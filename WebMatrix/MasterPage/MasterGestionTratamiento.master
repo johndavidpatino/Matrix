@@ -1,0 +1,105 @@
+﻿<%@ Master Language="VB" MasterPageFile="~/MasterPage/NewSite.Master" AutoEventWireup="false" CodeBehind="MasterGestionTratamiento.master.vb" Inherits="WebMatrix.MasterGestionTratamiento" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+    <asp:ContentPlaceHolder ID="CPH_Head" runat="server">
+    </asp:ContentPlaceHolder>
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="CPH_Menu" runat="server">
+    <ul class="mi-menu">
+        <li>
+            <a href="#">SUBDIRECCIÓN CALIDAD</a>
+            <ul>
+                <li><a title="Informe de anulación" href="../RP_Reportes/InformeAnulacion.aspx">Informe de anulación</a></li>
+                <li><a title="Activación de encuestas anuladas" href="../OP_Cuantitativo/ConsultaTrabajos.aspx">Desanulación de encuestas</a></li>
+                <li><a title="Seguimiento tareas" href="../CORE/ListaTareas-Trafico.aspx?Permiso=29">Seguimiento tareas</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">SUBDIRECCIÓN TRATAMIENTO</a>
+        </li>
+        <li>
+            <a href="#">OP CUANTI</a>
+            <ul>
+                <li>
+                    <a href="#">Crítica</a>
+                    <ul>
+                        <li><a title="Gestión y Ejecución de Tareas" href="../RE_GT/TraficoTareas.aspx?UnidadId=5&RolId=22&URLRetorno=7">Gestionar tareas</a></li>
+                        <li><a title="Tabular Estudios" href="../RE_GT/SeleccionarPreguntasTabular.aspx">TabularEstudios</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Verificación</a>
+                    <ul>
+                        <li><a title="Gestión y Ejecución de Tareas" href="../RE_GT/TraficoTareas.aspx?UnidadId=6&RolId=23&URLRetorno=8">Gestionar tareas</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Captura</a>
+                    <ul>
+                        <li><a title="Gestión y Ejecución de Tareas" href="../RE_GT/TraficoTareas.aspx?UnidadId=7&RolId=24&URLRetorno=9">Gestionar tareas</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Codificación</a>
+                    <ul>
+                        <li><a title="Gestión y Ejecución de Tareas" href="../RE_GT/TraficoTareas.aspx?UnidadId=8&RolId=25&URLRetorno=10">Gestionar tareas</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">DataCleaning</a>
+                    <ul>
+                        <li><a title="Gestión y Ejecución de Tareas" href="../RE_GT/TraficoTareas.aspx?UnidadId=9&RolId=27&URLRetorno=11">Gestionar tareas</a></li>
+                        <li><a title="Trafico tareas" href="../CORE/ListaTareas-Trafico.aspx?Permiso=110&ProcesoId=9">Trafico tareas</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Procesamiento</a>
+                    <ul>
+                        <li><a title="Gestión y Ejecución de Tareas" href="../RE_GT/TraficoTareas.aspx?UnidadId=10&RolId=26&URLRetorno=12">Gestionar tareas</a></li>
+                        <li><a title="Trafico tareas" href="../CORE/ListaTareas-Trafico.aspx?Permiso=112&ProcesoId=10">Trafico tareas</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">OP CUALI</a>
+            <ul>
+                <li><a href="#">Control Calidad</a>
+                    <ul>
+                        <li><a title="Calidad Campo" href="../PY_ControlCalidad/ControlCalidadCampo.aspx">Campo</a></li>
+                        <li><a title="Calidad Transcripción" href="../PY_ControlCalidad/ControlTranscripcion.aspx">Transcripciones</a></li>
+                        <li><a title="Calidad Informe" href="../PY_ControlCalidad/ControlCalidadInforme.aspx">Informe</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Evaluacion Calidad</a>
+                    <ul>
+                        <li><a title="Evaluación Entrevistadora" href="../PY_ControlCalidad/EvaluacionEntrevistadora.aspx">Entrevistadora</a></li>
+                        <li><a title="Evaluación Moderadora" href="../PY_ControlCalidad/EvaluacionModeradora.aspx">Moderadora</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+          <li>
+            <a href="../Home/Default.aspx">IR AL INICIO</a>
+        </li>
+   </ul>
+</asp:Content>
+<asp:Content ID="Content3" ContentPlaceHolderID="CPH_BreadCumbs" runat="server">
+</asp:Content>
+<asp:Content ID="Content4" ContentPlaceHolderID="CPH_TituloGeneral" runat="server">
+    <asp:ContentPlaceHolder ID="CPH_OpcionesMenu" runat="server">
+    </asp:ContentPlaceHolder>
+    <a>Gestión y Tratamiento de Datos</a>
+</asp:Content>
+<asp:Content ID="Content5" ContentPlaceHolderID="CPH_Titulo" runat="server">
+    <asp:ContentPlaceHolder ID="CPH_Titulo" runat="server">
+    </asp:ContentPlaceHolder>
+</asp:Content>
+<asp:Content ID="Content6" ContentPlaceHolderID="CPH_Subtitulo" runat="server">
+    <asp:ContentPlaceHolder ID="CPH_ComentFormulario" runat="server">
+    </asp:ContentPlaceHolder>
+</asp:Content>
+<asp:Content ID="Content7" ContentPlaceHolderID="CPH_Content" runat="server">
+    <asp:ContentPlaceHolder ID="CPH_ContentForm" runat="server">
+    </asp:ContentPlaceHolder>
+</asp:Content>

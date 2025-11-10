@@ -1,0 +1,17 @@
+﻿#ContainerFormDesvinculacionEmpleado section {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+}
+
+#ContainerFormDesvinculacionEmpleado .FormGroupField {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+}
+
+.invalid {
+    border-color: red !important;
+    border-style: dashed;
+    border-width: 1px;
+}

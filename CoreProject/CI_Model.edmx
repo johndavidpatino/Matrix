@@ -1,0 +1,366 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="CIModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <Function Name="CI_Busqueda_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TodosCampos" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="CI_CarpetasRed_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Unidad" Type="int" Mode="In" />
+          <Parameter Name="TipoGrupoUnidad" Type="tinyint" Mode="In" />
+        </Function>
+        <Function Name="CI_CarpetasRedRaiz_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Unidad" Type="int" Mode="In" />
+          <Parameter Name="TipoGrupoUnidad" Type="tinyint" Mode="In" />
+        </Function>
+        <Function Name="CI_DetalleAlmacenamiento_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdMaestro" Type="bigint" Mode="In" />
+          <Parameter Name="IdTrabajo" Type="bigint" Mode="In" />
+          <Parameter Name="Contiene" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Observacion" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="CI_DetalleAlmacenamiento_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="bigint" Mode="In" />
+          <Parameter Name="IdMaestro" Type="bigint" Mode="In" />
+          <Parameter Name="IdTrabajo" Type="bigint" Mode="In" />
+          <Parameter Name="Contiene" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Observacion" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="CI_DetalleAlmacenamiento_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="bigint" Mode="In" />
+          <Parameter Name="IdMaestro" Type="bigint" Mode="In" />
+          <Parameter Name="IdTrabajo" Type="bigint" Mode="In" />
+          <Parameter Name="TodosCampos" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="CI_DocumentosCierre_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdTrabajo" Type="bigint" Mode="In" />
+          <Parameter Name="RolResponsableCierre" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="CI_DocumentosRecuperacion_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdTrabajo" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="CI_LogCierres_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdTrabajo" Type="bigint" Mode="In" />
+          <Parameter Name="IdUsuarioCierre" Type="bigint" Mode="In" />
+          <Parameter Name="Observacion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="CierreForzado" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="CI_LogCreacionCarpetasRed_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Trabajo" Type="bigint" Mode="In" />
+          <Parameter Name="CarpetaRed" Type="int" Mode="In" />
+          <Parameter Name="Creada" Type="bit" Mode="In" />
+          <Parameter Name="Descripcion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Usuario" Type="bigint" Mode="In" />
+          <Parameter Name="Fecha" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="CI_MaestroAlmacenamiento_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UsuarioId" Type="bigint" Mode="In" />
+          <Parameter Name="Observacion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="TipoAlmacenamiento" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="CI_MaestroAlmacenamiento_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="CI_SolicitudMedios_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdMedio" Type="bigint" Mode="In" />
+          <Parameter Name="IdUsuarioSolicita" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="CI_SolicitudMedios_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="bigint" Mode="In" />
+          <Parameter Name="IdMedio" Type="bigint" Mode="In" />
+          <Parameter Name="TodosCampos" Type="varchar(max)" Mode="In" />
+        </Function>
+        <EntityContainer Name="CIModelStoreContainer" />
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CIModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="CIEntities" annotation:LazyLoadingEnabled="true" >
+          <FunctionImport Name="CI_DetalleAlmacenamiento_Add" ReturnType="Collection(Decimal)">
+            <Parameter Name="IdMaestro" Mode="In" Type="Int64" />
+            <Parameter Name="IdTrabajo" Mode="In" Type="Int64" />
+            <Parameter Name="Contiene" Mode="In" Type="String" />
+            <Parameter Name="Observacion" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="CI_DetalleAlmacenamiento_Get" ReturnType="Collection(CIModel.CI_DetalleAlmacenamiento_Get_Result)">
+            <Parameter Name="Id" Mode="In" Type="Int64" />
+            <Parameter Name="IdMaestro" Mode="In" Type="Int64" />
+            <Parameter Name="IdTrabajo" Mode="In" Type="Int64" />
+            <Parameter Name="TodosCampos" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="CI_MaestroAlmacenamiento_Add" ReturnType="Collection(Decimal)">
+            <Parameter Name="UsuarioId" Mode="In" Type="Int64" />
+            <Parameter Name="Observacion" Mode="In" Type="String" />
+            <Parameter Name="TipoAlmacenamiento" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="CI_MaestroAlmacenamiento_Get" ReturnType="Collection(CIModel.CI_MaestroAlmacenamiento_Get_Result)">
+          <Parameter Name="Id" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="CI_DetalleAlmacenamiento_Edit">
+            <Parameter Name="Id" Mode="In" Type="Int64" />
+            <Parameter Name="IdMaestro" Mode="In" Type="Int64" />
+            <Parameter Name="IdTrabajo" Mode="In" Type="Int64" />
+            <Parameter Name="Contiene" Mode="In" Type="String" />
+            <Parameter Name="Observacion" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="CI_SolicitudMedios_Add" ReturnType="Collection(Decimal)">
+            <Parameter Name="IdMedio" Mode="In" Type="Int64" />
+            <Parameter Name="IdUsuarioSolicita" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="CI_SolicitudMedios_Get" ReturnType="Collection(CIModel.CI_SolicitudMedios_Get_Result)">
+            <Parameter Name="Id" Mode="In" Type="Int64" />
+            <Parameter Name="IdMedio" Mode="In" Type="Int64" />
+            <Parameter Name="TodosCampos" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="CI_DocumentosCierre_Get" ReturnType="Collection(CIModel.CI_DocumentosCierre_Get_Result)">
+          <Parameter Name="IdTrabajo" Mode="In" Type="Int64" />
+            <Parameter Name="RolResponsableCierre" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="CI_LogCierres_Add" ReturnType="Collection(Decimal)">
+            <Parameter Name="IdTrabajo" Mode="In" Type="Int64" />
+            <Parameter Name="IdUsuarioCierre" Mode="In" Type="Int64" />
+            <Parameter Name="Observacion" Mode="In" Type="String" />
+            <Parameter Name="CierreForzado" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="CI_DocumentosRecuperacion_Get" ReturnType="Collection(CIModel.CI_DocumentosRecuperacion_Get_Result)">
+          <Parameter Name="IdTrabajo" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="CI_CarpetasRed_Get" ReturnType="Collection(CIModel.CI_CarpetasRed_Get_Result)">
+            <Parameter Name="Unidad" Mode="In" Type="Int32" />
+            <Parameter Name="TipoGrupoUnidad" Mode="In" Type="Byte" />
+          </FunctionImport>
+          <FunctionImport Name="CI_CarpetasRedRaiz_Get" ReturnType="Collection(CIModel.CI_CarpetasRedRaiz_Get_Result)">
+            <Parameter Name="Unidad" Mode="In" Type="Int32" />
+            <Parameter Name="TipoGrupoUnidad" Mode="In" Type="Byte" />
+          </FunctionImport>
+          <FunctionImport Name="CI_LogCreacionCarpetasRed_Add" ReturnType="Collection(Decimal)">
+            <Parameter Name="Trabajo" Mode="In" Type="Int64" />
+            <Parameter Name="CarpetaRed" Mode="In" Type="Int32" />
+            <Parameter Name="Creada" Mode="In" Type="Boolean" />
+            <Parameter Name="Descripcion" Mode="In" Type="String" />
+            <Parameter Name="Usuario" Mode="In" Type="Int64" />
+            <Parameter Name="Fecha" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="CI_Busqueda_Get" ReturnType="Collection(CIModel.CI_Busqueda_Get_Result)">
+          <Parameter Name="TodosCampos" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="CI_DetalleAlmacenamiento_Get_Result">
+          <Property Type="Int64" Name="IdMedio" Nullable="false" />
+          <Property Type="Int64" Name="IdTrabajo" Nullable="false" />
+          <Property Type="String" Name="JobBook" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="NombreTrabajo" Nullable="false" MaxLength="250" />
+          <Property Type="String" Name="GerenteProyecto" Nullable="true" MaxLength="501" />
+          <Property Type="Int64" Name="CodTipoAlmacenamiento" Nullable="false" />
+          <Property Type="String" Name="TipoAlmacenamiento" Nullable="false" />
+          <Property Type="String" Name="Contiene" Nullable="false" />
+          <Property Type="String" Name="Observacion" Nullable="true" />
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Titulo" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="Antecedentes" Nullable="true" />
+          <Property Type="String" Name="Objetivos" Nullable="false" />
+          <Property Type="String" Name="ActionStandars" Nullable="false" />
+          <Property Type="String" Name="Metodologia" Nullable="true" />
+          <Property Type="String" Name="TargetGroup" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="CI_MaestroAlmacenamiento_Get_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="String" Name="UsuarioRegistra" Nullable="true" MaxLength="501" />
+          <Property Type="Int64" Name="UsuarioId" Nullable="false" />
+          <Property Type="DateTime" Name="FechaRegistro" Nullable="false" Precision="23" />
+          <Property Type="String" Name="Observacion" Nullable="true" />
+          <Property Type="Int64" Name="CodTipoAlmacenamiento" Nullable="false" />
+          <Property Type="String" Name="TipoAlmacenamiento" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="CI_SolicitudMedios_Get_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="Int64" Name="IdMedio" Nullable="false" />
+          <Property Type="Int64" Name="IdUsuarioSolicita" Nullable="false" />
+          <Property Type="String" Name="UsuarioSolicita" Nullable="true" MaxLength="501" />
+          <Property Type="DateTime" Name="FechaSolicitud" Nullable="false" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="CI_DocumentosCierre_Get_Result">
+          <Property Type="Int64" Name="IdDocumento" Nullable="false" />
+          <Property Type="String" Name="Documento" Nullable="true" MaxLength="250" />
+          <Property Type="Int32" Name="Cantidad" Nullable="true" />
+          <Property Type="String" Name="URLOtroServidor" Nullable="true" />
+          <Property Type="String" Name="TipoArchivo" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="RolResponsableCierre" Nullable="true" />
+          <Property Type="Boolean" Name="Encontrado" Nullable="true" />
+          <Property Type="DateTime" Name="FechaEscaneo" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Observacion" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="CI_DocumentosRecuperacion_Get_Result">
+          <Property Type="Int64" Name="IdDocumento" Nullable="false" />
+          <Property Type="String" Name="Documento" Nullable="true" MaxLength="250" />
+          <Property Type="Int32" Name="Cantidad" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="CI_CarpetasRed_Get_Result">
+          <Property Type="Int16" Name="id" Nullable="false" />
+          <Property Type="String" Name="Ubicacion" Nullable="false" MaxLength="250" />
+          <Property Type="Int32" Name="Raiz" Nullable="false" />
+          <Property Type="String" Name="Descripcion" Nullable="false" />
+          <Property Type="String" Name="RutaRaiz" Nullable="false" MaxLength="250" />
+          <Property Type="Int32" Name="Unidad" Nullable="true" />
+          <Property Type="Int32" Name="GrupoUnidadId" Nullable="true" />
+          <Property Type="Int16" Name="IdCarpeta" Nullable="false" />
+          </ComplexType>
+        <ComplexType Name="CI_CarpetasRedRaiz_Get_Result">
+          <Property Type="Int16" Name="id" Nullable="false" />
+          <Property Type="String" Name="RutaRaiz" Nullable="false" MaxLength="250" />
+          <Property Type="Int32" Name="Unidad" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="CI_Busqueda_Get_Result">
+          <Property Type="Int64" Name="IdTrabajo" Nullable="false" />
+          <Property Type="String" Name="JobBook" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="NombreTrabajo" Nullable="false" MaxLength="250" />
+          <Property Type="String" Name="GerenteProyecto" Nullable="true" MaxLength="501" />
+          <Property Type="String" Name="Unidad" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Cliente" Nullable="false" MaxLength="250" />
+          <Property Type="String" Name="Estado" Nullable="true" MaxLength="20" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CIModelStoreContainer" CdmEntityContainer="CIEntities" >
+          <FunctionImportMapping FunctionImportName="CI_DetalleAlmacenamiento_Add" FunctionName="CIModel.Store.CI_DetalleAlmacenamiento_Add" />
+          <FunctionImportMapping FunctionImportName="CI_DetalleAlmacenamiento_Get" FunctionName="CIModel.Store.CI_DetalleAlmacenamiento_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CIModel.CI_DetalleAlmacenamiento_Get_Result">
+                <ScalarProperty Name="IdMedio" ColumnName="IdMedio" />
+                <ScalarProperty Name="IdTrabajo" ColumnName="IdTrabajo" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="NombreTrabajo" ColumnName="NombreTrabajo" />
+                <ScalarProperty Name="GerenteProyecto" ColumnName="GerenteProyecto" />
+                <ScalarProperty Name="CodTipoAlmacenamiento" ColumnName="CodTipoAlmacenamiento" />
+                <ScalarProperty Name="TipoAlmacenamiento" ColumnName="TipoAlmacenamiento" />
+                <ScalarProperty Name="Contiene" ColumnName="Contiene" />
+                <ScalarProperty Name="Observacion" ColumnName="Observacion" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Titulo" ColumnName="Titulo" />
+                <ScalarProperty Name="Antecedentes" ColumnName="Antecedentes" />
+                <ScalarProperty Name="Objetivos" ColumnName="Objetivos" />
+                <ScalarProperty Name="ActionStandars" ColumnName="ActionStandars" />
+                <ScalarProperty Name="Metodologia" ColumnName="Metodologia" />
+                <ScalarProperty Name="TargetGroup" ColumnName="TargetGroup" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CI_MaestroAlmacenamiento_Add" FunctionName="CIModel.Store.CI_MaestroAlmacenamiento_Add" />
+          <FunctionImportMapping FunctionImportName="CI_MaestroAlmacenamiento_Get" FunctionName="CIModel.Store.CI_MaestroAlmacenamiento_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CIModel.CI_MaestroAlmacenamiento_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UsuarioRegistra" ColumnName="UsuarioRegistra" />
+                <ScalarProperty Name="UsuarioId" ColumnName="UsuarioId" />
+                <ScalarProperty Name="FechaRegistro" ColumnName="FechaRegistro" />
+                <ScalarProperty Name="Observacion" ColumnName="Observacion" />
+                <ScalarProperty Name="CodTipoAlmacenamiento" ColumnName="CodTipoAlmacenamiento" />
+                <ScalarProperty Name="TipoAlmacenamiento" ColumnName="TipoAlmacenamiento" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CI_DetalleAlmacenamiento_Edit" FunctionName="CIModel.Store.CI_DetalleAlmacenamiento_Edit" />
+          <FunctionImportMapping FunctionImportName="CI_SolicitudMedios_Add" FunctionName="CIModel.Store.CI_SolicitudMedios_Add" />
+          <FunctionImportMapping FunctionImportName="CI_SolicitudMedios_Get" FunctionName="CIModel.Store.CI_SolicitudMedios_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CIModel.CI_SolicitudMedios_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdMedio" ColumnName="IdMedio" />
+                <ScalarProperty Name="IdUsuarioSolicita" ColumnName="IdUsuarioSolicita" />
+                <ScalarProperty Name="UsuarioSolicita" ColumnName="UsuarioSolicita" />
+                <ScalarProperty Name="FechaSolicitud" ColumnName="FechaSolicitud" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CI_DocumentosCierre_Get" FunctionName="CIModel.Store.CI_DocumentosCierre_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CIModel.CI_DocumentosCierre_Get_Result">
+                <ScalarProperty Name="IdDocumento" ColumnName="IdDocumento" />
+                <ScalarProperty Name="Documento" ColumnName="Documento" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="URLOtroServidor" ColumnName="URLOtroServidor" />
+                <ScalarProperty Name="TipoArchivo" ColumnName="TipoArchivo" />
+                <ScalarProperty Name="RolResponsableCierre" ColumnName="RolResponsableCierre" />
+                <ScalarProperty Name="Encontrado" ColumnName="Encontrado" />
+                <ScalarProperty Name="FechaEscaneo" ColumnName="FechaEscaneo" />
+                <ScalarProperty Name="Observacion" ColumnName="Observacion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CI_LogCierres_Add" FunctionName="CIModel.Store.CI_LogCierres_Add" />
+          <FunctionImportMapping FunctionImportName="CI_DocumentosRecuperacion_Get" FunctionName="CIModel.Store.CI_DocumentosRecuperacion_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CIModel.CI_DocumentosRecuperacion_Get_Result">
+                <ScalarProperty Name="IdDocumento" ColumnName="IdDocumento" />
+                <ScalarProperty Name="Documento" ColumnName="Documento" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CI_CarpetasRed_Get" FunctionName="CIModel.Store.CI_CarpetasRed_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CIModel.CI_CarpetasRed_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Ubicacion" ColumnName="Ubicacion" />
+                <ScalarProperty Name="Raiz" ColumnName="Raiz" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="RutaRaiz" ColumnName="RutaRaiz" />
+                <ScalarProperty Name="Unidad" ColumnName="Unidad" />
+                <ScalarProperty Name="GrupoUnidadId" ColumnName="GrupoUnidadId" />
+                <ScalarProperty Name="IdCarpeta" ColumnName="IdCarpeta" />
+                </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CI_CarpetasRedRaiz_Get" FunctionName="CIModel.Store.CI_CarpetasRedRaiz_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CIModel.CI_CarpetasRedRaiz_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="RutaRaiz" ColumnName="RutaRaiz" />
+                <ScalarProperty Name="Unidad" ColumnName="Unidad" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CI_LogCreacionCarpetasRed_Add" FunctionName="CIModel.Store.CI_LogCreacionCarpetasRed_Add" />
+          <FunctionImportMapping FunctionImportName="CI_Busqueda_Get" FunctionName="CIModel.Store.CI_Busqueda_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CIModel.CI_Busqueda_Get_Result">
+                <ScalarProperty Name="IdTrabajo" ColumnName="IdTrabajo" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="NombreTrabajo" ColumnName="NombreTrabajo" />
+                <ScalarProperty Name="GerenteProyecto" ColumnName="GerenteProyecto" />
+                <ScalarProperty Name="Unidad" ColumnName="Unidad" />
+                <ScalarProperty Name="Cliente" ColumnName="Cliente" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

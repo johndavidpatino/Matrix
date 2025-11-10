@@ -1,0 +1,1780 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="US_Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="US_GruposPermisos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="GrupoPermisos" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="US_GrupoUnidad">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GrupoUnidad" Type="varchar" MaxLength="250" />
+          <Property Name="TipoGrupoUnidad" Type="tinyint" />
+          <Property Name="Activo" Type="bit" />
+          <Property Name="CodContable" Type="int" />
+          <Property Name="Sigla" Type="nchar" MaxLength="3" />
+        </EntityType>
+        <EntityType Name="US_Permisos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Permiso" Type="varchar" MaxLength="100" />
+          <Property Name="Grupoid" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="US_PermisosUsuarios">
+          <Key>
+            <PropertyRef Name="PermisoId" />
+            <PropertyRef Name="UsuarioId" />
+          </Key>
+          <Property Name="PermisoId" Type="int" Nullable="false" />
+          <Property Name="UsuarioId" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="US_Roles">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="Rol" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="US_RolesPermisos">
+          <Key>
+            <PropertyRef Name="PermisoId" />
+            <PropertyRef Name="RolId" />
+          </Key>
+          <Property Name="PermisoId" Type="int" Nullable="false" />
+          <Property Name="RolId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="US_RolesUsuarios">
+          <Key>
+            <PropertyRef Name="UsuarioId" />
+            <PropertyRef Name="RolId" />
+          </Key>
+          <Property Name="UsuarioId" Type="bigint" Nullable="false" />
+          <Property Name="RolId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="US_TipoGrupoUnidad">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="tinyint" Nullable="false" />
+          <Property Name="TipoGrupoUnidad" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="US_Unidades">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Unidad" Type="varchar" MaxLength="50" />
+          <Property Name="GrupoUnidadId" Type="int" />
+          <Property Name="Codigo" Type="int" />
+          <Property Name="Sigla" Type="nchar" MaxLength="13" />
+          <Property Name="GMMinimo" Type="decimal" Precision="18" Scale="3" />
+          <Property Name="Trafico" Type="tinyint" />
+        </EntityType>
+        <EntityType Name="US_Usuarios">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" Nullable="false" />
+          <Property Name="Usuario" Type="varchar" MaxLength="30" />
+          <Property Name="Password" Type="varchar" MaxLength="50" />
+          <Property Name="Nombres" Type="varchar" MaxLength="250" />
+          <Property Name="Apellidos" Type="varchar" MaxLength="250" />
+          <Property Name="Email" Type="varchar" MaxLength="250" />
+          <Property Name="Activo" Type="bit" />
+        </EntityType>
+        <EntityType Name="US_UsuariosUnidades">
+          <Key>
+            <PropertyRef Name="UsuarioId" />
+            <PropertyRef Name="UnidadId" />
+          </Key>
+          <Property Name="UsuarioId" Type="bigint" Nullable="false" />
+          <Property Name="UnidadId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_US_GrupoUnidad_US_TipoGrupoUnidad">
+          <End Role="US_TipoGrupoUnidad" Type="Self.US_TipoGrupoUnidad" Multiplicity="0..1" />
+          <End Role="US_GrupoUnidad" Type="Self.US_GrupoUnidad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="US_TipoGrupoUnidad">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="US_GrupoUnidad">
+              <PropertyRef Name="TipoGrupoUnidad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_US_GrupoUnidad_US_Unidades">
+          <End Role="US_Unidades" Type="Self.US_Unidades" Multiplicity="1" />
+          <End Role="US_GrupoUnidad" Type="Self.US_GrupoUnidad" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="US_Unidades">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="US_GrupoUnidad">
+              <PropertyRef Name="id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_US_Permisos_US_GruposPermisos">
+          <End Role="US_GruposPermisos" Type="Self.US_GruposPermisos" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="US_Permisos" Type="Self.US_Permisos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="US_GruposPermisos">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="US_Permisos">
+              <PropertyRef Name="Grupoid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_US_PermisosUsuarios_US_Permisos">
+          <End Role="US_Permisos" Type="Self.US_Permisos" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="US_PermisosUsuarios" Type="Self.US_PermisosUsuarios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="US_Permisos">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="US_PermisosUsuarios">
+              <PropertyRef Name="PermisoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_US_PermisosUsuarios_US_Usuarios">
+          <End Role="US_Usuarios" Type="Self.US_Usuarios" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="US_PermisosUsuarios" Type="Self.US_PermisosUsuarios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="US_Usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="US_PermisosUsuarios">
+              <PropertyRef Name="UsuarioId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_US_RolesPermisos_US_Permisos">
+          <End Role="US_Permisos" Type="Self.US_Permisos" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="US_RolesPermisos" Type="Self.US_RolesPermisos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="US_Permisos">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="US_RolesPermisos">
+              <PropertyRef Name="PermisoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_US_RolesPermisos_US_Roles">
+          <End Role="US_Roles" Type="Self.US_Roles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="US_RolesPermisos" Type="Self.US_RolesPermisos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="US_Roles">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="US_RolesPermisos">
+              <PropertyRef Name="RolId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_US_RolesUsuarios_US_Roles">
+          <End Role="US_Roles" Type="Self.US_Roles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="US_RolesUsuarios" Type="Self.US_RolesUsuarios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="US_Roles">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="US_RolesUsuarios">
+              <PropertyRef Name="RolId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_US_RolesUsuarios_US_Usuarios">
+          <End Role="US_Usuarios" Type="Self.US_Usuarios" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="US_RolesUsuarios" Type="Self.US_RolesUsuarios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="US_Usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="US_RolesUsuarios">
+              <PropertyRef Name="UsuarioId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_US_UsuariosUnidades_US_GrupoUnidad">
+          <End Role="US_Unidades" Type="Self.US_Unidades" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="US_UsuariosUnidades" Type="Self.US_UsuariosUnidades" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="US_Unidades">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="US_UsuariosUnidades">
+              <PropertyRef Name="UnidadId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_US_UsuariosUnidades_US_Usuarios">
+          <End Role="US_Usuarios" Type="Self.US_Usuarios" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="US_UsuariosUnidades" Type="Self.US_UsuariosUnidades" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="US_Usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="US_UsuariosUnidades">
+              <PropertyRef Name="UsuarioId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="ConsultarUsuarios" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="ConsultarUsuariosXNombre" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="ConsultarUsuariosXRolesUsuarios" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="RolId" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="ObtenerUsuarios" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="US_CorreosAnuncioAprobacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ESTUDIOID" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="US_CorreosPresupuestos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="US_CorreosTrabajos_PreyEsp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TrabajoID" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="US_GruposPermisos_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="GrupoPermisos" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="US_GruposPermisos_Del" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="US_GruposPermisos_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="GrupoPermisos" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="US_GruposPermisos_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="GrupoPermisos" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="US_GruposPermisos_GetCombo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="US_GrupoUnidad_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="GrupoUnidad" Type="varchar" Mode="In" />
+          <Parameter Name="TipoGrupoUnidad" Type="int" Mode="In" />
+          <Parameter Name="Activo" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="US_GrupoUnidad_Del" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="US_GrupoUnidad_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="GrupoUnidad" Type="varchar" Mode="In" />
+          <Parameter Name="TipoGrupoUnidad" Type="int" Mode="In" />
+          <Parameter Name="Activo" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="US_GrupoUnidad_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="GrupoUnidad" Type="varchar(max)" Mode="In" />
+          <Parameter Name="TipoGrupoUnidad" Type="int" Mode="In" />
+        </Function>
+        <Function Name="US_GrupoUnidad_GetCombo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TipoGrupoUnidad" Type="int" Mode="In" />
+        </Function>
+        <Function Name="US_Permisos_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Permiso" Type="varchar" Mode="In" />
+          <Parameter Name="Grupoid" Type="int" Mode="In" />
+        </Function>
+        <Function Name="US_Permisos_Del" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="US_Permisos_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="Permiso" Type="varchar" Mode="In" />
+          <Parameter Name="Grupoid" Type="int" Mode="In" />
+        </Function>
+        <Function Name="US_Permisos_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Permiso" Type="varchar" Mode="In" />
+          <Parameter Name="GrupoId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="US_Permisos_GetCombo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="GrupoId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="US_PermisosUsuarios_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PermisoId" Type="int" Mode="In" />
+          <Parameter Name="UsuarioId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="US_PermisosUsuarios_Del" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UsuarioId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="US_PermisosUsuarios_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PermisoId" Type="int" Mode="In" />
+          <Parameter Name="UsuarioId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="US_PermisosUsuarios_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UsuarioId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="US_PermisosxIdUsuario_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Permiso" Type="varchar" Mode="In" />
+          <Parameter Name="UsuarioId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="US_PermisosXUsuario_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UsuarioId" Type="bigint" Mode="In" />
+          <Parameter Name="Asignado" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="US_Roles_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="Rol" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="US_Roles_Del" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="US_Roles_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="Rol" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="US_Roles_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Rol" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="US_Roles_GetCombo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="US_RolesPermisos_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PermisoId" Type="int" Mode="In" />
+          <Parameter Name="RolId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="US_RolesPermisos_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PermisoId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="US_RolesUsuarios_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UsuarioId" Type="bigint" Mode="In" />
+          <Parameter Name="RolId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="US_RolesUsuarios_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="RolId" Type="int" Mode="In" />
+          <Parameter Name="usuarioId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="US_RolesXUsuario_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UsuarioId" Type="bigint" Mode="In" />
+          <Parameter Name="Asignado" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="US_TipoGrupoUnidad_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="TipoGrupoUnidad" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="US_TipoGrupoUnidad_Del" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="US_TipoGrupoUnidad_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="TipoGrupoUnidad" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="US_TipoGrupoUnidad_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="US_TipoGrupoUnidad_Get_Nombre" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TipoGrupoUnidad" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="US_TipoGrupoUnidad_GetCombo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="US_TodasUnidades_GetCombo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="US_Unidad_Get_Combo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="US_Unidades_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+          <Parameter Name="Unidad" Type="varchar" Mode="In" />
+          <Parameter Name="GrupoUnidadId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="US_Unidades_Del" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="US_Unidades_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+          <Parameter Name="Unidad" Type="varchar" Mode="In" />
+          <Parameter Name="GrupoUnidadId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="US_Unidades_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Unidad" Type="varchar" Mode="In" />
+          <Parameter Name="GrupoUnidad" Type="int" Mode="In" />
+          <Parameter Name="IdUnidad" Type="int" Mode="In" />
+        </Function>
+        <Function Name="US_Unidades_Get_All" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="US_Unidades_GetCombo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="GrupoUnidad" Type="int" Mode="In" />
+        </Function>
+        <Function Name="US_UnidadesXUsuario_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UsuarioId" Type="bigint" Mode="In" />
+          <Parameter Name="Asignado" Type="bit" Mode="In" />
+          <Parameter Name="GrupoUnidadId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="US_Usuarios_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="bigint" Mode="In" />
+          <Parameter Name="Usuario" Type="varchar" Mode="In" />
+          <Parameter Name="Password" Type="varchar" Mode="In" />
+          <Parameter Name="Nombres" Type="varchar" Mode="In" />
+          <Parameter Name="Apellidos" Type="varchar" Mode="In" />
+          <Parameter Name="Email" Type="varchar" Mode="In" />
+          <Parameter Name="Activo" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="US_Usuarios_Del" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="US_Usuarios_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="bigint" Mode="In" />
+          <Parameter Name="Usuario" Type="varchar" Mode="In" />
+          <Parameter Name="Password" Type="varchar" Mode="In" />
+          <Parameter Name="Nombres" Type="varchar" Mode="In" />
+          <Parameter Name="Apellidos" Type="varchar" Mode="In" />
+          <Parameter Name="Email" Type="varchar" Mode="In" />
+          <Parameter Name="Activo" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="US_Usuarios_Edit_Password" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="bigint" Mode="In" />
+          <Parameter Name="Password" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="US_Usuarios_Get_Combo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="US_Usuarios_Get_xGrupoUnidadxRol" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Rol" Type="int" Mode="In" />
+          <Parameter Name="GrupoUnidad" Type="int" Mode="In" />
+        </Function>
+        <Function Name="US_Usuarios_Get_xRol" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Rol" Type="int" Mode="In" />
+        </Function>
+        <Function Name="US_Usuarios_Get_xRolxPropuesta" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Rol" Type="int" Mode="In" />
+          <Parameter Name="PropuestaId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="US_Usuarios_Get_xUnidad" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Unidad" Type="int" Mode="In" />
+        </Function>
+        <Function Name="US_Usuarios_Get_xUnidadxRol" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Rol" Type="int" Mode="In" />
+          <Parameter Name="Unidad" Type="int" Mode="In" />
+        </Function>
+        <Function Name="US_Usuarios_GetLogin" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="USUARIO" Type="varchar" Mode="In" />
+          <Parameter Name="PASSWORD" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="US_UsuariosAnyParameter_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="bigint" Mode="In" />
+          <Parameter Name="Usuario" Type="varchar" Mode="In" />
+          <Parameter Name="Nombres" Type="varchar" Mode="In" />
+          <Parameter Name="Apellidos" Type="varchar" Mode="In" />
+          <Parameter Name="Email" Type="varchar" Mode="In" />
+          <Parameter Name="Activo" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="US_UsuariosGrupoUnidad_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="US_UsuariosUnidades_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UsuarioId" Type="bigint" Mode="In" />
+          <Parameter Name="UnidadId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="US_UsuariosUnidades_Del" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UsuarioId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="US_UsuariosUnidades_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UsuarioId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="US_UsuariosXUnidadesXRol_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Unidades" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="RolId" Type="bigint" Mode="In" />
+          <Parameter Name="UsuarioId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="VerificarPermisoUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PermisoId" Type="bigint" Mode="In" />
+          <Parameter Name="UsuarioId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="VerificarRolUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="RolId" Type="bigint" Mode="In" />
+          <Parameter Name="UsuarioId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="VerificarUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="usuario" Type="varchar" Mode="In" />
+          <Parameter Name="contrasena" Type="varchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="US_ModelStoreContainer">
+          <EntitySet Name="US_GruposPermisos" EntityType="Self.US_GruposPermisos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="US_GrupoUnidad" EntityType="Self.US_GrupoUnidad" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="US_Permisos" EntityType="Self.US_Permisos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="US_PermisosUsuarios" EntityType="Self.US_PermisosUsuarios" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="US_Roles" EntityType="Self.US_Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="US_RolesPermisos" EntityType="Self.US_RolesPermisos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="US_RolesUsuarios" EntityType="Self.US_RolesUsuarios" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="US_TipoGrupoUnidad" EntityType="Self.US_TipoGrupoUnidad" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="US_Unidades" EntityType="Self.US_Unidades" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="US_Usuarios" EntityType="Self.US_Usuarios" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="US_UsuariosUnidades" EntityType="Self.US_UsuariosUnidades" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_US_GrupoUnidad_US_TipoGrupoUnidad" Association="Self.FK_US_GrupoUnidad_US_TipoGrupoUnidad">
+            <End Role="US_TipoGrupoUnidad" EntitySet="US_TipoGrupoUnidad" />
+            <End Role="US_GrupoUnidad" EntitySet="US_GrupoUnidad" />
+          </AssociationSet>
+          <AssociationSet Name="FK_US_GrupoUnidad_US_Unidades" Association="Self.FK_US_GrupoUnidad_US_Unidades">
+            <End Role="US_Unidades" EntitySet="US_Unidades" />
+            <End Role="US_GrupoUnidad" EntitySet="US_GrupoUnidad" />
+          </AssociationSet>
+          <AssociationSet Name="FK_US_Permisos_US_GruposPermisos" Association="Self.FK_US_Permisos_US_GruposPermisos">
+            <End Role="US_GruposPermisos" EntitySet="US_GruposPermisos" />
+            <End Role="US_Permisos" EntitySet="US_Permisos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_US_PermisosUsuarios_US_Permisos" Association="Self.FK_US_PermisosUsuarios_US_Permisos">
+            <End Role="US_Permisos" EntitySet="US_Permisos" />
+            <End Role="US_PermisosUsuarios" EntitySet="US_PermisosUsuarios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_US_PermisosUsuarios_US_Usuarios" Association="Self.FK_US_PermisosUsuarios_US_Usuarios">
+            <End Role="US_Usuarios" EntitySet="US_Usuarios" />
+            <End Role="US_PermisosUsuarios" EntitySet="US_PermisosUsuarios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_US_RolesPermisos_US_Permisos" Association="Self.FK_US_RolesPermisos_US_Permisos">
+            <End Role="US_Permisos" EntitySet="US_Permisos" />
+            <End Role="US_RolesPermisos" EntitySet="US_RolesPermisos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_US_RolesPermisos_US_Roles" Association="Self.FK_US_RolesPermisos_US_Roles">
+            <End Role="US_Roles" EntitySet="US_Roles" />
+            <End Role="US_RolesPermisos" EntitySet="US_RolesPermisos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_US_RolesUsuarios_US_Roles" Association="Self.FK_US_RolesUsuarios_US_Roles">
+            <End Role="US_Roles" EntitySet="US_Roles" />
+            <End Role="US_RolesUsuarios" EntitySet="US_RolesUsuarios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_US_RolesUsuarios_US_Usuarios" Association="Self.FK_US_RolesUsuarios_US_Usuarios">
+            <End Role="US_Usuarios" EntitySet="US_Usuarios" />
+            <End Role="US_RolesUsuarios" EntitySet="US_RolesUsuarios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_US_UsuariosUnidades_US_GrupoUnidad" Association="Self.FK_US_UsuariosUnidades_US_GrupoUnidad">
+            <End Role="US_Unidades" EntitySet="US_Unidades" />
+            <End Role="US_UsuariosUnidades" EntitySet="US_UsuariosUnidades" />
+          </AssociationSet>
+          <AssociationSet Name="FK_US_UsuariosUnidades_US_Usuarios" Association="Self.FK_US_UsuariosUnidades_US_Usuarios">
+            <End Role="US_Usuarios" EntitySet="US_Usuarios" />
+            <End Role="US_UsuariosUnidades" EntitySet="US_UsuariosUnidades" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="US_Model" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2009/11/edm" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <EntityContainer Name="US_Entities" annotation:LazyLoadingEnabled="true" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+          <FunctionImport Name="VerificarPermisoUsuario" ReturnType="Collection(US_Model.VerificarPermisoUsuario_Result)">
+            <Parameter Name="PermisoId" Mode="In" Type="Int64" />
+            <Parameter Name="UsuarioId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="ConsultarUsuariosXUnidades" ReturnType="Collection(US_Model.Usuarios_Result)">
+          <Parameter Name="UnidadId" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ConsultarUsuariosXRolesUsuarios" ReturnType="Collection(US_Model.Usuarios_Result)">
+          <Parameter Name="RolId" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ConsultarUsuariosXNombre" ReturnType="Collection(US_Model.Usuarios_Result)">
+          <Parameter Name="Nombre" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ConsultarUsuariosXGrupoUnidad" ReturnType="Collection(US_Model.Usuarios_Result)">
+          <Parameter Name="GrupoUnidadId" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ConsultarUsuariosTipoUnidad" ReturnType="Collection(US_Model.Usuarios_Result)">
+          <Parameter Name="TipoUnidadId" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ConsultarUsuarios" ReturnType="Collection(US_Model.ConsultarUsuarios_Result)" />
+          <FunctionImport Name="ObtenerUsuarios" ReturnType="Collection(US_Model.ObtenerUsuarios_Result)" />
+          <FunctionImport Name="US_Usuarios_Add">
+            <Parameter Name="id" Mode="In" Type="Int64" />
+            <Parameter Name="Usuario" Mode="In" Type="String" />
+            <Parameter Name="Password" Mode="In" Type="String" />
+            <Parameter Name="Nombres" Mode="In" Type="String" />
+            <Parameter Name="Apellidos" Mode="In" Type="String" />
+            <Parameter Name="Email" Mode="In" Type="String" />
+            <Parameter Name="Activo" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="US_Usuarios_Del">
+          <Parameter Name="id" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="US_Usuarios_Edit">
+            <Parameter Name="id" Mode="In" Type="Int64" />
+            <Parameter Name="Usuario" Mode="In" Type="String" />
+            <Parameter Name="Password" Mode="In" Type="String" />
+            <Parameter Name="Nombres" Mode="In" Type="String" />
+            <Parameter Name="Apellidos" Mode="In" Type="String" />
+            <Parameter Name="Email" Mode="In" Type="String" />
+            <Parameter Name="Activo" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="US_TipoGrupoUnidad_Add">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="TipoGrupoUnidad" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="US_TipoGrupoUnidad_Del">
+          <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="US_TipoGrupoUnidad_Edit">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="TipoGrupoUnidad" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="US_TipoGrupoUnidad_Get" ReturnType="Collection(US_Model.US_TipoGrupoUnidad_Get_Result)" />
+          <FunctionImport Name="US_TipoGrupoUnidad_Get_Nombre" ReturnType="Collection(US_Model.US_TipoGrupoUnidad_Get_Result)">
+          <Parameter Name="TipoGrupoUnidad" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="US_GrupoUnidad_Add">
+            <Parameter Name="GrupoUnidad" Mode="In" Type="String" />
+            <Parameter Name="TipoGrupoUnidad" Mode="In" Type="Int32" />
+            <Parameter Name="Activo" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="US_GrupoUnidad_Del">
+          <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="US_GrupoUnidad_Edit">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="GrupoUnidad" Mode="In" Type="String" />
+            <Parameter Name="TipoGrupoUnidad" Mode="In" Type="Int32" />
+            <Parameter Name="Activo" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="US_GrupoUnidad_Get" ReturnType="Collection(US_Model.GrupoUnidad_Result)">
+            <Parameter Name="GrupoUnidad" Mode="In" Type="String" />
+            <Parameter Name="TipoGrupoUnidad" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="US_Unidades_Add">
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+            <Parameter Name="Unidad" Mode="In" Type="String" />
+            <Parameter Name="GrupoUnidadId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="US_Unidades_Del">
+          <Parameter Name="Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="US_Unidades_Edit">
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+            <Parameter Name="Unidad" Mode="In" Type="String" />
+            <Parameter Name="GrupoUnidadId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="US_Unidades_Get" ReturnType="Collection(US_Model.Unidades_Result)">
+            <Parameter Name="Unidad" Mode="In" Type="String" />
+            <Parameter Name="GrupoUnidad" Mode="In" Type="Int32" />
+            <Parameter Name="IdUnidad" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="US_GruposPermisos_Add">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="GrupoPermisos" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="US_GruposPermisos_Del">
+          <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="US_GruposPermisos_Edit">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="GrupoPermisos" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="US_GruposPermisos_Get" ReturnType="Collection(US_Model.GruposPermisos_Result)">
+          <Parameter Name="GrupoPermisos" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="US_Permisos_Add">
+            <Parameter Name="Permiso" Mode="In" Type="String" />
+            <Parameter Name="Grupoid" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="US_Permisos_Del">
+          <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="US_Permisos_Edit">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="Permiso" Mode="In" Type="String" />
+            <Parameter Name="Grupoid" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="US_Permisos_Get" ReturnType="Collection(US_Model.Permisos_Result)">
+            <Parameter Name="Permiso" Mode="In" Type="String" />
+            <Parameter Name="GrupoId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="US_Roles_Add">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="Rol" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="US_Roles_Del">
+          <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="US_Roles_Edit">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="Rol" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="US_Roles_Get" ReturnType="Collection(US_Model.Roles_Result)">
+          <Parameter Name="Rol" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="US_GruposPermisos" EntityType="US_Model.US_GruposPermisos" />
+          <EntitySet Name="US_GrupoUnidad" EntityType="US_Model.US_GrupoUnidad" />
+          <EntitySet Name="US_Permisos" EntityType="US_Model.US_Permisos" />
+          <EntitySet Name="US_Roles" EntityType="US_Model.US_Roles" />
+          <EntitySet Name="US_TipoGrupoUnidad" EntityType="US_Model.US_TipoGrupoUnidad" />
+          <EntitySet Name="US_Unidades" EntityType="US_Model.US_Unidades" />
+          <EntitySet Name="US_Usuarios" EntityType="US_Model.US_Usuarios" />
+          <AssociationSet Name="FK_US_Permisos_US_GruposPermisos" Association="US_Model.FK_US_Permisos_US_GruposPermisos">
+            <End Role="US_GruposPermisos" EntitySet="US_GruposPermisos" />
+            <End Role="US_Permisos" EntitySet="US_Permisos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_US_GrupoUnidad_US_TipoGrupoUnidad" Association="US_Model.FK_US_GrupoUnidad_US_TipoGrupoUnidad">
+            <End Role="US_TipoGrupoUnidad" EntitySet="US_TipoGrupoUnidad" />
+            <End Role="US_GrupoUnidad" EntitySet="US_GrupoUnidad" />
+          </AssociationSet>
+          <AssociationSet Name="FK_US_Unidad_US_GrupoUnidad" Association="US_Model.FK_US_Unidad_US_GrupoUnidad">
+            <End Role="US_GrupoUnidad" EntitySet="US_GrupoUnidad" />
+            <End Role="US_Unidades" EntitySet="US_Unidades" />
+          </AssociationSet>
+          <AssociationSet Name="US_PermisosUsuarios" Association="US_Model.US_PermisosUsuarios">
+            <End Role="US_Permisos" EntitySet="US_Permisos" />
+            <End Role="US_Usuarios" EntitySet="US_Usuarios" />
+          </AssociationSet>
+          <AssociationSet Name="US_RolesPermisos" Association="US_Model.US_RolesPermisos">
+            <End Role="US_Permisos" EntitySet="US_Permisos" />
+            <End Role="US_Roles" EntitySet="US_Roles" />
+          </AssociationSet>
+          <AssociationSet Name="US_RolesUsuarios" Association="US_Model.US_RolesUsuarios">
+            <End Role="US_Roles" EntitySet="US_Roles" />
+            <End Role="US_Usuarios" EntitySet="US_Usuarios" />
+          </AssociationSet>
+          <AssociationSet Name="US_UsuariosUnidades" Association="US_Model.US_UsuariosUnidades">
+            <End Role="US_Unidades" EntitySet="US_Unidades" />
+            <End Role="US_Usuarios" EntitySet="US_Usuarios" />
+          </AssociationSet>
+          <FunctionImport Name="US_UsuariosUnidades_Add">
+            <Parameter Name="UsuarioId" Mode="In" Type="Int64" />
+            <Parameter Name="UnidadId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="US_UsuariosUnidades_Del">
+          <Parameter Name="UsuarioId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="US_UsuariosUnidades_Get" ReturnType="Collection(US_Model.UsuariosUnidades_Result)">
+          <Parameter Name="UsuarioId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="US_PermisosUsuarios_Add">
+            <Parameter Name="PermisoId" Mode="In" Type="Int32" />
+            <Parameter Name="UsuarioId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="US_PermisosUsuarios_Del">
+          <Parameter Name="UsuarioId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="US_PermisosUsuarios_Get" ReturnType="Collection(US_Model.PermisosUsuarios_Result)">
+          <Parameter Name="UsuarioId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="US_GruposPermisos_GetCombo" ReturnType="Collection(US_Model.GruposPermisosCombo_Result)" />
+          <FunctionImport Name="US_GrupoUnidad_GetCombo" ReturnType="Collection(US_Model.GrupoUnidadCombo_Result)">
+          <Parameter Name="TipoGrupoUnidad" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="US_Permisos_GetCombo" ReturnType="Collection(US_Model.PermisosCombo_Result)">
+          <Parameter Name="GrupoId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="US_TipoGrupoUnidad_GetCombo" ReturnType="Collection(US_Model.TipoGrupoUnidadCombo_Result)" />
+          <FunctionImport Name="US_Unidades_GetCombo" ReturnType="Collection(US_Model.UnidadesCombo_Result)">
+          <Parameter Name="GrupoUnidad" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="US_RolesPermisos_Add">
+            <Parameter Name="PermisoId" Mode="In" Type="Int32" />
+            <Parameter Name="RolId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="US_RolesPermisos_Get" ReturnType="Collection(US_Model.RolesPermisos_Result)">
+          <Parameter Name="PermisoId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="US_Roles_GetCombo" ReturnType="Collection(US_Model.RolesCombo_Result)" />
+          <FunctionImport Name="US_RolesUsuarios_Add">
+            <Parameter Name="UsuarioId" Mode="In" Type="Int64" />
+            <Parameter Name="RolId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="US_RolesUsuarios_Get" ReturnType="Collection(US_Model.RolesUsuarios_Result)">
+            <Parameter Name="RolId" Mode="In" Type="Int32" />
+            <Parameter Name="usuarioId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="US_TodasUnidades_GetCombo" ReturnType="Collection(US_Model.UnidadesCombo_Result)" />
+          <AssociationSet Name="FK_US_GrupoUnidad_US_Unidades" Association="US_Model.FK_US_GrupoUnidad_US_Unidades">
+            <End Role="US_Unidades" EntitySet="US_Unidades" />
+            <End Role="US_GrupoUnidad" EntitySet="US_GrupoUnidad" />
+          </AssociationSet>
+          <FunctionImport Name="US_GetLogin" ReturnType="Collection(Int64)">
+            <Parameter Name="USUARIO" Mode="In" Type="String" />
+            <Parameter Name="PASSWORD" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="US_Unidad_Get_Combo" ReturnType="Collection(US_Model.US_Unidad_Get_Combo_Result)" />
+          <FunctionImport Name="US_PermisosxIdUsuario_Get" ReturnType="Collection(US_Model.US_PermisosxIdUsuario_Get_Result)">
+            <Parameter Name="Permiso" Mode="In" Type="String" />
+            <Parameter Name="UsuarioId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="US_Unidades_Get_All" ReturnType="Collection(US_Model.US_Unidades_Get_All_Result)" />
+          <FunctionImport Name="US_Usuarios_Get_xRol" ReturnType="Collection(US_Model.Usuarios_Result)">
+          <Parameter Name="Rol" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="US_Usuarios_Edit_Password">
+            <Parameter Name="id" Mode="In" Type="Int64" />
+            <Parameter Name="Password" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="US_Usuarios_Get_xUnidad" ReturnType="Collection(US_Model.Usuarios_Result)">
+          <Parameter Name="Unidad" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="US_Usuarios_Get_xGrupoUnidadxRol" ReturnType="Collection(US_Model.Usuarios_Result)">
+            <Parameter Name="Rol" Mode="In" Type="Int32" />
+            <Parameter Name="GrupoUnidad" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="US_Usuarios_Get_xUnidadxRol" ReturnType="Collection(US_Model.Usuarios_Result)">
+            <Parameter Name="Rol" Mode="In" Type="Int32" />
+            <Parameter Name="Unidad" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="US_Usuarios_Get_xRolxPropuesta" ReturnType="Collection(US_Model.Usuarios_Result)">
+            <Parameter Name="Rol" Mode="In" Type="Int32" />
+            <Parameter Name="PropuestaId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="US_CorreosAnuncioAprobacion" ReturnType="Collection(US_Model.US_CorreosAnuncioAprobacion_Result)">
+          <Parameter Name="ESTUDIOID" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="US_CorreosTrabajos_PreyEsp" ReturnType="Collection(US_Model.US_CorreosTrabajos_PreyEsp_Result)">
+          <Parameter Name="TrabajoID" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="US_UnidadesXUsuario_Get" ReturnType="Collection(US_Model.US_UnidadesXUsuario_Get_Result)">
+            <Parameter Name="UsuarioId" Mode="In" Type="Int64" />
+            <Parameter Name="Asignado" Mode="In" Type="Boolean" />
+            <Parameter Name="GrupoUnidadId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="US_PermisosXUsuario_Get" ReturnType="Collection(US_Model.US_PermisosXUsuario_Get_Result)">
+            <Parameter Name="UsuarioId" Mode="In" Type="Int64" />
+            <Parameter Name="Asignado" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="US_RolesXUsuario_Get" ReturnType="Collection(US_Model.US_RolesXUsuario_Get_Result)">
+            <Parameter Name="UsuarioId" Mode="In" Type="Int64" />
+            <Parameter Name="Asignado" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="US_UsuariosXUnidadesXRol_Get" ReturnType="Collection(US_Model.US_UsuariosXUnidadesXRol_Get_Result)">
+            <Parameter Name="Unidades" Mode="In" Type="String" />
+            <Parameter Name="RolId" Mode="In" Type="Int64" />
+            <Parameter Name="UsuarioId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="US_CorreosPresupuestos" ReturnType="Collection(US_Model.US_CorreosPresupuestos_Result)">
+          <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="US_UsuariosAnyParameter_Get" ReturnType="Collection(US_Model.US_UsuariosAnyParameter_Get_Result)">
+            <Parameter Name="id" Mode="In" Type="Int64" />
+            <Parameter Name="Usuario" Mode="In" Type="String" />
+            <Parameter Name="Nombres" Mode="In" Type="String" />
+            <Parameter Name="Apellidos" Mode="In" Type="String" />
+            <Parameter Name="Email" Mode="In" Type="String" />
+            <Parameter Name="Activo" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="US_UsuariosGrupoUnidad_Get" ReturnType="Collection(US_Model.US_UsuariosGrupoUnidad_Get_Result)">
+          <Parameter Name="ID" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="VerificarRolUsuario" ReturnType="Collection(Int32)">
+            <Parameter Name="RolId" Mode="In" Type="Int64" />
+            <Parameter Name="UsuarioId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          </EntityContainer>
+        <ComplexType Name="VerificarPermisoUsuario_Result">
+          <Property Type="Int32" Name="Cantidad" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="ConsultarUsuarios_Result">
+          <Property Type="String" Name="Nombre" Nullable="true" MaxLength="501" />
+        </ComplexType>
+        <ComplexType Name="ObtenerUsuarios_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="String" Name="Nombres" Nullable="true" MaxLength="501" />
+        </ComplexType>
+        <ComplexType Name="Usuarios_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="String" Name="Usuario" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Nombres" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="Apellidos" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="250" />
+          <Property Type="Boolean" Name="Activo" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="US_TipoGrupoUnidad_Get_Result">
+          <Property Type="Byte" Name="id" Nullable="false" />
+          <Property Type="String" Name="TipoGrupoUnidad" Nullable="true" MaxLength="250" />
+        </ComplexType>
+        <ComplexType Name="GrupoUnidad_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="GrupoUnidad" Nullable="true" MaxLength="250" />
+          <Property Type="Byte" Name="TipoGrupoUnidad" Nullable="true" />
+          <Property Type="String" Name="NombreTipoGrupoUnidad" Nullable="true" MaxLength="250" />
+          <Property Type="Boolean" Name="Activo" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="Unidades_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="Unidad" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="GrupoUnidadId" Nullable="true" />
+          <Property Type="String" Name="GrupoUnidad" Nullable="true" MaxLength="250" />
+        </ComplexType>
+        <ComplexType Name="GruposPermisos_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="GrupoPermisos" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="Permisos_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="Permiso" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="Grupoid" Nullable="false" />
+          <Property Type="String" Name="GrupoPermisos" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="Roles_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="Rol" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <EntityType Name="US_GruposPermisos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="GrupoPermisos" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="US_Permisos" Relationship="US_Model.FK_US_Permisos_US_GruposPermisos" FromRole="US_GruposPermisos" ToRole="US_Permisos" />
+        </EntityType>
+        <EntityType Name="US_GrupoUnidad">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int32" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="String" Name="GrupoUnidad" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Type="Byte" Name="TipoGrupoUnidad" />
+          <Property Type="Boolean" Name="Activo" />
+          <NavigationProperty Name="US_TipoGrupoUnidad" Relationship="US_Model.FK_US_GrupoUnidad_US_TipoGrupoUnidad" FromRole="US_GrupoUnidad" ToRole="US_TipoGrupoUnidad" />
+          <NavigationProperty Name="US_Unidades" Relationship="US_Model.FK_US_Unidad_US_GrupoUnidad" FromRole="US_GrupoUnidad" ToRole="US_Unidades" />
+          <NavigationProperty Name="US_Unidades_1" Relationship="US_Model.FK_US_GrupoUnidad_US_Unidades" FromRole="US_GrupoUnidad" ToRole="US_Unidades" />
+          <Property Type="Int32" Name="CodContable" />
+          <Property Type="String" Name="Sigla" MaxLength="3" FixedLength="true" Unicode="true" />
+        </EntityType>
+        <EntityType Name="US_Permisos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int32" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="String" Name="Permiso" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="Grupoid" Nullable="false" />
+          <NavigationProperty Name="US_GruposPermisos" Relationship="US_Model.FK_US_Permisos_US_GruposPermisos" FromRole="US_Permisos" ToRole="US_GruposPermisos" />
+          <NavigationProperty Name="US_Usuarios" Relationship="US_Model.US_PermisosUsuarios" FromRole="US_Permisos" ToRole="US_Usuarios" />
+          <NavigationProperty Name="US_Roles" Relationship="US_Model.US_RolesPermisos" FromRole="US_Permisos" ToRole="US_Roles" />
+        </EntityType>
+        <EntityType Name="US_Roles">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="Rol" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="US_Permisos" Relationship="US_Model.US_RolesPermisos" FromRole="US_Roles" ToRole="US_Permisos" />
+          <NavigationProperty Name="US_Usuarios" Relationship="US_Model.US_RolesUsuarios" FromRole="US_Roles" ToRole="US_Usuarios" />
+        </EntityType>
+        <EntityType Name="US_TipoGrupoUnidad">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Byte" Name="id" Nullable="false" />
+          <Property Type="String" Name="TipoGrupoUnidad" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="US_GrupoUnidad" Relationship="US_Model.FK_US_GrupoUnidad_US_TipoGrupoUnidad" FromRole="US_TipoGrupoUnidad" ToRole="US_GrupoUnidad" />
+        </EntityType>
+        <EntityType Name="US_Unidades">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="Unidad" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="GrupoUnidadId" />
+          <NavigationProperty Name="US_GrupoUnidad" Relationship="US_Model.FK_US_Unidad_US_GrupoUnidad" FromRole="US_Unidades" ToRole="US_GrupoUnidad" />
+          <NavigationProperty Name="US_Usuarios" Relationship="US_Model.US_UsuariosUnidades" FromRole="US_Unidades" ToRole="US_Usuarios" />
+          <NavigationProperty Name="US_GrupoUnidad_1" Relationship="US_Model.FK_US_GrupoUnidad_US_Unidades" FromRole="US_Unidades" ToRole="US_GrupoUnidad" />
+          <Property Type="Int32" Name="Codigo" />
+          <Property Type="String" Name="Sigla" MaxLength="13" FixedLength="true" Unicode="true" />
+          <Property Type="Decimal" Name="GMMinimo" Precision="18" Scale="3" />
+          <Property Name="Trafico" Type="Byte" />
+        </EntityType>
+        <EntityType Name="US_Usuarios">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="String" Name="Usuario" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Password" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Nombres" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Apellidos" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Email" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="Activo" />
+          <NavigationProperty Name="US_Permisos" Relationship="US_Model.US_PermisosUsuarios" FromRole="US_Usuarios" ToRole="US_Permisos" />
+          <NavigationProperty Name="US_Roles" Relationship="US_Model.US_RolesUsuarios" FromRole="US_Usuarios" ToRole="US_Roles" />
+          <NavigationProperty Name="US_Unidades" Relationship="US_Model.US_UsuariosUnidades" FromRole="US_Usuarios" ToRole="US_Unidades" />
+        </EntityType>
+        <Association Name="FK_US_Permisos_US_GruposPermisos">
+          <End Type="US_Model.US_GruposPermisos" Role="US_GruposPermisos" Multiplicity="1" />
+          <End Type="US_Model.US_Permisos" Role="US_Permisos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="US_GruposPermisos">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="US_Permisos">
+              <PropertyRef Name="Grupoid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_US_GrupoUnidad_US_TipoGrupoUnidad">
+          <End Type="US_Model.US_TipoGrupoUnidad" Role="US_TipoGrupoUnidad" Multiplicity="0..1" />
+          <End Type="US_Model.US_GrupoUnidad" Role="US_GrupoUnidad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="US_TipoGrupoUnidad">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="US_GrupoUnidad">
+              <PropertyRef Name="TipoGrupoUnidad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_US_Unidad_US_GrupoUnidad">
+          <End Type="US_Model.US_GrupoUnidad" Role="US_GrupoUnidad" Multiplicity="0..1" />
+          <End Type="US_Model.US_Unidades" Role="US_Unidades" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="US_GrupoUnidad">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="US_Unidades">
+              <PropertyRef Name="GrupoUnidadId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="US_PermisosUsuarios">
+          <End Type="US_Model.US_Permisos" Role="US_Permisos" Multiplicity="*" />
+          <End Type="US_Model.US_Usuarios" Role="US_Usuarios" Multiplicity="*" />
+        </Association>
+        <Association Name="US_RolesPermisos">
+          <End Type="US_Model.US_Permisos" Role="US_Permisos" Multiplicity="*" />
+          <End Type="US_Model.US_Roles" Role="US_Roles" Multiplicity="*" />
+        </Association>
+        <Association Name="US_RolesUsuarios">
+          <End Type="US_Model.US_Roles" Role="US_Roles" Multiplicity="*" />
+          <End Type="US_Model.US_Usuarios" Role="US_Usuarios" Multiplicity="*" />
+        </Association>
+        <Association Name="US_UsuariosUnidades">
+          <End Type="US_Model.US_Unidades" Role="US_Unidades" Multiplicity="*" />
+          <End Type="US_Model.US_Usuarios" Role="US_Usuarios" Multiplicity="*" />
+        </Association>
+        <ComplexType Name="UsuariosUnidades_Result">
+          <Property Type="Int64" Name="UsuarioId" Nullable="false" />
+          <Property Type="Int32" Name="UnidadId" Nullable="false" />
+          <Property Type="String" Name="Unidad" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="PermisosUsuarios_Result">
+          <Property Type="Int32" Name="PermisoId" Nullable="false" />
+          <Property Type="Int64" Name="UsuarioId" Nullable="false" />
+          <Property Type="String" Name="Permiso" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="GruposPermisosCombo_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="GrupoPermisos" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="GrupoUnidadCombo_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="GrupoUnidad" Nullable="true" MaxLength="250" />
+        </ComplexType>
+        <ComplexType Name="PermisosCombo_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="Permiso" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="TipoGrupoUnidadCombo_Result">
+          <Property Type="Byte" Name="id" Nullable="false" />
+          <Property Type="String" Name="TipoGrupoUnidad" Nullable="true" MaxLength="250" />
+        </ComplexType>
+        <ComplexType Name="UnidadesCombo_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="Unidad" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="RolesPermisos_Result">
+          <Property Type="Int32" Name="PermisoId" Nullable="false" />
+          <Property Type="Int32" Name="RolId" Nullable="false" />
+          <Property Type="String" Name="Rol" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="RolesCombo_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="Rol" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="RolesUsuarios_Result">
+          <Property Type="Int64" Name="UsuarioId" Nullable="false" />
+          <Property Type="Int32" Name="RolId" Nullable="false" />
+          <Property Type="String" Name="Usuario" Nullable="true" MaxLength="20" />
+        </ComplexType>
+        <Association Name="FK_US_GrupoUnidad_US_Unidades">
+          <End Type="US_Model.US_Unidades" Role="US_Unidades" Multiplicity="1" />
+          <End Type="US_Model.US_GrupoUnidad" Role="US_GrupoUnidad" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="US_Unidades">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="US_GrupoUnidad">
+              <PropertyRef Name="id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="US_Unidad_Get_Combo_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="Unidad" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="US_PermisosxIdUsuario_Get_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="Permiso" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="US_Unidades_Get_All_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="Unidad" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="GrupoUnidadId" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="US_CorreosAnuncioAprobacion_Result">
+          <Property Type="String" Name="CORREO" Nullable="true" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="US_CorreosTrabajos_PreyEsp_Result">
+          <Property Type="String" Name="CORREO" Nullable="true" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="US_UnidadesXUsuario_Get_Result">
+          <Property Type="Int64" Name="UsuarioId" Nullable="true" />
+          <Property Type="Int32" Name="UnidadId" Nullable="true" />
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="Unidad" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="GrupoUnidadId" Nullable="true" />
+          <Property Type="Int32" Name="Codigo" Nullable="true" />
+          <Property Type="String" Name="Sigla" Nullable="true" MaxLength="13" />
+          <Property Type="Decimal" Name="GMMinimo" Nullable="true" Precision="18" Scale="3" />
+          <Property Type="String" Name="Asignado" Nullable="false" MaxLength="5" />
+        </ComplexType>
+        <ComplexType Name="US_PermisosXUsuario_Get_Result">
+          <Property Type="Int32" Name="PermisoId" Nullable="true" />
+          <Property Type="Int64" Name="UsuarioId" Nullable="true" />
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="Permiso" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="Grupoid" Nullable="false" />
+          <Property Type="String" Name="Asignado" Nullable="false" MaxLength="5" />
+        </ComplexType>
+        <ComplexType Name="US_RolesXUsuario_Get_Result">
+          <Property Type="Int64" Name="UsuarioId" Nullable="true" />
+          <Property Type="Int32" Name="RolId" Nullable="true" />
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="Rol" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Asignado" Nullable="false" MaxLength="5" />
+        </ComplexType>
+        <ComplexType Name="US_UsuariosXUnidadesXRol_Get_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="String" Name="Usuario" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Password" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Nombres" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="Apellidos" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="250" />
+          <Property Type="Boolean" Name="Activo" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="US_CorreosPresupuestos_Result">
+          <Property Type="String" Name="CORREO" Nullable="true" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="US_UsuariosAnyParameter_Get_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="String" Name="Usuario" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Password" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Nombres" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="Apellidos" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="250" />
+          <Property Type="Boolean" Name="Activo" Nullable="true" />
+          <Property Type="String" Name="Cargo" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Ciudad" Nullable="false" MaxLength="255" />
+        </ComplexType>
+        <ComplexType Name="US_UsuariosGrupoUnidad_Get_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="Int32" Name="IdUnidad" Nullable="true" />
+          <Property Type="String" Name="Unidad" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="IdGrupoUnidad" Nullable="true" />
+          <Property Type="String" Name="GrupoUnidad" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="Usuario" Nullable="true" MaxLength="501" />
+        </ComplexType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="US_ModelStoreContainer" CdmEntityContainer="US_Entities">
+          <FunctionImportMapping FunctionImportName="VerificarPermisoUsuario" FunctionName="US_Model.Store.VerificarPermisoUsuario">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.VerificarPermisoUsuario_Result">
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ConsultarUsuariosXRolesUsuarios" FunctionName="US_Model.Store.ConsultarUsuariosXRolesUsuarios">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.Usuarios_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="Nombres" ColumnName="Nombres" />
+                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ConsultarUsuariosXNombre" FunctionName="US_Model.Store.ConsultarUsuariosXNombre">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.Usuarios_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="Nombres" ColumnName="Nombres" />
+                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ConsultarUsuarios" FunctionName="US_Model.Store.ConsultarUsuarios">
+          <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.ConsultarUsuarios_Result">
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ObtenerUsuarios" FunctionName="US_Model.Store.ObtenerUsuarios">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.ObtenerUsuarios_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Nombres" ColumnName="Nombres" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_Usuarios_Add" FunctionName="US_Model.Store.US_Usuarios_Add" />
+          <FunctionImportMapping FunctionImportName="US_Usuarios_Del" FunctionName="US_Model.Store.US_Usuarios_Del" />
+          <FunctionImportMapping FunctionImportName="US_Usuarios_Edit" FunctionName="US_Model.Store.US_Usuarios_Edit" />
+          <FunctionImportMapping FunctionImportName="US_TipoGrupoUnidad_Add" FunctionName="US_Model.Store.US_TipoGrupoUnidad_Add" />
+          <FunctionImportMapping FunctionImportName="US_TipoGrupoUnidad_Del" FunctionName="US_Model.Store.US_TipoGrupoUnidad_Del" />
+          <FunctionImportMapping FunctionImportName="US_TipoGrupoUnidad_Edit" FunctionName="US_Model.Store.US_TipoGrupoUnidad_Edit" />
+          <FunctionImportMapping FunctionImportName="US_TipoGrupoUnidad_Get" FunctionName="US_Model.Store.US_TipoGrupoUnidad_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.US_TipoGrupoUnidad_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="TipoGrupoUnidad" ColumnName="TipoGrupoUnidad" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_TipoGrupoUnidad_Get_Nombre" FunctionName="US_Model.Store.US_TipoGrupoUnidad_Get_Nombre">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.US_TipoGrupoUnidad_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="TipoGrupoUnidad" ColumnName="TipoGrupoUnidad" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_GrupoUnidad_Add" FunctionName="US_Model.Store.US_GrupoUnidad_Add" />
+          <FunctionImportMapping FunctionImportName="US_GrupoUnidad_Del" FunctionName="US_Model.Store.US_GrupoUnidad_Del" />
+          <FunctionImportMapping FunctionImportName="US_GrupoUnidad_Edit" FunctionName="US_Model.Store.US_GrupoUnidad_Edit" />
+          <FunctionImportMapping FunctionImportName="US_GrupoUnidad_Get" FunctionName="US_Model.Store.US_GrupoUnidad_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.GrupoUnidad_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="GrupoUnidad" ColumnName="GrupoUnidad" />
+                <ScalarProperty Name="TipoGrupoUnidad" ColumnName="TipoGrupoUnidad" />
+                <ScalarProperty Name="NombreTipoGrupoUnidad" ColumnName="NombreTipoGrupoUnidad" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_Unidades_Add" FunctionName="US_Model.Store.US_Unidades_Add" />
+          <FunctionImportMapping FunctionImportName="US_Unidades_Del" FunctionName="US_Model.Store.US_Unidades_Del" />
+          <FunctionImportMapping FunctionImportName="US_Unidades_Edit" FunctionName="US_Model.Store.US_Unidades_Edit" />
+          <FunctionImportMapping FunctionImportName="US_Unidades_Get" FunctionName="US_Model.Store.US_Unidades_Get">
+          <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.Unidades_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Unidad" ColumnName="Unidad" />
+                <ScalarProperty Name="GrupoUnidadId" ColumnName="GrupoUnidadId" />
+                <ScalarProperty Name="GrupoUnidad" ColumnName="GrupoUnidad" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_GruposPermisos_Add" FunctionName="US_Model.Store.US_GruposPermisos_Add" />
+          <FunctionImportMapping FunctionImportName="US_GruposPermisos_Del" FunctionName="US_Model.Store.US_GruposPermisos_Del" />
+          <FunctionImportMapping FunctionImportName="US_GruposPermisos_Edit" FunctionName="US_Model.Store.US_GruposPermisos_Edit" />
+          <FunctionImportMapping FunctionImportName="US_GruposPermisos_Get" FunctionName="US_Model.Store.US_GruposPermisos_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.GruposPermisos_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="GrupoPermisos" ColumnName="GrupoPermisos" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_Permisos_Add" FunctionName="US_Model.Store.US_Permisos_Add" />
+          <FunctionImportMapping FunctionImportName="US_Permisos_Del" FunctionName="US_Model.Store.US_Permisos_Del" />
+          <FunctionImportMapping FunctionImportName="US_Permisos_Edit" FunctionName="US_Model.Store.US_Permisos_Edit" />
+          <FunctionImportMapping FunctionImportName="US_Permisos_Get" FunctionName="US_Model.Store.US_Permisos_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.Permisos_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Permiso" ColumnName="Permiso" />
+                <ScalarProperty Name="Grupoid" ColumnName="Grupoid" />
+                <ScalarProperty Name="GrupoPermisos" ColumnName="GrupoPermisos" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_Roles_Add" FunctionName="US_Model.Store.US_Roles_Add" />
+          <FunctionImportMapping FunctionImportName="US_Roles_Del" FunctionName="US_Model.Store.US_Roles_Del" />
+          <FunctionImportMapping FunctionImportName="US_Roles_Edit" FunctionName="US_Model.Store.US_Roles_Edit" />
+          <FunctionImportMapping FunctionImportName="US_Roles_Get" FunctionName="US_Model.Store.US_Roles_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.Roles_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Rol" ColumnName="Rol" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="US_GruposPermisos">
+            <EntityTypeMapping TypeName="US_Model.US_GruposPermisos">
+              <MappingFragment StoreEntitySet="US_GruposPermisos">
+                <ScalarProperty Name="GrupoPermisos" ColumnName="GrupoPermisos" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="US_GrupoUnidad">
+            <EntityTypeMapping TypeName="US_Model.US_GrupoUnidad">
+              <MappingFragment StoreEntitySet="US_GrupoUnidad">
+                <ScalarProperty Name="Sigla" ColumnName="Sigla" />
+                <ScalarProperty Name="CodContable" ColumnName="CodContable" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="TipoGrupoUnidad" ColumnName="TipoGrupoUnidad" />
+                <ScalarProperty Name="GrupoUnidad" ColumnName="GrupoUnidad" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="US_Permisos">
+            <EntityTypeMapping TypeName="US_Model.US_Permisos">
+              <MappingFragment StoreEntitySet="US_Permisos">
+                <ScalarProperty Name="Grupoid" ColumnName="Grupoid" />
+                <ScalarProperty Name="Permiso" ColumnName="Permiso" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="US_Roles">
+            <EntityTypeMapping TypeName="US_Model.US_Roles">
+              <MappingFragment StoreEntitySet="US_Roles">
+                <ScalarProperty Name="Rol" ColumnName="Rol" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="US_TipoGrupoUnidad">
+            <EntityTypeMapping TypeName="US_Model.US_TipoGrupoUnidad">
+              <MappingFragment StoreEntitySet="US_TipoGrupoUnidad">
+                <ScalarProperty Name="TipoGrupoUnidad" ColumnName="TipoGrupoUnidad" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="US_Unidades">
+            <EntityTypeMapping TypeName="US_Model.US_Unidades">
+              <MappingFragment StoreEntitySet="US_Unidades">
+                <ScalarProperty Name="Trafico" ColumnName="Trafico" />
+                <ScalarProperty Name="GMMinimo" ColumnName="GMMinimo" />
+                <ScalarProperty Name="Sigla" ColumnName="Sigla" />
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="GrupoUnidadId" ColumnName="GrupoUnidadId" />
+                <ScalarProperty Name="Unidad" ColumnName="Unidad" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="US_Usuarios">
+            <EntityTypeMapping TypeName="US_Model.US_Usuarios">
+              <MappingFragment StoreEntitySet="US_Usuarios">
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+                <ScalarProperty Name="Nombres" ColumnName="Nombres" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="US_PermisosUsuarios" TypeName="US_Model.US_PermisosUsuarios" StoreEntitySet="US_PermisosUsuarios">
+            <EndProperty Name="US_Usuarios">
+              <ScalarProperty Name="id" ColumnName="UsuarioId" />
+            </EndProperty>
+            <EndProperty Name="US_Permisos">
+              <ScalarProperty Name="id" ColumnName="PermisoId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="US_RolesPermisos" TypeName="US_Model.US_RolesPermisos" StoreEntitySet="US_RolesPermisos">
+            <EndProperty Name="US_Roles">
+              <ScalarProperty Name="id" ColumnName="RolId" />
+            </EndProperty>
+            <EndProperty Name="US_Permisos">
+              <ScalarProperty Name="id" ColumnName="PermisoId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="US_RolesUsuarios" TypeName="US_Model.US_RolesUsuarios" StoreEntitySet="US_RolesUsuarios">
+            <EndProperty Name="US_Usuarios">
+              <ScalarProperty Name="id" ColumnName="UsuarioId" />
+            </EndProperty>
+            <EndProperty Name="US_Roles">
+              <ScalarProperty Name="id" ColumnName="RolId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="US_UsuariosUnidades" TypeName="US_Model.US_UsuariosUnidades" StoreEntitySet="US_UsuariosUnidades">
+            <EndProperty Name="US_Usuarios">
+              <ScalarProperty Name="id" ColumnName="UsuarioId" />
+            </EndProperty>
+            <EndProperty Name="US_Unidades">
+              <ScalarProperty Name="id" ColumnName="UnidadId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <FunctionImportMapping FunctionImportName="US_UsuariosUnidades_Add" FunctionName="US_Model.Store.US_UsuariosUnidades_Add" />
+          <FunctionImportMapping FunctionImportName="US_UsuariosUnidades_Del" FunctionName="US_Model.Store.US_UsuariosUnidades_Del" />
+          <FunctionImportMapping FunctionImportName="US_UsuariosUnidades_Get" FunctionName="US_Model.Store.US_UsuariosUnidades_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.UsuariosUnidades_Result">
+                <ScalarProperty Name="UsuarioId" ColumnName="UsuarioId" />
+                <ScalarProperty Name="UnidadId" ColumnName="UnidadId" />
+                <ScalarProperty Name="Unidad" ColumnName="Unidad" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_PermisosUsuarios_Add" FunctionName="US_Model.Store.US_PermisosUsuarios_Add" />
+          <FunctionImportMapping FunctionImportName="US_PermisosUsuarios_Del" FunctionName="US_Model.Store.US_PermisosUsuarios_Del" />
+          <FunctionImportMapping FunctionImportName="US_PermisosUsuarios_Get" FunctionName="US_Model.Store.US_PermisosUsuarios_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.PermisosUsuarios_Result">
+                <ScalarProperty Name="PermisoId" ColumnName="PermisoId" />
+                <ScalarProperty Name="UsuarioId" ColumnName="UsuarioId" />
+                <ScalarProperty Name="Permiso" ColumnName="Permiso" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_GruposPermisos_GetCombo" FunctionName="US_Model.Store.US_GruposPermisos_GetCombo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.GruposPermisosCombo_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="GrupoPermisos" ColumnName="GrupoPermisos" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_GrupoUnidad_GetCombo" FunctionName="US_Model.Store.US_GrupoUnidad_GetCombo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.GrupoUnidadCombo_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="GrupoUnidad" ColumnName="GrupoUnidad" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_Permisos_GetCombo" FunctionName="US_Model.Store.US_Permisos_GetCombo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.PermisosCombo_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Permiso" ColumnName="Permiso" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_TipoGrupoUnidad_GetCombo" FunctionName="US_Model.Store.US_TipoGrupoUnidad_GetCombo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.TipoGrupoUnidadCombo_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="TipoGrupoUnidad" ColumnName="TipoGrupoUnidad" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_Unidades_GetCombo" FunctionName="US_Model.Store.US_Unidades_GetCombo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.UnidadesCombo_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Unidad" ColumnName="Unidad" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_RolesPermisos_Add" FunctionName="US_Model.Store.US_RolesPermisos_Add" />
+          <FunctionImportMapping FunctionImportName="US_RolesPermisos_Get" FunctionName="US_Model.Store.US_RolesPermisos_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.RolesPermisos_Result">
+                <ScalarProperty Name="PermisoId" ColumnName="PermisoId" />
+                <ScalarProperty Name="RolId" ColumnName="RolId" />
+                <ScalarProperty Name="Rol" ColumnName="Rol" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_Roles_GetCombo" FunctionName="US_Model.Store.US_Roles_GetCombo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.RolesCombo_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Rol" ColumnName="Rol" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_RolesUsuarios_Add" FunctionName="US_Model.Store.US_RolesUsuarios_Add" />
+          <FunctionImportMapping FunctionImportName="US_RolesUsuarios_Get" FunctionName="US_Model.Store.US_RolesUsuarios_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.RolesUsuarios_Result">
+                <ScalarProperty Name="UsuarioId" ColumnName="UsuarioId" />
+                <ScalarProperty Name="RolId" ColumnName="RolId" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_GetLogin" FunctionName="US_Model.Store.US_Usuarios_GetLogin" />
+          <FunctionImportMapping FunctionImportName="US_Unidad_Get_Combo" FunctionName="US_Model.Store.US_Unidad_Get_Combo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.US_Unidad_Get_Combo_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Unidad" ColumnName="Unidad" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_TodasUnidades_GetCombo" FunctionName="US_Model.Store.US_TodasUnidades_GetCombo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.UnidadesCombo_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Unidad" ColumnName="Unidad" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_PermisosxIdUsuario_Get" FunctionName="US_Model.Store.US_PermisosxIdUsuario_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.US_PermisosxIdUsuario_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Permiso" ColumnName="Permiso" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_Unidades_Get_All" FunctionName="US_Model.Store.US_Unidades_Get_All">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.US_Unidades_Get_All_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Unidad" ColumnName="Unidad" />
+                <ScalarProperty Name="GrupoUnidadId" ColumnName="GrupoUnidadId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_Usuarios_Get_xRol" FunctionName="US_Model.Store.US_Usuarios_Get_xRol">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.Usuarios_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="Nombres" ColumnName="Nombres" />
+                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_Usuarios_Edit_Password" FunctionName="US_Model.Store.US_Usuarios_Edit_Password" />
+          <FunctionImportMapping FunctionImportName="US_Usuarios_Get_xUnidad" FunctionName="US_Model.Store.US_Usuarios_Get_xUnidad">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.Usuarios_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="Nombres" ColumnName="Nombres" />
+                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_Usuarios_Get_xGrupoUnidadxRol" FunctionName="US_Model.Store.US_Usuarios_Get_xGrupoUnidadxRol">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.Usuarios_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="Nombres" ColumnName="Nombres" />
+                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_Usuarios_Get_xUnidadxRol" FunctionName="US_Model.Store.US_Usuarios_Get_xUnidadxRol">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.Usuarios_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="Nombres" ColumnName="Nombres" />
+                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_Usuarios_Get_xRolxPropuesta" FunctionName="US_Model.Store.US_Usuarios_Get_xRolxPropuesta">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.Usuarios_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="Nombres" ColumnName="Nombres" />
+                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_CorreosAnuncioAprobacion" FunctionName="US_Model.Store.US_CorreosAnuncioAprobacion">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.US_CorreosAnuncioAprobacion_Result">
+                <ScalarProperty Name="CORREO" ColumnName="CORREO" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_CorreosTrabajos_PreyEsp" FunctionName="US_Model.Store.US_CorreosTrabajos_PreyEsp">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.US_CorreosTrabajos_PreyEsp_Result">
+                <ScalarProperty Name="CORREO" ColumnName="CORREO" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_UnidadesXUsuario_Get" FunctionName="US_Model.Store.US_UnidadesXUsuario_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.US_UnidadesXUsuario_Get_Result">
+                <ScalarProperty Name="UsuarioId" ColumnName="UsuarioId" />
+                <ScalarProperty Name="UnidadId" ColumnName="UnidadId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Unidad" ColumnName="Unidad" />
+                <ScalarProperty Name="GrupoUnidadId" ColumnName="GrupoUnidadId" />
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="Sigla" ColumnName="Sigla" />
+                <ScalarProperty Name="GMMinimo" ColumnName="GMMinimo" />
+                <ScalarProperty Name="Asignado" ColumnName="Asignado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_PermisosXUsuario_Get" FunctionName="US_Model.Store.US_PermisosXUsuario_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.US_PermisosXUsuario_Get_Result">
+                <ScalarProperty Name="PermisoId" ColumnName="PermisoId" />
+                <ScalarProperty Name="UsuarioId" ColumnName="UsuarioId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Permiso" ColumnName="Permiso" />
+                <ScalarProperty Name="Grupoid" ColumnName="Grupoid" />
+                <ScalarProperty Name="Asignado" ColumnName="Asignado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_RolesXUsuario_Get" FunctionName="US_Model.Store.US_RolesXUsuario_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.US_RolesXUsuario_Get_Result">
+                <ScalarProperty Name="UsuarioId" ColumnName="UsuarioId" />
+                <ScalarProperty Name="RolId" ColumnName="RolId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Rol" ColumnName="Rol" />
+                <ScalarProperty Name="Asignado" ColumnName="Asignado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_UsuariosXUnidadesXRol_Get" FunctionName="US_Model.Store.US_UsuariosXUnidadesXRol_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.US_UsuariosXUnidadesXRol_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Nombres" ColumnName="Nombres" />
+                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_CorreosPresupuestos" FunctionName="US_Model.Store.US_CorreosPresupuestos">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.US_CorreosPresupuestos_Result">
+                <ScalarProperty Name="CORREO" ColumnName="CORREO" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_UsuariosAnyParameter_Get" FunctionName="US_Model.Store.US_UsuariosAnyParameter_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.US_UsuariosAnyParameter_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Nombres" ColumnName="Nombres" />
+                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="Cargo" ColumnName="Cargo" />
+                <ScalarProperty Name="Ciudad" ColumnName="Ciudad" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_UsuariosGrupoUnidad_Get" FunctionName="US_Model.Store.US_UsuariosGrupoUnidad_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="US_Model.US_UsuariosGrupoUnidad_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="IdUnidad" ColumnName="IdUnidad" />
+                <ScalarProperty Name="Unidad" ColumnName="Unidad" />
+                <ScalarProperty Name="IdGrupoUnidad" ColumnName="IdGrupoUnidad" />
+                <ScalarProperty Name="GrupoUnidad" ColumnName="GrupoUnidad" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="VerificarRolUsuario" FunctionName="US_Model.Store.VerificarRolUsuario" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer>
+    <edmx:Connection>
+      <edmx:DesignerInfoPropertySet>
+        <edmx:DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </edmx:DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <edmx:DesignerInfoPropertySet>
+        <edmx:DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <edmx:DesignerProperty Name="EnablePluralization" Value="True" />
+        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <edmx:DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+        <edmx:DesignerProperty Name="UseLegacyProvider" Value="True" />
+      </edmx:DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <edmx:Diagram Name="US_Model">
+        <edmx:EntityTypeShape EntityType="US_Model.US_GruposPermisos" Width="1.5" PointX="3" PointY="5.625" Height="1.5956835937499996" />
+        <edmx:EntityTypeShape EntityType="US_Model.US_GrupoUnidad" Width="1.5" PointX="3" PointY="1.375" Height="2.1725878906249996" />
+        <edmx:EntityTypeShape EntityType="US_Model.US_Permisos" Width="1.5" PointX="5.25" PointY="5.375" Height="2.1725878906249996" />
+        <edmx:EntityTypeShape EntityType="US_Model.US_Roles" Width="1.5" PointX="5.25" PointY="8.25" Height="1.7879850260416674" />
+        <edmx:EntityTypeShape EntityType="US_Model.US_TipoGrupoUnidad" Width="1.5" PointX="0.75" PointY="1.625" Height="1.5956835937500031" />
+        <edmx:EntityTypeShape EntityType="US_Model.US_Unidades" Width="1.5" PointX="5.25" PointY="1.5" Height="1.9802864583333388" />
+        <edmx:EntityTypeShape EntityType="US_Model.US_Usuarios" Width="1.5" PointX="7.5" PointY="1" Height="2.9417936197916674" />
+        <edmx:AssociationConnector Association="US_Model.FK_US_Permisos_US_GruposPermisos">
+          <edmx:ConnectorPoint PointX="4.5" PointY="6.422841796875" />
+          <edmx:ConnectorPoint PointX="5.25" PointY="6.422841796875" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="US_Model.FK_US_GrupoUnidad_US_TipoGrupoUnidad">
+          <edmx:ConnectorPoint PointX="2.25" PointY="2.4228417968750016" />
+          <edmx:ConnectorPoint PointX="3" PointY="2.4228417968750016" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="US_Model.FK_US_Unidad_US_GrupoUnidad">
+          <edmx:ConnectorPoint PointX="4.5" PointY="2.5862939453125" />
+          <edmx:ConnectorPoint PointX="5.25" PointY="2.5862939453125" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="US_Model.US_PermisosUsuarios">
+          <edmx:ConnectorPoint PointX="6.75" PointY="6.4612939453125" />
+          <edmx:ConnectorPoint PointX="7.7604141666666671" PointY="6.4612939453124989" />
+          <edmx:ConnectorPoint PointX="7.9270808333333331" PointY="6.4612939453125" />
+          <edmx:ConnectorPoint PointX="8.25" PointY="6.4612939453125" />
+          <edmx:ConnectorPoint PointX="8.25" PointY="3.9417936197916674" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="US_Model.US_RolesPermisos">
+          <edmx:ConnectorPoint PointX="6" PointY="7.547587890625" />
+          <edmx:ConnectorPoint PointX="6" PointY="8.25" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="US_Model.US_RolesUsuarios">
+          <edmx:ConnectorPoint PointX="6.75" PointY="9.1439925130208337" />
+          <edmx:ConnectorPoint PointX="7.8437475" PointY="9.1439925130208337" />
+          <edmx:ConnectorPoint PointX="7.8437475" PointY="3.9417936197916674" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="US_Model.US_UsuariosUnidades">
+          <edmx:ConnectorPoint PointX="6.75" PointY="2.5862939453125" />
+          <edmx:ConnectorPoint PointX="7.5" PointY="2.5862939453125" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="US_Model.FK_US_GrupoUnidad_US_Unidades">
+          <edmx:ConnectorPoint PointX="5.25" PointY="1.98064697265625" />
+          <edmx:ConnectorPoint PointX="4.5" PointY="1.98064697265625" />
+        </edmx:AssociationConnector>
+      </edmx:Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

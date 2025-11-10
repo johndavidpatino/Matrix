@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
+	<siteMapNode url="Home/Default.aspx" title="Home"  description="Inicio del sitio">
+		<siteMapNode url="CU_Cuentas/Home.aspx" title="Cuentas"  description="Menú de cuentas">
+			<siteMapNode title="Clientes" url="CU_Cuentas/Clientes.aspx" description="Gestión de clientes"/>
+			<siteMapNode title="Contactos" url="CU_Cuentas/Contactos.aspx" description="Gestión de contactos"/>
+			<siteMapNode title="Briefs" url="CU_Cuentas/Briefs.aspx" description="Gestión de briefs"/>
+			<siteMapNode title="Propuestas" url="CU_Cuentas/Propuestas.aspx" description="Gestión de propuestas">
+				<siteMapNode title="IQuote" url="CAP/Cap_Principal.aspx" description="Presupuestos"/>
+				<siteMapNode title="Envío para revisión" url="CU_Cuentas/EnvioPresupuestosRevision" description="Envio propuestas a revisión"></siteMapNode>
+			</siteMapNode>
+			<siteMapNode title="Ajuste Costos Mystery" url="CU_Cuentas/AjustesCostosMystery.aspx" description="Ajuste Costos Mystery"></siteMapNode>
+			<siteMapNode title="Peticiones Quejas y Reclamos" url="CU_Cuentas/FormPQR.aspx" description="Gestión PQR"/>
+			<siteMapNode title="Estudios" url="CU_Cuentas/Estudios.aspx" description="Gestión de Estudios"/>
+			<siteMapNode title="Proyectos" url="CU_Cuentas/Proyectos.aspx" />
+		</siteMapNode>
+		<siteMapNode url="Es_Estadistica/Home.aspx" title="Estadística"  description="Menú de Estadística">
+			<siteMapNode title="Brief de Diseño Muestral" url="Es_Estadistica/BriefDisenoDeMuestra.aspx" description="Gestión de brief"/>
+			<siteMapNode title="Diseño Muestral" url="Es_Estadistica/DisenoDeMuestra.aspx" description="Diseños muestrales"/>
+			<siteMapNode title="Metodologías" url="Es_Estadistica/MetodologiaDeCampo.aspx" description="Metodologías de Campo"/>
+		</siteMapNode>
+
+		<siteMapNode url="MBO/Default.aspx" title="MBO"  description="MBO">
+			<siteMapNode title="MBO Gerencia" url="MBO/AOTGerencia.aspx"/>
+			<siteMapNode title="MBO Autorizacion GM" url="CU_Cuentas/AutorizacionPresupuestosDirectores.aspx"/>
+			<siteMapNode title="MBO Matrix gestion" url="MBO/MatrixGestion.aspx"/>
+			<siteMapNode title="MBO Propuestas Estado" url="MBO/PropuestasEstadoTotal.aspx"/>
+			<siteMapNode title="MBO Propuestas sin entregar" url="MBO/PropuestasSinTrabajo.aspx"/>
+			<siteMapNode title="MBO Operaciones" url="MBO/CampoCalidadCiudad.aspx"/>
+			<siteMapNode title="MBO Operaciones" url="MBO/CampoCalidadTotal.aspx"/>
+			<siteMapNode title="MBO Operaciones" url="MBO/CampoProduccion.aspx"/>
+			<siteMapNode title="MBO Dirección" url="MBO/AOTDireccion.aspx"/>
+			<siteMapNode title="MBO Dirección" url="MBO/PropuestasEstadoUnidad.aspx"/>
+			<siteMapNode title="AOT Gerentes" url="MBO/AOTPorGerentes.aspx"/>
+		</siteMapNode>
+
+		<siteMapNode url="TH_TalentoHumano/Default.aspx" title="Talento Humano"  description="Menú de Talento Humano">
+			<siteMapNode title="Tipo Unidades" url="US_Usuarios/TipoGrupoUnidad.aspx">
+				<siteMapNode title="Grupos Unidades" url="US_Usuarios/GrupoUnidad.aspx">
+					<siteMapNode title="Unidades" url="US_Usuarios/Unidades.aspx"/>
+				</siteMapNode>
+			</siteMapNode>
+			<siteMapNode title="Usuarios" url="US_Usuarios/Usuarios.aspx">
+				<siteMapNode title="Unidades asociadas a usuario" url="US_Usuarios/UsuariosUnidades.aspx"/>
+				<siteMapNode title="Permisos asociados al usuario" url="US_Usuarios/PermisosUsuarios.aspx"/>
+			</siteMapNode>
+			<siteMapNode title="Roles" url="US_Usuarios/Roles.aspx">
+				<siteMapNode title="Permisos de rol" url="US_Usuarios/RolesPermisos.aspx"/>
+				<siteMapNode title="Usuarios de rol" url="US_Usuarios/RolesUsuarios.aspx"/>
+			</siteMapNode>
+			<siteMapNode title="Permisos" url="US_Usuarios/GruposPermisos.aspx">
+				<siteMapNode title="Permisos" url="US_Usuarios/Permisos.aspx"/>
+			</siteMapNode>
+			<siteMapNode title="Listado Hojas de Vida" url="TH_TalentoHumano/ListadoHojasDeVida.aspx"/>
+			<siteMapNode title="Listado Encuestadores" url="TH_TalentoHumano/ListadoEncuestadores.aspx">
+				<siteMapNode title="Ficha Encuestador" url="TH_TalentoHumano/FichaEncuestador.aspx"/>
+			</siteMapNode>
+			<siteMapNode title="Empleados y temporales" url="TH_TalentoHumano/Personas.aspx"/>
+			<siteMapNode title="Reporte Personal" url="RP_Reportes/ListadoGeneralMatrix.aspx"/>
+			<siteMapNode title="Hojas de Vida" url="TH_TalentoHumano/HojaVida.aspx"/>
+		</siteMapNode>
+		<siteMapNode title="Sistema de Gestión" url="GD_Documentos/Default.aspx" >
+			<siteMapNode title="Maestro Documentos" url="GD_Documentos/GD_Maestro.aspx" />
+			<siteMapNode title="Procesos" url="GD_Documentos/GD_Procesos.aspx" />
+			<siteMapNode title="Solicitud Documentos" url="GD_Documentos/GD_SolicitudDocumentos.aspx" />
+			<siteMapNode title="Aprobaciones" url="GD_Documentos/GD_Aprobaciones.aspx" />
+			<siteMapNode title="Aprobación" url="GD_Documentos/GD_Aprobacion.aspx" />
+			<siteMapNode title="Tipo de Solicitud" url="GD_Documentos/GD_TipoSolicitud.aspx" />
+			<siteMapNode title="Revisión" url="GD_Documentos/Revision.aspx" />
+			<siteMapNode title="Actas" url="SG_Actas/Actas.aspx" />
+			<siteMapNode title="Seguimiento" url="SG_Actas/Seguimiento.aspx" />
+			<siteMapNode title="Seguimiento a feedback" url="US_Usuarios/SeguimientoFeedback.aspx" />
+			<siteMapNode title="MBO_Cuentas-Proyectos" url="MBO/IndicesManualesCuentas.aspx" />
+			<siteMapNode title="ProductoNoConforme" url="GD_Documentos/ProductoNoConformeRegistrar.aspx" />
+			<siteMapNode title="Seguimiento PNC" url="GD_Documentos/GD_SeguimientoPNC.aspx" />
+		</siteMapNode>
+		<siteMapNode url="RE_GT/HomeRecoleccion.aspx" title="Recolección de Datos"  description="Recolección de Datos">
+			<siteMapNode title="Revisar Presupuestos" url="CU_Cuentas/RevisionPresupuestos.aspx" description="Revisión presupuestos"></siteMapNode>
+			<siteMapNode title="Ajustar Costos" url="CAP/PresupuestosAprobados.aspx?opt=2" description="AjustarCostos"></siteMapNode>
+			<siteMapNode title="Asignar COE" url="RE_GT/AsignacionCOE.aspx" />
+			<siteMapNode title="Asignar JBI" url="RE_GT/AsignacionJBI.aspx" />
+			<siteMapNode title="Cambiar JBI" url="RE_GT/CambiosJBI.aspx" />
+			<siteMapNode title="Asignación Coordinador de Campo Cuantitativo" url="RE_GT/AsignacionCoordinador.aspx?TipoTecnicaid=2" />
+			<siteMapNode title="Asignación Coordinador de Campo Cualitativo" url="RE_GT/AsignacionCoordinador.aspx?TipoTecnicaid=1" />
+			<siteMapNode url="OP_Cualitativo/HomeRecoleccion.aspx" title="Operaciones Cualitativas" description="Operaciones Cualitativas">
+				<siteMapNode title="COE" url="OP_Cualitativo/Trabajos.aspx" description="COE">
+					<siteMapNode title="Configuración Entrevistas" url="OP_Cualitativo/Entrevista.aspx" description="Gestión de entrevistas"/>
+					<siteMapNode title="Configuración Sesiones" url="OP_Cualitativo/Sesion.aspx" description="Gestión de sesiones"/>
+					<siteMapNode title="Configuración Observaciones" url="OP_Cualitativo/Observacion.aspx" description="Gestión de observaciones"/>
+				</siteMapNode>
+				<siteMapNode title="Calendario" url="OP_Cualitativo/Calendario.aspx" description="Calendario"/>
+				<siteMapNode title="Programación de Campo" url="OP_Cualitativo/ProgramacionCampo.aspx" description="Programación de Campo"/>
+				<siteMapNode title="Coordinador de Campo" url="OP_Cualitativo/TrabajosCoordinador.aspx" description="Coordinador de Campo">
+					<siteMapNode title="EstimacionProduccion" url="OP_Cuantitativo/EstimacionProduccion.aspx" />
+				</siteMapNode>
+			</siteMapNode>
+			<siteMapNode url="OP_Cuantitativo/HomeRecoleccion.aspx" title="Operaciones Cuantitativas" description="Operaciones Cuantitativas">
+				<siteMapNode title="COE" url="OP_Cuantitativo/Trabajos.aspx" description="COE">
+					<siteMapNode title="Distribución de muestra" url="OP_Cuantitativo/MuestraTrabajos.aspx" description="Distribución de muestra"/>
+					<siteMapNode title="Supervision Campo Telefónico" url="OP_Cuantitativo/SupervisionCampoTelefonico.aspx" />
+					<siteMapNode title="RO Cuestionario" url="OP_RO_RegistroObservaciones/Cuestionario.aspx" />
+					<siteMapNode title="RO Instructivo" url="OP_RO_RegistroObservaciones/Instructivo.aspx" />
+					<siteMapNode title="RO MaterialAyuda" url="OP_RO_RegistroObservaciones/MaterialAyuda.aspx" />
+					<siteMapNode title="RO Metodologia" url="OP_RO_RegistroObservaciones/Metodologia.aspx" />
+				</siteMapNode>
+				<siteMapNode title="Coordinador de Campo" url="OP_Cuantitativo/TrabajosCoordinador.aspx" description="Coordinador de Campo"/>
+				<siteMapNode title="Capacitaciones" url="TH_TalentoHumano/Capacitacion.aspx"/>
+				<siteMapNode title="Tráfico RMC" url="OP_Cuantitativo/TraficoEncuestas/RMC.aspx?UnidadId=38" />
+				<siteMapNode title="Contratistas" url="TH_TalentoHumano/Contratacion.aspx"/>
+			</siteMapNode>
+		</siteMapNode>
+
+		<siteMapNode url="RE_GT/HomeGestionTratamiento.aspx" title="Gestión y Tratamiento de Datos"  description="Gestión y Tratamiento de Datos">
+			<siteMapNode url="OP_Cualitativo/HomeGestion.aspx" title="Operaciones Cualitativas" description="Operaciones Cualitativas">
+				<siteMapNode title="Control Calidad Campo Cualitativo" url="PY_ControlCalidad/ControlCalidadCampo.aspx" />
+				<siteMapNode title="Control Calidad Transcripciones Cualitativo" url="PY_ControlCalidad/ControlCalidadTranscripciones.aspx" />
+				<siteMapNode title="Control Calidad Informe Cualitativo" url="PY_ControlCalidad/ControlCalidadInforme.aspx" />
+				<siteMapNode title="Evaluacion Entrevistadora" url="PY_ControlCalidad/EvaluacionEntrevistadora.aspx" />
+				<siteMapNode title="Evaluacion Moderadora" url="PY_ControlCalidad/EvaluacionModeradora.aspx" />
+			</siteMapNode>
+			<siteMapNode url="OP_Cuantitativo/HomeGestion.aspx" title="Operaciones Cuantitativas" description="Operaciones Cuantitativas">
+				<siteMapNode title="Tráfico Crítica F2F" url="OP_Cuantitativo/TraficoEncuestas/RMC.aspx?UnidadId=28" />
+				<siteMapNode title="Tráfico Crítica Especializados" url="OP_Cuantitativo/TraficoEncuestas/RMC.aspx?UnidadId=30" />
+				<siteMapNode title="Tráfico Verficación" url="OP_Cuantitativo/TraficoEncuestas/RMC.aspx?UnidadId=20" />
+				<siteMapNode title="Tráfico Captura" url="OP_Cuantitativo/TraficoEncuestas/RMC.aspx?UnidadId=21" />
+				<siteMapNode title="Cargar Errores" url="MBO/CargarErrores.aspx" />
+				<siteMapNode title="Consultar Errores" url="MBO/CampoErroresUnEstudio.aspx" />
+				<siteMapNode title="Calidad encuestadores" url="MBO/CampoEncuestadores.aspx" />
+				<siteMapNode title="TabularEstudios" url="RE_GT/SeleccionarPreguntasTabular.aspx" />
+			</siteMapNode>
+			<siteMapNode title="Presupuestos" url="CAP/PresupuestosAprobados.aspx" />
+			<siteMapNode title="SimuladorCostos" url="CAP/SimuladorCostosOperaciones.aspx" />
+		</siteMapNode>
+		<siteMapNode title="Cualitativo" >
+			<siteMapNode title="Segmentos" url="PY_Proyectos/SegmentosCuali.aspx" >
+				<siteMapNode title="Campo Cualitativo" url="OP_Cualitativo/CampoCualitativo.aspx" />
+			</siteMapNode>
+		</siteMapNode>
+		<siteMapNode title="Proyectos" url="PY_Proyectos/Home.aspx" >
+			<siteMapNode title="Proyectos" url="PY_Proyectos/PY_Proyectos.aspx" />
+			<siteMapNode title="Asignación de Proyectos" url="PY_Proyectos/AsignacionProyectos.aspx" />
+			<siteMapNode title="Especificaciones trabajo" url="OP_Cuantitativo/FichaCuantitativa.aspx" />
+			<siteMapNode title="Especificaciones Entrevistas" url="OP_Cualitativo/FichaEntrevista.aspx" description="Entrevistas"></siteMapNode>
+			<siteMapNode title="Especificaciones Sesiones" url="OP_Cualitativo/FichaSesion.aspx" description="Sesiones"></siteMapNode>
+			<siteMapNode title="Especificaciones Observaciones" url="OP_Cualitativo/FichaObservacion.aspx" description="Observaciones"></siteMapNode>
+		</siteMapNode>
+		<siteMapNode title="Sistema de Gestión" url="Default.aspx" >
+			<siteMapNode title="Retroalimentación" url="US_Usuarios/Feedback.aspx" />
+		</siteMapNode>
+		<siteMapNode title="Reportes">
+			<siteMapNode url="RP_Reportes/AvanceDeCampo.aspx" title="Avance de Campo"></siteMapNode>
+			<siteMapNode url="RP_Reportes/ListadoBrief.aspx" title="Viabilidad de brief"></siteMapNode>
+			<siteMapNode url="RP_Reportes/ListadoPropuestas.aspx" title="Listado de Propuestas"></siteMapNode>
+			<siteMapNode url="RP_Reportes/TrabajosConAtraso.aspx" title="Trabajos con atraso"></siteMapNode>
+			<siteMapNode url="RP_Reportes/TrabajosPorGerencia.aspx" title="Trabajos por gerencia"></siteMapNode>
+			<siteMapNode url="RP_Reportes/TraficoAreasGeneral.aspx" title="Trafico de Encuestas en Áreas"></siteMapNode>
+			<siteMapNode url="RP_Reportes/PlaneacionOperaciones.aspx" title="Planeación General de Operaciones"></siteMapNode>
+			<siteMapNode url="RP_Reportes/PlaneacionCampo.aspx" title="Planeación de Campo"></siteMapNode>
+			<siteMapNode url="RP_Reportes/PlaneacionPropuestas.aspx" title="Planeación según propuestas"></siteMapNode>
+			<siteMapNode url="RP_Reportes/ListadoPropuestasSeguimiento.aspx" title="Seguimiento a propuestas"></siteMapNode>
+			<siteMapNode url="RP_Reportes/ListadoEstudiosSeguimiento.aspx" title="Seguimiento a anuncios"></siteMapNode>
+		</siteMapNode>
+		<siteMapNode url="FI_AdministrativoFinanciero/Default.aspx" title="Administrativo y Financiero"  description="Administrativo y Financiero">
+			<siteMapNode title="Control Costos" url="CAP/ControlPresupuestos.aspx" description="Control Costos"/>
+			<siteMapNode title="Listado Estudios" url="FI_AdministrativoFinanciero/ListadoEstudios.aspx" description="Listado Estudios"/>
+			<siteMapNode title="Listado Propuestas" url="FI_AdministrativoFinanciero/ListadoPropuestas.aspx" description="Listado Propuestas"/>
+			<siteMapNode title="Nomina distribucion costos" url="FI_AdministrativoFinanciero/NominaDistribucionCostos.aspx" description="Nomina Distribucion Costos"/>
+			<siteMapNode title="Exportar producción" url="FI_AdministrativoFinanciero/ExportarProduccionIDs.aspx" description="Exportar producción"/>
+		</siteMapNode>
+		<siteMapNode url="FI_AdministrativoFinanciero/Default-Compras.aspx" title="Compras"  description="Compras">
+			<siteMapNode title="Gestión de Órdenes de compra y servicio" url="FI_AdministrativoFinanciero/Gestion-Ordenes.aspx" description="Gestión de Órdenes de compra y servicio"/>
+			<siteMapNode title="Órdenes de Compra, Servicio y Requerimientos" url="FI_AdministrativoFinanciero/Gestion-Ordenes1.aspx" description="Órdenes de Compra, Servicio y Requerimientos"/>
+			<siteMapNode title="Aprobación de Órdenes de compra y servicio" url="FI_AdministrativoFinanciero/Gestion-Ordenes-Aprobacion.aspx" description="Aprobación de Órdenes de compra y servicio"/>
+			<siteMapNode title="Recepción de facturas" url="FI_AdministrativoFinanciero/Recepcion-Facturas.aspx" description="Recepción de facturas"/>
+			<siteMapNode title="Envíos de facturas" url="FI_AdministrativoFinanciero/Gestion-Traza-Facturas.aspx" description="Envíos de facturas"/>
+			<siteMapNode title="Aprobación facturas" url="FI_AdministrativoFinanciero/Aprobacion-Evaluacion-Facturas.aspx" description="Aprobación facturas"/>
+			<siteMapNode title="Evaluación Proveedores facturas" url="FI_AdministrativoFinanciero/Evaluacion-Proveedor-Facturas.aspx" description="Evaluación Proveedores facturas"/>
+			<siteMapNode title="Reporte Órdenes" url="FI_AdministrativoFinanciero/ReporteOrdenesFacturas.aspx" description="Reporte Órdenes"/>
+			<siteMapNode title="Reporte Facturas" url="FI_AdministrativoFinanciero/ReporteFacturasRadicadas.aspx" description="Reporte Facturas"/>
+		</siteMapNode>
+	</siteMapNode>
+</siteMap>

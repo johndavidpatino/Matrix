@@ -1,0 +1,1117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ES_Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ES_AprobacionMetodologia">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MetodologiaId" Type="bigint" />
+          <Property Name="TrabajoId" Type="bigint" />
+          <Property Name="Observación" Type="varchar(max)" />
+          <Property Name="Aprobado" Type="smallint" />
+          <Property Name="Usuario" Type="bigint" />
+          <Property Name="Fecha" Type="datetime" />
+        </EntityType>
+        <EntityType Name="ES_BriefDisenoMuestral">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Propuestaid" Type="bigint" />
+          <Property Name="Fecha" Type="datetime" />
+          <Property Name="Objetivo" Type="varchar(max)" />
+          <Property Name="Poblacion" Type="varchar(max)" />
+          <Property Name="Capacidad" Type="varchar(max)" />
+          <Property Name="Metodologia" Type="varchar(max)" />
+          <Property Name="NivelesDesagregacion" Type="varchar(max)" />
+          <Property Name="PosiblesMarcos" Type="varchar(max)" />
+          <Property Name="Variable" Type="varchar(max)" />
+          <Property Name="Observaciones" Type="varchar(max)" />
+          <Property Name="NoVersion" Type="int" />
+        </EntityType>
+        <EntityType Name="ES_DisenoMuestral">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BriefId" Type="bigint" />
+          <Property Name="Fecha" Type="datetime" />
+          <Property Name="MuestroProbabilistico" Type="bit" />
+          <Property Name="Objetivo" Type="bit" />
+          <Property Name="Poblacion" Type="bit" />
+          <Property Name="Mercado" Type="bit" />
+          <Property Name="Marco" Type="bit" />
+          <Property Name="Tecnica" Type="bit" />
+          <Property Name="Diseno" Type="bit" />
+          <Property Name="Tamano" Type="bit" />
+          <Property Name="Fiabilidad" Type="bit" />
+          <Property Name="Desagregacion" Type="bit" />
+          <Property Name="Fuente" Type="bit" />
+          <Property Name="Ponderacion" Type="bit" />
+          <Property Name="ObjetivoT" Type="varchar(max)" />
+          <Property Name="PoblacionT" Type="varchar(max)" />
+          <Property Name="MercadoT" Type="varchar(max)" />
+          <Property Name="MarcoT" Type="varchar(max)" />
+          <Property Name="TecnicaT" Type="varchar(max)" />
+          <Property Name="DisenoT" Type="varchar(max)" />
+          <Property Name="TamanoT" Type="varchar(max)" />
+          <Property Name="FiabilidadT" Type="varchar(max)" />
+          <Property Name="DesagregacionT" Type="varchar(max)" />
+          <Property Name="FuenteT" Type="varchar(max)" />
+          <Property Name="PonderacionT" Type="varchar(max)" />
+          <Property Name="Variable" Type="bit" />
+          <Property Name="VariableT" Type="varchar(max)" />
+          <Property Name="Observaciones" Type="bit" />
+          <Property Name="ObservacionesT" Type="varchar(max)" />
+          <Property Name="NoVersion" Type="int" />
+        </EntityType>
+        <EntityType Name="ES_MetodologiaCampo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TrabajoId" Type="bigint" />
+          <Property Name="NombreEstudio" Type="varchar(max)" />
+          <Property Name="Fecha" Type="datetime" />
+          <Property Name="Objetivo" Type="bit" />
+          <Property Name="Mercado" Type="bit" />
+          <Property Name="Marco" Type="bit" />
+          <Property Name="Tecnica" Type="bit" />
+          <Property Name="Diseno" Type="bit" />
+          <Property Name="Instrucciones" Type="bit" />
+          <Property Name="Distribucion" Type="bit" />
+          <Property Name="NivelConfianza" Type="bit" />
+          <Property Name="MargenError" Type="bit" />
+          <Property Name="Desagregacion" Type="bit" />
+          <Property Name="Fuente" Type="bit" />
+          <Property Name="Variables" Type="bit" />
+          <Property Name="Tasa" Type="bit" />
+          <Property Name="Procedimiento" Type="bit" />
+          <Property Name="ObjetivoT" Type="varchar(max)" />
+          <Property Name="MercadoT" Type="varchar(max)" />
+          <Property Name="MarcoT" Type="varchar(max)" />
+          <Property Name="TecnicaT" Type="varchar(max)" />
+          <Property Name="DisenoT" Type="varchar(max)" />
+          <Property Name="InstruccionesT" Type="varchar(max)" />
+          <Property Name="DistribucionT" Type="varchar(max)" />
+          <Property Name="NivelConfianzaT" Type="varchar(max)" />
+          <Property Name="MargenErrorT" Type="varchar(max)" />
+          <Property Name="DesagregacionT" Type="varchar(max)" />
+          <Property Name="FuenteT" Type="varchar(max)" />
+          <Property Name="VariablesT" Type="varchar(max)" />
+          <Property Name="TasaT" Type="varchar(max)" />
+          <Property Name="ProcedimientoT" Type="varchar(max)" />
+          <Property Name="NoVersion" Type="tinyint" />
+          <Property Name="Usuario" Type="bigint" />
+        </EntityType>
+        <Association Name="FK_ES_DisenoMuestral_ES_BriefDisenoMuestral">
+          <End Role="ES_BriefDisenoMuestral" Type="Self.ES_BriefDisenoMuestral" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ES_DisenoMuestral" Type="Self.ES_DisenoMuestral" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ES_BriefDisenoMuestral">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ES_DisenoMuestral">
+              <PropertyRef Name="BriefId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="ES_BriefDisenoMuestral_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Propuestaid" Type="bigint" Mode="In" />
+          <Parameter Name="Fecha" Type="datetime" Mode="In" />
+          <Parameter Name="Objetivo" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Poblacion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Capacidad" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Metodologia" Type="varchar(max)" Mode="In" />
+          <Parameter Name="NivelesDesagregacion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="PosiblesMarcos" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Variable" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Observaciones" Type="varchar(max)" Mode="In" />
+          <Parameter Name="NoVersion" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ES_BriefDisenoMuestral_Del" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="ES_BriefDisenoMuestral_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="bigint" Mode="In" />
+          <Parameter Name="Propuestaid" Type="bigint" Mode="In" />
+          <Parameter Name="Fecha" Type="datetime" Mode="In" />
+          <Parameter Name="Objetivo" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Poblacion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Capacidad" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Metodologia" Type="varchar(max)" Mode="In" />
+          <Parameter Name="NivelesDesagregacion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="PosiblesMarcos" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Variable" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Observaciones" Type="varchar(max)" Mode="In" />
+          <Parameter Name="NoVersion" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ES_BriefDisenoMuestral_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="bigint" Mode="In" />
+          <Parameter Name="PropuestaId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="ES_DisenoMuestral_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BriefId" Type="bigint" Mode="In" />
+          <Parameter Name="Fecha" Type="datetime" Mode="In" />
+          <Parameter Name="MuestroProbabilistico" Type="bit" Mode="In" />
+          <Parameter Name="Objetivo" Type="bit" Mode="In" />
+          <Parameter Name="Poblacion" Type="bit" Mode="In" />
+          <Parameter Name="Mercado" Type="bit" Mode="In" />
+          <Parameter Name="Marco" Type="bit" Mode="In" />
+          <Parameter Name="Tecnica" Type="bit" Mode="In" />
+          <Parameter Name="Diseno" Type="bit" Mode="In" />
+          <Parameter Name="Tamano" Type="bit" Mode="In" />
+          <Parameter Name="Fiabilidad" Type="bit" Mode="In" />
+          <Parameter Name="Desagregacion" Type="bit" Mode="In" />
+          <Parameter Name="Fuente" Type="bit" Mode="In" />
+          <Parameter Name="Ponderacion" Type="bit" Mode="In" />
+          <Parameter Name="ObjetivoT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="PoblacionT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="MercadoT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="MarcoT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="TecnicaT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="DisenoT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="TamanoT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="FiabilidadT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="DesagregacionT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="FuenteT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="PonderacionT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Variable" Type="bit" Mode="In" />
+          <Parameter Name="VariableT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Observaciones" Type="varchar(max)" Mode="In" />
+          <Parameter Name="ObservacionesT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="NoVersion" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ES_DisenoMuestral_Del" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="ES_DisenoMuestral_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="bigint" Mode="In" />
+          <Parameter Name="BriefId" Type="bigint" Mode="In" />
+          <Parameter Name="Fecha" Type="datetime" Mode="In" />
+          <Parameter Name="MuestroProbabilistico" Type="bit" Mode="In" />
+          <Parameter Name="Objetivo" Type="bit" Mode="In" />
+          <Parameter Name="Poblacion" Type="bit" Mode="In" />
+          <Parameter Name="Mercado" Type="bit" Mode="In" />
+          <Parameter Name="Marco" Type="bit" Mode="In" />
+          <Parameter Name="Tecnica" Type="bit" Mode="In" />
+          <Parameter Name="Diseno" Type="bit" Mode="In" />
+          <Parameter Name="Tamano" Type="bit" Mode="In" />
+          <Parameter Name="Fiabilidad" Type="bit" Mode="In" />
+          <Parameter Name="Desagregacion" Type="bit" Mode="In" />
+          <Parameter Name="Fuente" Type="bit" Mode="In" />
+          <Parameter Name="Ponderacion" Type="bit" Mode="In" />
+          <Parameter Name="ObjetivoT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="PoblacionT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="MercadoT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="MarcoT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="TecnicaT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="DisenoT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="TamanoT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="FiabilidadT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="DesagregacionT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="FuenteT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="PonderacionT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Variable" Type="bit" Mode="In" />
+          <Parameter Name="VariableT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Observaciones" Type="varchar(max)" Mode="In" />
+          <Parameter Name="ObservacionesT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="NoVersion" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ES_DisenoMuestral_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="bigint" Mode="In" />
+          <Parameter Name="BriefId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="ES_MetodologiaCampo_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+          <Parameter Name="NombreEstudio" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Fecha" Type="datetime" Mode="In" />
+          <Parameter Name="Objetivo" Type="bit" Mode="In" />
+          <Parameter Name="Mercado" Type="bit" Mode="In" />
+          <Parameter Name="Marco" Type="bit" Mode="In" />
+          <Parameter Name="Tecnica" Type="bit" Mode="In" />
+          <Parameter Name="Diseno" Type="bit" Mode="In" />
+          <Parameter Name="Instrucciones" Type="bit" Mode="In" />
+          <Parameter Name="Distribucion" Type="bit" Mode="In" />
+          <Parameter Name="NivelConfianza" Type="bit" Mode="In" />
+          <Parameter Name="MargenError" Type="bit" Mode="In" />
+          <Parameter Name="Desagregacion" Type="bit" Mode="In" />
+          <Parameter Name="Fuente" Type="bit" Mode="In" />
+          <Parameter Name="Variables" Type="bit" Mode="In" />
+          <Parameter Name="Tasa" Type="bit" Mode="In" />
+          <Parameter Name="Procedimiento" Type="bit" Mode="In" />
+          <Parameter Name="ObjetivoT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="MercadoT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="MarcoT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="TecnicaT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="DisenoT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="InstruccionesT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="DistribucionT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="NivelConfianzaT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="MargenErrorT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="DesagregacionT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="FuenteT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="VariablesT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="TasaT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="ProcedimientoT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Version" Type="tinyint" Mode="In" />
+          <Parameter Name="Usuario" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="ES_MetodologiaCampo_Del" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="ES_MetodologiaCampo_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="bigint" Mode="In" />
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+          <Parameter Name="NombreEstudio" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Fecha" Type="datetime" Mode="In" />
+          <Parameter Name="Objetivo" Type="bit" Mode="In" />
+          <Parameter Name="Mercado" Type="bit" Mode="In" />
+          <Parameter Name="Marco" Type="bit" Mode="In" />
+          <Parameter Name="Tecnica" Type="bit" Mode="In" />
+          <Parameter Name="Diseno" Type="bit" Mode="In" />
+          <Parameter Name="Instrucciones" Type="bit" Mode="In" />
+          <Parameter Name="Distribucion" Type="bit" Mode="In" />
+          <Parameter Name="NivelConfianza" Type="bit" Mode="In" />
+          <Parameter Name="MargenError" Type="bit" Mode="In" />
+          <Parameter Name="Desagregacion" Type="bit" Mode="In" />
+          <Parameter Name="Fuente" Type="bit" Mode="In" />
+          <Parameter Name="Variables" Type="bit" Mode="In" />
+          <Parameter Name="Tasa" Type="bit" Mode="In" />
+          <Parameter Name="Procedimiento" Type="bit" Mode="In" />
+          <Parameter Name="ObjetivoT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="MercadoT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="MarcoT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="TecnicaT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="DisenoT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="InstruccionesT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="DistribucionT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="NivelConfianzaT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="MargenErrorT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="DesagregacionT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="FuenteT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="VariablesT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="TasaT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="ProcedimientoT" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="ES_MetodologiaCampo_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="bigint" Mode="In" />
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="ES_MetodologiaCampo_NumVersiones" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idTrabajo" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="ES_MetodologiaCampoTr" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Trabajo" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ES_ObtenerMetodologiaXIdxTr" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TrabajoId" Type="int" Mode="In" />
+          <Parameter Name="Id" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="ES_ModelStoreContainer">
+          <EntitySet Name="ES_AprobacionMetodologia" EntityType="Self.ES_AprobacionMetodologia" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ES_BriefDisenoMuestral" EntityType="Self.ES_BriefDisenoMuestral" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ES_DisenoMuestral" EntityType="Self.ES_DisenoMuestral" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ES_MetodologiaCampo" EntityType="Self.ES_MetodologiaCampo" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_ES_DisenoMuestral_ES_BriefDisenoMuestral" Association="Self.FK_ES_DisenoMuestral_ES_BriefDisenoMuestral">
+            <End Role="ES_BriefDisenoMuestral" EntitySet="ES_BriefDisenoMuestral" />
+            <End Role="ES_DisenoMuestral" EntitySet="ES_DisenoMuestral" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ES_Model" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2009/11/edm" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <EntityContainer Name="ES_Entities" annotation:LazyLoadingEnabled="true" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+          <FunctionImport Name="ES_BriefDisenoMuestral_Add" ReturnType="Collection(Decimal)">
+            <Parameter Name="Propuestaid" Mode="In" Type="Int64" />
+            <Parameter Name="Fecha" Mode="In" Type="DateTime" />
+            <Parameter Name="Objetivo" Mode="In" Type="String" />
+            <Parameter Name="Poblacion" Mode="In" Type="String" />
+            <Parameter Name="Capacidad" Mode="In" Type="String" />
+            <Parameter Name="Metodologia" Mode="In" Type="String" />
+            <Parameter Name="NivelesDesagregacion" Mode="In" Type="String" />
+            <Parameter Name="PosiblesMarcos" Mode="In" Type="String" />
+            <Parameter Name="Variable" Mode="In" Type="String" />
+            <Parameter Name="Observaciones" Mode="In" Type="String" />
+            <Parameter Name="NoVersion" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ES_BriefDisenoMuestral_Edit">
+            <Parameter Name="Id" Mode="In" Type="Int64" />
+            <Parameter Name="Propuestaid" Mode="In" Type="Int64" />
+            <Parameter Name="Fecha" Mode="In" Type="DateTime" />
+            <Parameter Name="Objetivo" Mode="In" Type="String" />
+            <Parameter Name="Poblacion" Mode="In" Type="String" />
+            <Parameter Name="Capacidad" Mode="In" Type="String" />
+            <Parameter Name="Metodologia" Mode="In" Type="String" />
+            <Parameter Name="NivelesDesagregacion" Mode="In" Type="String" />
+            <Parameter Name="PosiblesMarcos" Mode="In" Type="String" />
+            <Parameter Name="Variable" Mode="In" Type="String" />
+            <Parameter Name="Observaciones" Mode="In" Type="String" />
+            <Parameter Name="NoVersion" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ES_DisenoMuestral_Add" ReturnType="Collection(Decimal)">
+            <Parameter Name="BriefId" Mode="In" Type="Int64" />
+            <Parameter Name="Fecha" Mode="In" Type="DateTime" />
+            <Parameter Name="MuestroProbabilistico" Mode="In" Type="Boolean" />
+            <Parameter Name="Objetivo" Mode="In" Type="Boolean" />
+            <Parameter Name="Poblacion" Mode="In" Type="Boolean" />
+            <Parameter Name="Mercado" Mode="In" Type="Boolean" />
+            <Parameter Name="Marco" Mode="In" Type="Boolean" />
+            <Parameter Name="Tecnica" Mode="In" Type="Boolean" />
+            <Parameter Name="Diseno" Mode="In" Type="Boolean" />
+            <Parameter Name="Tamano" Mode="In" Type="Boolean" />
+            <Parameter Name="Fiabilidad" Mode="In" Type="Boolean" />
+            <Parameter Name="Desagregacion" Mode="In" Type="Boolean" />
+            <Parameter Name="Fuente" Mode="In" Type="Boolean" />
+            <Parameter Name="Ponderacion" Mode="In" Type="Boolean" />
+            <Parameter Name="ObjetivoT" Mode="In" Type="String" />
+            <Parameter Name="PoblacionT" Mode="In" Type="String" />
+            <Parameter Name="MercadoT" Mode="In" Type="String" />
+            <Parameter Name="MarcoT" Mode="In" Type="String" />
+            <Parameter Name="TecnicaT" Mode="In" Type="String" />
+            <Parameter Name="DisenoT" Mode="In" Type="String" />
+            <Parameter Name="TamanoT" Mode="In" Type="String" />
+            <Parameter Name="FiabilidadT" Mode="In" Type="String" />
+            <Parameter Name="DesagregacionT" Mode="In" Type="String" />
+            <Parameter Name="FuenteT" Mode="In" Type="String" />
+            <Parameter Name="PonderacionT" Mode="In" Type="String" />
+            <Parameter Name="Variable" Mode="In" Type="Boolean" />
+            <Parameter Name="VariableT" Mode="In" Type="String" />
+            <Parameter Name="Observaciones" Mode="In" Type="String" />
+            <Parameter Name="ObservacionesT" Mode="In" Type="String" />
+            <Parameter Name="NoVersion" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ES_DisenoMuestral_Edit">
+            <Parameter Name="Id" Mode="In" Type="Int64" />
+            <Parameter Name="BriefId" Mode="In" Type="Int64" />
+            <Parameter Name="Fecha" Mode="In" Type="DateTime" />
+            <Parameter Name="MuestroProbabilistico" Mode="In" Type="Boolean" />
+            <Parameter Name="Objetivo" Mode="In" Type="Boolean" />
+            <Parameter Name="Poblacion" Mode="In" Type="Boolean" />
+            <Parameter Name="Mercado" Mode="In" Type="Boolean" />
+            <Parameter Name="Marco" Mode="In" Type="Boolean" />
+            <Parameter Name="Tecnica" Mode="In" Type="Boolean" />
+            <Parameter Name="Diseno" Mode="In" Type="Boolean" />
+            <Parameter Name="Tamano" Mode="In" Type="Boolean" />
+            <Parameter Name="Fiabilidad" Mode="In" Type="Boolean" />
+            <Parameter Name="Desagregacion" Mode="In" Type="Boolean" />
+            <Parameter Name="Fuente" Mode="In" Type="Boolean" />
+            <Parameter Name="Ponderacion" Mode="In" Type="Boolean" />
+            <Parameter Name="ObjetivoT" Mode="In" Type="String" />
+            <Parameter Name="PoblacionT" Mode="In" Type="String" />
+            <Parameter Name="MercadoT" Mode="In" Type="String" />
+            <Parameter Name="MarcoT" Mode="In" Type="String" />
+            <Parameter Name="TecnicaT" Mode="In" Type="String" />
+            <Parameter Name="DisenoT" Mode="In" Type="String" />
+            <Parameter Name="TamanoT" Mode="In" Type="String" />
+            <Parameter Name="FiabilidadT" Mode="In" Type="String" />
+            <Parameter Name="DesagregacionT" Mode="In" Type="String" />
+            <Parameter Name="FuenteT" Mode="In" Type="String" />
+            <Parameter Name="PonderacionT" Mode="In" Type="String" />
+            <Parameter Name="Variable" Mode="In" Type="Boolean" />
+            <Parameter Name="VariableT" Mode="In" Type="String" />
+            <Parameter Name="Observaciones" Mode="In" Type="String" />
+            <Parameter Name="ObservacionesT" Mode="In" Type="String" />
+            <Parameter Name="NoVersion" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ES_MetodologiaCampo_Add" ReturnType="Collection(Decimal)">
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+            <Parameter Name="NombreEstudio" Mode="In" Type="String" />
+            <Parameter Name="Fecha" Mode="In" Type="DateTime" />
+            <Parameter Name="Objetivo" Mode="In" Type="Boolean" />
+            <Parameter Name="Mercado" Mode="In" Type="Boolean" />
+            <Parameter Name="Marco" Mode="In" Type="Boolean" />
+            <Parameter Name="Tecnica" Mode="In" Type="Boolean" />
+            <Parameter Name="Diseno" Mode="In" Type="Boolean" />
+            <Parameter Name="Instrucciones" Mode="In" Type="Boolean" />
+            <Parameter Name="Distribucion" Mode="In" Type="Boolean" />
+            <Parameter Name="NivelConfianza" Mode="In" Type="Boolean" />
+            <Parameter Name="MargenError" Mode="In" Type="Boolean" />
+            <Parameter Name="Desagregacion" Mode="In" Type="Boolean" />
+            <Parameter Name="Fuente" Mode="In" Type="Boolean" />
+            <Parameter Name="Variables" Mode="In" Type="Boolean" />
+            <Parameter Name="Tasa" Mode="In" Type="Boolean" />
+            <Parameter Name="Procedimiento" Mode="In" Type="Boolean" />
+            <Parameter Name="ObjetivoT" Mode="In" Type="String" />
+            <Parameter Name="MercadoT" Mode="In" Type="String" />
+            <Parameter Name="MarcoT" Mode="In" Type="String" />
+            <Parameter Name="TecnicaT" Mode="In" Type="String" />
+            <Parameter Name="DisenoT" Mode="In" Type="String" />
+            <Parameter Name="InstruccionesT" Mode="In" Type="String" />
+            <Parameter Name="DistribucionT" Mode="In" Type="String" />
+            <Parameter Name="NivelConfianzaT" Mode="In" Type="String" />
+            <Parameter Name="MargenErrorT" Mode="In" Type="String" />
+            <Parameter Name="DesagregacionT" Mode="In" Type="String" />
+            <Parameter Name="FuenteT" Mode="In" Type="String" />
+            <Parameter Name="VariablesT" Mode="In" Type="String" />
+            <Parameter Name="TasaT" Mode="In" Type="String" />
+            <Parameter Name="ProcedimientoT" Mode="In" Type="String" />
+            <Parameter Name="Version" Mode="In" Type="Byte" />
+            <Parameter Name="Usuario" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="ES_MetodologiaCampo_Edit">
+            <Parameter Name="Id" Mode="In" Type="Int64" />
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+            <Parameter Name="NombreEstudio" Mode="In" Type="String" />
+            <Parameter Name="Fecha" Mode="In" Type="DateTime" />
+            <Parameter Name="Objetivo" Mode="In" Type="Boolean" />
+            <Parameter Name="Mercado" Mode="In" Type="Boolean" />
+            <Parameter Name="Marco" Mode="In" Type="Boolean" />
+            <Parameter Name="Tecnica" Mode="In" Type="Boolean" />
+            <Parameter Name="Diseno" Mode="In" Type="Boolean" />
+            <Parameter Name="Instrucciones" Mode="In" Type="Boolean" />
+            <Parameter Name="Distribucion" Mode="In" Type="Boolean" />
+            <Parameter Name="NivelConfianza" Mode="In" Type="Boolean" />
+            <Parameter Name="MargenError" Mode="In" Type="Boolean" />
+            <Parameter Name="Desagregacion" Mode="In" Type="Boolean" />
+            <Parameter Name="Fuente" Mode="In" Type="Boolean" />
+            <Parameter Name="Variables" Mode="In" Type="Boolean" />
+            <Parameter Name="Tasa" Mode="In" Type="Boolean" />
+            <Parameter Name="Procedimiento" Mode="In" Type="Boolean" />
+            <Parameter Name="ObjetivoT" Mode="In" Type="String" />
+            <Parameter Name="MercadoT" Mode="In" Type="String" />
+            <Parameter Name="MarcoT" Mode="In" Type="String" />
+            <Parameter Name="TecnicaT" Mode="In" Type="String" />
+            <Parameter Name="DisenoT" Mode="In" Type="String" />
+            <Parameter Name="InstruccionesT" Mode="In" Type="String" />
+            <Parameter Name="DistribucionT" Mode="In" Type="String" />
+            <Parameter Name="NivelConfianzaT" Mode="In" Type="String" />
+            <Parameter Name="MargenErrorT" Mode="In" Type="String" />
+            <Parameter Name="DesagregacionT" Mode="In" Type="String" />
+            <Parameter Name="FuenteT" Mode="In" Type="String" />
+            <Parameter Name="VariablesT" Mode="In" Type="String" />
+            <Parameter Name="TasaT" Mode="In" Type="String" />
+            <Parameter Name="ProcedimientoT" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ES_MetodologiaCampo_Del">
+          <Parameter Name="Id" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="ES_BriefDisenoMuestral_Del">
+          <Parameter Name="Id" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="ES_DisenoMuestral_Del">
+          <Parameter Name="Id" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="ES_MetodologiaCampo_Get" ReturnType="Collection(ES_Model.ES_MetodologiaCampo_Get_Result)">
+            <Parameter Name="id" Mode="In" Type="Int64" />
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="ES_MetodologiaCampoTr" ReturnType="Collection(ES_Model.ES_MetodologiaCampoTr_Result)">
+          <Parameter Name="Trabajo" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ES_ObtenerMetodologiaXIdxTr" ReturnType="Collection(ES_Model.ES_ObtenerMetodologiaXIdxTr_Result)">
+            <Parameter Name="TrabajoId" Mode="In" Type="Int32" />
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ES_MetodologiaCampo_NumVersiones" ReturnType="Collection(Int32)">
+          <Parameter Name="idTrabajo" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="ES_DisenoMuestral_Get" ReturnType="Collection(ES_Model.ES_DisenoMuestral_Get_Result)">
+            <Parameter Name="id" Mode="In" Type="Int64" />
+            <Parameter Name="BriefId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="ES_BriefDisenoMuestral_Get" ReturnType="Collection(ES_Model.ES_BriefDisenoMuestral_Get_Result)">
+            <Parameter Name="id" Mode="In" Type="Int64" />
+            <Parameter Name="PropuestaId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <EntitySet Name="ES_BriefDisenoMuestral" EntityType="ES_Model.ES_BriefDisenoMuestral" />
+          <EntitySet Name="ES_DisenoMuestral" EntityType="ES_Model.ES_DisenoMuestral" />
+          <EntitySet Name="ES_MetodologiaCampo" EntityType="ES_Model.ES_MetodologiaCampo" />
+          <AssociationSet Name="FK_ES_DisenoMuestral_ES_BriefDisenoMuestral" Association="ES_Model.FK_ES_DisenoMuestral_ES_BriefDisenoMuestral">
+            <End Role="ES_BriefDisenoMuestral" EntitySet="ES_BriefDisenoMuestral" />
+            <End Role="ES_DisenoMuestral" EntitySet="ES_DisenoMuestral" />
+          </AssociationSet>
+          <EntitySet Name="ES_AprobacionMetodologia" EntityType="ES_Model.ES_AprobacionMetodologia" />
+        </EntityContainer>
+        <ComplexType Name="ES_MetodologiaCampo_Get_Result">
+          <Property Type="Int64" Name="TrabajoId" Nullable="true" />
+          <Property Type="String" Name="NombreEstudio" Nullable="true" />
+          <Property Type="DateTime" Name="Fecha" Nullable="true" Precision="23" />
+          <Property Type="Boolean" Name="Objetivo" Nullable="true" />
+          <Property Type="Boolean" Name="Mercado" Nullable="true" />
+          <Property Type="Boolean" Name="Marco" Nullable="true" />
+          <Property Type="Boolean" Name="Tecnica" Nullable="true" />
+          <Property Type="Boolean" Name="Diseno" Nullable="true" />
+          <Property Type="Boolean" Name="Instrucciones" Nullable="true" />
+          <Property Type="Boolean" Name="Distribucion" Nullable="true" />
+          <Property Type="Boolean" Name="NivelConfianza" Nullable="true" />
+          <Property Type="Boolean" Name="MargenError" Nullable="true" />
+          <Property Type="Boolean" Name="Desagregacion" Nullable="true" />
+          <Property Type="Boolean" Name="Fuente" Nullable="true" />
+          <Property Type="Boolean" Name="Variables" Nullable="true" />
+          <Property Type="Boolean" Name="Tasa" Nullable="true" />
+          <Property Type="Boolean" Name="Procedimiento" Nullable="true" />
+          <Property Type="String" Name="ObjetivoT" Nullable="true" />
+          <Property Type="String" Name="MercadoT" Nullable="true" />
+          <Property Type="String" Name="MarcoT" Nullable="true" />
+          <Property Type="String" Name="TecnicaT" Nullable="true" />
+          <Property Type="String" Name="DisenoT" Nullable="true" />
+          <Property Type="String" Name="InstruccionesT" Nullable="true" />
+          <Property Type="String" Name="DistribucionT" Nullable="true" />
+          <Property Type="String" Name="NivelConfianzaT" Nullable="true" />
+          <Property Type="String" Name="MargenErrorT" Nullable="true" />
+          <Property Type="String" Name="DesagregacionT" Nullable="true" />
+          <Property Type="String" Name="FuenteT" Nullable="true" />
+          <Property Type="String" Name="VariablesT" Nullable="true" />
+          <Property Type="String" Name="TasaT" Nullable="true" />
+          <Property Type="String" Name="ProcedimientoT" Nullable="true" />
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="Byte" Name="NoVersion" Nullable="true" />
+          <Property Type="Int64" Name="Usuario" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="ES_MetodologiaCampoTr_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="Int64" Name="TrabajoId" Nullable="true" />
+          <Property Type="Byte" Name="NoVersion" Nullable="true" />
+          <Property Type="String" Name="Fecha" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Usuario" Nullable="true" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="ES_ObtenerMetodologiaXIdxTr_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="Int64" Name="TrabajoId" Nullable="true" />
+          <Property Type="String" Name="NombreEstudio" Nullable="true" />
+          <Property Type="DateTime" Name="Fecha" Nullable="true" Precision="23" />
+          <Property Type="Boolean" Name="Objetivo" Nullable="true" />
+          <Property Type="Boolean" Name="Mercado" Nullable="true" />
+          <Property Type="Boolean" Name="Marco" Nullable="true" />
+          <Property Type="Boolean" Name="Tecnica" Nullable="true" />
+          <Property Type="Boolean" Name="Diseno" Nullable="true" />
+          <Property Type="Boolean" Name="Instrucciones" Nullable="true" />
+          <Property Type="Boolean" Name="Distribucion" Nullable="true" />
+          <Property Type="Boolean" Name="NivelConfianza" Nullable="true" />
+          <Property Type="Boolean" Name="MargenError" Nullable="true" />
+          <Property Type="Boolean" Name="Desagregacion" Nullable="true" />
+          <Property Type="Boolean" Name="Fuente" Nullable="true" />
+          <Property Type="Boolean" Name="Variables" Nullable="true" />
+          <Property Type="Boolean" Name="Tasa" Nullable="true" />
+          <Property Type="Boolean" Name="Procedimiento" Nullable="true" />
+          <Property Type="String" Name="ObjetivoT" Nullable="true" />
+          <Property Type="String" Name="MercadoT" Nullable="true" />
+          <Property Type="String" Name="MarcoT" Nullable="true" />
+          <Property Type="String" Name="TecnicaT" Nullable="true" />
+          <Property Type="String" Name="DisenoT" Nullable="true" />
+          <Property Type="String" Name="InstruccionesT" Nullable="true" />
+          <Property Type="String" Name="DistribucionT" Nullable="true" />
+          <Property Type="String" Name="NivelConfianzaT" Nullable="true" />
+          <Property Type="String" Name="MargenErrorT" Nullable="true" />
+          <Property Type="String" Name="DesagregacionT" Nullable="true" />
+          <Property Type="String" Name="FuenteT" Nullable="true" />
+          <Property Type="String" Name="VariablesT" Nullable="true" />
+          <Property Type="String" Name="TasaT" Nullable="true" />
+          <Property Type="String" Name="ProcedimientoT" Nullable="true" />
+          <Property Type="Byte" Name="NoVersion" Nullable="true" />
+          <Property Type="Int64" Name="Usuario" Nullable="true" />
+          <Property Type="String" Name="FechaVersion" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="UsuarioCreacion" Nullable="true" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="ES_DisenoMuestral_Get_Result">
+          <Property Type="Int64" Name="Propuestaid" Nullable="true" />
+          <Property Type="Int64" Name="BriefId" Nullable="true" />
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="DateTime" Name="Fecha" Nullable="true" Precision="23" />
+          <Property Type="Boolean" Name="MuestroProbabilistico" Nullable="true" />
+          <Property Type="Boolean" Name="Objetivo" Nullable="true" />
+          <Property Type="Boolean" Name="Poblacion" Nullable="true" />
+          <Property Type="Boolean" Name="Mercado" Nullable="true" />
+          <Property Type="Boolean" Name="Marco" Nullable="true" />
+          <Property Type="Boolean" Name="Tecnica" Nullable="true" />
+          <Property Type="Boolean" Name="Diseno" Nullable="true" />
+          <Property Type="Boolean" Name="Tamano" Nullable="true" />
+          <Property Type="Boolean" Name="Desagregacion" Nullable="true" />
+          <Property Type="Boolean" Name="Fiabilidad" Nullable="true" />
+          <Property Type="Boolean" Name="Fuente" Nullable="true" />
+          <Property Type="Boolean" Name="Ponderacion" Nullable="true" />
+          <Property Type="Boolean" Name="Variable" Nullable="true" />
+          <Property Type="String" Name="ObjetivoT" Nullable="true" />
+          <Property Type="String" Name="PoblacionT" Nullable="true" />
+          <Property Type="String" Name="MercadoT" Nullable="true" />
+          <Property Type="String" Name="MarcoT" Nullable="true" />
+          <Property Type="String" Name="DisenoT" Nullable="true" />
+          <Property Type="String" Name="TecnicaT" Nullable="true" />
+          <Property Type="String" Name="TamanoT" Nullable="true" />
+          <Property Type="String" Name="DesagregacionT" Nullable="true" />
+          <Property Type="String" Name="FiabilidadT" Nullable="true" />
+          <Property Type="String" Name="FuenteT" Nullable="true" />
+          <Property Type="String" Name="PonderacionT" Nullable="true" />
+          <Property Type="String" Name="VariableT" Nullable="true" />
+          <Property Type="String" Name="Gerente" Nullable="true" MaxLength="501" />
+          <Property Type="Boolean" Name="Observaciones" Nullable="true" />
+          <Property Type="String" Name="ObservacionesT" Nullable="true" />
+          <Property Type="Int32" Name="NoVersion" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="ES_BriefDisenoMuestral_Get_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="Int64" Name="Propuestaid" Nullable="true" />
+          <Property Type="DateTime" Name="Fecha" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Objetivo" Nullable="true" />
+          <Property Type="String" Name="Poblacion" Nullable="true" />
+          <Property Type="String" Name="Capacidad" Nullable="true" />
+          <Property Type="String" Name="Metodologia" Nullable="true" />
+          <Property Type="String" Name="NivelesDesagregacion" Nullable="true" />
+          <Property Type="String" Name="PosiblesMarcos" Nullable="true" />
+          <Property Type="String" Name="Variable" Nullable="true" />
+          <Property Type="String" Name="Observaciones" Nullable="true" />
+          <Property Type="Int32" Name="NoVersion" Nullable="true" />
+          <Property Type="String" Name="Titulo" Nullable="true" MaxLength="100" />
+          <Property Type="Decimal" Name="ProbabilidadId" Nullable="true" Precision="3" Scale="0" />
+          <Property Type="Byte" Name="TipoId" Nullable="true" />
+          <Property Type="Byte" Name="EstadoId" Nullable="true" />
+          <Property Type="DateTime" Name="FechaEnvio" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="FechaAprob" Nullable="true" Precision="23" />
+          <Property Type="Byte" Name="OrigenId" Nullable="true" />
+          <Property Type="Int16" Name="RazonNoAprobId" Nullable="true" />
+          <Property Type="String" Name="FormaEnvio" Nullable="true" MaxLength="50" />
+          <Property Type="Int64" Name="Brief" Nullable="true" />
+          <Property Type="Boolean" Name="Tracking" Nullable="true" />
+          <Property Type="String" Name="Estado" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="TipoPropuesta" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="OrigenProp" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="Probabilidad" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="Razon" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="NombreBrief" Nullable="true" MaxLength="51" />
+          <Property Type="String" Name="Gerente" Nullable="true" MaxLength="501" />
+        </ComplexType>
+        <EntityType Name="ES_BriefDisenoMuestral">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Propuestaid" Type="Int64" />
+          <Property Name="Fecha" Type="DateTime" Precision="3" />
+          <Property Name="Objetivo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Poblacion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Capacidad" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Metodologia" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="NivelesDesagregacion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="PosiblesMarcos" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Variable" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Observaciones" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="NoVersion" Type="Int32" />
+          <NavigationProperty Name="ES_DisenoMuestral" Relationship="ES_Model.FK_ES_DisenoMuestral_ES_BriefDisenoMuestral" FromRole="ES_BriefDisenoMuestral" ToRole="ES_DisenoMuestral" />
+        </EntityType>
+        <EntityType Name="ES_DisenoMuestral">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BriefId" Type="Int64" />
+          <Property Name="Fecha" Type="DateTime" Precision="3" />
+          <Property Name="MuestroProbabilistico" Type="Boolean" />
+          <Property Name="Objetivo" Type="Boolean" />
+          <Property Name="Poblacion" Type="Boolean" />
+          <Property Name="Mercado" Type="Boolean" />
+          <Property Name="Marco" Type="Boolean" />
+          <Property Name="Tecnica" Type="Boolean" />
+          <Property Name="Diseno" Type="Boolean" />
+          <Property Name="Tamano" Type="Boolean" />
+          <Property Name="Fiabilidad" Type="Boolean" />
+          <Property Name="Desagregacion" Type="Boolean" />
+          <Property Name="Fuente" Type="Boolean" />
+          <Property Name="Ponderacion" Type="Boolean" />
+          <Property Name="ObjetivoT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="PoblacionT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="MercadoT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="MarcoT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="TecnicaT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="DisenoT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="TamanoT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="FiabilidadT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="DesagregacionT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="FuenteT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="PonderacionT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Variable" Type="Boolean" />
+          <Property Name="VariableT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Observaciones" Type="Boolean" />
+          <Property Name="ObservacionesT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="NoVersion" Type="Int32" />
+          <NavigationProperty Name="ES_BriefDisenoMuestral" Relationship="ES_Model.FK_ES_DisenoMuestral_ES_BriefDisenoMuestral" FromRole="ES_DisenoMuestral" ToRole="ES_BriefDisenoMuestral" />
+        </EntityType>
+        <EntityType Name="ES_MetodologiaCampo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TrabajoId" Type="Int64" />
+          <Property Name="NombreEstudio" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Fecha" Type="DateTime" Precision="3" />
+          <Property Name="Objetivo" Type="Boolean" />
+          <Property Name="Mercado" Type="Boolean" />
+          <Property Name="Marco" Type="Boolean" />
+          <Property Name="Tecnica" Type="Boolean" />
+          <Property Name="Diseno" Type="Boolean" />
+          <Property Name="Instrucciones" Type="Boolean" />
+          <Property Name="Distribucion" Type="Boolean" />
+          <Property Name="NivelConfianza" Type="Boolean" />
+          <Property Name="MargenError" Type="Boolean" />
+          <Property Name="Desagregacion" Type="Boolean" />
+          <Property Name="Fuente" Type="Boolean" />
+          <Property Name="Variables" Type="Boolean" />
+          <Property Name="Tasa" Type="Boolean" />
+          <Property Name="Procedimiento" Type="Boolean" />
+          <Property Name="ObjetivoT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="MercadoT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="MarcoT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="TecnicaT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="DisenoT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="InstruccionesT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="DistribucionT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="NivelConfianzaT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="MargenErrorT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="DesagregacionT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="FuenteT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="VariablesT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="TasaT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ProcedimientoT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="NoVersion" Type="Byte" />
+          <Property Name="Usuario" Type="Int64" />
+        </EntityType>
+        <Association Name="FK_ES_DisenoMuestral_ES_BriefDisenoMuestral">
+          <End Type="ES_Model.ES_BriefDisenoMuestral" Role="ES_BriefDisenoMuestral" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="ES_Model.ES_DisenoMuestral" Role="ES_DisenoMuestral" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ES_BriefDisenoMuestral">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ES_DisenoMuestral">
+              <PropertyRef Name="BriefId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ES_AprobacionMetodologia">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MetodologiaId" Type="Int64" />
+          <Property Name="TrabajoId" Type="Int64" />
+          <Property Name="Observación" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Aprobado" Type="Int16" />
+          <Property Name="Usuario" Type="Int64" />
+          <Property Name="Fecha" Type="DateTime" Precision="3" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ES_ModelStoreContainer" CdmEntityContainer="ES_Entities">
+          <FunctionImportMapping FunctionImportName="ES_BriefDisenoMuestral_Add" FunctionName="ES_Model.Store.ES_BriefDisenoMuestral_Add" />
+          <FunctionImportMapping FunctionImportName="ES_BriefDisenoMuestral_Edit" FunctionName="ES_Model.Store.ES_BriefDisenoMuestral_Edit" />
+          <FunctionImportMapping FunctionImportName="ES_DisenoMuestral_Add" FunctionName="ES_Model.Store.ES_DisenoMuestral_Add" />
+          <FunctionImportMapping FunctionImportName="ES_DisenoMuestral_Edit" FunctionName="ES_Model.Store.ES_DisenoMuestral_Edit" />
+          <FunctionImportMapping FunctionImportName="ES_MetodologiaCampo_Add" FunctionName="ES_Model.Store.ES_MetodologiaCampo_Add" />
+          <FunctionImportMapping FunctionImportName="ES_MetodologiaCampo_Edit" FunctionName="ES_Model.Store.ES_MetodologiaCampo_Edit" />
+          <FunctionImportMapping FunctionImportName="ES_MetodologiaCampo_Del" FunctionName="ES_Model.Store.ES_MetodologiaCampo_Del" />
+          <FunctionImportMapping FunctionImportName="ES_BriefDisenoMuestral_Del" FunctionName="ES_Model.Store.ES_BriefDisenoMuestral_Del" />
+          <FunctionImportMapping FunctionImportName="ES_DisenoMuestral_Del" FunctionName="ES_Model.Store.ES_DisenoMuestral_Del" />
+          <FunctionImportMapping FunctionImportName="ES_MetodologiaCampoTr" FunctionName="ES_Model.Store.ES_MetodologiaCampoTr">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ES_Model.ES_MetodologiaCampoTr_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="NoVersion" ColumnName="NoVersion" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ES_ObtenerMetodologiaXIdxTr" FunctionName="ES_Model.Store.ES_ObtenerMetodologiaXIdxTr">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ES_Model.ES_ObtenerMetodologiaXIdxTr_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="NombreEstudio" ColumnName="NombreEstudio" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Objetivo" ColumnName="Objetivo" />
+                <ScalarProperty Name="Mercado" ColumnName="Mercado" />
+                <ScalarProperty Name="Marco" ColumnName="Marco" />
+                <ScalarProperty Name="Tecnica" ColumnName="Tecnica" />
+                <ScalarProperty Name="Diseno" ColumnName="Diseno" />
+                <ScalarProperty Name="Instrucciones" ColumnName="Instrucciones" />
+                <ScalarProperty Name="Distribucion" ColumnName="Distribucion" />
+                <ScalarProperty Name="NivelConfianza" ColumnName="NivelConfianza" />
+                <ScalarProperty Name="MargenError" ColumnName="MargenError" />
+                <ScalarProperty Name="Desagregacion" ColumnName="Desagregacion" />
+                <ScalarProperty Name="Fuente" ColumnName="Fuente" />
+                <ScalarProperty Name="Variables" ColumnName="Variables" />
+                <ScalarProperty Name="Tasa" ColumnName="Tasa" />
+                <ScalarProperty Name="Procedimiento" ColumnName="Procedimiento" />
+                <ScalarProperty Name="ObjetivoT" ColumnName="ObjetivoT" />
+                <ScalarProperty Name="MercadoT" ColumnName="MercadoT" />
+                <ScalarProperty Name="MarcoT" ColumnName="MarcoT" />
+                <ScalarProperty Name="TecnicaT" ColumnName="TecnicaT" />
+                <ScalarProperty Name="DisenoT" ColumnName="DisenoT" />
+                <ScalarProperty Name="InstruccionesT" ColumnName="InstruccionesT" />
+                <ScalarProperty Name="DistribucionT" ColumnName="DistribucionT" />
+                <ScalarProperty Name="NivelConfianzaT" ColumnName="NivelConfianzaT" />
+                <ScalarProperty Name="MargenErrorT" ColumnName="MargenErrorT" />
+                <ScalarProperty Name="DesagregacionT" ColumnName="DesagregacionT" />
+                <ScalarProperty Name="FuenteT" ColumnName="FuenteT" />
+                <ScalarProperty Name="VariablesT" ColumnName="VariablesT" />
+                <ScalarProperty Name="TasaT" ColumnName="TasaT" />
+                <ScalarProperty Name="ProcedimientoT" ColumnName="ProcedimientoT" />
+                <ScalarProperty Name="NoVersion" ColumnName="NoVersion" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="FechaVersion" ColumnName="FechaVersion" />
+                <ScalarProperty Name="UsuarioCreacion" ColumnName="UsuarioCreacion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ES_MetodologiaCampo_Get" FunctionName="ES_Model.Store.ES_MetodologiaCampo_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ES_Model.ES_MetodologiaCampo_Get_Result">
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="NombreEstudio" ColumnName="NombreEstudio" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Objetivo" ColumnName="Objetivo" />
+                <ScalarProperty Name="Mercado" ColumnName="Mercado" />
+                <ScalarProperty Name="Marco" ColumnName="Marco" />
+                <ScalarProperty Name="Tecnica" ColumnName="Tecnica" />
+                <ScalarProperty Name="Diseno" ColumnName="Diseno" />
+                <ScalarProperty Name="Instrucciones" ColumnName="Instrucciones" />
+                <ScalarProperty Name="Distribucion" ColumnName="Distribucion" />
+                <ScalarProperty Name="NivelConfianza" ColumnName="NivelConfianza" />
+                <ScalarProperty Name="MargenError" ColumnName="MargenError" />
+                <ScalarProperty Name="Desagregacion" ColumnName="Desagregacion" />
+                <ScalarProperty Name="Fuente" ColumnName="Fuente" />
+                <ScalarProperty Name="Variables" ColumnName="Variables" />
+                <ScalarProperty Name="Tasa" ColumnName="Tasa" />
+                <ScalarProperty Name="Procedimiento" ColumnName="Procedimiento" />
+                <ScalarProperty Name="ObjetivoT" ColumnName="ObjetivoT" />
+                <ScalarProperty Name="MercadoT" ColumnName="MercadoT" />
+                <ScalarProperty Name="MarcoT" ColumnName="MarcoT" />
+                <ScalarProperty Name="TecnicaT" ColumnName="TecnicaT" />
+                <ScalarProperty Name="DisenoT" ColumnName="DisenoT" />
+                <ScalarProperty Name="InstruccionesT" ColumnName="InstruccionesT" />
+                <ScalarProperty Name="DistribucionT" ColumnName="DistribucionT" />
+                <ScalarProperty Name="NivelConfianzaT" ColumnName="NivelConfianzaT" />
+                <ScalarProperty Name="MargenErrorT" ColumnName="MargenErrorT" />
+                <ScalarProperty Name="DesagregacionT" ColumnName="DesagregacionT" />
+                <ScalarProperty Name="FuenteT" ColumnName="FuenteT" />
+                <ScalarProperty Name="VariablesT" ColumnName="VariablesT" />
+                <ScalarProperty Name="TasaT" ColumnName="TasaT" />
+                <ScalarProperty Name="ProcedimientoT" ColumnName="ProcedimientoT" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="NoVersion" ColumnName="NoVersion" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ES_MetodologiaCampo_NumVersiones" FunctionName="ES_Model.Store.ES_MetodologiaCampo_NumVersiones" />
+          <FunctionImportMapping FunctionImportName="ES_DisenoMuestral_Get" FunctionName="ES_Model.Store.ES_DisenoMuestral_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ES_Model.ES_DisenoMuestral_Get_Result">
+                <ScalarProperty Name="Propuestaid" ColumnName="Propuestaid" />
+                <ScalarProperty Name="BriefId" ColumnName="BriefId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="MuestroProbabilistico" ColumnName="MuestroProbabilistico" />
+                <ScalarProperty Name="Objetivo" ColumnName="Objetivo" />
+                <ScalarProperty Name="Poblacion" ColumnName="Poblacion" />
+                <ScalarProperty Name="Mercado" ColumnName="Mercado" />
+                <ScalarProperty Name="Marco" ColumnName="Marco" />
+                <ScalarProperty Name="Tecnica" ColumnName="Tecnica" />
+                <ScalarProperty Name="Diseno" ColumnName="Diseno" />
+                <ScalarProperty Name="Tamano" ColumnName="Tamano" />
+                <ScalarProperty Name="Desagregacion" ColumnName="Desagregacion" />
+                <ScalarProperty Name="Fiabilidad" ColumnName="Fiabilidad" />
+                <ScalarProperty Name="Fuente" ColumnName="Fuente" />
+                <ScalarProperty Name="Ponderacion" ColumnName="Ponderacion" />
+                <ScalarProperty Name="Variable" ColumnName="Variable" />
+                <ScalarProperty Name="ObjetivoT" ColumnName="ObjetivoT" />
+                <ScalarProperty Name="PoblacionT" ColumnName="PoblacionT" />
+                <ScalarProperty Name="MercadoT" ColumnName="MercadoT" />
+                <ScalarProperty Name="MarcoT" ColumnName="MarcoT" />
+                <ScalarProperty Name="DisenoT" ColumnName="DisenoT" />
+                <ScalarProperty Name="TecnicaT" ColumnName="TecnicaT" />
+                <ScalarProperty Name="TamanoT" ColumnName="TamanoT" />
+                <ScalarProperty Name="DesagregacionT" ColumnName="DesagregacionT" />
+                <ScalarProperty Name="FiabilidadT" ColumnName="FiabilidadT" />
+                <ScalarProperty Name="FuenteT" ColumnName="FuenteT" />
+                <ScalarProperty Name="PonderacionT" ColumnName="PonderacionT" />
+                <ScalarProperty Name="VariableT" ColumnName="VariableT" />
+                <ScalarProperty Name="Gerente" ColumnName="Gerente" />
+                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
+                <ScalarProperty Name="ObservacionesT" ColumnName="ObservacionesT" />
+                <ScalarProperty Name="NoVersion" ColumnName="NoVersion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ES_BriefDisenoMuestral_Get" FunctionName="ES_Model.Store.ES_BriefDisenoMuestral_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ES_Model.ES_BriefDisenoMuestral_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Propuestaid" ColumnName="Propuestaid" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Objetivo" ColumnName="Objetivo" />
+                <ScalarProperty Name="Poblacion" ColumnName="Poblacion" />
+                <ScalarProperty Name="Capacidad" ColumnName="Capacidad" />
+                <ScalarProperty Name="Metodologia" ColumnName="Metodologia" />
+                <ScalarProperty Name="NivelesDesagregacion" ColumnName="NivelesDesagregacion" />
+                <ScalarProperty Name="PosiblesMarcos" ColumnName="PosiblesMarcos" />
+                <ScalarProperty Name="Variable" ColumnName="Variable" />
+                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
+                <ScalarProperty Name="NoVersion" ColumnName="NoVersion" />
+                <ScalarProperty Name="Titulo" ColumnName="Titulo" />
+                <ScalarProperty Name="ProbabilidadId" ColumnName="ProbabilidadId" />
+                <ScalarProperty Name="TipoId" ColumnName="TipoId" />
+                <ScalarProperty Name="EstadoId" ColumnName="EstadoId" />
+                <ScalarProperty Name="FechaEnvio" ColumnName="FechaEnvio" />
+                <ScalarProperty Name="FechaAprob" ColumnName="FechaAprob" />
+                <ScalarProperty Name="OrigenId" ColumnName="OrigenId" />
+                <ScalarProperty Name="RazonNoAprobId" ColumnName="RazonNoAprobId" />
+                <ScalarProperty Name="FormaEnvio" ColumnName="FormaEnvio" />
+                <ScalarProperty Name="Brief" ColumnName="Brief" />
+                <ScalarProperty Name="Tracking" ColumnName="Tracking" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="TipoPropuesta" ColumnName="TipoPropuesta" />
+                <ScalarProperty Name="OrigenProp" ColumnName="OrigenProp" />
+                <ScalarProperty Name="Probabilidad" ColumnName="Probabilidad" />
+                <ScalarProperty Name="Razon" ColumnName="Razon" />
+                <ScalarProperty Name="NombreBrief" ColumnName="NombreBrief" />
+                <ScalarProperty Name="Gerente" ColumnName="Gerente" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="ES_BriefDisenoMuestral">
+            <EntityTypeMapping TypeName="ES_Model.ES_BriefDisenoMuestral">
+              <MappingFragment StoreEntitySet="ES_BriefDisenoMuestral">
+                <ScalarProperty Name="NoVersion" ColumnName="NoVersion" />
+                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
+                <ScalarProperty Name="Variable" ColumnName="Variable" />
+                <ScalarProperty Name="PosiblesMarcos" ColumnName="PosiblesMarcos" />
+                <ScalarProperty Name="NivelesDesagregacion" ColumnName="NivelesDesagregacion" />
+                <ScalarProperty Name="Metodologia" ColumnName="Metodologia" />
+                <ScalarProperty Name="Capacidad" ColumnName="Capacidad" />
+                <ScalarProperty Name="Poblacion" ColumnName="Poblacion" />
+                <ScalarProperty Name="Objetivo" ColumnName="Objetivo" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Propuestaid" ColumnName="Propuestaid" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ES_DisenoMuestral">
+            <EntityTypeMapping TypeName="ES_Model.ES_DisenoMuestral">
+              <MappingFragment StoreEntitySet="ES_DisenoMuestral">
+                <ScalarProperty Name="NoVersion" ColumnName="NoVersion" />
+                <ScalarProperty Name="ObservacionesT" ColumnName="ObservacionesT" />
+                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
+                <ScalarProperty Name="VariableT" ColumnName="VariableT" />
+                <ScalarProperty Name="Variable" ColumnName="Variable" />
+                <ScalarProperty Name="PonderacionT" ColumnName="PonderacionT" />
+                <ScalarProperty Name="FuenteT" ColumnName="FuenteT" />
+                <ScalarProperty Name="DesagregacionT" ColumnName="DesagregacionT" />
+                <ScalarProperty Name="FiabilidadT" ColumnName="FiabilidadT" />
+                <ScalarProperty Name="TamanoT" ColumnName="TamanoT" />
+                <ScalarProperty Name="DisenoT" ColumnName="DisenoT" />
+                <ScalarProperty Name="TecnicaT" ColumnName="TecnicaT" />
+                <ScalarProperty Name="MarcoT" ColumnName="MarcoT" />
+                <ScalarProperty Name="MercadoT" ColumnName="MercadoT" />
+                <ScalarProperty Name="PoblacionT" ColumnName="PoblacionT" />
+                <ScalarProperty Name="ObjetivoT" ColumnName="ObjetivoT" />
+                <ScalarProperty Name="Ponderacion" ColumnName="Ponderacion" />
+                <ScalarProperty Name="Fuente" ColumnName="Fuente" />
+                <ScalarProperty Name="Desagregacion" ColumnName="Desagregacion" />
+                <ScalarProperty Name="Fiabilidad" ColumnName="Fiabilidad" />
+                <ScalarProperty Name="Tamano" ColumnName="Tamano" />
+                <ScalarProperty Name="Diseno" ColumnName="Diseno" />
+                <ScalarProperty Name="Tecnica" ColumnName="Tecnica" />
+                <ScalarProperty Name="Marco" ColumnName="Marco" />
+                <ScalarProperty Name="Mercado" ColumnName="Mercado" />
+                <ScalarProperty Name="Poblacion" ColumnName="Poblacion" />
+                <ScalarProperty Name="Objetivo" ColumnName="Objetivo" />
+                <ScalarProperty Name="MuestroProbabilistico" ColumnName="MuestroProbabilistico" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="BriefId" ColumnName="BriefId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ES_MetodologiaCampo">
+            <EntityTypeMapping TypeName="ES_Model.ES_MetodologiaCampo">
+              <MappingFragment StoreEntitySet="ES_MetodologiaCampo">
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="NoVersion" ColumnName="NoVersion" />
+                <ScalarProperty Name="ProcedimientoT" ColumnName="ProcedimientoT" />
+                <ScalarProperty Name="TasaT" ColumnName="TasaT" />
+                <ScalarProperty Name="VariablesT" ColumnName="VariablesT" />
+                <ScalarProperty Name="FuenteT" ColumnName="FuenteT" />
+                <ScalarProperty Name="DesagregacionT" ColumnName="DesagregacionT" />
+                <ScalarProperty Name="MargenErrorT" ColumnName="MargenErrorT" />
+                <ScalarProperty Name="NivelConfianzaT" ColumnName="NivelConfianzaT" />
+                <ScalarProperty Name="DistribucionT" ColumnName="DistribucionT" />
+                <ScalarProperty Name="InstruccionesT" ColumnName="InstruccionesT" />
+                <ScalarProperty Name="DisenoT" ColumnName="DisenoT" />
+                <ScalarProperty Name="TecnicaT" ColumnName="TecnicaT" />
+                <ScalarProperty Name="MarcoT" ColumnName="MarcoT" />
+                <ScalarProperty Name="MercadoT" ColumnName="MercadoT" />
+                <ScalarProperty Name="ObjetivoT" ColumnName="ObjetivoT" />
+                <ScalarProperty Name="Procedimiento" ColumnName="Procedimiento" />
+                <ScalarProperty Name="Tasa" ColumnName="Tasa" />
+                <ScalarProperty Name="Variables" ColumnName="Variables" />
+                <ScalarProperty Name="Fuente" ColumnName="Fuente" />
+                <ScalarProperty Name="Desagregacion" ColumnName="Desagregacion" />
+                <ScalarProperty Name="MargenError" ColumnName="MargenError" />
+                <ScalarProperty Name="NivelConfianza" ColumnName="NivelConfianza" />
+                <ScalarProperty Name="Distribucion" ColumnName="Distribucion" />
+                <ScalarProperty Name="Instrucciones" ColumnName="Instrucciones" />
+                <ScalarProperty Name="Diseno" ColumnName="Diseno" />
+                <ScalarProperty Name="Tecnica" ColumnName="Tecnica" />
+                <ScalarProperty Name="Marco" ColumnName="Marco" />
+                <ScalarProperty Name="Mercado" ColumnName="Mercado" />
+                <ScalarProperty Name="Objetivo" ColumnName="Objetivo" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="NombreEstudio" ColumnName="NombreEstudio" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ES_AprobacionMetodologia">
+            <EntityTypeMapping TypeName="ES_Model.ES_AprobacionMetodologia">
+              <MappingFragment StoreEntitySet="ES_AprobacionMetodologia">
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="Aprobado" ColumnName="Aprobado" />
+                <ScalarProperty Name="Observación" ColumnName="Observación" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="MetodologiaId" ColumnName="MetodologiaId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer>
+    <edmx:Connection>
+      <edmx:DesignerInfoPropertySet>
+        <edmx:DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </edmx:DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <edmx:DesignerInfoPropertySet>
+        <edmx:DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <edmx:DesignerProperty Name="EnablePluralization" Value="False" />
+        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <edmx:DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+        <edmx:DesignerProperty Name="UseLegacyProvider" Value="True" />
+      </edmx:DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams></edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

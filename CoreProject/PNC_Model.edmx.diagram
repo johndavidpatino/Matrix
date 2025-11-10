@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="420672d95b8441c1b0fe8509c55b5e30" Name="Diagram1">
+        <EntityTypeShape EntityType="MatrixModel1.PNC_FuenteReclamo" Width="1.5" PointX="7.75" PointY="8.125" />
+        <EntityTypeShape EntityType="MatrixModel1.PNC_VObtenerCliente" Width="1.625" PointX="2.875" PointY="5.25" />
+        <EntityTypeShape EntityType="MatrixModel1.PNC_VObtenerUsuarios" Width="1.875" PointX="4.625" PointY="3.625" />
+        <EntityTypeShape EntityType="MatrixModel1.PNC_TiposDeAccion" Width="1.875" PointX="0.75" PointY="5.25" />
+        <EntityTypeShape EntityType="MatrixModel1.PNC_VObtenerUnidad" Width="1.875" PointX="6.875" PointY="3.875" />
+        <EntityTypeShape EntityType="MatrixModel1.PNC_Categorias" Width="1.5" PointX="8.625" PointY="10.625" />
+        <EntityTypeShape EntityType="MatrixModel1.PNC_ProductoNoConformeAcciones" Width="3" PointX="7.125" PointY="0.5" />
+        <EntityTypeShape EntityType="MatrixModel1.PNC_ProductoNoConformeCausas" Width="2.5" PointX="4.5" PointY="0.5" />
+        <EntityTypeShape EntityType="MatrixModel1.PNC_VerProductoNoConformeCausas" Width="3" PointX="6" PointY="5.5" />
+        <EntityTypeShape EntityType="MatrixModel1.PNC_VerProductoNoConformeDetalle" Width="2.875" PointX="10.375" PointY="0.5" />
+        <EntityTypeShape EntityType="MatrixModel1.PNC_ProductoNoConforme" Width="2.125" PointX="2.25" PointY="0.5" />
+        <EntityTypeShape EntityType="MatrixModel1.PNC_VerProductoNoConforme" Width="3" PointX="10.25" PointY="4.625" />
+        <EntityTypeShape EntityType="MatrixModel1.PNC_Procedimientos" Width="1.5" PointX="0.75" PointY="7.75" />
+        <EntityTypeShape EntityType="MatrixModel1.PNC_Procesos" Width="1.5" PointX="2.75" PointY="7.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

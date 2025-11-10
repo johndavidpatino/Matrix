@@ -1,0 +1,280 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="IPS_Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="OP_IPS_Ejecucion">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TrabajoId" Type="bigint" />
+          <Property Name="FechaHoraObservacion" Type="datetime" />
+          <Property Name="Pregunta" Type="varchar" MaxLength="20" />
+          <Property Name="Observacion" Type="varchar" MaxLength="10" />
+          <Property Name="DescripcionObservacion" Type="varchar(max)" />
+          <Property Name="RespuestaProgramador" Type="varchar(max)" />
+          <Property Name="FechaHoraRespuesta" Type="datetime" />
+        </EntityType>
+        <EntityType Name="OP_IPS_Revision">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TrabajoId" Type="bigint" />
+          <Property Name="FechaHoraObservacion" Type="datetime" />
+          <Property Name="Pregunta" Type="varchar" MaxLength="20" />
+          <Property Name="Observacion" Type="varchar" MaxLength="10" />
+          <Property Name="DescripcionObservacion" Type="varchar(max)" />
+          <Property Name="RespuestaProgramador" Type="varchar(max)" />
+          <Property Name="FechaHoraRespuesta" Type="datetime" />
+        </EntityType>
+        <Function Name="OP_IPS_Ejecucion_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+          <Parameter Name="Pregunta" Type="varchar" Mode="In" />
+          <Parameter Name="Observacion" Type="varchar" Mode="In" />
+          <Parameter Name="DescripcionObservacion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="RespuestaProgramador" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="OP_IPS_Ejecucion_Del" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_IPS_Ejecucion_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="bigint" Mode="In" />
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+          <Parameter Name="Pregunta" Type="varchar" Mode="In" />
+          <Parameter Name="Observacion" Type="varchar" Mode="In" />
+          <Parameter Name="DescripcionObservacion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="RespuestaProgramador" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="OP_IPS_Ejecucion_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="bigint" Mode="In" />
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_IPS_Revision_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+          <Parameter Name="Pregunta" Type="varchar" Mode="In" />
+          <Parameter Name="Observacion" Type="varchar" Mode="In" />
+          <Parameter Name="DescripcionObservacion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="RespuestaProgramador" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="OP_IPS_Revision_Del" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_IPS_Revision_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="bigint" Mode="In" />
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+          <Parameter Name="Pregunta" Type="varchar" Mode="In" />
+          <Parameter Name="Observacion" Type="varchar" Mode="In" />
+          <Parameter Name="DescripcionObservacion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="RespuestaProgramador" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="OP_IPS_Revision_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="bigint" Mode="In" />
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+        </Function>
+        <EntityContainer Name="IPS_ModelStoreContainer">
+          <EntitySet Name="OP_IPS_Ejecucion" EntityType="Self.OP_IPS_Ejecucion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OP_IPS_Revision" EntityType="Self.OP_IPS_Revision" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="IPS_Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="OP_IPS_Ejecucion">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TrabajoId" Type="Int64" />
+          <Property Name="FechaHoraObservacion" Type="DateTime" Precision="3" />
+          <Property Name="Pregunta" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Observacion" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DescripcionObservacion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="RespuestaProgramador" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="FechaHoraRespuesta" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="OP_IPS_Revision">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TrabajoId" Type="Int64" />
+          <Property Name="FechaHoraObservacion" Type="DateTime" Precision="3" />
+          <Property Name="Pregunta" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Observacion" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DescripcionObservacion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="RespuestaProgramador" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="FechaHoraRespuesta" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityContainer Name="IPSEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="OP_IPS_Ejecucion" EntityType="Self.OP_IPS_Ejecucion" />
+          <EntitySet Name="OP_IPS_Revision" EntityType="Self.OP_IPS_Revision" />
+          <FunctionImport Name="OP_IPS_Ejecucion_Add" ReturnType="Collection(Decimal)">
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+            <Parameter Name="Pregunta" Mode="In" Type="String" />
+            <Parameter Name="Observacion" Mode="In" Type="String" />
+            <Parameter Name="DescripcionObservacion" Mode="In" Type="String" />
+            <Parameter Name="RespuestaProgramador" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OP_IPS_Ejecucion_Del">
+            <Parameter Name="ID" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="OP_IPS_Ejecucion_Edit">
+            <Parameter Name="ID" Mode="In" Type="Int64" />
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+            <Parameter Name="Pregunta" Mode="In" Type="String" />
+            <Parameter Name="Observacion" Mode="In" Type="String" />
+            <Parameter Name="DescripcionObservacion" Mode="In" Type="String" />
+            <Parameter Name="RespuestaProgramador" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OP_IPS_Ejecucion_Get" ReturnType="Collection(IPS_Model.OP_IPS_Ejecucion_Get_Result)">
+            <Parameter Name="ID" Mode="In" Type="Int64" />
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="OP_IPS_Revision_Add" ReturnType="Collection(Decimal)">
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+            <Parameter Name="Pregunta" Mode="In" Type="String" />
+            <Parameter Name="Observacion" Mode="In" Type="String" />
+            <Parameter Name="DescripcionObservacion" Mode="In" Type="String" />
+            <Parameter Name="RespuestaProgramador" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OP_IPS_Revision_Del">
+            <Parameter Name="ID" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="OP_IPS_Revision_Edit">
+            <Parameter Name="ID" Mode="In" Type="Int64" />
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+            <Parameter Name="Pregunta" Mode="In" Type="String" />
+            <Parameter Name="Observacion" Mode="In" Type="String" />
+            <Parameter Name="DescripcionObservacion" Mode="In" Type="String" />
+            <Parameter Name="RespuestaProgramador" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OP_IPS_Revision_Get" ReturnType="Collection(IPS_Model.OP_IPS_Revision_Get_Result)">
+            <Parameter Name="ID" Mode="In" Type="Int64" />
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="OP_IPS_Ejecucion_Get_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="Int64" Name="TrabajoId" Nullable="true" />
+          <Property Type="DateTime" Name="FechaHoraObservacion" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Pregunta" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Observacion" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="DescripcionObservacion" Nullable="true" />
+          <Property Type="String" Name="RespuestaProgramador" Nullable="true" />
+          <Property Type="DateTime" Name="FechaHoraRespuesta" Nullable="true" Precision="23" />
+          <Property Type="String" Name="JobBook" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="NombreTrabajo" Nullable="false" MaxLength="250" />
+        </ComplexType>
+        <ComplexType Name="OP_IPS_Revision_Get_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="Int64" Name="TrabajoId" Nullable="true" />
+          <Property Type="DateTime" Name="FechaHoraObservacion" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Pregunta" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Observacion" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="DescripcionObservacion" Nullable="true" />
+          <Property Type="String" Name="RespuestaProgramador" Nullable="true" />
+          <Property Type="DateTime" Name="FechaHoraRespuesta" Nullable="true" Precision="23" />
+          <Property Type="String" Name="JobBook" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="NombreTrabajo" Nullable="false" MaxLength="250" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="IPS_ModelStoreContainer" CdmEntityContainer="IPSEntities">
+          <EntitySetMapping Name="OP_IPS_Ejecucion">
+            <EntityTypeMapping TypeName="IPS_Model.OP_IPS_Ejecucion">
+              <MappingFragment StoreEntitySet="OP_IPS_Ejecucion">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="FechaHoraObservacion" ColumnName="FechaHoraObservacion" />
+                <ScalarProperty Name="Pregunta" ColumnName="Pregunta" />
+                <ScalarProperty Name="Observacion" ColumnName="Observacion" />
+                <ScalarProperty Name="DescripcionObservacion" ColumnName="DescripcionObservacion" />
+                <ScalarProperty Name="RespuestaProgramador" ColumnName="RespuestaProgramador" />
+                <ScalarProperty Name="FechaHoraRespuesta" ColumnName="FechaHoraRespuesta" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OP_IPS_Revision">
+            <EntityTypeMapping TypeName="IPS_Model.OP_IPS_Revision">
+              <MappingFragment StoreEntitySet="OP_IPS_Revision">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="FechaHoraObservacion" ColumnName="FechaHoraObservacion" />
+                <ScalarProperty Name="Pregunta" ColumnName="Pregunta" />
+                <ScalarProperty Name="Observacion" ColumnName="Observacion" />
+                <ScalarProperty Name="DescripcionObservacion" ColumnName="DescripcionObservacion" />
+                <ScalarProperty Name="RespuestaProgramador" ColumnName="RespuestaProgramador" />
+                <ScalarProperty Name="FechaHoraRespuesta" ColumnName="FechaHoraRespuesta" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OP_IPS_Ejecucion_Add" FunctionName="IPS_Model.Store.OP_IPS_Ejecucion_Add" />
+          <FunctionImportMapping FunctionImportName="OP_IPS_Ejecucion_Del" FunctionName="IPS_Model.Store.OP_IPS_Ejecucion_Del" />
+          <FunctionImportMapping FunctionImportName="OP_IPS_Ejecucion_Edit" FunctionName="IPS_Model.Store.OP_IPS_Ejecucion_Edit" />
+          <FunctionImportMapping FunctionImportName="OP_IPS_Ejecucion_Get" FunctionName="IPS_Model.Store.OP_IPS_Ejecucion_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IPS_Model.OP_IPS_Ejecucion_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="FechaHoraObservacion" ColumnName="FechaHoraObservacion" />
+                <ScalarProperty Name="Pregunta" ColumnName="Pregunta" />
+                <ScalarProperty Name="Observacion" ColumnName="Observacion" />
+                <ScalarProperty Name="DescripcionObservacion" ColumnName="DescripcionObservacion" />
+                <ScalarProperty Name="RespuestaProgramador" ColumnName="RespuestaProgramador" />
+                <ScalarProperty Name="FechaHoraRespuesta" ColumnName="FechaHoraRespuesta" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="NombreTrabajo" ColumnName="NombreTrabajo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OP_IPS_Revision_Add" FunctionName="IPS_Model.Store.OP_IPS_Revision_Add" />
+          <FunctionImportMapping FunctionImportName="OP_IPS_Revision_Del" FunctionName="IPS_Model.Store.OP_IPS_Revision_Del" />
+          <FunctionImportMapping FunctionImportName="OP_IPS_Revision_Edit" FunctionName="IPS_Model.Store.OP_IPS_Revision_Edit" />
+          <FunctionImportMapping FunctionImportName="OP_IPS_Revision_Get" FunctionName="IPS_Model.Store.OP_IPS_Revision_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IPS_Model.OP_IPS_Revision_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="FechaHoraObservacion" ColumnName="FechaHoraObservacion" />
+                <ScalarProperty Name="Pregunta" ColumnName="Pregunta" />
+                <ScalarProperty Name="Observacion" ColumnName="Observacion" />
+                <ScalarProperty Name="DescripcionObservacion" ColumnName="DescripcionObservacion" />
+                <ScalarProperty Name="RespuestaProgramador" ColumnName="RespuestaProgramador" />
+                <ScalarProperty Name="FechaHoraRespuesta" ColumnName="FechaHoraRespuesta" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="NombreTrabajo" ColumnName="NombreTrabajo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

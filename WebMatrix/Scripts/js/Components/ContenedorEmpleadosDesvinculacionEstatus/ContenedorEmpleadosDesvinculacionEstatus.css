@@ -1,0 +1,37 @@
+﻿.ContenedorEmpleadosDesvinculacionEstatus {
+    height: 100%;
+}
+
+    .ContenedorEmpleadosDesvinculacionEstatus header {
+        display: flex;
+        justify-content: center;
+    }
+
+    .ContenedorEmpleadosDesvinculacionEstatus segment {
+        display: grid;
+        grid-template-rows: auto auto auto;
+        row-gap: 5px;
+        height: 100%;
+    }
+
+        .ContenedorEmpleadosDesvinculacionEstatus segment .Search {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .ContenedorEmpleadosDesvinculacionEstatus segment .ContentCards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit,250px);
+            column-gap: 10px;
+            row-gap: 10px;
+            grid-template-rows: auto;
+            overflow-y: auto;
+            justify-content: center;
+        }
+
+        .ContenedorEmpleadosDesvinculacionEstatus segment .Pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }

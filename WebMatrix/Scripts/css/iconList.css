@@ -1,0 +1,292 @@
+﻿.MarcaList
+{
+    background: transparent url('images/ListaIconosAdministracion_16x400.png') 0px 2px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+
+
+.LineaList
+{
+    background: transparent url('images/ListaIconosAdministracion_16x400.png') 0px -18px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+
+
+.ConsesionarioList
+{
+    background: transparent url('images/ListaIconosAdministracion_16x400.png') 0px -36px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+
+
+.ClienteList
+{
+    background: transparent url('images/ListaIconosAdministracion_16x400.png') 0px -55px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+
+
+.TallerList
+{
+    background: transparent url('images/ListaIconosAdministracion_16x400.png') 0px -73px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+
+
+.CarList
+{
+    background: transparent url('images/ListaIconosAdministracion_16x400.png') 0px -92px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+
+.ImportList
+{
+    background: transparent url('images/ListaIconosAdministracion_16x400.png') 0px -110px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+
+.KitList
+{
+    background: transparent url('images/ListaIconosAdministracion_16x400.png') 0px -130px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+
+.CilindroList
+{
+    background: transparent url('images/ListaIconosAdministracion_16x400.png') 0px -150px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+
+.BankList
+{
+    background: transparent url('images/ListaIconosAdministracion_16x400.png') 0px -169px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+
+.CompanyList
+{
+    background: transparent url('images/ListaIconosAdministracion_16x400.png') 0px -189px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+
+.ExecutiveList
+{
+    background: transparent url('images/ListaIconosAdministracion_16x400.png') 0px -210px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+
+.GasStationList
+{
+    background: transparent url('images/ListaIconosAdministracion_16x400.png') 0px -230px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+
+.FestivosList
+{
+    background: transparent url('images/ListaIconosAdministracion_16x400.png') 0px -249px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+
+.HorarioList
+{
+    background: transparent url('images/ListaIconosAdministracion_16x400.png') 0px -266px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+
+.ConfigurarEstacion
+{
+    background: transparent url('images/ListaIconosAdministracion_16x400.png') 0px -286px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+
+.FlotasList
+{
+    background: transparent url('images/ListaIconosAdministracion_16x400.png') 0px -307px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+.BodegasList
+{
+    background: transparent url('images/ListaIconosAdministracion_16x400.png') 0px -307px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+.ArticulosList
+{
+    background: transparent url('images/ListaIconosAdministracion_16x400.png') 0px -307px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+/* Procesos */
+
+.CertificacionList
+{
+    background: transparent url('images/ListaIconosProcesos_16x300.png') 0px -2px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+
+.LegalizacionList
+{
+    background: transparent url('images/ListaIconosProcesos_16x300.png') 0px -20px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+
+.ValoracionesList
+{
+    background: transparent url('images/ListaIconosProcesos_16x300.png') 0px -37px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+
+.ConversionesList
+{
+    background: transparent url('images/ListaIconosProcesos_16x300.png') 0px -56px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+
+.CreditosList
+{
+    background: transparent url('images/ListaIconosProcesos_16x300.png') 0px -75px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+
+.RevisionesList
+{
+    background: transparent url('images/ListaIconosProcesos_16x300.png') 0px -93px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+
+.BloqueoList
+{
+    background: transparent url('images/ListaIconosProcesos_16x300.png') 0px -110px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+
+.DesmonteList
+{
+    background: transparent url('images/ListaIconosProcesos_16x300.png') 0px -128px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+
+.campañaList
+{
+    background: transparent url('images/ListaIconosProcesos_16x300.png') 0px -148px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+
+.InfoIdentificadorList
+{
+    background: transparent url('images/ListaIconosProcesos_16x300.png') 0px -168px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+.RestriccionesList
+{
+    background: transparent url('images/ListaIconosProcesos_16x300.png') 0px -188px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+
+/*Reportes*/
+.RecaudoFinancieraList
+{
+    background: transparent url('images/ListaIconosReportes_16x300.png') 0px -5px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+
+.ConsumoCreditoList
+{
+    background: transparent url('images/ListaIconosReportes_16x300.png') 0px -25px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+
+.BonosRedimidosList
+{
+    background: transparent url('images/ListaIconosReportes_16x300.png') 0px -47px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+
+.CertificacionesList
+{
+    background: transparent url('images/ListaIconosReportes_16x300.png') 0px -69px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+
+/* Seguridad */
+
+.PerfilesList
+{
+    background: transparent url('images/ListaIconosSeguridad_16x300.png') 0px -1px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+
+.UsuariosList
+{
+    background: transparent url('images/ListaIconosSeguridad_16x300.png') 0px -18px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+
+.AsignarPerfilList
+{
+    background: transparent url('images/ListaIconosSeguridad_16x300.png') 0px -38px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+
+.RestauraContraList
+{
+    background: transparent url('images/ListaIconosSeguridad_16x300.png') 0px -62px;
+    background-repeat: no-repeat;
+    height:19px;
+}
+
+.PermisosList
+{
+    background: transparent url('images/ListaIconosSeguridad_16x300.png') 0px -89px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+
+.BloqUsuariosList
+{
+    background: transparent url('images/ListaIconosSeguridad_16x300.png') 0px -109px;
+    background-repeat: no-repeat;
+    height:16px;
+}
+
+.AsociarList
+{
+    background: transparent url('images/ListaIconosSeguridad_16x300.png') 0px -129px;
+    background-repeat: no-repeat;
+    height:16px;
+}

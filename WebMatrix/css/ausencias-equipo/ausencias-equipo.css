@@ -1,0 +1,400 @@
+.ausencias-equipo-container {
+    background-color: #fff;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    border-radius: 8px;
+}
+
+.gantt-container {
+    padding-block: 2rem;
+    position: relative;
+    background-color: #fff;
+}
+
+.gantt-row-title {
+    display: block;
+    font-size: 14px;
+}
+
+.gantt-estado {
+    color: rgb(113, 113, 113);
+}
+
+
+.btn-ausencias {
+    --btn-bg-color: var(--cyan);
+    border: none;
+    height: 30px;
+    padding-inline: .75rem;
+    background-color: var(--btn-bg-color);
+    color: #fff;
+    border-radius: 4px;
+    position: relative;
+}
+
+
+.loader-wrapper {
+    --size: 18px;
+    --border: 2px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: inherit;
+    background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%);
+    background-size: 200% 100%;
+    animation: 1s shine linear infinite;
+    z-index: 100;
+}
+
+@keyframes shine {
+    to {
+      background-position-x: -200%;
+    }
+  }
+
+.loader {
+
+    display: block;
+    background-color: transparent;
+    width: var(--size);
+    height: var(--size);
+    border: var(--border) solid #FFF;
+    border-bottom-color: var(--indigo);
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+}
+
+.btn-ausencias-variant {
+    background-color: #fff;
+    color: var(--cyan);
+    border: 1.5px solid var(--cyan);
+}
+
+.btn-ausencias-red {
+    background-color: var(--red);
+    color: #fff;
+}
+
+.btn-ausencias-icon {
+    display: flex;
+    align-items: center;
+    gap: .25rem;
+}
+
+.btn-ausencias-icon svg {
+    width: 16px;
+    height: 16px;
+}
+
+.btn-ausencias-icon .material-symbols-outlined {
+    font-size: 1rem;
+}
+
+.btn-ausencias:not(:disabled):hover {
+    opacity: .8;
+}
+
+.btn-anular {
+    background-color: var(--red);
+}
+
+.btn-ausencias:disabled {
+    background-color: var(--light);
+    color: var(--secondary);
+}
+
+
+.ausencias-header {
+    display: flex;
+    border-bottom: 1.5px solid var(--light);
+    justify-content: space-between;
+}
+
+.ausencias-filtros {
+    padding-bottom: 1rem;
+
+    display: flex;
+    gap: 1rem;
+}
+
+.ausencias-date {
+    height: 30px;
+    padding-inline: .5rem;
+    border: 1px solid var(--light);
+    outline: none;
+    border-radius: 4px;
+}
+
+.ausencias-date:focus {
+    outline: 1px solid var(--cyan);
+}
+
+/* modal */
+
+.ausencias-modal {
+    position: relative;
+    margin-top: 1rem;
+    border-bottom: 1px solid var(--light);
+    padding-bottom: 1rem;
+    display: grid;
+    gap: 1rem;
+}
+
+.ausencias-modal-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: left;
+    align-items: center;
+    gap: 1rem;
+}
+
+.ausencias-modal-header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.ausencias-modal-header>button {
+    justify-self: right;
+}
+
+.ausencias-search-persona {
+    display: flex;
+    gap: .5rem;
+}
+
+.ausencias-input-text {
+    height: 30px;
+    border: 1px solid var(--gray);
+    padding-inline: .5rem;
+    border-radius: 4px;
+}
+
+.asencias-modal-title {
+    font-size: 18px;
+}
+
+.ausencias-modal.hidden {
+    display: none;
+}
+
+.ausencias-listas {
+    display: grid;
+    gap: 1rem;
+}
+
+.ausencias-listas-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.ausencias-lista-personas {
+    padding: 1rem;
+    border: 1px solid var(--secondary);
+    border-radius: 8px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.lista-persona {
+    display: grid;
+    align-items: center;
+    grid-template-columns: auto 1fr auto;
+    padding-inline: 1rem;
+    padding-block: .5rem;
+    gap: .5rem;
+    border-radius: 4px;
+    border: 1px solid var(--light);
+}
+
+.ausencias-listas>button {
+    max-width: 100px !important;
+}
+
+.btn-pos-right {
+    position: absolute;
+    right: 1rem;
+    top: 0;
+
+}
+
+.lista-persona-name {
+    display: inline-flex;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+.lista-persona-avatar {
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+    border-radius: 9999px;
+    border: 1px solid var(--indigo);
+}
+
+
+.gantt-row-beneficio:not(:empty) {
+    --beneficio-bg-color: var(--light);
+    background-color: var(--beneficio-bg-color);
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 9999px;
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
+}
+
+.beneficio-label {
+    background-color: var(--beneficio-bg-color);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding-inline: .5rem;
+    padding-block: .1rem;
+    border-radius: 999px;
+}
+
+.gantt-row-beneficio.beneficio-vacaciones,
+.beneficio-label.beneficio-vacaciones {
+    --beneficio-bg-color: var(--blue);
+    color: #fff;
+}
+
+.gantt-row-beneficio.beneficio-plus,
+.beneficio-label.beneficio-plus {
+    --beneficio-bg-color: var(--orange);
+    color: #fff;
+}
+
+.gantt-row-beneficio.beneficio-balance,
+.beneficio-label.beneficio-balance {
+    --beneficio-bg-color: var(--green);
+    color: #fff;
+}
+
+.ausencias-loading-inner {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.ausencias-loading {
+    width: 50px;
+    padding: 8px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #25b09b;
+    --_m:
+        conic-gradient(#0000 10%, #000),
+        linear-gradient(#000 0 0) content-box;
+    -webkit-mask: var(--_m);
+    mask: var(--_m);
+    -webkit-mask-composite: source-out;
+    mask-composite: subtract;
+    animation: l3 1s infinite linear;
+}
+
+@keyframes l3 {
+    to {
+        transform: rotate(1turn)
+    }
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.ausencias-lista-personas::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+.ausencias-lista-personas::-webkit-scrollbar:vertical {
+    width:10px;
+}
+
+.ausencias-lista-personas::-webkit-scrollbar-button:increment,.ausencias-lista-personas::-webkit-scrollbar-button {
+    display: none;
+} 
+
+.ausencias-lista-personas::-webkit-scrollbar:horizontal {
+    height: 10px;
+}
+
+.ausencias-lista-personas::-webkit-scrollbar-thumb {
+    background-color: #797979;
+    border-radius: 20px;
+    border: 2px solid #f1f2f3;
+}
+
+.ausencias-lista-personas::-webkit-scrollbar-track {
+    border-radius: 10px;  
+}
+
+.asuencias-equipo-cards{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
+    padding-block: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    gap: 1rem;
+    border-top: 1px solid var(--light);
+    border-bottom: 1px solid var(--light);
+}
+.team-card{
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas: "avatar name"
+    "avatar beneficios";
+    justify-items: center;
+    gap: .5rem;
+    border: 1px solid rgb(196, 196, 196);
+    border-radius: 4px;
+    overflow: hidden;
+}
+.team-card-avatar{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    grid-area: avatar;
+}
+
+.team-card-name{
+    grid-area: name;
+    justify-self: start;
+    align-self: start;
+    padding-top: .5rem;
+    font-weight: 600;
+}
+.team-card-name{
+    grid-area: name;
+}
+.team-card-beneficios-wrapper {
+    grid-area: beneficios;
+    align-self: end;
+    justify-self: start;
+    display: flex;
+    margin: 0;
+    font-size: 12px;
+}
+

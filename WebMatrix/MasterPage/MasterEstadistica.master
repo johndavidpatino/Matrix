@@ -1,0 +1,58 @@
+﻿<%@ Master Language="VB" MasterPageFile="~/MasterPage/NewSite.Master" AutoEventWireup="false" CodeBehind="MasterEstadistica.master.vb" Inherits="WebMatrix.MasterEstadistica" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+    <asp:ContentPlaceHolder ID="CPH_Head" runat="server">
+    </asp:ContentPlaceHolder>
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="CPH_Menu" runat="server">
+    <ul class="mi-menu">
+        <li>
+            <a href="#">BRIEF DISEÑO MUESTRAL</a>
+            <ul>
+                <li><a title="Pendientes por responder" href="../ES_Estadistica/BriefDisenoDeMuestra.aspx?pendientes=1">Pendientes de respuesta</a></li>
+                <li><a title="Listado de briefs" href="../ES_Estadistica/BriefDisenoDeMuestra.aspx">Consultar</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">DISEÑOS MUESTRALES</a>
+            <ul>
+                <li><a title="Ver Diseños Muestrales" href="../ES_Estadistica/DisenoDeMuestra.aspx">Consultar</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">METODOLOGIA DE CAMPO</a>
+            <ul>
+                <li><a title="Trabajos Pendientes de Metodología de Campo" href="../ES_Estadistica/MetodologiaDeCampo.aspx?pendientes=yes">Pendientes</a></li>
+                <li><a title="Ver Metodologías de todos los Trabajos" href="../ES_Estadistica/MetodologiaDeCampo.aspx">Consultar todos</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">TAREAS</a>
+            <ul>
+                <li><a title="Realizar gestión de tareas de la unidad" href="../RE_GT/TraficoTareas.aspx?UnidadId=13&RolId=33&URLRetorno=15">Gestionar Tareas</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="../Home/Default.aspx">IR AL INICIO</a>
+        </li>
+    </ul>
+</asp:Content>
+<asp:Content ID="Content3" ContentPlaceHolderID="CPH_BreadCumbs" runat="server">
+</asp:Content>
+<asp:Content ID="Content4" ContentPlaceHolderID="CPH_TituloGeneral" runat="server">
+    <asp:ContentPlaceHolder ID="CPH_OpcionesMenu" runat="server">
+    </asp:ContentPlaceHolder>
+    <a>Menú de Estadística</a>
+</asp:Content>
+<asp:Content ID="Content5" ContentPlaceHolderID="CPH_Titulo" runat="server">
+    <asp:ContentPlaceHolder ID="CPH_Titulo" runat="server">
+    </asp:ContentPlaceHolder>
+</asp:Content>
+<asp:Content ID="Content6" ContentPlaceHolderID="CPH_Subtitulo" runat="server">
+    <asp:ContentPlaceHolder ID="CPH_ComentFormulario" runat="server">
+    </asp:ContentPlaceHolder>
+</asp:Content>
+<asp:Content ID="Content7" ContentPlaceHolderID="CPH_Content" runat="server">
+    <asp:ContentPlaceHolder ID="CPH_ContentForm" runat="server">
+    </asp:ContentPlaceHolder>
+</asp:Content>

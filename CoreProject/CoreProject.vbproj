@@ -1,0 +1,3767 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>
+    </SchemaVersion>
+    <ProjectGuid>{B5F8A99E-0F52-4937-A1DC-9F16B2B34863}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>CoreProject</RootNamespace>
+    <AssemblyName>CoreProject</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MyType>Windows</MyType>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>CoreProject.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>CoreProject.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>Off</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Dapper, Version=1.50.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.1.50.4\lib\net451\Dapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.11.42.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.11.42\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="Ipsos.Apis.BIScraper, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ipsos.Apis.BIScraper.1.0.5\lib\net452\Ipsos.Apis.BIScraper.dll</HintPath>
+    </Reference>
+    <Reference Include="Ipsos.Apis.SisConn, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ipsos.Apis.SisConn.1.0.1\lib\net452\Ipsos.Apis.SisConn.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CCPresupuestosInternosGet_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ActividadesPresupuestadasCampo_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ActividadesPresupuestadas_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ActividadesXTrabajo_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ArchivoNomina_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_CargosActividades.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_CarguesProduccionGet_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_CedulasProduccion_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_CodigosPreguntasGestionCampo_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ConsecutivoCC_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ConsecutivoOrdendeServicio_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ConteosXIdGet_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_CuentasCobro_Get_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_CuentasContablesGet_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_CuentasRadicadasGet_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_DescuentosGet_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_DetallePresupuestoGetXId_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_DetallePresupuestoGet_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_DetallePresupuestosReclutamientoSelect_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_DetallePresupuestosSelect_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_DETALLEPRESUPUESTOXID_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_EncabezadoPlanillaAsistencia_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_EstadosCuentasGet_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_FechaUltimaCC_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_FinzOpe.Context.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CC_FinzOpe.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_FinzOpe.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CC_FinzOpe.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="CC_FinzOpe.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_FinzOpe1.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CC_FinzOpe.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="CC_InformacionCoe_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_InformacionTrabajos_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_InfoTrabajo_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_JobBookCerradoGet_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_LiquidacionXFechas_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ListadoTrabajosActivosDescargar_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_MuestraGenerarRequerimiento_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_MuestraTrabajosGet_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_NombreCoordinadorGet_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ObservacionPresupuestoGet_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ObtenerAñoValorLast_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ObtenerAñoValor_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ObtenerPresupuestosCondicionesDescripciones_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ObtenerProduccionErroresCargueDatos_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_OrdenesdeServicioGet_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ParticipantesPlanillaAsistencia_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_PersonalAsignadoGet_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_Preguntas.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_PreguntasGestionCampoXTrabajo_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_PresupuestoInterno.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_PresupuestoInternoCondiciones.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_PresupuestoInternoCondicionesDetalle.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_PresupuestoInternoGet_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_PresupuestosInternosGetXId_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_PresupuestosInternosGet_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ProducccionValorEncuesta_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ProduccionCargaPST.vb">
+      <DependentUpon>OP_Cuanti_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ProduccionCiudades_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ProduccionDescuentosSS.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ProduccionDiasTrabajados_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ProduccionExportPorIDs_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ProduccionExport_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ProduccionGetxFecha_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ProduccionResumenXCedula_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ProduccionTempGet_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ProduccionTiposEncuestador_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ProduccionTrabajosSinPresupuesto_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ProduccionValidarCargueDiferenteEncuestas_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ProduccionValidarHorasPorDia_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ProduccionValidarPersona_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ProduccionXCiudad_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ProduccionXFechas_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_RecepcionCuentasdeCobroGetXId_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_RecepcionCuentasdeCobroGet_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ReporteActividadesProduccion_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ReporteActvidadadesProduccionXFecha_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ReporteContabilizacion_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ReporteOrdenesServicio_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ReportePagosSumaxTipo_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ReportePagos_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_SolicitudPresupuesto.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_SolicitudPresupuestoGet_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_TarifasAutomaticasGet_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_TipoDocumentoGet_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_TiposDePresupuesto.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_TrabajoGetProducto_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_TrabajosConteo_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_Trabajos_Get_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_ValorEncuestaGet_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CI_Busqueda_Get_Result.vb">
+      <DependentUpon>CI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CI_CarpetasRedRaiz_Get_Result.vb">
+      <DependentUpon>CI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CI_CarpetasRed_Get_Result.vb">
+      <DependentUpon>CI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CI_DetalleAlmacenamiento_Get_Result.vb">
+      <DependentUpon>CI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CI_DocumentosCierre_Get_Result.vb">
+      <DependentUpon>CI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CI_DocumentosRecuperacion_Get_Result.vb">
+      <DependentUpon>CI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CI_MaestroAlmacenamiento_Get_Result.vb">
+      <DependentUpon>CI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CI_Model.Context.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CI_Model.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CI_Model.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CI_Model.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="CI_Model.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CI_SolicitudMedios_Get_Result.vb">
+      <DependentUpon>CI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Clases\CC_FinzOpe\CCDapp.vb" />
+    <Compile Include="Clases\CC_FinzOpe\GestionTrabajosFin.vb" />
+    <Compile Include="Clases\CC_FinzOpe\PresupInt.vb" />
+    <Compile Include="Clases\CC_FinzOpe\ProcesosInternos.vb" />
+    <Compile Include="Clases\CORE\Constantes.vb" />
+    <Compile Include="Clases\CU\BriefDapper.vb" />
+    <Compile Include="Clases\CU\GestionJobBook.vb" />
+    <Compile Include="Clases\FI\Combo.vb" />
+    <Compile Include="Clases\FI\Combo32.vb" />
+    <Compile Include="Clases\FI\Formatos.vb" />
+    <Compile Include="Clases\INV\Inventario.vb" />
+    <Compile Include="Clases\Controls\PermisosUsuarios.vb" />
+    <Compile Include="Clases\Controls\UploadFile.vb" />
+    <Compile Include="Clases\CORE\GestionTareas.vb" />
+    <Compile Include="Clases\CORE\Divipola.vb" />
+    <Compile Include="Clases\CORE\Hilo.vb" />
+    <Compile Include="Clases\CORE\LogEntrada.vb" />
+    <Compile Include="Clases\CORE\LogWorkFlow.vb" />
+    <Compile Include="Clases\CORE\Planeacion.vb" />
+    <Compile Include="Clases\CORE\Tarea.vb" />
+    <Compile Include="Clases\CORE\TareasPrevias.vb" />
+    <Compile Include="Clases\CORE\Tareas_Documentos.vb" />
+    <Compile Include="Clases\CORE\TipoHilo_Tareas.vb" />
+    <Compile Include="Clases\CORE\TiposHilos.vb" />
+    <Compile Include="Clases\CORE\Unidades.vb" />
+    <Compile Include="Clases\CORE\WorkFlow.vb" />
+    <Compile Include="Clases\CORE\WorkFlowEstados.vb" />
+    <Compile Include="Clases\CORE\WorkFlow_UsuariosAsignados.vb" />
+    <Compile Include="Clases\CU\AnuncioAprobacion.vb" />
+    <Compile Include="Clases\CU\Auxiliares.vb" />
+    <Compile Include="Clases\CU\Brief.vb" />
+    <Compile Include="Clases\CU\Cliente.vb" />
+    <Compile Include="Clases\CU\Contacto.vb" />
+    <Compile Include="Clases\CU\CambiosAlternativasEstudios.vb" />
+    <Compile Include="Clases\CU\Estudio.vb" />
+    <Compile Include="Clases\CU\Estudios_Presupuestos.vb" />
+    <Compile Include="Clases\CORE\Feedback.vb" />
+    <Compile Include="Clases\CU\Pqr.vb" />
+    <Compile Include="Clases\CU\Presupuesto.vb" />
+    <Compile Include="Clases\CU\ProductoInterno.vb" />
+    <Compile Include="Clases\CU\Propuesta.vb" />
+    <Compile Include="Clases\CU\SeguimientoPropuesta.vb" />
+    <Compile Include="Clases\ES\BriefDisenoMuestral.vb" />
+    <Compile Include="Clases\ES\DisenoMuestral.vb" />
+    <Compile Include="Clases\ES\MetodologiaCampo.vb" />
+    <Compile Include="Clases\FI\RecepcionFacturasYOrdenes.vb" />
+    <Compile Include="Clases\FI\OrdenesCompraYServicio.vb" />
+    <Compile Include="Clases\GD\GD_Procedimientos.vb" />
+    <Compile Include="Clases\GD\RepositorioDocumentos.vb" />
+    <Compile Include="Clases\GD\TipoSolicitud.vb" />
+    <Compile Include="Clases\GestionCampo\GC_Tabulacion.vb" />
+    <Compile Include="Clases\GestionCampo\Sync.vb" />
+    <Compile Include="Clases\IQ\ActividadDTO.vb" />
+    <Compile Include="Clases\IQ\ActSubcontratadas.vb" />
+    <Compile Include="Clases\IQ\CaraCara.vb" />
+    <Compile Include="Clases\IQ\CotizadorDapper.vb" />
+    <Compile Include="Clases\IQ\Cotizador.vb" />
+    <Compile Include="Clases\IQ\Cati.vb" />
+    <Compile Include="Clases\IQ\Consultas.vb" />
+    <Compile Include="Clases\IQ\ControlCostos.vb" />
+    <Compile Include="Clases\IQ\Entrevistas.vb" />
+    <Compile Include="Clases\IQ\GrossMargin.vb" />
+    <Compile Include="Clases\IQ\Transacciones.vb" />
+    <Compile Include="Clases\IQ\IquoteGeneral.vb" />
+    <Compile Include="Clases\IQ\ObservacionesPresupuestos.vb" />
+    <Compile Include="Clases\IQ\OnLine.vb" />
+    <Compile Include="Clases\IQ\sesionesGrupo.vb" />
+    <Compile Include="Clases\IQ\SimulacionCostos.vb" />
+    <Compile Include="Clases\IQ\UCPreguntas.vb" />
+    <Compile Include="Clases\OP\GestionTrabajosOP.vb" />
+    <Compile Include="Clases\OP\iFieldSettings.vb" />
+    <Compile Include="Clases\OP\PlaneacionOperaciones.vb" />
+    <Compile Include="Clases\OP\Encuestadores.vb" />
+    <Compile Include="Clases\OP\Entrevistas.vb" />
+    <Compile Include="Clases\OP\FichaEntrevistas.vb" />
+    <Compile Include="Clases\OP\FichaObservaciones.vb" />
+    <Compile Include="Clases\OP\FichaSesiones.vb" />
+    <Compile Include="Clases\OP\GerentesDeOperacion.vb" />
+    <Compile Include="Clases\OP\MetodologiaOperaciones.vb" />
+    <Compile Include="Clases\OP\MetodologiasFichas.vb" />
+    <Compile Include="Clases\OP\Observaciones.vb" />
+    <Compile Include="Clases\OP\Sesiones.vb" />
+    <Compile Include="Clases\OP\TecnicasRecol.vb" />
+    <Compile Include="Clases\OP\TipoEncuestador.vb" />
+    <Compile Include="Clases\OP\Transcripciones.vb" />
+    <Compile Include="Clases\OP_Cuanti\ActivacionEncuestas.vb" />
+    <Compile Include="Clases\OP_Cuanti\AnulacionEncuestas.vb" />
+    <Compile Include="Clases\OP_Cuanti\CoordinacionCampo.vb" />
+    <Compile Include="Clases\OP_Cuanti\CoordinacionCampoPersonal.vb" />
+    <Compile Include="Clases\OP_Cuanti\CorreoAnulacionEncuestas.vb" />
+    <Compile Include="Clases\CI\CentroInformacion.vb" />
+    <Compile Include="Clases\OP_Cuanti\OP_CuantiDapper.vb" />
+    <Compile Include="Clases\OP_Cuanti\RevisionIPS.vb" />
+    <Compile Include="Clases\OP_Cuanti\EjecucionIPS.vb" />
+    <Compile Include="Clases\OP_Cuanti\IPSClass.vb" />
+    <Compile Include="Clases\OP_Cuanti\Critica.vb" />
+    <Compile Include="Clases\OP_Cuanti\PlaneacionProduccion.vb" />
+    <Compile Include="Clases\OP_Cuanti\FichaCuantitativo.vb" />
+    <Compile Include="Clases\OP_Cuanti\RegistroProduccion.vb" />
+    <Compile Include="Clases\OP_Cuanti\RMC.vb" />
+    <Compile Include="Clases\OP_Cuanti\SupervisionCampoTelefonico.vb" />
+    <Compile Include="Clases\OP_Cuanti\TrabajoOPCuanti.vb" />
+    <Compile Include="Clases\OP_Cuanti\TraficoEncuestas.vb" />
+    <Compile Include="Clases\OP_Cuanti\Verificacion.vb" />
+    <Compile Include="Clases\OP_RO\EjecucionCuestionario.vb" />
+    <Compile Include="Clases\OP_RO\EjecucionInstructivo.vb" />
+    <Compile Include="Clases\OP_RO\EjecucionMaterialAyuda.vb" />
+    <Compile Include="Clases\OP_RO\EjecucionMetodologia.vb" />
+    <Compile Include="Clases\OP_RO\RevisionCuestionario.vb" />
+    <Compile Include="Clases\OP_RO\RevisionInstructivo.vb" />
+    <Compile Include="Clases\OP_RO\RevisionMaterialAyuda.vb" />
+    <Compile Include="Clases\OP_RO\RevisionMetodologia.vb" />
+    <Compile Include="Clases\PNC\PNCClass.vb" />
+    <Compile Include="Clases\PY\ControlCalidad.vb" />
+    <Compile Include="Clases\OP\CampoCualitativo.vb" />
+    <Compile Include="Clases\PY\DetalleControlCalidad.vb" />
+    <Compile Include="Clases\PY\DetalleEvaluacion.vb" />
+    <Compile Include="Clases\PY\Evaluacion.vb" />
+    <Compile Include="Clases\PY\PreEntregaTrabajo.vb" />
+    <Compile Include="Clases\PY\Pregunta.vb" />
+    <Compile Include="Clases\PY\Presupuesto.vb" />
+    <Compile Include="Clases\PY\Proyecto.vb" />
+    <Compile Include="Clases\PY\Proyectos_Presupuestos.vb" />
+    <Compile Include="Clases\PY\SegmentosCuali.vb" />
+    <Compile Include="Clases\PY\TipoProyecto.vb" />
+    <Compile Include="Clases\PY\Trabajo.vb" />
+    <Compile Include="Clases\PY\EntregasTrabajos.vb" />
+    <Compile Include="Clases\REP\AccionesMejoraDapper.vb" />
+    <Compile Include="Clases\REP\AnalisisIndicadoresDapper.vb" />
+    <Compile Include="Clases\REP\Campo.vb" />
+    <Compile Include="Clases\REP\GerentesOP.vb" />
+    <Compile Include="Clases\REP\GestionCalidad.vb" />
+    <Compile Include="Clases\REP\OrdenesFacturas.vb" />
+    <Compile Include="Clases\REP\PropuestaxBrief.vb" />
+    <Compile Include="Clases\REP\VariablesControl.vb" />
+    <Compile Include="Clases\REP\RegistroObservaciones.vb" />
+    <Compile Include="Clases\REP\ReportesGenerales.vb" />
+    <Compile Include="Clases\REP\ReportesTareas.vb" />
+    <Compile Include="Clases\REP\Top10.vb" />
+    <Compile Include="Clases\REP\InformeAnuladas.vb" />
+    <Compile Include="Clases\REP\AvanceCampo.vb" />
+    <Compile Include="Clases\REP\DestinatariosCorreos.vb" />
+    <Compile Include="Clases\REP\GerpProyectos.vb" />
+    <Compile Include="Clases\REP\RP_GerOpe.vb" />
+    <Compile Include="Clases\REP\Directores.vb" />
+    <Compile Include="Clases\SGC\SGC_AuditoriasInternasDapper.vb" />
+    <Compile Include="Clases\SG\ActaComite.vb" />
+    <Compile Include="Clases\SG\Actas.vb" />
+    <Compile Include="Clases\SG\AsistenteActa.vb" />
+    <Compile Include="Clases\SG\ParticipanteActa.vb" />
+    <Compile Include="Clases\SG\Seguimientos.vb" />
+    <Compile Include="Clases\SG\SeguimientosActaComite.vb" />
+    <Compile Include="Clases\SG\Tareas.vb" />
+    <Compile Include="Clases\TH\DesvinculacionEmpleadosDapper.vb" />
+    <Compile Include="Clases\TH\EmpleadosDapper.vb" />
+    <Compile Include="Clases\TH\Capacitaciones.vb" />
+    <Compile Include="Clases\TH\CapacitacionesParticipantes.vb" />
+    <Compile Include="Clases\TH\Cargos.vb" />
+    <Compile Include="Clases\TH\Contratista.vb" />
+    <Compile Include="Clases\TH\AusenciasEquipoDapper.vb" />
+    <Compile Include="Clases\TH\Empleados.vb" />
+    <Compile Include="Clases\TH\GestionAusencia.vb" />
+    <Compile Include="Clases\TH\HojasVida.vb" />
+    <Compile Include="Clases\TH\RegistroPersonas.vb" />
+    <Compile Include="Clases\TH\TeleTrabajoC.vb" />
+    <Compile Include="Clases\TH\TipoContratacion.vb" />
+    <Compile Include="Clases\TH\Educacion.vb" />
+    <Compile Include="Clases\TH\ExperienciaLaboral.vb" />
+    <Compile Include="Clases\TH\HojaVida.vb" />
+    <Compile Include="Clases\TH\Idiomas.vb" />
+    <Compile Include="Clases\TH\Personas.vb" />
+    <Compile Include="Clases\US\DestinatariosCorreos.vb" />
+    <Compile Include="Clases\US\UsuariosDapper.vb" />
+    <Compile Include="Clases\US\GrupoPermisos.vb" />
+    <Compile Include="Clases\US\GrupoUnidad.vb" />
+    <Compile Include="Clases\CORE\LogEjecucion.vb" />
+    <Compile Include="Clases\US\Permisos.vb" />
+    <Compile Include="Clases\US\PermisosUsuarios.vb" />
+    <Compile Include="Clases\US\Roles.vb" />
+    <Compile Include="Clases\US\RolesPermisos.vb" />
+    <Compile Include="Clases\US\RolesUsuarios.vb" />
+    <Compile Include="Clases\US\TipoGrupoUnidad.vb" />
+    <Compile Include="Clases\US\Unidades.vb" />
+    <Compile Include="Clases\US\Usuarios.vb" />
+    <Compile Include="Clases\US\UsuariosUnidades.vb" />
+    <Compile Include="Clases\US\Validacion.vb" />
+    <Compile Include="Clases\UU\PlanillaModeracionDapper.vb" />
+    <Compile Include="Combo.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Combo32.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ConsultarUsuarios_Result.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_Asunto_Get_Result.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_Configuracion_DocumentosXTarea_Get_Result.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_Configuracion_TareasXTipoHilo_Get_Result.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_Configuracion_Tareas_Previas_Result.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_DestinatariosCorreosNotificacionFecha_Result.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_DocumentosRequeridosXTarea_Get_Result.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_DocumentosXHilo_Get_Result.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_Hilos.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_HilosGetxContenedor_Result.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_Model.Context.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CORE_Model.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_Model.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CORE_Model.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_Model.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_ObservacionesTareas_Get_Result.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_obtenerCantidadTareasXTrabajo_Result.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_obtenerusuariosasignados_get_Result.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_Planeacion.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_Retroalimentacion.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_Tareas.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_TareasPrevias.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_TareasXUnidadEjecuta_Result.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_Tareas_Documentos.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_Tareas_Get_Result.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_TipoHilos.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_TipoHilo_Tareas.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_TipoRetroalimentacion.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_TrabajosTareas_Get_Result.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_Trabajos_WithWorkFlow_Result.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_Unidades.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Core_UnidadesAll_Result.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_UsuariosAsignadosXProceso_Result.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_WorkFlow.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_WorkflowEstados.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_WorkFlow_GetxHiloid_Result.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_WorkFlow_GetXTrabajoXTarea_Result.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_WorkFlow_TareasAsociadas_Get_Result.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_WorkFlow_TareasPrevias_Get_Result.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_WorkFlow_Trabajos_Get_Result.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_WorkFlow_UsuariosANotificarTareaDevuelta_Get_Result.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_WorkFlow_UsuariosAsignados.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CORE_WorkFlow_UsuariosAsignados_Get_Result.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CO_EvaluacionProveedoresFactura.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CO_EvaluacionProveedoresFacturaOP.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CO_EvaluacionProveedoresFacturaOP_Get_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CO_EvaluacionProveedoresGrupos.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CO_EvaluacionProveedoresItems.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CT_TareasIndicadores_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CT_TareasList_Result.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CT_TareasTrabajosList_Result.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CT_UnidadesAsignacionXUsuario_Result.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_AlternativasNoUsadasXEstudio_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_AnuncioAprobacion_Get_Result.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_Brief.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_Brief_Get_Result.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_Ciudades_Get_Result.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_Clientes.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_Cliente_Get_Result.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_Contactos.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_Contactos_GetMail_Result.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_Contactos_Get_Result.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_CONTACTOS_PQR_GET_Result.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_Departamentos_Get_Result.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_EstadoPropuesta.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_EstadoPropuesta_Get_Result.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_Estudios.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_Estudios_DocumentosSoporte.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_Estudios_Get_Result.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_Estudios_Presupuestos.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_Model.Context.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CU_Model.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_Model.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CU_Model.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="CU_Model.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_MuestraAnuncioAprobacion_Result.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_OrigenPropuesta.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_OrigenPropuesta_Get_Result.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_Paises_Get_Result.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_PQR_Get_Result.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_Presupuestos.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_PresupuestosRevisionPorGerenteOperaciones_Result.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_Presupuesto_Get_Result.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_ProbabilidadAprobacion.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_ProbabilidadAprobacion_Get_Result.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_ProductoInterno_Get_Result.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_Propuestas.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_PropuestasRevisionPorGerenteOperaciones_Result.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_Propuestas_Get_Result.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_Propuesta_Presupuestos_TecnicaMetodologia_Result.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_RazonesNoAprobacion.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_RazonesNoAprobacion_Get_Result.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_Sectores_GET_Result.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_SeguimientoPropuestas_Get_Result.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_TipoBrief_Get_Result.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_TipoCliente_Get_Result.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_TipoMovimientoCombo_Result.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_TipoPropuesta.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_TipoPropuesta_Get_Result.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CU_Trabajos_Get_Result.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="C_Divipola.vb">
+      <DependentUpon>OP_Cuanti_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="C_Divipola2.vb">
+      <DependentUpon>OP_Cuanti2_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="C_Divipola3.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Divipola_Get_Dpto_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Divipola_Get_Result.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ES_AprobacionMetodologia.vb">
+      <DependentUpon>ES_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ES_BriefDisenoMuestral.vb">
+      <DependentUpon>ES_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ES_BriefDisenoMuestral_Get_Result.vb">
+      <DependentUpon>ES_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ES_DisenoMuestral.vb">
+      <DependentUpon>ES_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ES_DisenoMuestral_Get_Result.vb">
+      <DependentUpon>ES_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ES_MetodologiaCampo.vb">
+      <DependentUpon>ES_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ES_MetodologiaCampoTr_Result.vb">
+      <DependentUpon>ES_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ES_MetodologiaCampo_Get_Result.vb">
+      <DependentUpon>ES_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ES_Model.Context.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ES_Model.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ES_Model.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ES_Model.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="ES_Model.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ES_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ES_ObtenerMetodologiaXIdxTr_Result.vb">
+      <DependentUpon>ES_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExternalServices\BIService.vb" />
+    <Compile Include="ExternalServices\CredentialsManagerRepository.vb" />
+    <Compile Include="ExternalServices\ErrorResult.vb" />
+    <Compile Include="ExternalServices\JobBookModerationResult.vb" />
+    <Compile Include="ExternalServices\RequestService.vb" />
+    <Compile Include="ExternalServices\Result.vb" />
+    <Compile Include="FDU_DiligenciamientoInformacionEmpleado_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_AprobacionFacturasRadicadasXUsuarioXOrden_Result.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_CentroCostos_Get_Result.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_CentroCosto_Get_Result.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_CentrosDeCosto.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_EstadosFactura.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_EstadosFactura_Get_Result.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_EstadosOrdenes.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_EvaluacionProveedores.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_FacturasPendientesAprobacion_Get_Result.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_FacturasPendientesEvaluacion_Get_Result.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_FacturasRadicadas.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_FacturasRadicadasGET_Result.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_FacturasRadicadasNew_Get_Result.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_FacturasRadicadas_Detalle.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_FacturasRadicadas_DetalleRequerimiento.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_FacturasRadicadas_Detalle_Get_Result.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_FacturasRadicadas_Detalle_Ordenes_Result.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_FacturasRadicadas_Get_Result.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_FacturasRadicadas_LlaveCompuesta_Get_Result.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_JBE_JBI_CC_Get_Result.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_LogAprobacionFacturas.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_LogAprobacionFacturasUsuarios.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_LogAprobacionFacturasUsuarios_Get_Result.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_LogAprobacionOrdenCompra_get_Result.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_LogAprobacionOrdenesCompra.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_LogAprobacionOrdenesRequerimiento.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_LogAprobacionOrdenesServicio.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_LogAprobacionOrdenRequerimiento_get_Result.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_LogAprobacionOrdenServicio_get_Result.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_LogEvaluacionProveedorFacturas.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_LogEvaluacionProveedorFacturas_Get_Result.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_LogOrdenes.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_Model.Context.vb">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>FI_Model.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_Model.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_Model1.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FI_Model.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="FI_NivelesAprobacion.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_NivelesAprobacion_Get_Result.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_ObservacionesLogAprobacionOrdenCompra_Result.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_ObservacionesLogAprobacionOrdenRequerimiento_Result.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_ObservacionesLogAprobacionOrdenServicio_Result.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_ObtenerUsuarioAprobacionRequerimiento_Result.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_OrdenCompra.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_OrdenCompradetalle.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_OrdenDetalle_Get_Result.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_OrdenesDeCompraPendientesAprobacion_Get_Result.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_OrdenesDeCompra_Get_Result.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_OrdenesDeRequerimientoPendientesAprobacion_Get_Result.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_OrdenesDeRequerimiento_Get_Result.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_OrdenesDeServicioPendientesAprobacion_Get_Result.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_OrdenesDeServicio_Get_Result.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_OrdenRequerimiento.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_OrdenRequerimientodetalle.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_OrdenServicio.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_OrdenServiciodetalle.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_QuejasReclamosProveedores.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_QuejasReclamosProveedores_Get_Result.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_TipoDetalle.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_TipoDocumento.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_TipoDocumentoRadicado.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_TipoPagoRequerimiento.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FI_UsuariosCC.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="f_Constantes_Get_Result.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GD_CorreosUsuario_Get_Result.vb">
+      <DependentUpon>GD_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GD_DocumentosControlados.vb">
+      <DependentUpon>GD_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GD_EscanerDocumentos.vb">
+      <DependentUpon>GD_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GD_EscanerDocumentos_Get_Result.vb">
+      <DependentUpon>GD_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GD_EstadoSolicitud.vb">
+      <DependentUpon>GD_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GD_EstadoSolicitud_Get_F_Result.vb">
+      <DependentUpon>GD_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GD_Estados_Get_Result.vb">
+      <DependentUpon>GD_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GD_GD_MaestroDocumentos_Get2_Result.vb">
+      <DependentUpon>GD_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GD_MaestroDocumentos.vb">
+      <DependentUpon>GD_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GD_MaestroDocumentos_Add2_Result.vb">
+      <DependentUpon>GD_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GD_MaestroDocumentos_Get_Result.vb">
+      <DependentUpon>GD_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GD_Model.Context.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GD_Model.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GD_Model.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GD_Model.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="GD_Model.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GD_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GD_Procesos_Get_F_Result.vb">
+      <DependentUpon>GD_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GD_Procesos_Get_Result.vb">
+      <DependentUpon>GD_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GD_RepositorioDocumentos.vb">
+      <DependentUpon>GD_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GD_RepositorioDocumentos_GetXTrabajo_Result.vb">
+      <DependentUpon>GD_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GD_Revisiones.vb">
+      <DependentUpon>GD_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GD_Revisiones_Get_Result.vb">
+      <DependentUpon>GD_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GD_SolicitudDocumentos.vb">
+      <DependentUpon>GD_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GD_TipoRevision.vb">
+      <DependentUpon>GD_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GD_TipoSolicitud.vb">
+      <DependentUpon>GD_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GD_TipoSolicitud_Get_F_Result.vb">
+      <DependentUpon>GD_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GD_TipoSolicitud_Get_Result.vb">
+      <DependentUpon>GD_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GD_US_Usuarios_Get_Result.vb">
+      <DependentUpon>GD_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GestionCampo.Context.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GestionCampo.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GestionCampo.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GestionCampo.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="GestionCampo.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GestionCampo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GruposPermisosCombo_Result.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GruposPermisos_Result.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GrupoUnidadCombo_Result.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GrupoUnidad_Result.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="INV_Articulos_Get_Result.vb">
+      <DependentUpon>INV_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="INV_Asignaciones_Get_Result.vb">
+      <DependentUpon>INV_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="INV_BU_Get_Result.vb">
+      <DependentUpon>INV_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="INV_Camaras_Get_Result.vb">
+      <DependentUpon>INV_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="INV_EstadoArticulo_Get_Result.vb">
+      <DependentUpon>INV_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="INV_EstadoConsumible_Get_Result.vb">
+      <DependentUpon>INV_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="INV_EstadosActivosFijos_Get_Result.vb">
+      <DependentUpon>INV_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="INV_EstadoTablet_Get_Result.vb">
+      <DependentUpon>INV_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="INV_Legalizaciones_Get_Result.vb">
+      <DependentUpon>INV_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="INV_MantenimientoEquipos_Get_Result.vb">
+      <DependentUpon>INV_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="INV_Model.Context.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>INV_Model.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="INV_Model.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>INV_Model.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="INV_Model.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>INV_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="INV_Papeleria_Get_Result.vb">
+      <DependentUpon>INV_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="INV_Perifericos_Get_Result.vb">
+      <DependentUpon>INV_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="INV_RegistroArticulos_Get_Result.vb">
+      <DependentUpon>INV_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="INV_ReporteLegalizaciones_Result.vb">
+      <DependentUpon>INV_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="INV_ReporteRemanente_Result.vb">
+      <DependentUpon>INV_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="INV_Sede_Get_Result.vb">
+      <DependentUpon>INV_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="INV_StockConsumibles_Get_Result.vb">
+      <DependentUpon>INV_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="INV_StockxLegalizar_Get_Result.vb">
+      <DependentUpon>INV_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="INV_TipoLegalizacion_Get_Result.vb">
+      <DependentUpon>INV_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="INV_TipoMovimiento_Get_Result.vb">
+      <DependentUpon>INV_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="INV_ValorBono_Get_Result.vb">
+      <DependentUpon>INV_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ActiviadesXTrabajo_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_Actividades.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ActividadesGet_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_AjusteCostoOperacionesObtenerDatos_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_AjusteCostoOperaciones_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_AlternativasToExportIQuote.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_AnalisisEstadisticaPresupuesto.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_AutorizadosModificacionGM.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_CalculoPyG_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_CantidadContactos.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_Ciudades.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ControlCostos.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_CostoActividades.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_CostosJobBookExternoTotales_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_CostosJobBookInternoTotales_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_CostoViaticos.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_Cuantitativos_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_DatosGeneralesPresupuesto.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_Evidencia.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_Fases.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_FasesDisponiblesPorAlternativa_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_HorasProfesionales.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_LogCambios.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_Model.Context.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IQ_Model.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_Model.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_MODEL2.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IQ_MODEL.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_MuestraInfoTrabajo_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_Muestra_1.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ObtenerActControlCostos_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ObtenerActividades_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ObtenerAnalisisEstadisticos_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ObtenerCargos_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ObtenerCiudadesMuestraGeneral_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ObtenerCiudadesMuestra_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ObtenerCiudades_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ObtenerControlCostosAutorizados_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ObtenerCostoActividades_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ObtenerDatosPropuesta_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ObtenerDepartamentos_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ObtenerDescPresupuesto_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ObtenerFasesJB_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ObtenerFases_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ObtenerHistorialPreguntas_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ObtenerHorasProfesionalesXAlternativa_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ObtenerHorasProfesionales_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ObtenerMetodologias_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ObtenerMuestraCatiShow_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ObtenerMuestraCati_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ObtenerMuestraF2F_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ObtenerMuestraOnLineShow_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ObtenerMuestraOnLine_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ObtenerMuestraXCiudadCaraCara_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ObtenerMuestraXCiudad_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ObtenerNacionales_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ObtenerOpcionesMuestra_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ObtenerPresupuestosAprobados_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ObtenerPresupuestosxPropuesta_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ObtenerTecnicas_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ObtenerUnidades_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ObtenerValorMistery_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ObtenerViaticosPresupuesto_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_OpcionesAplicadas.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_OpcionesMuestra.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_OpcionesTecnicas.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_Parametros.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ParametrosGenerales.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_Preguntas.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_PresupuestosPorPropuesta_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_Procesos.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ProcesosPresupuesto.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_Productos.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_SimuladorCostosOperaciones_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_Simulador_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_SolicitudesAjustesPresupuesto.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_SolicitudesCambiosGM_Get_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_SolicitudesSimulador_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_TarifasEstadistica.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_TarifasMistery.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_TecnicaProcesos.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_Tecnicas.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_TecnicasActividades.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_TipoEvidencia.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_TipoPresupuestosXCuPresupuesto_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_TipoServicio.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_TotalizarMuestra_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IQ_ValorVisitaMistery.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModeloIPS.Context.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ModeloIPS.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModeloIPS.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ModeloIPS.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="ModeloIPS.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ModeloIPS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="NSE_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ObtenerOfertas_Result.vb">
+      <DependentUpon>IQ_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ObtenerUsuarios_Result.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_ActividadesProduccionGet_Result.vb">
+      <DependentUpon>OP_Cuanti_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_CampoCuali.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_CampoCuali_Get_Result.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_CorreoAnulacionEncuestas_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Cuanti2_Model.Context.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OP_Cuanti2_Model.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Cuanti2_Model.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OP_Cuanti2_Model.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Cuanti2_Model.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OP_Cuanti2_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Cuanti_Model.Context1.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OP_Cuanti_Model.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Cuanti_Model.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OP_Cuanti_Model.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Cuanti_Model.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OP_Cuanti_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Encuestadores.vb">
+      <DependentUpon>OP_Cuanti2_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Encuestadores2.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Encuestadores4.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_EncuestasAnuladas.vb">
+      <DependentUpon>OP_Cuanti_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Entities.Context.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OP_Entities.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Entities.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Entrevistados_Cuali.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Entrevistados_Cuali_Get_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_EntrevistasCuali_Distribucion.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_EntrevistasCuali_DistribucionGet_Result.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Entrevistas_Get_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_EnvioPaquetesEncuestas.vb">
+      <DependentUpon>OP_Cuanti_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_EstadosSesion.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Estado_Programacion_Campo_Cuali.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_EstimacionesProduccionCiudad.vb">
+      <DependentUpon>OP_Cuanti_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_EstimacionProduccion.vb">
+      <DependentUpon>OP_Cuanti_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_FichaCuantitativo_Get_Result.vb">
+      <DependentUpon>OP_Cuanti_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_FichaEntrevistas_Get_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_FichaObservaciones_Get_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_FichaSesiones_Get_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Filtros.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Filtros_Get_Result.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_IPS_Aplicativos.vb">
+      <DependentUpon>OP_Cuanti_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_IPS_Ejecucion.vb">
+      <DependentUpon>OP_Cuanti_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_IPS_Ejecucion_Get_Result.vb">
+      <DependentUpon>OP_Cuanti_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_IPS_Procesos.vb">
+      <DependentUpon>OP_Cuanti_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_IPS_Revision.vb">
+      <DependentUpon>OP_Cuanti_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_IPS_Revision_Get_Result.vb">
+      <DependentUpon>OP_Cuanti_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_JBE_JBI_CC_Get_Result.vb">
+      <DependentUpon>OP_Cuanti_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_ListaActividades_Get_Result.vb">
+      <DependentUpon>OP_Cuanti_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_ListadoCampoCualiXSegmento_Result.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_ListadoPersonasAsignadasTrabajo_Result.vb">
+      <DependentUpon>OP_Cuanti2_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_LogEntrevistasCuali.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_LogEntrevistasCuali_Get_Result.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_LogInHomeCuali.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_LogInHomeCuali_Get_Result.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_LogRespuestas_Filtro.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_LogSesionesCuali.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_LogSesionesCuali_Get_Result.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Log_Programacion_Campo_Cuali.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Metodologias.vb">
+      <DependentUpon>OP_Cuanti_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Metodologias2.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Metodologias_Get_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_MetodologiaTipoFicha.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Model.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OP_Model.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Moderadores_Cuali.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_MuestraTrabajos.vb">
+      <DependentUpon>OP_Cuanti_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_MuestraTrabajosCuali.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_MuestraTrabajosCuali_Entrevistas.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_MuestraTrabajosCuali_EntrevistasGet_Result.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_MuestraTrabajosCuali_Get_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_MuestraTrabajosCuali_InHome.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_MuestraTrabajosCuali_InHomeGet_Result.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_MuestraTrabajosCuali_Sesiones.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_MuestraTrabajosCuali_SesionesGet_Result.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Op_MuestraTrabajosGet_Result.vb">
+      <DependentUpon>OP_Cuanti_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Op_MuestraTrabajos_Get_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Observaciones_Get_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Observaciones_Programacion_Campo_Cuali.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_PersonalSinProduccion_Result.vb">
+      <DependentUpon>OP_Cuanti2_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_PersonasAsignacion_Result.vb">
+      <DependentUpon>OP_Cuanti2_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_PersonasAsignadasTrabajo.vb">
+      <DependentUpon>OP_Cuanti2_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_PL_CodificacionPersonas_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_PL_CodificacionPreguntas_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_PL_CriticaEncuestas_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_PL_CriticaPersonas_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_PL_DigitacionPersonas_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_PL_DigitacionPreguntas_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_PL_EncuestadoresXCiudad_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_PL_EncuestadoresXGerencia_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_PL_EncuestadoresXMetodologia_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_PL_EncuestadoresXUnidad_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_PL_Encuestadores_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_PL_EncuestasXCiudad_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_PL_EncuestasXGerencia_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_PL_EncuestasXMetodologia_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_PL_EncuestasXUnidad_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_PL_Encuestas_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_PL_ProcesamientoPersonas_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_PL_ProcesamientoTrabajos_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_PL_PropuestasAltaProbabilidadDatos_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_PL_PropuestasAltaProbabilidad_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_PL_ScriptingPersonas_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_PL_ScriptingTrabajos_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_PL_VerificacionHoras_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_PL_VerificacionPersonas_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Preguntas_Filtro.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Preguntas_Filtro_Get_Result.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_PresupuestosAsignacionJBI_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_ProduccionEstimadaOPTrafico.vb">
+      <DependentUpon>OP_Cuanti_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Produccion_Get_Result.vb">
+      <DependentUpon>OP_Cuanti_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Programacion_Campo_Cuali.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Programados_Entrevistados_Cuali_Get_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Reclutadores_Cuali.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Respuestas_FiltroReclutamiento_Maestro_Get_Result.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Respuestas_Filtro_Detalle.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Respuestas_Filtro_Detalle_Get_Result.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Respuestas_Filtro_Maestro.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Respuestas_Filtro_Maestro_Get_Result.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_RO_EjecucionCuestionario_Get_Result.vb">
+      <DependentUpon>OP_RO_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_RO_EjecucionInstructivo_Get_Result.vb">
+      <DependentUpon>OP_RO_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_RO_EjecucionMaterialAyuda_Get_Result.vb">
+      <DependentUpon>OP_RO_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_RO_EjecucionMetodologia_Get_Result.vb">
+      <DependentUpon>OP_RO_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_RO_Model.Context.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OP_RO_Model.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_RO_Model.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OP_RO_Model.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="OP_RO_Model.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OP_RO_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_RO_RevisionCuestionario_Get_Result.vb">
+      <DependentUpon>OP_RO_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_RO_RevisionInstructivo_Get_Result.vb">
+      <DependentUpon>OP_RO_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_RO_RevisionMaterialAyuda_Get_Result.vb">
+      <DependentUpon>OP_RO_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_RO_RevisionMetodologia_Get_Result.vb">
+      <DependentUpon>OP_RO_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Sesiones_Get_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_SupervisionNoEstudioMax_Get_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Tecnicas.vb">
+      <DependentUpon>OP_Cuanti_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_TipoEncuestador.vb">
+      <DependentUpon>OP_Cuanti2_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_TipoEncuestador2.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_TipoEncuestador4.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_TipoFiltro.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_TipoPregunta_Filtro.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_TipoRecoleccion.vb">
+      <DependentUpon>OP_Cuanti_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_TrabajoConfiguracion.vb">
+      <DependentUpon>OP_Cuanti_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_TrabajoConfiguracion_Get_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_TrabajosParaAsignacionCOE_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Trabajos_CallCenter_Get_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Trabajos_Get_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Trabajos_xCoordinador_Get_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_TraficoArhivos_GetDisponibleDevolucion_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_TraficoArhivos_GetDisponibleEnvio_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_TraficoEncuestas.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_TraficoEncuestasCiudad_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_TraficoEncuestasMuestraCiudadesRMC_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_TraficoEncuestas_Get_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_TraficoEncuestas_ListadoGet_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_TraficoEncuesta_GetCritica_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_TraficoEncuesta_GetRMC_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Transcripciones_Get_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OP_UnidadesProduccionGet_Result.vb">
+      <DependentUpon>OP_Cuanti_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PermisosCombo_Result.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PermisosUsuarios_Result.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Permisos_Result.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PNC_Categorias.vb">
+      <DependentUpon>PNC_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PNC_Causa_Get_Result.vb">
+      <DependentUpon>PNC_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PNC_EmailAcciones_Result.vb">
+      <DependentUpon>PNC_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PNC_FuenteReclamo.vb">
+      <DependentUpon>PNC_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PNC_GetById_Result.vb">
+      <DependentUpon>PNC_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PNC_Model.Context.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PNC_Model.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PNC_Model.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PNC_Model.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="PNC_Model.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PNC_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PNC_ObtenerProductoNoConformeTodos_Result.vb">
+      <DependentUpon>PNC_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PNC_ObtenerProductoNoConforme_Result.vb">
+      <DependentUpon>PNC_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PNC_Procedimientos.vb">
+      <DependentUpon>PNC_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PNC_Procesos.vb">
+      <DependentUpon>PNC_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PNC_ProductoNoConforme.vb">
+      <DependentUpon>PNC_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PNC_ProductoNoConformeAcciones.vb">
+      <DependentUpon>PNC_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PNC_ProductoNoConformeAcciones_Get_Result.vb">
+      <DependentUpon>PNC_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PNC_ProductoNoConformeCausas.vb">
+      <DependentUpon>PNC_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PNC_ProductoNoConformeCausas_Get_Result.vb">
+      <DependentUpon>PNC_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PNC_Productos_Get_Result.vb">
+      <DependentUpon>PNC_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PNC_Productos_Log_Get_Result.vb">
+      <DependentUpon>PNC_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PNC_Seguimiento_Get_Result.vb">
+      <DependentUpon>PNC_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PNC_TiposDeAccion.vb">
+      <DependentUpon>PNC_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PNC_VerProductoNoConforme.vb">
+      <DependentUpon>PNC_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PNC_VerProductoNoConformeCausas.vb">
+      <DependentUpon>PNC_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PNC_VerProductoNoConformeDetalle.vb">
+      <DependentUpon>PNC_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PNC_VObtenerCliente.vb">
+      <DependentUpon>PNC_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PNC_VObtenerUnidad.vb">
+      <DependentUpon>PNC_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PNC_VObtenerUsuarios.vb">
+      <DependentUpon>PNC_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_AyudasCuali.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_AyudasRequeridasCuali.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_ControlCalidad_Get_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_CoordinadorProyecto_Cuali_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_Cuali.Context.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PY_Cuali.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_Cuali.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PY_Cuali.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="PY_Cuali.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_DetalleControlCalidad_Get_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_DetalleEvaluacion_Get_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_EspCuentasCuali.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_EspCuentasCuanti.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_EspecificacionesTrabajo.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_EspecifTecTrabajo.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_EspecifTecTrabajoCuali.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_EstadosProyecto.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_EstadosTrabajo.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_Evaluacion_Get_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_GerenteProyecto_Cuali_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_InfoTrabajoCreacion_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_LugaresCuali.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_Model.Context.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PY_Model.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_Model.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PY_Model.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="PY_Model.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_ObtenerEspecifXIdxTr_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_ObtenerVerEspecifTecTr_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_Preguntas_Get_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_Presupuestos_CU_Estudios_Get_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_Proyectos.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_Proyectos_Get_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_Proyecto_Presupuesto_Get_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_ReclutamientoRequeridoCuali.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_ReporteProyectosSinJBI_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_SegmentosCuali.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_SegmentosCuali_Get_Result.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_SegmentosCuali_Moderadores.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_SegmentosCuali_Moderadores_Get_Result.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_SegmentosCuali_Reclutadores.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_SegmentosCuali_Reclutadores_Get_Result.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_TipoReclutamientoCuali.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_TiposProyectos_Get_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_Tipos_Procesos_Get_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_Trabajo.vb">
+      <DependentUpon>OP_Cuanti_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_Trabajo0.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_Trabajo2.vb">
+      <DependentUpon>OP_Cuanti2_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_TrabajoCuali.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_TrabajoCuali_Get_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_TrabajosConTareaEntregaDeProyectos_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_TrabajosCuali_GET_All_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_TrabajosxProyectosxCoordinador_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_TrabajosxProyectosxGerente_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_Trabajos_COES_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_Trabajos_GET_All_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_Trabajos_Get_Cualitativos_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_Trabajos_Get_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_Trabajos_Get_WithoutMetodCampo_Estadistica_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_Trabajo_Entrega_Cualitativo_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_Trabajo_Entrega_Cuali_Entrevistas_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_Trabajo_Entrega_Cuali_Observaciones_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_Trabajo_Entrega_Cuali_Sesiones_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_Trabajo_Entrega_Cuantitativo_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_Trabajo_Get_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_Trabajo_PreEntrega_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_Unidades_ProyectosSinJBI_Get_Result.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PY_Variables_Control.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_AsignacionRecursosXUnidad_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_AvanceAreasRemanentes_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_AvanceCampoGeneral_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_AvanceCampoxCiudad_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_AvancePorcentualAreas_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_Calidad_ErroresRO_COE_Detalle_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_Calidad_ErroresRO_COE_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_Calidad_ErroresRO_GerenteProyectos_Detalle_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_Calidad_ErroresRO_GerenteProyectos_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_Calidad_ErroresRO_ResponsableTarea_Detalle_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_Calidad_ErroresRO_ResponsableTarea_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_CiudadesAgrupacionDiezPrincipales_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_ConteoTrabajos_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_Diligenciamiento_Esquema_Analisis_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_EjecucionXEncuestador_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_EjecucionXSupervisor_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_EncuestasAnuladas_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_Envio_Propuestas_48Horas_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_ErroresRegistroObservacionesDetalle_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_ErroresRegistroObservaciones_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_EstudiosAtrasadosxGerencia_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_EvaluacionProveedores_Ops_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_EvaluacionProveedores_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_FacturasRadicadas_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_FichaEncuestador_Datos_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_FichaEncuestador_EncuestasMetodologia_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_FichaEncuestador_TrabajosParticipado_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_Inconsistencias_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_IndicacionesPropuestayBriefXGerente_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_IndicacionesPropuestayBriefxUnidades_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_IndicacionesPropuestayBrief_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_IndicadoresCronogramaTareasByIdTrabajo_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_IndicadoresCumplimientoAlTiempoATiempo_Detalle_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_IndicadoresCumplimientoAlTiempoATiempo_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_IndicadoresCumplimientoTareasDetalle_COE_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_IndicadoresCumplimientoTareasDetalle_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_IndicadoresCumplimientoTareas_COE_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_IndicadoresCumplimientoTareas_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_InformeAnuladasxCiudad_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_InformeConsolidadoEjecucion_Detalle_Result.vb">
+      <DependentUpon>OP_Cuanti_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_InformeConsolidadoEjecucion_Result.vb">
+      <DependentUpon>OP_Cuanti_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_InformeTablets_Agrupado_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_InformeTablets_Diario_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_ListadoBriefDirector_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_ListadoEstudiosSeguimiento_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_ListadoPlaneacionUnidades_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_ListadoPropuestasDirector_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_ListadoPropuestasSeguimiento_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_ListadoTrabajosCCT_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_MatrizEstimacionCumplimiento_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_Model.Context.vb">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>REP_Model.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_Model.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>REP_Model.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="REP_Model.vb">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_OrdenesCompra_Facturas_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_OrdenesServicio_Facturas_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_OrdenesUnificado_Facturas_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_OrdenesUnificado_RequerimientosServicio_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_PlaneacionTrabajosDetalleSemana_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_PlaneacionTrabajosGeneral_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_Porcentaje_Diligenciamiento_Brief_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_ProduccionCampoxFecha_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_PYPropuesta_InfoGeneral_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_PYPropuesta_InfoMuestra_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_PYPropuesta_InfoPreguntas_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_PY_IDFORMS_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_PY_VariablesControlEmpleadosConEvaluacion_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_PY_Variables_Control_PorMes_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_PY_Variables_Control_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_RegistroObservacionesInstrumento_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_RegistroObservacionesTarea_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_RegistroObservacionesTipo_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_RegistroObservacionesUsuario_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_RegistroObservaciones_Consolidado_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_RegistroObservaciones_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_TiemposRevisionPresupuestosListado_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_TiemposRevisionPresupuestosResumen_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_Top10Encuestadores_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_TrabajosxGerencia_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_TrabajosxGrupoUnidadBU_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Rep_TrabajosXUsuario_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REP_TraficoAreas_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RolesCombo_Result.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RolesPermisos_Result.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RolesUsuarios_Result.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Roles_Result.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SeguimientoUltimo_Id_Result.vb">
+      <DependentUpon>SG_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SG_ActaComite_Add_Result.vb">
+      <DependentUpon>SG_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SG_ActaComite_Get_Result.vb">
+      <DependentUpon>SG_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SG_Actas.vb">
+      <DependentUpon>SG_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SG_ActasTareasEstado_Result.vb">
+      <DependentUpon>SG_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SG_Acta_Add_Result.vb">
+      <DependentUpon>SG_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SG_Acta_Result.vb">
+      <DependentUpon>SG_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SG_AsistenteActaComite_Get_ActaId_Result.vb">
+      <DependentUpon>SG_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SG_EstadoSeguimiento_Get_Result.vb">
+      <DependentUpon>SG_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SG_Model.Context.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SG_Model.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SG_Model.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SG_Model.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="SG_Model.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SG_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SG_ParticipanteActa_Result.vb">
+      <DependentUpon>SG_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SG_SeguimientosActaComite_Get_Result.vb">
+      <DependentUpon>SG_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SG_Seguimiento_Result.vb">
+      <DependentUpon>SG_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SG_Tarea_Add_Result.vb">
+      <DependentUpon>SG_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SG_Tarea_Result.vb">
+      <DependentUpon>SG_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SG_TipoReunion_Get_Result.vb">
+      <DependentUpon>SG_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Sync_Preguntas_Get_Result.vb">
+      <DependentUpon>GestionCampo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Area.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Area_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Area_JefeArea_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_ARL.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_AspiracionSalarial.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_AusenciasEquipo_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Ausencia_Incapacidades.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Bancos.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Bandas_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_BU.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_CajasCompensacion.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Capacitaciones.vb">
+      <DependentUpon>OP_Cuanti2_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Capacitaciones2.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_CapacitacionesParticipantes.vb">
+      <DependentUpon>OP_Cuanti2_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_CapacitacionesParticipantes2.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_CapacitacionesParticipantes_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Capacitaciones_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_CapacitacionGeneralGet_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_CapacitacionParticipantes_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_CapacitacionPersonas_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Cargos.vb">
+      <DependentUpon>OP_Cuanti2_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Cargos2.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Cargos_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_CarnetXPersonaGet_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Ciudades.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_CiudadxPaisGet_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_ContactosEmergencia_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_ContactosEmergencia_Report_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Contratistas.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_ContratistasClasificacion.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_ContratistasDetalleServiciosGet_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_ContratistasEstadosGet_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_ContratistasGet_Result.vb">
+      <DependentUpon>FI_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_DetalleTipoEncuestadorGet_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_DominioIdioma.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Educacion_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Educacion_Report_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Empleados_DatosEmergencia_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Empleados_EstadoDiligenciamientoDatos_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Empleados_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Empleados_Reporte_Info_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Empresas.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Empresas_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_EPS.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_EstadoCivil.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_EstadoEducacion.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_EstadoEducacion_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_EstadosActuales.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_EstadosCiviles.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_EvaluacionesGet_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_ExperienciaLaboral_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_ExperienciaLaboral_Report_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_FondosCesantias.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_FondosPensiones.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_FormasSalario.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_GetLogPersonas_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_GruposSanguineos.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Hijos_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Hijos_Report_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_HojasVida_Entrevistas_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_HojasVida_ExperienciasLaborales_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_HojasVida_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_HojasVida_Profesiones_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_HojaVida.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_HojaVida_Add_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_HojaVida_Edit_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_HojaVida_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_HWH_AprobacionManager_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Idiomas.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Idiomas_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Jefes_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_JobFunctions_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Levels_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Localidades_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_LogContratistaGet_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_LogTeleTrabajo.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_ModalidadesEducacion_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Model.Context.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TH_Model.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Model.Context1.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TH_Model.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Model.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TH_Model.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Model.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_MotivosCambioSalario_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_NivelCargo.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_NivelesEducativos.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_NivelesIdiomas_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Nivel_BI.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_PaisGet_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Parentescos_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_ParticipantesCapacitacionesNoAprobaron_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Personas.vb">
+      <DependentUpon>OP_Cuanti2_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Personas2.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Personas3.vb">
+      <DependentUpon>OP_Cuanti_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_PersonasGET_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_PersonasXTipoContratoGET_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Personas_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_PersonaXTipoContratacionGet_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Profesiones.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Profesiones_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Promociones_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_REPCambiosContratacion_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_ReportePSTSinProduccionXFecha_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Reporte_PST_CT_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Salarios_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Sedes.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_ServicioContratistaGet_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_ServiciosContratistasCuentasContables_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Sexo.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_SolicitudAusencia.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_STGGet_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_TallasCamiseta.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Teletrabajo.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_TeletrabajoGet_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_TeleTrabajoJefeXId_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_TeleTrabajoJefeXJefe_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_Teletrabajo_Estados.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_TiempoExperiencia.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_TiemposContrato_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_TipoContratacion.vb">
+      <DependentUpon>OP_Cuanti2_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_TipoContratacion2.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_TipoIdentificacion.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_TipoIdentificacion_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_TiposContratacion_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_TiposCuentaBancaria.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_TiposEducacion_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_TiposSalario.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TH_TiposSalario_Get_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TipoActaCombo_Result.vb">
+      <DependentUpon>SG_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TipoGrupoUnidadCombo_Result.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TiposResultadosVerificacionCampo.vb">
+      <DependentUpon>GestionCampo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TR_CambioEstados.vb">
+      <DependentUpon>PY_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UltimoNoActa_Result.vb">
+      <DependentUpon>SG_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UnidadCombo_Result.vb">
+      <DependentUpon>SG_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UnidadesCombo_Result.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Unidades_Result.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UsuariosUnidades_Result.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Usuarios_Result.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_CorreoAnulacionEncuestas_Result.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_CorreosAnuncioAprobacion_Result.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_CorreosPresupuestos_Result.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_CorreosTrabajos_PreyEsp_Result.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_Correos_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_GruposPermisos.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_GrupoUnidad.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_GrupoUnidad2.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_Model.Context.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>US_Model.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_Model.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>US_Model.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="US_Model.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_Permisos.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_PermisosxIdUsuario_Get_Result.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_PermisosXUsuario_Get_Result.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_Roles.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_RolesUsuarios2.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_RolesXUsuario_Get_Result.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_TipoGrupoUnidad.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_TipoGrupoUnidad2.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_TipoGrupoUnidad_Get_Result.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_Unidades.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_Unidades2.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_Unidades3.vb">
+      <DependentUpon>OP_Cuanti_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_UnidadesXUsuario_Get_Result.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_Unidades_Get_All_Result.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_Unidad_Get_Combo_Result.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_Usuarios.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_Usuarios2.vb">
+      <DependentUpon>OP_Cuanti_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_Usuarios3.vb">
+      <DependentUpon>CORE_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_UsuariosAnyParameter_Get_Result.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_UsuariosCargueProduccionGet_Result.vb">
+      <DependentUpon>CC_FinzOpe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_UsuariosGrupoUnidad_Get_Result.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_UsuariosModeradoresCualitativos_Result.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_UsuariosOP.vb">
+      <DependentUpon>OP_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_UsuariosReclutadoresCualitativos_Result.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_UsuariosTranscriptoresCualitativos_Result.vb">
+      <DependentUpon>PY_Cuali.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_UsuariosUnidades2.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_UsuariosXUnidadesXRol_Get_Result.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_Usuarios_GetMail_Result.vb">
+      <DependentUpon>CU_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_Usuarios_Get_Combo_Result.vb">
+      <DependentUpon>TH_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="US_Usuarios_Get_xUnidadxRolNombre_Result.vb">
+      <DependentUpon>REP_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VerificarPermisoUsuario_Result.vb">
+      <DependentUpon>US_Model.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config">
+      <SubType>Designer</SubType>
+    </None>
+    <EntityDeploy Include="CC_FinzOpe.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>CC_FinzOpe1.Designer.vb</LastGenOutput>
+    </EntityDeploy>
+    <EntityDeploy Include="GD_Model.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>GD_Model.Designer.vb</LastGenOutput>
+    </EntityDeploy>
+    <EntityDeploy Include="CU_Model.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>CU_Model.Designer.vb</LastGenOutput>
+    </EntityDeploy>
+    <EntityDeploy Include="ES_Model.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ES_Model.Designer.vb</LastGenOutput>
+    </EntityDeploy>
+    <EntityDeploy Include="CORE_Model.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>CORE_Model.Designer.vb</LastGenOutput>
+    </EntityDeploy>
+    <EntityDeploy Include="IQ_MODEL.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>IQ_MODEL2.Designer.vb</LastGenOutput>
+    </EntityDeploy>
+    <None Include="CC_FinzOpe.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>CC_FinzOpe.edmx</DependentUpon>
+      <LastGenOutput>CC_FinzOpe.Context.vb</LastGenOutput>
+    </None>
+    <None Include="CC_FinzOpe.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>CC_FinzOpe.edmx</DependentUpon>
+      <LastGenOutput>CC_FinzOpe.vb</LastGenOutput>
+    </None>
+    <EntityDeploy Include="CI_Model.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>CI_Model.Designer.vb</LastGenOutput>
+    </EntityDeploy>
+    <None Include="CI_Model.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>CI_Model.edmx</DependentUpon>
+      <LastGenOutput>CI_Model.Context.vb</LastGenOutput>
+    </None>
+    <None Include="CI_Model.edmx.diagram">
+      <DependentUpon>CI_Model.edmx</DependentUpon>
+    </None>
+    <None Include="CI_Model.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>CI_Model.edmx</DependentUpon>
+      <LastGenOutput>CI_Model.vb</LastGenOutput>
+    </None>
+    <None Include="CORE_Model.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>CORE_Model.Context.vb</LastGenOutput>
+      <DependentUpon>CORE_Model.edmx</DependentUpon>
+    </None>
+    <None Include="CORE_Model.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>CORE_Model.vb</LastGenOutput>
+      <DependentUpon>CORE_Model.edmx</DependentUpon>
+    </None>
+    <None Include="CU_Model.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>CU_Model.edmx</DependentUpon>
+      <LastGenOutput>CU_Model.Context.vb</LastGenOutput>
+    </None>
+    <None Include="CU_Model.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>CU_Model.edmx</DependentUpon>
+      <LastGenOutput>CU_Model.vb</LastGenOutput>
+    </None>
+    <None Include="ES_Model.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ES_Model.Context.vb</LastGenOutput>
+      <DependentUpon>ES_Model.edmx</DependentUpon>
+    </None>
+    <None Include="ES_Model.edmx.diagram">
+      <DependentUpon>ES_Model.edmx</DependentUpon>
+    </None>
+    <None Include="ES_Model.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ES_Model.vb</LastGenOutput>
+      <DependentUpon>ES_Model.edmx</DependentUpon>
+    </None>
+    <EntityDeploy Include="FI_Model.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>FI_Model1.Designer.vb</LastGenOutput>
+    </EntityDeploy>
+    <None Include="FI_Model.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>FI_Model.edmx</DependentUpon>
+      <LastGenOutput>FI_Model.Context.vb</LastGenOutput>
+    </None>
+    <None Include="FI_Model.edmx.diagram">
+      <DependentUpon>FI_Model.edmx</DependentUpon>
+    </None>
+    <None Include="FI_Model.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>FI_Model.vb</LastGenOutput>
+      <DependentUpon>FI_Model.edmx</DependentUpon>
+    </None>
+    <None Include="GD_Model.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>GD_Model.Context.vb</LastGenOutput>
+      <DependentUpon>GD_Model.edmx</DependentUpon>
+    </None>
+    <None Include="GD_Model.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>GD_Model.vb</LastGenOutput>
+      <DependentUpon>GD_Model.edmx</DependentUpon>
+    </None>
+    <EntityDeploy Include="GestionCampo.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>GestionCampo.Designer.vb</LastGenOutput>
+    </EntityDeploy>
+    <None Include="GestionCampo.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>GestionCampo.edmx</DependentUpon>
+      <LastGenOutput>GestionCampo.Context.vb</LastGenOutput>
+    </None>
+    <None Include="GestionCampo.edmx.diagram">
+      <DependentUpon>GestionCampo.edmx</DependentUpon>
+    </None>
+    <None Include="GestionCampo.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>GestionCampo.edmx</DependentUpon>
+      <LastGenOutput>GestionCampo.vb</LastGenOutput>
+    </None>
+    <EntityDeploy Include="INV_Model.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>INV_Model.Designer.vb</LastGenOutput>
+    </EntityDeploy>
+    <None Include="INV_Model.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>INV_Model.edmx</DependentUpon>
+      <LastGenOutput>INV_Model.Context.vb</LastGenOutput>
+    </None>
+    <None Include="INV_Model.edmx.diagram">
+      <DependentUpon>INV_Model.edmx</DependentUpon>
+    </None>
+    <None Include="INV_Model.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>INV_Model.edmx</DependentUpon>
+      <LastGenOutput>INV_Model.vb</LastGenOutput>
+    </None>
+    <None Include="IQ_Model.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>IQ_Model.Context.vb</LastGenOutput>
+      <DependentUpon>IQ_MODEL.edmx</DependentUpon>
+    </None>
+    <None Include="IQ_Model.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>IQ_Model.vb</LastGenOutput>
+      <DependentUpon>IQ_MODEL.edmx</DependentUpon>
+    </None>
+    <EntityDeploy Include="ModeloIPS.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ModeloIPS.Designer.vb</LastGenOutput>
+    </EntityDeploy>
+    <None Include="libman.json" />
+    <None Include="ModeloIPS.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ModeloIPS.edmx</DependentUpon>
+      <LastGenOutput>ModeloIPS.Context.vb</LastGenOutput>
+    </None>
+    <None Include="ModeloIPS.edmx.diagram">
+      <DependentUpon>ModeloIPS.edmx</DependentUpon>
+    </None>
+    <None Include="ModeloIPS.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ModeloIPS.edmx</DependentUpon>
+      <LastGenOutput>ModeloIPS.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+    <EntityDeploy Include="US_Model.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>US_Model.Designer.vb</LastGenOutput>
+    </EntityDeploy>
+    <EntityDeploy Include="SG_Model.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>SG_Model.Designer.vb</LastGenOutput>
+    </EntityDeploy>
+    <EntityDeploy Include="OP_Model.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>OP_Model.Designer.vb</LastGenOutput>
+    </EntityDeploy>
+    <EntityDeploy Include="PY_Model.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>PY_Model.Designer.vb</LastGenOutput>
+    </EntityDeploy>
+    <EntityDeploy Include="TH_Model.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>TH_Model.Designer.vb</LastGenOutput>
+    </EntityDeploy>
+    <EntityDeploy Include="OP_RO_Model.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>OP_RO_Model.Designer.vb</LastGenOutput>
+    </EntityDeploy>
+    <EntityDeploy Include="OP_Cuanti_Model.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>OP_Cuanti_Model.Designer.vb</LastGenOutput>
+    </EntityDeploy>
+    <EntityDeploy Include="OP_Cuanti2_Model.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>OP_Cuanti2_Model.Designer.vb</LastGenOutput>
+    </EntityDeploy>
+    <EntityDeploy Include="REP_Model.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>REP_Model.Designer.vb</LastGenOutput>
+    </EntityDeploy>
+    <EntityDeploy Include="PY_Cuali.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>PY_Cuali.Designer.vb</LastGenOutput>
+    </EntityDeploy>
+    <None Include="OP_Cuanti2_Model.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>OP_Cuanti2_Model.Context.vb</LastGenOutput>
+      <DependentUpon>OP_Cuanti2_Model.edmx</DependentUpon>
+    </None>
+    <None Include="OP_Cuanti2_Model.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>OP_Cuanti2_Model.vb</LastGenOutput>
+      <DependentUpon>OP_Cuanti2_Model.edmx</DependentUpon>
+    </None>
+    <None Include="OP_Cuanti_Model.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>OP_Cuanti_Model.edmx</DependentUpon>
+      <LastGenOutput>OP_Cuanti_Model.Context1.vb</LastGenOutput>
+    </None>
+    <None Include="OP_Cuanti_Model.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>OP_Cuanti_Model.edmx</DependentUpon>
+      <LastGenOutput>OP_Cuanti_Model.vb</LastGenOutput>
+    </None>
+    <None Include="OP_Entities.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>OP_Entities.Context.vb</LastGenOutput>
+      <DependentUpon>OP_Model.edmx</DependentUpon>
+    </None>
+    <None Include="OP_Entities.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>OP_Entities.vb</LastGenOutput>
+      <DependentUpon>OP_Model.edmx</DependentUpon>
+    </None>
+    <None Include="OP_RO_Model.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>OP_RO_Model.Context.vb</LastGenOutput>
+      <DependentUpon>OP_RO_Model.edmx</DependentUpon>
+    </None>
+    <None Include="OP_RO_Model.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>OP_RO_Model.vb</LastGenOutput>
+      <DependentUpon>OP_RO_Model.edmx</DependentUpon>
+    </None>
+    <EntityDeploy Include="PNC_Model.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>PNC_Model.Designer.vb</LastGenOutput>
+    </EntityDeploy>
+    <None Include="packages.config" />
+    <None Include="PNC_Model.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>PNC_Model.edmx</DependentUpon>
+      <LastGenOutput>PNC_Model.Context.vb</LastGenOutput>
+    </None>
+    <None Include="PNC_Model.edmx.diagram">
+      <DependentUpon>PNC_Model.edmx</DependentUpon>
+    </None>
+    <None Include="PNC_Model.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>PNC_Model.edmx</DependentUpon>
+      <LastGenOutput>PNC_Model.vb</LastGenOutput>
+    </None>
+    <None Include="PY_Cuali.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>PY_Cuali.Context.vb</LastGenOutput>
+      <DependentUpon>PY_Cuali.edmx</DependentUpon>
+    </None>
+    <None Include="PY_Cuali.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>PY_Cuali.vb</LastGenOutput>
+      <DependentUpon>PY_Cuali.edmx</DependentUpon>
+    </None>
+    <None Include="PY_Model.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>PY_Model.Context.vb</LastGenOutput>
+      <DependentUpon>PY_Model.edmx</DependentUpon>
+    </None>
+    <None Include="PY_Model.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>PY_Model.vb</LastGenOutput>
+      <DependentUpon>PY_Model.edmx</DependentUpon>
+    </None>
+    <None Include="REP_Model.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>REP_Model.edmx</DependentUpon>
+      <LastGenOutput>REP_Model.Context.vb</LastGenOutput>
+    </None>
+    <None Include="REP_Model.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>REP_Model.edmx</DependentUpon>
+      <LastGenOutput>REP_Model.vb</LastGenOutput>
+    </None>
+    <None Include="SG_Model.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>SG_Model.Context.vb</LastGenOutput>
+      <DependentUpon>SG_Model.edmx</DependentUpon>
+    </None>
+    <None Include="SG_Model.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>SG_Model.vb</LastGenOutput>
+      <DependentUpon>SG_Model.edmx</DependentUpon>
+    </None>
+    <None Include="TH_Model.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>TH_Model.edmx</DependentUpon>
+      <LastGenOutput>TH_Model.Context1.vb</LastGenOutput>
+    </None>
+    <None Include="TH_Model.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>TH_Model.vb</LastGenOutput>
+      <DependentUpon>TH_Model.edmx</DependentUpon>
+    </None>
+    <None Include="US_Model.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>US_Model.Context.vb</LastGenOutput>
+      <DependentUpon>US_Model.edmx</DependentUpon>
+    </None>
+    <None Include="US_Model.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>US_Model.vb</LastGenOutput>
+      <DependentUpon>US_Model.edmx</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Clases\PC\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\AjaxControlToolkit.dll" />
+    <Content Include="bin\BusyBoxDotNet.dll" />
+    <Content Include="bin\Debug\CoreProject.dll" />
+    <Content Include="bin\Debug\CoreProject.pdb" />
+    <Content Include="bin\Debug\Dapper.dll" />
+    <Content Include="bin\Debug\Dapper.xml" />
+    <Content Include="bin\Debug\EntityFramework.dll" />
+    <Content Include="bin\Debug\EntityFramework.SqlServer.dll" />
+    <Content Include="bin\Debug\EntityFramework.SqlServer.xml" />
+    <Content Include="bin\Debug\EntityFramework.xml" />
+    <Content Include="bin\DocumentFormat.OpenXml.dll" />
+    <Content Include="bin\EntityFramework.dll" />
+    <Content Include="bin\es\DevExpress.Charts.Designer.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.Dashboard.v14.1.Core.resources.dll" />
+    <Content Include="bin\es\DevExpress.Dashboard.v14.1.Web.resources.dll" />
+    <Content Include="bin\es\DevExpress.Dashboard.v14.1.Win.resources.dll" />
+    <Content Include="bin\es\DevExpress.Data.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.DataAccess.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.DataAccess.v14.1.UI.resources.dll" />
+    <Content Include="bin\es\DevExpress.ExpressApp.CloneObject.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.ExpressApp.FileAttachment.Web.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.ExpressApp.FileAttachment.Win.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.ExpressApp.HtmlPropertyEditor.Win.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.ExpressApp.Objects.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.ExpressApp.PivotChart.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.ExpressApp.PivotChart.Win.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.ExpressApp.Reports.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.ExpressApp.Reports.Win.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.ExpressApp.Scheduler.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.ExpressApp.Scheduler.Web.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.ExpressApp.Scheduler.Win.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.ExpressApp.ScriptRecorder.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.ExpressApp.ScriptRecorder.Win.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.ExpressApp.Security.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.ExpressApp.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.ExpressApp.Validation.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.ExpressApp.Validation.Win.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.ExpressApp.ViewVariantsModule.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.ExpressApp.Web.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.ExpressApp.Win.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.Office.v14.1.Core.resources.dll" />
+    <Content Include="bin\es\DevExpress.PivotGrid.v14.1.Core.resources.dll" />
+    <Content Include="bin\es\DevExpress.Printing.v14.1.Core.resources.dll" />
+    <Content Include="bin\es\DevExpress.RichEdit.v14.1.Core.resources.dll" />
+    <Content Include="bin\es\DevExpress.Snap.v14.1.Core.resources.dll" />
+    <Content Include="bin\es\DevExpress.Snap.v14.1.Extensions.resources.dll" />
+    <Content Include="bin\es\DevExpress.Snap.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.Utils.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.Utils.v14.1.UI.resources.dll" />
+    <Content Include="bin\es\DevExpress.Web.ASPxHtmlEditor.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.Web.ASPxScheduler.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.Web.ASPxSpellChecker.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.Web.ASPxTreeList.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.Web.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.Xpf.Charts.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.Xpf.Core.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.Xpf.Docking.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.Xpf.Gauges.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.Xpf.Grid.v14.1.Core.resources.dll" />
+    <Content Include="bin\es\DevExpress.Xpf.LayoutControl.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.Xpf.NavBar.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.Xpf.Printing.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.Xpf.Ribbon.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.Xpf.RichEdit.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.Xpf.Scheduler.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.Xpo.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.XtraBars.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.XtraCharts.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.XtraCharts.v14.1.Wizard.resources.dll" />
+    <Content Include="bin\es\DevExpress.XtraEditors.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.XtraGauges.v14.1.Core.resources.dll" />
+    <Content Include="bin\es\DevExpress.XtraGauges.v14.1.Presets.resources.dll" />
+    <Content Include="bin\es\DevExpress.XtraGrid.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.XtraLayout.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.XtraNavBar.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.XtraPivotGrid.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.XtraPrinting.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.XtraReports.v14.1.Extensions.resources.dll" />
+    <Content Include="bin\es\DevExpress.XtraReports.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.XtraReports.v14.1.Web.resources.dll" />
+    <Content Include="bin\es\DevExpress.XtraRichEdit.v14.1.Extensions.resources.dll" />
+    <Content Include="bin\es\DevExpress.XtraRichEdit.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.XtraScheduler.v14.1.Core.resources.dll" />
+    <Content Include="bin\es\DevExpress.XtraScheduler.v14.1.Extensions.resources.dll" />
+    <Content Include="bin\es\DevExpress.XtraScheduler.v14.1.Reporting.resources.dll" />
+    <Content Include="bin\es\DevExpress.XtraScheduler.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.XtraSpellChecker.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.XtraTreeList.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.XtraVerticalGrid.v14.1.resources.dll" />
+    <Content Include="bin\es\DevExpress.XtraWizard.v14.1.resources.dll" />
+    <Content Include="bin\FusionCharts.dll" />
+    <Content Include="bin\itextsharp.dll" />
+    <Content Include="bin\Microsoft.Practices.EnterpriseLibrary.Common.dll" />
+    <Content Include="bin\Microsoft.Practices.EnterpriseLibrary.Data.dll" />
+    <Content Include="bin\Microsoft.Practices.ServiceLocation.dll" />
+    <Content Include="bin\Microsoft.Practices.Unity.dll" />
+    <Content Include="bin\Microsoft.Practices.Unity.Interception.dll" />
+    <Content Include="bin\WebMatrix.pdb" />
+    <Content Include="bin\WebMatrix.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Utilidades\Utilidades.vbproj">
+      <Project>{FC7250C5-27B9-4C5C-9230-EB6742F1C5CA}</Project>
+      <Name>Utilidades</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

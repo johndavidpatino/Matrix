@@ -1,0 +1,163 @@
+body
+{
+	background-image:url(../images/fnd-matrix.gif);
+	background-color:#000;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:16px;
+	margin:0px;
+}
+
+P{
+	font-family: 'Sanchez', serif;
+	color:#CDDDAC;
+	text-align:center;
+}
+img
+{
+  border:0;
+}
+
+#content
+{
+	width:750px;
+	margin:1% auto 0;
+}
+#logomenu
+{
+	padding: 10px 0 0 170px;
+	width:600px;
+}
+#dobleflecha1
+{
+	padding:10px 15px 15px 25px;
+	height:35px;
+	width:35px;
+	float:left;
+}
+#dobleflecha2
+{
+	padding:10px 0px 15px 20px;
+	height:35px;
+	width:35px;
+	float:left;
+}
+#cajasarriba
+{
+	padding:0 10px 15px 10px;
+	height:45px;
+	width:290px;
+	float:left;
+	transition: all 500ms ease;
+	-webkit-transition: all 500ms ease;
+	-moz-transition: all 500ms ease;
+	-ms-transition: all 500ms ease;
+	-o-transition: all 500ms ease;
+}
+div img
+{
+	transition: all 500ms ease;
+	-webkit-transition: all 500ms ease;
+	-moz-transition: all 500ms ease;
+	-ms-transition: all 500ms ease;
+	-o-transition: all 500ms ease;
+}
+div img:hover
+{
+	-webkit-box-shadow:  0px 0px 10px 3px #43990B;
+	box-shadow:  0px 0px 10px 3px #43990B;
+	-moz-box-shadow:  0px 0px 10px 3px #43990B;
+	-ms-box-shadow:  0px 0px 10px 3px #43990B;
+	-o-box-shadow:  0px 0px 10px 3px #43990B;
+}
+#barraizq
+{
+	padding:0 15px 0 0;
+	height:340px;
+	width:60px;
+	float:left;
+}
+#barrader
+{
+	padding:0 0 0 0;
+	height:340px;
+	width:60px;
+	float:left;
+}
+#content-centro
+{
+	padding:0 15px 0 0;
+	height:340px;
+	width:600px;
+	float:left;
+}
+#btnscentro
+{
+	padding:0 0 10px 0;
+	height:70px;
+	width:600px;
+	float:left;
+}
+#btnscentro1
+{
+	padding:10px 0 10px 0;
+	height:70px;
+	width:600px;
+	float:left;
+}
+#abajo
+{
+	width:750px;
+	margin: 15px 0 0 0;
+}
+#cajasabajo
+{ 
+	float:left;
+	height:45px;
+	padding:10px 10px 0 10px;
+	width:130px;
+}
+#logomenu img:hover
+{
+	-webkit-box-shadow:  none;
+      box-shadow:  none;
+	  -moz-box-shadow:  none;
+	  -o-box-shadow:  none;
+	  -ms-box-shadow:  none;
+}
+#dobleflecha1 img:hover
+{
+	-webkit-box-shadow:  none;
+	box-shadow:  none;
+	-moz-box-shadow:  none;
+	  -o-box-shadow:  none;
+	  -ms-box-shadow:  none;
+}
+#dobleflecha2 img:hover
+{
+	-webkit-box-shadow:  none;
+box-shadow:  none;
+-moz-box-shadow:  none;
+	  -o-box-shadow:  none;
+	  -ms-box-shadow:  none;
+}
+
+footer{
+	clear:both;
+	padding-top:5px;
+	text-align:center;
+	color:#FFF;
+	font-family: 'Metrophobic', Arial, serif; font-weight: 400; 
+	color:#FFF;
+	font-size:12px;
+}
+footer a{
+	color:#FFF;
+	text-decoration:none;
+}
+footer li{
+	padding-left:15px;
+	padding-right:15px;
+	display: inline;
+	background-image:url(../images/vineta.png);
+	background-repeat:no-repeat;
+}

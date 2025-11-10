@@ -1,0 +1,610 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="OP_RO_Model.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="OP_RO_ModelStoreContainer" />
+        <Function Name="OP_RO_EjecucionCuestionario_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+          <Parameter Name="Pregunta" Type="varchar" Mode="In" />
+          <Parameter Name="Observacion" Type="varchar" Mode="In" />
+          <Parameter Name="DescripcionObservacion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="RespuestaGerenteProyectos" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="OP_RO_EjecucionCuestionario_Del" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_RO_EjecucionCuestionario_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="bigint" Mode="In" />
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+          <Parameter Name="Pregunta" Type="varchar" Mode="In" />
+          <Parameter Name="Observacion" Type="varchar" Mode="In" />
+          <Parameter Name="DescripcionObservacion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="RespuestaGerenteProyectos" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="OP_RO_EjecucionCuestionario_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="bigint" Mode="In" />
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_RO_EjecucionInstructivo_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+          <Parameter Name="Observacion" Type="varchar" Mode="In" />
+          <Parameter Name="DescripcionObservacion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="RespuestaGerenteProyectos" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="OP_RO_EjecucionInstructivo_Del" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_RO_EjecucionInstructivo_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="bigint" Mode="In" />
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+          <Parameter Name="Observacion" Type="varchar" Mode="In" />
+          <Parameter Name="DescripcionObservacion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="RespuestaGerenteProyectos" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="OP_RO_EjecucionInstructivo_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="bigint" Mode="In" />
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_RO_EjecucionMaterialAyuda_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+          <Parameter Name="Observacion" Type="varchar" Mode="In" />
+          <Parameter Name="DescripcionObservacion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="RespuestaGerenteProyectos" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="OP_RO_EjecucionMaterialAyuda_Del" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_RO_EjecucionMaterialAyuda_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="bigint" Mode="In" />
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+          <Parameter Name="Observacion" Type="varchar" Mode="In" />
+          <Parameter Name="DescripcionObservacion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="RespuestaGerenteProyectos" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="OP_RO_EjecucionMaterialAyuda_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="bigint" Mode="In" />
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_RO_EjecucionMetodologia_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+          <Parameter Name="Observacion" Type="varchar" Mode="In" />
+          <Parameter Name="DescripcionObservacion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="RespuestaGerenteProyectos" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="OP_RO_EjecucionMetodologia_Del" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_RO_EjecucionMetodologia_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="bigint" Mode="In" />
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+          <Parameter Name="Observacion" Type="varchar" Mode="In" />
+          <Parameter Name="DescripcionObservacion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="RespuestaGerenteProyectos" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="OP_RO_EjecucionMetodologia_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="bigint" Mode="In" />
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_RO_RevisionCuestionario_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+          <Parameter Name="Pregunta" Type="varchar" Mode="In" />
+          <Parameter Name="Observacion" Type="varchar" Mode="In" />
+          <Parameter Name="DescripcionObservacion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="RespuestaGerenteProyectos" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="OP_RO_RevisionCuestionario_Del" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_RO_RevisionCuestionario_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="bigint" Mode="In" />
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+          <Parameter Name="Pregunta" Type="varchar" Mode="In" />
+          <Parameter Name="Observacion" Type="varchar" Mode="In" />
+          <Parameter Name="DescripcionObservacion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="RespuestaGerenteProyectos" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="OP_RO_RevisionCuestionario_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="bigint" Mode="In" />
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_RO_RevisionInstructivo_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+          <Parameter Name="Observacion" Type="varchar" Mode="In" />
+          <Parameter Name="DescripcionObservacion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="RespuestaGerenteProyectos" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="OP_RO_RevisionInstructivo_Del" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_RO_RevisionInstructivo_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="bigint" Mode="In" />
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+          <Parameter Name="Observacion" Type="varchar" Mode="In" />
+          <Parameter Name="DescripcionObservacion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="RespuestaGerenteProyectos" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="OP_RO_RevisionInstructivo_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="bigint" Mode="In" />
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_RO_RevisionMaterialAyuda_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+          <Parameter Name="Observacion" Type="varchar" Mode="In" />
+          <Parameter Name="DescripcionObservacion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="RespuestaGerenteProyectos" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="OP_RO_RevisionMaterialAyuda_Del" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_RO_RevisionMaterialAyuda_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="bigint" Mode="In" />
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+          <Parameter Name="Observacion" Type="varchar" Mode="In" />
+          <Parameter Name="DescripcionObservacion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="RespuestaGerenteProyectos" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="OP_RO_RevisionMaterialAyuda_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="bigint" Mode="In" />
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_RO_RevisionMetodologia_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+          <Parameter Name="Observacion" Type="varchar" Mode="In" />
+          <Parameter Name="DescripcionObservacion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="RespuestaGerenteProyectos" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="OP_RO_RevisionMetodologia_Del" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_RO_RevisionMetodologia_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="bigint" Mode="In" />
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+          <Parameter Name="Observacion" Type="varchar" Mode="In" />
+          <Parameter Name="DescripcionObservacion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="RespuestaGerenteProyectos" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="OP_RO_RevisionMetodologia_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="bigint" Mode="In" />
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+        </Function>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="OP_RO_Model" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2009/11/edm" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <EntityContainer Name="OP_RO_Entities" annotation:LazyLoadingEnabled="true" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+          <FunctionImport Name="OP_RO_EjecucionCuestionario_Add" ReturnType="Collection(Decimal)">
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+            <Parameter Name="Pregunta" Mode="In" Type="String" />
+            <Parameter Name="Observacion" Mode="In" Type="String" />
+            <Parameter Name="DescripcionObservacion" Mode="In" Type="String" />
+            <Parameter Name="RespuestaGerenteProyectos" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OP_RO_EjecucionCuestionario_Del">
+            <Parameter Name="ID" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="OP_RO_EjecucionCuestionario_Edit">
+            <Parameter Name="ID" Mode="In" Type="Int64" />
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+            <Parameter Name="Pregunta" Mode="In" Type="String" />
+            <Parameter Name="Observacion" Mode="In" Type="String" />
+            <Parameter Name="DescripcionObservacion" Mode="In" Type="String" />
+            <Parameter Name="RespuestaGerenteProyectos" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OP_RO_EjecucionCuestionario_Get" ReturnType="Collection(OP_RO_Model.OP_RO_EjecucionCuestionario_Get_Result)">
+            <Parameter Name="ID" Mode="In" Type="Int64" />
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="OP_RO_EjecucionInstructivo_Add" ReturnType="Collection(Decimal)">
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+            <Parameter Name="Observacion" Mode="In" Type="String" />
+            <Parameter Name="DescripcionObservacion" Mode="In" Type="String" />
+            <Parameter Name="RespuestaGerenteProyectos" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OP_RO_EjecucionInstructivo_Del">
+            <Parameter Name="ID" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="OP_RO_EjecucionInstructivo_Edit">
+            <Parameter Name="ID" Mode="In" Type="Int64" />
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+            <Parameter Name="Observacion" Mode="In" Type="String" />
+            <Parameter Name="DescripcionObservacion" Mode="In" Type="String" />
+            <Parameter Name="RespuestaGerenteProyectos" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OP_RO_EjecucionInstructivo_Get" ReturnType="Collection(OP_RO_Model.OP_RO_EjecucionInstructivo_Get_Result)">
+            <Parameter Name="ID" Mode="In" Type="Int64" />
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="OP_RO_EjecucionMaterialAyuda_Add" ReturnType="Collection(Decimal)">
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+            <Parameter Name="Observacion" Mode="In" Type="String" />
+            <Parameter Name="DescripcionObservacion" Mode="In" Type="String" />
+            <Parameter Name="RespuestaGerenteProyectos" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OP_RO_EjecucionMaterialAyuda_Del">
+            <Parameter Name="ID" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="OP_RO_EjecucionMaterialAyuda_Edit">
+            <Parameter Name="ID" Mode="In" Type="Int64" />
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+            <Parameter Name="Observacion" Mode="In" Type="String" />
+            <Parameter Name="DescripcionObservacion" Mode="In" Type="String" />
+            <Parameter Name="RespuestaGerenteProyectos" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OP_RO_EjecucionMaterialAyuda_Get" ReturnType="Collection(OP_RO_Model.OP_RO_EjecucionMaterialAyuda_Get_Result)">
+            <Parameter Name="ID" Mode="In" Type="Int64" />
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="OP_RO_EjecucionMetodologia_Add" ReturnType="Collection(Decimal)">
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+            <Parameter Name="Observacion" Mode="In" Type="String" />
+            <Parameter Name="DescripcionObservacion" Mode="In" Type="String" />
+            <Parameter Name="RespuestaGerenteProyectos" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OP_RO_EjecucionMetodologia_Del">
+            <Parameter Name="ID" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="OP_RO_EjecucionMetodologia_Edit">
+            <Parameter Name="ID" Mode="In" Type="Int64" />
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+            <Parameter Name="Observacion" Mode="In" Type="String" />
+            <Parameter Name="DescripcionObservacion" Mode="In" Type="String" />
+            <Parameter Name="RespuestaGerenteProyectos" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OP_RO_EjecucionMetodologia_Get" ReturnType="Collection(OP_RO_Model.OP_RO_EjecucionMetodologia_Get_Result)">
+            <Parameter Name="ID" Mode="In" Type="Int64" />
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="OP_RO_RevisionCuestionario_Add" ReturnType="Collection(Decimal)">
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+            <Parameter Name="Pregunta" Mode="In" Type="String" />
+            <Parameter Name="Observacion" Mode="In" Type="String" />
+            <Parameter Name="DescripcionObservacion" Mode="In" Type="String" />
+            <Parameter Name="RespuestaGerenteProyectos" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OP_RO_RevisionCuestionario_Del">
+            <Parameter Name="ID" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="OP_RO_RevisionCuestionario_Edit">
+            <Parameter Name="ID" Mode="In" Type="Int64" />
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+            <Parameter Name="Pregunta" Mode="In" Type="String" />
+            <Parameter Name="Observacion" Mode="In" Type="String" />
+            <Parameter Name="DescripcionObservacion" Mode="In" Type="String" />
+            <Parameter Name="RespuestaGerenteProyectos" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OP_RO_RevisionCuestionario_Get" ReturnType="Collection(OP_RO_Model.OP_RO_RevisionCuestionario_Get_Result)">
+            <Parameter Name="ID" Mode="In" Type="Int64" />
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="OP_RO_RevisionInstructivo_Add" ReturnType="Collection(Decimal)">
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+            <Parameter Name="Observacion" Mode="In" Type="String" />
+            <Parameter Name="DescripcionObservacion" Mode="In" Type="String" />
+            <Parameter Name="RespuestaGerenteProyectos" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OP_RO_RevisionInstructivo_Del">
+            <Parameter Name="ID" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="OP_RO_RevisionInstructivo_Edit">
+            <Parameter Name="ID" Mode="In" Type="Int64" />
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+            <Parameter Name="Observacion" Mode="In" Type="String" />
+            <Parameter Name="DescripcionObservacion" Mode="In" Type="String" />
+            <Parameter Name="RespuestaGerenteProyectos" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OP_RO_RevisionInstructivo_Get" ReturnType="Collection(OP_RO_Model.OP_RO_RevisionInstructivo_Get_Result)">
+            <Parameter Name="ID" Mode="In" Type="Int64" />
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="OP_RO_RevisionMaterialAyuda_Add" ReturnType="Collection(Decimal)">
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+            <Parameter Name="Observacion" Mode="In" Type="String" />
+            <Parameter Name="DescripcionObservacion" Mode="In" Type="String" />
+            <Parameter Name="RespuestaGerenteProyectos" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OP_RO_RevisionMaterialAyuda_Del">
+            <Parameter Name="ID" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="OP_RO_RevisionMaterialAyuda_Edit">
+            <Parameter Name="ID" Mode="In" Type="Int64" />
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+            <Parameter Name="Observacion" Mode="In" Type="String" />
+            <Parameter Name="DescripcionObservacion" Mode="In" Type="String" />
+            <Parameter Name="RespuestaGerenteProyectos" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OP_RO_RevisionMaterialAyuda_Get" ReturnType="Collection(OP_RO_Model.OP_RO_RevisionMaterialAyuda_Get_Result)">
+            <Parameter Name="ID" Mode="In" Type="Int64" />
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="OP_RO_RevisionMetodologia_Add" ReturnType="Collection(Decimal)">
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+            <Parameter Name="Observacion" Mode="In" Type="String" />
+            <Parameter Name="DescripcionObservacion" Mode="In" Type="String" />
+            <Parameter Name="RespuestaGerenteProyectos" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OP_RO_RevisionMetodologia_Del">
+            <Parameter Name="ID" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="OP_RO_RevisionMetodologia_Edit">
+            <Parameter Name="ID" Mode="In" Type="Int64" />
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+            <Parameter Name="Observacion" Mode="In" Type="String" />
+            <Parameter Name="DescripcionObservacion" Mode="In" Type="String" />
+            <Parameter Name="RespuestaGerenteProyectos" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OP_RO_RevisionMetodologia_Get" ReturnType="Collection(OP_RO_Model.OP_RO_RevisionMetodologia_Get_Result)">
+            <Parameter Name="ID" Mode="In" Type="Int64" />
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="OP_RO_EjecucionCuestionario_Get_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="Int64" Name="TrabajoId" Nullable="true" />
+          <Property Type="DateTime" Name="FechaHoraObservacion" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Pregunta" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Observacion" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="DescripcionObservacion" Nullable="true" />
+          <Property Type="String" Name="RespuestaGerenteProyectos" Nullable="true" />
+          <Property Type="DateTime" Name="FechaHoraRespuesta" Nullable="true" Precision="23" />
+          <Property Type="String" Name="JobBook" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="NombreTrabajo" Nullable="false" MaxLength="250" />
+        </ComplexType>
+        <ComplexType Name="OP_RO_EjecucionInstructivo_Get_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="Int64" Name="TrabajoId" Nullable="true" />
+          <Property Type="DateTime" Name="FechaHoraObservacion" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Observacion" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="DescripcionObservacion" Nullable="true" />
+          <Property Type="String" Name="RespuestaGerenteProyectos" Nullable="true" />
+          <Property Type="DateTime" Name="FechaHoraRespuesta" Nullable="true" Precision="23" />
+          <Property Type="String" Name="JobBook" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="NombreTrabajo" Nullable="false" MaxLength="250" />
+        </ComplexType>
+        <ComplexType Name="OP_RO_EjecucionMaterialAyuda_Get_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="Int64" Name="TrabajoId" Nullable="true" />
+          <Property Type="DateTime" Name="FechaHoraObservacion" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Observacion" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="DescripcionObservacion" Nullable="true" />
+          <Property Type="String" Name="RespuestaGerenteProyectos" Nullable="true" />
+          <Property Type="DateTime" Name="FechaHoraRespuesta" Nullable="true" Precision="23" />
+          <Property Type="String" Name="JobBook" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="NombreTrabajo" Nullable="false" MaxLength="250" />
+        </ComplexType>
+        <ComplexType Name="OP_RO_EjecucionMetodologia_Get_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="Int64" Name="TrabajoId" Nullable="true" />
+          <Property Type="DateTime" Name="FechaHoraObservacion" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Observacion" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="DescripcionObservacion" Nullable="true" />
+          <Property Type="String" Name="RespuestaGerenteProyectos" Nullable="true" />
+          <Property Type="DateTime" Name="FechaHoraRespuesta" Nullable="true" Precision="23" />
+          <Property Type="String" Name="JobBook" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="NombreTrabajo" Nullable="false" MaxLength="250" />
+        </ComplexType>
+        <ComplexType Name="OP_RO_RevisionCuestionario_Get_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="Int64" Name="TrabajoId" Nullable="true" />
+          <Property Type="DateTime" Name="FechaHoraObservacion" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Pregunta" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Observacion" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="DescripcionObservacion" Nullable="true" />
+          <Property Type="String" Name="RespuestaGerenteProyectos" Nullable="true" />
+          <Property Type="DateTime" Name="FechaHoraRespuesta" Nullable="true" Precision="23" />
+          <Property Type="String" Name="JobBook" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="NombreTrabajo" Nullable="false" MaxLength="250" />
+        </ComplexType>
+        <ComplexType Name="OP_RO_RevisionInstructivo_Get_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="Int64" Name="TrabajoId" Nullable="true" />
+          <Property Type="DateTime" Name="FechaHoraObservacion" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Observacion" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="DescripcionObservacion" Nullable="true" />
+          <Property Type="String" Name="RespuestaGerenteProyectos" Nullable="true" />
+          <Property Type="DateTime" Name="FechaHoraRespuesta" Nullable="true" Precision="23" />
+          <Property Type="String" Name="JobBook" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="NombreTrabajo" Nullable="false" MaxLength="250" />
+        </ComplexType>
+        <ComplexType Name="OP_RO_RevisionMaterialAyuda_Get_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="Int64" Name="TrabajoId" Nullable="true" />
+          <Property Type="DateTime" Name="FechaHoraObservacion" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Observacion" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="DescripcionObservacion" Nullable="true" />
+          <Property Type="String" Name="RespuestaGerenteProyectos" Nullable="true" />
+          <Property Type="DateTime" Name="FechaHoraRespuesta" Nullable="true" Precision="23" />
+          <Property Type="String" Name="JobBook" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="NombreTrabajo" Nullable="false" MaxLength="250" />
+        </ComplexType>
+        <ComplexType Name="OP_RO_RevisionMetodologia_Get_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="Int64" Name="TrabajoId" Nullable="true" />
+          <Property Type="DateTime" Name="FechaHoraObservacion" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Observacion" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="DescripcionObservacion" Nullable="true" />
+          <Property Type="String" Name="RespuestaGerenteProyectos" Nullable="true" />
+          <Property Type="DateTime" Name="FechaHoraRespuesta" Nullable="true" Precision="23" />
+          <Property Type="String" Name="JobBook" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="NombreTrabajo" Nullable="false" MaxLength="250" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="OP_RO_ModelStoreContainer" CdmEntityContainer="OP_RO_Entities">
+          <FunctionImportMapping FunctionImportName="OP_RO_EjecucionCuestionario_Add" FunctionName="OP_RO_Model.Store.OP_RO_EjecucionCuestionario_Add" />
+          <FunctionImportMapping FunctionImportName="OP_RO_EjecucionCuestionario_Del" FunctionName="OP_RO_Model.Store.OP_RO_EjecucionCuestionario_Del" />
+          <FunctionImportMapping FunctionImportName="OP_RO_EjecucionCuestionario_Edit" FunctionName="OP_RO_Model.Store.OP_RO_EjecucionCuestionario_Edit" />
+          <FunctionImportMapping FunctionImportName="OP_RO_EjecucionCuestionario_Get" FunctionName="OP_RO_Model.Store.OP_RO_EjecucionCuestionario_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OP_RO_Model.OP_RO_EjecucionCuestionario_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="FechaHoraObservacion" ColumnName="FechaHoraObservacion" />
+                <ScalarProperty Name="Pregunta" ColumnName="Pregunta" />
+                <ScalarProperty Name="Observacion" ColumnName="Observacion" />
+                <ScalarProperty Name="DescripcionObservacion" ColumnName="DescripcionObservacion" />
+                <ScalarProperty Name="RespuestaGerenteProyectos" ColumnName="RespuestaGerenteProyectos" />
+                <ScalarProperty Name="FechaHoraRespuesta" ColumnName="FechaHoraRespuesta" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="NombreTrabajo" ColumnName="NombreTrabajo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OP_RO_EjecucionInstructivo_Add" FunctionName="OP_RO_Model.Store.OP_RO_EjecucionInstructivo_Add" />
+          <FunctionImportMapping FunctionImportName="OP_RO_EjecucionInstructivo_Del" FunctionName="OP_RO_Model.Store.OP_RO_EjecucionInstructivo_Del" />
+          <FunctionImportMapping FunctionImportName="OP_RO_EjecucionInstructivo_Edit" FunctionName="OP_RO_Model.Store.OP_RO_EjecucionInstructivo_Edit" />
+          <FunctionImportMapping FunctionImportName="OP_RO_EjecucionInstructivo_Get" FunctionName="OP_RO_Model.Store.OP_RO_EjecucionInstructivo_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OP_RO_Model.OP_RO_EjecucionInstructivo_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="FechaHoraObservacion" ColumnName="FechaHoraObservacion" />
+                <ScalarProperty Name="Observacion" ColumnName="Observacion" />
+                <ScalarProperty Name="DescripcionObservacion" ColumnName="DescripcionObservacion" />
+                <ScalarProperty Name="RespuestaGerenteProyectos" ColumnName="RespuestaGerenteProyectos" />
+                <ScalarProperty Name="FechaHoraRespuesta" ColumnName="FechaHoraRespuesta" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="NombreTrabajo" ColumnName="NombreTrabajo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OP_RO_EjecucionMaterialAyuda_Add" FunctionName="OP_RO_Model.Store.OP_RO_EjecucionMaterialAyuda_Add" />
+          <FunctionImportMapping FunctionImportName="OP_RO_EjecucionMaterialAyuda_Del" FunctionName="OP_RO_Model.Store.OP_RO_EjecucionMaterialAyuda_Del" />
+          <FunctionImportMapping FunctionImportName="OP_RO_EjecucionMaterialAyuda_Edit" FunctionName="OP_RO_Model.Store.OP_RO_EjecucionMaterialAyuda_Edit" />
+          <FunctionImportMapping FunctionImportName="OP_RO_EjecucionMaterialAyuda_Get" FunctionName="OP_RO_Model.Store.OP_RO_EjecucionMaterialAyuda_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OP_RO_Model.OP_RO_EjecucionMaterialAyuda_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="FechaHoraObservacion" ColumnName="FechaHoraObservacion" />
+                <ScalarProperty Name="Observacion" ColumnName="Observacion" />
+                <ScalarProperty Name="DescripcionObservacion" ColumnName="DescripcionObservacion" />
+                <ScalarProperty Name="RespuestaGerenteProyectos" ColumnName="RespuestaGerenteProyectos" />
+                <ScalarProperty Name="FechaHoraRespuesta" ColumnName="FechaHoraRespuesta" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="NombreTrabajo" ColumnName="NombreTrabajo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OP_RO_EjecucionMetodologia_Add" FunctionName="OP_RO_Model.Store.OP_RO_EjecucionMetodologia_Add" />
+          <FunctionImportMapping FunctionImportName="OP_RO_EjecucionMetodologia_Del" FunctionName="OP_RO_Model.Store.OP_RO_EjecucionMetodologia_Del" />
+          <FunctionImportMapping FunctionImportName="OP_RO_EjecucionMetodologia_Edit" FunctionName="OP_RO_Model.Store.OP_RO_EjecucionMetodologia_Edit" />
+          <FunctionImportMapping FunctionImportName="OP_RO_EjecucionMetodologia_Get" FunctionName="OP_RO_Model.Store.OP_RO_EjecucionMetodologia_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OP_RO_Model.OP_RO_EjecucionMetodologia_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="FechaHoraObservacion" ColumnName="FechaHoraObservacion" />
+                <ScalarProperty Name="Observacion" ColumnName="Observacion" />
+                <ScalarProperty Name="DescripcionObservacion" ColumnName="DescripcionObservacion" />
+                <ScalarProperty Name="RespuestaGerenteProyectos" ColumnName="RespuestaGerenteProyectos" />
+                <ScalarProperty Name="FechaHoraRespuesta" ColumnName="FechaHoraRespuesta" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="NombreTrabajo" ColumnName="NombreTrabajo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OP_RO_RevisionCuestionario_Add" FunctionName="OP_RO_Model.Store.OP_RO_RevisionCuestionario_Add" />
+          <FunctionImportMapping FunctionImportName="OP_RO_RevisionCuestionario_Del" FunctionName="OP_RO_Model.Store.OP_RO_RevisionCuestionario_Del" />
+          <FunctionImportMapping FunctionImportName="OP_RO_RevisionCuestionario_Edit" FunctionName="OP_RO_Model.Store.OP_RO_RevisionCuestionario_Edit" />
+          <FunctionImportMapping FunctionImportName="OP_RO_RevisionCuestionario_Get" FunctionName="OP_RO_Model.Store.OP_RO_RevisionCuestionario_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OP_RO_Model.OP_RO_RevisionCuestionario_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="FechaHoraObservacion" ColumnName="FechaHoraObservacion" />
+                <ScalarProperty Name="Pregunta" ColumnName="Pregunta" />
+                <ScalarProperty Name="Observacion" ColumnName="Observacion" />
+                <ScalarProperty Name="DescripcionObservacion" ColumnName="DescripcionObservacion" />
+                <ScalarProperty Name="RespuestaGerenteProyectos" ColumnName="RespuestaGerenteProyectos" />
+                <ScalarProperty Name="FechaHoraRespuesta" ColumnName="FechaHoraRespuesta" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="NombreTrabajo" ColumnName="NombreTrabajo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OP_RO_RevisionInstructivo_Add" FunctionName="OP_RO_Model.Store.OP_RO_RevisionInstructivo_Add" />
+          <FunctionImportMapping FunctionImportName="OP_RO_RevisionInstructivo_Del" FunctionName="OP_RO_Model.Store.OP_RO_RevisionInstructivo_Del" />
+          <FunctionImportMapping FunctionImportName="OP_RO_RevisionInstructivo_Edit" FunctionName="OP_RO_Model.Store.OP_RO_RevisionInstructivo_Edit" />
+          <FunctionImportMapping FunctionImportName="OP_RO_RevisionInstructivo_Get" FunctionName="OP_RO_Model.Store.OP_RO_RevisionInstructivo_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OP_RO_Model.OP_RO_RevisionInstructivo_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="FechaHoraObservacion" ColumnName="FechaHoraObservacion" />
+                <ScalarProperty Name="Observacion" ColumnName="Observacion" />
+                <ScalarProperty Name="DescripcionObservacion" ColumnName="DescripcionObservacion" />
+                <ScalarProperty Name="RespuestaGerenteProyectos" ColumnName="RespuestaGerenteProyectos" />
+                <ScalarProperty Name="FechaHoraRespuesta" ColumnName="FechaHoraRespuesta" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="NombreTrabajo" ColumnName="NombreTrabajo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OP_RO_RevisionMaterialAyuda_Add" FunctionName="OP_RO_Model.Store.OP_RO_RevisionMaterialAyuda_Add" />
+          <FunctionImportMapping FunctionImportName="OP_RO_RevisionMaterialAyuda_Del" FunctionName="OP_RO_Model.Store.OP_RO_RevisionMaterialAyuda_Del" />
+          <FunctionImportMapping FunctionImportName="OP_RO_RevisionMaterialAyuda_Edit" FunctionName="OP_RO_Model.Store.OP_RO_RevisionMaterialAyuda_Edit" />
+          <FunctionImportMapping FunctionImportName="OP_RO_RevisionMaterialAyuda_Get" FunctionName="OP_RO_Model.Store.OP_RO_RevisionMaterialAyuda_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OP_RO_Model.OP_RO_RevisionMaterialAyuda_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="FechaHoraObservacion" ColumnName="FechaHoraObservacion" />
+                <ScalarProperty Name="Observacion" ColumnName="Observacion" />
+                <ScalarProperty Name="DescripcionObservacion" ColumnName="DescripcionObservacion" />
+                <ScalarProperty Name="RespuestaGerenteProyectos" ColumnName="RespuestaGerenteProyectos" />
+                <ScalarProperty Name="FechaHoraRespuesta" ColumnName="FechaHoraRespuesta" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="NombreTrabajo" ColumnName="NombreTrabajo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OP_RO_RevisionMetodologia_Add" FunctionName="OP_RO_Model.Store.OP_RO_RevisionMetodologia_Add" />
+          <FunctionImportMapping FunctionImportName="OP_RO_RevisionMetodologia_Del" FunctionName="OP_RO_Model.Store.OP_RO_RevisionMetodologia_Del" />
+          <FunctionImportMapping FunctionImportName="OP_RO_RevisionMetodologia_Edit" FunctionName="OP_RO_Model.Store.OP_RO_RevisionMetodologia_Edit" />
+          <FunctionImportMapping FunctionImportName="OP_RO_RevisionMetodologia_Get" FunctionName="OP_RO_Model.Store.OP_RO_RevisionMetodologia_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OP_RO_Model.OP_RO_RevisionMetodologia_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="FechaHoraObservacion" ColumnName="FechaHoraObservacion" />
+                <ScalarProperty Name="Observacion" ColumnName="Observacion" />
+                <ScalarProperty Name="DescripcionObservacion" ColumnName="DescripcionObservacion" />
+                <ScalarProperty Name="RespuestaGerenteProyectos" ColumnName="RespuestaGerenteProyectos" />
+                <ScalarProperty Name="FechaHoraRespuesta" ColumnName="FechaHoraRespuesta" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="NombreTrabajo" ColumnName="NombreTrabajo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer>
+    <edmx:Connection>
+      <edmx:DesignerInfoPropertySet>
+        <edmx:DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </edmx:DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <edmx:DesignerInfoPropertySet>
+        <edmx:DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <edmx:DesignerProperty Name="EnablePluralization" Value="False" />
+        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <edmx:DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </edmx:DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <edmx:Diagram Name="OP_RO_Model" />
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

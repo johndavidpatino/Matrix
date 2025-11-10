@@ -1,0 +1,2461 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="MatrixModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CORE_Hilos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TipoHiloId" Type="bigint" />
+          <Property Name="ContenedorId" Type="bigint" />
+        </EntityType>
+        <EntityType Name="CORE_Planeacion">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Core_WorkFlow_Id" Type="bigint" Nullable="false" />
+          <Property Name="FechaInicio" Type="date" />
+          <Property Name="FechaFin" Type="date" />
+          <Property Name="FechaRegistro" Type="datetime" />
+          <Property Name="Usuario" Type="bigint" />
+          <Property Name="Observacion" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="CORE_Retroalimentacion">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Fecha" Type="datetime" />
+          <Property Name="Usuario" Type="bigint" />
+          <Property Name="TipoId" Type="tinyint" />
+          <Property Name="Mensaje" Type="varchar(max)" />
+          <Property Name="Respuesta" Type="varchar(max)" />
+          <Property Name="UsuarioResponde" Type="bigint" />
+          <Property Name="Solucionado" Type="bit" />
+          <Property Name="FechaSolucion" Type="datetime" />
+        </EntityType>
+        <EntityType Name="CORE_Tareas">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Tarea" Type="varchar" MaxLength="150" />
+          <Property Name="NoEmpiezaAntesDe" Type="bigint" />
+          <Property Name="NoTerminaAntesDe" Type="bigint" />
+          <Property Name="TiempoPromedioDias" Type="smallint" />
+          <Property Name="RequiereEstimacion" Type="bit" />
+          <Property Name="RolEstima" Type="bigint" />
+          <Property Name="UnidadEjecuta" Type="bigint" />
+          <Property Name="UnidadRecibe" Type="bigint" />
+          <Property Name="RolEjecuta" Type="bigint" />
+          <Property Name="Visible" Type="bit" />
+          <Property Name="Orden" Type="bigint" />
+        </EntityType>
+        <EntityType Name="CORE_Tareas_Documentos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TareaId" Type="bigint" Nullable="false" />
+          <Property Name="DocumentoId" Type="bigint" Nullable="false" />
+          <Property Name="TipoDocumentoTareaId" Type="smallint" />
+          <Property Name="EsOpcional" Type="bit" />
+        </EntityType>
+        <EntityType Name="CORE_TareasPrevias">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TipoHiloId" Type="bigint" Nullable="false" />
+          <Property Name="TareaId" Type="bigint" Nullable="false" />
+          <Property Name="TareaPreviaId" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CORE_TipoHilo_Tareas">
+          <Key>
+            <PropertyRef Name="TipoHiloId" />
+            <PropertyRef Name="TareaId" />
+          </Key>
+          <Property Name="TipoHiloId" Type="bigint" Nullable="false" />
+          <Property Name="TareaId" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CORE_TipoHilos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" Nullable="false" />
+          <Property Name="Hilo" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="CORE_TipoRetroalimentacion">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="tinyint" Nullable="false" />
+          <Property Name="Tipo" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="CORE_Unidades">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" Nullable="false" />
+          <Property Name="Unidad" Type="varchar" MaxLength="50" />
+          <Property Name="MultiUnidad" Type="bit" />
+        </EntityType>
+        <EntityType Name="CORE_WorkFlow">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="HiloId" Type="bigint" />
+          <Property Name="TareaId" Type="bigint" />
+          <Property Name="FIniP" Type="date" />
+          <Property Name="FFinP" Type="date" />
+          <Property Name="FIniR" Type="date" />
+          <Property Name="FFinR" Type="date" />
+          <Property Name="UsuarioEstima" Type="bigint" />
+          <Property Name="UsuarioAsignado" Type="bigint" />
+          <Property Name="Estado" Type="tinyint" />
+          <Property Name="FechaUltimoEstado" Type="datetime" />
+          <Property Name="ObservacionesPlaneacion" Type="varchar(max)" />
+          <Property Name="ObservacionesEjecucion" Type="varchar(max)" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="CORE_WorkFlow_UsuariosAsignados">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="WorkFlowId" Type="bigint" Nullable="false" />
+          <Property Name="UsuarioId" Type="bigint" Nullable="false" />
+          <Property Name="FechaAsignacion" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CORE_WorkflowEstados">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Estado" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="US_RolesUsuarios">
+          <Key>
+            <PropertyRef Name="UsuarioId" />
+            <PropertyRef Name="RolId" />
+          </Key>
+          <Property Name="UsuarioId" Type="bigint" Nullable="false" />
+          <Property Name="RolId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="US_Usuarios">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" Nullable="false" />
+          <Property Name="Usuario" Type="varchar" MaxLength="30" />
+          <Property Name="Password" Type="varchar" MaxLength="50" />
+          <Property Name="Nombres" Type="varchar" MaxLength="250" />
+          <Property Name="Apellidos" Type="varchar" MaxLength="250" />
+          <Property Name="Email" Type="varchar" MaxLength="250" />
+          <Property Name="Activo" Type="bit" />
+        </EntityType>
+        <Association Name="FK_CORE_Hilos_CORE_TipoHilos">
+          <End Role="CORE_TipoHilos" Type="Self.CORE_TipoHilos" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="CORE_Hilos" Type="Self.CORE_Hilos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CORE_TipoHilos">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CORE_Hilos">
+              <PropertyRef Name="TipoHiloId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CORE_Planeacion_CORE_WorkFlow">
+          <End Role="CORE_WorkFlow" Type="Self.CORE_WorkFlow" Multiplicity="1" />
+          <End Role="CORE_Planeacion" Type="Self.CORE_Planeacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CORE_WorkFlow">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CORE_Planeacion">
+              <PropertyRef Name="Core_WorkFlow_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CORE_Retroalimentacion_CORE_TipoRetroalimentacion">
+          <End Role="CORE_TipoRetroalimentacion" Type="Self.CORE_TipoRetroalimentacion" Multiplicity="0..1" />
+          <End Role="CORE_Retroalimentacion" Type="Self.CORE_Retroalimentacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CORE_TipoRetroalimentacion">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CORE_Retroalimentacion">
+              <PropertyRef Name="TipoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CORE_Retroalimentacion_US_Usuarios">
+          <End Role="US_Usuarios" Type="Self.US_Usuarios" Multiplicity="0..1" />
+          <End Role="CORE_Retroalimentacion" Type="Self.CORE_Retroalimentacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="US_Usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CORE_Retroalimentacion">
+              <PropertyRef Name="Usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CORE_Retroalimentacion_US_Usuarios1">
+          <End Role="US_Usuarios" Type="Self.US_Usuarios" Multiplicity="0..1" />
+          <End Role="CORE_Retroalimentacion" Type="Self.CORE_Retroalimentacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="US_Usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CORE_Retroalimentacion">
+              <PropertyRef Name="UsuarioResponde" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CORE_Tareas_CORE_Unidades">
+          <End Role="CORE_Unidades" Type="Self.CORE_Unidades" Multiplicity="0..1" />
+          <End Role="CORE_Tareas" Type="Self.CORE_Tareas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CORE_Unidades">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CORE_Tareas">
+              <PropertyRef Name="UnidadEjecuta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CORE_Tareas_Documentos_CORE_Tareas">
+          <End Role="CORE_Tareas" Type="Self.CORE_Tareas" Multiplicity="1" />
+          <End Role="CORE_Tareas_Documentos" Type="Self.CORE_Tareas_Documentos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CORE_Tareas">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CORE_Tareas_Documentos">
+              <PropertyRef Name="TareaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CORE_TareasPrevias_CORE_TipoHilo_Tareas">
+          <End Role="CORE_TipoHilo_Tareas" Type="Self.CORE_TipoHilo_Tareas" Multiplicity="1" />
+          <End Role="CORE_TareasPrevias" Type="Self.CORE_TareasPrevias" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CORE_TipoHilo_Tareas">
+              <PropertyRef Name="TipoHiloId" />
+              <PropertyRef Name="TareaId" />
+            </Principal>
+            <Dependent Role="CORE_TareasPrevias">
+              <PropertyRef Name="TipoHiloId" />
+              <PropertyRef Name="TareaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CORE_TareasPrevias_CORE_TipoHilo_Tareas1">
+          <End Role="CORE_TipoHilo_Tareas" Type="Self.CORE_TipoHilo_Tareas" Multiplicity="1" />
+          <End Role="CORE_TareasPrevias" Type="Self.CORE_TareasPrevias" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CORE_TipoHilo_Tareas">
+              <PropertyRef Name="TipoHiloId" />
+              <PropertyRef Name="TareaId" />
+            </Principal>
+            <Dependent Role="CORE_TareasPrevias">
+              <PropertyRef Name="TipoHiloId" />
+              <PropertyRef Name="TareaPreviaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CORE_TipoHilo_Tareas_CORE_Tareas">
+          <End Role="CORE_Tareas" Type="Self.CORE_Tareas" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="CORE_TipoHilo_Tareas" Type="Self.CORE_TipoHilo_Tareas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CORE_Tareas">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CORE_TipoHilo_Tareas">
+              <PropertyRef Name="TareaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CORE_TipoHilo_Tareas_CORE_TipoHilos">
+          <End Role="CORE_TipoHilos" Type="Self.CORE_TipoHilos" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="CORE_TipoHilo_Tareas" Type="Self.CORE_TipoHilo_Tareas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CORE_TipoHilos">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CORE_TipoHilo_Tareas">
+              <PropertyRef Name="TipoHiloId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CORE_WorkFlow_CORE_Hilos">
+          <End Role="CORE_Hilos" Type="Self.CORE_Hilos" Multiplicity="0..1" />
+          <End Role="CORE_WorkFlow" Type="Self.CORE_WorkFlow" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CORE_Hilos">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CORE_WorkFlow">
+              <PropertyRef Name="HiloId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CORE_WorlFlow_UsuariosAsignados_CORE_WorkFlow">
+          <End Role="CORE_WorkFlow" Type="Self.CORE_WorkFlow" Multiplicity="1" />
+          <End Role="CORE_WorkFlow_UsuariosAsignados" Type="Self.CORE_WorkFlow_UsuariosAsignados" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CORE_WorkFlow">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CORE_WorkFlow_UsuariosAsignados">
+              <PropertyRef Name="WorkFlowId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CORE_WorlFlow_UsuariosAsignados_US_Usuarios">
+          <End Role="US_Usuarios" Type="Self.US_Usuarios" Multiplicity="1" />
+          <End Role="CORE_WorkFlow_UsuariosAsignados" Type="Self.CORE_WorkFlow_UsuariosAsignados" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="US_Usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CORE_WorkFlow_UsuariosAsignados">
+              <PropertyRef Name="UsuarioId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_US_RolesUsuarios_US_Usuarios">
+          <End Role="US_Usuarios" Type="Self.US_Usuarios" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="US_RolesUsuarios" Type="Self.US_RolesUsuarios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="US_Usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="US_RolesUsuarios">
+              <PropertyRef Name="UsuarioId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="f_Constantes_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" StoreFunctionName="_Constantes_Get">
+          <Parameter Name="Id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="CORE_Asunto_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="CORE_Configuracion_DocumentosXTarea_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TareaId" Type="bigint" Mode="In" />
+          <Parameter Name="TipoDocumentoTareaId" Type="smallint" Mode="In" />
+          <Parameter Name="Asignado" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="CORE_Configuracion_Tareas_Previas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TareaId" Type="bigint" Mode="In" />
+          <Parameter Name="TipoHiloId" Type="bigint" Mode="In" />
+          <Parameter Name="Asignada" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="CORE_Configuracion_TareasXTipoHilo_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TipoHiloId" Type="bigint" Mode="In" />
+          <Parameter Name="Asignada" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="CORE_DestinatariosCorreosNotificacionFecha" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TareaId" Type="bigint" Mode="In" />
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="CORE_DocumentosRequeridosXTarea_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TareaId" Type="bigint" Mode="In" />
+          <Parameter Name="TipoDocumentoTareaId" Type="smallint" Mode="In" />
+          <Parameter Name="IdContenedor" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="CORE_DocumentosXHilo_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdContenedor" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="CORE_Feedback_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Usuario" Type="bigint" Mode="In" />
+          <Parameter Name="TipoId" Type="int" Mode="In" />
+          <Parameter Name="Mensaje" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="CORE_Hilo_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TipoHiloId" Type="bigint" Mode="In" />
+          <Parameter Name="ContenedorId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="CORE_HilosGetxContenedor" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CONTENEDOR" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="Core_Log_Entrada_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UsuarioId" Type="bigint" Mode="In" />
+          <Parameter Name="Fecha" Type="datetime" Mode="In" />
+          <Parameter Name="Ip" Type="varchar" Mode="In" />
+          <Parameter Name="NomEquipo" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="CORE_Log_WorkFlow_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="core_WorkFlow_Id" Type="bigint" Mode="In" />
+          <Parameter Name="fechaRegistro" Type="datetime" Mode="In" />
+          <Parameter Name="usuario" Type="bigint" Mode="In" />
+          <Parameter Name="EstadoWorkFlow_Id" Type="smallint" Mode="In" />
+          <Parameter Name="observacion" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="CORE_Log_WorkFlow_MasivoEstadoCreada_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+          <Parameter Name="FechaRegistro" Type="datetime" Mode="In" />
+          <Parameter Name="Usuario" Type="bigint" Mode="In" />
+          <Parameter Name="tipohiloId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="CORE_ObservacionesTareas_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="core_WorkFlow_Id" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="CORE_obtenerCantidadTareasXTrabajo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idUsuario" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="CORE_obtenerusuariosasignados_get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idtrabajo" Type="bigint" Mode="In" />
+          <Parameter Name="rolid" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="CORE_Planeacion_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Core_WorkFlow_Id" Type="bigint" Mode="In" />
+          <Parameter Name="FechaInicio" Type="date" Mode="In" />
+          <Parameter Name="FechaFin" Type="date" Mode="In" />
+          <Parameter Name="Usuario" Type="bigint" Mode="In" />
+          <Parameter Name="FechaRegistro" Type="datetime" Mode="In" />
+          <Parameter Name="Observacion" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="CORE_Tareas_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="CORE_TareasDependientes_Finalizar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="tareaId" Type="bigint" Mode="In" />
+          <Parameter Name="trabajoId" Type="bigint" Mode="In" />
+          <Parameter Name="usuarioId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="CORE_TareasXUnidadEjecuta" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="unidadEjecuta" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="CORE_Trabajos_WithWorkFlow" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="bigint" Mode="In" />
+          <Parameter Name="HiloId" Type="bigint" Mode="In" />
+          <Parameter Name="TareaId" Type="bigint" Mode="In" />
+          <Parameter Name="FIniP" Type="date" Mode="In" />
+          <Parameter Name="FFinP" Type="date" Mode="In" />
+          <Parameter Name="FIniR" Type="date" Mode="In" />
+          <Parameter Name="FFinR" Type="date" Mode="In" />
+          <Parameter Name="UsuarioEstima" Type="bigint" Mode="In" />
+          <Parameter Name="UsuarioAsignado" Type="bigint" Mode="In" />
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+          <Parameter Name="TodosCampos" Type="varchar(max)" Mode="In" />
+          <Parameter Name="RolEstima" Type="int" Mode="In" />
+          <Parameter Name="EstadoWorkFlow_Id" Type="smallint" Mode="In" />
+          <Parameter Name="unidadEjecuta" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="CORE_TrabajosTareas_Count_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CoeId" Type="bigint" Mode="In" />
+          <Parameter Name="GerenteProyectosId" Type="bigint" Mode="In" />
+          <Parameter Name="Core_UnidadId" Type="bigint" Mode="In" />
+          <Parameter Name="UnidadesId" Type="nvarchar" Mode="In" />
+          <Parameter Name="NombreTrabajo" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="CodEstadoActual" Type="bigint" Mode="In" />
+          <Parameter Name="anoRegistro" Type="numeric" Mode="In" />
+          <Parameter Name="mesRegistro" Type="numeric" Mode="In" />
+        </Function>
+        <Function Name="CORE_TrabajosTareas_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CoeId" Type="bigint" Mode="In" />
+          <Parameter Name="GerenteProyectosId" Type="bigint" Mode="In" />
+          <Parameter Name="Core_UnidadId" Type="bigint" Mode="In" />
+          <Parameter Name="UnidadesId" Type="nvarchar" Mode="In" />
+          <Parameter Name="NombreTrabajo" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="CodEstadoActual" Type="bigint" Mode="In" />
+          <Parameter Name="PaginaActual" Type="numeric" Mode="In" />
+          <Parameter Name="TamanoPagina" Type="numeric" Mode="In" />
+          <Parameter Name="anoRegistro" Type="numeric" Mode="In" />
+          <Parameter Name="mesRegistro" Type="numeric" Mode="In" />
+        </Function>
+        <Function Name="Core_UnidadesAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="CORE_UsuariosAsignadosXProceso" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idProceso" Type="tinyint" Mode="In" />
+        </Function>
+        <Function Name="CORE_WorkFlow_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="HiloId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="CORE_WorkFlow_AddDuplicados" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TareaId" Type="bigint" Mode="In" />
+          <Parameter Name="Hilo" Type="bigint" Mode="In" />
+          <Parameter Name="FIniP" Type="date" Mode="In" />
+          <Parameter Name="FFinP" Type="date" Mode="In" />
+          <Parameter Name="FIniR" Type="date" Mode="In" />
+          <Parameter Name="FFinR" Type="date" Mode="In" />
+          <Parameter Name="UsuarioEstima" Type="bigint" Mode="In" />
+          <Parameter Name="UsuarioAsignado" Type="bigint" Mode="In" />
+          <Parameter Name="Estado" Type="tinyint" Mode="In" />
+          <Parameter Name="FechaUltimoEstado" Type="date" Mode="In" />
+          <Parameter Name="ObservacionesPlaneacion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="ObservacionesEjecucion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Descripcion" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="CORE_WorkFlow_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="bigint" Mode="In" />
+          <Parameter Name="FIniP" Type="date" Mode="In" />
+          <Parameter Name="FFinP" Type="date" Mode="In" />
+          <Parameter Name="FIniR" Type="date" Mode="In" />
+          <Parameter Name="FFinR" Type="date" Mode="In" />
+          <Parameter Name="UsuarioEstima" Type="bigint" Mode="In" />
+          <Parameter Name="UsuarioAsignado" Type="bigint" Mode="In" />
+          <Parameter Name="ObservacionesPlaneacion" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="CORE_WorkFlow_GetxHiloid" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Hiloid" Type="int" Mode="In" />
+        </Function>
+        <Function Name="CORE_WorkFlow_GetXTrabajoXTarea" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="trabajoid" Type="bigint" Mode="In" />
+          <Parameter Name="tareaid" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="CORE_WorkFlow_TareasAsociadas_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="trabajoId" Type="bigint" Mode="In" />
+          <Parameter Name="tareaId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="CORE_WorkFlow_TareasPrevias_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TipoHiloId" Type="bigint" Mode="In" />
+          <Parameter Name="TareaId" Type="bigint" Mode="In" />
+          <Parameter Name="trabajoId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="CORE_WorkFlow_Trabajos_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="bigint" Mode="In" />
+          <Parameter Name="HiloId" Type="bigint" Mode="In" />
+          <Parameter Name="TareaId" Type="bigint" Mode="In" />
+          <Parameter Name="FIniP" Type="date" Mode="In" />
+          <Parameter Name="FFinP" Type="date" Mode="In" />
+          <Parameter Name="FIniR" Type="date" Mode="In" />
+          <Parameter Name="FFinR" Type="date" Mode="In" />
+          <Parameter Name="UsuarioEstima" Type="bigint" Mode="In" />
+          <Parameter Name="UsuarioAsignado" Type="bigint" Mode="In" />
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+          <Parameter Name="TodosCampos" Type="varchar(max)" Mode="In" />
+          <Parameter Name="RolEstima" Type="int" Mode="In" />
+          <Parameter Name="EstadoWorkFlow_Id" Type="smallint" Mode="In" />
+          <Parameter Name="unidadEjecuta" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="CORE_WorkFlow_UsuariosANotificarTareaDevuelta_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="trabajoId" Type="bigint" Mode="In" />
+          <Parameter Name="tareaId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="CORE_WorkFlow_UsuariosAsignados_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="WorkFlowId" Type="bigint" Mode="In" />
+          <Parameter Name="Asignado" Type="bit" Mode="In" />
+          <Parameter Name="RolId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="CT_TareasList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TareaWFId" Type="bigint" Mode="In" />
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+          <Parameter Name="RolEstima" Type="bigint" Mode="In" />
+          <Parameter Name="UnidadEjecuta" Type="bigint" Mode="In" />
+          <Parameter Name="EstadoNo" Type="int" Mode="In" />
+          <Parameter Name="UsuarioId" Type="bigint" Mode="In" />
+          <Parameter Name="Estado" Type="int" Mode="In" />
+          <Parameter Name="FIniP" Type="date" Mode="In" />
+          <Parameter Name="FFinP" Type="date" Mode="In" />
+          <Parameter Name="FIniR" Type="date" Mode="In" />
+          <Parameter Name="FFinR" Type="date" Mode="In" />
+        </Function>
+        <Function Name="CT_TareasListPendientesAsignacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TareaWFId" Type="bigint" Mode="In" />
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+          <Parameter Name="RolEstima" Type="bigint" Mode="In" />
+          <Parameter Name="UnidadEjecuta" Type="bigint" Mode="In" />
+          <Parameter Name="EstadoNo" Type="int" Mode="In" />
+          <Parameter Name="UsuarioId" Type="bigint" Mode="In" />
+          <Parameter Name="Estado" Type="int" Mode="In" />
+        </Function>
+        <Function Name="CT_TareasPrevias" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TipoHiloId" Type="bigint" Mode="In" />
+          <Parameter Name="WFId" Type="bigint" Mode="In" />
+          <Parameter Name="trabajoId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="CT_TareasTrabajosList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UsuarioId" Type="bigint" Mode="In" />
+          <Parameter Name="Estado" Type="int" Mode="In" />
+        </Function>
+        <Function Name="CT_UnidadesAsignacionXUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="USUARIO" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="Divipola_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Pais" Type="int" Mode="In" />
+        </Function>
+        <Function Name="LogEjecucionAdd" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FromId" Type="int" Mode="In" />
+          <Parameter Name="idDoc" Type="bigint" Mode="In" />
+          <Parameter Name="Fecha" Type="datetime" Mode="In" />
+          <Parameter Name="UsuarioId" Type="bigint" Mode="In" />
+          <Parameter Name="AccionId" Type="tinyint" Mode="In" />
+        </Function>
+        <EntityContainer Name="MatrixModelStoreContainer">
+          <EntitySet Name="CORE_Hilos" EntityType="Self.CORE_Hilos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CORE_Planeacion" EntityType="Self.CORE_Planeacion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CORE_Retroalimentacion" EntityType="Self.CORE_Retroalimentacion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CORE_Tareas" EntityType="Self.CORE_Tareas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CORE_Tareas_Documentos" EntityType="Self.CORE_Tareas_Documentos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CORE_TareasPrevias" EntityType="Self.CORE_TareasPrevias" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CORE_TipoHilo_Tareas" EntityType="Self.CORE_TipoHilo_Tareas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CORE_TipoHilos" EntityType="Self.CORE_TipoHilos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CORE_TipoRetroalimentacion" EntityType="Self.CORE_TipoRetroalimentacion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CORE_Unidades" EntityType="Self.CORE_Unidades" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CORE_WorkFlow" EntityType="Self.CORE_WorkFlow" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CORE_WorkFlow_UsuariosAsignados" EntityType="Self.CORE_WorkFlow_UsuariosAsignados" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CORE_WorkflowEstados" EntityType="Self.CORE_WorkflowEstados" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="US_RolesUsuarios" EntityType="Self.US_RolesUsuarios" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="US_Usuarios" EntityType="Self.US_Usuarios" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_CORE_Hilos_CORE_TipoHilos" Association="Self.FK_CORE_Hilos_CORE_TipoHilos">
+            <End Role="CORE_TipoHilos" EntitySet="CORE_TipoHilos" />
+            <End Role="CORE_Hilos" EntitySet="CORE_Hilos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CORE_Planeacion_CORE_WorkFlow" Association="Self.FK_CORE_Planeacion_CORE_WorkFlow">
+            <End Role="CORE_WorkFlow" EntitySet="CORE_WorkFlow" />
+            <End Role="CORE_Planeacion" EntitySet="CORE_Planeacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CORE_Retroalimentacion_CORE_TipoRetroalimentacion" Association="Self.FK_CORE_Retroalimentacion_CORE_TipoRetroalimentacion">
+            <End Role="CORE_TipoRetroalimentacion" EntitySet="CORE_TipoRetroalimentacion" />
+            <End Role="CORE_Retroalimentacion" EntitySet="CORE_Retroalimentacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CORE_Retroalimentacion_US_Usuarios" Association="Self.FK_CORE_Retroalimentacion_US_Usuarios">
+            <End Role="US_Usuarios" EntitySet="US_Usuarios" />
+            <End Role="CORE_Retroalimentacion" EntitySet="CORE_Retroalimentacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CORE_Retroalimentacion_US_Usuarios1" Association="Self.FK_CORE_Retroalimentacion_US_Usuarios1">
+            <End Role="US_Usuarios" EntitySet="US_Usuarios" />
+            <End Role="CORE_Retroalimentacion" EntitySet="CORE_Retroalimentacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CORE_Tareas_CORE_Unidades" Association="Self.FK_CORE_Tareas_CORE_Unidades">
+            <End Role="CORE_Unidades" EntitySet="CORE_Unidades" />
+            <End Role="CORE_Tareas" EntitySet="CORE_Tareas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CORE_Tareas_Documentos_CORE_Tareas" Association="Self.FK_CORE_Tareas_Documentos_CORE_Tareas">
+            <End Role="CORE_Tareas" EntitySet="CORE_Tareas" />
+            <End Role="CORE_Tareas_Documentos" EntitySet="CORE_Tareas_Documentos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CORE_TareasPrevias_CORE_TipoHilo_Tareas" Association="Self.FK_CORE_TareasPrevias_CORE_TipoHilo_Tareas">
+            <End Role="CORE_TipoHilo_Tareas" EntitySet="CORE_TipoHilo_Tareas" />
+            <End Role="CORE_TareasPrevias" EntitySet="CORE_TareasPrevias" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CORE_TareasPrevias_CORE_TipoHilo_Tareas1" Association="Self.FK_CORE_TareasPrevias_CORE_TipoHilo_Tareas1">
+            <End Role="CORE_TipoHilo_Tareas" EntitySet="CORE_TipoHilo_Tareas" />
+            <End Role="CORE_TareasPrevias" EntitySet="CORE_TareasPrevias" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CORE_TipoHilo_Tareas_CORE_Tareas" Association="Self.FK_CORE_TipoHilo_Tareas_CORE_Tareas">
+            <End Role="CORE_Tareas" EntitySet="CORE_Tareas" />
+            <End Role="CORE_TipoHilo_Tareas" EntitySet="CORE_TipoHilo_Tareas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CORE_TipoHilo_Tareas_CORE_TipoHilos" Association="Self.FK_CORE_TipoHilo_Tareas_CORE_TipoHilos">
+            <End Role="CORE_TipoHilos" EntitySet="CORE_TipoHilos" />
+            <End Role="CORE_TipoHilo_Tareas" EntitySet="CORE_TipoHilo_Tareas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CORE_WorkFlow_CORE_Hilos" Association="Self.FK_CORE_WorkFlow_CORE_Hilos">
+            <End Role="CORE_Hilos" EntitySet="CORE_Hilos" />
+            <End Role="CORE_WorkFlow" EntitySet="CORE_WorkFlow" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CORE_WorlFlow_UsuariosAsignados_CORE_WorkFlow" Association="Self.FK_CORE_WorlFlow_UsuariosAsignados_CORE_WorkFlow">
+            <End Role="CORE_WorkFlow" EntitySet="CORE_WorkFlow" />
+            <End Role="CORE_WorkFlow_UsuariosAsignados" EntitySet="CORE_WorkFlow_UsuariosAsignados" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CORE_WorlFlow_UsuariosAsignados_US_Usuarios" Association="Self.FK_CORE_WorlFlow_UsuariosAsignados_US_Usuarios">
+            <End Role="US_Usuarios" EntitySet="US_Usuarios" />
+            <End Role="CORE_WorkFlow_UsuariosAsignados" EntitySet="CORE_WorkFlow_UsuariosAsignados" />
+          </AssociationSet>
+          <AssociationSet Name="FK_US_RolesUsuarios_US_Usuarios" Association="Self.FK_US_RolesUsuarios_US_Usuarios">
+            <End Role="US_Usuarios" EntitySet="US_Usuarios" />
+            <End Role="US_RolesUsuarios" EntitySet="US_RolesUsuarios" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MatrixModel" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2009/11/edm" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <EntityContainer Name="CORE_Entities" annotation:LazyLoadingEnabled="true" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+          <FunctionImport Name="CORE_DocumentosRequeridosXTarea_Get" ReturnType="Collection(MatrixModel.CORE_DocumentosRequeridosXTarea_Get_Result)">
+            <Parameter Name="TareaId" Mode="In" Type="Int64" />
+            <Parameter Name="TipoDocumentoTareaId" Mode="In" Type="Int16" />
+            <Parameter Name="IdContenedor" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="CORE_WorkFlow_Trabajos_Get" ReturnType="Collection(MatrixModel.CORE_WorkFlow_Trabajos_Get_Result)">
+            <Parameter Name="Id" Mode="In" Type="Int64" />
+            <Parameter Name="HiloId" Mode="In" Type="Int64" />
+            <Parameter Name="TareaId" Mode="In" Type="Int64" />
+            <Parameter Name="FIniP" Mode="In" Type="DateTime" />
+            <Parameter Name="FFinP" Mode="In" Type="DateTime" />
+            <Parameter Name="FIniR" Mode="In" Type="DateTime" />
+            <Parameter Name="FFinR" Mode="In" Type="DateTime" />
+            <Parameter Name="UsuarioEstima" Mode="In" Type="Int64" />
+            <Parameter Name="UsuarioAsignado" Mode="In" Type="Int64" />
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+            <Parameter Name="TodosCampos" Mode="In" Type="String" />
+            <Parameter Name="RolEstima" Mode="In" Type="Int32" />
+            <Parameter Name="EstadoWorkFlow_Id" Mode="In" Type="Int16" />
+            <Parameter Name="unidadEjecuta" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="CORE_Hilo_Add" ReturnType="Collection(Decimal)">
+            <Parameter Name="TipoHiloId" Mode="In" Type="Int64" />
+            <Parameter Name="ContenedorId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="CORE_WorkFlow_Add">
+          <Parameter Name="HiloId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="CORE_WorkFlow_Edit">
+            <Parameter Name="id" Mode="In" Type="Int64" />
+            <Parameter Name="FIniP" Mode="In" Type="DateTime" />
+            <Parameter Name="FFinP" Mode="In" Type="DateTime" />
+            <Parameter Name="FIniR" Mode="In" Type="DateTime" />
+            <Parameter Name="FFinR" Mode="In" Type="DateTime" />
+            <Parameter Name="UsuarioEstima" Mode="In" Type="Int64" />
+            <Parameter Name="UsuarioAsignado" Mode="In" Type="Int64" />
+            <Parameter Name="ObservacionesPlaneacion" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="CORE_Tareas_Get" ReturnType="Collection(MatrixModel.CORE_Tareas_Get_Result)">
+          <Parameter Name="id" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="CORE_Planeacion_Add" ReturnType="Collection(Decimal)">
+            <Parameter Name="Core_WorkFlow_Id" Mode="In" Type="Int64" />
+            <Parameter Name="FechaInicio" Mode="In" Type="DateTime" />
+            <Parameter Name="FechaFin" Mode="In" Type="DateTime" />
+            <Parameter Name="Usuario" Mode="In" Type="Int64" />
+            <Parameter Name="FechaRegistro" Mode="In" Type="DateTime" />
+            <Parameter Name="Observacion" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="CORE_Log_WorkFlow_MasivoEstadoCreada_Add">
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+            <Parameter Name="FechaRegistro" Mode="In" Type="DateTime" />
+            <Parameter Name="Usuario" Mode="In" Type="Int64" />
+            <Parameter Name="tipohiloId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="CORE_WorkFlow_TareasPrevias_Get" ReturnType="Collection(MatrixModel.CORE_WorkFlow_TareasPrevias_Get_Result)">
+            <Parameter Name="TipoHiloId" Mode="In" Type="Int64" />
+            <Parameter Name="TareaId" Mode="In" Type="Int64" />
+            <Parameter Name="trabajoId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="CORE_Log_WorkFlow_Add" ReturnType="Collection(Decimal)">
+            <Parameter Name="core_WorkFlow_Id" Mode="In" Type="Int64" />
+            <Parameter Name="fechaRegistro" Mode="In" Type="DateTime" />
+            <Parameter Name="usuario" Mode="In" Type="Int64" />
+            <Parameter Name="EstadoWorkFlow_Id" Mode="In" Type="Int16" />
+            <Parameter Name="observacion" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Divipola_Get" ReturnType="Collection(MatrixModel.Divipola_Get_Result)">
+          <Parameter Name="Pais" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="CORE_Trabajos_WithWorkFlow" ReturnType="Collection(MatrixModel.CORE_Trabajos_WithWorkFlow_Result)">
+            <Parameter Name="Id" Mode="In" Type="Int64" />
+            <Parameter Name="HiloId" Mode="In" Type="Int64" />
+            <Parameter Name="TareaId" Mode="In" Type="Int64" />
+            <Parameter Name="FIniP" Mode="In" Type="DateTime" />
+            <Parameter Name="FFinP" Mode="In" Type="DateTime" />
+            <Parameter Name="FIniR" Mode="In" Type="DateTime" />
+            <Parameter Name="FFinR" Mode="In" Type="DateTime" />
+            <Parameter Name="UsuarioEstima" Mode="In" Type="Int64" />
+            <Parameter Name="UsuarioAsignado" Mode="In" Type="Int64" />
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+            <Parameter Name="TodosCampos" Mode="In" Type="String" />
+            <Parameter Name="RolEstima" Mode="In" Type="Int32" />
+            <Parameter Name="EstadoWorkFlow_Id" Mode="In" Type="Int16" />
+            <Parameter Name="unidadEjecuta" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="CORE_obtenerCantidadTareasXTrabajo" ReturnType="Collection(MatrixModel.CORE_obtenerCantidadTareasXTrabajo_Result)">
+          <Parameter Name="idUsuario" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="CORE_Asunto_Get" ReturnType="Collection(MatrixModel.CORE_Asunto_Get_Result)" />
+          <FunctionImport Name="CORE_Feedback_Add" ReturnType="Collection(Int64)">
+            <Parameter Name="Usuario" Mode="In" Type="Int64" />
+            <Parameter Name="TipoId" Mode="In" Type="Int32" />
+            <Parameter Name="Mensaje" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="CORE_WorkflowEstados" EntityType="MatrixModel.CORE_WorkflowEstados" />
+          <EntitySet Name="CORE_Retroalimentacion" EntityType="MatrixModel.CORE_Retroalimentacion" />
+          <EntitySet Name="CORE_TipoRetroalimentacion" EntityType="MatrixModel.CORE_TipoRetroalimentacion" />
+          <EntitySet Name="US_Usuarios" EntityType="MatrixModel.US_Usuarios3" />
+          <AssociationSet Name="FK_CORE_Retroalimentacion_CORE_TipoRetroalimentacion" Association="MatrixModel.FK_CORE_Retroalimentacion_CORE_TipoRetroalimentacion">
+            <End Role="CORE_TipoRetroalimentacion" EntitySet="CORE_TipoRetroalimentacion" />
+            <End Role="CORE_Retroalimentacion" EntitySet="CORE_Retroalimentacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CORE_Retroalimentacion_US_Usuarios" Association="MatrixModel.FK_CORE_Retroalimentacion_US_Usuarios">
+            <End Role="US_Usuarios" EntitySet="US_Usuarios" />
+            <End Role="CORE_Retroalimentacion" EntitySet="CORE_Retroalimentacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CORE_Retroalimentacion_US_Usuarios1" Association="MatrixModel.FK_CORE_Retroalimentacion_US_Usuarios1">
+            <End Role="US_Usuarios" EntitySet="US_Usuarios" />
+            <End Role="CORE_Retroalimentacion" EntitySet="CORE_Retroalimentacion" />
+          </AssociationSet>
+          <FunctionImport Name="CORE_WorkFlow_TareasAsociadas_Get" ReturnType="Collection(MatrixModel.CORE_WorkFlow_TareasAsociadas_Get_Result)">
+            <Parameter Name="trabajoId" Mode="In" Type="Int64" />
+            <Parameter Name="tareaId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="CORE_WorkFlow_UsuariosANotificarTareaDevuelta_Get" ReturnType="Collection(MatrixModel.CORE_WorkFlow_UsuariosANotificarTareaDevuelta_Get_Result)">
+            <Parameter Name="trabajoId" Mode="In" Type="Int64" />
+            <Parameter Name="tareaId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="LogEjecucionAdd">
+            <Parameter Name="FromId" Mode="In" Type="Int32" />
+            <Parameter Name="idDoc" Mode="In" Type="Int64" />
+            <Parameter Name="Fecha" Mode="In" Type="DateTime" />
+            <Parameter Name="UsuarioId" Mode="In" Type="Int64" />
+            <Parameter Name="AccionId" Mode="In" Type="Byte" />
+          </FunctionImport>
+          <FunctionImport Name="CORE_TareasDependientes_Finalizar">
+            <Parameter Name="tareaId" Mode="In" Type="Int64" />
+            <Parameter Name="trabajoId" Mode="In" Type="Int64" />
+            <Parameter Name="usuarioId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <EntitySet Name="CORE_Hilos" EntityType="MatrixModel.CORE_Hilos" />
+          <FunctionImport Name="CORE_Configuracion_DocumentosXTarea_Get" ReturnType="Collection(MatrixModel.CORE_Configuracion_DocumentosXTarea_Get_Result)">
+            <Parameter Name="TareaId" Mode="In" Type="Int64" />
+            <Parameter Name="TipoDocumentoTareaId" Mode="In" Type="Int16" />
+            <Parameter Name="Asignado" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <EntitySet Name="CORE_Tareas_Documentos" EntityType="MatrixModel.CORE_Tareas_Documentos" />
+          <EntitySet Name="CORE_TareasPrevias" EntityType="MatrixModel.CORE_TareasPrevias" />
+          <EntitySet Name="CORE_Tareas" EntityType="MatrixModel.CORE_Tareas" />
+          <AssociationSet Name="FK_CORE_Tareas_Documentos_CORE_Tareas" Association="MatrixModel.FK_CORE_Tareas_Documentos_CORE_Tareas">
+            <End Role="CORE_Tareas" EntitySet="CORE_Tareas" />
+            <End Role="CORE_Tareas_Documentos" EntitySet="CORE_Tareas_Documentos" />
+          </AssociationSet>
+          <EntitySet Name="CORE_TipoHilo_Tareas" EntityType="MatrixModel.CORE_TipoHilo_Tareas" />
+          <AssociationSet Name="FK_CORE_TipoHilo_Tareas_CORE_Tareas" Association="MatrixModel.FK_CORE_TipoHilo_Tareas_CORE_Tareas">
+            <End Role="CORE_Tareas" EntitySet="CORE_Tareas" />
+            <End Role="CORE_TipoHilo_Tareas" EntitySet="CORE_TipoHilo_Tareas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CORE_TareasPrevias_CORE_TipoHilo_Tareas" Association="MatrixModel.FK_CORE_TareasPrevias_CORE_TipoHilo_Tareas">
+            <End Role="CORE_TipoHilo_Tareas" EntitySet="CORE_TipoHilo_Tareas" />
+            <End Role="CORE_TareasPrevias" EntitySet="CORE_TareasPrevias" />
+          </AssociationSet>
+          <FunctionImport Name="CORE_Configuracion_Tareas_Previas" ReturnType="Collection(MatrixModel.CORE_Configuracion_Tareas_Previas_Result)">
+            <Parameter Name="TareaId" Mode="In" Type="Int64" />
+            <Parameter Name="TipoHiloId" Mode="In" Type="Int64" />
+            <Parameter Name="Asignada" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <EntitySet Name="CORE_TipoHilos" EntityType="MatrixModel.CORE_TipoHilos" />
+          <AssociationSet Name="FK_CORE_Hilos_CORE_TipoHilos" Association="MatrixModel.FK_CORE_Hilos_CORE_TipoHilos">
+            <End Role="CORE_TipoHilos" EntitySet="CORE_TipoHilos" />
+            <End Role="CORE_Hilos" EntitySet="CORE_Hilos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CORE_TareasPrevias_CORE_TipoHilo_Tareas1" Association="MatrixModel.FK_CORE_TareasPrevias_CORE_TipoHilo_Tareas1">
+            <End Role="CORE_TipoHilo_Tareas" EntitySet="CORE_TipoHilo_Tareas" />
+            <End Role="CORE_TareasPrevias" EntitySet="CORE_TareasPrevias" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CORE_TipoHilo_Tareas_CORE_TipoHilos" Association="MatrixModel.FK_CORE_TipoHilo_Tareas_CORE_TipoHilos">
+            <End Role="CORE_TipoHilos" EntitySet="CORE_TipoHilos" />
+            <End Role="CORE_TipoHilo_Tareas" EntitySet="CORE_TipoHilo_Tareas" />
+          </AssociationSet>
+          <EntitySet Name="CORE_Unidades" EntityType="MatrixModel.CORE_Unidades" />
+          <FunctionImport Name="CORE_Configuracion_TareasXTipoHilo_Get" ReturnType="Collection(MatrixModel.CORE_Configuracion_TareasXTipoHilo_Get_Result)">
+            <Parameter Name="TipoHiloId" Mode="In" Type="Int64" />
+            <Parameter Name="Asignada" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <EntitySet Name="CORE_WorkFlow_UsuariosAsignados" EntityType="MatrixModel.CORE_WorkFlow_UsuariosAsignados" />
+          <AssociationSet Name="FK_CORE_WorlFlow_UsuariosAsignados_US_Usuarios" Association="MatrixModel.FK_CORE_WorlFlow_UsuariosAsignados_US_Usuarios">
+            <End Role="US_Usuarios3" EntitySet="US_Usuarios" />
+            <End Role="CORE_WorkFlow_UsuariosAsignados" EntitySet="CORE_WorkFlow_UsuariosAsignados" />
+          </AssociationSet>
+          <EntitySet Name="US_RolesUsuarios2" EntityType="MatrixModel.US_RolesUsuarios2" />
+          <AssociationSet Name="FK_US_RolesUsuarios_US_Usuarios" Association="MatrixModel.FK_US_RolesUsuarios_US_Usuarios">
+            <End Role="US_Usuarios3" EntitySet="US_Usuarios" />
+            <End Role="US_RolesUsuarios" EntitySet="US_RolesUsuarios2" />
+          </AssociationSet>
+          <FunctionImport Name="CORE_WorkFlow_UsuariosAsignados_Get" ReturnType="Collection(MatrixModel.CORE_WorkFlow_UsuariosAsignados_Get_Result)">
+            <Parameter Name="WorkFlowId" Mode="In" Type="Int64" />
+            <Parameter Name="Asignado" Mode="In" Type="Boolean" />
+            <Parameter Name="RolId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <EntitySet Name="CORE_Planeacion" EntityType="MatrixModel.CORE_Planeacion" />
+          <FunctionImport Name="CORE_DocumentosXHilo_Get" ReturnType="Collection(MatrixModel.CORE_DocumentosXHilo_Get_Result)">
+          <Parameter Name="IdContenedor" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="CORE_ObservacionesTareas_Get" ReturnType="Collection(MatrixModel.CORE_ObservacionesTareas_Get_Result)">
+          <Parameter Name="core_WorkFlow_Id" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <AssociationSet Name="FK_CORE_Tareas_CORE_Unidades" Association="MatrixModel.FK_CORE_Tareas_CORE_Unidades">
+            <End Role="CORE_Unidades" EntitySet="CORE_Unidades" />
+            <End Role="CORE_Tareas" EntitySet="CORE_Tareas" />
+          </AssociationSet>
+          <FunctionImport Name="CORE_WorkFlow_GetXTrabajoXTarea" ReturnType="Collection(MatrixModel.CORE_WorkFlow_GetXTrabajoXTarea_Result)">
+            <Parameter Name="trabajoid" Mode="In" Type="Int64" />
+            <Parameter Name="tareaid" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="CORE_DestinatariosCorreosNotificacionFecha" ReturnType="Collection(MatrixModel.CORE_DestinatariosCorreosNotificacionFecha_Result)">
+            <Parameter Name="TareaId" Mode="In" Type="Int64" />
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="CT_TareasPrevias" ReturnType="Collection(MatrixModel.CT_TareasList_Result)">
+            <Parameter Name="TipoHiloId" Mode="In" Type="Int64" />
+            <Parameter Name="WFId" Mode="In" Type="Int64" />
+            <Parameter Name="trabajoId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <EntitySet Name="CORE_WorkFlow" EntityType="MatrixModel.CORE_WorkFlow" />
+          <AssociationSet Name="FK_CORE_Planeacion_CORE_WorkFlow" Association="MatrixModel.FK_CORE_Planeacion_CORE_WorkFlow">
+            <End Role="CORE_WorkFlow" EntitySet="CORE_WorkFlow" />
+            <End Role="CORE_Planeacion" EntitySet="CORE_Planeacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CORE_WorlFlow_UsuariosAsignados_CORE_WorkFlow" Association="MatrixModel.FK_CORE_WorlFlow_UsuariosAsignados_CORE_WorkFlow">
+            <End Role="CORE_WorkFlow" EntitySet="CORE_WorkFlow" />
+            <End Role="CORE_WorkFlow_UsuariosAsignados" EntitySet="CORE_WorkFlow_UsuariosAsignados" />
+          </AssociationSet>
+          <FunctionImport Name="Core_Log_Entrada_Add">
+            <Parameter Name="UsuarioId" Mode="In" Type="Int64" />
+            <Parameter Name="Fecha" Mode="In" Type="DateTime" />
+            <Parameter Name="Ip" Mode="In" Type="String" />
+            <Parameter Name="NomEquipo" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="CT_TareasTrabajosList" ReturnType="Collection(MatrixModel.CT_TareasTrabajosList_Result)">
+            <Parameter Name="UsuarioId" Mode="In" Type="Int64" />
+            <Parameter Name="Estado" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="CT_TareasListPendientesAsignacion" ReturnType="Collection(MatrixModel.CT_TareasList_Result)">
+            <Parameter Name="TareaWFId" Mode="In" Type="Int64" />
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+            <Parameter Name="RolEstima" Mode="In" Type="Int64" />
+            <Parameter Name="UnidadEjecuta" Mode="In" Type="Int64" />
+            <Parameter Name="EstadoNo" Mode="In" Type="Int32" />
+            <Parameter Name="UsuarioId" Mode="In" Type="Int64" />
+            <Parameter Name="Estado" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="CT_UnidadesAsignacionXUsuario" ReturnType="Collection(MatrixModel.CT_UnidadesAsignacionXUsuario_Result)">
+          <Parameter Name="USUARIO" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="CORE_HilosGetxContenedor" ReturnType="Collection(MatrixModel.CORE_HilosGetxContenedor_Result)">
+          <Parameter Name="CONTENEDOR" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="CORE_WorkFlow_GetxHiloid" ReturnType="Collection(MatrixModel.CORE_WorkFlow_GetxHiloid_Result)">
+          <Parameter Name="Hiloid" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="CORE_WorkFlow_AddDuplicados">
+            <Parameter Name="TareaId" Mode="In" Type="Int64" />
+            <Parameter Name="Hilo" Mode="In" Type="Int64" />
+            <Parameter Name="FIniP" Mode="In" Type="DateTime" />
+            <Parameter Name="FFinP" Mode="In" Type="DateTime" />
+            <Parameter Name="FIniR" Mode="In" Type="DateTime" />
+            <Parameter Name="FFinR" Mode="In" Type="DateTime" />
+            <Parameter Name="UsuarioEstima" Mode="In" Type="Int64" />
+            <Parameter Name="UsuarioAsignado" Mode="In" Type="Int64" />
+            <Parameter Name="Estado" Mode="In" Type="Byte" />
+            <Parameter Name="FechaUltimoEstado" Mode="In" Type="DateTime" />
+            <Parameter Name="ObservacionesPlaneacion" Mode="In" Type="String" />
+            <Parameter Name="ObservacionesEjecucion" Mode="In" Type="String" />
+            <Parameter Name="Descripcion" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="CT_TareasList" ReturnType="Collection(MatrixModel.CT_TareasList_Result)">
+            <Parameter Name="TareaWFId" Mode="In" Type="Int64" />
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+            <Parameter Name="RolEstima" Mode="In" Type="Int64" />
+            <Parameter Name="UnidadEjecuta" Mode="In" Type="Int64" />
+            <Parameter Name="EstadoNo" Mode="In" Type="Int32" />
+            <Parameter Name="UsuarioId" Mode="In" Type="Int64" />
+            <Parameter Name="Estado" Mode="In" Type="Int32" />
+            <Parameter Name="FIniP" Mode="In" Type="DateTime" />
+            <Parameter Name="FFinP" Mode="In" Type="DateTime" />
+            <Parameter Name="FIniR" Mode="In" Type="DateTime" />
+            <Parameter Name="FFinR" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="Core_UnidadesAll" ReturnType="Collection(MatrixModel.Core_UnidadesAll_Result)" />
+          <FunctionImport Name="CORE_obtenerusuariosasignados_get" ReturnType="Collection(MatrixModel.CORE_obtenerusuariosasignados_get_Result)">
+            <Parameter Name="idtrabajo" Mode="In" Type="Int64" />
+            <Parameter Name="rolid" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="f_Constantes_Get" ReturnType="Collection(MatrixModel.f_Constantes_Get_Result)">
+          <Parameter Name="Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <AssociationSet Name="FK_CORE_WorkFlow_CORE_Hilos" Association="MatrixModel.FK_CORE_WorkFlow_CORE_Hilos">
+            <End Role="CORE_Hilos" EntitySet="CORE_Hilos" />
+            <End Role="CORE_WorkFlow" EntitySet="CORE_WorkFlow" />
+          </AssociationSet>
+          <FunctionImport Name="CORE_TareasXUnidadEjecuta" ReturnType="Collection(MatrixModel.CORE_TareasXUnidadEjecuta_Result)">
+          <Parameter Name="unidadEjecuta" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="CORE_UsuariosAsignadosXProceso" ReturnType="Collection(MatrixModel.CORE_UsuariosAsignadosXProceso_Result)">
+          <Parameter Name="idProceso" Mode="In" Type="Byte" />
+          </FunctionImport>
+          <FunctionImport Name="CORE_TrabajosTareas_Count_Get" ReturnType="Collection(Int32)">
+            <Parameter Name="CoeId" Mode="In" Type="Int64" />
+            <Parameter Name="GerenteProyectosId" Mode="In" Type="Int64" />
+            <Parameter Name="Core_UnidadId" Mode="In" Type="Int64" />
+            <Parameter Name="UnidadesId" Mode="In" Type="String" />
+            <Parameter Name="NombreTrabajo" Mode="In" Type="String" />
+            <Parameter Name="CodEstadoActual" Mode="In" Type="Int64" />
+            <Parameter Name="anoRegistro" Mode="In" Type="Decimal" />
+            <Parameter Name="mesRegistro" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="CORE_TrabajosTareas_Get" ReturnType="Collection(MatrixModel.CORE_TrabajosTareas_Get_Result)">
+            <Parameter Name="CoeId" Mode="In" Type="Int64" />
+            <Parameter Name="GerenteProyectosId" Mode="In" Type="Int64" />
+            <Parameter Name="Core_UnidadId" Mode="In" Type="Int64" />
+            <Parameter Name="UnidadesId" Mode="In" Type="String" />
+            <Parameter Name="NombreTrabajo" Mode="In" Type="String" />
+            <Parameter Name="CodEstadoActual" Mode="In" Type="Int64" />
+            <Parameter Name="PaginaActual" Mode="In" Type="Decimal" />
+            <Parameter Name="TamanoPagina" Mode="In" Type="Decimal" />
+            <Parameter Name="anoRegistro" Mode="In" Type="Decimal" />
+            <Parameter Name="mesRegistro" Mode="In" Type="Decimal" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="CORE_DocumentosRequeridosXTarea_Get_Result">
+          <Property Type="Int64" Name="IdDocumento" Nullable="false" />
+          <Property Type="String" Name="Documento" Nullable="true" MaxLength="250" />
+          <Property Type="Boolean" Name="Controlado" Nullable="true" />
+          <Property Type="Boolean" Name="Activo" Nullable="true" />
+          <Property Type="String" Name="Codigo" Nullable="false" MaxLength="100" />
+          <Property Type="Int16" Name="IdProceso" Nullable="true" />
+          <Property Type="String" Name="Responsable" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="Cantidad" Nullable="true" />
+          <Property Type="String" Name="URL" Nullable="true" MaxLength="250" />
+          <Property Type="Int64" Name="TareaId" Nullable="false" />
+          <Property Type="Int64" Name="IdContenedor" Nullable="true" />
+          <Property Type="Boolean" Name="EsOpcional" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="CORE_Tareas_Get_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="String" Name="Tarea" Nullable="true" MaxLength="50" />
+          <Property Type="Int64" Name="NoEmpiezaAntesDe" Nullable="true" />
+          <Property Type="Int64" Name="NoTerminaAntesDe" Nullable="true" />
+          <Property Type="Int16" Name="TiempoPromedioDias" Nullable="true" />
+          <Property Type="Boolean" Name="RequiereEstimacion" Nullable="true" />
+          <Property Type="Int64" Name="RolEstima" Nullable="true" />
+          <Property Type="Int64" Name="UnidadEjecuta" Nullable="true" />
+          <Property Type="Int64" Name="UnidadRecibe" Nullable="true" />
+          <Property Type="Int64" Name="RolEjecuta" Nullable="true" />
+          <Property Type="Boolean" Name="Visible" Nullable="true" />
+          <Property Type="String" Name="TextoRolEjecuta" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="TextoRolEstima" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="TextoUnidadEjecuta" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="CORE_WorkFlow_TareasPrevias_Get_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="String" Name="Tarea" Nullable="true" MaxLength="150" />
+          <Property Type="DateTime" Name="FIniP" Nullable="true" />
+          <Property Type="DateTime" Name="FFinP" Nullable="true" />
+          <Property Type="Int16" Name="EstadoWorkFlow_Id" Nullable="false" />
+          <Property Type="String" Name="JobBook" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Estado" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="Divipola_Get_Result">
+          <Property Type="Int32" Name="DivDeptoMunicipio" Nullable="false" />
+          <Property Type="Int16" Name="DivDepto" Nullable="false" />
+          <Property Type="Int32" Name="DivMunicipio" Nullable="false" />
+          <Property Type="String" Name="DivDeptoNombre" Nullable="false" MaxLength="255" />
+          <Property Type="String" Name="DivMuniNombre" Nullable="false" MaxLength="255" />
+          <Property Type="Int16" Name="DivOrden" Nullable="true" />
+          <Property Type="Int32" Name="Pais" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="CORE_Trabajos_WithWorkFlow_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="Int64" Name="ProyectoId" Nullable="true" />
+          <Property Type="Int32" Name="OP_MetodologiaId" Nullable="true" />
+          <Property Type="Int64" Name="PresupuestoId" Nullable="true" />
+          <Property Type="String" Name="NombreTrabajo" Nullable="true" MaxLength="250" />
+          <Property Type="Int64" Name="Muestra" Nullable="true" />
+          <Property Type="DateTime" Name="FechaTentativaInicioCampo" Nullable="true" />
+          <Property Type="DateTime" Name="FechaTentativaFinalizacion" Nullable="true" />
+          <Property Type="Int64" Name="COE" Nullable="true" />
+          <Property Type="Int32" Name="Unidad" Nullable="true" />
+          <Property Type="String" Name="NombreProyecto" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="NombreMetodologia" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="NombreUnidad" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="JobBook" Nullable="true" MaxLength="20" />
+          <Property Type="Byte" Name="TipoRecoleccionId" Nullable="true" />
+          <Property Type="String" Name="NombreCOE" Nullable="true" MaxLength="501" />
+        </ComplexType>
+        <ComplexType Name="CORE_obtenerCantidadTareasXTrabajo_Result">
+          <Property Type="Int64" Name="ID" Nullable="false" />
+          <Property Type="String" Name="NombreTrabajo" Nullable="true" MaxLength="250" />
+          <Property Type="Int32" Name="Creada" Nullable="true" />
+          <Property Type="Int32" Name="EnCurso" Nullable="true" />
+          <Property Type="Int32" Name="Asignada" Nullable="true" />
+          <Property Type="Int32" Name="Devuelta" Nullable="true" />
+          <Property Type="Int32" Name="Finalizada" Nullable="true" />
+          <Property Type="Int32" Name="NoAplica" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="CORE_Asunto_Get_Result">
+          <Property Type="Byte" Name="id" Nullable="false" />
+          <Property Type="String" Name="Tipo" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <EntityType Name="CORE_WorkflowEstados">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int16" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="String" Name="Estado" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="CORE_Retroalimentacion">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int64" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="DateTime" Name="Fecha" Precision="3" />
+          <Property Type="Int64" Name="Usuario" />
+          <Property Type="Byte" Name="TipoId" />
+          <Property Type="String" Name="Mensaje" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Respuesta" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="Int64" Name="UsuarioResponde" />
+          <Property Type="Boolean" Name="Solucionado" />
+          <Property Type="DateTime" Name="FechaSolucion" Precision="3" />
+          <NavigationProperty Name="CORE_TipoRetroalimentacion" Relationship="MatrixModel.FK_CORE_Retroalimentacion_CORE_TipoRetroalimentacion" FromRole="CORE_Retroalimentacion" ToRole="CORE_TipoRetroalimentacion" />
+          <NavigationProperty Name="US_Usuarios" Relationship="MatrixModel.FK_CORE_Retroalimentacion_US_Usuarios" FromRole="CORE_Retroalimentacion" ToRole="US_Usuarios" />
+          <NavigationProperty Name="US_Usuarios1" Relationship="MatrixModel.FK_CORE_Retroalimentacion_US_Usuarios1" FromRole="CORE_Retroalimentacion" ToRole="US_Usuarios" />
+        </EntityType>
+        <EntityType Name="CORE_TipoRetroalimentacion">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Byte" Name="id" Nullable="false" />
+          <Property Type="String" Name="Tipo" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="CORE_Retroalimentacion" Relationship="MatrixModel.FK_CORE_Retroalimentacion_CORE_TipoRetroalimentacion" FromRole="CORE_TipoRetroalimentacion" ToRole="CORE_Retroalimentacion" />
+        </EntityType>
+        <EntityType Name="US_Usuarios3">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="String" Name="Usuario" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Password" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Nombres" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Apellidos" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Email" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="Activo" />
+          <NavigationProperty Name="CORE_Retroalimentacion" Relationship="MatrixModel.FK_CORE_Retroalimentacion_US_Usuarios" FromRole="US_Usuarios" ToRole="CORE_Retroalimentacion" />
+          <NavigationProperty Name="CORE_Retroalimentacion1" Relationship="MatrixModel.FK_CORE_Retroalimentacion_US_Usuarios1" FromRole="US_Usuarios" ToRole="CORE_Retroalimentacion" />
+          <NavigationProperty Name="CORE_WorkFlow_UsuariosAsignados" Relationship="MatrixModel.FK_CORE_WorlFlow_UsuariosAsignados_US_Usuarios" FromRole="US_Usuarios3" ToRole="CORE_WorkFlow_UsuariosAsignados" />
+          <NavigationProperty Name="US_RolesUsuarios" Relationship="MatrixModel.FK_US_RolesUsuarios_US_Usuarios" FromRole="US_Usuarios3" ToRole="US_RolesUsuarios" />
+        </EntityType>
+        <Association Name="FK_CORE_Retroalimentacion_CORE_TipoRetroalimentacion">
+          <End Type="MatrixModel.CORE_TipoRetroalimentacion" Role="CORE_TipoRetroalimentacion" Multiplicity="0..1" />
+          <End Type="MatrixModel.CORE_Retroalimentacion" Role="CORE_Retroalimentacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CORE_TipoRetroalimentacion">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CORE_Retroalimentacion">
+              <PropertyRef Name="TipoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CORE_Retroalimentacion_US_Usuarios">
+          <End Type="MatrixModel.US_Usuarios3" Role="US_Usuarios" Multiplicity="0..1" />
+          <End Type="MatrixModel.CORE_Retroalimentacion" Role="CORE_Retroalimentacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="US_Usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CORE_Retroalimentacion">
+              <PropertyRef Name="Usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CORE_Retroalimentacion_US_Usuarios1">
+          <End Type="MatrixModel.US_Usuarios3" Role="US_Usuarios" Multiplicity="0..1" />
+          <End Type="MatrixModel.CORE_Retroalimentacion" Role="CORE_Retroalimentacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="US_Usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CORE_Retroalimentacion">
+              <PropertyRef Name="UsuarioResponde" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="CORE_WorkFlow_TareasAsociadas_Get_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="250" />
+        </ComplexType>
+        <ComplexType Name="CORE_WorkFlow_UsuariosANotificarTareaDevuelta_Get_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="250" />
+        </ComplexType>
+        <EntityType Name="CORE_Hilos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int64" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="Int64" Name="TipoHiloId" />
+          <Property Type="Int64" Name="ContenedorId" />
+          <NavigationProperty Name="CORE_TipoHilos" Relationship="MatrixModel.FK_CORE_Hilos_CORE_TipoHilos" FromRole="CORE_Hilos" ToRole="CORE_TipoHilos" />
+          <NavigationProperty Name="CORE_WorkFlow" Relationship="MatrixModel.FK_CORE_WorkFlow_CORE_Hilos" FromRole="CORE_Hilos" ToRole="CORE_WorkFlow" />
+        </EntityType>
+        <ComplexType Name="CORE_Configuracion_DocumentosXTarea_Get_Result">
+          <Property Type="Int64" Name="IdDocumento" Nullable="false" />
+          <Property Type="String" Name="Documento" Nullable="true" MaxLength="250" />
+          <Property Type="Boolean" Name="Controlado" Nullable="true" />
+          <Property Type="Boolean" Name="Activo" Nullable="true" />
+          <Property Type="String" Name="Codigo" Nullable="false" MaxLength="100" />
+          <Property Type="Int16" Name="IdProceso" Nullable="true" />
+          <Property Type="String" Name="Responsable" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="URL" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="Asignado" Nullable="false" MaxLength="5" />
+          <Property Type="Int64" Name="TareaId" Nullable="true" />
+          <Property Type="Int64" Name="id" Nullable="true" />
+          <Property Type="Boolean" Name="EsOpcional" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="CORE_Tareas_Documentos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int64" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="Int64" Name="TareaId" Nullable="false" />
+          <Property Type="Int64" Name="DocumentoId" Nullable="false" />
+          <Property Type="Int16" Name="TipoDocumentoTareaId" />
+          <Property Type="Boolean" Name="EsOpcional" />
+          <NavigationProperty Name="CORE_Tareas" Relationship="MatrixModel.FK_CORE_Tareas_Documentos_CORE_Tareas" FromRole="CORE_Tareas_Documentos" ToRole="CORE_Tareas" />
+        </EntityType>
+        <EntityType Name="CORE_TareasPrevias">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int64" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="Int64" Name="TipoHiloId" Nullable="false" />
+          <Property Type="Int64" Name="TareaId" Nullable="false" />
+          <Property Type="Int64" Name="TareaPreviaId" Nullable="false" />
+          <NavigationProperty Name="CORE_TipoHilo_Tareas" Relationship="MatrixModel.FK_CORE_TareasPrevias_CORE_TipoHilo_Tareas" FromRole="CORE_TareasPrevias" ToRole="CORE_TipoHilo_Tareas" />
+          <NavigationProperty Name="CORE_TipoHilo_Tareas1" Relationship="MatrixModel.FK_CORE_TareasPrevias_CORE_TipoHilo_Tareas1" FromRole="CORE_TareasPrevias" ToRole="CORE_TipoHilo_Tareas" />
+        </EntityType>
+        <EntityType Name="CORE_Tareas">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int64" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="String" Name="Tarea" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Type="Int64" Name="NoEmpiezaAntesDe" />
+          <Property Type="Int64" Name="NoTerminaAntesDe" />
+          <Property Type="Int16" Name="TiempoPromedioDias" />
+          <Property Type="Boolean" Name="RequiereEstimacion" />
+          <Property Type="Int64" Name="RolEstima" />
+          <Property Type="Int64" Name="UnidadEjecuta" />
+          <Property Type="Int64" Name="UnidadRecibe" />
+          <Property Type="Int64" Name="RolEjecuta" />
+          <Property Type="Boolean" Name="Visible" />
+          <NavigationProperty Name="CORE_Tareas_Documentos" Relationship="MatrixModel.FK_CORE_Tareas_Documentos_CORE_Tareas" FromRole="CORE_Tareas" ToRole="CORE_Tareas_Documentos" />
+          <NavigationProperty Name="CORE_TipoHilo_Tareas" Relationship="MatrixModel.FK_CORE_TipoHilo_Tareas_CORE_Tareas" FromRole="CORE_Tareas" ToRole="CORE_TipoHilo_Tareas" />
+          <Property Type="Int64" Name="Orden" />
+          <NavigationProperty Name="CORE_Unidades" Relationship="MatrixModel.FK_CORE_Tareas_CORE_Unidades" FromRole="CORE_Tareas" ToRole="CORE_Unidades" />
+        </EntityType>
+        <Association Name="FK_CORE_Tareas_Documentos_CORE_Tareas">
+          <End Type="MatrixModel.CORE_Tareas" Role="CORE_Tareas" Multiplicity="1" />
+          <End Type="MatrixModel.CORE_Tareas_Documentos" Role="CORE_Tareas_Documentos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CORE_Tareas">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CORE_Tareas_Documentos">
+              <PropertyRef Name="TareaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="CORE_TipoHilo_Tareas">
+          <Key>
+            <PropertyRef Name="TipoHiloId" />
+            <PropertyRef Name="TareaId" />
+          </Key>
+          <Property Type="Int64" Name="TipoHiloId" Nullable="false" />
+          <Property Type="Int64" Name="TareaId" Nullable="false" />
+          <NavigationProperty Name="CORE_Tareas" Relationship="MatrixModel.FK_CORE_TipoHilo_Tareas_CORE_Tareas" FromRole="CORE_TipoHilo_Tareas" ToRole="CORE_Tareas" />
+          <NavigationProperty Name="CORE_TareasPrevias" Relationship="MatrixModel.FK_CORE_TareasPrevias_CORE_TipoHilo_Tareas" FromRole="CORE_TipoHilo_Tareas" ToRole="CORE_TareasPrevias" />
+          <NavigationProperty Name="CORE_TareasPrevias1" Relationship="MatrixModel.FK_CORE_TareasPrevias_CORE_TipoHilo_Tareas1" FromRole="CORE_TipoHilo_Tareas" ToRole="CORE_TareasPrevias" />
+          <NavigationProperty Name="CORE_TipoHilos" Relationship="MatrixModel.FK_CORE_TipoHilo_Tareas_CORE_TipoHilos" FromRole="CORE_TipoHilo_Tareas" ToRole="CORE_TipoHilos" />
+        </EntityType>
+        <Association Name="FK_CORE_TipoHilo_Tareas_CORE_Tareas">
+          <End Type="MatrixModel.CORE_Tareas" Role="CORE_Tareas" Multiplicity="1" />
+          <End Type="MatrixModel.CORE_TipoHilo_Tareas" Role="CORE_TipoHilo_Tareas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CORE_Tareas">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CORE_TipoHilo_Tareas">
+              <PropertyRef Name="TareaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CORE_TareasPrevias_CORE_TipoHilo_Tareas">
+          <End Type="MatrixModel.CORE_TipoHilo_Tareas" Role="CORE_TipoHilo_Tareas" Multiplicity="1" />
+          <End Type="MatrixModel.CORE_TareasPrevias" Role="CORE_TareasPrevias" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CORE_TipoHilo_Tareas">
+              <PropertyRef Name="TipoHiloId" />
+              <PropertyRef Name="TareaId" />
+            </Principal>
+            <Dependent Role="CORE_TareasPrevias">
+              <PropertyRef Name="TipoHiloId" />
+              <PropertyRef Name="TareaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="CORE_Configuracion_Tareas_Previas_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="String" Name="Tarea" Nullable="true" MaxLength="150" />
+          <Property Type="Int64" Name="NoEmpiezaAntesDe" Nullable="true" />
+          <Property Type="Int64" Name="NoTerminaAntesDe" Nullable="true" />
+          <Property Type="Int16" Name="TiempoPromedioDias" Nullable="true" />
+          <Property Type="Boolean" Name="RequiereEstimacion" Nullable="true" />
+          <Property Type="Int64" Name="RolEstima" Nullable="true" />
+          <Property Type="Int64" Name="UnidadEjecuta" Nullable="true" />
+          <Property Type="Int64" Name="UnidadRecibe" Nullable="true" />
+          <Property Type="Int64" Name="RolEjecuta" Nullable="true" />
+          <Property Type="Boolean" Name="Visible" Nullable="true" />
+          <Property Type="String" Name="Asignada" Nullable="false" MaxLength="5" />
+          <Property Type="String" Name="TextoRolEjecuta" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="TextoRolEstima" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="TextoUnidadEjecuta" Nullable="true" MaxLength="50" />
+          <Property Type="Int64" Name="CORE_TareasPrevias_Id" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="CORE_TipoHilos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="String" Name="Hilo" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="CORE_Hilos" Relationship="MatrixModel.FK_CORE_Hilos_CORE_TipoHilos" FromRole="CORE_TipoHilos" ToRole="CORE_Hilos" />
+          <NavigationProperty Name="CORE_TipoHilo_Tareas" Relationship="MatrixModel.FK_CORE_TipoHilo_Tareas_CORE_TipoHilos" FromRole="CORE_TipoHilos" ToRole="CORE_TipoHilo_Tareas" />
+        </EntityType>
+        <Association Name="FK_CORE_Hilos_CORE_TipoHilos">
+          <End Type="MatrixModel.CORE_TipoHilos" Role="CORE_TipoHilos" Multiplicity="0..1" />
+          <End Type="MatrixModel.CORE_Hilos" Role="CORE_Hilos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CORE_TipoHilos">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CORE_Hilos">
+              <PropertyRef Name="TipoHiloId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CORE_TareasPrevias_CORE_TipoHilo_Tareas1">
+          <End Type="MatrixModel.CORE_TipoHilo_Tareas" Role="CORE_TipoHilo_Tareas" Multiplicity="1" />
+          <End Type="MatrixModel.CORE_TareasPrevias" Role="CORE_TareasPrevias" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CORE_TipoHilo_Tareas">
+              <PropertyRef Name="TipoHiloId" />
+              <PropertyRef Name="TareaId" />
+            </Principal>
+            <Dependent Role="CORE_TareasPrevias">
+              <PropertyRef Name="TipoHiloId" />
+              <PropertyRef Name="TareaPreviaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CORE_TipoHilo_Tareas_CORE_TipoHilos">
+          <End Type="MatrixModel.CORE_TipoHilos" Role="CORE_TipoHilos" Multiplicity="1" />
+          <End Type="MatrixModel.CORE_TipoHilo_Tareas" Role="CORE_TipoHilo_Tareas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CORE_TipoHilos">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CORE_TipoHilo_Tareas">
+              <PropertyRef Name="TipoHiloId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="CORE_Unidades">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="String" Name="Unidad" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="CORE_Tareas" Relationship="MatrixModel.FK_CORE_Tareas_CORE_Unidades" FromRole="CORE_Unidades" ToRole="CORE_Tareas" />
+          <Property Name="MultiUnidad" Type="Boolean" />
+        </EntityType>
+        <ComplexType Name="CORE_Configuracion_TareasXTipoHilo_Get_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="String" Name="Tarea" Nullable="true" MaxLength="150" />
+          <Property Type="Int64" Name="NoEmpiezaAntesDe" Nullable="true" />
+          <Property Type="Int64" Name="NoTerminaAntesDe" Nullable="true" />
+          <Property Type="Int16" Name="TiempoPromedioDias" Nullable="true" />
+          <Property Type="Boolean" Name="RequiereEstimacion" Nullable="true" />
+          <Property Type="Int64" Name="RolEstima" Nullable="true" />
+          <Property Type="Int64" Name="UnidadEjecuta" Nullable="true" />
+          <Property Type="Int64" Name="UnidadRecibe" Nullable="true" />
+          <Property Type="Int64" Name="RolEjecuta" Nullable="true" />
+          <Property Type="Boolean" Name="Visible" Nullable="true" />
+          <Property Type="String" Name="TextoRolEjecuta" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="TextoRolEstima" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="TextoUnidadEjecuta" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Asignada" Nullable="false" MaxLength="5" />
+        </ComplexType>
+        <EntityType Name="CORE_WorkFlow_UsuariosAsignados">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int64" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="Int64" Name="WorkFlowId" Nullable="false" />
+          <Property Type="Int64" Name="UsuarioId" Nullable="false" />
+          <Property Type="DateTime" Name="FechaAsignacion" Nullable="false" Precision="3" />
+          <NavigationProperty Name="US_Usuarios" Relationship="MatrixModel.FK_CORE_WorlFlow_UsuariosAsignados_US_Usuarios" FromRole="CORE_WorkFlow_UsuariosAsignados" ToRole="US_Usuarios3" />
+          <NavigationProperty Name="CORE_WorkFlow" Relationship="MatrixModel.FK_CORE_WorlFlow_UsuariosAsignados_CORE_WorkFlow" FromRole="CORE_WorkFlow_UsuariosAsignados" ToRole="CORE_WorkFlow" />
+        </EntityType>
+        <Association Name="FK_CORE_WorlFlow_UsuariosAsignados_US_Usuarios">
+          <End Type="MatrixModel.US_Usuarios3" Role="US_Usuarios3" Multiplicity="1" />
+          <End Type="MatrixModel.CORE_WorkFlow_UsuariosAsignados" Role="CORE_WorkFlow_UsuariosAsignados" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="US_Usuarios3">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CORE_WorkFlow_UsuariosAsignados">
+              <PropertyRef Name="UsuarioId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="US_RolesUsuarios2">
+          <Key>
+            <PropertyRef Name="UsuarioId" />
+            <PropertyRef Name="RolId" />
+          </Key>
+          <Property Type="Int64" Name="UsuarioId" Nullable="false" />
+          <Property Type="Int32" Name="RolId" Nullable="false" />
+          <NavigationProperty Name="US_Usuarios" Relationship="MatrixModel.FK_US_RolesUsuarios_US_Usuarios" FromRole="US_RolesUsuarios" ToRole="US_Usuarios3" />
+        </EntityType>
+        <Association Name="FK_US_RolesUsuarios_US_Usuarios">
+          <End Type="MatrixModel.US_Usuarios3" Role="US_Usuarios3" Multiplicity="1" />
+          <End Type="MatrixModel.US_RolesUsuarios2" Role="US_RolesUsuarios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="US_Usuarios3">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="US_RolesUsuarios">
+              <PropertyRef Name="UsuarioId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="CORE_WorkFlow_UsuariosAsignados_Get_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="String" Name="Usuario" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Password" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Nombres" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="Apellidos" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="250" />
+          <Property Type="Boolean" Name="Activo" Nullable="true" />
+          <Property Type="String" Name="Asignado" Nullable="false" MaxLength="5" />
+          <Property Type="Int64" Name="WorkFlowId" Nullable="true" />
+          <Property Type="Int64" Name="CORE_WorkFlow_UsuariosAsignados_Id" Nullable="true" />
+          <Property Type="String" Name="Nombre" Nullable="true" MaxLength="501" />
+          <Property Type="Int64" Name="UsuarioId" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="CORE_Planeacion">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int64" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="Int64" Name="Core_WorkFlow_Id" Nullable="false" />
+          <Property Type="DateTime" Name="FechaInicio" Precision="0" />
+          <Property Type="DateTime" Name="FechaFin" Precision="0" />
+          <Property Type="DateTime" Name="FechaRegistro" Precision="3" />
+          <Property Type="Int64" Name="Usuario" />
+          <Property Type="String" Name="Observacion" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="CORE_WorkFlow" Relationship="MatrixModel.FK_CORE_Planeacion_CORE_WorkFlow" FromRole="CORE_Planeacion" ToRole="CORE_WorkFlow" />
+        </EntityType>
+        <ComplexType Name="CORE_DocumentosXHilo_Get_Result">
+          <Property Type="Int64" Name="IdDocumento" Nullable="false" />
+          <Property Type="String" Name="Documento" Nullable="true" MaxLength="250" />
+          <Property Type="Boolean" Name="Controlado" Nullable="true" />
+          <Property Type="Boolean" Name="Activo" Nullable="true" />
+          <Property Type="String" Name="Codigo" Nullable="false" MaxLength="100" />
+          <Property Type="Int16" Name="IdProceso" Nullable="true" />
+          <Property Type="String" Name="Responsable" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="URL" Nullable="true" MaxLength="250" />
+          <Property Type="Int32" Name="Cantidad" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="CORE_ObservacionesTareas_Get_Result">
+          <Property Type="DateTime" Name="FechaRegistro" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Observacion" Nullable="true" />
+          <Property Type="String" Name="Usuario" Nullable="true" MaxLength="501" />
+          <Property Type="String" Name="Cargo" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Estado" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <Association Name="FK_CORE_Tareas_CORE_Unidades">
+          <End Type="MatrixModel.CORE_Unidades" Role="CORE_Unidades" Multiplicity="0..1" />
+          <End Type="MatrixModel.CORE_Tareas" Role="CORE_Tareas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CORE_Unidades">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CORE_Tareas">
+              <PropertyRef Name="UnidadEjecuta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="CORE_WorkFlow_GetXTrabajoXTarea_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="Int64" Name="HiloId" Nullable="true" />
+          <Property Type="Int64" Name="TareaId" Nullable="true" />
+          <Property Type="DateTime" Name="FIniP" Nullable="true" />
+          <Property Type="DateTime" Name="FFinP" Nullable="true" />
+          <Property Type="DateTime" Name="FIniR" Nullable="true" />
+          <Property Type="DateTime" Name="FFinR" Nullable="true" />
+          <Property Type="Int64" Name="UsuarioEstima" Nullable="true" />
+          <Property Type="Int64" Name="UsuarioAsignado" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="CORE_DestinatariosCorreosNotificacionFecha_Result">
+          <Property Type="String" Name="email" Nullable="true" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="CT_TareasList_Result">
+          <Property Type="Int64" Name="ID" Nullable="false" />
+          <Property Type="Int64" Name="IDTRABAJO" Nullable="false" />
+          <Property Type="String" Name="JobBook" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="NombreTrabajo" Nullable="true" MaxLength="250" />
+          <Property Type="DateTime" Name="FIniP" Nullable="true" />
+          <Property Type="DateTime" Name="FFinP" Nullable="true" />
+          <Property Type="DateTime" Name="FIniR" Nullable="true" />
+          <Property Type="DateTime" Name="FFinR" Nullable="true" />
+          <Property Type="String" Name="TAREA" Nullable="true" MaxLength="201" />
+          <Property Type="String" Name="Responsable" Nullable="true" MaxLength="501" />
+          <Property Type="String" Name="Estado" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="OBSERVACIONESPLANEACION" Nullable="true" />
+          <Property Type="String" Name="OBSERVACIONESEJECUCION" Nullable="true" />
+          <Property Type="Byte" Name="ESTADOID" Nullable="true" />
+          <Property Type="Int64" Name="USUARIOID" Nullable="true" />
+          <Property Type="Int64" Name="RolEstima" Nullable="true" />
+          <Property Type="Int64" Name="RolEjecuta" Nullable="true" />
+          <Property Type="Int64" Name="TareaId" Nullable="true" />
+          <Property Type="Int32" Name="RETRASO" Nullable="false" />
+        </ComplexType>
+        <EntityType Name="CORE_WorkFlow">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int64" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="Int64" Name="HiloId" />
+          <Property Type="Int64" Name="TareaId" />
+          <Property Type="DateTime" Name="FIniP" Precision="0" />
+          <Property Type="DateTime" Name="FFinP" Precision="0" />
+          <Property Type="DateTime" Name="FIniR" Precision="0" />
+          <Property Type="DateTime" Name="FFinR" Precision="0" />
+          <Property Type="Int64" Name="UsuarioEstima" />
+          <Property Type="Int64" Name="UsuarioAsignado" />
+          <Property Type="Byte" Name="Estado" />
+          <Property Type="DateTime" Name="FechaUltimoEstado" Precision="3" />
+          <Property Type="String" Name="ObservacionesPlaneacion" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ObservacionesEjecucion" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Descripcion" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="CORE_Planeacion" Relationship="MatrixModel.FK_CORE_Planeacion_CORE_WorkFlow" FromRole="CORE_WorkFlow" ToRole="CORE_Planeacion" />
+          <NavigationProperty Name="CORE_WorkFlow_UsuariosAsignados" Relationship="MatrixModel.FK_CORE_WorlFlow_UsuariosAsignados_CORE_WorkFlow" FromRole="CORE_WorkFlow" ToRole="CORE_WorkFlow_UsuariosAsignados" />
+          <NavigationProperty Name="CORE_Hilos" Relationship="MatrixModel.FK_CORE_WorkFlow_CORE_Hilos" FromRole="CORE_WorkFlow" ToRole="CORE_Hilos" />
+        </EntityType>
+        <Association Name="FK_CORE_Planeacion_CORE_WorkFlow">
+          <End Type="MatrixModel.CORE_WorkFlow" Role="CORE_WorkFlow" Multiplicity="1" />
+          <End Type="MatrixModel.CORE_Planeacion" Role="CORE_Planeacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CORE_WorkFlow">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CORE_Planeacion">
+              <PropertyRef Name="Core_WorkFlow_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CORE_WorlFlow_UsuariosAsignados_CORE_WorkFlow">
+          <End Type="MatrixModel.CORE_WorkFlow" Role="CORE_WorkFlow" Multiplicity="1" />
+          <End Type="MatrixModel.CORE_WorkFlow_UsuariosAsignados" Role="CORE_WorkFlow_UsuariosAsignados" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CORE_WorkFlow">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CORE_WorkFlow_UsuariosAsignados">
+              <PropertyRef Name="WorkFlowId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="CT_TareasTrabajosList_Result">
+          <Property Type="Int64" Name="ID" Nullable="false" />
+          <Property Type="Int64" Name="IDTRABAJO" Nullable="false" />
+          <Property Type="String" Name="JobBook" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="NombreTrabajo" Nullable="true" MaxLength="250" />
+        </ComplexType>
+        <ComplexType Name="CT_UnidadesAsignacionXUsuario_Result">
+          <Property Type="Int32" Name="id" Nullable="true" />
+          <Property Type="String" Name="Unidad" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="CORE_HilosGetxContenedor_Result">
+          <Property Type="Int64" Name="ID" Nullable="false" />
+          <Property Type="Int64" Name="TIPOHILOID" Nullable="true" />
+          <Property Type="Int64" Name="CONTENEDORID" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="CORE_WorkFlow_GetxHiloid_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="Int64" Name="HiloId" Nullable="true" />
+          <Property Type="Int64" Name="TareaId" Nullable="true" />
+          <Property Type="DateTime" Name="FIniP" Nullable="true" />
+          <Property Type="DateTime" Name="FFinP" Nullable="true" />
+          <Property Type="DateTime" Name="FIniR" Nullable="true" />
+          <Property Type="DateTime" Name="FFinR" Nullable="true" />
+          <Property Type="Int64" Name="UsuarioEstima" Nullable="true" />
+          <Property Type="Int64" Name="UsuarioAsignado" Nullable="true" />
+          <Property Type="Byte" Name="Estado" Nullable="true" />
+          <Property Type="DateTime" Name="FechaUltimoEstado" Nullable="true" Precision="23" />
+          <Property Type="String" Name="ObservacionesPlaneacion" Nullable="true" />
+          <Property Type="String" Name="ObservacionesEjecucion" Nullable="true" />
+          <Property Type="String" Name="Descripcion" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="Core_UnidadesAll_Result">
+          <Property Type="Int64" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Unidad" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="CORE_WorkFlow_Trabajos_Get_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="DateTime" Name="FFinP" Nullable="true" />
+          <Property Type="DateTime" Name="FFinR" Nullable="true" />
+          <Property Type="DateTime" Name="FIniP" Nullable="true" />
+          <Property Type="DateTime" Name="FIniR" Nullable="true" />
+          <Property Type="Int64" Name="HiloId" Nullable="true" />
+          <Property Type="Int64" Name="TareaId" Nullable="true" />
+          <Property Type="Int64" Name="UsuarioAsignado" Nullable="true" />
+          <Property Type="Int64" Name="UsuarioEstima" Nullable="true" />
+          <Property Type="String" Name="Tarea" Nullable="true" MaxLength="150" />
+          <Property Type="String" Name="JobBook" Nullable="true" MaxLength="20" />
+          <Property Type="Int16" Name="EstadoWorkFlow_Id" Nullable="true" />
+          <Property Type="String" Name="Estado" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Observacion" Nullable="true" />
+          <Property Type="String" Name="TextoUsuarioAsignado" Nullable="true" MaxLength="501" />
+          <Property Type="Int32" Name="CantidadUsuariosAsignados" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="CORE_obtenerusuariosasignados_get_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="String" Name="Usuario" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Password" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Nombres" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="Apellidos" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="250" />
+          <Property Type="Boolean" Name="Activo" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="f_Constantes_Get_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="Descripcion" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Valor" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Adicional" Nullable="true" MaxLength="500" />
+        </ComplexType>
+        <Association Name="FK_CORE_WorkFlow_CORE_Hilos">
+          <End Type="MatrixModel.CORE_Hilos" Role="CORE_Hilos" Multiplicity="0..1" />
+          <End Type="MatrixModel.CORE_WorkFlow" Role="CORE_WorkFlow" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CORE_Hilos">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CORE_WorkFlow">
+              <PropertyRef Name="HiloId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="CORE_TareasXUnidadEjecuta_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="String" Name="Tarea" Nullable="true" MaxLength="150" />
+          <Property Type="Int64" Name="NoEmpiezaAntesDe" Nullable="true" />
+          <Property Type="Int64" Name="NoTerminaAntesDe" Nullable="true" />
+          <Property Type="Int16" Name="TiempoPromedioDias" Nullable="true" />
+          <Property Type="Boolean" Name="RequiereEstimacion" Nullable="true" />
+          <Property Type="Int64" Name="RolEstima" Nullable="true" />
+          <Property Type="Int64" Name="UnidadEjecuta" Nullable="true" />
+          <Property Type="Int64" Name="UnidadRecibe" Nullable="true" />
+          <Property Type="Int64" Name="RolEjecuta" Nullable="true" />
+          <Property Type="Boolean" Name="Visible" Nullable="true" />
+          <Property Type="Int64" Name="Orden" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="CORE_UsuariosAsignadosXProceso_Result">
+          <Property Type="Int64" Name="id" Nullable="true" />
+          <Property Type="String" Name="Usuario" Nullable="true" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="CORE_TrabajosTareas_Get_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="String" Name="NombreTrabajo" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="JobBook" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Proceso" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Unidad" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="GerenteProyectos" Nullable="true" MaxLength="501" />
+          <Property Type="Int64" Name="IdGerenteProyectos" Nullable="true" />
+          <Property Type="String" Name="COE" Nullable="true" MaxLength="501" />
+          <Property Type="Int64" Name="IdCOE" Nullable="true" />
+          <Property Type="String" Name="Tarea" Nullable="true" MaxLength="150" />
+          <Property Type="DateTime" Name="FIniP" Nullable="true" />
+          <Property Type="DateTime" Name="FFinP" Nullable="true" />
+          <Property Type="DateTime" Name="FIniR" Nullable="true" />
+          <Property Type="DateTime" Name="FFinR" Nullable="true" />
+          <Property Type="String" Name="Estado" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="Ano" Nullable="true" />
+          <Property Type="Int32" Name="Mes" Nullable="true" />
+          <Property Type="DateTime" Name="FechaRegistro" Nullable="true" Precision="23" />
+          <Property Type="String" Name="txtEstadoActual" Nullable="true" MaxLength="29" />
+          <Property Type="Int32" Name="codEstadoActual" Nullable="true" />
+          <Property Type="Int64" Name="Posicion" Nullable="true" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MatrixModelStoreContainer" CdmEntityContainer="CORE_Entities">
+          <FunctionImportMapping FunctionImportName="CORE_DocumentosRequeridosXTarea_Get" FunctionName="MatrixModel.Store.CORE_DocumentosRequeridosXTarea_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel.CORE_DocumentosRequeridosXTarea_Get_Result">
+                <ScalarProperty Name="IdDocumento" ColumnName="IdDocumento" />
+                <ScalarProperty Name="Documento" ColumnName="Documento" />
+                <ScalarProperty Name="Controlado" ColumnName="Controlado" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="IdProceso" ColumnName="IdProceso" />
+                <ScalarProperty Name="Responsable" ColumnName="Responsable" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="URL" ColumnName="URL" />
+                <ScalarProperty Name="TareaId" ColumnName="TareaId" />
+                <ScalarProperty Name="IdContenedor" ColumnName="IdContenedor" />
+                <ScalarProperty Name="EsOpcional" ColumnName="EsOpcional" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CORE_WorkFlow_Trabajos_Get" FunctionName="MatrixModel.Store.CORE_WorkFlow_Trabajos_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel.CORE_WorkFlow_Trabajos_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="FFinP" ColumnName="FFinP" />
+                <ScalarProperty Name="FFinR" ColumnName="FFinR" />
+                <ScalarProperty Name="FIniP" ColumnName="FIniP" />
+                <ScalarProperty Name="FIniR" ColumnName="FIniR" />
+                <ScalarProperty Name="HiloId" ColumnName="HiloId" />
+                <ScalarProperty Name="TareaId" ColumnName="TareaId" />
+                <ScalarProperty Name="UsuarioAsignado" ColumnName="UsuarioAsignado" />
+                <ScalarProperty Name="UsuarioEstima" ColumnName="UsuarioEstima" />
+                <ScalarProperty Name="Tarea" ColumnName="Tarea" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="EstadoWorkFlow_Id" ColumnName="EstadoWorkFlow_Id" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Observacion" ColumnName="Observacion" />
+                <ScalarProperty Name="TextoUsuarioAsignado" ColumnName="TextoUsuarioAsignado" />
+                <ScalarProperty Name="CantidadUsuariosAsignados" ColumnName="CantidadUsuariosAsignados" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CORE_Hilo_Add" FunctionName="MatrixModel.Store.CORE_Hilo_Add" />
+          <FunctionImportMapping FunctionImportName="CORE_WorkFlow_Add" FunctionName="MatrixModel.Store.CORE_WorkFlow_Add" />
+          <FunctionImportMapping FunctionImportName="CORE_WorkFlow_Edit" FunctionName="MatrixModel.Store.CORE_WorkFlow_Edit" />
+          <FunctionImportMapping FunctionImportName="CORE_Tareas_Get" FunctionName="MatrixModel.Store.CORE_Tareas_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel.CORE_Tareas_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Tarea" ColumnName="Tarea" />
+                <ScalarProperty Name="NoEmpiezaAntesDe" ColumnName="NoEmpiezaAntesDe" />
+                <ScalarProperty Name="NoTerminaAntesDe" ColumnName="NoTerminaAntesDe" />
+                <ScalarProperty Name="TiempoPromedioDias" ColumnName="TiempoPromedioDias" />
+                <ScalarProperty Name="RequiereEstimacion" ColumnName="RequiereEstimacion" />
+                <ScalarProperty Name="RolEstima" ColumnName="RolEstima" />
+                <ScalarProperty Name="UnidadEjecuta" ColumnName="UnidadEjecuta" />
+                <ScalarProperty Name="UnidadRecibe" ColumnName="UnidadRecibe" />
+                <ScalarProperty Name="RolEjecuta" ColumnName="RolEjecuta" />
+                <ScalarProperty Name="Visible" ColumnName="Visible" />
+                <ScalarProperty Name="TextoRolEjecuta" ColumnName="TextoRolEjecuta" />
+                <ScalarProperty Name="TextoRolEstima" ColumnName="TextoRolEstima" />
+                <ScalarProperty Name="TextoUnidadEjecuta" ColumnName="TextoUnidadEjecuta" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CORE_Planeacion_Add" FunctionName="MatrixModel.Store.CORE_Planeacion_Add" />
+          <FunctionImportMapping FunctionImportName="CORE_Log_WorkFlow_MasivoEstadoCreada_Add" FunctionName="MatrixModel.Store.CORE_Log_WorkFlow_MasivoEstadoCreada_Add" />
+          <FunctionImportMapping FunctionImportName="CORE_WorkFlow_TareasPrevias_Get" FunctionName="MatrixModel.Store.CORE_WorkFlow_TareasPrevias_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel.CORE_WorkFlow_TareasPrevias_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Tarea" ColumnName="Tarea" />
+                <ScalarProperty Name="FIniP" ColumnName="FIniP" />
+                <ScalarProperty Name="FFinP" ColumnName="FFinP" />
+                <ScalarProperty Name="EstadoWorkFlow_Id" ColumnName="EstadoWorkFlow_Id" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CORE_Log_WorkFlow_Add" FunctionName="MatrixModel.Store.CORE_Log_WorkFlow_Add" />
+          <FunctionImportMapping FunctionImportName="Divipola_Get" FunctionName="MatrixModel.Store.Divipola_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel.Divipola_Get_Result">
+                <ScalarProperty Name="DivDeptoMunicipio" ColumnName="DivDeptoMunicipio" />
+                <ScalarProperty Name="DivDepto" ColumnName="DivDepto" />
+                <ScalarProperty Name="DivMunicipio" ColumnName="DivMunicipio" />
+                <ScalarProperty Name="DivDeptoNombre" ColumnName="DivDeptoNombre" />
+                <ScalarProperty Name="DivMuniNombre" ColumnName="DivMuniNombre" />
+                <ScalarProperty Name="DivOrden" ColumnName="DivOrden" />
+                <ScalarProperty Name="Pais" ColumnName="Pais" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CORE_Trabajos_WithWorkFlow" FunctionName="MatrixModel.Store.CORE_Trabajos_WithWorkFlow">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel.CORE_Trabajos_WithWorkFlow_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="ProyectoId" ColumnName="ProyectoId" />
+                <ScalarProperty Name="OP_MetodologiaId" ColumnName="OP_MetodologiaId" />
+                <ScalarProperty Name="PresupuestoId" ColumnName="PresupuestoId" />
+                <ScalarProperty Name="NombreTrabajo" ColumnName="NombreTrabajo" />
+                <ScalarProperty Name="Muestra" ColumnName="Muestra" />
+                <ScalarProperty Name="FechaTentativaInicioCampo" ColumnName="FechaTentativaInicioCampo" />
+                <ScalarProperty Name="FechaTentativaFinalizacion" ColumnName="FechaTentativaFinalizacion" />
+                <ScalarProperty Name="COE" ColumnName="COE" />
+                <ScalarProperty Name="Unidad" ColumnName="Unidad" />
+                <ScalarProperty Name="NombreProyecto" ColumnName="NombreProyecto" />
+                <ScalarProperty Name="NombreMetodologia" ColumnName="NombreMetodologia" />
+                <ScalarProperty Name="NombreUnidad" ColumnName="NombreUnidad" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="TipoRecoleccionId" ColumnName="TipoRecoleccionId" />
+                <ScalarProperty Name="NombreCOE" ColumnName="NombreCOE" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CORE_obtenerCantidadTareasXTrabajo" FunctionName="MatrixModel.Store.CORE_obtenerCantidadTareasXTrabajo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel.CORE_obtenerCantidadTareasXTrabajo_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="NombreTrabajo" ColumnName="NombreTrabajo" />
+                <ScalarProperty Name="Creada" ColumnName="Creada" />
+                <ScalarProperty Name="EnCurso" ColumnName="EnCurso" />
+                <ScalarProperty Name="Asignada" ColumnName="Asignada" />
+                <ScalarProperty Name="Devuelta" ColumnName="Devuelta" />
+                <ScalarProperty Name="Finalizada" ColumnName="Finalizada" />
+                <ScalarProperty Name="NoAplica" ColumnName="NoAplica" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CORE_Asunto_Get" FunctionName="MatrixModel.Store.CORE_Asunto_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel.CORE_Asunto_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CORE_Feedback_Add" FunctionName="MatrixModel.Store.CORE_Feedback_Add" />
+          <EntitySetMapping Name="CORE_WorkflowEstados">
+            <EntityTypeMapping TypeName="MatrixModel.CORE_WorkflowEstados">
+              <MappingFragment StoreEntitySet="CORE_WorkflowEstados">
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CORE_Retroalimentacion">
+            <EntityTypeMapping TypeName="MatrixModel.CORE_Retroalimentacion">
+              <MappingFragment StoreEntitySet="CORE_Retroalimentacion">
+                <ScalarProperty Name="FechaSolucion" ColumnName="FechaSolucion" />
+                <ScalarProperty Name="Solucionado" ColumnName="Solucionado" />
+                <ScalarProperty Name="UsuarioResponde" ColumnName="UsuarioResponde" />
+                <ScalarProperty Name="Respuesta" ColumnName="Respuesta" />
+                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
+                <ScalarProperty Name="TipoId" ColumnName="TipoId" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CORE_TipoRetroalimentacion">
+            <EntityTypeMapping TypeName="MatrixModel.CORE_TipoRetroalimentacion">
+              <MappingFragment StoreEntitySet="CORE_TipoRetroalimentacion">
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="US_Usuarios">
+            <EntityTypeMapping TypeName="MatrixModel.US_Usuarios3">
+              <MappingFragment StoreEntitySet="US_Usuarios">
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+                <ScalarProperty Name="Nombres" ColumnName="Nombres" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="CORE_WorkFlow_TareasAsociadas_Get" FunctionName="MatrixModel.Store.CORE_WorkFlow_TareasAsociadas_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel.CORE_WorkFlow_TareasAsociadas_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CORE_WorkFlow_UsuariosANotificarTareaDevuelta_Get" FunctionName="MatrixModel.Store.CORE_WorkFlow_UsuariosANotificarTareaDevuelta_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel.CORE_WorkFlow_UsuariosANotificarTareaDevuelta_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="LogEjecucionAdd" FunctionName="MatrixModel.Store.LogEjecucionAdd" />
+          <FunctionImportMapping FunctionImportName="CORE_TareasDependientes_Finalizar" FunctionName="MatrixModel.Store.CORE_TareasDependientes_Finalizar" />
+          <EntitySetMapping Name="CORE_Hilos">
+            <EntityTypeMapping TypeName="MatrixModel.CORE_Hilos">
+              <MappingFragment StoreEntitySet="CORE_Hilos">
+                <ScalarProperty Name="ContenedorId" ColumnName="ContenedorId" />
+                <ScalarProperty Name="TipoHiloId" ColumnName="TipoHiloId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="CORE_Configuracion_DocumentosXTarea_Get" FunctionName="MatrixModel.Store.CORE_Configuracion_DocumentosXTarea_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel.CORE_Configuracion_DocumentosXTarea_Get_Result">
+                <ScalarProperty Name="IdDocumento" ColumnName="IdDocumento" />
+                <ScalarProperty Name="Documento" ColumnName="Documento" />
+                <ScalarProperty Name="Controlado" ColumnName="Controlado" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="IdProceso" ColumnName="IdProceso" />
+                <ScalarProperty Name="Responsable" ColumnName="Responsable" />
+                <ScalarProperty Name="URL" ColumnName="URL" />
+                <ScalarProperty Name="Asignado" ColumnName="Asignado" />
+                <ScalarProperty Name="TareaId" ColumnName="TareaId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="EsOpcional" ColumnName="EsOpcional" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="CORE_Tareas_Documentos">
+            <EntityTypeMapping TypeName="MatrixModel.CORE_Tareas_Documentos">
+              <MappingFragment StoreEntitySet="CORE_Tareas_Documentos">
+                <ScalarProperty Name="EsOpcional" ColumnName="EsOpcional" />
+                <ScalarProperty Name="TipoDocumentoTareaId" ColumnName="TipoDocumentoTareaId" />
+                <ScalarProperty Name="DocumentoId" ColumnName="DocumentoId" />
+                <ScalarProperty Name="TareaId" ColumnName="TareaId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CORE_TareasPrevias">
+            <EntityTypeMapping TypeName="MatrixModel.CORE_TareasPrevias">
+              <MappingFragment StoreEntitySet="CORE_TareasPrevias">
+                <ScalarProperty Name="TareaPreviaId" ColumnName="TareaPreviaId" />
+                <ScalarProperty Name="TareaId" ColumnName="TareaId" />
+                <ScalarProperty Name="TipoHiloId" ColumnName="TipoHiloId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CORE_Tareas">
+            <EntityTypeMapping TypeName="MatrixModel.CORE_Tareas">
+              <MappingFragment StoreEntitySet="CORE_Tareas">
+                <ScalarProperty Name="Orden" ColumnName="Orden" />
+                <ScalarProperty Name="Visible" ColumnName="Visible" />
+                <ScalarProperty Name="RolEjecuta" ColumnName="RolEjecuta" />
+                <ScalarProperty Name="UnidadRecibe" ColumnName="UnidadRecibe" />
+                <ScalarProperty Name="UnidadEjecuta" ColumnName="UnidadEjecuta" />
+                <ScalarProperty Name="RolEstima" ColumnName="RolEstima" />
+                <ScalarProperty Name="RequiereEstimacion" ColumnName="RequiereEstimacion" />
+                <ScalarProperty Name="TiempoPromedioDias" ColumnName="TiempoPromedioDias" />
+                <ScalarProperty Name="NoTerminaAntesDe" ColumnName="NoTerminaAntesDe" />
+                <ScalarProperty Name="NoEmpiezaAntesDe" ColumnName="NoEmpiezaAntesDe" />
+                <ScalarProperty Name="Tarea" ColumnName="Tarea" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CORE_TipoHilo_Tareas">
+            <EntityTypeMapping TypeName="MatrixModel.CORE_TipoHilo_Tareas">
+              <MappingFragment StoreEntitySet="CORE_TipoHilo_Tareas">
+                <ScalarProperty Name="TareaId" ColumnName="TareaId" />
+                <ScalarProperty Name="TipoHiloId" ColumnName="TipoHiloId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="CORE_Configuracion_Tareas_Previas" FunctionName="MatrixModel.Store.CORE_Configuracion_Tareas_Previas">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel.CORE_Configuracion_Tareas_Previas_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Tarea" ColumnName="Tarea" />
+                <ScalarProperty Name="NoEmpiezaAntesDe" ColumnName="NoEmpiezaAntesDe" />
+                <ScalarProperty Name="NoTerminaAntesDe" ColumnName="NoTerminaAntesDe" />
+                <ScalarProperty Name="TiempoPromedioDias" ColumnName="TiempoPromedioDias" />
+                <ScalarProperty Name="RequiereEstimacion" ColumnName="RequiereEstimacion" />
+                <ScalarProperty Name="RolEstima" ColumnName="RolEstima" />
+                <ScalarProperty Name="UnidadEjecuta" ColumnName="UnidadEjecuta" />
+                <ScalarProperty Name="UnidadRecibe" ColumnName="UnidadRecibe" />
+                <ScalarProperty Name="RolEjecuta" ColumnName="RolEjecuta" />
+                <ScalarProperty Name="Visible" ColumnName="Visible" />
+                <ScalarProperty Name="Asignada" ColumnName="Asignada" />
+                <ScalarProperty Name="TextoRolEjecuta" ColumnName="TextoRolEjecuta" />
+                <ScalarProperty Name="TextoRolEstima" ColumnName="TextoRolEstima" />
+                <ScalarProperty Name="TextoUnidadEjecuta" ColumnName="TextoUnidadEjecuta" />
+                <ScalarProperty Name="CORE_TareasPrevias_Id" ColumnName="CORE_TareasPrevias_Id" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="CORE_TipoHilos">
+            <EntityTypeMapping TypeName="MatrixModel.CORE_TipoHilos">
+              <MappingFragment StoreEntitySet="CORE_TipoHilos">
+                <ScalarProperty Name="Hilo" ColumnName="Hilo" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CORE_Unidades">
+            <EntityTypeMapping TypeName="MatrixModel.CORE_Unidades">
+              <MappingFragment StoreEntitySet="CORE_Unidades">
+                <ScalarProperty Name="MultiUnidad" ColumnName="MultiUnidad" />
+                <ScalarProperty Name="Unidad" ColumnName="Unidad" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="CORE_Configuracion_TareasXTipoHilo_Get" FunctionName="MatrixModel.Store.CORE_Configuracion_TareasXTipoHilo_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel.CORE_Configuracion_TareasXTipoHilo_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Tarea" ColumnName="Tarea" />
+                <ScalarProperty Name="NoEmpiezaAntesDe" ColumnName="NoEmpiezaAntesDe" />
+                <ScalarProperty Name="NoTerminaAntesDe" ColumnName="NoTerminaAntesDe" />
+                <ScalarProperty Name="TiempoPromedioDias" ColumnName="TiempoPromedioDias" />
+                <ScalarProperty Name="RequiereEstimacion" ColumnName="RequiereEstimacion" />
+                <ScalarProperty Name="RolEstima" ColumnName="RolEstima" />
+                <ScalarProperty Name="UnidadEjecuta" ColumnName="UnidadEjecuta" />
+                <ScalarProperty Name="UnidadRecibe" ColumnName="UnidadRecibe" />
+                <ScalarProperty Name="RolEjecuta" ColumnName="RolEjecuta" />
+                <ScalarProperty Name="Visible" ColumnName="Visible" />
+                <ScalarProperty Name="TextoRolEjecuta" ColumnName="TextoRolEjecuta" />
+                <ScalarProperty Name="TextoRolEstima" ColumnName="TextoRolEstima" />
+                <ScalarProperty Name="TextoUnidadEjecuta" ColumnName="TextoUnidadEjecuta" />
+                <ScalarProperty Name="Asignada" ColumnName="Asignada" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="CORE_WorkFlow_UsuariosAsignados">
+            <EntityTypeMapping TypeName="MatrixModel.CORE_WorkFlow_UsuariosAsignados">
+              <MappingFragment StoreEntitySet="CORE_WorkFlow_UsuariosAsignados">
+                <ScalarProperty Name="FechaAsignacion" ColumnName="FechaAsignacion" />
+                <ScalarProperty Name="UsuarioId" ColumnName="UsuarioId" />
+                <ScalarProperty Name="WorkFlowId" ColumnName="WorkFlowId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="US_RolesUsuarios2">
+            <EntityTypeMapping TypeName="MatrixModel.US_RolesUsuarios2">
+              <MappingFragment StoreEntitySet="US_RolesUsuarios">
+                <ScalarProperty Name="RolId" ColumnName="RolId" />
+                <ScalarProperty Name="UsuarioId" ColumnName="UsuarioId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="CORE_WorkFlow_UsuariosAsignados_Get" FunctionName="MatrixModel.Store.CORE_WorkFlow_UsuariosAsignados_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel.CORE_WorkFlow_UsuariosAsignados_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Nombres" ColumnName="Nombres" />
+                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="Asignado" ColumnName="Asignado" />
+                <ScalarProperty Name="WorkFlowId" ColumnName="WorkFlowId" />
+                <ScalarProperty Name="CORE_WorkFlow_UsuariosAsignados_Id" ColumnName="CORE_WorkFlow_UsuariosAsignados_Id" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="UsuarioId" ColumnName="UsuarioId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="CORE_Planeacion">
+            <EntityTypeMapping TypeName="MatrixModel.CORE_Planeacion">
+              <MappingFragment StoreEntitySet="CORE_Planeacion">
+                <ScalarProperty Name="Observacion" ColumnName="Observacion" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="FechaRegistro" ColumnName="FechaRegistro" />
+                <ScalarProperty Name="FechaFin" ColumnName="FechaFin" />
+                <ScalarProperty Name="FechaInicio" ColumnName="FechaInicio" />
+                <ScalarProperty Name="Core_WorkFlow_Id" ColumnName="Core_WorkFlow_Id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="CORE_DocumentosXHilo_Get" FunctionName="MatrixModel.Store.CORE_DocumentosXHilo_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel.CORE_DocumentosXHilo_Get_Result">
+                <ScalarProperty Name="IdDocumento" ColumnName="IdDocumento" />
+                <ScalarProperty Name="Documento" ColumnName="Documento" />
+                <ScalarProperty Name="Controlado" ColumnName="Controlado" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="IdProceso" ColumnName="IdProceso" />
+                <ScalarProperty Name="Responsable" ColumnName="Responsable" />
+                <ScalarProperty Name="URL" ColumnName="URL" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CORE_ObservacionesTareas_Get" FunctionName="MatrixModel.Store.CORE_ObservacionesTareas_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel.CORE_ObservacionesTareas_Get_Result">
+                <ScalarProperty Name="FechaRegistro" ColumnName="FechaRegistro" />
+                <ScalarProperty Name="Observacion" ColumnName="Observacion" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="Cargo" ColumnName="Cargo" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CORE_WorkFlow_GetXTrabajoXTarea" FunctionName="MatrixModel.Store.CORE_WorkFlow_GetXTrabajoXTarea">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel.CORE_WorkFlow_GetXTrabajoXTarea_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="HiloId" ColumnName="HiloId" />
+                <ScalarProperty Name="TareaId" ColumnName="TareaId" />
+                <ScalarProperty Name="FIniP" ColumnName="FIniP" />
+                <ScalarProperty Name="FFinP" ColumnName="FFinP" />
+                <ScalarProperty Name="FIniR" ColumnName="FIniR" />
+                <ScalarProperty Name="FFinR" ColumnName="FFinR" />
+                <ScalarProperty Name="UsuarioEstima" ColumnName="UsuarioEstima" />
+                <ScalarProperty Name="UsuarioAsignado" ColumnName="UsuarioAsignado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CORE_DestinatariosCorreosNotificacionFecha" FunctionName="MatrixModel.Store.CORE_DestinatariosCorreosNotificacionFecha">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel.CORE_DestinatariosCorreosNotificacionFecha_Result">
+                <ScalarProperty Name="email" ColumnName="email" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CT_TareasPrevias" FunctionName="MatrixModel.Store.CT_TareasPrevias">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel.CT_TareasList_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IDTRABAJO" ColumnName="IDTRABAJO" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="NombreTrabajo" ColumnName="NombreTrabajo" />
+                <ScalarProperty Name="FIniP" ColumnName="FIniP" />
+                <ScalarProperty Name="FFinP" ColumnName="FFinP" />
+                <ScalarProperty Name="FIniR" ColumnName="FIniR" />
+                <ScalarProperty Name="FFinR" ColumnName="FFinR" />
+                <ScalarProperty Name="TAREA" ColumnName="TAREA" />
+                <ScalarProperty Name="Responsable" ColumnName="Responsable" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="OBSERVACIONESPLANEACION" ColumnName="OBSERVACIONESPLANEACION" />
+                <ScalarProperty Name="OBSERVACIONESEJECUCION" ColumnName="OBSERVACIONESEJECUCION" />
+                <ScalarProperty Name="ESTADOID" ColumnName="ESTADOID" />
+                <ScalarProperty Name="USUARIOID" ColumnName="USUARIOID" />
+                <ScalarProperty Name="RolEstima" ColumnName="RolEstima" />
+                <ScalarProperty Name="RolEjecuta" ColumnName="RolEjecuta" />
+                <ScalarProperty Name="TareaId" ColumnName="TareaId" />
+                <ScalarProperty Name="RETRASO" ColumnName="RETRASO" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="CORE_WorkFlow">
+            <EntityTypeMapping TypeName="MatrixModel.CORE_WorkFlow">
+              <MappingFragment StoreEntitySet="CORE_WorkFlow">
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="ObservacionesEjecucion" ColumnName="ObservacionesEjecucion" />
+                <ScalarProperty Name="ObservacionesPlaneacion" ColumnName="ObservacionesPlaneacion" />
+                <ScalarProperty Name="FechaUltimoEstado" ColumnName="FechaUltimoEstado" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="UsuarioAsignado" ColumnName="UsuarioAsignado" />
+                <ScalarProperty Name="UsuarioEstima" ColumnName="UsuarioEstima" />
+                <ScalarProperty Name="FFinR" ColumnName="FFinR" />
+                <ScalarProperty Name="FIniR" ColumnName="FIniR" />
+                <ScalarProperty Name="FFinP" ColumnName="FFinP" />
+                <ScalarProperty Name="FIniP" ColumnName="FIniP" />
+                <ScalarProperty Name="TareaId" ColumnName="TareaId" />
+                <ScalarProperty Name="HiloId" ColumnName="HiloId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Core_Log_Entrada_Add" FunctionName="MatrixModel.Store.Core_Log_Entrada_Add" />
+          <FunctionImportMapping FunctionImportName="CT_TareasTrabajosList" FunctionName="MatrixModel.Store.CT_TareasTrabajosList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel.CT_TareasTrabajosList_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IDTRABAJO" ColumnName="IDTRABAJO" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="NombreTrabajo" ColumnName="NombreTrabajo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CT_TareasListPendientesAsignacion" FunctionName="MatrixModel.Store.CT_TareasListPendientesAsignacion">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel.CT_TareasList_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IDTRABAJO" ColumnName="IDTRABAJO" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="NombreTrabajo" ColumnName="NombreTrabajo" />
+                <ScalarProperty Name="FIniP" ColumnName="FIniP" />
+                <ScalarProperty Name="FFinP" ColumnName="FFinP" />
+                <ScalarProperty Name="FIniR" ColumnName="FIniR" />
+                <ScalarProperty Name="FFinR" ColumnName="FFinR" />
+                <ScalarProperty Name="TAREA" ColumnName="TAREA" />
+                <ScalarProperty Name="Responsable" ColumnName="Responsable" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="OBSERVACIONESPLANEACION" ColumnName="OBSERVACIONESPLANEACION" />
+                <ScalarProperty Name="OBSERVACIONESEJECUCION" ColumnName="OBSERVACIONESEJECUCION" />
+                <ScalarProperty Name="ESTADOID" ColumnName="ESTADOID" />
+                <ScalarProperty Name="USUARIOID" ColumnName="USUARIOID" />
+                <ScalarProperty Name="RolEstima" ColumnName="RolEstima" />
+                <ScalarProperty Name="RolEjecuta" ColumnName="RolEjecuta" />
+                <ScalarProperty Name="TareaId" ColumnName="TareaId" />
+                <ScalarProperty Name="RETRASO" ColumnName="RETRASO" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CT_UnidadesAsignacionXUsuario" FunctionName="MatrixModel.Store.CT_UnidadesAsignacionXUsuario">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel.CT_UnidadesAsignacionXUsuario_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Unidad" ColumnName="Unidad" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CORE_HilosGetxContenedor" FunctionName="MatrixModel.Store.CORE_HilosGetxContenedor">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel.CORE_HilosGetxContenedor_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="TIPOHILOID" ColumnName="TIPOHILOID" />
+                <ScalarProperty Name="CONTENEDORID" ColumnName="CONTENEDORID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CORE_WorkFlow_GetxHiloid" FunctionName="MatrixModel.Store.CORE_WorkFlow_GetxHiloid">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel.CORE_WorkFlow_GetxHiloid_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="HiloId" ColumnName="HiloId" />
+                <ScalarProperty Name="TareaId" ColumnName="TareaId" />
+                <ScalarProperty Name="FIniP" ColumnName="FIniP" />
+                <ScalarProperty Name="FFinP" ColumnName="FFinP" />
+                <ScalarProperty Name="FIniR" ColumnName="FIniR" />
+                <ScalarProperty Name="FFinR" ColumnName="FFinR" />
+                <ScalarProperty Name="UsuarioEstima" ColumnName="UsuarioEstima" />
+                <ScalarProperty Name="UsuarioAsignado" ColumnName="UsuarioAsignado" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="FechaUltimoEstado" ColumnName="FechaUltimoEstado" />
+                <ScalarProperty Name="ObservacionesPlaneacion" ColumnName="ObservacionesPlaneacion" />
+                <ScalarProperty Name="ObservacionesEjecucion" ColumnName="ObservacionesEjecucion" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CORE_WorkFlow_AddDuplicados" FunctionName="MatrixModel.Store.CORE_WorkFlow_AddDuplicados" />
+          <FunctionImportMapping FunctionImportName="CT_TareasList" FunctionName="MatrixModel.Store.CT_TareasList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel.CT_TareasList_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IDTRABAJO" ColumnName="IDTRABAJO" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="NombreTrabajo" ColumnName="NombreTrabajo" />
+                <ScalarProperty Name="FIniP" ColumnName="FIniP" />
+                <ScalarProperty Name="FFinP" ColumnName="FFinP" />
+                <ScalarProperty Name="FIniR" ColumnName="FIniR" />
+                <ScalarProperty Name="FFinR" ColumnName="FFinR" />
+                <ScalarProperty Name="TAREA" ColumnName="TAREA" />
+                <ScalarProperty Name="Responsable" ColumnName="Responsable" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="OBSERVACIONESPLANEACION" ColumnName="OBSERVACIONESPLANEACION" />
+                <ScalarProperty Name="OBSERVACIONESEJECUCION" ColumnName="OBSERVACIONESEJECUCION" />
+                <ScalarProperty Name="ESTADOID" ColumnName="ESTADOID" />
+                <ScalarProperty Name="USUARIOID" ColumnName="USUARIOID" />
+                <ScalarProperty Name="RolEstima" ColumnName="RolEstima" />
+                <ScalarProperty Name="RolEjecuta" ColumnName="RolEjecuta" />
+                <ScalarProperty Name="TareaId" ColumnName="TareaId" />
+                <ScalarProperty Name="RETRASO" ColumnName="RETRASO" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Core_UnidadesAll" FunctionName="MatrixModel.Store.Core_UnidadesAll">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel.Core_UnidadesAll_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Unidad" ColumnName="Unidad" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CORE_obtenerusuariosasignados_get" FunctionName="MatrixModel.Store.CORE_obtenerusuariosasignados_get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel.CORE_obtenerusuariosasignados_get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Nombres" ColumnName="Nombres" />
+                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="f_Constantes_Get" FunctionName="MatrixModel.Store.f_Constantes_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel.f_Constantes_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Valor" ColumnName="Valor" />
+                <ScalarProperty Name="Adicional" ColumnName="Adicional" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CORE_TareasXUnidadEjecuta" FunctionName="MatrixModel.Store.CORE_TareasXUnidadEjecuta">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel.CORE_TareasXUnidadEjecuta_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Tarea" ColumnName="Tarea" />
+                <ScalarProperty Name="NoEmpiezaAntesDe" ColumnName="NoEmpiezaAntesDe" />
+                <ScalarProperty Name="NoTerminaAntesDe" ColumnName="NoTerminaAntesDe" />
+                <ScalarProperty Name="TiempoPromedioDias" ColumnName="TiempoPromedioDias" />
+                <ScalarProperty Name="RequiereEstimacion" ColumnName="RequiereEstimacion" />
+                <ScalarProperty Name="RolEstima" ColumnName="RolEstima" />
+                <ScalarProperty Name="UnidadEjecuta" ColumnName="UnidadEjecuta" />
+                <ScalarProperty Name="UnidadRecibe" ColumnName="UnidadRecibe" />
+                <ScalarProperty Name="RolEjecuta" ColumnName="RolEjecuta" />
+                <ScalarProperty Name="Visible" ColumnName="Visible" />
+                <ScalarProperty Name="Orden" ColumnName="Orden" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CORE_UsuariosAsignadosXProceso" FunctionName="MatrixModel.Store.CORE_UsuariosAsignadosXProceso">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel.CORE_UsuariosAsignadosXProceso_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CORE_TrabajosTareas_Count_Get" FunctionName="MatrixModel.Store.CORE_TrabajosTareas_Count_Get" />
+          <FunctionImportMapping FunctionImportName="CORE_TrabajosTareas_Get" FunctionName="MatrixModel.Store.CORE_TrabajosTareas_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel.CORE_TrabajosTareas_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="NombreTrabajo" ColumnName="NombreTrabajo" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="Proceso" ColumnName="Proceso" />
+                <ScalarProperty Name="Unidad" ColumnName="Unidad" />
+                <ScalarProperty Name="GerenteProyectos" ColumnName="GerenteProyectos" />
+                <ScalarProperty Name="IdGerenteProyectos" ColumnName="IdGerenteProyectos" />
+                <ScalarProperty Name="COE" ColumnName="COE" />
+                <ScalarProperty Name="IdCOE" ColumnName="IdCOE" />
+                <ScalarProperty Name="Tarea" ColumnName="Tarea" />
+                <ScalarProperty Name="FIniP" ColumnName="FIniP" />
+                <ScalarProperty Name="FFinP" ColumnName="FFinP" />
+                <ScalarProperty Name="FIniR" ColumnName="FIniR" />
+                <ScalarProperty Name="FFinR" ColumnName="FFinR" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Ano" ColumnName="Ano" />
+                <ScalarProperty Name="Mes" ColumnName="Mes" />
+                <ScalarProperty Name="FechaRegistro" ColumnName="FechaRegistro" />
+                <ScalarProperty Name="txtEstadoActual" ColumnName="txtEstadoActual" />
+                <ScalarProperty Name="codEstadoActual" ColumnName="codEstadoActual" />
+                <ScalarProperty Name="Posicion" ColumnName="Posicion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer>
+    <edmx:Connection>
+      <edmx:DesignerInfoPropertySet>
+        <edmx:DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </edmx:DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <edmx:DesignerInfoPropertySet>
+        <edmx:DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <edmx:DesignerProperty Name="EnablePluralization" Value="True" />
+        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <edmx:DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+        <edmx:DesignerProperty Name="UseLegacyProvider" Value="True" />
+      </edmx:DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <edmx:Diagram Name="CORE_Model" ZoomLevel="86">
+        <edmx:EntityTypeShape EntityType="MatrixModel.CORE_WorkflowEstados" Width="1.75" PointX="13.5" PointY="0.5" Height="1.4033821614583333" />
+        <edmx:EntityTypeShape EntityType="MatrixModel.CORE_Retroalimentacion" Width="1.5" PointX="6.5" PointY="0.875" Height="3.3263964843749996" />
+        <edmx:EntityTypeShape EntityType="MatrixModel.CORE_TipoRetroalimentacion" Width="1.5" PointX="3.375" PointY="5.875" Height="1.5956835937499996" />
+        <edmx:EntityTypeShape EntityType="MatrixModel.US_Usuarios3" Width="1.5" PointX="3.375" PointY="1.25" Height="3.1340950520833326" />
+        <edmx:AssociationConnector Association="MatrixModel.FK_CORE_Retroalimentacion_CORE_TipoRetroalimentacion">
+          <edmx:ConnectorPoint PointX="4.875" PointY="5.875" />
+          <edmx:ConnectorPoint PointX="5.25" PointY="5.5" />
+          <edmx:ConnectorPoint PointX="5.25" PointY="2.7504722921139324" />
+          <edmx:ConnectorPoint PointX="6.5" PointY="2.7504722921139324" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="MatrixModel.FK_CORE_Retroalimentacion_US_Usuarios">
+          <edmx:ConnectorPoint PointX="4.875" PointY="3.5508214132076823" />
+          <edmx:ConnectorPoint PointX="5.166666666666667" PointY="3.5508214132076819" />
+          <edmx:ConnectorPoint PointX="5.333333333333333" PointY="3.5508214132076823" />
+          <edmx:ConnectorPoint PointX="6.5" PointY="3.5508214132076823" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="MatrixModel.FK_CORE_Retroalimentacion_US_Usuarios1">
+          <edmx:ConnectorPoint PointX="4.875" PointY="1.9501231710201825" />
+          <edmx:ConnectorPoint PointX="6.5" PointY="1.9501231710201825" />
+        </edmx:AssociationConnector>
+        <edmx:EntityTypeShape EntityType="MatrixModel.CORE_Hilos" Width="1.5" PointX="14.875" PointY="7.875" Height="1.7879850260416665" />
+        <edmx:EntityTypeShape EntityType="MatrixModel.CORE_Tareas_Documentos" Width="1.875" PointX="11.625" PointY="2.25" Height="2.1725878906249996" />
+        <edmx:EntityTypeShape EntityType="MatrixModel.CORE_TareasPrevias" Width="1.5" PointX="10.625" PointY="4.875" Height="2.1725878906249996" />
+        <edmx:EntityTypeShape EntityType="MatrixModel.CORE_Tareas" Width="1.5" PointX="9.25" PointY="0.75" Height="3.9033007812499996" />
+        <edmx:AssociationConnector Association="MatrixModel.FK_CORE_Tareas_Documentos_CORE_Tareas">
+          <edmx:ConnectorPoint PointX="10.75" PointY="3.3362939453125" />
+          <edmx:ConnectorPoint PointX="11.625" PointY="3.3362939453125" />
+        </edmx:AssociationConnector>
+        <edmx:EntityTypeShape EntityType="MatrixModel.CORE_TipoHilo_Tareas" Width="1.75" PointX="8.625" PointY="6.125" Height="2.1725878906249996" />
+        <edmx:AssociationConnector Association="MatrixModel.FK_CORE_TipoHilo_Tareas_CORE_Tareas">
+          <edmx:ConnectorPoint PointX="9.8125" PointY="4.65330078125" />
+          <edmx:ConnectorPoint PointX="9.8125" PointY="6.125" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="MatrixModel.FK_CORE_TareasPrevias_CORE_TipoHilo_Tareas">
+          <edmx:ConnectorPoint PointX="10.375" PointY="6.8087187449137367" />
+          <edmx:ConnectorPoint PointX="10.625" PointY="6.8087187449137367" />
+        </edmx:AssociationConnector>
+        <edmx:EntityTypeShape EntityType="MatrixModel.CORE_TipoHilos" Width="1.5" PointX="6.375" PointY="5.625" Height="1.7879850260416657" />
+        <edmx:AssociationConnector Association="MatrixModel.FK_CORE_Hilos_CORE_TipoHilos">
+          <edmx:ConnectorPoint PointX="7.125" PointY="5.625" />
+          <edmx:ConnectorPoint PointX="7.125" PointY="4.78125" />
+          <edmx:ConnectorPoint PointX="9.7291666666666661" PointY="4.7812499999999991" />
+          <edmx:ConnectorPoint PointX="9.8958333333333339" PointY="4.78125" />
+          <edmx:ConnectorPoint PointX="12.375" PointY="4.78125" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="MatrixModel.FK_CORE_TareasPrevias_CORE_TipoHilo_Tareas1">
+          <edmx:ConnectorPoint PointX="10.375" PointY="6.4043593724568684" />
+          <edmx:ConnectorPoint PointX="10.625" PointY="6.4043593724568684" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="MatrixModel.FK_CORE_TipoHilo_Tareas_CORE_TipoHilos">
+          <edmx:ConnectorPoint PointX="7.875" PointY="6.7689925130208328" />
+          <edmx:ConnectorPoint PointX="8.625" PointY="6.7689925130208328" />
+        </edmx:AssociationConnector>
+        <edmx:EntityTypeShape EntityType="MatrixModel.CORE_Unidades" Width="1.5" PointX="11.625" PointY="0.5" Height="1.59568359375" />
+        <edmx:EntityTypeShape EntityType="MatrixModel.CORE_WorkFlow_UsuariosAsignados" Width="1.5" PointX="1.25" PointY="6.875" Height="2.1725878906249996" />
+        <edmx:AssociationConnector Association="MatrixModel.FK_CORE_WorlFlow_UsuariosAsignados_US_Usuarios">
+          <edmx:ConnectorPoint PointX="3.375" PointY="2.03125" />
+          <edmx:ConnectorPoint PointX="2.65625" PointY="2.03125" />
+          <edmx:ConnectorPoint PointX="2.65625" PointY="6.875" />
+        </edmx:AssociationConnector>
+        <edmx:EntityTypeShape EntityType="MatrixModel.US_RolesUsuarios2" Width="2" PointX="5.25" PointY="7.875" Height="1.5956835937499996" />
+        <edmx:AssociationConnector Association="MatrixModel.FK_US_RolesUsuarios_US_Usuarios">
+          <edmx:ConnectorPoint PointX="4.875" PointY="4.3239957682291656" />
+          <edmx:ConnectorPoint PointX="5.166666666666667" PointY="4.3239957682291648" />
+          <edmx:ConnectorPoint PointX="5.333333333333333" PointY="4.3239957682291656" />
+          <edmx:ConnectorPoint PointX="5.78125" PointY="4.3239957682291656" />
+          <edmx:ConnectorPoint PointX="5.78125" PointY="7.875" />
+        </edmx:AssociationConnector>
+        <edmx:EntityTypeShape EntityType="MatrixModel.CORE_Planeacion" Width="1.625" PointX="0.875" PointY="2.875" Height="2.5571907552083317" IsExpanded="true" />
+        <edmx:AssociationConnector Association="MatrixModel.FK_CORE_Tareas_CORE_Unidades">
+          <edmx:ConnectorPoint PointX="11.625" PointY="1.422841796875" />
+          <edmx:ConnectorPoint PointX="10.75" PointY="1.422841796875" />
+        </edmx:AssociationConnector>
+        <edmx:EntityTypeShape EntityType="MatrixModel.CORE_WorkFlow" Width="1.5" PointX="11.25" PointY="9.25" Height="4.0956022135416656" />
+        <edmx:AssociationConnector Association="MatrixModel.FK_CORE_Planeacion_CORE_WorkFlow">
+          <edmx:ConnectorPoint PointX="11.25" PointY="12.191372080230732" />
+          <edmx:ConnectorPoint PointX="1.03125" PointY="12.191372080230732" />
+          <edmx:ConnectorPoint PointX="1.03125" PointY="5.4321907552083317" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="MatrixModel.FK_CORE_WorlFlow_UsuariosAsignados_CORE_WorkFlow">
+          <edmx:ConnectorPoint PointX="11.25" PointY="10.831025336990372" />
+          <edmx:ConnectorPoint PointX="2" PointY="10.831025336990372" />
+          <edmx:ConnectorPoint PointX="2" PointY="9.047587890625" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="MatrixModel.FK_CORE_WorkFlow_CORE_Hilos" />
+      </edmx:Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

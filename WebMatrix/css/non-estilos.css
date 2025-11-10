@@ -1,0 +1,227 @@
+﻿
+/*Estilos tabla*/
+
+.nonstile table {
+    border-collapse: inherit;
+    margin: inherit;
+    padding: inherit;
+    width: inherit;
+    border: inherit;
+}
+
+.nonstile thead th {
+    background-color: inherit;
+    border: 0px solid inherit;
+    color: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    margin: inherit;
+    text-align: inherit;
+    border-width: inherit;
+    padding: inherit;
+    text-transform: inherit;
+    padding: inherit;
+}
+
+.nonstile tr th {
+    background-color: inherit;
+    border: 0px solid inherit;
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    margin: inherit;
+    text-align: inherit;
+    border-width: inherit;
+    padding: inherit;
+    text-transform: inherit;
+    padding: inherit;
+}
+
+.nonstile tfoot td {
+    background-color: inherit;
+    border: 0px solid inherit;
+    color: inherit;
+    font-family: 'Roboto', sans-serif;
+    font-size: inherit;
+    font-weight: inherit;
+    margin: inherit;
+    text-align: inherit;
+    border-width: inherit;
+    padding: inherit;
+    text-transform: inherit;
+    padding: inherit;
+}
+
+    .nonstile tfoot td:hover {
+        background-color: #686868;
+        color: #ffffff;
+    }
+
+.nonstile thead th:hover {
+    background-color: #00817d;
+    color: #ffffff;
+}
+
+.nonstile tr th:hover {
+    background-color: #00817d;
+    color: #ffffff;
+}
+
+.nonstile tr:nth-child(odd) {
+    background-color: #fff;
+}
+
+.nonstile tr:nth-child(even) {
+    background-color: #eee;
+}
+
+.nonstile tr:nth-child(odd):hover {
+    background-color: #f8f8f8;
+}
+
+.nonstile tr:nth-child(even):hover {
+    background-color: #e4e4e4;
+}
+
+.nonstile td {
+    vertical-align: inherit;
+    border: inherit;
+    border-width: inherit;
+    text-align: inherit;
+    padding: inherit;
+    font-size: inherit;
+    font-family: inherit;
+    font-weight: inherit;
+    color: inherit;
+    padding: inherit;
+}
+
+.nonstile tr:last-child td {
+    border: 1px solid #c1c1c1;
+    border-width: 0px 1px 0px 0px;
+}
+
+.nonstile tr td:last-child {
+    border: 1px solid #c1c1c1;
+    border-width: 0px 0px 1px 0px;
+}
+
+.nonstile tr:last-child td:last-child {
+    border: 1px solid #c1c1c1;
+    border-width: 0px 0px 0px 0px;
+}
+
+.nonstile tr:first-child td:first-child {
+    border: 1px solid #c1c1c1;
+    border-width: 0px 1px 1px 0px;
+}
+
+.nonstile tr:first-child td:last-child {
+    border: 1px solid #c1c1c1;
+    border-width: solid 0px 0px 1px 1px;
+}
+
+/*Fin estilos tablas*/
+
+
+
+
+/* Estilos formulario */
+
+.nonstile label {
+    display: inherit;
+    font-weight: inherit;
+    text-align: inherit;
+    padding-top: inherit;
+    width: inherit;
+    float: inherit;
+}
+
+.nonstile p {
+    display: inherit;
+    font-weight: inherit;
+    padding-top: inherit;
+}
+
+.nonstile input, select {
+    float: inherit;
+    font-size: inherit;
+    width: inherit;
+    margin: inherit;
+    padding: inherit;
+    color: inherit;
+    height: inherit;
+    background: inherit;
+    border-width: inherit;
+    border-style: inherit;
+    border-color: inherit;
+    border-radius: inherit;
+}
+
+    .nonstile input:focus {
+        border-width: inherit;
+        border-style: inherit;
+    }
+
+.nonstile select {
+    float: inherit;
+    font-size: inherit;
+    padding: inherit;
+    border: inherit;
+    width: inherit;
+    margin: inherit;
+    color: inherit;
+}
+
+.nonstile input[type=image] {
+    width: inherit;
+    margin: inherit;
+    padding: inherit;
+    color: inherit;
+    height: inherit;
+    background: inherit;
+    border: 0 none;
+}
+
+#.nonstile input[type=checkbox] {
+    width: inherit;
+    margin-left: 50px;
+    padding: inherit;
+    color: inherit;
+    height: inherit;
+    background: inherit;
+    border: 0 none;
+    float: inherit;
+    text-align: inherit;
+}
+
+.nonstile button {
+    float: inherit;
+    padding: inherit;
+    height: inherit;
+    font-size: inherit;
+    color: inherit;
+    outline: inherit;
+    background-color: inherit;
+    border: inherit;
+}
+
+.nonstile button:hover {
+    background-color: inherit;
+}
+
+.nonstile input[type=submit] {
+    float: inherit;
+    padding: inherit;
+    height: inherit;
+    font-size: inherit;
+    color: inherit;
+    outline: inherit;
+    background-color: inherit;
+    border: inherit;
+}
+
+
+/* Fin estilos formulario */
+

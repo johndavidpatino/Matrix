@@ -1,0 +1,112 @@
+﻿<%@ Page Title="" Language="vb" AutoEventWireup="false" MasterPageFile="~/MasterPage/RP_F.master" CodeBehind="PlaneacionPorUnidadOPS.aspx.vb" Inherits="WebMatrix.PlaneacionPorUnidadOPS" EnableViewState="false" %>
+
+<%@ Register Assembly="DevExpress.XtraCharts.v19.1.Web, Version=19.1.14.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.XtraCharts.Web" TagPrefix="dxchartsui" %>
+<%@ Register assembly="DevExpress.XtraCharts.v19.1, Version=19.1.14.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" namespace="DevExpress.XtraCharts" tagprefix="cc1" %>
+<%@ Register assembly="DevExpress.Web.v19.1, Version=19.1.14.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" namespace="DevExpress.Data.Linq" tagprefix="dx" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="CPH_Head" runat="server">
+    <script type="text/javascript">
+        $(document).ready(function () {
+            loadPlugins();
+        });
+
+        function loadPlugins() {
+
+            $('#accordion').accordion({
+                change: function (event, ui) { $('html, body').animate({ scrollTop: 0 }, 'slow'); },
+                header: "h3",
+                autoHeight: false
+            });
+            $("#<%= txtFechaInicio.ClientId %>").mask("9999/99/99");
+            $("#<%= txtFechaInicio.ClientId %>").datepicker({
+                dateFormat: 'yy/mm/dd',
+                changeMonth: true,
+                changeYear: true,
+                dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
+            });
+
+            $("#<%= txtFechaFin.ClientID%>").mask("9999/99/99");
+            $("#<%= txtFechaFin.ClientId %>").datepicker({
+                dateFormat: 'yy/mm/dd',
+                changeMonth: true,
+                changeYear: true,
+                dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
+            });
+        }
+    </script>
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="CPH_OpcionesMenu" runat="server">
+</asp:Content>
+<asp:Content ID="Content3" ContentPlaceHolderID="CPH_Titulo" runat="server">
+    Planeación por unidad
+</asp:Content>
+<asp:Content ID="Content4" ContentPlaceHolderID="CPH_ComentFormulario" runat="server">
+</asp:Content>
+<asp:Content ID="Content5" ContentPlaceHolderID="CPH_ContentForm" runat="server">
+    <label>Unidad</label>
+    <asp:DropDownList ID="ddlUnidades" runat="server">
+        <asp:ListItem Text="COE" Value="3"></asp:ListItem>
+    <asp:ListItem Text="Campo" Value="4"></asp:ListItem>
+    <asp:ListItem Text="Crítica" Value="5"></asp:ListItem>
+    <asp:ListItem Text="Verificacion" Value="6"></asp:ListItem>
+    <asp:ListItem Text="Captura" Value="7"></asp:ListItem>
+    <asp:ListItem Text="Codificación" Value="8"></asp:ListItem>
+    <asp:ListItem Text="DataCleaning" Value="9"></asp:ListItem>
+    <asp:ListItem Text="Procesamiento" Value="10"></asp:ListItem>
+    <asp:ListItem Text="Scripting" Value="11"></asp:ListItem>
+    <asp:ListItem Text="Pilotos" Value="12"></asp:ListItem>
+    <asp:ListItem Text="Estadística" Value="13"></asp:ListItem>
+    <asp:ListItem Text="Call Center" Value="14"></asp:ListItem>
+    <asp:ListItem Text="RMC" Value="15"></asp:ListItem>
+
+    </asp:DropDownList>
+    <label>Fecha Inicio</label>
+    <asp:TextBox ID="txtFechaInicio" runat="server"></asp:TextBox>
+    <label>Fecha Fin</label>
+    <asp:TextBox ID="txtFechaFin" runat="server"></asp:TextBox>
+    <asp:Button ID="btnMostrar" runat="server" Text="Ver gráfico" />
+    <div class="clear"></div>
+    <br />
+    <dxchartsui:WebChartControl ID="WebChartControl1" runat="server" CrosshairEnabled="True" Height="600px" Width="800px" DataSourceID="SqlDsData" PaletteName="Slipstream">
+        <diagramserializable>
+            <cc1:GanttDiagram>
+                <axisx visibleinpanesserializable="-1">
+                </axisx>
+                <axisy visibleinpanesserializable="-1">
+                    <datetimescaleoptions workdaysonly="True">
+                    </datetimescaleoptions>
+                </axisy>
+            </cc1:GanttDiagram>
+        </diagramserializable>
+        <seriesserializable>
+            <cc1:Series ArgumentDataMember="Usuario" ArgumentScaleType="Qualitative" Name="Planeado" SynchronizePointOptions="False" ValueDataMembersSerializable="FIniP;FFinP" ValueScaleType="DateTime">
+                <viewserializable>
+                    <cc1:SideBySideGanttSeriesView>
+                    </cc1:SideBySideGanttSeriesView>
+                </viewserializable>
+            </cc1:Series>
+            <cc1:Series ArgumentDataMember="Usuario" ArgumentScaleType="Qualitative" Name="Ejecutado" SynchronizePointOptions="False" ValueDataMembersSerializable="FIniR;FFinR" ValueScaleType="DateTime">
+                <viewserializable>
+                    <cc1:SideBySideGanttSeriesView>
+                    </cc1:SideBySideGanttSeriesView>
+                </viewserializable>
+            </cc1:Series>
+        </seriesserializable>
+        <seriestemplate synchronizepointoptions="False">
+            <viewserializable>
+                <cc1:SideBySideGanttSeriesView>
+                </cc1:SideBySideGanttSeriesView>
+            </viewserializable>
+        </seriestemplate>
+    </dxchartsui:WebChartControl>
+    <asp:SqlDataSource ID="SqlDsData" runat="server" ConnectionString="<%$ ConnectionStrings:MatrixConnectionString %>" SelectCommand="REP_GanttPlaneacionAllOps" SelectCommandType="StoredProcedure">
+        <SelectParameters>
+            <asp:ControlParameter ControlID="ddlUnidades" Name="Unidad" PropertyName="SelectedValue" Type="Int64" />
+            <asp:ControlParameter ControlID="txtFechaInicio" DbType="Date" Name="FechaI" PropertyName="Text" />
+            <asp:ControlParameter ControlID="txtFechaFin" DbType="Date" Name="FechaF" PropertyName="Text" />
+        </SelectParameters>
+    </asp:SqlDataSource>
+</asp:Content>

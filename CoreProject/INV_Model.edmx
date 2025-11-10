@@ -1,0 +1,1647 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="INVModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <Function Name="INV_Articulos_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdTipoArticulo" Type="bigint" Mode="In" />
+          <Parameter Name="GrupoUnidad" Type="int" Mode="In" />
+        </Function>
+        <Function Name="INV_Asignaciones_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdActivoFijo" Type="bigint" Mode="In" />
+          <Parameter Name="UsuarioRegistra" Type="bigint" Mode="In" />
+          <Parameter Name="FechaAsignacion" Type="datetime" Mode="In" />
+          <Parameter Name="CentroCosto" Type="tinyint" Mode="In" />
+          <Parameter Name="BU" Type="int" Mode="In" />
+          <Parameter Name="JobBook" Type="bigint" Mode="In" />
+          <Parameter Name="JobBookCodigo" Type="varchar" Mode="In" />
+          <Parameter Name="JobBookNombre" Type="varchar" Mode="In" />
+          <Parameter Name="Ciudad" Type="bigint" Mode="In" />
+          <Parameter Name="EstadoTablet" Type="bigint" Mode="In" />
+          <Parameter Name="UsuarioAsignado" Type="bigint" Mode="In" />
+          <Parameter Name="TipoCargo" Type="tinyint" Mode="In" />
+          <Parameter Name="Cargo" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Observacion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Sede" Type="int" Mode="In" />
+          <Parameter Name="TipoGrupoUnidad" Type="tinyint" Mode="In" />
+          <Parameter Name="GrupoUnidad" Type="int" Mode="In" />
+          <Parameter Name="Unidad" Type="int" Mode="In" />
+        </Function>
+        <Function Name="INV_Asignaciones_Del" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdActivoFijo" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="INV_Asignaciones_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="bigint" Mode="In" />
+          <Parameter Name="IdActivoFijo" Type="bigint" Mode="In" />
+          <Parameter Name="UsuarioRegistra" Type="bigint" Mode="In" />
+          <Parameter Name="FechaAsignacion" Type="datetime" Mode="In" />
+          <Parameter Name="CentroCosto" Type="tinyint" Mode="In" />
+          <Parameter Name="BU" Type="int" Mode="In" />
+          <Parameter Name="JobBook" Type="bigint" Mode="In" />
+          <Parameter Name="JobBookCodigo" Type="varchar" Mode="In" />
+          <Parameter Name="JobBookNombre" Type="varchar" Mode="In" />
+          <Parameter Name="Ciudad" Type="bigint" Mode="In" />
+          <Parameter Name="EstadoTablet" Type="bigint" Mode="In" />
+          <Parameter Name="UsuarioAsignado" Type="bigint" Mode="In" />
+          <Parameter Name="TipoCargo" Type="tinyint" Mode="In" />
+          <Parameter Name="Cargo" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Observacion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Sede" Type="int" Mode="In" />
+          <Parameter Name="TipoGrupoUnidad" Type="tinyint" Mode="In" />
+          <Parameter Name="GrupoUnidad" Type="int" Mode="In" />
+          <Parameter Name="Unidad" Type="int" Mode="In" />
+        </Function>
+        <Function Name="INV_Asignaciones_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdActivoFijo" Type="bigint" Mode="In" />
+          <Parameter Name="Articulo" Type="bigint" Mode="In" />
+          <Parameter Name="BU" Type="int" Mode="In" />
+          <Parameter Name="JobBookCodigo" Type="varchar" Mode="In" />
+          <Parameter Name="JobBookNombre" Type="varchar" Mode="In" />
+          <Parameter Name="Ciudad" Type="bigint" Mode="In" />
+          <Parameter Name="EstadoTablet" Type="bigint" Mode="In" />
+          <Parameter Name="IdUsuarioAsignado" Type="bigint" Mode="In" />
+          <Parameter Name="UsuarioAsignado" Type="varchar(max)" Mode="In" />
+          <Parameter Name="TipoCargo" Type="tinyint" Mode="In" />
+          <Parameter Name="Asignado" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="INV_BU_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="INV_Camaras_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="INV_EstadoArticulo_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="INV_EstadoConsumible_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="INV_EstadoTablet_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="INV_Legalizaciones_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdConsumible" Type="bigint" Mode="In" />
+          <Parameter Name="UsuarioRegistra" Type="bigint" Mode="In" />
+          <Parameter Name="TipoLegalizacion" Type="tinyint" Mode="In" />
+          <Parameter Name="Radicado" Type="varchar" Mode="In" />
+          <Parameter Name="Fecha" Type="datetime" Mode="In" />
+          <Parameter Name="UsuarioResponsable" Type="bigint" Mode="In" />
+          <Parameter Name="Unidades" Type="int" Mode="In" />
+          <Parameter Name="Firmas" Type="bigint" Mode="In" />
+          <Parameter Name="Devoluciones" Type="bigint" Mode="In" />
+          <Parameter Name="NotasCredito" Type="bigint" Mode="In" />
+          <Parameter Name="DescuentoNomina" Type="bigint" Mode="In" />
+          <Parameter Name="ValorLegalizado" Type="bigint" Mode="In" />
+          <Parameter Name="Pendiente" Type="bigint" Mode="In" />
+          <Parameter Name="Observaciones" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Legalizado" Type="bit" Mode="In" />
+          <Parameter Name="CentroCosto" Type="tinyint" Mode="In" />
+          <Parameter Name="BU" Type="int" Mode="In" />
+          <Parameter Name="JobBook" Type="bigint" Mode="In" />
+          <Parameter Name="JobBookCodigo" Type="varchar" Mode="In" />
+          <Parameter Name="JobBookNombre" Type="varchar" Mode="In" />
+          <Parameter Name="ValorCarrera" Type="bigint" Mode="In" />
+          <Parameter Name="Verificado" Type="bigint" Mode="In" />
+          <Parameter Name="FechaVerificacion" Type="datetime" Mode="In" />
+          <Parameter Name="UsuarioVerifica" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="INV_Legalizaciones_Del" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="INV_Legalizaciones_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="bigint" Mode="In" />
+          <Parameter Name="IdConsumible" Type="bigint" Mode="In" />
+          <Parameter Name="UsuarioRegistra" Type="bigint" Mode="In" />
+          <Parameter Name="TipoLegalizacion" Type="tinyint" Mode="In" />
+          <Parameter Name="Radicado" Type="varchar" Mode="In" />
+          <Parameter Name="Fecha" Type="datetime" Mode="In" />
+          <Parameter Name="UsuarioResponsable" Type="bigint" Mode="In" />
+          <Parameter Name="Unidades" Type="int" Mode="In" />
+          <Parameter Name="Firmas" Type="bigint" Mode="In" />
+          <Parameter Name="Devoluciones" Type="bigint" Mode="In" />
+          <Parameter Name="NotasCredito" Type="bigint" Mode="In" />
+          <Parameter Name="DescuentoNomina" Type="bigint" Mode="In" />
+          <Parameter Name="ValorLegalizado" Type="bigint" Mode="In" />
+          <Parameter Name="Pendiente" Type="bigint" Mode="In" />
+          <Parameter Name="Observaciones" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Legalizado" Type="bit" Mode="In" />
+          <Parameter Name="CentroCosto" Type="tinyint" Mode="In" />
+          <Parameter Name="BU" Type="int" Mode="In" />
+          <Parameter Name="JobBook" Type="bigint" Mode="In" />
+          <Parameter Name="JobBookCodigo" Type="varchar" Mode="In" />
+          <Parameter Name="JobBookNombre" Type="varchar" Mode="In" />
+          <Parameter Name="ValorCarrera" Type="bigint" Mode="In" />
+          <Parameter Name="Verificado" Type="bigint" Mode="In" />
+          <Parameter Name="FechaVerificacion" Type="datetime" Mode="In" />
+          <Parameter Name="UsuarioVerifica" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="INV_Legalizaciones_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="bigint" Mode="In" />
+          <Parameter Name="IdConsumible" Type="bigint" Mode="In" />
+          <Parameter Name="BU" Type="int" Mode="In" />
+          <Parameter Name="JobBookCodigo" Type="varchar" Mode="In" />
+          <Parameter Name="Articulo" Type="bigint" Mode="In" />
+          <Parameter Name="TipoProducto" Type="bigint" Mode="In" />
+          <Parameter Name="UsuarioRegistra" Type="bigint" Mode="In" />
+          <Parameter Name="UsuarioAsignado" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="INV_LogAsignaciones_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdActivoFijo" Type="bigint" Mode="In" />
+          <Parameter Name="IdArticulo" Type="bigint" Mode="In" />
+          <Parameter Name="IdUsuario" Type="bigint" Mode="In" />
+          <Parameter Name="CentroCosto" Type="tinyint" Mode="In" />
+          <Parameter Name="BU" Type="int" Mode="In" />
+          <Parameter Name="JobBook" Type="bigint" Mode="In" />
+          <Parameter Name="JobBookCodigo" Type="varchar" Mode="In" />
+          <Parameter Name="JobBookNombre" Type="varchar" Mode="In" />
+          <Parameter Name="Ciudad" Type="bigint" Mode="In" />
+          <Parameter Name="EstadoTablet" Type="bigint" Mode="In" />
+          <Parameter Name="Asignado" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="INV_MantenimientoEquipos_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdActivoFijo" Type="bigint" Mode="In" />
+          <Parameter Name="UsuarioRegistra" Type="bigint" Mode="In" />
+          <Parameter Name="Fecha" Type="date" Mode="In" />
+          <Parameter Name="TipoMantenimiento" Type="int" Mode="In" />
+          <Parameter Name="UsuarioResponsable" Type="bigint" Mode="In" />
+          <Parameter Name="Observaciones" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="INV_MantenimientoEquipos_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="bigint" Mode="In" />
+          <Parameter Name="IdActivoFijo" Type="bigint" Mode="In" />
+          <Parameter Name="UsuarioRegistra" Type="bigint" Mode="In" />
+          <Parameter Name="Fecha" Type="date" Mode="In" />
+          <Parameter Name="TipoMantenimiento" Type="int" Mode="In" />
+          <Parameter Name="UsuarioResponsable" Type="bigint" Mode="In" />
+          <Parameter Name="Observaciones" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="INV_MantenimientoEquipos_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="bigint" Mode="In" />
+          <Parameter Name="IdActivoFijo" Type="bigint" Mode="In" />
+          <Parameter Name="Articulo" Type="bigint" Mode="In" />
+          <Parameter Name="TipoMantenimiento" Type="int" Mode="In" />
+          <Parameter Name="IdUsuarioResponsable" Type="bigint" Mode="In" />
+          <Parameter Name="UsuarioResponsable" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="INV_Papeleria_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="INV_Perifericos_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="INV_RegistroArticulos_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TipoArticulo" Type="bigint" Mode="In" />
+          <Parameter Name="Articulo" Type="bigint" Mode="In" />
+          <Parameter Name="FechaCompra" Type="date" Mode="In" />
+          <Parameter Name="UsuarioRegistra" Type="bigint" Mode="In" />
+          <Parameter Name="CentroCosto" Type="tinyint" Mode="In" />
+          <Parameter Name="BU" Type="int" Mode="In" />
+          <Parameter Name="JobBook" Type="bigint" Mode="In" />
+          <Parameter Name="JobBookCodigo" Type="varchar" Mode="In" />
+          <Parameter Name="JobBookNombre" Type="varchar" Mode="In" />
+          <Parameter Name="CuentaContable" Type="bigint" Mode="In" />
+          <Parameter Name="ValorUnitario" Type="bigint" Mode="In" />
+          <Parameter Name="Estado" Type="bigint" Mode="In" />
+          <Parameter Name="descripcion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Symphony" Type="varchar(max)" Mode="In" />
+          <Parameter Name="IdFisico" Type="bigint" Mode="In" />
+          <Parameter Name="Sede" Type="bigint" Mode="In" />
+          <Parameter Name="TipoComputador" Type="bigint" Mode="In" />
+          <Parameter Name="PertenecePC" Type="tinyint" Mode="In" />
+          <Parameter Name="TipoPeriferico" Type="bigint" Mode="In" />
+          <Parameter Name="Marca" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Modelo" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Procesador" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Memoria" Type="varchar" Mode="In" />
+          <Parameter Name="Almacenamiento" Type="varchar" Mode="In" />
+          <Parameter Name="SistemaOperativo" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Serial" Type="varchar(max)" Mode="In" />
+          <Parameter Name="NombreEquipo" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Office" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Programas" Type="varchar(max)" Mode="In" />
+          <Parameter Name="TipoServidor" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Raid" Type="varchar(max)" Mode="In" />
+          <Parameter Name="IdTablet" Type="bigint" Mode="In" />
+          <Parameter Name="IdSTG" Type="bigint" Mode="In" />
+          <Parameter Name="TamanoPantalla" Type="varchar" Mode="In" />
+          <Parameter Name="Chip" Type="bigint" Mode="In" />
+          <Parameter Name="IMEI" Type="bigint" Mode="In" />
+          <Parameter Name="Pertenece" Type="bigint" Mode="In" />
+          <Parameter Name="Operador" Type="bigint" Mode="In" />
+          <Parameter Name="NumeroCelular" Type="bigint" Mode="In" />
+          <Parameter Name="CantidadMinutos" Type="int" Mode="In" />
+          <Parameter Name="TipoProducto" Type="bigint" Mode="In" />
+          <Parameter Name="Producto" Type="varchar(max)" Mode="In" />
+          <Parameter Name="TipoObsequio" Type="tinyint" Mode="In" />
+          <Parameter Name="TipoBono" Type="bigint" Mode="In" />
+          <Parameter Name="Asignado" Type="bit" Mode="In" />
+          <Parameter Name="FechaFinRenta" Type="date" Mode="In" />
+          <Parameter Name="NumeroPV" Type="bigint" Mode="In" />
+          <Parameter Name="ProveedorId" Type="bigint" Mode="In" />
+          <Parameter Name="Cantidad" Type="bigint" Mode="In" />
+          <Parameter Name="ProductoPapeleria" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="INV_RegistroArticulos_Asignado_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="bigint" Mode="In" />
+          <Parameter Name="Asignado" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="INV_RegistroArticulos_Del" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="INV_RegistroArticulos_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="bigint" Mode="In" />
+          <Parameter Name="TipoArticulo" Type="bigint" Mode="In" />
+          <Parameter Name="Articulo" Type="bigint" Mode="In" />
+          <Parameter Name="FechaCompra" Type="date" Mode="In" />
+          <Parameter Name="UsuarioRegistra" Type="bigint" Mode="In" />
+          <Parameter Name="CentroCosto" Type="tinyint" Mode="In" />
+          <Parameter Name="BU" Type="int" Mode="In" />
+          <Parameter Name="JobBook" Type="bigint" Mode="In" />
+          <Parameter Name="JobBookCodigo" Type="varchar" Mode="In" />
+          <Parameter Name="JobBookNombre" Type="varchar" Mode="In" />
+          <Parameter Name="CuentaContable" Type="bigint" Mode="In" />
+          <Parameter Name="ValorUnitario" Type="bigint" Mode="In" />
+          <Parameter Name="Estado" Type="bigint" Mode="In" />
+          <Parameter Name="descripcion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Symphony" Type="varchar(max)" Mode="In" />
+          <Parameter Name="IdFisico" Type="bigint" Mode="In" />
+          <Parameter Name="Sede" Type="bigint" Mode="In" />
+          <Parameter Name="TipoComputador" Type="bigint" Mode="In" />
+          <Parameter Name="PertenecePC" Type="tinyint" Mode="In" />
+          <Parameter Name="TipoPeriferico" Type="bigint" Mode="In" />
+          <Parameter Name="Marca" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Modelo" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Procesador" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Memoria" Type="varchar" Mode="In" />
+          <Parameter Name="Almacenamiento" Type="varchar" Mode="In" />
+          <Parameter Name="SistemaOperativo" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Serial" Type="varchar(max)" Mode="In" />
+          <Parameter Name="NombreEquipo" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Office" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Programas" Type="varchar(max)" Mode="In" />
+          <Parameter Name="TipoServidor" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Raid" Type="varchar(max)" Mode="In" />
+          <Parameter Name="IdTablet" Type="bigint" Mode="In" />
+          <Parameter Name="IdSTG" Type="bigint" Mode="In" />
+          <Parameter Name="TamanoPantalla" Type="varchar" Mode="In" />
+          <Parameter Name="Chip" Type="bigint" Mode="In" />
+          <Parameter Name="IMEI" Type="bigint" Mode="In" />
+          <Parameter Name="Pertenece" Type="bigint" Mode="In" />
+          <Parameter Name="Operador" Type="bigint" Mode="In" />
+          <Parameter Name="NumeroCelular" Type="bigint" Mode="In" />
+          <Parameter Name="CantidadMinutos" Type="int" Mode="In" />
+          <Parameter Name="TipoProducto" Type="bigint" Mode="In" />
+          <Parameter Name="Producto" Type="varchar(max)" Mode="In" />
+          <Parameter Name="TipoObsequio" Type="tinyint" Mode="In" />
+          <Parameter Name="TipoBono" Type="bigint" Mode="In" />
+          <Parameter Name="Asignado" Type="bit" Mode="In" />
+          <Parameter Name="FechaFinRenta" Type="date" Mode="In" />
+          <Parameter Name="NumeroPV" Type="bigint" Mode="In" />
+          <Parameter Name="ProveedorId" Type="bigint" Mode="In" />
+          <Parameter Name="Cantidad" Type="bigint" Mode="In" />
+          <Parameter Name="ProductoPapeleria" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="INV_RegistroArticulos_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="bigint" Mode="In" />
+          <Parameter Name="TipoArticulo" Type="bigint" Mode="In" />
+          <Parameter Name="Articulo" Type="bigint" Mode="In" />
+          <Parameter Name="TipoComputador" Type="bigint" Mode="In" />
+          <Parameter Name="PertenecePC" Type="tinyint" Mode="In" />
+          <Parameter Name="TipoPeriferico" Type="bigint" Mode="In" />
+          <Parameter Name="TipoProducto" Type="bigint" Mode="In" />
+          <Parameter Name="Estado" Type="bigint" Mode="In" />
+          <Parameter Name="Sede" Type="bigint" Mode="In" />
+          <Parameter Name="IdUsuarioAsignado" Type="bigint" Mode="In" />
+          <Parameter Name="UsuarioAsignado" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Asignado" Type="bit" Mode="In" />
+          <Parameter Name="IdFisico" Type="bigint" Mode="In" />
+          <Parameter Name="TodosCampos" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="INV_ReporteLegalizaciones" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FechaIni" Type="datetime" Mode="In" />
+          <Parameter Name="FechaFin" Type="datetime" Mode="In" />
+          <Parameter Name="UsuarioAsignado" Type="bigint" Mode="In" />
+          <Parameter Name="Articulo" Type="bigint" Mode="In" />
+          <Parameter Name="BU" Type="int" Mode="In" />
+          <Parameter Name="JobBookCodigo" Type="varchar" Mode="In" />
+          <Parameter Name="TodosCampos" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="INV_ReporteRemanente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdConsumible" Type="bigint" Mode="In" />
+          <Parameter Name="Articulo" Type="bigint" Mode="In" />
+          <Parameter Name="TipoProducto" Type="bigint" Mode="In" />
+          <Parameter Name="JobBook" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="INV_Sede_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="INV_StockConsumibles_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdConsumible" Type="bigint" Mode="In" />
+          <Parameter Name="NumeroVale" Type="bigint" Mode="In" />
+          <Parameter Name="Fecha" Type="datetime" Mode="In" />
+          <Parameter Name="UsuarioRegistra" Type="bigint" Mode="In" />
+          <Parameter Name="TipoMovimiento" Type="tinyint" Mode="In" />
+          <Parameter Name="Estado" Type="tinyint" Mode="In" />
+          <Parameter Name="CentroCosto" Type="tinyint" Mode="In" />
+          <Parameter Name="BU" Type="int" Mode="In" />
+          <Parameter Name="JobBook" Type="bigint" Mode="In" />
+          <Parameter Name="JobBookCodigo" Type="varchar" Mode="In" />
+          <Parameter Name="JobBookNombre" Type="varchar" Mode="In" />
+          <Parameter Name="CuentaContable" Type="bigint" Mode="In" />
+          <Parameter Name="Ciudad" Type="bigint" Mode="In" />
+          <Parameter Name="Valor" Type="bigint" Mode="In" />
+          <Parameter Name="Total" Type="bigint" Mode="In" />
+          <Parameter Name="Disponible" Type="bigint" Mode="In" />
+          <Parameter Name="UsuarioAsignado" Type="bigint" Mode="In" />
+          <Parameter Name="TipoCargo" Type="tinyint" Mode="In" />
+          <Parameter Name="Observaciones" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="INV_StockConsumibles_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="bigint" Mode="In" />
+          <Parameter Name="IdConsumible" Type="bigint" Mode="In" />
+          <Parameter Name="IdArticulo" Type="bigint" Mode="In" />
+          <Parameter Name="TipoMovimiento" Type="tinyint" Mode="In" />
+          <Parameter Name="BU" Type="int" Mode="In" />
+          <Parameter Name="JobBookCodigo" Type="varchar" Mode="In" />
+          <Parameter Name="JobBookNombre" Type="varchar" Mode="In" />
+          <Parameter Name="Ciudad" Type="bigint" Mode="In" />
+          <Parameter Name="IdUsuario" Type="bigint" Mode="In" />
+          <Parameter Name="Usuario" Type="varchar(max)" Mode="In" />
+          <Parameter Name="TipoCargo" Type="tinyint" Mode="In" />
+          <Parameter Name="Legalizado" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="INV_StockxLegalizar_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BU" Type="int" Mode="In" />
+          <Parameter Name="JobBookCodigo" Type="varchar" Mode="In" />
+          <Parameter Name="Articulo" Type="bigint" Mode="In" />
+          <Parameter Name="TipoProducto" Type="bigint" Mode="In" />
+          <Parameter Name="UsuarioRegistra" Type="bigint" Mode="In" />
+          <Parameter Name="UsuarioAsignado" Type="bigint" Mode="In" />
+          <Parameter Name="IdConsumible" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="INV_TipoLegalizacion_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Permiso" Type="int" Mode="In" />
+        </Function>
+        <Function Name="INV_TipoMovimiento_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Permiso" Type="int" Mode="In" />
+        </Function>
+        <Function Name="INV_ValorBono_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="INVModelStoreContainer" />
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="INVModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="INVEntities" annotation:LazyLoadingEnabled="true" >
+          <FunctionImport Name="INV_Articulos_Get" ReturnType="Collection(INVModel.INV_Articulos_Get_Result)">
+            <Parameter Name="IdTipoArticulo" Mode="In" Type="Int64" />
+            <Parameter Name="GrupoUnidad" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="INV_Perifericos_Get" ReturnType="Collection(INVModel.INV_Perifericos_Get_Result)" />
+          <FunctionImport Name="INV_ValorBono_Get" ReturnType="Collection(INVModel.INV_ValorBono_Get_Result)" />
+          <FunctionImport Name="INV_RegistroArticulos_Add" ReturnType="Collection(Decimal)">
+            <Parameter Name="TipoArticulo" Mode="In" Type="Int64" />
+            <Parameter Name="Articulo" Mode="In" Type="Int64" />
+            <Parameter Name="FechaCompra" Mode="In" Type="DateTime" />
+            <Parameter Name="UsuarioRegistra" Mode="In" Type="Int64" />
+            <Parameter Name="CentroCosto" Mode="In" Type="Byte" />
+            <Parameter Name="BU" Mode="In" Type="Int32" />
+            <Parameter Name="JobBook" Mode="In" Type="Int64" />
+            <Parameter Name="JobBookCodigo" Mode="In" Type="String" />
+            <Parameter Name="JobBookNombre" Mode="In" Type="String" />
+            <Parameter Name="CuentaContable" Mode="In" Type="Int64" />
+            <Parameter Name="ValorUnitario" Mode="In" Type="Int64" />
+            <Parameter Name="Estado" Mode="In" Type="Int64" />
+            <Parameter Name="descripcion" Mode="In" Type="String" />
+            <Parameter Name="Symphony" Mode="In" Type="String" />
+            <Parameter Name="IdFisico" Mode="In" Type="Int64" />
+            <Parameter Name="Sede" Mode="In" Type="Int64" />
+            <Parameter Name="TipoComputador" Mode="In" Type="Int64" />
+            <Parameter Name="PertenecePC" Mode="In" Type="Byte" />
+            <Parameter Name="TipoPeriferico" Mode="In" Type="Int64" />
+            <Parameter Name="Marca" Mode="In" Type="String" />
+            <Parameter Name="Modelo" Mode="In" Type="String" />
+            <Parameter Name="Procesador" Mode="In" Type="String" />
+            <Parameter Name="Memoria" Mode="In" Type="String" />
+            <Parameter Name="Almacenamiento" Mode="In" Type="String" />
+            <Parameter Name="SistemaOperativo" Mode="In" Type="String" />
+            <Parameter Name="Serial" Mode="In" Type="String" />
+            <Parameter Name="NombreEquipo" Mode="In" Type="String" />
+            <Parameter Name="Office" Mode="In" Type="String" />
+            <Parameter Name="Programas" Mode="In" Type="String" />
+            <Parameter Name="TipoServidor" Mode="In" Type="String" />
+            <Parameter Name="Raid" Mode="In" Type="String" />
+            <Parameter Name="IdTablet" Mode="In" Type="Int64" />
+            <Parameter Name="IdSTG" Mode="In" Type="Int64" />
+            <Parameter Name="TamanoPantalla" Mode="In" Type="String" />
+            <Parameter Name="Chip" Mode="In" Type="Int64" />
+            <Parameter Name="IMEI" Mode="In" Type="Int64" />
+            <Parameter Name="Pertenece" Mode="In" Type="Int64" />
+            <Parameter Name="Operador" Mode="In" Type="Int64" />
+            <Parameter Name="NumeroCelular" Mode="In" Type="Int64" />
+            <Parameter Name="CantidadMinutos" Mode="In" Type="Int32" />
+            <Parameter Name="TipoProducto" Mode="In" Type="Int64" />
+            <Parameter Name="Producto" Mode="In" Type="String" />
+            <Parameter Name="TipoObsequio" Mode="In" Type="Byte" />
+            <Parameter Name="TipoBono" Mode="In" Type="Int64" />
+            <Parameter Name="Asignado" Mode="In" Type="Boolean" />
+            <Parameter Name="FechaFinRenta" Mode="In" Type="DateTime" />
+            <Parameter Name="NumeroPV" Mode="In" Type="Int64" />
+            <Parameter Name="ProveedorId" Mode="In" Type="Int64" />
+            <Parameter Name="Cantidad" Mode="In" Type="Int64" />
+            <Parameter Name="ProductoPapeleria" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="INV_RegistroArticulos_Del">
+          <Parameter Name="Id" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="INV_RegistroArticulos_Edit">
+            <Parameter Name="Id" Mode="In" Type="Int64" />
+            <Parameter Name="TipoArticulo" Mode="In" Type="Int64" />
+            <Parameter Name="Articulo" Mode="In" Type="Int64" />
+            <Parameter Name="FechaCompra" Mode="In" Type="DateTime" />
+            <Parameter Name="UsuarioRegistra" Mode="In" Type="Int64" />
+            <Parameter Name="CentroCosto" Mode="In" Type="Byte" />
+            <Parameter Name="BU" Mode="In" Type="Int32" />
+            <Parameter Name="JobBook" Mode="In" Type="Int64" />
+            <Parameter Name="JobBookCodigo" Mode="In" Type="String" />
+            <Parameter Name="JobBookNombre" Mode="In" Type="String" />
+            <Parameter Name="CuentaContable" Mode="In" Type="Int64" />
+            <Parameter Name="ValorUnitario" Mode="In" Type="Int64" />
+            <Parameter Name="Estado" Mode="In" Type="Int64" />
+            <Parameter Name="descripcion" Mode="In" Type="String" />
+            <Parameter Name="Symphony" Mode="In" Type="String" />
+            <Parameter Name="IdFisico" Mode="In" Type="Int64" />
+            <Parameter Name="Sede" Mode="In" Type="Int64" />
+            <Parameter Name="TipoComputador" Mode="In" Type="Int64" />
+            <Parameter Name="PertenecePC" Mode="In" Type="Byte" />
+            <Parameter Name="TipoPeriferico" Mode="In" Type="Int64" />
+            <Parameter Name="Marca" Mode="In" Type="String" />
+            <Parameter Name="Modelo" Mode="In" Type="String" />
+            <Parameter Name="Procesador" Mode="In" Type="String" />
+            <Parameter Name="Memoria" Mode="In" Type="String" />
+            <Parameter Name="Almacenamiento" Mode="In" Type="String" />
+            <Parameter Name="SistemaOperativo" Mode="In" Type="String" />
+            <Parameter Name="Serial" Mode="In" Type="String" />
+            <Parameter Name="NombreEquipo" Mode="In" Type="String" />
+            <Parameter Name="Office" Mode="In" Type="String" />
+            <Parameter Name="Programas" Mode="In" Type="String" />
+            <Parameter Name="TipoServidor" Mode="In" Type="String" />
+            <Parameter Name="Raid" Mode="In" Type="String" />
+            <Parameter Name="IdTablet" Mode="In" Type="Int64" />
+            <Parameter Name="IdSTG" Mode="In" Type="Int64" />
+            <Parameter Name="TamanoPantalla" Mode="In" Type="String" />
+            <Parameter Name="Chip" Mode="In" Type="Int64" />
+            <Parameter Name="IMEI" Mode="In" Type="Int64" />
+            <Parameter Name="Pertenece" Mode="In" Type="Int64" />
+            <Parameter Name="Operador" Mode="In" Type="Int64" />
+            <Parameter Name="NumeroCelular" Mode="In" Type="Int64" />
+            <Parameter Name="CantidadMinutos" Mode="In" Type="Int32" />
+            <Parameter Name="TipoProducto" Mode="In" Type="Int64" />
+            <Parameter Name="Producto" Mode="In" Type="String" />
+            <Parameter Name="TipoObsequio" Mode="In" Type="Byte" />
+            <Parameter Name="TipoBono" Mode="In" Type="Int64" />
+            <Parameter Name="Asignado" Mode="In" Type="Boolean" />
+            <Parameter Name="FechaFinRenta" Mode="In" Type="DateTime" />
+            <Parameter Name="NumeroPV" Mode="In" Type="Int64" />
+            <Parameter Name="ProveedorId" Mode="In" Type="Int64" />
+            <Parameter Name="Cantidad" Mode="In" Type="Int64" />
+            <Parameter Name="ProductoPapeleria" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="INV_Asignaciones_Add" ReturnType="Collection(Decimal)">
+            <Parameter Name="IdActivoFijo" Mode="In" Type="Int64" />
+            <Parameter Name="UsuarioRegistra" Mode="In" Type="Int64" />
+            <Parameter Name="FechaAsignacion" Mode="In" Type="DateTime" />
+            <Parameter Name="CentroCosto" Mode="In" Type="Byte" />
+            <Parameter Name="BU" Mode="In" Type="Int32" />
+            <Parameter Name="JobBook" Mode="In" Type="Int64" />
+            <Parameter Name="JobBookCodigo" Mode="In" Type="String" />
+            <Parameter Name="JobBookNombre" Mode="In" Type="String" />
+            <Parameter Name="Ciudad" Mode="In" Type="Int64" />
+            <Parameter Name="EstadoTablet" Mode="In" Type="Int64" />
+            <Parameter Name="UsuarioAsignado" Mode="In" Type="Int64" />
+            <Parameter Name="TipoCargo" Mode="In" Type="Byte" />
+            <Parameter Name="Cargo" Mode="In" Type="String" />
+            <Parameter Name="Observacion" Mode="In" Type="String" />
+            <Parameter Name="Sede" Mode="In" Type="Int32" />
+            <Parameter Name="TipoGrupoUnidad" Mode="In" Type="Byte" />
+            <Parameter Name="GrupoUnidad" Mode="In" Type="Int32" />
+            <Parameter Name="Unidad" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="INV_Asignaciones_Get" ReturnType="Collection(INVModel.INV_Asignaciones_Get_Result)">
+            <Parameter Name="IdActivoFijo" Mode="In" Type="Int64" />
+            <Parameter Name="Articulo" Mode="In" Type="Int64" />
+            <Parameter Name="BU" Mode="In" Type="Int32" />
+            <Parameter Name="JobBookCodigo" Mode="In" Type="String" />
+            <Parameter Name="JobBookNombre" Mode="In" Type="String" />
+            <Parameter Name="Ciudad" Mode="In" Type="Int64" />
+            <Parameter Name="EstadoTablet" Mode="In" Type="Int64" />
+            <Parameter Name="IdUsuarioAsignado" Mode="In" Type="Int64" />
+            <Parameter Name="UsuarioAsignado" Mode="In" Type="String" />
+            <Parameter Name="TipoCargo" Mode="In" Type="Byte" />
+            <Parameter Name="Asignado" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="INV_RegistroArticulos_Asignado_Edit">
+            <Parameter Name="Id" Mode="In" Type="Int64" />
+            <Parameter Name="Asignado" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="INV_EstadosActivosFijos_Get" ReturnType="Collection(INVModel.INV_EstadosActivosFijos_Get_Result)" />
+          <FunctionImport Name="INV_EstadoTablet_Get" ReturnType="Collection(INVModel.INV_EstadoTablet_Get_Result)" />
+          <FunctionImport Name="INV_Asignaciones_Edit">
+            <Parameter Name="Id" Mode="In" Type="Int64" />
+            <Parameter Name="IdActivoFijo" Mode="In" Type="Int64" />
+            <Parameter Name="UsuarioRegistra" Mode="In" Type="Int64" />
+            <Parameter Name="FechaAsignacion" Mode="In" Type="DateTime" />
+            <Parameter Name="CentroCosto" Mode="In" Type="Byte" />
+            <Parameter Name="BU" Mode="In" Type="Int32" />
+            <Parameter Name="JobBook" Mode="In" Type="Int64" />
+            <Parameter Name="JobBookCodigo" Mode="In" Type="String" />
+            <Parameter Name="JobBookNombre" Mode="In" Type="String" />
+            <Parameter Name="Ciudad" Mode="In" Type="Int64" />
+            <Parameter Name="EstadoTablet" Mode="In" Type="Int64" />
+            <Parameter Name="UsuarioAsignado" Mode="In" Type="Int64" />
+            <Parameter Name="TipoCargo" Mode="In" Type="Byte" />
+            <Parameter Name="Cargo" Mode="In" Type="String" />
+            <Parameter Name="Observacion" Mode="In" Type="String" />
+            <Parameter Name="Sede" Mode="In" Type="Int32" />
+            <Parameter Name="TipoGrupoUnidad" Mode="In" Type="Byte" />
+            <Parameter Name="GrupoUnidad" Mode="In" Type="Int32" />
+            <Parameter Name="Unidad" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="INV_LogAsignaciones_Add" ReturnType="Collection(Decimal)">
+            <Parameter Name="IdActivoFijo" Mode="In" Type="Int64" />
+            <Parameter Name="IdArticulo" Mode="In" Type="Int64" />
+            <Parameter Name="IdUsuario" Mode="In" Type="Int64" />
+            <Parameter Name="CentroCosto" Mode="In" Type="Byte" />
+            <Parameter Name="BU" Mode="In" Type="Int32" />
+            <Parameter Name="JobBook" Mode="In" Type="Int64" />
+            <Parameter Name="JobBookCodigo" Mode="In" Type="String" />
+            <Parameter Name="JobBookNombre" Mode="In" Type="String" />
+            <Parameter Name="Ciudad" Mode="In" Type="Int64" />
+            <Parameter Name="EstadoTablet" Mode="In" Type="Int64" />
+            <Parameter Name="Asignado" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="INV_EstadoArticulo_Get" ReturnType="Collection(INVModel.INV_EstadoArticulo_Get_Result)" />
+          <FunctionImport Name="INV_StockConsumibles_Add" ReturnType="Collection(Decimal)">
+            <Parameter Name="IdConsumible" Mode="In" Type="Int64" />
+            <Parameter Name="NumeroVale" Mode="In" Type="Int64" />
+            <Parameter Name="Fecha" Mode="In" Type="DateTime" />
+            <Parameter Name="UsuarioRegistra" Mode="In" Type="Int64" />
+            <Parameter Name="TipoMovimiento" Mode="In" Type="Byte" />
+            <Parameter Name="Estado" Mode="In" Type="Byte" />
+            <Parameter Name="CentroCosto" Mode="In" Type="Byte" />
+            <Parameter Name="BU" Mode="In" Type="Int32" />
+            <Parameter Name="JobBook" Mode="In" Type="Int64" />
+            <Parameter Name="JobBookCodigo" Mode="In" Type="String" />
+            <Parameter Name="JobBookNombre" Mode="In" Type="String" />
+            <Parameter Name="CuentaContable" Mode="In" Type="Int64" />
+            <Parameter Name="Ciudad" Mode="In" Type="Int64" />
+            <Parameter Name="Valor" Mode="In" Type="Int64" />
+            <Parameter Name="Total" Mode="In" Type="Int64" />
+            <Parameter Name="Disponible" Mode="In" Type="Int64" />
+            <Parameter Name="UsuarioAsignado" Mode="In" Type="Int64" />
+            <Parameter Name="TipoCargo" Mode="In" Type="Byte" />
+            <Parameter Name="Observaciones" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="INV_EstadoConsumible_Get" ReturnType="Collection(INVModel.INV_EstadoConsumible_Get_Result)" />
+          <FunctionImport Name="INV_StockConsumibles_Get" ReturnType="Collection(INVModel.INV_StockConsumibles_Get_Result)">
+            <Parameter Name="Id" Mode="In" Type="Int64" />
+            <Parameter Name="IdConsumible" Mode="In" Type="Int64" />
+            <Parameter Name="IdArticulo" Mode="In" Type="Int64" />
+            <Parameter Name="TipoMovimiento" Mode="In" Type="Byte" />
+            <Parameter Name="BU" Mode="In" Type="Int32" />
+            <Parameter Name="JobBookCodigo" Mode="In" Type="String" />
+            <Parameter Name="JobBookNombre" Mode="In" Type="String" />
+            <Parameter Name="Ciudad" Mode="In" Type="Int64" />
+            <Parameter Name="IdUsuario" Mode="In" Type="Int64" />
+            <Parameter Name="Usuario" Mode="In" Type="String" />
+            <Parameter Name="TipoCargo" Mode="In" Type="Byte" />
+            <Parameter Name="Legalizado" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="INV_Legalizaciones_Add" ReturnType="Collection(Decimal)">
+            <Parameter Name="IdConsumible" Mode="In" Type="Int64" />
+            <Parameter Name="UsuarioRegistra" Mode="In" Type="Int64" />
+            <Parameter Name="TipoLegalizacion" Mode="In" Type="Byte" />
+            <Parameter Name="Radicado" Mode="In" Type="String" />
+            <Parameter Name="Fecha" Mode="In" Type="DateTime" />
+            <Parameter Name="UsuarioResponsable" Mode="In" Type="Int64" />
+            <Parameter Name="Unidades" Mode="In" Type="Int32" />
+            <Parameter Name="Firmas" Mode="In" Type="Int64" />
+            <Parameter Name="Devoluciones" Mode="In" Type="Int64" />
+            <Parameter Name="NotasCredito" Mode="In" Type="Int64" />
+            <Parameter Name="DescuentoNomina" Mode="In" Type="Int64" />
+            <Parameter Name="ValorLegalizado" Mode="In" Type="Int64" />
+            <Parameter Name="Pendiente" Mode="In" Type="Int64" />
+            <Parameter Name="Observaciones" Mode="In" Type="String" />
+            <Parameter Name="Legalizado" Mode="In" Type="Boolean" />
+            <Parameter Name="CentroCosto" Mode="In" Type="Byte" />
+            <Parameter Name="BU" Mode="In" Type="Int32" />
+            <Parameter Name="JobBook" Mode="In" Type="Int64" />
+            <Parameter Name="JobBookCodigo" Mode="In" Type="String" />
+            <Parameter Name="JobBookNombre" Mode="In" Type="String" />
+            <Parameter Name="ValorCarrera" Mode="In" Type="Int64" />
+            <Parameter Name="Verificado" Mode="In" Type="Int64" />
+            <Parameter Name="FechaVerificacion" Mode="In" Type="DateTime" />
+            <Parameter Name="UsuarioVerifica" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="INV_Sede_Get" ReturnType="Collection(INVModel.INV_Sede_Get_Result)" />
+          <FunctionImport Name="INV_BU_Get" ReturnType="Collection(INVModel.INV_BU_Get_Result)" />
+          <FunctionImport Name="INV_TipoMovimiento_Get" ReturnType="Collection(INVModel.INV_TipoMovimiento_Get_Result)">
+          <Parameter Name="Permiso" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="INV_TipoLegalizacion_Get" ReturnType="Collection(INVModel.INV_TipoLegalizacion_Get_Result)">
+          <Parameter Name="Permiso" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="INV_StockxLegalizar_Get" ReturnType="Collection(INVModel.INV_StockxLegalizar_Get_Result)">
+            <Parameter Name="BU" Mode="In" Type="Int32" />
+            <Parameter Name="JobBookCodigo" Mode="In" Type="String" />
+            <Parameter Name="Articulo" Mode="In" Type="Int64" />
+            <Parameter Name="TipoProducto" Mode="In" Type="Int64" />
+            <Parameter Name="UsuarioRegistra" Mode="In" Type="Int64" />
+            <Parameter Name="UsuarioAsignado" Mode="In" Type="Int64" />
+            <Parameter Name="IdConsumible" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="INV_Legalizaciones_Get" ReturnType="Collection(INVModel.INV_Legalizaciones_Get_Result)">
+            <Parameter Name="Id" Mode="In" Type="Int64" />
+            <Parameter Name="IdConsumible" Mode="In" Type="Int64" />
+            <Parameter Name="BU" Mode="In" Type="Int32" />
+            <Parameter Name="JobBookCodigo" Mode="In" Type="String" />
+            <Parameter Name="Articulo" Mode="In" Type="Int64" />
+            <Parameter Name="TipoProducto" Mode="In" Type="Int64" />
+            <Parameter Name="UsuarioRegistra" Mode="In" Type="Int64" />
+            <Parameter Name="UsuarioAsignado" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="INV_Legalizaciones_Del">
+          <Parameter Name="Id" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="INV_Legalizaciones_Edit">
+            <Parameter Name="Id" Mode="In" Type="Int64" />
+            <Parameter Name="IdConsumible" Mode="In" Type="Int64" />
+            <Parameter Name="UsuarioRegistra" Mode="In" Type="Int64" />
+            <Parameter Name="TipoLegalizacion" Mode="In" Type="Byte" />
+            <Parameter Name="Radicado" Mode="In" Type="String" />
+            <Parameter Name="Fecha" Mode="In" Type="DateTime" />
+            <Parameter Name="UsuarioResponsable" Mode="In" Type="Int64" />
+            <Parameter Name="Unidades" Mode="In" Type="Int32" />
+            <Parameter Name="Firmas" Mode="In" Type="Int64" />
+            <Parameter Name="Devoluciones" Mode="In" Type="Int64" />
+            <Parameter Name="NotasCredito" Mode="In" Type="Int64" />
+            <Parameter Name="DescuentoNomina" Mode="In" Type="Int64" />
+            <Parameter Name="ValorLegalizado" Mode="In" Type="Int64" />
+            <Parameter Name="Pendiente" Mode="In" Type="Int64" />
+            <Parameter Name="Observaciones" Mode="In" Type="String" />
+            <Parameter Name="Legalizado" Mode="In" Type="Boolean" />
+            <Parameter Name="CentroCosto" Mode="In" Type="Byte" />
+            <Parameter Name="BU" Mode="In" Type="Int32" />
+            <Parameter Name="JobBook" Mode="In" Type="Int64" />
+            <Parameter Name="JobBookCodigo" Mode="In" Type="String" />
+            <Parameter Name="JobBookNombre" Mode="In" Type="String" />
+            <Parameter Name="ValorCarrera" Mode="In" Type="Int64" />
+            <Parameter Name="Verificado" Mode="In" Type="Int64" />
+            <Parameter Name="FechaVerificacion" Mode="In" Type="DateTime" />
+            <Parameter Name="UsuarioVerifica" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="INV_ReporteLegalizaciones" ReturnType="Collection(INVModel.INV_ReporteLegalizaciones_Result)">
+            <Parameter Name="FechaIni" Mode="In" Type="DateTime" />
+            <Parameter Name="FechaFin" Mode="In" Type="DateTime" />
+            <Parameter Name="UsuarioAsignado" Mode="In" Type="Int64" />
+            <Parameter Name="Articulo" Mode="In" Type="Int64" />
+            <Parameter Name="BU" Mode="In" Type="Int32" />
+            <Parameter Name="JobBookCodigo" Mode="In" Type="String" />
+            <Parameter Name="TodosCampos" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="INV_Papeleria_Get" ReturnType="Collection(INVModel.INV_Papeleria_Get_Result)" />
+          <FunctionImport Name="INV_MantenimientoEquipos_Add" ReturnType="Collection(Decimal)">
+            <Parameter Name="IdActivoFijo" Mode="In" Type="Int64" />
+            <Parameter Name="UsuarioRegistra" Mode="In" Type="Int64" />
+            <Parameter Name="Fecha" Mode="In" Type="DateTime" />
+            <Parameter Name="TipoMantenimiento" Mode="In" Type="Int32" />
+            <Parameter Name="UsuarioResponsable" Mode="In" Type="Int64" />
+            <Parameter Name="Observaciones" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="INV_MantenimientoEquipos_Edit">
+            <Parameter Name="Id" Mode="In" Type="Int64" />
+            <Parameter Name="IdActivoFijo" Mode="In" Type="Int64" />
+            <Parameter Name="UsuarioRegistra" Mode="In" Type="Int64" />
+            <Parameter Name="Fecha" Mode="In" Type="DateTime" />
+            <Parameter Name="TipoMantenimiento" Mode="In" Type="Int32" />
+            <Parameter Name="UsuarioResponsable" Mode="In" Type="Int64" />
+            <Parameter Name="Observaciones" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="INV_MantenimientoEquipos_Get" ReturnType="Collection(INVModel.INV_MantenimientoEquipos_Get_Result)">
+            <Parameter Name="Id" Mode="In" Type="Int64" />
+            <Parameter Name="IdActivoFijo" Mode="In" Type="Int64" />
+            <Parameter Name="Articulo" Mode="In" Type="Int64" />
+            <Parameter Name="TipoMantenimiento" Mode="In" Type="Int32" />
+            <Parameter Name="IdUsuarioResponsable" Mode="In" Type="Int64" />
+            <Parameter Name="UsuarioResponsable" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="INV_ReporteRemanente" ReturnType="Collection(INVModel.INV_ReporteRemanente_Result)">
+            <Parameter Name="IdConsumible" Mode="In" Type="Int64" />
+            <Parameter Name="Articulo" Mode="In" Type="Int64" />
+            <Parameter Name="TipoProducto" Mode="In" Type="Int64" />
+            <Parameter Name="JobBook" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="INV_Asignaciones_Del">
+          <Parameter Name="IdActivoFijo" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="INV_Camaras_Get" ReturnType="Collection(INVModel.INV_Camaras_Get_Result)" />
+          <FunctionImport Name="INV_RegistroArticulos_Get" ReturnType="Collection(INVModel.INV_RegistroArticulos_Get_Result)">
+            <Parameter Name="Id" Mode="In" Type="Int64" />
+            <Parameter Name="TipoArticulo" Mode="In" Type="Int64" />
+            <Parameter Name="Articulo" Mode="In" Type="Int64" />
+            <Parameter Name="TipoComputador" Mode="In" Type="Int64" />
+            <Parameter Name="PertenecePC" Mode="In" Type="Byte" />
+            <Parameter Name="TipoPeriferico" Mode="In" Type="Int64" />
+            <Parameter Name="TipoProducto" Mode="In" Type="Int64" />
+            <Parameter Name="Estado" Mode="In" Type="Int64" />
+            <Parameter Name="Sede" Mode="In" Type="Int64" />
+            <Parameter Name="IdUsuarioAsignado" Mode="In" Type="Int64" />
+            <Parameter Name="UsuarioAsignado" Mode="In" Type="String" />
+            <Parameter Name="Asignado" Mode="In" Type="Boolean" />
+            <Parameter Name="IdFisico" Mode="In" Type="Int64" />
+            <Parameter Name="TodosCampos" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="INV_Articulos_Get_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="String" Name="Articulo" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="INV_Perifericos_Get_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Periferico" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="INV_ValorBono_Get_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Bono" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="INV_Asignaciones_Get_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="Int64" Name="IdActivoFijo" Nullable="true" />
+          <Property Type="Int64" Name="IdArticulo" Nullable="true" />
+          <Property Type="String" Name="Articulo" Nullable="false" />
+          <Property Type="DateTime" Name="FechaAsignacion" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Observacion" Nullable="true" />
+          <Property Type="Boolean" Name="IdAsignado" Nullable="true" />
+          <Property Type="String" Name="Asignado" Nullable="true" MaxLength="2" />
+          <Property Type="Int64" Name="IdEstadoTablet" Nullable="true" />
+          <Property Type="String" Name="EstadoTablet" Nullable="true" MaxLength="50" />
+          <Property Type="Int64" Name="IdEstadoArticulo" Nullable="true" />
+          <Property Type="String" Name="EstadoArticulo" Nullable="true" MaxLength="50" />
+          <Property Type="Int64" Name="IdUsuarioRegistra" Nullable="true" />
+          <Property Type="String" Name="UsuarioRegistra" Nullable="true" MaxLength="501" />
+          <Property Type="Byte" Name="IdCentroCosto" Nullable="true" />
+          <Property Type="String" Name="CentroCosto" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="IdBU" Nullable="true" />
+          <Property Type="String" Name="BU" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="JobBookCodigo" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="JobBookNombre" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="Ciudad" Nullable="true" MaxLength="50" />
+          <Property Type="Int64" Name="IdUsuarioAsignado" Nullable="true" />
+          <Property Type="String" Name="UsuarioAsignado" Nullable="true" MaxLength="201" />
+          <Property Type="Byte" Name="IdTipoCargo" Nullable="true" />
+          <Property Type="String" Name="TipoCargo" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="Cargo" Nullable="true" />
+          <Property Type="Int64" Name="IdTipoComputador" Nullable="true" />
+          <Property Type="String" Name="TipoComputador" Nullable="true" MaxLength="50" />
+          <Property Type="Int64" Name="IdTipoPeriferico" Nullable="true" />
+          <Property Type="String" Name="TipoPeriferico" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Marca" Nullable="true" />
+          <Property Type="String" Name="Modelo" Nullable="true" />
+          <Property Type="String" Name="Serial" Nullable="true" />
+          <Property Type="String" Name="NombreEquipo" Nullable="true" />
+          <Property Type="Int64" Name="IdTablet" Nullable="true" />
+          <Property Type="Int64" Name="Chip" Nullable="true" />
+          <Property Type="Int64" Name="IMEI" Nullable="true" />
+          <Property Type="Int64" Name="NumeroCelular" Nullable="true" />
+          <Property Type="Int32" Name="CantidadMinutos" Nullable="true" />
+          <Property Type="Int64" Name="IdCiudad" Nullable="true" />
+          <Property Type="Int64" Name="JobBook" Nullable="true" />
+          <Property Type="Int64" Name="IdFisico" Nullable="true" />
+          <Property Type="Int32" Name="IdSede" Nullable="true" />
+          <Property Type="String" Name="Sede" Nullable="true" />
+          <Property Type="Int32" Name="IdGrupoUnidad" Nullable="true" />
+          <Property Type="String" Name="GrupoUnidad" Nullable="true" MaxLength="250" />
+          <Property Type="Int32" Name="IdUnidad" Nullable="true" />
+          <Property Type="String" Name="Unidad" Nullable="true" MaxLength="50" />
+          <Property Type="Byte" Name="IdTipoGrupoUnidad" Nullable="true" />
+          <Property Type="String" Name="TipoGrupoUnidad" Nullable="true" MaxLength="250" />
+        </ComplexType>
+        <ComplexType Name="INV_EstadosActivosFijos_Get_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="String" Name="EstadoActivoFijo" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="INV_EstadoTablet_Get_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Estado" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="INV_EstadoArticulo_Get_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Estado" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="INV_EstadoConsumible_Get_Result">
+          <Property Type="Byte" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Estado" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="INV_StockConsumibles_Get_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="Int64" Name="IdConsumible" Nullable="true" />
+          <Property Type="Int64" Name="IdArticulo" Nullable="true" />
+          <Property Type="String" Name="Articulo" Nullable="false" />
+          <Property Type="Int64" Name="IdUsuarioRegistra" Nullable="true" />
+          <Property Type="String" Name="UsuarioRegistra" Nullable="true" MaxLength="501" />
+          <Property Type="Byte" Name="IdTipoMovimiento" Nullable="true" />
+          <Property Type="String" Name="TipoMovimiento" Nullable="true" MaxLength="50" />
+          <Property Type="Byte" Name="IdCentroCosto" Nullable="true" />
+          <Property Type="String" Name="CentroCosto" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="IdBU" Nullable="true" />
+          <Property Type="String" Name="BU" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="JobBookCodigo" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="JobBookNombre" Nullable="true" MaxLength="250" />
+          <Property Type="Int64" Name="Total" Nullable="true" />
+          <Property Type="Int64" Name="IdCuentaContable" Nullable="true" />
+          <Property Type="String" Name="NumeroCuentaContable" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="CuentaContable" Nullable="true" MaxLength="50" />
+          <Property Type="Int64" Name="IdUsuarioAsignado" Nullable="true" />
+          <Property Type="String" Name="UsuarioAsignado" Nullable="true" MaxLength="201" />
+          <Property Type="String" Name="Observaciones" Nullable="true" />
+          <Property Type="Int64" Name="Particion" Nullable="true" />
+          <Property Type="Byte" Name="IdTipoObsequio" Nullable="true" />
+          <Property Type="String" Name="TipoObsequio" Nullable="true" MaxLength="50" />
+          <Property Type="Byte" Name="IdEstadoProducto" Nullable="true" />
+          <Property Type="String" Name="EstadoProducto" Nullable="true" MaxLength="50" />
+          <Property Type="Int64" Name="NumeroVale" Nullable="true" />
+          <Property Type="Int64" Name="IdTipoProducto" Nullable="true" />
+          <Property Type="String" Name="TipoProducto" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Producto" Nullable="true" />
+          <Property Type="Int64" Name="IdTipoBono" Nullable="true" />
+          <Property Type="String" Name="TipoBono" Nullable="true" MaxLength="50" />
+          <Property Type="Int64" Name="IdCiudad" Nullable="true" />
+          <Property Type="String" Name="Ciudad" Nullable="true" MaxLength="50" />
+          <Property Type="Byte" Name="IdTipoCargo" Nullable="true" />
+          <Property Type="String" Name="TipoCargo" Nullable="true" MaxLength="250" />
+          <Property Type="DateTime" Name="Fecha" Nullable="true" Precision="23" />
+          <Property Type="Int64" Name="Valor" Nullable="true" />
+          <Property Type="Int64" Name="Disponible" Nullable="true" />
+          <Property Type="Int64" Name="JobBook" Nullable="true" />
+          </ComplexType>
+        <ComplexType Name="INV_Sede_Get_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Sede" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="INV_BU_Get_Result">
+          <Property Type="Int64" Name="Id" Nullable="true" />
+          <Property Type="String" Name="Nombre" Nullable="true" MaxLength="121" />
+        </ComplexType>
+        <ComplexType Name="INV_TipoMovimiento_Get_Result">
+          <Property Type="Byte" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Movimiento" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="INV_TipoLegalizacion_Get_Result">
+          <Property Type="Byte" Name="Id" Nullable="false" />
+          <Property Type="String" Name="TipoLegalizacion" Nullable="false" MaxLength="250" />
+        </ComplexType>
+        <ComplexType Name="INV_StockxLegalizar_Get_Result">
+          <Property Type="String" Name="Usuario" Nullable="true" MaxLength="201" />
+          <Property Type="Int64" Name="TotalEntregado" Nullable="true" />
+          <Property Type="Int64" Name="TotalLegalizado" Nullable="false" />
+          <Property Type="Int64" Name="IdConsumible" Nullable="true" />
+          <Property Type="String" Name="Articulo" Nullable="true" />
+          <Property Type="Int64" Name="UsuarioAsignado" Nullable="true" />
+          <Property Type="Byte" Name="IdCentroCosto" Nullable="true" />
+          <Property Type="String" Name="CentroCosto" Nullable="true" MaxLength="50" />
+          <Property Type="Int64" Name="JobBook" Nullable="true" />
+          <Property Type="String" Name="JobBookCodigo" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="JobBookNombre" Nullable="true" MaxLength="250" />
+          <Property Type="Int32" Name="IdBU" Nullable="true" />
+          <Property Type="String" Name="BU" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Estado" Nullable="false" MaxLength="10" />
+          <Property Type="Int64" Name="Pendiente" Nullable="true" />
+          <Property Type="Int64" Name="IdArticulo" Nullable="true" />
+          <Property Type="Int64" Name="UsuarioRegistra" Nullable="true" />
+          <Property Type="Int64" Name="URL" Nullable="true" />
+          <Property Type="Int64" Name="TotalFirmas" Nullable="false" />
+          <Property Type="Int64" Name="TotalDevoluciones" Nullable="false" />
+          <Property Type="Int64" Name="TotalNotasCredito" Nullable="false" />
+          <Property Type="Int64" Name="TotalDescuentoNomina" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="INV_Legalizaciones_Get_Result">
+          <Property Type="Int64" Name="IdConsumible" Nullable="true" />
+          <Property Type="String" Name="Articulo" Nullable="true" />
+          <Property Type="String" Name="Usuario" Nullable="true" MaxLength="201" />
+          <Property Type="String" Name="Legalizado" Nullable="true" MaxLength="2" />
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="Int64" Name="ValorLegalizado" Nullable="true" />
+          <Property Type="Int64" Name="Pendiente" Nullable="true" />
+          <Property Type="Int64" Name="IdArticulo" Nullable="true" />
+          <Property Type="Int64" Name="UsuarioRegistra" Nullable="true" />
+          <Property Type="Byte" Name="IdTipoLegalizacion" Nullable="true" />
+          <Property Type="String" Name="TipoLegalizacion" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="Radicado" Nullable="true" MaxLength="250" />
+          <Property Type="DateTime" Name="Fecha" Nullable="true" Precision="23" />
+          <Property Type="Int64" Name="UsuarioResponsable" Nullable="true" />
+          <Property Type="Int32" Name="Unidades" Nullable="true" />
+          <Property Type="Int64" Name="ValorEntregado" Nullable="true" />
+          <Property Type="Int64" Name="Firmas" Nullable="true" />
+          <Property Type="Int64" Name="Devoluciones" Nullable="true" />
+          <Property Type="Int64" Name="NotasCredito" Nullable="true" />
+          <Property Type="Int64" Name="DescuentoNomina" Nullable="true" />
+          <Property Type="Byte" Name="IdCentroCosto" Nullable="true" />
+          <Property Type="String" Name="CentroCosto" Nullable="true" MaxLength="50" />
+          <Property Type="Int64" Name="JobBook" Nullable="true" />
+          <Property Type="String" Name="JobBookCodigo" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="JobBookNombre" Nullable="true" MaxLength="250" />
+          <Property Type="Int32" Name="IdBU" Nullable="true" />
+          <Property Type="String" Name="BU" Nullable="true" MaxLength="100" />
+          <Property Type="Boolean" Name="IdLegalizado" Nullable="true" />
+          <Property Type="Int64" Name="ValorCarrera" Nullable="true" />
+          <Property Type="Boolean" Name="IdVerificado" Nullable="true" />
+          <Property Type="String" Name="Verificado" Nullable="true" MaxLength="2" />
+          <Property Type="DateTime" Name="FechaVerificacion" Nullable="true" Precision="23" />
+          <Property Type="Int64" Name="IdUsuarioVerifica" Nullable="true" />
+          <Property Type="String" Name="UsuarioVerifica" Nullable="true" MaxLength="501" />
+          <Property Type="String" Name="Estado" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Observaciones" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="INV_ReporteLegalizaciones_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="Int64" Name="IdConsumible" Nullable="true" />
+          <Property Type="Int64" Name="IdArticulo" Nullable="true" />
+          <Property Type="String" Name="Articulo" Nullable="true" />
+          <Property Type="Int64" Name="UsuarioRegistra" Nullable="true" />
+          <Property Type="Byte" Name="IdTipoLegalizacion" Nullable="true" />
+          <Property Type="String" Name="TipoLegalizacion" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="Radicado" Nullable="true" MaxLength="250" />
+          <Property Type="DateTime" Name="Fecha" Nullable="true" Precision="23" />
+          <Property Type="Int64" Name="UsuarioResponsable" Nullable="true" />
+          <Property Type="String" Name="UsuarioAsignado" Nullable="true" MaxLength="201" />
+          <Property Type="Byte" Name="IdCentroCosto" Nullable="true" />
+          <Property Type="String" Name="CentroCosto" Nullable="true" MaxLength="50" />
+          <Property Type="Int64" Name="JobBook" Nullable="true" />
+          <Property Type="String" Name="JobBookCodigo" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="JobBookNombre" Nullable="true" MaxLength="250" />
+          <Property Type="Int32" Name="IdBU" Nullable="true" />
+          <Property Type="String" Name="BU" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="Unidades" Nullable="true" />
+          <Property Type="Int64" Name="ValorCarrera" Nullable="true" />
+          <Property Type="Int64" Name="ValorEntregado" Nullable="true" />
+          <Property Type="Int64" Name="Firmas" Nullable="true" />
+          <Property Type="Int64" Name="Devoluciones" Nullable="true" />
+          <Property Type="Int64" Name="NotasCredito" Nullable="true" />
+          <Property Type="Int64" Name="DescuentoNomina" Nullable="true" />
+          <Property Type="Int64" Name="ValorLegalizado" Nullable="true" />
+          <Property Type="Int64" Name="Pendiente" Nullable="true" />
+          <Property Type="String" Name="Observaciones" Nullable="true" />
+          <Property Type="Boolean" Name="IdLegalizado" Nullable="true" />
+          <Property Type="String" Name="Legalizado" Nullable="true" MaxLength="2" />
+        </ComplexType>
+        <ComplexType Name="INV_Papeleria_Get_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Producto" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="INV_MantenimientoEquipos_Get_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="Int64" Name="IdActivoFijo" Nullable="false" />
+          <Property Type="Int64" Name="IdArticulo" Nullable="true" />
+          <Property Type="String" Name="Articulo" Nullable="false" />
+          <Property Type="Int64" Name="IdTipoComputador" Nullable="true" />
+          <Property Type="String" Name="TipoComputador" Nullable="true" MaxLength="50" />
+          <Property Type="Int64" Name="IdTipoPeriferico" Nullable="true" />
+          <Property Type="String" Name="TipoPeriferico" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Marca" Nullable="true" />
+          <Property Type="String" Name="Modelo" Nullable="true" />
+          <Property Type="Int64" Name="IdFisico" Nullable="true" />
+          <Property Type="String" Name="Serial" Nullable="true" />
+          <Property Type="String" Name="NombreEquipo" Nullable="true" />
+          <Property Type="Int64" Name="IdTablet" Nullable="true" />
+          <Property Type="Int64" Name="Chip" Nullable="true" />
+          <Property Type="Int64" Name="IMEI" Nullable="true" />
+          <Property Type="Int64" Name="NumeroCelular" Nullable="true" />
+          <Property Type="Int32" Name="CantidadMinutos" Nullable="true" />
+          <Property Type="Int64" Name="IdUsuarioRegistra" Nullable="false" />
+          <Property Type="String" Name="UsuarioRegistra" Nullable="true" MaxLength="501" />
+          <Property Type="DateTime" Name="Fecha" Nullable="false" />
+          <Property Type="Int32" Name="IdTipoMantenimiento" Nullable="false" />
+          <Property Type="String" Name="TipoMantenimiento" Nullable="true" MaxLength="250" />
+          <Property Type="Int64" Name="IdUsuarioResponsable" Nullable="true" />
+          <Property Type="String" Name="UsuarioResponsable" Nullable="true" MaxLength="201" />
+          <Property Type="String" Name="Observaciones" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="INV_ReporteRemanente_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="Int64" Name="IdConsumible" Nullable="true" />
+          <Property Type="Int64" Name="IdArticulo" Nullable="true" />
+          <Property Type="String" Name="Articulo" Nullable="false" />
+          <Property Type="Int64" Name="IdTipoProducto" Nullable="true" />
+          <Property Type="String" Name="TipoProducto" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Producto" Nullable="true" />
+          <Property Type="Int64" Name="IdTipoBono" Nullable="true" />
+          <Property Type="String" Name="TipoBono" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="Fecha" Nullable="true" Precision="23" />
+          <Property Type="Int64" Name="IdUsuarioRegistra" Nullable="true" />
+          <Property Type="String" Name="UsuarioRegistra" Nullable="true" MaxLength="501" />
+          <Property Type="Byte" Name="IdTipoObsequio" Nullable="true" />
+          <Property Type="String" Name="TipoObsequio" Nullable="true" MaxLength="50" />
+          <Property Type="Byte" Name="IdEstadoProducto" Nullable="true" />
+          <Property Type="String" Name="EstadoProducto" Nullable="true" MaxLength="50" />
+          <Property Type="Byte" Name="IdCentroCosto" Nullable="true" />
+          <Property Type="String" Name="CentroCosto" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="IdBU" Nullable="true" />
+          <Property Type="String" Name="BU" Nullable="true" MaxLength="100" />
+          <Property Type="Int64" Name="JobBook" Nullable="true" />
+          <Property Type="String" Name="JobBookCodigo" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="JobBookNombre" Nullable="true" MaxLength="250" />
+          <Property Type="Int64" Name="IdCuentaContable" Nullable="true" />
+          <Property Type="String" Name="NumeroCuentaContable" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="CuentaContable" Nullable="true" MaxLength="50" />
+          <Property Type="Int64" Name="IdCiudad" Nullable="true" />
+          <Property Type="String" Name="Ciudad" Nullable="true" MaxLength="50" />
+          <Property Type="Int64" Name="NumeroVale" Nullable="true" />
+          <Property Type="Int64" Name="Total" Nullable="true" />
+          <Property Type="Int64" Name="Valor" Nullable="true" />
+          <Property Type="Int64" Name="Disponible" Nullable="true" />
+          <Property Type="String" Name="Observaciones" Nullable="true" />
+          <Property Type="Int64" Name="IdUsuarioAsignado" Nullable="true" />
+          <Property Type="String" Name="UsuarioAsignado" Nullable="true" MaxLength="201" />
+          <Property Type="Byte" Name="IdTipoCargo" Nullable="true" />
+          <Property Type="String" Name="TipoCargo" Nullable="true" MaxLength="250" />
+          <Property Type="Int64" Name="Particion" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="INV_Camaras_Get_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Camara" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="INV_RegistroArticulos_Get_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="Int64" Name="IdTipoArticulo" Nullable="false" />
+          <Property Type="String" Name="TipoArticulo" Nullable="false" />
+          <Property Type="Int64" Name="IdArticulo" Nullable="true" />
+          <Property Type="String" Name="Articulo" Nullable="false" />
+          <Property Type="DateTime" Name="FechaCompra" Nullable="true" />
+          <Property Type="DateTime" Name="FechaFinRenta" Nullable="true" />
+          <Property Type="DateTime" Name="FechaRegistro" Nullable="true" Precision="23" />
+          <Property Type="Int64" Name="IdUsuarioRegistra" Nullable="true" />
+          <Property Type="String" Name="UsuarioRegistra" Nullable="true" MaxLength="501" />
+          <Property Type="Byte" Name="IdCentroCosto" Nullable="true" />
+          <Property Type="String" Name="CentroCosto" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="IdBU" Nullable="true" />
+          <Property Type="String" Name="BU" Nullable="true" MaxLength="100" />
+          <Property Type="Int64" Name="JobBook" Nullable="true" />
+          <Property Type="String" Name="JobBookCodigo" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="JobBookNombre" Nullable="true" MaxLength="250" />
+          <Property Type="Int64" Name="IdCuentaContable" Nullable="true" />
+          <Property Type="String" Name="NumeroCuentaContable" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="CuentaContable" Nullable="true" MaxLength="100" />
+          <Property Type="Int64" Name="Valor" Nullable="true" />
+          <Property Type="Int64" Name="Cantidad" Nullable="true" />
+          <Property Type="Int64" Name="IdEstado" Nullable="true" />
+          <Property Type="String" Name="Estado" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Descripcion" Nullable="true" />
+          <Property Type="Int64" Name="NumeroPV" Nullable="true" />
+          <Property Type="Int64" Name="ProveedorId" Nullable="true" />
+          <Property Type="String" Name="NombreProveedor" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="Symphony" Nullable="true" />
+          <Property Type="Int64" Name="IdFisico" Nullable="true" />
+          <Property Type="Int64" Name="IdSede" Nullable="true" />
+          <Property Type="String" Name="Sede" Nullable="true" />
+          <Property Type="Int64" Name="IdTipoComputador" Nullable="true" />
+          <Property Type="String" Name="TipoComputador" Nullable="true" MaxLength="50" />
+          <Property Type="Byte" Name="IdPertenecePC" Nullable="true" />
+          <Property Type="String" Name="PertenecePC" Nullable="true" MaxLength="50" />
+          <Property Type="Int64" Name="IdTipoPeriferico" Nullable="true" />
+          <Property Type="String" Name="TipoPeriferico" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Marca" Nullable="true" />
+          <Property Type="String" Name="Modelo" Nullable="true" />
+          <Property Type="String" Name="Procesador" Nullable="true" />
+          <Property Type="String" Name="Memoria" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Almacenamiento" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="SistemaOperativo" Nullable="true" />
+          <Property Type="String" Name="Serial" Nullable="true" />
+          <Property Type="String" Name="NombreEquipo" Nullable="true" />
+          <Property Type="String" Name="Office" Nullable="true" />
+          <Property Type="String" Name="Programas" Nullable="true" />
+          <Property Type="String" Name="TipoServidor" Nullable="true" />
+          <Property Type="String" Name="Raid" Nullable="true" />
+          <Property Type="Int64" Name="IdTablet" Nullable="true" />
+          <Property Type="Int64" Name="IdSTG" Nullable="true" />
+          <Property Type="String" Name="TamanoPantalla" Nullable="true" MaxLength="50" />
+          <Property Type="Int64" Name="Chip" Nullable="true" />
+          <Property Type="Int64" Name="IMEI" Nullable="true" />
+          <Property Type="Int64" Name="IdPertenece" Nullable="true" />
+          <Property Type="String" Name="Pertenece" Nullable="true" MaxLength="50" />
+          <Property Type="Int64" Name="IdOperador" Nullable="true" />
+          <Property Type="String" Name="Operador" Nullable="true" MaxLength="50" />
+          <Property Type="Int64" Name="NumeroCelular" Nullable="true" />
+          <Property Type="Int32" Name="CantidadMinutos" Nullable="true" />
+          <Property Type="Int64" Name="IdTipoProducto" Nullable="true" />
+          <Property Type="String" Name="TipoProducto" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Producto" Nullable="true" />
+          <Property Type="Byte" Name="IdTipoObsequio" Nullable="true" />
+          <Property Type="String" Name="TipoObsequio" Nullable="true" MaxLength="50" />
+          <Property Type="Int64" Name="IdTipoBono" Nullable="true" />
+          <Property Type="String" Name="TipoBono" Nullable="true" MaxLength="50" />
+          <Property Type="Int64" Name="IdProductoPapeleria" Nullable="true" />
+          <Property Type="String" Name="ProductoPapeleria" Nullable="true" />
+          <Property Type="Boolean" Name="IdAsignado" Nullable="true" />
+          <Property Type="String" Name="Asignado" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="Cargo" Nullable="true" />
+          <Property Type="String" Name="Area" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="BU1" Nullable="true" />
+          <Property Type="Int64" Name="IdUsuarioAsignado" Nullable="true" />
+          <Property Type="String" Name="UsuarioAsignado" Nullable="true" MaxLength="201" />
+          <Property Type="DateTime" Name="FechaAsignacion" Nullable="true" Precision="23" />
+          <Property Type="String" Name="ObservacionAsignacion" Nullable="true" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="INVModelStoreContainer" CdmEntityContainer="INVEntities" >
+          <FunctionImportMapping FunctionImportName="INV_Articulos_Get" FunctionName="INVModel.Store.INV_Articulos_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="INVModel.INV_Articulos_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Articulo" ColumnName="Articulo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="INV_Perifericos_Get" FunctionName="INVModel.Store.INV_Perifericos_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="INVModel.INV_Perifericos_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Periferico" ColumnName="Periferico" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="INV_ValorBono_Get" FunctionName="INVModel.Store.INV_ValorBono_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="INVModel.INV_ValorBono_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Bono" ColumnName="Bono" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="INV_RegistroArticulos_Add" FunctionName="INVModel.Store.INV_RegistroArticulos_Add" />
+          <FunctionImportMapping FunctionImportName="INV_RegistroArticulos_Del" FunctionName="INVModel.Store.INV_RegistroArticulos_Del" />
+          <FunctionImportMapping FunctionImportName="INV_RegistroArticulos_Edit" FunctionName="INVModel.Store.INV_RegistroArticulos_Edit" />
+          <FunctionImportMapping FunctionImportName="INV_Asignaciones_Add" FunctionName="INVModel.Store.INV_Asignaciones_Add" />
+          <FunctionImportMapping FunctionImportName="INV_Asignaciones_Get" FunctionName="INVModel.Store.INV_Asignaciones_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="INVModel.INV_Asignaciones_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdActivoFijo" ColumnName="IdActivoFijo" />
+                <ScalarProperty Name="IdArticulo" ColumnName="IdArticulo" />
+                <ScalarProperty Name="Articulo" ColumnName="Articulo" />
+                <ScalarProperty Name="FechaAsignacion" ColumnName="FechaAsignacion" />
+                <ScalarProperty Name="Observacion" ColumnName="Observacion" />
+                <ScalarProperty Name="IdAsignado" ColumnName="IdAsignado" />
+                <ScalarProperty Name="Asignado" ColumnName="Asignado" />
+                <ScalarProperty Name="IdEstadoTablet" ColumnName="IdEstadoTablet" />
+                <ScalarProperty Name="EstadoTablet" ColumnName="EstadoTablet" />
+                <ScalarProperty Name="IdEstadoArticulo" ColumnName="IdEstadoArticulo" />
+                <ScalarProperty Name="EstadoArticulo" ColumnName="EstadoArticulo" />
+                <ScalarProperty Name="IdUsuarioRegistra" ColumnName="IdUsuarioRegistra" />
+                <ScalarProperty Name="UsuarioRegistra" ColumnName="UsuarioRegistra" />
+                <ScalarProperty Name="IdCentroCosto" ColumnName="IdCentroCosto" />
+                <ScalarProperty Name="CentroCosto" ColumnName="CentroCosto" />
+                <ScalarProperty Name="IdBU" ColumnName="IdBU" />
+                <ScalarProperty Name="BU" ColumnName="BU" />
+                <ScalarProperty Name="JobBookCodigo" ColumnName="JobBookCodigo" />
+                <ScalarProperty Name="JobBookNombre" ColumnName="JobBookNombre" />
+                <ScalarProperty Name="Ciudad" ColumnName="Ciudad" />
+                <ScalarProperty Name="IdUsuarioAsignado" ColumnName="IdUsuarioAsignado" />
+                <ScalarProperty Name="UsuarioAsignado" ColumnName="UsuarioAsignado" />
+                <ScalarProperty Name="IdTipoCargo" ColumnName="IdTipoCargo" />
+                <ScalarProperty Name="TipoCargo" ColumnName="TipoCargo" />
+                <ScalarProperty Name="Cargo" ColumnName="Cargo" />
+                <ScalarProperty Name="IdTipoComputador" ColumnName="IdTipoComputador" />
+                <ScalarProperty Name="TipoComputador" ColumnName="TipoComputador" />
+                <ScalarProperty Name="IdTipoPeriferico" ColumnName="IdTipoPeriferico" />
+                <ScalarProperty Name="TipoPeriferico" ColumnName="TipoPeriferico" />
+                <ScalarProperty Name="Marca" ColumnName="Marca" />
+                <ScalarProperty Name="Modelo" ColumnName="Modelo" />
+                <ScalarProperty Name="Serial" ColumnName="Serial" />
+                <ScalarProperty Name="NombreEquipo" ColumnName="NombreEquipo" />
+                <ScalarProperty Name="IdTablet" ColumnName="IdTablet" />
+                <ScalarProperty Name="Chip" ColumnName="Chip" />
+                <ScalarProperty Name="IMEI" ColumnName="IMEI" />
+                <ScalarProperty Name="NumeroCelular" ColumnName="NumeroCelular" />
+                <ScalarProperty Name="CantidadMinutos" ColumnName="CantidadMinutos" />
+                <ScalarProperty Name="IdCiudad" ColumnName="IdCiudad" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="IdFisico" ColumnName="IdFisico" />
+                <ScalarProperty Name="IdSede" ColumnName="IdSede" />
+                <ScalarProperty Name="Sede" ColumnName="Sede" />
+                <ScalarProperty Name="IdGrupoUnidad" ColumnName="IdGrupoUnidad" />
+                <ScalarProperty Name="GrupoUnidad" ColumnName="GrupoUnidad" />
+                <ScalarProperty Name="IdUnidad" ColumnName="IdUnidad" />
+                <ScalarProperty Name="Unidad" ColumnName="Unidad" />
+                <ScalarProperty Name="IdTipoGrupoUnidad" ColumnName="IdTipoGrupoUnidad" />
+                <ScalarProperty Name="TipoGrupoUnidad" ColumnName="TipoGrupoUnidad" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="INV_RegistroArticulos_Asignado_Edit" FunctionName="INVModel.Store.INV_RegistroArticulos_Asignado_Edit" />
+          <FunctionImportMapping FunctionImportName="INV_EstadoTablet_Get" FunctionName="INVModel.Store.INV_EstadoTablet_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="INVModel.INV_EstadoTablet_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="INV_Asignaciones_Edit" FunctionName="INVModel.Store.INV_Asignaciones_Edit" />
+          <FunctionImportMapping FunctionImportName="INV_LogAsignaciones_Add" FunctionName="INVModel.Store.INV_LogAsignaciones_Add" />
+          <FunctionImportMapping FunctionImportName="INV_EstadoArticulo_Get" FunctionName="INVModel.Store.INV_EstadoArticulo_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="INVModel.INV_EstadoArticulo_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="INV_StockConsumibles_Add" FunctionName="INVModel.Store.INV_StockConsumibles_Add" />
+          <FunctionImportMapping FunctionImportName="INV_EstadoConsumible_Get" FunctionName="INVModel.Store.INV_EstadoConsumible_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="INVModel.INV_EstadoConsumible_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="INV_StockConsumibles_Get" FunctionName="INVModel.Store.INV_StockConsumibles_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="INVModel.INV_StockConsumibles_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdConsumible" ColumnName="IdConsumible" />
+                <ScalarProperty Name="IdArticulo" ColumnName="IdArticulo" />
+                <ScalarProperty Name="Articulo" ColumnName="Articulo" />
+                <ScalarProperty Name="IdUsuarioRegistra" ColumnName="IdUsuarioRegistra" />
+                <ScalarProperty Name="UsuarioRegistra" ColumnName="UsuarioRegistra" />
+                <ScalarProperty Name="IdTipoMovimiento" ColumnName="IdTipoMovimiento" />
+                <ScalarProperty Name="TipoMovimiento" ColumnName="TipoMovimiento" />
+                <ScalarProperty Name="IdCentroCosto" ColumnName="IdCentroCosto" />
+                <ScalarProperty Name="CentroCosto" ColumnName="CentroCosto" />
+                <ScalarProperty Name="IdBU" ColumnName="IdBU" />
+                <ScalarProperty Name="BU" ColumnName="BU" />
+                <ScalarProperty Name="JobBookCodigo" ColumnName="JobBookCodigo" />
+                <ScalarProperty Name="JobBookNombre" ColumnName="JobBookNombre" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="IdCuentaContable" ColumnName="IdCuentaContable" />
+                <ScalarProperty Name="NumeroCuentaContable" ColumnName="NumeroCuentaContable" />
+                <ScalarProperty Name="CuentaContable" ColumnName="CuentaContable" />
+                <ScalarProperty Name="IdUsuarioAsignado" ColumnName="IdUsuarioAsignado" />
+                <ScalarProperty Name="UsuarioAsignado" ColumnName="UsuarioAsignado" />
+                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
+                <ScalarProperty Name="Particion" ColumnName="Particion" />
+                <ScalarProperty Name="IdTipoObsequio" ColumnName="IdTipoObsequio" />
+                <ScalarProperty Name="TipoObsequio" ColumnName="TipoObsequio" />
+                <ScalarProperty Name="IdEstadoProducto" ColumnName="IdEstadoProducto" />
+                <ScalarProperty Name="EstadoProducto" ColumnName="EstadoProducto" />
+                <ScalarProperty Name="NumeroVale" ColumnName="NumeroVale" />
+                <ScalarProperty Name="IdTipoProducto" ColumnName="IdTipoProducto" />
+                <ScalarProperty Name="TipoProducto" ColumnName="TipoProducto" />
+                <ScalarProperty Name="Producto" ColumnName="Producto" />
+                <ScalarProperty Name="IdTipoBono" ColumnName="IdTipoBono" />
+                <ScalarProperty Name="TipoBono" ColumnName="TipoBono" />
+                <ScalarProperty Name="IdCiudad" ColumnName="IdCiudad" />
+                <ScalarProperty Name="Ciudad" ColumnName="Ciudad" />
+                <ScalarProperty Name="IdTipoCargo" ColumnName="IdTipoCargo" />
+                <ScalarProperty Name="TipoCargo" ColumnName="TipoCargo" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Valor" ColumnName="Valor" />
+                <ScalarProperty Name="Disponible" ColumnName="Disponible" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="INV_Legalizaciones_Add" FunctionName="INVModel.Store.INV_Legalizaciones_Add" />
+          <FunctionImportMapping FunctionImportName="INV_Sede_Get" FunctionName="INVModel.Store.INV_Sede_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="INVModel.INV_Sede_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Sede" ColumnName="Sede" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="INV_BU_Get" FunctionName="INVModel.Store.INV_BU_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="INVModel.INV_BU_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="INV_TipoMovimiento_Get" FunctionName="INVModel.Store.INV_TipoMovimiento_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="INVModel.INV_TipoMovimiento_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Movimiento" ColumnName="Movimiento" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="INV_TipoLegalizacion_Get" FunctionName="INVModel.Store.INV_TipoLegalizacion_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="INVModel.INV_TipoLegalizacion_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="TipoLegalizacion" ColumnName="TipoLegalizacion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="INV_StockxLegalizar_Get" FunctionName="INVModel.Store.INV_StockxLegalizar_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="INVModel.INV_StockxLegalizar_Get_Result">
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="TotalEntregado" ColumnName="TotalEntregado" />
+                <ScalarProperty Name="TotalLegalizado" ColumnName="TotalLegalizado" />
+                <ScalarProperty Name="IdConsumible" ColumnName="IdConsumible" />
+                <ScalarProperty Name="Articulo" ColumnName="Articulo" />
+                <ScalarProperty Name="UsuarioAsignado" ColumnName="UsuarioAsignado" />
+                <ScalarProperty Name="IdCentroCosto" ColumnName="IdCentroCosto" />
+                <ScalarProperty Name="CentroCosto" ColumnName="CentroCosto" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="JobBookCodigo" ColumnName="JobBookCodigo" />
+                <ScalarProperty Name="JobBookNombre" ColumnName="JobBookNombre" />
+                <ScalarProperty Name="IdBU" ColumnName="IdBU" />
+                <ScalarProperty Name="BU" ColumnName="BU" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Pendiente" ColumnName="Pendiente" />
+                <ScalarProperty Name="IdArticulo" ColumnName="IdArticulo" />
+                <ScalarProperty Name="UsuarioRegistra" ColumnName="UsuarioRegistra" />
+                <ScalarProperty Name="URL" ColumnName="URL" />
+                <ScalarProperty Name="TotalFirmas" ColumnName="TotalFirmas" />
+                <ScalarProperty Name="TotalDevoluciones" ColumnName="TotalDevoluciones" />
+                <ScalarProperty Name="TotalNotasCredito" ColumnName="TotalNotasCredito" />
+                <ScalarProperty Name="TotalDescuentoNomina" ColumnName="TotalDescuentoNomina" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="INV_Legalizaciones_Get" FunctionName="INVModel.Store.INV_Legalizaciones_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="INVModel.INV_Legalizaciones_Get_Result">
+                <ScalarProperty Name="IdConsumible" ColumnName="IdConsumible" />
+                <ScalarProperty Name="Articulo" ColumnName="Articulo" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="Legalizado" ColumnName="Legalizado" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ValorLegalizado" ColumnName="ValorLegalizado" />
+                <ScalarProperty Name="Pendiente" ColumnName="Pendiente" />
+                <ScalarProperty Name="IdArticulo" ColumnName="IdArticulo" />
+                <ScalarProperty Name="UsuarioRegistra" ColumnName="UsuarioRegistra" />
+                <ScalarProperty Name="IdTipoLegalizacion" ColumnName="IdTipoLegalizacion" />
+                <ScalarProperty Name="TipoLegalizacion" ColumnName="TipoLegalizacion" />
+                <ScalarProperty Name="Radicado" ColumnName="Radicado" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="UsuarioResponsable" ColumnName="UsuarioResponsable" />
+                <ScalarProperty Name="Unidades" ColumnName="Unidades" />
+                <ScalarProperty Name="ValorEntregado" ColumnName="ValorEntregado" />
+                <ScalarProperty Name="Firmas" ColumnName="Firmas" />
+                <ScalarProperty Name="Devoluciones" ColumnName="Devoluciones" />
+                <ScalarProperty Name="NotasCredito" ColumnName="NotasCredito" />
+                <ScalarProperty Name="DescuentoNomina" ColumnName="DescuentoNomina" />
+                <ScalarProperty Name="IdCentroCosto" ColumnName="IdCentroCosto" />
+                <ScalarProperty Name="CentroCosto" ColumnName="CentroCosto" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="JobBookCodigo" ColumnName="JobBookCodigo" />
+                <ScalarProperty Name="JobBookNombre" ColumnName="JobBookNombre" />
+                <ScalarProperty Name="IdBU" ColumnName="IdBU" />
+                <ScalarProperty Name="BU" ColumnName="BU" />
+                <ScalarProperty Name="IdLegalizado" ColumnName="IdLegalizado" />
+                <ScalarProperty Name="ValorCarrera" ColumnName="ValorCarrera" />
+                <ScalarProperty Name="IdVerificado" ColumnName="IdVerificado" />
+                <ScalarProperty Name="Verificado" ColumnName="Verificado" />
+                <ScalarProperty Name="FechaVerificacion" ColumnName="FechaVerificacion" />
+                <ScalarProperty Name="IdUsuarioVerifica" ColumnName="IdUsuarioVerifica" />
+                <ScalarProperty Name="UsuarioVerifica" ColumnName="UsuarioVerifica" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="INV_Legalizaciones_Del" FunctionName="INVModel.Store.INV_Legalizaciones_Del" />
+          <FunctionImportMapping FunctionImportName="INV_Legalizaciones_Edit" FunctionName="INVModel.Store.INV_Legalizaciones_Edit" />
+          <FunctionImportMapping FunctionImportName="INV_ReporteLegalizaciones" FunctionName="INVModel.Store.INV_ReporteLegalizaciones">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="INVModel.INV_ReporteLegalizaciones_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdConsumible" ColumnName="IdConsumible" />
+                <ScalarProperty Name="IdArticulo" ColumnName="IdArticulo" />
+                <ScalarProperty Name="Articulo" ColumnName="Articulo" />
+                <ScalarProperty Name="UsuarioRegistra" ColumnName="UsuarioRegistra" />
+                <ScalarProperty Name="IdTipoLegalizacion" ColumnName="IdTipoLegalizacion" />
+                <ScalarProperty Name="TipoLegalizacion" ColumnName="TipoLegalizacion" />
+                <ScalarProperty Name="Radicado" ColumnName="Radicado" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="UsuarioResponsable" ColumnName="UsuarioResponsable" />
+                <ScalarProperty Name="UsuarioAsignado" ColumnName="UsuarioAsignado" />
+                <ScalarProperty Name="IdCentroCosto" ColumnName="IdCentroCosto" />
+                <ScalarProperty Name="CentroCosto" ColumnName="CentroCosto" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="JobBookCodigo" ColumnName="JobBookCodigo" />
+                <ScalarProperty Name="JobBookNombre" ColumnName="JobBookNombre" />
+                <ScalarProperty Name="IdBU" ColumnName="IdBU" />
+                <ScalarProperty Name="BU" ColumnName="BU" />
+                <ScalarProperty Name="Unidades" ColumnName="Unidades" />
+                <ScalarProperty Name="ValorCarrera" ColumnName="ValorCarrera" />
+                <ScalarProperty Name="ValorEntregado" ColumnName="ValorEntregado" />
+                <ScalarProperty Name="Firmas" ColumnName="Firmas" />
+                <ScalarProperty Name="Devoluciones" ColumnName="Devoluciones" />
+                <ScalarProperty Name="NotasCredito" ColumnName="NotasCredito" />
+                <ScalarProperty Name="DescuentoNomina" ColumnName="DescuentoNomina" />
+                <ScalarProperty Name="ValorLegalizado" ColumnName="ValorLegalizado" />
+                <ScalarProperty Name="Pendiente" ColumnName="Pendiente" />
+                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
+                <ScalarProperty Name="IdLegalizado" ColumnName="IdLegalizado" />
+                <ScalarProperty Name="Legalizado" ColumnName="Legalizado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="INV_Papeleria_Get" FunctionName="INVModel.Store.INV_Papeleria_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="INVModel.INV_Papeleria_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Producto" ColumnName="Producto" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="INV_MantenimientoEquipos_Add" FunctionName="INVModel.Store.INV_MantenimientoEquipos_Add" />
+          <FunctionImportMapping FunctionImportName="INV_MantenimientoEquipos_Edit" FunctionName="INVModel.Store.INV_MantenimientoEquipos_Edit" />
+          <FunctionImportMapping FunctionImportName="INV_MantenimientoEquipos_Get" FunctionName="INVModel.Store.INV_MantenimientoEquipos_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="INVModel.INV_MantenimientoEquipos_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdActivoFijo" ColumnName="IdActivoFijo" />
+                <ScalarProperty Name="IdArticulo" ColumnName="IdArticulo" />
+                <ScalarProperty Name="Articulo" ColumnName="Articulo" />
+                <ScalarProperty Name="IdTipoComputador" ColumnName="IdTipoComputador" />
+                <ScalarProperty Name="TipoComputador" ColumnName="TipoComputador" />
+                <ScalarProperty Name="IdTipoPeriferico" ColumnName="IdTipoPeriferico" />
+                <ScalarProperty Name="TipoPeriferico" ColumnName="TipoPeriferico" />
+                <ScalarProperty Name="Marca" ColumnName="Marca" />
+                <ScalarProperty Name="Modelo" ColumnName="Modelo" />
+                <ScalarProperty Name="IdFisico" ColumnName="IdFisico" />
+                <ScalarProperty Name="Serial" ColumnName="Serial" />
+                <ScalarProperty Name="NombreEquipo" ColumnName="NombreEquipo" />
+                <ScalarProperty Name="IdTablet" ColumnName="IdTablet" />
+                <ScalarProperty Name="Chip" ColumnName="Chip" />
+                <ScalarProperty Name="IMEI" ColumnName="IMEI" />
+                <ScalarProperty Name="NumeroCelular" ColumnName="NumeroCelular" />
+                <ScalarProperty Name="CantidadMinutos" ColumnName="CantidadMinutos" />
+                <ScalarProperty Name="IdUsuarioRegistra" ColumnName="IdUsuarioRegistra" />
+                <ScalarProperty Name="UsuarioRegistra" ColumnName="UsuarioRegistra" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="IdTipoMantenimiento" ColumnName="IdTipoMantenimiento" />
+                <ScalarProperty Name="TipoMantenimiento" ColumnName="TipoMantenimiento" />
+                <ScalarProperty Name="IdUsuarioResponsable" ColumnName="IdUsuarioResponsable" />
+                <ScalarProperty Name="UsuarioResponsable" ColumnName="UsuarioResponsable" />
+                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="INV_ReporteRemanente" FunctionName="INVModel.Store.INV_ReporteRemanente">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="INVModel.INV_ReporteRemanente_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdConsumible" ColumnName="IdConsumible" />
+                <ScalarProperty Name="IdArticulo" ColumnName="IdArticulo" />
+                <ScalarProperty Name="Articulo" ColumnName="Articulo" />
+                <ScalarProperty Name="IdTipoProducto" ColumnName="IdTipoProducto" />
+                <ScalarProperty Name="TipoProducto" ColumnName="TipoProducto" />
+                <ScalarProperty Name="Producto" ColumnName="Producto" />
+                <ScalarProperty Name="IdTipoBono" ColumnName="IdTipoBono" />
+                <ScalarProperty Name="TipoBono" ColumnName="TipoBono" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="IdUsuarioRegistra" ColumnName="IdUsuarioRegistra" />
+                <ScalarProperty Name="UsuarioRegistra" ColumnName="UsuarioRegistra" />
+                <ScalarProperty Name="IdTipoObsequio" ColumnName="IdTipoObsequio" />
+                <ScalarProperty Name="TipoObsequio" ColumnName="TipoObsequio" />
+                <ScalarProperty Name="IdEstadoProducto" ColumnName="IdEstadoProducto" />
+                <ScalarProperty Name="EstadoProducto" ColumnName="EstadoProducto" />
+                <ScalarProperty Name="IdCentroCosto" ColumnName="IdCentroCosto" />
+                <ScalarProperty Name="CentroCosto" ColumnName="CentroCosto" />
+                <ScalarProperty Name="IdBU" ColumnName="IdBU" />
+                <ScalarProperty Name="BU" ColumnName="BU" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="JobBookCodigo" ColumnName="JobBookCodigo" />
+                <ScalarProperty Name="JobBookNombre" ColumnName="JobBookNombre" />
+                <ScalarProperty Name="IdCuentaContable" ColumnName="IdCuentaContable" />
+                <ScalarProperty Name="NumeroCuentaContable" ColumnName="NumeroCuentaContable" />
+                <ScalarProperty Name="CuentaContable" ColumnName="CuentaContable" />
+                <ScalarProperty Name="IdCiudad" ColumnName="IdCiudad" />
+                <ScalarProperty Name="Ciudad" ColumnName="Ciudad" />
+                <ScalarProperty Name="NumeroVale" ColumnName="NumeroVale" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Valor" ColumnName="Valor" />
+                <ScalarProperty Name="Disponible" ColumnName="Disponible" />
+                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
+                <ScalarProperty Name="IdUsuarioAsignado" ColumnName="IdUsuarioAsignado" />
+                <ScalarProperty Name="UsuarioAsignado" ColumnName="UsuarioAsignado" />
+                <ScalarProperty Name="IdTipoCargo" ColumnName="IdTipoCargo" />
+                <ScalarProperty Name="TipoCargo" ColumnName="TipoCargo" />
+                <ScalarProperty Name="Particion" ColumnName="Particion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="INV_Asignaciones_Del" FunctionName="INVModel.Store.INV_Asignaciones_Del" />
+          <FunctionImportMapping FunctionImportName="INV_Camaras_Get" FunctionName="INVModel.Store.INV_Camaras_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="INVModel.INV_Camaras_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Camara" ColumnName="Camara" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="INV_RegistroArticulos_Get" FunctionName="INVModel.Store.INV_RegistroArticulos_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="INVModel.INV_RegistroArticulos_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdTipoArticulo" ColumnName="IdTipoArticulo" />
+                <ScalarProperty Name="TipoArticulo" ColumnName="TipoArticulo" />
+                <ScalarProperty Name="IdArticulo" ColumnName="IdArticulo" />
+                <ScalarProperty Name="Articulo" ColumnName="Articulo" />
+                <ScalarProperty Name="FechaCompra" ColumnName="FechaCompra" />
+                <ScalarProperty Name="FechaFinRenta" ColumnName="FechaFinRenta" />
+                <ScalarProperty Name="FechaRegistro" ColumnName="FechaRegistro" />
+                <ScalarProperty Name="IdUsuarioRegistra" ColumnName="IdUsuarioRegistra" />
+                <ScalarProperty Name="UsuarioRegistra" ColumnName="UsuarioRegistra" />
+                <ScalarProperty Name="IdCentroCosto" ColumnName="IdCentroCosto" />
+                <ScalarProperty Name="CentroCosto" ColumnName="CentroCosto" />
+                <ScalarProperty Name="IdBU" ColumnName="IdBU" />
+                <ScalarProperty Name="BU" ColumnName="BU" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="JobBookCodigo" ColumnName="JobBookCodigo" />
+                <ScalarProperty Name="JobBookNombre" ColumnName="JobBookNombre" />
+                <ScalarProperty Name="IdCuentaContable" ColumnName="IdCuentaContable" />
+                <ScalarProperty Name="NumeroCuentaContable" ColumnName="NumeroCuentaContable" />
+                <ScalarProperty Name="CuentaContable" ColumnName="CuentaContable" />
+                <ScalarProperty Name="Valor" ColumnName="Valor" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="NumeroPV" ColumnName="NumeroPV" />
+                <ScalarProperty Name="ProveedorId" ColumnName="ProveedorId" />
+                <ScalarProperty Name="NombreProveedor" ColumnName="NombreProveedor" />
+                <ScalarProperty Name="Symphony" ColumnName="Symphony" />
+                <ScalarProperty Name="IdFisico" ColumnName="IdFisico" />
+                <ScalarProperty Name="IdSede" ColumnName="IdSede" />
+                <ScalarProperty Name="Sede" ColumnName="Sede" />
+                <ScalarProperty Name="IdTipoComputador" ColumnName="IdTipoComputador" />
+                <ScalarProperty Name="TipoComputador" ColumnName="TipoComputador" />
+                <ScalarProperty Name="IdPertenecePC" ColumnName="IdPertenecePC" />
+                <ScalarProperty Name="PertenecePC" ColumnName="PertenecePC" />
+                <ScalarProperty Name="IdTipoPeriferico" ColumnName="IdTipoPeriferico" />
+                <ScalarProperty Name="TipoPeriferico" ColumnName="TipoPeriferico" />
+                <ScalarProperty Name="Marca" ColumnName="Marca" />
+                <ScalarProperty Name="Modelo" ColumnName="Modelo" />
+                <ScalarProperty Name="Procesador" ColumnName="Procesador" />
+                <ScalarProperty Name="Memoria" ColumnName="Memoria" />
+                <ScalarProperty Name="Almacenamiento" ColumnName="Almacenamiento" />
+                <ScalarProperty Name="SistemaOperativo" ColumnName="SistemaOperativo" />
+                <ScalarProperty Name="Serial" ColumnName="Serial" />
+                <ScalarProperty Name="NombreEquipo" ColumnName="NombreEquipo" />
+                <ScalarProperty Name="Office" ColumnName="Office" />
+                <ScalarProperty Name="Programas" ColumnName="Programas" />
+                <ScalarProperty Name="TipoServidor" ColumnName="TipoServidor" />
+                <ScalarProperty Name="Raid" ColumnName="Raid" />
+                <ScalarProperty Name="IdTablet" ColumnName="IdTablet" />
+                <ScalarProperty Name="IdSTG" ColumnName="IdSTG" />
+                <ScalarProperty Name="TamanoPantalla" ColumnName="TamanoPantalla" />
+                <ScalarProperty Name="Chip" ColumnName="Chip" />
+                <ScalarProperty Name="IMEI" ColumnName="IMEI" />
+                <ScalarProperty Name="IdPertenece" ColumnName="IdPertenece" />
+                <ScalarProperty Name="Pertenece" ColumnName="Pertenece" />
+                <ScalarProperty Name="IdOperador" ColumnName="IdOperador" />
+                <ScalarProperty Name="Operador" ColumnName="Operador" />
+                <ScalarProperty Name="NumeroCelular" ColumnName="NumeroCelular" />
+                <ScalarProperty Name="CantidadMinutos" ColumnName="CantidadMinutos" />
+                <ScalarProperty Name="IdTipoProducto" ColumnName="IdTipoProducto" />
+                <ScalarProperty Name="TipoProducto" ColumnName="TipoProducto" />
+                <ScalarProperty Name="Producto" ColumnName="Producto" />
+                <ScalarProperty Name="IdTipoObsequio" ColumnName="IdTipoObsequio" />
+                <ScalarProperty Name="TipoObsequio" ColumnName="TipoObsequio" />
+                <ScalarProperty Name="IdTipoBono" ColumnName="IdTipoBono" />
+                <ScalarProperty Name="TipoBono" ColumnName="TipoBono" />
+                <ScalarProperty Name="IdProductoPapeleria" ColumnName="IdProductoPapeleria" />
+                <ScalarProperty Name="ProductoPapeleria" ColumnName="ProductoPapeleria" />
+                <ScalarProperty Name="IdAsignado" ColumnName="IdAsignado" />
+                <ScalarProperty Name="Asignado" ColumnName="Asignado" />
+                <ScalarProperty Name="Cargo" ColumnName="Cargo" />
+                <ScalarProperty Name="Area" ColumnName="Area" />
+                <ScalarProperty Name="BU1" ColumnName="BU1" />
+                <ScalarProperty Name="IdUsuarioAsignado" ColumnName="IdUsuarioAsignado" />
+                <ScalarProperty Name="UsuarioAsignado" ColumnName="UsuarioAsignado" />
+                <ScalarProperty Name="FechaAsignacion" ColumnName="FechaAsignacion" />
+                <ScalarProperty Name="ObservacionAsignacion" ColumnName="ObservacionAsignacion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

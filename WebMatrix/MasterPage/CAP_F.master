@@ -1,0 +1,37 @@
+﻿<%@ Master Language="VB" MasterPageFile="~/MasterPage/CAP_.master" AutoEventWireup="false" CodeBehind="CAP_F.master.vb" Inherits="WebMatrix.CAP_F" %>
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="CPH_Head" runat="server">
+    <asp:ContentPlaceHolder ID="CPH_Head" runat="server">
+
+    </asp:ContentPlaceHolder>
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="CPH_Section" runat="server">
+    <div id="menu-form">
+          <nav>
+           <ul>
+               <asp:ContentPlaceHolder ID="CPH_OpcionesMenu" runat="server">
+
+               </asp:ContentPlaceHolder>
+           </ul>
+           </nav>
+       </div>
+       <div id="campo-formulario">
+       <h1>
+           <asp:ContentPlaceHolder ID="CPH_Titulo" runat="server">
+
+           </asp:ContentPlaceHolder>
+       </h1>
+       <div id="coment-formulario" style="visibility:hidden">
+            <asp:ContentPlaceHolder ID="CPH_ComentFormulario" runat="server"></asp:ContentPlaceHolder>
+       </div>
+       <br />
+         <asp:ToolkitScriptManager ID="ToolkitScriptManager1" ScriptMode="Release" runat="server">
+                    </asp:ToolkitScriptManager>
+
+                                 
+               <asp:ContentPlaceHolder ID="CPH_ContentForm" runat="server">
+
+           </asp:ContentPlaceHolder>
+                </div>
+         
+</asp:Content>

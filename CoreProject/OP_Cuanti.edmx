@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="OP_Cuanti.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="OP_CuantiStoreContainer">
+          <EntitySet Name="OP_FichaCuantitativo" EntityType="OP_Cuanti.Store.OP_FichaCuantitativo" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="OP_FichaCuantitativo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="TrabajoId" Type="bigint" />
+          <Property Name="GrupoObjetivo" Type="varchar(max)" />
+          <Property Name="CubrimientoGeografico" Type="varchar(max)" />
+          <Property Name="MarcoMuestral" Type="varchar(max)" />
+          <Property Name="DistribucionMuestra" Type="varchar(max)" />
+          <Property Name="Cuotas" Type="varchar(max)" />
+          <Property Name="NivelDesagregacionResultados" Type="varchar(max)" />
+          <Property Name="Ponderacion" Type="varchar(max)" />
+          <Property Name="RequerimientosEspeciales" Type="varchar(max)" />
+          <Property Name="OtrasObservaciones" Type="varchar(max)" />
+          <Property Name="IncentivoEconomico" Type="bit" />
+          <Property Name="PresupuestoIncentivo" Type="float" />
+          <Property Name="RegalosCliente" Type="bit" />
+          <Property Name="CompraIpsos" Type="bit" />
+          <Property Name="Presupuesto" Type="float" />
+        </EntityType>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2008/09/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="OP_Cuanti" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <EntityContainer Name="OP_CuantiContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="OP_FichaCuantitativo" EntityType="OP_Cuanti.OP_FichaCuantitativo" />
+        </EntityContainer>
+        <EntityType Name="OP_FichaCuantitativo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int64" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int64" Name="TrabajoId" />
+          <Property Type="String" Name="GrupoObjetivo" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CubrimientoGeografico" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="MarcoMuestral" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DistribucionMuestra" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Cuotas" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="NivelDesagregacionResultados" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Ponderacion" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="RequerimientosEspeciales" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="OtrasObservaciones" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="IncentivoEconomico" />
+          <Property Type="Double" Name="PresupuestoIncentivo" />
+          <Property Type="Boolean" Name="RegalosCliente" />
+          <Property Type="Boolean" Name="CompraIpsos" />
+          <Property Type="Double" Name="Presupuesto" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs" Space="C-S">
+        <Alias Key="Model" Value="OP_Cuanti" />
+        <Alias Key="Target" Value="OP_Cuanti.Store" />
+        <EntityContainerMapping CdmEntityContainer="OP_CuantiContainer" StorageEntityContainer="OP_CuantiStoreContainer">
+          <EntitySetMapping Name="OP_FichaCuantitativo">
+            <EntityTypeMapping TypeName="OP_Cuanti.OP_FichaCuantitativo">
+              <MappingFragment StoreEntitySet="OP_FichaCuantitativo">
+                <ScalarProperty Name="Presupuesto" ColumnName="Presupuesto" />
+                <ScalarProperty Name="CompraIpsos" ColumnName="CompraIpsos" />
+                <ScalarProperty Name="RegalosCliente" ColumnName="RegalosCliente" />
+                <ScalarProperty Name="PresupuestoIncentivo" ColumnName="PresupuestoIncentivo" />
+                <ScalarProperty Name="IncentivoEconomico" ColumnName="IncentivoEconomico" />
+                <ScalarProperty Name="OtrasObservaciones" ColumnName="OtrasObservaciones" />
+                <ScalarProperty Name="RequerimientosEspeciales" ColumnName="RequerimientosEspeciales" />
+                <ScalarProperty Name="Ponderacion" ColumnName="Ponderacion" />
+                <ScalarProperty Name="NivelDesagregacionResultados" ColumnName="NivelDesagregacionResultados" />
+                <ScalarProperty Name="Cuotas" ColumnName="Cuotas" />
+                <ScalarProperty Name="DistribucionMuestra" ColumnName="DistribucionMuestra" />
+                <ScalarProperty Name="MarcoMuestral" ColumnName="MarcoMuestral" />
+                <ScalarProperty Name="CubrimientoGeografico" ColumnName="CubrimientoGeografico" />
+                <ScalarProperty Name="GrupoObjetivo" ColumnName="GrupoObjetivo" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram Name="OP_Cuanti" >
+        <EntityTypeShape EntityType="OP_Cuanti.OP_FichaCuantitativo" Width="1.5" PointX="0.75" PointY="0.75" Height="4.0956022135416656" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

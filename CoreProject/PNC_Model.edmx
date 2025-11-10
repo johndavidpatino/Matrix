@@ -1,0 +1,1080 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="MatrixModel1.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="PNC_Categorias">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="72" />
+          <Property Name="IdUnidad" Type="int" />
+          <Property Name="IdRol" Type="int" />
+        </EntityType>
+        <EntityType Name="PNC_FuenteReclamo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Descripcion" Type="nchar" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="PNC_Procedimientos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PNC_Procesos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PNC_ProductoNoConforme">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdEstudio" Type="int" />
+          <Property Name="IdTrabajo" Type="int" />
+          <Property Name="JobBook" Type="nchar" MaxLength="15" />
+          <Property Name="FechaReclamo" Type="date" />
+          <Property Name="IdReporta" Type="bigint" />
+          <Property Name="IdUnidad" Type="int" />
+          <Property Name="IdClienteExterno" Type="bigint" />
+          <Property Name="FuenteReclamo" Type="int" />
+          <Property Name="Categoria" Type="int" />
+          <Property Name="Tarea" Type="int" />
+          <Property Name="Descripcion" Type="varchar(max)" />
+          <Property Name="Cerrado" Type="bit" />
+          <Property Name="FechaCierre" Type="date" />
+          <Property Name="Usuario" Type="bigint" />
+          <Property Name="FechaGrabacion" Type="date" />
+          <Property Name="FechaActualizacion" Type="date" />
+        </EntityType>
+        <EntityType Name="PNC_ProductoNoConformeAcciones">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdPNC" Type="int" />
+          <Property Name="IdCausa" Type="int" />
+          <Property Name="TipoAccion" Type="int" />
+          <Property Name="Accion" Type="varchar(max)" />
+          <Property Name="FechaPlaneada" Type="date" />
+          <Property Name="FechaEjecucion" Type="date" />
+          <Property Name="IdResponsableAccion" Type="int" />
+          <Property Name="IdResponsableSeguimiento" Type="int" />
+          <Property Name="EvidenciaCierre" Type="varchar(max)" />
+          <Property Name="PermiteActualizar" Type="bit" />
+        </EntityType>
+        <EntityType Name="PNC_ProductoNoConformeCausas">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdPNC" Type="int" />
+          <Property Name="CausaRaiz" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="PNC_TiposDeAccion">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Accion" Type="nchar" MaxLength="20" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Matrix.dbo.PNC_VerProductoNoConforme' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="PNC_VerProductoNoConforme">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Cliente" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="JobBook" Type="nchar" MaxLength="15" />
+          <Property Name="IdTrabajo" Type="int" />
+          <Property Name="NombreTrabajo" Type="varchar" MaxLength="250" />
+          <Property Name="Fuente" Type="nchar" MaxLength="30" />
+          <Property Name="Categoria" Type="nchar" MaxLength="72" />
+          <Property Name="Unidad" Type="varchar" MaxLength="250" />
+          <Property Name="Reporta" Type="varchar" MaxLength="501" />
+          <Property Name="Cliente" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar(max)" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Matrix.dbo.PNC_VerProductoNoConformeCausas' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="PNC_VerProductoNoConformeCausas">
+          <Key>
+            <PropertyRef Name="IdCausa" />
+          </Key>
+          <Property Name="JobBook" Type="nchar" MaxLength="15" />
+          <Property Name="IdPNC" Type="int" />
+          <Property Name="IdCausa" Type="int" Nullable="false" />
+          <Property Name="CausaRaiz" Type="varchar(max)" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Matrix.dbo.PNC_VerProductoNoConformeDetalle' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="PNC_VerProductoNoConformeDetalle">
+          <Key>
+            <PropertyRef Name="IdCausa" />
+            <PropertyRef Name="IdAccion" />
+          </Key>
+          <Property Name="JobBook" Type="nchar" MaxLength="15" />
+          <Property Name="IdPNC" Type="int" />
+          <Property Name="IdCausa" Type="int" Nullable="false" />
+          <Property Name="CausaRaiz" Type="varchar(max)" />
+          <Property Name="IdAccion" Type="int" Nullable="false" />
+          <Property Name="Accion" Type="nchar" MaxLength="20" />
+          <Property Name="DescripcionAccion" Type="varchar(max)" />
+          <Property Name="FechaPlaneada" Type="date" />
+          <Property Name="FechaEjecucion" Type="date" />
+          <Property Name="ResponsableAccion" Type="varchar" MaxLength="501" />
+          <Property Name="ResponsableSeguimiento" Type="varchar" MaxLength="502" />
+          <Property Name="EvidenciaCierre" Type="varchar(max)" />
+          <Property Name="TipoAccion" Type="int" />
+          <Property Name="IdResponsableAccion" Type="int" />
+          <Property Name="IdResponsableSeguimiento" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Matrix.dbo.PNC_VObtenerCliente' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="PNC_VObtenerCliente">
+          <Key>
+            <PropertyRef Name="IdEstudio" />
+            <PropertyRef Name="IdCliente" />
+            <PropertyRef Name="RazonSocial" />
+          </Key>
+          <Property Name="IdEstudio" Type="bigint" Nullable="false" />
+          <Property Name="IdCliente" Type="bigint" Nullable="false" />
+          <Property Name="RazonSocial" Type="varchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Matrix.dbo.PNC_VObtenerUnidad' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="PNC_VObtenerUnidad">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" Nullable="false" />
+          <Property Name="CodigoUnidad" Type="int" />
+          <Property Name="NombreUnidad" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Matrix.dbo.PNC_VObtenerUsuarios' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="PNC_VObtenerUsuarios">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="502" />
+        </EntityType>
+        <Function Name="PNC_Causa_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idProducto" Type="numeric" Mode="In" />
+        </Function>
+        <Function Name="PNC_EmailAcciones" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdPncDetalle" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="PNC_EmailNotificacionReporte" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idPNC" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="PNC_GetById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PNC_id" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="PNC_ObtenerProductoNoConforme" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="JobBook" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="PNC_ObtenerProductoNoConformeTodos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="PNC_Producto_UpdateEstado" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="numeric" Mode="In" />
+          <Parameter Name="estado" Type="tinyint" Mode="In" />
+        </Function>
+        <Function Name="PNC_ProductoNoConformeAcciones_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Estado" Type="tinyint" Mode="In" />
+        </Function>
+        <Function Name="PNC_ProductoNoConformeCausas_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Estado" Type="tinyint" Mode="In" />
+        </Function>
+        <Function Name="PNC_Productos_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="asociadoA" Type="tinyint" Mode="In" />
+          <Parameter Name="proyectoId" Type="bigint" Mode="In" />
+          <Parameter Name="trabajoId" Type="bigint" Mode="In" />
+          <Parameter Name="proceso" Type="tinyint" Mode="In" />
+          <Parameter Name="procedimiento" Type="tinyint" Mode="In" />
+          <Parameter Name="unidad" Type="tinyint" Mode="In" />
+          <Parameter Name="personaIdentifica" Type="bigint" Mode="In" />
+          <Parameter Name="fechaReclamo" Type="date" Mode="In" />
+          <Parameter Name="fuente" Type="int" Mode="In" />
+          <Parameter Name="categoria" Type="int" Mode="In" />
+          <Parameter Name="tarea" Type="bigint" Mode="In" />
+          <Parameter Name="responsable" Type="bigint" Mode="In" />
+          <Parameter Name="informarA" Type="bigint" Mode="In" />
+          <Parameter Name="descripcion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="estado" Type="tinyint" Mode="In" />
+          <Parameter Name="fechaCreacion" Type="datetime" Mode="In" />
+          <Parameter Name="usuario" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="PNC_Productos_Causas_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="productoId" Type="numeric" Mode="In" />
+          <Parameter Name="causa" Type="varchar(max)" Mode="In" />
+          <Parameter Name="correccion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="fechaEstimadaCierre" Type="date" Mode="In" />
+          <Parameter Name="usuario" Type="bigint" Mode="In" />
+          <Parameter Name="fechaCreacion" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="PNC_Productos_CorreosNotificar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idPNC" Type="numeric" Mode="In" />
+        </Function>
+        <Function Name="PNC_Productos_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="numeric" Mode="In" />
+          <Parameter Name="responsable" Type="bigint" Mode="In" />
+          <Parameter Name="estado" Type="tinyint" Mode="In" />
+          <Parameter Name="usuarioRegistra" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="PNC_Productos_Log_Estado_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idProducto" Type="numeric" Mode="In" />
+          <Parameter Name="estado" Type="tinyint" Mode="In" />
+          <Parameter Name="fecha" Type="datetime" Mode="In" />
+          <Parameter Name="usuario" Type="bigint" Mode="In" />
+          <Parameter Name="observacion" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="PNC_Productos_Log_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idProducto" Type="numeric" Mode="In" />
+          <Parameter Name="estado" Type="tinyint" Mode="In" />
+        </Function>
+        <Function Name="PNC_Seguimiento_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Estado" Type="tinyint" Mode="In" />
+        </Function>
+        <EntityContainer Name="MatrixModel1StoreContainer">
+          <EntitySet Name="PNC_Categorias" EntityType="Self.PNC_Categorias" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PNC_FuenteReclamo" EntityType="Self.PNC_FuenteReclamo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PNC_Procedimientos" EntityType="Self.PNC_Procedimientos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PNC_Procesos" EntityType="Self.PNC_Procesos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PNC_ProductoNoConforme" EntityType="Self.PNC_ProductoNoConforme" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PNC_ProductoNoConformeAcciones" EntityType="Self.PNC_ProductoNoConformeAcciones" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PNC_ProductoNoConformeCausas" EntityType="Self.PNC_ProductoNoConformeCausas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PNC_TiposDeAccion" EntityType="Self.PNC_TiposDeAccion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PNC_VerProductoNoConforme" EntityType="Self.PNC_VerProductoNoConforme" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [PNC_VerProductoNoConforme].[Id] AS [Id], 
+    [PNC_VerProductoNoConforme].[JobBook] AS [JobBook], 
+    [PNC_VerProductoNoConforme].[IdTrabajo] AS [IdTrabajo], 
+    [PNC_VerProductoNoConforme].[NombreTrabajo] AS [NombreTrabajo], 
+    [PNC_VerProductoNoConforme].[Fuente] AS [Fuente], 
+    [PNC_VerProductoNoConforme].[Categoria] AS [Categoria], 
+    [PNC_VerProductoNoConforme].[Unidad] AS [Unidad], 
+    [PNC_VerProductoNoConforme].[Reporta] AS [Reporta], 
+    [PNC_VerProductoNoConforme].[Cliente] AS [Cliente], 
+    [PNC_VerProductoNoConforme].[Descripcion] AS [Descripcion]
+    FROM [dbo].[PNC_VerProductoNoConforme] AS [PNC_VerProductoNoConforme]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="PNC_VerProductoNoConformeCausas" EntityType="Self.PNC_VerProductoNoConformeCausas" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [PNC_VerProductoNoConformeCausas].[JobBook] AS [JobBook], 
+    [PNC_VerProductoNoConformeCausas].[IdPNC] AS [IdPNC], 
+    [PNC_VerProductoNoConformeCausas].[IdCausa] AS [IdCausa], 
+    [PNC_VerProductoNoConformeCausas].[CausaRaiz] AS [CausaRaiz]
+    FROM [dbo].[PNC_VerProductoNoConformeCausas] AS [PNC_VerProductoNoConformeCausas]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="PNC_VerProductoNoConformeDetalle" EntityType="Self.PNC_VerProductoNoConformeDetalle" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [PNC_VerProductoNoConformeDetalle].[JobBook] AS [JobBook], 
+    [PNC_VerProductoNoConformeDetalle].[IdPNC] AS [IdPNC], 
+    [PNC_VerProductoNoConformeDetalle].[IdCausa] AS [IdCausa], 
+    [PNC_VerProductoNoConformeDetalle].[CausaRaiz] AS [CausaRaiz], 
+    [PNC_VerProductoNoConformeDetalle].[IdAccion] AS [IdAccion], 
+    [PNC_VerProductoNoConformeDetalle].[Accion] AS [Accion], 
+    [PNC_VerProductoNoConformeDetalle].[DescripcionAccion] AS [DescripcionAccion], 
+    [PNC_VerProductoNoConformeDetalle].[FechaPlaneada] AS [FechaPlaneada], 
+    [PNC_VerProductoNoConformeDetalle].[FechaEjecucion] AS [FechaEjecucion], 
+    [PNC_VerProductoNoConformeDetalle].[ResponsableAccion] AS [ResponsableAccion], 
+    [PNC_VerProductoNoConformeDetalle].[ResponsableSeguimiento] AS [ResponsableSeguimiento], 
+    [PNC_VerProductoNoConformeDetalle].[EvidenciaCierre] AS [EvidenciaCierre], 
+    [PNC_VerProductoNoConformeDetalle].[TipoAccion] AS [TipoAccion], 
+    [PNC_VerProductoNoConformeDetalle].[IdResponsableAccion] AS [IdResponsableAccion], 
+    [PNC_VerProductoNoConformeDetalle].[IdResponsableSeguimiento] AS [IdResponsableSeguimiento]
+    FROM [dbo].[PNC_VerProductoNoConformeDetalle] AS [PNC_VerProductoNoConformeDetalle]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="PNC_VObtenerCliente" EntityType="Self.PNC_VObtenerCliente" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [PNC_VObtenerCliente].[IdEstudio] AS [IdEstudio], 
+    [PNC_VObtenerCliente].[IdCliente] AS [IdCliente], 
+    [PNC_VObtenerCliente].[RazonSocial] AS [RazonSocial]
+    FROM [dbo].[PNC_VObtenerCliente] AS [PNC_VObtenerCliente]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="PNC_VObtenerUnidad" EntityType="Self.PNC_VObtenerUnidad" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [PNC_VObtenerUnidad].[id] AS [id], 
+    [PNC_VObtenerUnidad].[CodigoUnidad] AS [CodigoUnidad], 
+    [PNC_VObtenerUnidad].[NombreUnidad] AS [NombreUnidad]
+    FROM [dbo].[PNC_VObtenerUnidad] AS [PNC_VObtenerUnidad]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="PNC_VObtenerUsuarios" EntityType="Self.PNC_VObtenerUsuarios" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [PNC_VObtenerUsuarios].[id] AS [id], 
+    [PNC_VObtenerUsuarios].[Nombre] AS [Nombre]
+    FROM [dbo].[PNC_VObtenerUsuarios] AS [PNC_VObtenerUsuarios]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MatrixModel1" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="PNCEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="PNC_FuenteReclamo" EntityType="MatrixModel1.PNC_FuenteReclamo" />
+          <EntitySet Name="PNC_VObtenerCliente" EntityType="MatrixModel1.PNC_VObtenerCliente" />
+          <EntitySet Name="PNC_VObtenerUsuarios" EntityType="MatrixModel1.PNC_VObtenerUsuarios" />
+          <EntitySet Name="PNC_TiposDeAccion" EntityType="MatrixModel1.PNC_TiposDeAccion" />
+          <EntitySet Name="PNC_VObtenerUnidad" EntityType="MatrixModel1.PNC_VObtenerUnidad" />
+          <EntitySet Name="PNC_Categorias" EntityType="MatrixModel1.PNC_Categorias" />
+          <FunctionImport Name="PNC_EmailNotificacionReporte" ReturnType="Collection(String)">
+          <Parameter Name="idPNC" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="PNC_ObtenerProductoNoConforme" ReturnType="Collection(MatrixModel1.PNC_ObtenerProductoNoConforme_Result)">
+          <Parameter Name="JobBook" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PNC_ObtenerProductoNoConformeTodos" ReturnType="Collection(MatrixModel1.PNC_ObtenerProductoNoConformeTodos_Result)" />
+          <EntitySet Name="PNC_ProductoNoConformeAcciones" EntityType="MatrixModel1.PNC_ProductoNoConformeAcciones" />
+          <EntitySet Name="PNC_ProductoNoConformeCausas" EntityType="MatrixModel1.PNC_ProductoNoConformeCausas" />
+          <EntitySet Name="PNC_VerProductoNoConformeCausas" EntityType="MatrixModel1.PNC_VerProductoNoConformeCausas" />
+          <FunctionImport Name="PNC_GetById" ReturnType="Collection(MatrixModel1.PNC_GetById_Result)">
+          <Parameter Name="PNC_id" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="PNC_EmailAcciones" ReturnType="Collection(MatrixModel1.PNC_EmailAcciones_Result)">
+          <Parameter Name="IdPncDetalle" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <EntitySet Name="PNC_VerProductoNoConformeDetalle" EntityType="MatrixModel1.PNC_VerProductoNoConformeDetalle" />
+          <EntitySet Name="PNC_ProductoNoConforme" EntityType="MatrixModel1.PNC_ProductoNoConforme" />
+          <EntitySet Name="PNC_VerProductoNoConforme" EntityType="MatrixModel1.PNC_VerProductoNoConforme" />
+          <FunctionImport Name="PNC_Seguimiento_Get" ReturnType="Collection(MatrixModel1.PNC_Seguimiento_Get_Result)">
+          <Parameter Name="Estado" Mode="In" Type="Byte" />
+          </FunctionImport>
+          <FunctionImport Name="PNC_ProductoNoConformeAcciones_Get" ReturnType="Collection(MatrixModel1.PNC_ProductoNoConformeAcciones_Get_Result)">
+          <Parameter Name="Estado" Mode="In" Type="Byte" />
+          </FunctionImport>
+          <FunctionImport Name="PNC_ProductoNoConformeCausas_Get" ReturnType="Collection(MatrixModel1.PNC_ProductoNoConformeCausas_Get_Result)">
+          <Parameter Name="Estado" Mode="In" Type="Byte" />
+          </FunctionImport>
+          <EntitySet Name="PNC_Procedimientos" EntityType="MatrixModel1.PNC_Procedimientos" />
+          <EntitySet Name="PNC_Procesos" EntityType="MatrixModel1.PNC_Procesos" />
+          <FunctionImport Name="PNC_Productos_Add" ReturnType="Collection(Decimal)">
+            <Parameter Name="asociadoA" Mode="In" Type="Byte" />
+            <Parameter Name="proyectoId" Mode="In" Type="Int64" />
+            <Parameter Name="trabajoId" Mode="In" Type="Int64" />
+            <Parameter Name="proceso" Mode="In" Type="Byte" />
+            <Parameter Name="procedimiento" Mode="In" Type="Byte" />
+            <Parameter Name="unidad" Mode="In" Type="Byte" />
+            <Parameter Name="personaIdentifica" Mode="In" Type="Int64" />
+            <Parameter Name="fechaReclamo" Mode="In" Type="DateTime" />
+            <Parameter Name="fuente" Mode="In" Type="Int32" />
+            <Parameter Name="categoria" Mode="In" Type="Int32" />
+            <Parameter Name="tarea" Mode="In" Type="Int64" />
+            <Parameter Name="responsable" Mode="In" Type="Int64" />
+            <Parameter Name="informarA" Mode="In" Type="Int64" />
+            <Parameter Name="descripcion" Mode="In" Type="String" />
+            <Parameter Name="estado" Mode="In" Type="Byte" />
+            <Parameter Name="fechaCreacion" Mode="In" Type="DateTime" />
+            <Parameter Name="usuario" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="PNC_Productos_Log_Estado_Add" ReturnType="Collection(Decimal)">
+            <Parameter Name="idProducto" Mode="In" Type="Decimal" />
+            <Parameter Name="estado" Mode="In" Type="Byte" />
+            <Parameter Name="fecha" Mode="In" Type="DateTime" />
+            <Parameter Name="usuario" Mode="In" Type="Int64" />
+            <Parameter Name="observacion" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PNC_Productos_Get" ReturnType="Collection(MatrixModel1.PNC_Productos_Get_Result)">
+            <Parameter Name="id" Mode="In" Type="Decimal" />
+            <Parameter Name="responsable" Mode="In" Type="Int64" />
+            <Parameter Name="estado" Mode="In" Type="Byte" />
+            <Parameter Name="usuarioRegistra" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="PNC_Productos_Causas_Add" ReturnType="Collection(Decimal)">
+            <Parameter Name="productoId" Mode="In" Type="Decimal" />
+            <Parameter Name="causa" Mode="In" Type="String" />
+            <Parameter Name="correccion" Mode="In" Type="String" />
+            <Parameter Name="fechaEstimadaCierre" Mode="In" Type="DateTime" />
+            <Parameter Name="usuario" Mode="In" Type="Int64" />
+            <Parameter Name="fechaCreacion" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="PNC_Producto_UpdateEstado">
+            <Parameter Name="id" Mode="In" Type="Decimal" />
+            <Parameter Name="estado" Mode="In" Type="Byte" />
+          </FunctionImport>
+          <FunctionImport Name="PNC_Productos_CorreosNotificar" ReturnType="Collection(String)">
+          <Parameter Name="idPNC" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="PNC_Causa_Get" ReturnType="Collection(MatrixModel1.PNC_Causa_Get_Result)">
+          <Parameter Name="idProducto" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="PNC_Productos_Log_Get" ReturnType="Collection(MatrixModel1.PNC_Productos_Log_Get_Result)">
+            <Parameter Name="idProducto" Mode="In" Type="Decimal" />
+            <Parameter Name="estado" Mode="In" Type="Byte" />
+          </FunctionImport>
+          </EntityContainer>
+        <EntityType Name="PNC_FuenteReclamo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="30" FixedLength="true" Unicode="true" />
+        </EntityType>
+        <EntityType Name="PNC_VObtenerCliente">
+          <Key>
+            <PropertyRef Name="IdEstudio" />
+            <PropertyRef Name="IdCliente" />
+            <PropertyRef Name="RazonSocial" />
+          </Key>
+          <Property Name="IdEstudio" Type="Int64" Nullable="false" />
+          <Property Name="IdCliente" Type="Int64" Nullable="false" />
+          <Property Name="RazonSocial" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="PNC_VObtenerUsuarios">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="502" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="PNC_TiposDeAccion">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Accion" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+        </EntityType>
+        <EntityType Name="PNC_VObtenerUnidad">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" />
+          <Property Name="CodigoUnidad" Type="Int32" />
+          <Property Name="NombreUnidad" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="PNC_Categorias">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="72" FixedLength="false" Unicode="false" />
+          <Property Name="IdUnidad" Type="Int32" />
+          <Property Name="IdRol" Type="Int32" />
+        </EntityType>
+        <ComplexType Name="PNC_ObtenerProductoNoConforme_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="JobBook" Nullable="true" MaxLength="15" />
+          <Property Type="Int32" Name="IdTrabajo" Nullable="true" />
+          <Property Type="String" Name="NombreTrabajo" Nullable="true" />
+          <Property Type="String" Name="Fuente" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Categoria" Nullable="true" MaxLength="72" />
+          <Property Type="String" Name="Unidad" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="Reporta" Nullable="true" MaxLength="501" />
+          <Property Type="String" Name="Cliente" Nullable="false" MaxLength="250" />
+          <Property Type="String" Name="Descripcion" Nullable="true" />
+          <Property Type="DateTime" Name="FechaReclamo" Nullable="true" />
+          <Property Type="Int32" Name="IdFuente" Nullable="true" />
+          <Property Type="Int32" Name="IdCategoria" Nullable="true" />
+          <Property Type="Int32" Name="IdTarea" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="PNC_ObtenerProductoNoConformeTodos_Result">
+          <Property Type="Int32" Name="IdEstudio" Nullable="true" />
+          <Property Type="String" Name="Nombre" Nullable="true" />
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="JobBook" Nullable="true" MaxLength="15" />
+          <Property Type="Int32" Name="IdTrabajo" Nullable="true" />
+          <Property Type="String" Name="NombreTrabajo" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="Fuente" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Categoria" Nullable="true" MaxLength="72" />
+          <Property Type="String" Name="Unidad" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="Reporta" Nullable="true" MaxLength="501" />
+          <Property Type="String" Name="Cliente" Nullable="false" MaxLength="250" />
+          <Property Type="String" Name="Descripcion" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="PNC_ProductoNoConformeAcciones">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdPNC" Type="Int32" />
+          <Property Name="IdCausa" Type="Int32" />
+          <Property Name="TipoAccion" Type="Int32" />
+          <Property Name="Accion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="FechaPlaneada" Type="DateTime" Precision="0" />
+          <Property Name="FechaEjecucion" Type="DateTime" Precision="0" />
+          <Property Name="IdResponsableAccion" Type="Int32" />
+          <Property Name="IdResponsableSeguimiento" Type="Int32" />
+          <Property Name="EvidenciaCierre" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="PermiteActualizar" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="PNC_ProductoNoConformeCausas">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdPNC" Type="Int32" />
+          <Property Name="CausaRaiz" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="PNC_VerProductoNoConformeCausas">
+          <Key>
+            <PropertyRef Name="IdCausa" />
+          </Key>
+          <Property Name="JobBook" Type="String" MaxLength="15" FixedLength="true" Unicode="true" />
+          <Property Name="IdPNC" Type="Int32" />
+          <Property Name="IdCausa" Type="Int32" Nullable="false" />
+          <Property Name="CausaRaiz" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <ComplexType Name="PNC_GetById_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="JobBook" Nullable="true" MaxLength="20" />
+          <Property Type="DateTime" Name="FechaReclamo" Nullable="true" />
+          <Property Type="Int32" Name="IdEstudio" Nullable="true" />
+          <Property Type="String" Name="UsuarioReporta" Nullable="true" MaxLength="501" />
+          <Property Type="String" Name="Trabajo" Nullable="true" />
+          <Property Type="String" Name="Cliente" Nullable="false" MaxLength="250" />
+          <Property Type="String" Name="FuenteReclamo" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Catalogado" Nullable="true" MaxLength="72" />
+          <Property Type="String" Name="Descripcion" Nullable="true" />
+          <Property Type="String" Name="EmailUsuario" Nullable="true" MaxLength="250" />
+        </ComplexType>
+        <ComplexType Name="PNC_EmailAcciones_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Trabajo" Nullable="true" />
+          <Property Type="String" Name="DescripcionPNC" Nullable="true" />
+          <Property Type="String" Name="TipodeAccion" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Accion" Nullable="true" />
+          <Property Type="DateTime" Name="FechaPlaneada" Nullable="true" />
+          <Property Type="String" Name="ResponsableAccion" Nullable="true" MaxLength="501" />
+          <Property Type="String" Name="ResponsableSeguiimiento" Nullable="true" MaxLength="501" />
+          <Property Type="String" Name="EmailResponsable" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="EmailSeguimiento" Nullable="true" MaxLength="250" />
+        </ComplexType>
+        <EntityType Name="PNC_VerProductoNoConformeDetalle">
+          <Key>
+            <PropertyRef Name="IdCausa" />
+            <PropertyRef Name="IdAccion" />
+          </Key>
+          <Property Name="JobBook" Type="String" MaxLength="15" FixedLength="true" Unicode="true" />
+          <Property Name="IdPNC" Type="Int32" />
+          <Property Name="IdCausa" Type="Int32" Nullable="false" />
+          <Property Name="CausaRaiz" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IdAccion" Type="Int32" Nullable="false" />
+          <Property Name="Accion" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Name="DescripcionAccion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="FechaPlaneada" Type="DateTime" Precision="0" />
+          <Property Name="FechaEjecucion" Type="DateTime" Precision="0" />
+          <Property Name="ResponsableAccion" Type="String" MaxLength="501" FixedLength="false" Unicode="false" />
+          <Property Name="ResponsableSeguimiento" Type="String" MaxLength="502" FixedLength="false" Unicode="false" />
+          <Property Name="EvidenciaCierre" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="TipoAccion" Type="Int32" />
+          <Property Name="IdResponsableAccion" Type="Int32" />
+          <Property Name="IdResponsableSeguimiento" Type="Int32" />
+        </EntityType>
+        <EntityType Name="PNC_ProductoNoConforme">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdEstudio" Type="Int32" />
+          <Property Name="IdTrabajo" Type="Int32" />
+          <Property Name="JobBook" Type="String" MaxLength="15" FixedLength="true" Unicode="true" />
+          <Property Name="FechaReclamo" Type="DateTime" Precision="0" />
+          <Property Name="IdReporta" Type="Int64" />
+          <Property Name="IdUnidad" Type="Int32" />
+          <Property Name="IdClienteExterno" Type="Int64" />
+          <Property Name="FuenteReclamo" Type="Int32" />
+          <Property Name="Categoria" Type="Int32" />
+          <Property Name="Tarea" Type="Int32" />
+          <Property Name="Descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Cerrado" Type="Boolean" />
+          <Property Name="FechaCierre" Type="DateTime" Precision="0" />
+          <Property Name="Usuario" Type="Int64" />
+          <Property Name="FechaGrabacion" Type="DateTime" Precision="0" />
+          <Property Name="FechaActualizacion" Type="DateTime" Precision="0" />
+        </EntityType>
+        <EntityType Name="PNC_VerProductoNoConforme">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Cliente" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="JobBook" Type="String" MaxLength="15" FixedLength="true" Unicode="true" />
+          <Property Name="IdTrabajo" Type="Int32" />
+          <Property Name="NombreTrabajo" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Fuente" Type="String" MaxLength="30" FixedLength="true" Unicode="true" />
+          <Property Name="Categoria" Type="String" MaxLength="72" FixedLength="true" Unicode="true" />
+          <Property Name="Unidad" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Reporta" Type="String" MaxLength="501" FixedLength="false" Unicode="false" />
+          <Property Name="Cliente" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <ComplexType Name="PNC_Seguimiento_Get_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Int32" Name="IdEstudio" Nullable="true" />
+          <Property Type="String" Name="NombreEstudio" Nullable="true" />
+          <Property Type="Int32" Name="IdTrabajo" Nullable="true" />
+          <Property Type="String" Name="NombreTrabajo" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="JobBook" Nullable="true" MaxLength="15" />
+          <Property Type="DateTime" Name="FechaReclamo" Nullable="true" />
+          <Property Type="Int64" Name="IdReporta" Nullable="true" />
+          <Property Type="String" Name="Reporta" Nullable="true" MaxLength="501" />
+          <Property Type="Int32" Name="IdUnidad" Nullable="true" />
+          <Property Type="String" Name="Unidad" Nullable="true" MaxLength="250" />
+          <Property Type="Int64" Name="IdClienteExterno" Nullable="true" />
+          <Property Type="String" Name="Cliente" Nullable="false" MaxLength="250" />
+          <Property Type="Int32" Name="IdFuenteReclamo" Nullable="true" />
+          <Property Type="String" Name="FuenteReclamo" Nullable="true" MaxLength="30" />
+          <Property Type="Int32" Name="IdCategoria" Nullable="true" />
+          <Property Type="String" Name="Categoria" Nullable="true" MaxLength="72" />
+          <Property Type="Int32" Name="IdTarea" Nullable="true" />
+          <Property Type="String" Name="Tarea" Nullable="true" MaxLength="150" />
+          <Property Type="String" Name="Descripcion" Nullable="true" />
+          <Property Type="Int32" Name="CantidadCausas" Nullable="true" />
+          <Property Type="Int32" Name="CantidadAcciones" Nullable="true" />
+          <Property Type="String" Name="Estado" Nullable="false" MaxLength="17" />
+        </ComplexType>
+        <ComplexType Name="PNC_ProductoNoConformeAcciones_Get_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Int32" Name="IdPNC" Nullable="true" />
+          <Property Type="Int32" Name="IdCausa" Nullable="true" />
+          <Property Type="Int32" Name="TipoAccion" Nullable="true" />
+          <Property Type="String" Name="Accion" Nullable="true" />
+          <Property Type="DateTime" Name="FechaPlaneada" Nullable="true" />
+          <Property Type="DateTime" Name="FechaEjecucion" Nullable="true" />
+          <Property Type="Int32" Name="IdResponsableAccion" Nullable="true" />
+          <Property Type="Int32" Name="IdResponsableSeguimiento" Nullable="true" />
+          <Property Type="String" Name="EvidenciaCierre" Nullable="true" />
+          <Property Type="Boolean" Name="PermiteActualizar" Nullable="true" />
+          <Property Type="String" Name="Estado" Nullable="false" MaxLength="17" />
+        </ComplexType>
+        <ComplexType Name="PNC_ProductoNoConformeCausas_Get_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Int32" Name="IdPNC" Nullable="true" />
+          <Property Type="String" Name="CausaRaiz" Nullable="true" />
+          <Property Type="String" Name="Estado" Nullable="false" MaxLength="17" />
+        </ComplexType>
+        <EntityType Name="PNC_Procedimientos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="PNC_Procesos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <ComplexType Name="PNC_Productos_Get_Result">
+          <Property Type="Decimal" Name="id" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="String" Name="Proceso" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Procedimiento" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Unidad" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Fuente" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Categoria" Nullable="true" MaxLength="72" />
+          <Property Type="String" Name="proyectoTrabajo" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="descripcion" Nullable="false" />
+          <Property Type="String" Name="AsociadoA" Nullable="true" MaxLength="9" />
+          <Property Type="DateTime" Name="fechaReclamo" Nullable="false" />
+          <Property Type="String" Name="personaIdentifica" Nullable="true" MaxLength="501" />
+          <Property Type="String" Name="personaResponsable" Nullable="true" MaxLength="501" />
+          <Property Type="String" Name="personaInformar" Nullable="true" MaxLength="501" />
+          <Property Type="String" Name="Tarea" Nullable="true" MaxLength="150" />
+          <Property Type="DateTime" Name="fechaCreacion" Nullable="false" Precision="23" />
+          <Property Type="Byte" Name="estado" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="PNC_Causa_Get_Result">
+          <Property Type="Decimal" Name="id" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="productoId" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="String" Name="causa" Nullable="false" />
+          <Property Type="String" Name="correccion" Nullable="false" />
+          <Property Type="DateTime" Name="fechaEstimadaCierre" Nullable="false" />
+          <Property Type="Int64" Name="usuario" Nullable="false" />
+          <Property Type="DateTime" Name="fechaCreacion" Nullable="false" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="PNC_Productos_Log_Get_Result">
+          <Property Type="Decimal" Name="id" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="idProducto" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="Byte" Name="estado" Nullable="false" />
+          <Property Type="DateTime" Name="fecha" Nullable="false" Precision="23" />
+          <Property Type="Int64" Name="usuario" Nullable="false" />
+          <Property Type="String" Name="observacion" Nullable="true" />
+        </ComplexType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MatrixModel1StoreContainer" CdmEntityContainer="PNCEntities">
+          <EntitySetMapping Name="PNC_FuenteReclamo">
+            <EntityTypeMapping TypeName="MatrixModel1.PNC_FuenteReclamo">
+              <MappingFragment StoreEntitySet="PNC_FuenteReclamo">
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PNC_VObtenerCliente">
+            <EntityTypeMapping TypeName="MatrixModel1.PNC_VObtenerCliente">
+              <MappingFragment StoreEntitySet="PNC_VObtenerCliente">
+                <ScalarProperty Name="RazonSocial" ColumnName="RazonSocial" />
+                <ScalarProperty Name="IdCliente" ColumnName="IdCliente" />
+                <ScalarProperty Name="IdEstudio" ColumnName="IdEstudio" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PNC_VObtenerUsuarios">
+            <EntityTypeMapping TypeName="MatrixModel1.PNC_VObtenerUsuarios">
+              <MappingFragment StoreEntitySet="PNC_VObtenerUsuarios">
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PNC_TiposDeAccion">
+            <EntityTypeMapping TypeName="MatrixModel1.PNC_TiposDeAccion">
+              <MappingFragment StoreEntitySet="PNC_TiposDeAccion">
+                <ScalarProperty Name="Accion" ColumnName="Accion" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PNC_VObtenerUnidad">
+            <EntityTypeMapping TypeName="MatrixModel1.PNC_VObtenerUnidad">
+              <MappingFragment StoreEntitySet="PNC_VObtenerUnidad">
+                <ScalarProperty Name="NombreUnidad" ColumnName="NombreUnidad" />
+                <ScalarProperty Name="CodigoUnidad" ColumnName="CodigoUnidad" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PNC_Categorias">
+            <EntityTypeMapping TypeName="MatrixModel1.PNC_Categorias">
+              <MappingFragment StoreEntitySet="PNC_Categorias">
+                <ScalarProperty Name="IdRol" ColumnName="IdRol" />
+                <ScalarProperty Name="IdUnidad" ColumnName="IdUnidad" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="PNC_EmailNotificacionReporte" FunctionName="MatrixModel1.Store.PNC_EmailNotificacionReporte" />
+          <FunctionImportMapping FunctionImportName="PNC_ObtenerProductoNoConforme" FunctionName="MatrixModel1.Store.PNC_ObtenerProductoNoConforme">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel1.PNC_ObtenerProductoNoConforme_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="IdTrabajo" ColumnName="IdTrabajo" />
+                <ScalarProperty Name="NombreTrabajo" ColumnName="NombreTrabajo" />
+                <ScalarProperty Name="Fuente" ColumnName="Fuente" />
+                <ScalarProperty Name="Categoria" ColumnName="Categoria" />
+                <ScalarProperty Name="Unidad" ColumnName="Unidad" />
+                <ScalarProperty Name="Reporta" ColumnName="Reporta" />
+                <ScalarProperty Name="Cliente" ColumnName="Cliente" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="FechaReclamo" ColumnName="FechaReclamo" />
+                <ScalarProperty Name="IdFuente" ColumnName="IdFuente" />
+                <ScalarProperty Name="IdCategoria" ColumnName="IdCategoria" />
+                <ScalarProperty Name="IdTarea" ColumnName="IdTarea" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PNC_ObtenerProductoNoConformeTodos" FunctionName="MatrixModel1.Store.PNC_ObtenerProductoNoConformeTodos">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel1.PNC_ObtenerProductoNoConformeTodos_Result">
+                <ScalarProperty Name="IdEstudio" ColumnName="IdEstudio" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="IdTrabajo" ColumnName="IdTrabajo" />
+                <ScalarProperty Name="NombreTrabajo" ColumnName="NombreTrabajo" />
+                <ScalarProperty Name="Fuente" ColumnName="Fuente" />
+                <ScalarProperty Name="Categoria" ColumnName="Categoria" />
+                <ScalarProperty Name="Unidad" ColumnName="Unidad" />
+                <ScalarProperty Name="Reporta" ColumnName="Reporta" />
+                <ScalarProperty Name="Cliente" ColumnName="Cliente" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="PNC_ProductoNoConformeAcciones">
+            <EntityTypeMapping TypeName="MatrixModel1.PNC_ProductoNoConformeAcciones">
+              <MappingFragment StoreEntitySet="PNC_ProductoNoConformeAcciones">
+                <ScalarProperty Name="PermiteActualizar" ColumnName="PermiteActualizar" />
+                <ScalarProperty Name="EvidenciaCierre" ColumnName="EvidenciaCierre" />
+                <ScalarProperty Name="IdResponsableSeguimiento" ColumnName="IdResponsableSeguimiento" />
+                <ScalarProperty Name="IdResponsableAccion" ColumnName="IdResponsableAccion" />
+                <ScalarProperty Name="FechaEjecucion" ColumnName="FechaEjecucion" />
+                <ScalarProperty Name="FechaPlaneada" ColumnName="FechaPlaneada" />
+                <ScalarProperty Name="Accion" ColumnName="Accion" />
+                <ScalarProperty Name="TipoAccion" ColumnName="TipoAccion" />
+                <ScalarProperty Name="IdCausa" ColumnName="IdCausa" />
+                <ScalarProperty Name="IdPNC" ColumnName="IdPNC" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PNC_ProductoNoConformeCausas">
+            <EntityTypeMapping TypeName="MatrixModel1.PNC_ProductoNoConformeCausas">
+              <MappingFragment StoreEntitySet="PNC_ProductoNoConformeCausas">
+                <ScalarProperty Name="CausaRaiz" ColumnName="CausaRaiz" />
+                <ScalarProperty Name="IdPNC" ColumnName="IdPNC" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PNC_VerProductoNoConformeCausas">
+            <EntityTypeMapping TypeName="MatrixModel1.PNC_VerProductoNoConformeCausas">
+              <MappingFragment StoreEntitySet="PNC_VerProductoNoConformeCausas">
+                <ScalarProperty Name="CausaRaiz" ColumnName="CausaRaiz" />
+                <ScalarProperty Name="IdCausa" ColumnName="IdCausa" />
+                <ScalarProperty Name="IdPNC" ColumnName="IdPNC" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="PNC_GetById" FunctionName="MatrixModel1.Store.PNC_GetById">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel1.PNC_GetById_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="FechaReclamo" ColumnName="FechaReclamo" />
+                <ScalarProperty Name="IdEstudio" ColumnName="IdEstudio" />
+                <ScalarProperty Name="UsuarioReporta" ColumnName="UsuarioReporta" />
+                <ScalarProperty Name="Trabajo" ColumnName="Trabajo" />
+                <ScalarProperty Name="Cliente" ColumnName="Cliente" />
+                <ScalarProperty Name="FuenteReclamo" ColumnName="FuenteReclamo" />
+                <ScalarProperty Name="Catalogado" ColumnName="Catalogado" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="EmailUsuario" ColumnName="EmailUsuario" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PNC_EmailAcciones" FunctionName="MatrixModel1.Store.PNC_EmailAcciones">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel1.PNC_EmailAcciones_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Trabajo" ColumnName="Trabajo" />
+                <ScalarProperty Name="DescripcionPNC" ColumnName="DescripcionPNC" />
+                <ScalarProperty Name="TipodeAccion" ColumnName="TipodeAccion" />
+                <ScalarProperty Name="Accion" ColumnName="Accion" />
+                <ScalarProperty Name="FechaPlaneada" ColumnName="FechaPlaneada" />
+                <ScalarProperty Name="ResponsableAccion" ColumnName="ResponsableAccion" />
+                <ScalarProperty Name="ResponsableSeguiimiento" ColumnName="ResponsableSeguiimiento" />
+                <ScalarProperty Name="EmailResponsable" ColumnName="EmailResponsable" />
+                <ScalarProperty Name="EmailSeguimiento" ColumnName="EmailSeguimiento" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="PNC_VerProductoNoConformeDetalle">
+            <EntityTypeMapping TypeName="MatrixModel1.PNC_VerProductoNoConformeDetalle">
+              <MappingFragment StoreEntitySet="PNC_VerProductoNoConformeDetalle">
+                <ScalarProperty Name="IdResponsableSeguimiento" ColumnName="IdResponsableSeguimiento" />
+                <ScalarProperty Name="IdResponsableAccion" ColumnName="IdResponsableAccion" />
+                <ScalarProperty Name="TipoAccion" ColumnName="TipoAccion" />
+                <ScalarProperty Name="EvidenciaCierre" ColumnName="EvidenciaCierre" />
+                <ScalarProperty Name="ResponsableSeguimiento" ColumnName="ResponsableSeguimiento" />
+                <ScalarProperty Name="ResponsableAccion" ColumnName="ResponsableAccion" />
+                <ScalarProperty Name="FechaEjecucion" ColumnName="FechaEjecucion" />
+                <ScalarProperty Name="FechaPlaneada" ColumnName="FechaPlaneada" />
+                <ScalarProperty Name="DescripcionAccion" ColumnName="DescripcionAccion" />
+                <ScalarProperty Name="Accion" ColumnName="Accion" />
+                <ScalarProperty Name="IdAccion" ColumnName="IdAccion" />
+                <ScalarProperty Name="CausaRaiz" ColumnName="CausaRaiz" />
+                <ScalarProperty Name="IdCausa" ColumnName="IdCausa" />
+                <ScalarProperty Name="IdPNC" ColumnName="IdPNC" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PNC_ProductoNoConforme">
+            <EntityTypeMapping TypeName="MatrixModel1.PNC_ProductoNoConforme">
+              <MappingFragment StoreEntitySet="PNC_ProductoNoConforme">
+                <ScalarProperty Name="FechaActualizacion" ColumnName="FechaActualizacion" />
+                <ScalarProperty Name="FechaGrabacion" ColumnName="FechaGrabacion" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="FechaCierre" ColumnName="FechaCierre" />
+                <ScalarProperty Name="Cerrado" ColumnName="Cerrado" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Tarea" ColumnName="Tarea" />
+                <ScalarProperty Name="Categoria" ColumnName="Categoria" />
+                <ScalarProperty Name="FuenteReclamo" ColumnName="FuenteReclamo" />
+                <ScalarProperty Name="IdClienteExterno" ColumnName="IdClienteExterno" />
+                <ScalarProperty Name="IdUnidad" ColumnName="IdUnidad" />
+                <ScalarProperty Name="IdReporta" ColumnName="IdReporta" />
+                <ScalarProperty Name="FechaReclamo" ColumnName="FechaReclamo" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="IdTrabajo" ColumnName="IdTrabajo" />
+                <ScalarProperty Name="IdEstudio" ColumnName="IdEstudio" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PNC_VerProductoNoConforme">
+            <EntityTypeMapping TypeName="MatrixModel1.PNC_VerProductoNoConforme">
+              <MappingFragment StoreEntitySet="PNC_VerProductoNoConforme">
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Cliente" ColumnName="Cliente" />
+                <ScalarProperty Name="Reporta" ColumnName="Reporta" />
+                <ScalarProperty Name="Unidad" ColumnName="Unidad" />
+                <ScalarProperty Name="Categoria" ColumnName="Categoria" />
+                <ScalarProperty Name="Fuente" ColumnName="Fuente" />
+                <ScalarProperty Name="NombreTrabajo" ColumnName="NombreTrabajo" />
+                <ScalarProperty Name="IdTrabajo" ColumnName="IdTrabajo" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="PNC_Seguimiento_Get" FunctionName="MatrixModel1.Store.PNC_Seguimiento_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel1.PNC_Seguimiento_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdEstudio" ColumnName="IdEstudio" />
+                <ScalarProperty Name="NombreEstudio" ColumnName="NombreEstudio" />
+                <ScalarProperty Name="IdTrabajo" ColumnName="IdTrabajo" />
+                <ScalarProperty Name="NombreTrabajo" ColumnName="NombreTrabajo" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="FechaReclamo" ColumnName="FechaReclamo" />
+                <ScalarProperty Name="IdReporta" ColumnName="IdReporta" />
+                <ScalarProperty Name="Reporta" ColumnName="Reporta" />
+                <ScalarProperty Name="IdUnidad" ColumnName="IdUnidad" />
+                <ScalarProperty Name="Unidad" ColumnName="Unidad" />
+                <ScalarProperty Name="IdClienteExterno" ColumnName="IdClienteExterno" />
+                <ScalarProperty Name="Cliente" ColumnName="Cliente" />
+                <ScalarProperty Name="IdFuenteReclamo" ColumnName="IdFuenteReclamo" />
+                <ScalarProperty Name="FuenteReclamo" ColumnName="FuenteReclamo" />
+                <ScalarProperty Name="IdCategoria" ColumnName="IdCategoria" />
+                <ScalarProperty Name="Categoria" ColumnName="Categoria" />
+                <ScalarProperty Name="IdTarea" ColumnName="IdTarea" />
+                <ScalarProperty Name="Tarea" ColumnName="Tarea" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="CantidadCausas" ColumnName="CantidadCausas" />
+                <ScalarProperty Name="CantidadAcciones" ColumnName="CantidadAcciones" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PNC_ProductoNoConformeAcciones_Get" FunctionName="MatrixModel1.Store.PNC_ProductoNoConformeAcciones_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel1.PNC_ProductoNoConformeAcciones_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdPNC" ColumnName="IdPNC" />
+                <ScalarProperty Name="IdCausa" ColumnName="IdCausa" />
+                <ScalarProperty Name="TipoAccion" ColumnName="TipoAccion" />
+                <ScalarProperty Name="Accion" ColumnName="Accion" />
+                <ScalarProperty Name="FechaPlaneada" ColumnName="FechaPlaneada" />
+                <ScalarProperty Name="FechaEjecucion" ColumnName="FechaEjecucion" />
+                <ScalarProperty Name="IdResponsableAccion" ColumnName="IdResponsableAccion" />
+                <ScalarProperty Name="IdResponsableSeguimiento" ColumnName="IdResponsableSeguimiento" />
+                <ScalarProperty Name="EvidenciaCierre" ColumnName="EvidenciaCierre" />
+                <ScalarProperty Name="PermiteActualizar" ColumnName="PermiteActualizar" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PNC_ProductoNoConformeCausas_Get" FunctionName="MatrixModel1.Store.PNC_ProductoNoConformeCausas_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel1.PNC_ProductoNoConformeCausas_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdPNC" ColumnName="IdPNC" />
+                <ScalarProperty Name="CausaRaiz" ColumnName="CausaRaiz" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="PNC_Procedimientos">
+            <EntityTypeMapping TypeName="MatrixModel1.PNC_Procedimientos">
+              <MappingFragment StoreEntitySet="PNC_Procedimientos">
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PNC_Procesos">
+            <EntityTypeMapping TypeName="MatrixModel1.PNC_Procesos">
+              <MappingFragment StoreEntitySet="PNC_Procesos">
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="PNC_Productos_Add" FunctionName="MatrixModel1.Store.PNC_Productos_Add" />
+          <FunctionImportMapping FunctionImportName="PNC_Productos_Log_Estado_Add" FunctionName="MatrixModel1.Store.PNC_Productos_Log_Estado_Add" />
+          <FunctionImportMapping FunctionImportName="PNC_Productos_Get" FunctionName="MatrixModel1.Store.PNC_Productos_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel1.PNC_Productos_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Proceso" ColumnName="Proceso" />
+                <ScalarProperty Name="Procedimiento" ColumnName="Procedimiento" />
+                <ScalarProperty Name="Unidad" ColumnName="Unidad" />
+                <ScalarProperty Name="Fuente" ColumnName="Fuente" />
+                <ScalarProperty Name="Categoria" ColumnName="Categoria" />
+                <ScalarProperty Name="proyectoTrabajo" ColumnName="proyectoTrabajo" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="AsociadoA" ColumnName="AsociadoA" />
+                <ScalarProperty Name="fechaReclamo" ColumnName="fechaReclamo" />
+                <ScalarProperty Name="personaIdentifica" ColumnName="personaIdentifica" />
+                <ScalarProperty Name="personaResponsable" ColumnName="personaResponsable" />
+                <ScalarProperty Name="personaInformar" ColumnName="personaInformar" />
+                <ScalarProperty Name="Tarea" ColumnName="Tarea" />
+                <ScalarProperty Name="fechaCreacion" ColumnName="fechaCreacion" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PNC_Productos_Causas_Add" FunctionName="MatrixModel1.Store.PNC_Productos_Causas_Add" />
+          <FunctionImportMapping FunctionImportName="PNC_Producto_UpdateEstado" FunctionName="MatrixModel1.Store.PNC_Producto_UpdateEstado" />
+          <FunctionImportMapping FunctionImportName="PNC_Productos_CorreosNotificar" FunctionName="MatrixModel1.Store.PNC_Productos_CorreosNotificar" />
+          <FunctionImportMapping FunctionImportName="PNC_Causa_Get" FunctionName="MatrixModel1.Store.PNC_Causa_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel1.PNC_Causa_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="productoId" ColumnName="productoId" />
+                <ScalarProperty Name="causa" ColumnName="causa" />
+                <ScalarProperty Name="correccion" ColumnName="correccion" />
+                <ScalarProperty Name="fechaEstimadaCierre" ColumnName="fechaEstimadaCierre" />
+                <ScalarProperty Name="usuario" ColumnName="usuario" />
+                <ScalarProperty Name="fechaCreacion" ColumnName="fechaCreacion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PNC_Productos_Log_Get" FunctionName="MatrixModel1.Store.PNC_Productos_Log_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MatrixModel1.PNC_Productos_Log_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="idProducto" ColumnName="idProducto" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="fecha" ColumnName="fecha" />
+                <ScalarProperty Name="usuario" ColumnName="usuario" />
+                <ScalarProperty Name="observacion" ColumnName="observacion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

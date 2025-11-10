@@ -1,0 +1,55 @@
+﻿#modalWindowExport .columna {
+}
+
+#modalWindowExport {
+    display: flex;
+    gap: 20px;
+    margin: 20px;
+    font-size: 14px;
+}
+
+    #modalWindowExport .columna {
+        flex: 1;
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
+        align-items: baseline;
+    }
+
+    #modalWindowExport .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+        #modalWindowExport .form-group select {
+            height: unset;
+            margin: unset;
+        }
+
+
+    #modalWindowExport label {
+        margin-bottom: 5px;
+        font-size: unset;
+        text-align: unset;
+        padding-top: unset;
+    }
+
+    #modalWindowExport input, #modalWindowExport select, #modalWindowExport textarea, #modalWindowExport input, #modalWindowExport select, #modalWindowExport textarea {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    #modalWindowExport #btnGeneraExcel {
+        padding: 10px 20px;
+        background-color: #09c6c6;
+        color: white;
+        border: none;
+        cursor: pointer;
+        height: 42px;
+    }
+
+#btnExcel {
+    color: blue;
+    text-decoration: underline;
+}

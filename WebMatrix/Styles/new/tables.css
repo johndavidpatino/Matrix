@@ -1,0 +1,32 @@
+.ip-table{
+    border-collapse: collapse;
+    background-color: white;
+    color: #666;
+    border-radius: 3px;
+    width: 100%;
+    border: none;
+}
+
+.ip-table th{
+    padding: .25rem;
+    color: #5c5c5c;
+    background-color: rgba(0, 0, 0, 0.041);
+    text-shadow: none;
+}
+
+.ip-table td{
+    padding: .25rem;
+    text-align: center;
+}
+
+.ip-table tr:not(:last-child) {
+    border-bottom: 1px solid #e6e6e6;
+}
+
+.ip-table td:not(:last-child), .ip-table th:not(:last-child){
+    border-right: 1px solid #cecece;
+}
+
+.ip-table-row:hover{
+    background-color: #c2c2c25d;
+}

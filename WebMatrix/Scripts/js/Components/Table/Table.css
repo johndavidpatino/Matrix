@@ -1,0 +1,61 @@
+﻿.containerTable {
+    display: grid;
+    overflow-y: auto;
+    border: 1px solid #26BFAA;
+    grid-template-rows: 1fr 30px;
+    height: 100%;
+}
+
+    .containerTable .containerTableBody .table {
+        width: 100%;
+    }
+
+        .containerTable .containerTableBody .table thead tr td {
+            position: sticky;
+            top: 0;
+            background-color: white;
+        }
+
+        .containerTable .containerTableBody .table thead tr td {
+            border-bottom: 1px solid #26BFAA;
+            padding: 5px;
+            color: #033d5f;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .containerTable .containerTableBody .table tbody tr td {
+            border-bottom: 1px solid #26BFAA;
+            padding: 5px;
+            color: #444a4d;
+        }
+
+            .containerTable .containerTableBody .table tbody tr td input[type=button] {
+                border-radius: 5px;
+                background-color: cadetblue;
+                color: white;
+                cursor: pointer;
+                padding: 3px;
+            }
+
+    .containerTable .pagination {
+        display: flex;
+        position: sticky;
+        bottom: 0;
+        background-color: white;
+        align-items: center;
+        max-height: 30px;
+    }
+
+        .containerTable .pagination .paginationControls {
+            display: flex;
+        }
+
+            .containerTable .pagination .paginationControls > input[type] {
+                color: #444a4d;
+            }
+
+            .containerTable .pagination .paginationControls .currentPage {
+                padding: 5px;
+                color: #444a4d;
+            }

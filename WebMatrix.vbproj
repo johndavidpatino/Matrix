@@ -1,0 +1,1892 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>
+    </SchemaVersion>
+    <ProjectGuid>{1300080C-3699-49A5-9AEA-65C5ECD3BD0B}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{F184B08F-C81C-45F6-A57F-5ABD9991F28F}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <RootNamespace>WebMatrix</RootNamespace>
+    <AssemblyName>WebMatrix</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <MyType>Custom</MyType>
+    <UseIISExpress>false</UseIISExpress>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\</OutputPath>
+    <DocumentationFile>WebMatrix.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DocumentationFile>WebMatrix.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>Off</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AjaxControlToolkit, Version=4.1.7.123, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\AjaxControlToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="BusyBoxDotNet, Version=0.2.1.1366, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>F:\\BusyBoxDotNet.dll</HintPath>
+    </Reference>
+    <Reference Include="FusionCharts, Version=3.2.2.2, Culture=neutral, PublicKeyToken=58bb3098fe7f0ede, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>F:\\FusionCharts.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Collections.Specialized" />
+    <Import Include="System.Configuration" />
+    <Import Include="System.Text" />
+    <Import Include="System.Text.RegularExpressions" />
+    <Import Include="System.Web" />
+    <Import Include="System.Web.Caching" />
+    <Import Include="System.Web.SessionState" />
+    <Import Include="System.Web.Security" />
+    <Import Include="System.Web.Profile" />
+    <Import Include="System.Web.UI" />
+    <Import Include="System.Web.UI.WebControls" />
+    <Import Include="System.Web.UI.WebControls.WebParts" />
+    <Import Include="System.Web.UI.HtmlControls" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="About.aspx" />
+    <Content Include="Account\ChangePassword.aspx" />
+    <Content Include="Account\ChangePasswordSuccess.aspx" />
+    <Content Include="Account\Login.aspx" />
+    <Content Include="Account\Register.aspx" />
+    <Content Include="CAP\Cap_Principal.aspx" />
+    <Content Include="CAP\Imagenes\excel.jpg" />
+    <Content Include="CAP\Imagenes\minus.png" />
+    <Content Include="CAP\Imagenes\plus.png" />
+    <Content Include="CAP\UC_Cati.ascx" />
+    <Content Include="CAP\UserControls\UC_Preguntas.ascx" />
+    <Content Include="CAP\UserControls\UC_Producto.ascx" />
+    <Content Include="CORE\AsignacionTareas.aspx" />
+    <Content Include="CORE\Documentos_Tareas.aspx" />
+    <Content Include="CORE\EstimacionTareas.aspx" />
+    <Content Include="CORE\ListaTareasXHilo.aspx" />
+    <Content Include="CORE\ListaTrabajosTareas.aspx" />
+    <Content Include="CORE\Tarea.aspx" />
+    <Content Include="CORE\Tareas.aspx" />
+    <Content Include="CU_Cuentas\Briefs.aspx" />
+    <Content Include="CU_Cuentas\Clientes.aspx" />
+    <Content Include="CU_Cuentas\Contactos.aspx" />
+    <Content Include="CU_Cuentas\FormPQR.aspx" />
+    <Content Include="Emails\BriefEstadistica.aspx" />
+    <Content Include="Emails\COEAsignado.aspx" />
+    <Content Include="Emails\CoordinadorAsignado.aspx" />
+    <Content Include="Emails\ObservacionesRO.aspx" />
+    <Content Include="Emails\GerenteProyectosAsignado.aspx" />
+    <Content Include="Emails\NuevoTrabajoCoordCampo.aspx" />
+    <Content Include="Emails\NuevoTrabajoGerenciaOp.aspx" />
+    <Content Include="Emails\NuevoProyectoCoordinacion.aspx" />
+    <Content Include="Emails\MetodologiaDeCampo.aspx" />
+    <Content Include="Emails\DisenoDeMuestra.aspx" />
+    <Content Include="CU_Cuentas\RevisionPresupuestos.aspx" />
+    <Content Include="Emails\EntregaTrabajoObservaciones.aspx" />
+    <Content Include="Emails\EntregaTrabajoEntrevistas.aspx" />
+    <Content Include="Emails\EntregaTrabajoSesiones.aspx" />
+    <Content Include="FusionCharts\Area2D.swf" />
+    <Content Include="FusionCharts\Bar2D.swf" />
+    <Content Include="FusionCharts\Bubble.swf" />
+    <Content Include="FusionCharts\Column2D.swf" />
+    <Content Include="FusionCharts\Column3D.swf" />
+    <Content Include="FusionCharts\Data.xml" />
+    <Content Include="FusionCharts\Doughnut2D.swf" />
+    <Content Include="FusionCharts\Doughnut3D.swf" />
+    <Content Include="FusionCharts\FCExporter.swf" />
+    <Content Include="FusionCharts\firebug-lite.js" />
+    <Content Include="FusionCharts\FusionCharts.HC.Charts.js" />
+    <Content Include="FusionCharts\FusionCharts.HC.js" />
+    <Content Include="FusionCharts\FusionCharts.jqueryplugin.js" />
+    <Content Include="FusionCharts\FusionCharts.js" />
+    <Content Include="FusionCharts\FusionChartsExportComponent.js" />
+    <Content Include="FusionCharts\jquery.min.js" />
+    <Content Include="FusionCharts\Line.swf" />
+    <Content Include="FusionCharts\Marimekko.swf" />
+    <Content Include="FusionCharts\MSArea.swf" />
+    <Content Include="FusionCharts\MSBar2D.swf" />
+    <Content Include="FusionCharts\MSBar3D.swf" />
+    <Content Include="FusionCharts\MSColumn2D.swf" />
+    <Content Include="FusionCharts\MSColumn3D.swf" />
+    <Content Include="FusionCharts\MSColumn3DLineDY.swf" />
+    <Content Include="FusionCharts\MSColumnLine3D.swf" />
+    <Content Include="FusionCharts\MSCombi2D.swf" />
+    <Content Include="FusionCharts\MSCombi3D.swf" />
+    <Content Include="FusionCharts\MSCombiDY2D.swf" />
+    <Content Include="FusionCharts\MSLine.swf" />
+    <Content Include="FusionCharts\MSStackedColumn2D.swf" />
+    <Content Include="FusionCharts\MSStackedColumn2DLineDY.swf" />
+    <Content Include="FusionCharts\Pareto2D.swf" />
+    <Content Include="FusionCharts\Pareto3D.swf" />
+    <Content Include="FusionCharts\Pie2D.swf" />
+    <Content Include="FusionCharts\Pie3D.swf" />
+    <Content Include="FusionCharts\Scatter.swf" />
+    <Content Include="FusionCharts\ScrollArea2D.swf" />
+    <Content Include="FusionCharts\ScrollColumn2D.swf" />
+    <Content Include="FusionCharts\ScrollCombi2D.swf" />
+    <Content Include="FusionCharts\ScrollCombiDY2D.swf" />
+    <Content Include="FusionCharts\ScrollLine2D.swf" />
+    <Content Include="FusionCharts\ScrollStackedColumn2D.swf" />
+    <Content Include="FusionCharts\SSGrid.swf" />
+    <Content Include="FusionCharts\StackedArea2D.swf" />
+    <Content Include="FusionCharts\StackedBar2D.swf" />
+    <Content Include="FusionCharts\StackedBar3D.swf" />
+    <Content Include="FusionCharts\StackedColumn2D.swf" />
+    <Content Include="FusionCharts\StackedColumn2DLine.swf" />
+    <Content Include="FusionCharts\StackedColumn3D.swf" />
+    <Content Include="FusionCharts\StackedColumn3DLine.swf" />
+    <Content Include="FusionCharts\StackedColumn3DLineDY.swf" />
+    <Content Include="FusionCharts\ZoomLine.swf" />
+    <Content Include="FusionWidgets\AngularGauge.swf" />
+    <Content Include="FusionWidgets\Bulb.swf" />
+    <Content Include="FusionWidgets\Cylinder.swf" />
+    <Content Include="FusionWidgets\DrawingPad.swf" />
+    <Content Include="FusionWidgets\FCExporter.swf" />
+    <Content Include="FusionWidgets\firebug-lite.js" />
+    <Content Include="FusionWidgets\Funnel.swf" />
+    <Content Include="FusionWidgets\FusionCharts.HC.js" />
+    <Content Include="FusionWidgets\FusionCharts.HC.Widgets.js" />
+    <Content Include="FusionWidgets\FusionCharts.jqueryplugin.js" />
+    <Content Include="FusionWidgets\FusionCharts.js" />
+    <Content Include="FusionWidgets\FusionChartsExportComponent.js" />
+    <Content Include="FusionWidgets\Gantt.swf" />
+    <Content Include="FusionWidgets\HBullet.swf" />
+    <Content Include="FusionWidgets\HLED.swf" />
+    <Content Include="FusionWidgets\HLinearGauge.swf" />
+    <Content Include="FusionWidgets\jquery.min.js" />
+    <Content Include="FusionWidgets\Pyramid.swf" />
+    <Content Include="FusionWidgets\RealTimeArea.swf" />
+    <Content Include="FusionWidgets\RealTimeColumn.swf" />
+    <Content Include="FusionWidgets\RealTimeLine.swf" />
+    <Content Include="FusionWidgets\RealTimeLineDY.swf" />
+    <Content Include="FusionWidgets\RealTimeStackedArea.swf" />
+    <Content Include="FusionWidgets\RealTimeStackedColumn.swf" />
+    <Content Include="FusionWidgets\SparkColumn.swf" />
+    <Content Include="FusionWidgets\SparkLine.swf" />
+    <Content Include="FusionWidgets\SparkWinLoss.swf" />
+    <Content Include="FusionWidgets\Thermometer.swf" />
+    <Content Include="FusionWidgets\VBullet.swf" />
+    <Content Include="FusionWidgets\VLED.swf" />
+    <Content Include="Images\admin.png" />
+    <Content Include="Images\application_view_detail.png" />
+    <Content Include="Images\cliente.jpg" />
+    <Content Include="Images\estad.png" />
+    <Content Include="Images\logo-titulo.png" />
+    <Content Include="Images\New.gif" />
+    <Content Include="Images\page_attach.png" />
+    <Content Include="Images\sin-foto.jpg" />
+    <Content Include="MBO\CampoCalidadCiudad.aspx" />
+    <Content Include="MBO\CampoCalidadTotal.aspx" />
+    <Content Include="MBO\CampoProduccion.aspx" />
+    <Content Include="MBO\Default.aspx" />
+    <Content Include="MBO\EncuestasAlaFecha.aspx" />
+    <Content Include="MBO\GerenciaAOT.aspx" />
+    <Content Include="OP_Cualitativo\HomeGestion.aspx" />
+    <Content Include="OP_Cualitativo\HomeRecoleccion.aspx" />
+    <Content Include="OP_Cualitativo\MuestraTrabajos.aspx" />
+    <Content Include="OP_Cualitativo\TrabajosCoordinador.aspx" />
+    <Content Include="RE_GT\TraficoTareas.aspx" />
+    <Content Include="OP_Cuantitativo\HomeGestion.aspx" />
+    <Content Include="RE_GT\AsignacionCoordinador.aspx" />
+    <Content Include="RE_GT\GestionyTratamientoDeDatos.aspx" />
+    <Content Include="RE_GT\RecoleccionDeDatos.aspx" />
+    <Content Include="RE_GT\AsignacionCOE.aspx" />
+    <Content Include="OP_Cualitativo\Trabajos.aspx" />
+    <Content Include="OP_Cuantitativo\TraficoEncuestas.aspx" />
+    <Content Include="OP_Cuantitativo\TrabajosCoordinador.aspx" />
+    <Content Include="OP_Cuantitativo\EstimacionProduccion.aspx" />
+    <Content Include="OP_Cuantitativo\MuestraTrabajos.aspx" />
+    <Content Include="OP_Cuantitativo\Trabajos.aspx" />
+    <Content Include="PY_Proyectos\AsignacionProyectos.aspx" />
+    <Content Include="CU_Cuentas\Default.aspx" />
+    <Content Include="CU_Cuentas\Estudios.aspx" />
+    <Content Include="Emails\AnuncioAprobacion.aspx" />
+    <Content Include="Emails\EntregaTrabajoCuantitativo.aspx" />
+    <Content Include="Emails\PreEntregaTrabajo.aspx" />
+    <Content Include="GD_Documentos\GD_Documentos.aspx" />
+    <Content Include="Images\no.jpg" />
+    <Content Include="Images\si.jpg" />
+    <Content Include="OP_Cualitativo\Transcripcion.aspx" />
+    <Content Include="OP_Cuantitativo\HomeRecoleccion.aspx" />
+    <Content Include="OP_Cuantitativo\FichaCuantitativa.aspx" />
+    <Content Include="OP_Cuantitativo\SupervisionCampoTelefonico.aspx" />
+    <Content Include="OP_RO\Cuestionario.aspx" />
+    <Content Include="OP_RO\Instructivo.aspx" />
+    <Content Include="OP_RO\MaterialAyuda.aspx" />
+    <Content Include="OP_RO\Metodologia.aspx" />
+    <Content Include="PC_PropiedadCliente\EnviarProducto.aspx" />
+    <Content Include="PC_PropiedadCliente\ProductoInterno.aspx" />
+    <Content Include="CU_Cuentas\Propuestas.aspx" />
+    <Content Include="PC_PropiedadCliente\RecibirProducto.aspx" />
+    <Content Include="Default.aspx" />
+    <Content Include="ES_Estadistica\BriefDisenoDeMuestra.aspx" />
+    <Content Include="ES_Estadistica\Default.aspx" />
+    <Content Include="ES_Estadistica\DisenoDeMuestra.aspx" />
+    <Content Include="ES_Estadistica\MetodologiaDeCampo.aspx" />
+    <Content Include="ES_Estadistica\Trabajos.aspx" />
+    <Content Include="GD_Documentos\Aprobacion.aspx" />
+    <Content Include="GD_Documentos\Default.aspx" />
+    <Content Include="GD_Documentos\GD_Aprobaciones.aspx" />
+    <Content Include="GD_Documentos\GD_EstadoSolicitud.aspx" />
+    <Content Include="GD_Documentos\GD_Maestro.aspx" />
+    <Content Include="GD_Documentos\GD_Procesos.aspx" />
+    <Content Include="GD_Documentos\GD_SolicitudDocumentos.aspx" />
+    <Content Include="GD_Documentos\GD_TipoSolicitud.aspx" />
+    <Content Include="GD_Documentos\Revision.aspx" />
+    <Content Include="Home.aspx" />
+    <Content Include="Images\Add_16x16.png" />
+    <Content Include="Images\back_16.png" />
+    <Content Include="Images\bgNotification-Down_50.png" />
+    <Content Include="Images\bgNotification-Up_50.png" />
+    <Content Include="Images\calendar_24.png" />
+    <Content Include="Images\Cancel_16x16.png" />
+    <Content Include="Images\Chat-icon.png" />
+    <Content Include="Images\compras.png" />
+    <Content Include="Images\cuentas.png" />
+    <Content Include="Images\delete_12.png" />
+    <Content Include="Images\delete_16.png" />
+    <Content Include="Images\dobleflecha.png" />
+    <Content Include="Images\dobleflecha2.png" />
+    <Content Include="Images\edit.png" />
+    <Content Include="Images\error_16.png" />
+    <Content Include="Images\estadistica.png" />
+    <Content Include="Images\find_16.png" />
+    <Content Include="Images\fnd-content-login.png" />
+    <Content Include="Images\fnd-element1.jpg" />
+    <Content Include="Images\fnd-element2.jpg" />
+    <Content Include="Images\fnd-element3.jpg" />
+    <Content Include="Images\fnd-element4.jpg" />
+    <Content Include="Images\fnd-element5.jpg" />
+    <Content Include="Images\fnd-element6.jpg" />
+    <Content Include="Images\fnd-form1.jpg" />
+    <Content Include="Images\fnd-form2.jpg" />
+    <Content Include="Images\fnd-header.png" />
+    <Content Include="Images\fnd-linea1.png" />
+    <Content Include="Images\fnd-linea2.png" />
+    <Content Include="Images\fnd-matrix.gif" />
+    <Content Include="Images\fnd-matrix.jpg" />
+    <Content Include="Images\fnd-matrix2.jpg" />
+    <Content Include="Images\fnd-section.png" />
+    <Content Include="Images\fnd.jpg" />
+    <Content Include="Images\fondo-header.gif" />
+    <Content Include="Images\fondo-td.jpg" />
+    <Content Include="Images\fondo-th.jpg" />
+    <Content Include="Images\fondo2-td.jpg" />
+    <Content Include="Images\fondo2-th.jpg" />
+    <Content Include="Images\gestion-calidad.png" />
+    <Content Include="Images\iconos-header\conejo.png" />
+    <Content Include="Images\iconos-header\cuchara.png" />
+    <Content Include="Images\iconos-header\dejavu.png" />
+    <Content Include="Images\iconos-header\morfeo.png" />
+    <Content Include="Images\iconos-header\mr-anderson.png" />
+    <Content Include="Images\iconos-header\neo.png" />
+    <Content Include="Images\iconos-header\pastilla.png" />
+    <Content Include="Images\iconos-header\pc.png" />
+    <Content Include="Images\iconos-header\silla.png" />
+    <Content Include="Images\iconos-header\tele.png" />
+    <Content Include="Images\iconos-header\trinity.png" />
+    <Content Include="Images\iconos-secciones\cifras.png" />
+    <Content Include="Images\iconos-secciones\cine.png" />
+    <Content Include="Images\iconos-secciones\compras.png" />
+    <Content Include="Images\iconos-secciones\comunicacion.png" />
+    <Content Include="Images\iconos-secciones\ejecutivo.png" />
+    <Content Include="Images\iconos-secciones\idea.png" />
+    <Content Include="Images\iconos-secciones\mensaje.png" />
+    <Content Include="Images\iconos-secciones\movil.png" />
+    <Content Include="Images\iconos-secciones\mundo.png" />
+    <Content Include="Images\iconos-secciones\notas.png" />
+    <Content Include="Images\iconos-secciones\polea.png" />
+    <Content Include="Images\iconos-secciones\tv.png" />
+    <Content Include="Images\info_16.png" />
+    <Content Include="Images\list_16.png" />
+    <Content Include="Images\list_16_.png" />
+    <Content Include="Images\Lock.png" />
+    <Content Include="Images\logo-abajo.png" />
+    <Content Include="Images\logo-matrix.png" />
+    <Content Include="Images\logo-menu.png" />
+    <Content Include="Images\logo.png" />
+    <Content Include="Images\necesidades-cte.png" />
+    <Content Include="Images\operaciones.png" />
+    <Content Include="Images\operacionesc.png" />
+    <Content Include="Images\print_16x16.png" />
+    <Content Include="Images\proceso-gerencial.png" />
+    <Content Include="Images\proyectos.png" />
+    <Content Include="Images\SAP.png" />
+    <Content Include="Images\satisfaccion-cte.png" />
+    <Content Include="Images\save_16.png" />
+    <Content Include="Images\Save_16x16.png" />
+    <Content Include="Images\Search_16x16.png" />
+    <Content Include="Images\Select_16.png" />
+    <Content Include="Images\sombra-abajo.png" />
+    <Content Include="Images\talento.png" />
+    <Content Include="Images\tecno.png" />
+    <Content Include="Images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Images\ui-bg_highlight-soft_75_8bbf08_1x100.png" />
+    <Content Include="Images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Images\vineta.png" />
+    <Content Include="img\img01.jpg" />
+    <Content Include="img\img02.jpg" />
+    <Content Include="img\img03.jpg" />
+    <Content Include="img\img04.jpg" />
+    <Content Include="img\img05.jpg" />
+    <Content Include="img\slider-next.png" />
+    <Content Include="img\slider-next2.png" />
+    <Content Include="img\slider-prev.png" />
+    <Content Include="img\slider-prev2.png" />
+    <Content Include="OP_Cualitativo\Default.aspx" />
+    <Content Include="OP_Cualitativo\Entrevista.aspx" />
+    <Content Include="OP_Cualitativo\FichaEntrevista.aspx" />
+    <Content Include="OP_Cualitativo\FichaObservacion.aspx" />
+    <Content Include="OP_Cualitativo\FichaSesion.aspx" />
+    <Content Include="OP_Cualitativo\Observacion.aspx" />
+    <Content Include="OP_Cualitativo\Sesion.aspx" />
+    <Content Include="Prueba.aspx" />
+    <Content Include="PY_ControlCalidad\ControlCalidadCampo.aspx" />
+    <Content Include="PY_ControlCalidad\ControlCalidadInforme.aspx" />
+    <Content Include="PY_ControlCalidad\ControlCalidadTranscripciones.aspx" />
+    <Content Include="PY_ControlCalidad\EvaluacionEntrevistadora.aspx" />
+    <Content Include="PY_ControlCalidad\EvaluacionModeradora.aspx" />
+    <Content Include="PY_ControlCalidad\Preguntas.aspx" />
+    <Content Include="PY_Proyectos\Default.aspx" />
+    <Content Include="CU_Cuentas\Proyectos.aspx" />
+    <Content Include="PY_Proyectos\PY_Proyectos.aspx" />
+    <Content Include="PY_Proyectos\Trabajos.aspx" />
+    <Content Include="RP_Reportes\GanttUnTrabajo.aspx" />
+    <Content Include="Scripts\animacion.js" />
+    <Content Include="Scripts\animation-cajas.js" />
+    <Content Include="Scripts\css\handheld.css" />
+    <Content Include="Scripts\css\iconList.css" />
+    <Content Include="Scripts\css\images\BannerGasData700x122.png" />
+    <Content Include="Scripts\css\images\bgHeaderGreen_1x38.jpg" />
+    <Content Include="Scripts\css\images\bgHeaders_1x50.jpg" />
+    <Content Include="Scripts\css\images\fnd-element1.jpg" />
+    <Content Include="Scripts\css\images\fnd-element2.jpg" />
+    <Content Include="Scripts\css\images\fnd-element3.jpg" />
+    <Content Include="Scripts\css\images\fnd-element4.jpg" />
+    <Content Include="Scripts\css\images\fnd-element5.jpg" />
+    <Content Include="Scripts\css\images\fnd-element6.jpg" />
+    <Content Include="Scripts\css\images\fnd-form1.jpg" />
+    <Content Include="Scripts\css\images\fnd-form2.jpg" />
+    <Content Include="Scripts\css\images\fnd-linea1.png" />
+    <Content Include="Scripts\css\images\fnd-linea2.png" />
+    <Content Include="Scripts\css\images\grid_top_bg.jpg" />
+    <Content Include="Scripts\css\images\ListaIconosAdministracion_16x400.png" />
+    <Content Include="Scripts\css\images\ListaIconosProcesos_16x300.png" />
+    <Content Include="Scripts\css\images\ListaIconosReportes_16x300.png" />
+    <Content Include="Scripts\css\images\ListaIconosSeguridad_16x300.png" />
+    <Content Include="Scripts\css\images\ui-bg_diagonals-thick_18_b81900_40x40.png" />
+    <Content Include="Scripts\css\images\ui-bg_diagonals-thick_20_666666_40x40.png" />
+    <Content Include="Scripts\css\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Scripts\css\images\ui-bg_flat_0_eeeeee_40x100.png" />
+    <Content Include="Scripts\css\images\ui-bg_flat_55_994d53_40x100.png" />
+    <Content Include="Scripts\css\images\ui-bg_flat_55_fafafa_40x100.png" />
+    <Content Include="Scripts\css\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Scripts\css\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Scripts\css\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Scripts\css\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Scripts\css\images\ui-bg_glass_75_ffffff_1x400.png" />
+    <Content Include="Scripts\css\images\ui-bg_gloss-wave_30_3d3644_500x100.png" />
+    <Content Include="Scripts\css\images\ui-bg_highlight-soft_100_dcd9de_1x100.png" />
+    <Content Include="Scripts\css\images\ui-bg_highlight-soft_100_eae6ea_1x100.png" />
+    <Content Include="Scripts\css\images\ui-bg_highlight-soft_25_30273a_1x100.png" />
+    <Content Include="Scripts\css\images\ui-bg_highlight-soft_45_5f5964_1x100.png" />
+    <Content Include="Scripts\css\images\ui-bg_highlight-soft_75_8bbf08_1x100.png" />
+    <Content Include="Scripts\css\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Scripts\css\images\ui-bg_inset-soft_95_fef1ec_1x100.png" />
+    <Content Include="Scripts\css\images\ui-icons_222222_256x240.png" />
+    <Content Include="Scripts\css\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Scripts\css\images\ui-icons_454545_256x240.png" />
+    <Content Include="Scripts\css\images\ui-icons_734d99_256x240.png" />
+    <Content Include="Scripts\css\images\ui-icons_888888_256x240.png" />
+    <Content Include="Scripts\css\images\ui-icons_8d78a5_256x240.png" />
+    <Content Include="Scripts\css\images\ui-icons_a8a3ae_256x240.png" />
+    <Content Include="Scripts\css\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Scripts\css\images\ui-icons_ebccce_256x240.png" />
+    <Content Include="Scripts\css\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Scripts\css\scroll.css" />
+    <Content Include="Scripts\css\style.css" />
+    <Content Include="Scripts\css\tables.css" />
+    <Content Include="Scripts\css\theme.light.css" />
+    <Content Include="Scripts\css\tipTip.css" />
+    <Content Include="Scripts\cycle.js" />
+    <Content Include="Scripts\img\asc.gif" />
+    <Content Include="Scripts\img\bg-scrollbar-thumb-y.png" />
+    <Content Include="Scripts\img\bg-scrollbar-track-y.png" />
+    <Content Include="Scripts\img\bg-scrollbar-trackend-y.png" />
+    <Content Include="Scripts\img\bgHeaderBlue_1x38.jpg" />
+    <Content Include="Scripts\img\desc.gif" />
+    <Content Include="Scripts\img\digits.png" />
+    <Content Include="Scripts\img\dm_ico.png" />
+    <Content Include="Scripts\img\dropdown-bg-hover.gif" />
+    <Content Include="Scripts\img\dropdown-bg.gif" />
+    <Content Include="Scripts\img\dropdown-list-bg.gif" />
+    <Content Include="Scripts\img\expandcollapse.png" />
+    <Content Include="Scripts\img\favicon.ico" />
+    <Content Include="Scripts\img\footer_bg.gif" />
+    <Content Include="Scripts\img\footer_bg.jpg" />
+    <Content Include="Scripts\img\f_bg.gif" />
+    <Content Include="Scripts\img\grid_heading_bg.jpg" />
+    <Content Include="Scripts\img\grid_sep.jpg" />
+    <Content Include="Scripts\img\grid_top_bg.jpg" />
+    <Content Include="Scripts\img\home1.png" />
+    <Content Include="Scripts\img\home2.png" />
+    <Content Include="Scripts\img\iconset\1322886502_001_01.gif" />
+    <Content Include="Scripts\img\iconset\add.png" />
+    <Content Include="Scripts\img\iconset\comment.png" />
+    <Content Include="Scripts\img\iconset\delete.png" />
+    <Content Include="Scripts\img\iconset\edit.png" />
+    <Content Include="Scripts\img\iconset\icons.png" />
+    <Content Include="Scripts\img\iconset\ok.gif" />
+    <Content Include="Scripts\img\iconset\refresh.png" />
+    <Content Include="Scripts\img\iconset\secure.gif" />
+    <Content Include="Scripts\img\logodmk.jpg" />
+    <Content Include="Scripts\img\logo_dmk.png" />
+    <Content Include="Scripts\img\logo_dmk_sgd.png" />
+    <Content Include="Scripts\img\navigation-arrow.gif" />
+    <Content Include="Scripts\img\nav_bg.jpg" />
+    <Content Include="Scripts\img\nav_sep.jpg" />
+    <Content Include="Scripts\img\notification_icon.png" />
+    <Content Include="Scripts\img\search.png" />
+    <Content Include="Scripts\img\top_header_bg.jpg" />
+    <Content Include="Scripts\img\ui-bg_glass_75_cfdfed_1x400.png" />
+    <Content Include="Scripts\img\ui-bg_highlight-soft_75_6ba0cb_1x100.jpg" />
+    <Content Include="Scripts\jquery-1.6.2.min.js" />
+    <Content Include="Scripts\jquery-1.7.2.js" />
+    <Content Include="Scripts\jquery-ui-1.8.16.custom.min.js" />
+    <Content Include="Scripts\jquery.js" />
+    <Content Include="Scripts\js\jquery-ui-1.8.16.custom.min.js" />
+    <Content Include="Scripts\js\jquery.dataTables.min.js" />
+    <Content Include="Scripts\js\jquery.tablesorter.min.js" />
+    <Content Include="Scripts\js\jquery.tinyscrollbar.min.js" />
+    <Content Include="Scripts\js\jquery.validate.min.js" />
+    <Content Include="Scripts\js\libs\jquery-1.5.1.min.js" />
+    <Content Include="Scripts\js\libs\jquery.countdown.js" />
+    <Content Include="Scripts\js\libs\jquery.maskedinput-1.3.min.js" />
+    <Content Include="Scripts\js\libs\jquery.mousewheel.min.js" />
+    <Content Include="Scripts\js\libs\jquery.timeentry.min.js" />
+    <Content Include="Scripts\js\libs\jquery.tipTip.minified.js" />
+    <Content Include="Scripts\js\libs\jquery.tools.min.js" />
+    <Content Include="Scripts\js\libs\modernizr-1.7.min.js" />
+    <Content Include="Scripts\js\libs\ui.datepicker.2.css" />
+    <Content Include="Scripts\js\libs\ui.datetimepicker.2.js" />
+    <Content Include="Scripts\js\libs\ui.datetimepicker.js" />
+    <Content Include="Scripts\js\plugins.js" />
+    <Content Include="Scripts\js\pluginsPage.js" />
+    <Content Include="Scripts\js\uploadFile.js" />
+    <Content Include="Scripts\slider.js" />
+    <Content Include="Scripts\Style\images\ui-bg_diagonals-thick_18_b81900_40x40.png" />
+    <Content Include="Scripts\Style\images\ui-bg_diagonals-thick_20_666666_40x40.png" />
+    <Content Include="Scripts\Style\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Scripts\Style\images\ui-bg_flat_10_000000_40x100.png" />
+    <Content Include="Scripts\Style\images\ui-bg_glass_100_f6f6f6_1x400.png" />
+    <Content Include="Scripts\Style\images\ui-bg_glass_100_fdf5ce_1x400.png" />
+    <Content Include="Scripts\Style\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Scripts\Style\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Scripts\Style\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Scripts\Style\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Scripts\Style\images\ui-bg_glass_75_ffffff_1x400.png" />
+    <Content Include="Scripts\Style\images\ui-bg_gloss-wave_35_f6a828_500x100.png" />
+    <Content Include="Scripts\Style\images\ui-bg_highlight-soft_100_eeeeee_1x100.png" />
+    <Content Include="Scripts\Style\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Scripts\Style\images\ui-bg_highlight-soft_75_ffe45c_1x100.png" />
+    <Content Include="Scripts\Style\images\ui-bg_inset-soft_95_fef1ec_1x100.png" />
+    <Content Include="Scripts\Style\images\ui-icons_222222_256x240.png" />
+    <Content Include="Scripts\Style\images\ui-icons_228ef1_256x240.png" />
+    <Content Include="Scripts\Style\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Scripts\Style\images\ui-icons_454545_256x240.png" />
+    <Content Include="Scripts\Style\images\ui-icons_888888_256x240.png" />
+    <Content Include="Scripts\Style\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Scripts\Style\images\ui-icons_ef8c08_256x240.png" />
+    <Content Include="Scripts\Style\images\ui-icons_ffd27a_256x240.png" />
+    <Content Include="Scripts\Style\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Scripts\Style\jquery-ui-1.8.16.custom.css" />
+    <Content Include="SG_Actas\Actas.aspx" />
+    <Content Include="SG_Actas\ActasComite.aspx" />
+    <Content Include="SG_Actas\Seguimiento.aspx" />
+    <Content Include="Styles\estilos.css" />
+    <Content Include="Styles\forms.css" />
+    <Content Include="Styles\formulario.css" />
+    <Content Include="Styles\Login.css" />
+    <Content Include="Styles\menu.css" />
+    <Content Include="Styles\Site.css" />
+    <Content Include="Global.asax" />
+    <Content Include="Scripts\jquery-1.4.1-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.4.1.js" />
+    <Content Include="Scripts\jquery-1.4.1.min.js" />
+    <Content Include="Styles\skinStyle.css" />
+    <Content Include="Styles\slider.css" />
+    <Content Include="Styles\style.css" />
+    <Content Include="Styles\tablas.css" />
+    <Content Include="TH_TalentoHumano\Capacitacion.aspx" />
+    <Content Include="TH_TalentoHumano\Contratacion.aspx" />
+    <Content Include="TH_TalentoHumano\Default.aspx" />
+    <Content Include="TH_TalentoHumano\FichaEncuestador.aspx" />
+    <Content Include="TH_TalentoHumano\HojaVida.aspx" />
+    <Content Include="UsersControl\UsrCtrl_LoadFiles.ascx" />
+    <Content Include="UsersControl\UsrCtrl_Usuarios.ascx" />
+    <Content Include="US_Usuarios\GruposPermisos.aspx" />
+    <Content Include="US_Usuarios\GrupoUnidad.aspx" />
+    <Content Include="US_Usuarios\Permisos.aspx" />
+    <Content Include="US_Usuarios\PermisosUsuarios.aspx" />
+    <Content Include="US_Usuarios\Roles.aspx" />
+    <Content Include="US_Usuarios\RolesPermisos.aspx" />
+    <Content Include="US_Usuarios\RolesUsuarios.aspx" />
+    <Content Include="US_Usuarios\TipoGrupoUnidad.aspx" />
+    <Content Include="US_Usuarios\Unidades.aspx" />
+    <Content Include="US_Usuarios\Usuarios.aspx" />
+    <Content Include="US_Usuarios\UsuariosUnidades.aspx" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="About.aspx.designer.vb">
+      <DependentUpon>About.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="About.aspx.vb">
+      <DependentUpon>About.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="Account\ChangePassword.aspx.designer.vb">
+      <DependentUpon>ChangePassword.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Account\ChangePassword.aspx.vb">
+      <DependentUpon>ChangePassword.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="Account\ChangePasswordSuccess.aspx.designer.vb">
+      <DependentUpon>ChangePasswordSuccess.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Account\ChangePasswordSuccess.aspx.vb">
+      <DependentUpon>ChangePasswordSuccess.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="Account\Login.aspx.designer.vb">
+      <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Account\Login.aspx.vb">
+      <DependentUpon>Login.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="Account\Register.aspx.designer.vb">
+      <DependentUpon>Register.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Account\Register.aspx.vb">
+      <DependentUpon>Register.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="CAP\Cap_Principal.aspx.designer.vb">
+      <DependentUpon>Cap_Principal.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CAP\Cap_Principal.aspx.vb">
+      <DependentUpon>Cap_Principal.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CAP\UC_Cati.ascx.designer.vb">
+      <DependentUpon>UC_Cati.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="CAP\UC_Cati.ascx.vb">
+      <DependentUpon>UC_Cati.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CAP\UserControls\UC_Preguntas.ascx.designer.vb">
+      <DependentUpon>UC_Preguntas.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="CAP\UserControls\UC_Preguntas.ascx.vb">
+      <DependentUpon>UC_Preguntas.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CAP\UserControls\UC_Producto.ascx.designer.vb">
+      <DependentUpon>UC_Producto.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="CAP\UserControls\UC_Producto.ascx.vb">
+      <DependentUpon>UC_Producto.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Clases\Enums.vb" />
+    <Compile Include="Clases\EnviarCorreo.vb" />
+    <Compile Include="Clases\Utils.vb" />
+    <Compile Include="CORE\AsignacionTareas.aspx.designer.vb">
+      <DependentUpon>AsignacionTareas.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CORE\AsignacionTareas.aspx.vb">
+      <DependentUpon>AsignacionTareas.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="CORE\Documentos_Tareas.aspx.designer.vb">
+      <DependentUpon>Documentos_Tareas.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CORE\Documentos_Tareas.aspx.vb">
+      <DependentUpon>Documentos_Tareas.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="CORE\EstimacionTareas.aspx.designer.vb">
+      <DependentUpon>EstimacionTareas.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CORE\EstimacionTareas.aspx.vb">
+      <DependentUpon>EstimacionTareas.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="CORE\ListaTareasXHilo.aspx.designer.vb">
+      <DependentUpon>ListaTareasXHilo.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CORE\ListaTareasXHilo.aspx.vb">
+      <DependentUpon>ListaTareasXHilo.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="CORE\ListaTrabajosTareas.aspx.designer.vb">
+      <DependentUpon>ListaTrabajosTareas.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CORE\ListaTrabajosTareas.aspx.vb">
+      <DependentUpon>ListaTrabajosTareas.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="CORE\Tarea.aspx.designer.vb">
+      <DependentUpon>Tarea.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CORE\Tarea.aspx.vb">
+      <DependentUpon>Tarea.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="CORE\Tareas.aspx.designer.vb">
+      <DependentUpon>Tareas.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CORE\Tareas.aspx.vb">
+      <DependentUpon>Tareas.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="CU_Cuentas\Briefs.aspx.designer.vb">
+      <DependentUpon>Briefs.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CU_Cuentas\Briefs.aspx.vb">
+      <DependentUpon>Briefs.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="CU_Cuentas\Clientes.aspx.designer.vb">
+      <DependentUpon>Clientes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CU_Cuentas\Clientes.aspx.vb">
+      <DependentUpon>Clientes.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="CU_Cuentas\Contactos.aspx.designer.vb">
+      <DependentUpon>Contactos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CU_Cuentas\Contactos.aspx.vb">
+      <DependentUpon>Contactos.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="CU_Cuentas\FormPQR.aspx.designer.vb">
+      <DependentUpon>FormPQR.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CU_Cuentas\FormPQR.aspx.vb">
+      <DependentUpon>FormPQR.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="CU_Cuentas\RevisionPresupuestos.aspx.designer.vb">
+      <DependentUpon>RevisionPresupuestos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CU_Cuentas\RevisionPresupuestos.aspx.vb">
+      <DependentUpon>RevisionPresupuestos.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="DataSets\Gerencial1.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Gerencial.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\Operaciones1.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Operaciones.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Emails\BriefEstadistica.aspx.designer.vb">
+      <DependentUpon>BriefEstadistica.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Emails\BriefEstadistica.aspx.vb">
+      <DependentUpon>BriefEstadistica.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="Emails\COEAsignado.aspx.designer.vb">
+      <DependentUpon>COEAsignado.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Emails\COEAsignado.aspx.vb">
+      <DependentUpon>COEAsignado.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="Emails\CoordinadorAsignado.aspx.designer.vb">
+      <DependentUpon>CoordinadorAsignado.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Emails\CoordinadorAsignado.aspx.vb">
+      <DependentUpon>CoordinadorAsignado.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="Emails\ObservacionesRO.aspx.designer.vb">
+      <DependentUpon>ObservacionesRO.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Emails\ObservacionesRO.aspx.vb">
+      <DependentUpon>ObservacionesRO.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="Emails\GerenteProyectosAsignado.aspx.designer.vb">
+      <DependentUpon>GerenteProyectosAsignado.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Emails\GerenteProyectosAsignado.aspx.vb">
+      <DependentUpon>GerenteProyectosAsignado.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="Emails\NuevoTrabajoCoordCampo.aspx.designer.vb">
+      <DependentUpon>NuevoTrabajoCoordCampo.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Emails\NuevoTrabajoCoordCampo.aspx.vb">
+      <DependentUpon>NuevoTrabajoCoordCampo.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="Emails\NuevoTrabajoGerenciaOp.aspx.designer.vb">
+      <DependentUpon>NuevoTrabajoGerenciaOp.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Emails\NuevoTrabajoGerenciaOp.aspx.vb">
+      <DependentUpon>NuevoTrabajoGerenciaOp.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="Emails\NuevoProyectoCoordinacion.aspx.designer.vb">
+      <DependentUpon>NuevoProyectoCoordinacion.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Emails\NuevoProyectoCoordinacion.aspx.vb">
+      <DependentUpon>NuevoProyectoCoordinacion.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="Emails\MetodologiaDeCampo.aspx.designer.vb">
+      <DependentUpon>MetodologiaDeCampo.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Emails\MetodologiaDeCampo.aspx.vb">
+      <DependentUpon>MetodologiaDeCampo.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="Emails\DisenoDeMuestra.aspx.designer.vb">
+      <DependentUpon>DisenoDeMuestra.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Emails\DisenoDeMuestra.aspx.vb">
+      <DependentUpon>DisenoDeMuestra.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="Emails\EntregaTrabajoObservaciones.aspx.designer.vb">
+      <DependentUpon>EntregaTrabajoObservaciones.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Emails\EntregaTrabajoObservaciones.aspx.vb">
+      <DependentUpon>EntregaTrabajoObservaciones.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Emails\EntregaTrabajoEntrevistas.aspx.designer.vb">
+      <DependentUpon>EntregaTrabajoEntrevistas.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Emails\EntregaTrabajoEntrevistas.aspx.vb">
+      <DependentUpon>EntregaTrabajoEntrevistas.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Emails\EntregaTrabajoSesiones.aspx.designer.vb">
+      <DependentUpon>EntregaTrabajoSesiones.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Emails\EntregaTrabajoSesiones.aspx.vb">
+      <DependentUpon>EntregaTrabajoSesiones.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\GT_.master.designer.vb">
+      <DependentUpon>GT_.master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage\GT_.master.vb">
+      <DependentUpon>GT_.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\GT_F.master.designer.vb">
+      <DependentUpon>GT_F.master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage\GT_F.master.vb">
+      <DependentUpon>GT_F.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\RD_.master.designer.vb">
+      <DependentUpon>RD_.master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage\RD_.master.vb">
+      <DependentUpon>RD_.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\RD_F.master.designer.vb">
+      <DependentUpon>RD_F.master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage\RD_F.master.vb">
+      <DependentUpon>RD_F.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\MBO_.master.designer.vb">
+      <DependentUpon>MBO_.master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage\MBO_.master.vb">
+      <DependentUpon>MBO_.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\MBO_F.master.designer.vb">
+      <DependentUpon>MBO_F.master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage\MBO_F.master.vb">
+      <DependentUpon>MBO_F.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\OP_.master.designer.vb">
+      <DependentUpon>OP_.master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage\OP_.master.vb">
+      <DependentUpon>OP_.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\OP_F.master.designer.vb">
+      <DependentUpon>OP_F.master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage\OP_F.master.vb">
+      <DependentUpon>OP_F.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MBO\CampoCalidadCiudad.aspx.designer.vb">
+      <DependentUpon>CampoCalidadCiudad.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MBO\CampoCalidadCiudad.aspx.vb">
+      <DependentUpon>CampoCalidadCiudad.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MBO\CampoCalidadTotal.aspx.designer.vb">
+      <DependentUpon>CampoCalidadTotal.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MBO\CampoCalidadTotal.aspx.vb">
+      <DependentUpon>CampoCalidadTotal.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MBO\CampoProduccion.aspx.designer.vb">
+      <DependentUpon>CampoProduccion.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MBO\CampoProduccion.aspx.vb">
+      <DependentUpon>CampoProduccion.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MBO\Default.aspx.designer.vb">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MBO\Default.aspx.vb">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="MBO\EncuestasAlaFecha.aspx.designer.vb">
+      <DependentUpon>EncuestasAlaFecha.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MBO\EncuestasAlaFecha.aspx.vb">
+      <DependentUpon>EncuestasAlaFecha.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MBO\GerenciaAOT.aspx.designer.vb">
+      <DependentUpon>GerenciaAOT.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MBO\GerenciaAOT.aspx.vb">
+      <DependentUpon>GerenciaAOT.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OP_Cualitativo\HomeGestion.aspx.designer.vb">
+      <DependentUpon>HomeGestion.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Cualitativo\HomeGestion.aspx.vb">
+      <DependentUpon>HomeGestion.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="OP_Cualitativo\HomeRecoleccion.aspx.designer.vb">
+      <DependentUpon>HomeRecoleccion.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Cualitativo\HomeRecoleccion.aspx.vb">
+      <DependentUpon>HomeRecoleccion.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="OP_Cualitativo\MuestraTrabajos.aspx.designer.vb">
+      <DependentUpon>MuestraTrabajos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Cualitativo\MuestraTrabajos.aspx.vb">
+      <DependentUpon>MuestraTrabajos.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="OP_Cualitativo\TrabajosCoordinador.aspx.designer.vb">
+      <DependentUpon>TrabajosCoordinador.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Cualitativo\TrabajosCoordinador.aspx.vb">
+      <DependentUpon>TrabajosCoordinador.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="RE_GT\TraficoTareas.aspx.designer.vb">
+      <DependentUpon>TraficoTareas.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="RE_GT\TraficoTareas.aspx.vb">
+      <DependentUpon>TraficoTareas.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="OP_Cuantitativo\HomeGestion.aspx.designer.vb">
+      <DependentUpon>HomeGestion.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Cuantitativo\HomeGestion.aspx.vb">
+      <DependentUpon>HomeGestion.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="RE_GT\AsignacionCoordinador.aspx.designer.vb">
+      <DependentUpon>AsignacionCoordinador.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="RE_GT\AsignacionCoordinador.aspx.vb">
+      <DependentUpon>AsignacionCoordinador.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="RE_GT\GestionyTratamientoDeDatos.aspx.designer.vb">
+      <DependentUpon>GestionyTratamientoDeDatos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="RE_GT\GestionyTratamientoDeDatos.aspx.vb">
+      <DependentUpon>GestionyTratamientoDeDatos.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="RE_GT\RecoleccionDeDatos.aspx.designer.vb">
+      <DependentUpon>RecoleccionDeDatos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="RE_GT\RecoleccionDeDatos.aspx.vb">
+      <DependentUpon>RecoleccionDeDatos.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="RE_GT\AsignacionCOE.aspx.designer.vb">
+      <DependentUpon>AsignacionCOE.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="RE_GT\AsignacionCOE.aspx.vb">
+      <DependentUpon>AsignacionCOE.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="OP_Cualitativo\Trabajos.aspx.designer.vb">
+      <DependentUpon>Trabajos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Cualitativo\Trabajos.aspx.vb">
+      <DependentUpon>Trabajos.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="OP_Cuantitativo\TraficoEncuestas.aspx.designer.vb">
+      <DependentUpon>TraficoEncuestas.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Cuantitativo\TraficoEncuestas.aspx.vb">
+      <DependentUpon>TraficoEncuestas.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="OP_Cuantitativo\TrabajosCoordinador.aspx.designer.vb">
+      <DependentUpon>TrabajosCoordinador.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Cuantitativo\TrabajosCoordinador.aspx.vb">
+      <DependentUpon>TrabajosCoordinador.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="OP_Cuantitativo\EstimacionProduccion.aspx.designer.vb">
+      <DependentUpon>EstimacionProduccion.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Cuantitativo\EstimacionProduccion.aspx.vb">
+      <DependentUpon>EstimacionProduccion.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="OP_Cuantitativo\MuestraTrabajos.aspx.designer.vb">
+      <DependentUpon>MuestraTrabajos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Cuantitativo\MuestraTrabajos.aspx.vb">
+      <DependentUpon>MuestraTrabajos.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="OP_Cuantitativo\Trabajos.aspx.designer.vb">
+      <DependentUpon>Trabajos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Cuantitativo\Trabajos.aspx.vb">
+      <DependentUpon>Trabajos.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="PY_Proyectos\AsignacionProyectos.aspx.designer.vb">
+      <DependentUpon>AsignacionProyectos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PY_Proyectos\AsignacionProyectos.aspx.vb">
+      <DependentUpon>AsignacionProyectos.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="CU_Cuentas\Default.aspx.designer.vb">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CU_Cuentas\Default.aspx.vb">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="CU_Cuentas\Estudios.aspx.designer.vb">
+      <DependentUpon>Estudios.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CU_Cuentas\Estudios.aspx.vb">
+      <DependentUpon>Estudios.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Emails\AnuncioAprobacion.aspx.designer.vb">
+      <DependentUpon>AnuncioAprobacion.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Emails\AnuncioAprobacion.aspx.vb">
+      <DependentUpon>AnuncioAprobacion.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="Emails\EntregaTrabajoCuantitativo.aspx.designer.vb">
+      <DependentUpon>EntregaTrabajoCuantitativo.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Emails\EntregaTrabajoCuantitativo.aspx.vb">
+      <DependentUpon>EntregaTrabajoCuantitativo.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="Emails\PreEntregaTrabajo.aspx.designer.vb">
+      <DependentUpon>PreEntregaTrabajo.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Emails\PreEntregaTrabajo.aspx.vb">
+      <DependentUpon>PreEntregaTrabajo.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="GD_Documentos\GD_Documentos.aspx.designer.vb">
+      <DependentUpon>GD_Documentos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GD_Documentos\GD_Documentos.aspx.vb">
+      <DependentUpon>GD_Documentos.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\OPC_.master.designer.vb">
+      <DependentUpon>OPC_.master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage\OPC_.master.vb">
+      <DependentUpon>OPC_.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\OPC_F.master.designer.vb">
+      <DependentUpon>OPC_F.master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage\OPC_F.master.vb">
+      <DependentUpon>OPC_F.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\OPQ_.master.designer.vb">
+      <DependentUpon>OPQ_.master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage\OPQ_.master.vb">
+      <DependentUpon>OPQ_.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\OPQ_F.master.designer.vb">
+      <DependentUpon>OPQ_F.master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage\OPQ_F.master.vb">
+      <DependentUpon>OPQ_F.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\PY_.master.designer.vb">
+      <DependentUpon>PY_.master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage\PY_.master.vb">
+      <DependentUpon>PY_.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\PY_F.master.designer.vb">
+      <DependentUpon>PY_F.master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage\PY_F.master.vb">
+      <DependentUpon>PY_F.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OP_Cualitativo\Transcripcion.aspx.designer.vb">
+      <DependentUpon>Transcripcion.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Cualitativo\Transcripcion.aspx.vb">
+      <DependentUpon>Transcripcion.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OP_Cuantitativo\HomeRecoleccion.aspx.designer.vb">
+      <DependentUpon>HomeRecoleccion.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Cuantitativo\HomeRecoleccion.aspx.vb">
+      <DependentUpon>HomeRecoleccion.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="OP_Cuantitativo\FichaCuantitativa.aspx.designer.vb">
+      <DependentUpon>FichaCuantitativa.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Cuantitativo\FichaCuantitativa.aspx.vb">
+      <DependentUpon>FichaCuantitativa.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OP_Cuantitativo\SupervisionCampoTelefonico.aspx.designer.vb">
+      <DependentUpon>SupervisionCampoTelefonico.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Cuantitativo\SupervisionCampoTelefonico.aspx.vb">
+      <DependentUpon>SupervisionCampoTelefonico.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OP_RO\Cuestionario.aspx.designer.vb">
+      <DependentUpon>Cuestionario.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OP_RO\Cuestionario.aspx.vb">
+      <DependentUpon>Cuestionario.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OP_RO\Instructivo.aspx.designer.vb">
+      <DependentUpon>Instructivo.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OP_RO\Instructivo.aspx.vb">
+      <DependentUpon>Instructivo.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OP_RO\MaterialAyuda.aspx.designer.vb">
+      <DependentUpon>MaterialAyuda.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OP_RO\MaterialAyuda.aspx.vb">
+      <DependentUpon>MaterialAyuda.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OP_RO\Metodologia.aspx.designer.vb">
+      <DependentUpon>Metodologia.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OP_RO\Metodologia.aspx.vb">
+      <DependentUpon>Metodologia.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PC_PropiedadCliente\EnviarProducto.aspx.designer.vb">
+      <DependentUpon>EnviarProducto.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PC_PropiedadCliente\EnviarProducto.aspx.vb">
+      <DependentUpon>EnviarProducto.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PC_PropiedadCliente\ProductoInterno.aspx.designer.vb">
+      <DependentUpon>ProductoInterno.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PC_PropiedadCliente\ProductoInterno.aspx.vb">
+      <DependentUpon>ProductoInterno.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CU_Cuentas\Propuestas.aspx.designer.vb">
+      <DependentUpon>Propuestas.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CU_Cuentas\Propuestas.aspx.vb">
+      <DependentUpon>Propuestas.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="PC_PropiedadCliente\RecibirProducto.aspx.designer.vb">
+      <DependentUpon>RecibirProducto.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PC_PropiedadCliente\RecibirProducto.aspx.vb">
+      <DependentUpon>RecibirProducto.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Default.aspx.designer.vb">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Default.aspx.vb">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="ES_Estadistica\BriefDisenoDeMuestra.aspx.designer.vb">
+      <DependentUpon>BriefDisenoDeMuestra.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ES_Estadistica\BriefDisenoDeMuestra.aspx.vb">
+      <DependentUpon>BriefDisenoDeMuestra.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ES_Estadistica\Default.aspx.designer.vb">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ES_Estadistica\Default.aspx.vb">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="ES_Estadistica\DisenoDeMuestra.aspx.designer.vb">
+      <DependentUpon>DisenoDeMuestra.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ES_Estadistica\DisenoDeMuestra.aspx.vb">
+      <DependentUpon>DisenoDeMuestra.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ES_Estadistica\MetodologiaDeCampo.aspx.designer.vb">
+      <DependentUpon>MetodologiaDeCampo.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ES_Estadistica\MetodologiaDeCampo.aspx.vb">
+      <DependentUpon>MetodologiaDeCampo.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ES_Estadistica\Trabajos.aspx.designer.vb">
+      <DependentUpon>Trabajos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ES_Estadistica\Trabajos.aspx.vb">
+      <DependentUpon>Trabajos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GD_Documentos\Aprobacion.aspx.designer.vb">
+      <DependentUpon>Aprobacion.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GD_Documentos\Aprobacion.aspx.vb">
+      <DependentUpon>Aprobacion.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GD_Documentos\Default.aspx.designer.vb">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GD_Documentos\Default.aspx.vb">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="GD_Documentos\GD_Aprobaciones.aspx.designer.vb">
+      <DependentUpon>GD_Aprobaciones.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GD_Documentos\GD_Aprobaciones.aspx.vb">
+      <DependentUpon>GD_Aprobaciones.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GD_Documentos\GD_EstadoSolicitud.aspx.designer.vb">
+      <DependentUpon>GD_EstadoSolicitud.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GD_Documentos\GD_EstadoSolicitud.aspx.vb">
+      <DependentUpon>GD_EstadoSolicitud.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GD_Documentos\GD_Maestro.aspx.designer.vb">
+      <DependentUpon>GD_Maestro.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GD_Documentos\GD_Maestro.aspx.vb">
+      <DependentUpon>GD_Maestro.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GD_Documentos\GD_Procesos.aspx.designer.vb">
+      <DependentUpon>GD_Procesos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GD_Documentos\GD_Procesos.aspx.vb">
+      <DependentUpon>GD_Procesos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GD_Documentos\GD_SolicitudDocumentos.aspx.designer.vb">
+      <DependentUpon>GD_SolicitudDocumentos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GD_Documentos\GD_SolicitudDocumentos.aspx.vb">
+      <DependentUpon>GD_SolicitudDocumentos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GD_Documentos\GD_TipoSolicitud.aspx.designer.vb">
+      <DependentUpon>GD_TipoSolicitud.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GD_Documentos\GD_TipoSolicitud.aspx.vb">
+      <DependentUpon>GD_TipoSolicitud.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GD_Documentos\Revision.aspx.designer.vb">
+      <DependentUpon>Revision.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GD_Documentos\Revision.aspx.vb">
+      <DependentUpon>Revision.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Global.asax.vb">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Home.aspx.designer.vb">
+      <DependentUpon>Home.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Home.aspx.vb">
+      <DependentUpon>Home.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\CAP_.master.designer.vb">
+      <DependentUpon>CAP_.master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage\CAP_.master.vb">
+      <DependentUpon>CAP_.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\CAP_F.master.designer.vb">
+      <DependentUpon>CAP_F.master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage\CAP_F.master.vb">
+      <DependentUpon>CAP_F.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\PC_.master.designer.vb">
+      <DependentUpon>PC_.master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage\PC_.master.vb">
+      <DependentUpon>PC_.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\PC_F.master.designer.vb">
+      <DependentUpon>PC_F.master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage\PC_F.master.vb">
+      <DependentUpon>PC_F.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\ES_.master.designer.vb">
+      <DependentUpon>ES_.master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage\ES_.master.vb">
+      <DependentUpon>ES_.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\ES_F.master.designer.vb">
+      <DependentUpon>ES_F.master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage\ES_F.master.vb">
+      <DependentUpon>ES_F.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\TH_.master.designer.vb">
+      <DependentUpon>TH_.master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage\TH_.master.vb">
+      <DependentUpon>TH_.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\TH_F.master.designer.vb">
+      <DependentUpon>TH_F.master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage\TH_F.master.vb">
+      <DependentUpon>TH_F.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\PQR_.master.designer.vb">
+      <DependentUpon>PQR_.master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage\PQR_.master.vb">
+      <DependentUpon>PQR_.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\PQR_F.master.designer.vb">
+      <DependentUpon>PQR_F.master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage\PQR_F.master.vb">
+      <DependentUpon>PQR_F.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\SG_.master.designer.vb">
+      <DependentUpon>SG_.master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage\SG_.master.vb">
+      <DependentUpon>SG_.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\SG_F.master.designer.vb">
+      <DependentUpon>SG_F.master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage\SG_F.master.vb">
+      <DependentUpon>SG_F.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\GD_F.master.designer.vb">
+      <DependentUpon>GD_F.master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage\GD_F.master.vb">
+      <DependentUpon>GD_F.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\GD_.master.designer.vb">
+      <DependentUpon>GD_.master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage\GD_.master.vb">
+      <DependentUpon>GD_.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\CU_.master.designer.vb">
+      <DependentUpon>CU_.master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage\CU_.master.vb">
+      <DependentUpon>CU_.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\CU_F.master.designer.vb">
+      <DependentUpon>CU_F.master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage\CU_F.master.vb">
+      <DependentUpon>CU_F.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\Site.Master.designer.vb">
+      <DependentUpon>Site.Master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage\Site.Master.vb">
+      <DependentUpon>Site.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\MyExtensions\MyWebExtension.vb">
+      <VBMyExtensionTemplateID>Microsoft.VisualBasic.Web.MyExtension</VBMyExtensionTemplateID>
+      <VBMyExtensionTemplateVersion>1.0.0.0</VBMyExtensionTemplateVersion>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="OP_Cualitativo\Default.aspx.designer.vb">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Cualitativo\Default.aspx.vb">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="OP_Cualitativo\Entrevista.aspx.designer.vb">
+      <DependentUpon>Entrevista.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Cualitativo\Entrevista.aspx.vb">
+      <DependentUpon>Entrevista.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OP_Cualitativo\FichaEntrevista.aspx.designer.vb">
+      <DependentUpon>FichaEntrevista.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Cualitativo\FichaEntrevista.aspx.vb">
+      <DependentUpon>FichaEntrevista.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OP_Cualitativo\FichaObservacion.aspx.designer.vb">
+      <DependentUpon>FichaObservacion.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Cualitativo\FichaObservacion.aspx.vb">
+      <DependentUpon>FichaObservacion.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OP_Cualitativo\FichaSesion.aspx.designer.vb">
+      <DependentUpon>FichaSesion.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Cualitativo\FichaSesion.aspx.vb">
+      <DependentUpon>FichaSesion.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OP_Cualitativo\Observacion.aspx.designer.vb">
+      <DependentUpon>Observacion.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Cualitativo\Observacion.aspx.vb">
+      <DependentUpon>Observacion.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OP_Cualitativo\Sesion.aspx.designer.vb">
+      <DependentUpon>Sesion.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OP_Cualitativo\Sesion.aspx.vb">
+      <DependentUpon>Sesion.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Prueba.aspx.designer.vb">
+      <DependentUpon>Prueba.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Prueba.aspx.vb">
+      <DependentUpon>Prueba.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="PY_ControlCalidad\ControlCalidadCampo.aspx.designer.vb">
+      <DependentUpon>ControlCalidadCampo.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PY_ControlCalidad\ControlCalidadCampo.aspx.vb">
+      <DependentUpon>ControlCalidadCampo.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PY_ControlCalidad\ControlCalidadInforme.aspx.designer.vb">
+      <DependentUpon>ControlCalidadInforme.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PY_ControlCalidad\ControlCalidadInforme.aspx.vb">
+      <DependentUpon>ControlCalidadInforme.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PY_ControlCalidad\ControlCalidadTranscripciones.aspx.designer.vb">
+      <DependentUpon>ControlCalidadTranscripciones.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PY_ControlCalidad\ControlCalidadTranscripciones.aspx.vb">
+      <DependentUpon>ControlCalidadTranscripciones.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PY_ControlCalidad\EvaluacionEntrevistadora.aspx.designer.vb">
+      <DependentUpon>EvaluacionEntrevistadora.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PY_ControlCalidad\EvaluacionEntrevistadora.aspx.vb">
+      <DependentUpon>EvaluacionEntrevistadora.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PY_ControlCalidad\EvaluacionModeradora.aspx.designer.vb">
+      <DependentUpon>EvaluacionModeradora.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PY_ControlCalidad\EvaluacionModeradora.aspx.vb">
+      <DependentUpon>EvaluacionModeradora.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PY_ControlCalidad\Preguntas.aspx.designer.vb">
+      <DependentUpon>Preguntas.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PY_ControlCalidad\Preguntas.aspx.vb">
+      <DependentUpon>Preguntas.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PY_Proyectos\Default.aspx.designer.vb">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PY_Proyectos\Default.aspx.vb">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="CU_Cuentas\Proyectos.aspx.designer.vb">
+      <DependentUpon>Proyectos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CU_Cuentas\Proyectos.aspx.vb">
+      <DependentUpon>Proyectos.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="PY_Proyectos\PY_Proyectos.aspx.designer.vb">
+      <DependentUpon>PY_Proyectos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PY_Proyectos\PY_Proyectos.aspx.vb">
+      <DependentUpon>PY_Proyectos.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="PY_Proyectos\Trabajos.aspx.designer.vb">
+      <DependentUpon>Trabajos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PY_Proyectos\Trabajos.aspx.vb">
+      <DependentUpon>Trabajos.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="RP_Reportes\GanttUnTrabajo.aspx.designer.vb">
+      <DependentUpon>GanttUnTrabajo.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="RP_Reportes\GanttUnTrabajo.aspx.vb">
+      <DependentUpon>GanttUnTrabajo.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SG_Actas\Actas.aspx.designer.vb">
+      <DependentUpon>Actas.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SG_Actas\Actas.aspx.vb">
+      <DependentUpon>Actas.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SG_Actas\ActasComite.aspx.designer.vb">
+      <DependentUpon>ActasComite.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SG_Actas\ActasComite.aspx.vb">
+      <DependentUpon>ActasComite.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SG_Actas\Seguimiento.aspx.designer.vb">
+      <DependentUpon>Seguimiento.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SG_Actas\Seguimiento.aspx.vb">
+      <DependentUpon>Seguimiento.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TH_TalentoHumano\Capacitacion.aspx.designer.vb">
+      <DependentUpon>Capacitacion.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="TH_TalentoHumano\Capacitacion.aspx.vb">
+      <DependentUpon>Capacitacion.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TH_TalentoHumano\Contratacion.aspx.designer.vb">
+      <DependentUpon>Contratacion.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="TH_TalentoHumano\Contratacion.aspx.vb">
+      <DependentUpon>Contratacion.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="TH_TalentoHumano\Default.aspx.designer.vb">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="TH_TalentoHumano\Default.aspx.vb">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="TH_TalentoHumano\FichaEncuestador.aspx.designer.vb">
+      <DependentUpon>FichaEncuestador.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="TH_TalentoHumano\FichaEncuestador.aspx.vb">
+      <DependentUpon>FichaEncuestador.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="TH_TalentoHumano\HojaVida.aspx.designer.vb">
+      <DependentUpon>HojaVida.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="TH_TalentoHumano\HojaVida.aspx.vb">
+      <DependentUpon>HojaVida.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UsersControl\UsrCtrl_LoadFiles.ascx.designer.vb">
+      <DependentUpon>UsrCtrl_LoadFiles.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UsersControl\UsrCtrl_LoadFiles.ascx.vb">
+      <DependentUpon>UsrCtrl_LoadFiles.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UsersControl\UsrCtrl_Usuarios.ascx.designer.vb">
+      <DependentUpon>UsrCtrl_Usuarios.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UsersControl\UsrCtrl_Usuarios.ascx.vb">
+      <DependentUpon>UsrCtrl_Usuarios.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="US_Usuarios\GruposPermisos.aspx.designer.vb">
+      <DependentUpon>GruposPermisos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="US_Usuarios\GruposPermisos.aspx.vb">
+      <DependentUpon>GruposPermisos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="US_Usuarios\GrupoUnidad.aspx.designer.vb">
+      <DependentUpon>GrupoUnidad.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="US_Usuarios\GrupoUnidad.aspx.vb">
+      <DependentUpon>GrupoUnidad.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="US_Usuarios\Permisos.aspx.designer.vb">
+      <DependentUpon>Permisos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="US_Usuarios\Permisos.aspx.vb">
+      <DependentUpon>Permisos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="US_Usuarios\PermisosUsuarios.aspx.designer.vb">
+      <DependentUpon>PermisosUsuarios.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="US_Usuarios\PermisosUsuarios.aspx.vb">
+      <DependentUpon>PermisosUsuarios.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="US_Usuarios\Roles.aspx.designer.vb">
+      <DependentUpon>Roles.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="US_Usuarios\Roles.aspx.vb">
+      <DependentUpon>Roles.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="US_Usuarios\RolesPermisos.aspx.designer.vb">
+      <DependentUpon>RolesPermisos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="US_Usuarios\RolesPermisos.aspx.vb">
+      <DependentUpon>RolesPermisos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="US_Usuarios\RolesUsuarios.aspx.designer.vb">
+      <DependentUpon>RolesUsuarios.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="US_Usuarios\RolesUsuarios.aspx.vb">
+      <DependentUpon>RolesUsuarios.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="US_Usuarios\TipoGrupoUnidad.aspx.designer.vb">
+      <DependentUpon>TipoGrupoUnidad.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="US_Usuarios\TipoGrupoUnidad.aspx.vb">
+      <DependentUpon>TipoGrupoUnidad.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="US_Usuarios\Unidades.aspx.designer.vb">
+      <DependentUpon>Unidades.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="US_Usuarios\Unidades.aspx.vb">
+      <DependentUpon>Unidades.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="US_Usuarios\Usuarios.aspx.designer.vb">
+      <DependentUpon>Usuarios.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="US_Usuarios\Usuarios.aspx.vb">
+      <DependentUpon>Usuarios.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="US_Usuarios\UsuariosUnidades.aspx.designer.vb">
+      <DependentUpon>UsuariosUnidades.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="US_Usuarios\UsuariosUnidades.aspx.vb">
+      <DependentUpon>UsuariosUnidades.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Account\Web.config" />
+    <Content Include="MasterPage\Site.Master" />
+    <Content Include="MasterPage\CU_.master" />
+    <Content Include="MasterPage\CU_F.master" />
+    <Content Include="MasterPage\GD_.master" />
+    <Content Include="MasterPage\GD_F.master" />
+    <Content Include="MasterPage\SG_.master" />
+    <Content Include="MasterPage\SG_F.master" />
+    <Content Include="MasterPage\PQR_.master" />
+    <Content Include="MasterPage\PQR_F.master" />
+    <Content Include="MasterPage\TH_.master" />
+    <Content Include="MasterPage\TH_F.master" />
+    <Content Include="MasterPage\ES_.master" />
+    <Content Include="MasterPage\ES_F.master" />
+    <Content Include="MasterPage\PC_.master" />
+    <Content Include="MasterPage\PC_F.master" />
+    <Content Include="MasterPage\CAP_.master" />
+    <Content Include="MasterPage\CAP_F.master" />
+    <Content Include="MasterPage\PY_.master" />
+    <Content Include="MasterPage\PY_F.master" />
+    <Content Include="MasterPage\OPQ_.master" />
+    <Content Include="MasterPage\OPQ_F.master" />
+    <Content Include="MasterPage\OPC_.master" />
+    <Content Include="MasterPage\OPC_F.master" />
+    <Content Include="MasterPage\OP_.master" />
+    <Content Include="MasterPage\OP_F.master" />
+    <None Include="DataSets\Gerencial.xsc">
+      <DependentUpon>Gerencial.xsd</DependentUpon>
+    </None>
+    <None Include="DataSets\Gerencial.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>Gerencial1.Designer.vb</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="DataSets\Gerencial.xss">
+      <DependentUpon>Gerencial.xsd</DependentUpon>
+    </None>
+    <None Include="DataSets\Operaciones.xsc">
+      <DependentUpon>Operaciones.xsd</DependentUpon>
+    </None>
+    <None Include="DataSets\Operaciones.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>Operaciones1.Designer.vb</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="DataSets\Operaciones.xss">
+      <DependentUpon>Operaciones.xsd</DependentUpon>
+    </None>
+    <Content Include="MasterPage\MBO_.master" />
+    <Content Include="MasterPage\MBO_F.master" />
+    <Content Include="MasterPage\RD_.master" />
+    <Content Include="MasterPage\RD_F.master" />
+    <Content Include="MasterPage\GT_.master" />
+    <Content Include="MasterPage\GT_F.master" />
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="Scripts\css\images\Thumbs.db" />
+    <Content Include="Web.sitemap">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="ArchivosCargados\" />
+    <Folder Include="Images\Fotos\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CoreProject\CoreProject.vbproj">
+      <Project>{B5F8A99E-0F52-4937-A1DC-9F16B2B34863}</Project>
+      <Name>CoreProject</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utilidades\Utilidades.vbproj">
+      <Project>{FC7250C5-27B9-4C5C-9230-EB6742F1C5CA}</Project>
+      <Name>Utilidades %28Utilidades\Utilidades%29</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>40671</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

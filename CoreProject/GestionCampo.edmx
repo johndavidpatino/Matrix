@@ -1,0 +1,224 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="GCModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="TiposResultadosVerificacionCampo">
+          <Key>
+            <PropertyRef Name="TRVC_Id" />
+          </Key>
+          <Property Name="TRVC_Id" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TRVC_Descripcion" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Function Name="GrabarAuditoria" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="A_Id" Type="decimal" Mode="InOut" />
+          <Parameter Name="Usu_Id" Type="decimal" Mode="In" />
+          <Parameter Name="TA_Id" Type="smallint" Mode="In" />
+          <Parameter Name="Mod_Id" Type="smallint" Mode="In" />
+          <Parameter Name="A_Descripcion" Type="nvarchar" Mode="In" />
+          <Parameter Name="A_Fecha" Type="datetime" Mode="In" />
+          <Parameter Name="Id_Reg" Type="decimal" Mode="In" />
+          <Parameter Name="T_Id" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="obtenerRespuestaIdRegistroXIdTrabajoNumeroEncuesta" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="E_Id" Type="decimal" Mode="In" />
+          <Parameter Name="numeroEncuesta" Type="numeric" Mode="In" />
+        </Function>
+        <Function Name="ObtenerRespuestas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Res_ID" Type="decimal" Mode="InOut" />
+          <Parameter Name="E_Id" Type="decimal" Mode="In" />
+          <Parameter Name="Res_Numero" Type="numeric" Mode="In" />
+          <Parameter Name="Per_NumIdentificacionEncu" Type="decimal" Mode="In" />
+          <Parameter Name="Per_NumIdentificacionSup" Type="decimal" Mode="In" />
+          <Parameter Name="Res_IDM" Type="numeric" Mode="In" />
+          <Parameter Name="Res_Ciudad" Type="numeric" Mode="In" />
+          <Parameter Name="Res_Fecha" Type="datetime" Mode="In" />
+          <Parameter Name="Res_Libre1" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Res_Libre2" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Res_Libre3" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Res_Libre4" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Res_Libre5" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Res_Libre6" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Res_Libre7" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Res_Libre8" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Res_Libre9" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Res_Libre10" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Res_Libre11" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Res_Libre12" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Res_Libre13" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Res_Libre14" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Res_Libre15" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Res_Libre16" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Res_Libre17" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Res_Libre18" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Res_Libre19" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Res_Libre20" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Res_Libre21" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Res_Libre22" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Res_Libre23" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Res_Libre24" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Res_Libre25" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Res_Libre26" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Res_Libre27" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Res_Libre28" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Res_Libre29" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Res_Libre30" Type="varchar(max)" Mode="In" />
+          <Parameter Name="usuario" Type="decimal" Mode="In" />
+          <Parameter Name="pageSize" Type="int" Mode="In" />
+          <Parameter Name="CurrentPage" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Sync_EncuestaPiloto" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="sbjNum" Type="numeric" Mode="In" />
+        </Function>
+        <Function Name="Sync_EncuestasEntrenamiento" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="Sync_ErrorTrabajoEspecializado" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="Sync_HabilitarEncuestasPiloto" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="sbjNum" Type="numeric" Mode="In" />
+        </Function>
+        <Function Name="Sync_HabilitarSincronizacionEstudio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="Sync_Preguntas_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+          <Parameter Name="SbjNum" Type="numeric" Mode="In" />
+        </Function>
+        <Function Name="Sync_Preguntas_UpdateInfo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SbjNum" Type="numeric" Mode="In" />
+          <Parameter Name="DCP" Type="varchar" Mode="In" />
+          <Parameter Name="valor" Type="varchar" Mode="In" />
+          <Parameter Name="e_Id" Type="decimal" Mode="In" />
+        </Function>
+        <EntityContainer Name="GCModelStoreContainer">
+          <EntitySet Name="TiposResultadosVerificacionCampo" EntityType="Self.TiposResultadosVerificacionCampo" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="GCModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="GCEntities" annotation:LazyLoadingEnabled="true">
+          <FunctionImport Name="Sync_EncuestasEntrenamiento">
+          <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="Sync_ErrorTrabajoEspecializado">
+          <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="Sync_HabilitarSincronizacionEstudio">
+          <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="Sync_Preguntas_Get" ReturnType="Collection(GCModel.Sync_Preguntas_Get_Result)">
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+            <Parameter Name="SbjNum" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="Sync_Preguntas_UpdateInfo" ReturnType="Collection(String)">
+            <Parameter Name="SbjNum" Mode="In" Type="Decimal" />
+            <Parameter Name="DCP" Mode="In" Type="String" />
+            <Parameter Name="valor" Mode="In" Type="String" />
+            <Parameter Name="e_Id" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="Sync_HabilitarEncuestasPiloto">
+          <Parameter Name="sbjNum" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="Sync_EncuestaPiloto">
+          <Parameter Name="sbjNum" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="GrabarAuditoria">
+            <Parameter Name="A_Id" Mode="InOut" Type="Decimal" />
+            <Parameter Name="Usu_Id" Mode="In" Type="Decimal" />
+            <Parameter Name="TA_Id" Mode="In" Type="Int16" />
+            <Parameter Name="Mod_Id" Mode="In" Type="Int16" />
+            <Parameter Name="A_Descripcion" Mode="In" Type="String" />
+            <Parameter Name="A_Fecha" Mode="In" Type="DateTime" />
+            <Parameter Name="Id_Reg" Mode="In" Type="Decimal" />
+            <Parameter Name="T_Id" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="obtenerRespuestaIdRegistroXIdTrabajoNumeroEncuesta" ReturnType="Collection(Decimal)">
+            <Parameter Name="E_Id" Mode="In" Type="Decimal" />
+            <Parameter Name="numeroEncuesta" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <EntitySet Name="TiposResultadosVerificacionCampo" EntityType="GCModel.TiposResultadosVerificacionCampo" />
+        </EntityContainer>
+        <ComplexType Name="Sync_Preguntas_Get_Result">
+          <Property Type="Decimal" Name="E_Id" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="Pr_Id" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="String" Name="Pr_Nombre" Nullable="false" MaxLength="30" />
+          <Property Type="Int16" Name="TP_Id" Nullable="false" />
+          <Property Type="String" Name="Pr_ValoresPermitidos" Nullable="true" />
+          <Property Type="Int16" Name="Pr_Orden" Nullable="false" />
+          <Property Type="Int16" Name="DCP_Id" Nullable="false" />
+          <Property Type="Boolean" Name="Pr_EsRequerido" Nullable="true" />
+          <Property Type="String" Name="DCP_Descripcion" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <EntityType Name="TiposResultadosVerificacionCampo">
+          <Key>
+            <PropertyRef Name="TRVC_Id" />
+          </Key>
+          <Property Name="TRVC_Id" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TRVC_Descripcion" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="GCModelStoreContainer" CdmEntityContainer="GCEntities">
+          <FunctionImportMapping FunctionImportName="Sync_EncuestasEntrenamiento" FunctionName="GCModel.Store.Sync_EncuestasEntrenamiento" />
+          <FunctionImportMapping FunctionImportName="Sync_ErrorTrabajoEspecializado" FunctionName="GCModel.Store.Sync_ErrorTrabajoEspecializado" />
+          <FunctionImportMapping FunctionImportName="Sync_HabilitarSincronizacionEstudio" FunctionName="GCModel.Store.Sync_HabilitarSincronizacionEstudio" />
+          <FunctionImportMapping FunctionImportName="Sync_Preguntas_Get" FunctionName="GCModel.Store.Sync_Preguntas_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="GCModel.Sync_Preguntas_Get_Result">
+                <ScalarProperty Name="E_Id" ColumnName="E_Id" />
+                <ScalarProperty Name="Pr_Id" ColumnName="Pr_Id" />
+                <ScalarProperty Name="Pr_Nombre" ColumnName="Pr_Nombre" />
+                <ScalarProperty Name="TP_Id" ColumnName="TP_Id" />
+                <ScalarProperty Name="Pr_ValoresPermitidos" ColumnName="Pr_ValoresPermitidos" />
+                <ScalarProperty Name="Pr_Orden" ColumnName="Pr_Orden" />
+                <ScalarProperty Name="DCP_Id" ColumnName="DCP_Id" />
+                <ScalarProperty Name="Pr_EsRequerido" ColumnName="Pr_EsRequerido" />
+                <ScalarProperty Name="DCP_Descripcion" ColumnName="DCP_Descripcion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Sync_Preguntas_UpdateInfo" FunctionName="GCModel.Store.Sync_Preguntas_UpdateInfo" />
+          <FunctionImportMapping FunctionImportName="Sync_HabilitarEncuestasPiloto" FunctionName="GCModel.Store.Sync_HabilitarEncuestasPiloto" />
+          <FunctionImportMapping FunctionImportName="Sync_EncuestaPiloto" FunctionName="GCModel.Store.Sync_EncuestaPiloto" />
+          <FunctionImportMapping FunctionImportName="GrabarAuditoria" FunctionName="GCModel.Store.GrabarAuditoria" />
+          <FunctionImportMapping FunctionImportName="obtenerRespuestaIdRegistroXIdTrabajoNumeroEncuesta" FunctionName="GCModel.Store.obtenerRespuestaIdRegistroXIdTrabajoNumeroEncuesta" />
+          <EntitySetMapping Name="TiposResultadosVerificacionCampo">
+            <EntityTypeMapping TypeName="GCModel.TiposResultadosVerificacionCampo">
+              <MappingFragment StoreEntitySet="TiposResultadosVerificacionCampo">
+                <ScalarProperty Name="TRVC_Descripcion" ColumnName="TRVC_Descripcion" />
+                <ScalarProperty Name="TRVC_Id" ColumnName="TRVC_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

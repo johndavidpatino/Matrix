@@ -1,0 +1,78 @@
+﻿<%@ Master Language="VB" MasterPageFile="~/MasterPage/NewSite.Master" AutoEventWireup="false" CodeBehind="MasterREP.master.vb" Inherits="WebMatrix.MasterREP" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+	<asp:ContentPlaceHolder ID="head" runat="server">
+	</asp:ContentPlaceHolder>
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="CPH_Menu" runat="server">
+	<ul class="mi-menu">
+		<li>
+			<a href="../Home/Default.aspx">IR AL INICIO</a>
+		</li>
+		<li>
+			<a href="#">CUENTAS</a>
+			<ul>
+				<li><a href="ListadoPropuestasSeguimientoCCT.aspx">Propuestas por CCT</a></li>
+				<li><a href="TrabajosPorCCT.aspx">Trabajos por CCT</a></li>
+				<li><a href="EstudiosXEntregarCCT.aspx">Estudios sin entregar</a></li>
+				<li><a href="../MBO/PropuestasSinTrabajo.aspx">Propuestas sin trabajo</a></li>
+			</ul>
+		</li>
+		<li>
+			<a href="#">PROYECTOS</a>
+			<ul>
+				<li><a title="Reporte de Proyectos sin JBI" href="ReporteProyectosSinJBI.aspx">Proyectos sin JBI</a></li>
+			</ul>
+		</li>
+		<li>
+			<a href="#">OPERACIONES</a>
+			<ul>
+				<li><a title="Ver menú de reportes de operaciones" href="MenuOperacionesREP.aspx">Ver reportes</a></li>
+				<li><a title="Ver menú de reportes de Requerimientos de Servicio" href="DetalleRequerimientosReporte.aspx">Detalle Requerimiento de Servicio</a></li>
+			</ul>
+		</li>
+		<li>
+			<a href="#">FINANCIERO</a>
+			<ul>
+				<li><a href="ReporteActividades.aspx">Presupuesto y ejecucion por actividad</a></li>
+			</ul>
+		</li>
+		<li>
+			<a href="#">CALIDAD</a>
+			<ul>
+				<li><a title="Indicadores Medición Proyectos" href="../RP_Reportes/ReportesMedicionProgramaProyectos.aspx">Indicadores Medición Proyectos</a></li>
+				<li><a title="Errores Registro Observaciones" href="../RP_Reportes/IndicadoresRegistroObservaciones.aspx">Errores Registro Observaciones</a></li>
+				<li><a title="Registro Observaciones Por Tipo" href="../RP_Reportes/ReporteRegistroObservacionesTipo.aspx">Registro Observaciones Por Tipo</a></li>
+				<li><a title="Indicador de Cuestionario" href="../RP_Reportes/IndicadoresCumplimientoTareas.aspx">Cumplimiento de tareas</a></li>
+				<li><a title="Indicador de entrega de instrumentos Al tiempo y A Tiempo" href="../RP_Reportes/ReportesCumplimientoAtiempoAlTiempo.aspx">Instrumentos A Tiempo y Al Tiempo</a></li>
+				<li><a href="../RP_Reportes/ReporteInconsistencias.aspx">Reporte de Observaciones</a></li>
+				<li><a href="../RP_Reportes/IndicadoresCalidad.aspx">Indicadores Calidad</a></li>
+				<li><a href="ReporteTablets.aspx">Reporte de Tablets</a></li>
+				<li><a href="PlaneacionPorUnidad.aspx">Planeación Tareas Cuentas y Proyectos</a></li>
+				<li><a href="PlaneacionPorUnidad.aspx">Planeación Tareas Operaciones</a></li>
+				<li><a href="ReporteEvaluacionProveedores.aspx">Evaluación de Proveedores</a></li>
+				<li><a href="ReportesVariablesControl.aspx">Variables de control</a></li>
+			</ul>
+		</li>
+
+	</ul>
+</asp:Content>
+<asp:Content ID="Content3" ContentPlaceHolderID="CPH_BreadCumbs" runat="server">
+</asp:Content>
+<asp:Content ID="Content4" ContentPlaceHolderID="CPH_TituloGeneral" runat="server">
+	<asp:ContentPlaceHolder ID="CPH_TituloGeneral" runat="server">
+	</asp:ContentPlaceHolder>
+	<a>Reportes</a>
+</asp:Content>
+<asp:Content ID="Content5" ContentPlaceHolderID="CPH_Titulo" runat="server">
+	<asp:ContentPlaceHolder ID="CPH_Titulo" runat="server">
+	</asp:ContentPlaceHolder>
+</asp:Content>
+<asp:Content ID="Content6" ContentPlaceHolderID="CPH_Subtitulo" runat="server">
+	<asp:ContentPlaceHolder ID="CPH_Subtitulo" runat="server">
+	</asp:ContentPlaceHolder>
+</asp:Content>
+<asp:Content ID="Content7" ContentPlaceHolderID="CPH_Content" runat="server">
+	<asp:ContentPlaceHolder ID="CPH_Content" runat="server">
+	</asp:ContentPlaceHolder>
+</asp:Content>

@@ -1,0 +1,1340 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="GD_Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="GD_DocumentosControlados">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DocumentoId" Type="bigint" Nullable="false" />
+          <Property Name="Version" Type="float" />
+          <Property Name="Activo" Type="bit" />
+          <Property Name="UbicacionArchivo" Type="varchar" MaxLength="250" />
+          <Property Name="MetodoRecuperacion" Type="varchar" MaxLength="50" />
+          <Property Name="TiempoRetencion" Type="varchar" MaxLength="50" />
+          <Property Name="DisposicionFinal" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="GD_EscanerDocumentos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdTrabajo" Type="bigint" />
+          <Property Name="IdDocumento" Type="bigint" />
+          <Property Name="Encontrado" Type="bit" />
+          <Property Name="FechaEscaneo" Type="datetime" />
+          <Property Name="Observacion" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="GD_EstadoSolicitud">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Estado" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="GD_MaestroDocumentos">
+          <Key>
+            <PropertyRef Name="IdDocumento" />
+          </Key>
+          <Property Name="IdDocumento" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Documento" Type="varchar" MaxLength="250" />
+          <Property Name="Controlado" Type="bit" />
+          <Property Name="Activo" Type="bit" />
+          <Property Name="Codigo" Type="varchar" MaxLength="100" />
+          <Property Name="IdProceso" Type="smallint" />
+          <Property Name="Responsable" Type="varchar" MaxLength="100" />
+          <Property Name="URL" Type="varchar" MaxLength="250" />
+          <Property Name="Cierre" Type="bit" />
+          <Property Name="URLOtroServidor" Type="varchar(max)" />
+          <Property Name="TipoArchivo" Type="varchar" MaxLength="10" />
+          <Property Name="Recuperacion" Type="bit" />
+          <Property Name="URLRecuperacion" Type="varchar(max)" />
+          <Property Name="TablaId" Type="tinyint" />
+          <Property Name="RolResponsableCierre" Type="int" />
+        </EntityType>
+        <EntityType Name="GD_RepositorioDocumentos">
+          <Key>
+            <PropertyRef Name="IdDocumentoRepositorio" />
+          </Key>
+          <Property Name="IdDocumentoRepositorio" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar(max)" />
+          <Property Name="Url" Type="varchar(max)" />
+          <Property Name="DocumentoId" Type="bigint" Nullable="false" />
+          <Property Name="Version" Type="float" />
+          <Property Name="Fecha" Type="datetime" />
+          <Property Name="Comentarios" Type="varchar(max)" />
+          <Property Name="UsuarioId" Type="bigint" />
+          <Property Name="IdContenedor" Type="bigint" />
+        </EntityType>
+        <EntityType Name="GD_Revisiones">
+          <Key>
+            <PropertyRef Name="IdRevision" />
+          </Key>
+          <Property Name="IdRevision" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DocumentoId" Type="bigint" />
+          <Property Name="UsuarioId" Type="bigint" />
+          <Property Name="FechaAprobacion" Type="datetime" />
+          <Property Name="TipoRevision" Type="tinyint" />
+        </EntityType>
+        <EntityType Name="GD_SolicitudDocumentos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FechaSolicitud" Type="datetime" Nullable="false" />
+          <Property Name="Solicitante" Type="bigint" />
+          <Property Name="Area" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Cargo" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Tipoid" Type="int" Nullable="false" />
+          <Property Name="DocumentoId" Type="bigint" />
+          <Property Name="NombreDocumento" Type="varchar" MaxLength="250" />
+          <Property Name="Codigo" Type="varchar" MaxLength="100" />
+          <Property Name="AreaUso" Type="varchar" MaxLength="250" />
+          <Property Name="SitioAcceso" Type="varchar" MaxLength="250" />
+          <Property Name="RazonSolicitud" Type="varchar(max)" />
+          <Property Name="DescripcionSolicitud" Type="varchar(max)" />
+          <Property Name="Estadoid" Type="tinyint" />
+          <Property Name="FechaEstado" Type="datetime" />
+          <Property Name="Comentarios" Type="varchar(max)" />
+          <Property Name="Modificacion" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="GD_TipoRevision">
+          <Key>
+            <PropertyRef Name="IdTipoRevision" />
+          </Key>
+          <Property Name="IdTipoRevision" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Revision" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="GD_TipoSolicitud">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="Tipo" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <Association Name="FK_GD_DocumentosControlados_GD_MaestroDocumentos">
+          <End Role="GD_MaestroDocumentos" Type="Self.GD_MaestroDocumentos" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="GD_DocumentosControlados" Type="Self.GD_DocumentosControlados" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GD_MaestroDocumentos">
+              <PropertyRef Name="IdDocumento" />
+            </Principal>
+            <Dependent Role="GD_DocumentosControlados">
+              <PropertyRef Name="DocumentoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GD_MaestroDocumentos">
+          <End Role="GD_MaestroDocumentos" Type="Self.GD_MaestroDocumentos" Multiplicity="0..1" />
+          <End Role="GD_EscanerDocumentos" Type="Self.GD_EscanerDocumentos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GD_MaestroDocumentos">
+              <PropertyRef Name="IdDocumento" />
+            </Principal>
+            <Dependent Role="GD_EscanerDocumentos">
+              <PropertyRef Name="IdDocumento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GD_RepositorioDocumentos_GD_MaestroDocumentos">
+          <End Role="GD_MaestroDocumentos" Type="Self.GD_MaestroDocumentos" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="GD_RepositorioDocumentos" Type="Self.GD_RepositorioDocumentos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GD_MaestroDocumentos">
+              <PropertyRef Name="IdDocumento" />
+            </Principal>
+            <Dependent Role="GD_RepositorioDocumentos">
+              <PropertyRef Name="DocumentoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GD_SolicitudDocumentos_GD_EstadoSolicitud">
+          <End Role="GD_EstadoSolicitud" Type="Self.GD_EstadoSolicitud" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="GD_SolicitudDocumentos" Type="Self.GD_SolicitudDocumentos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GD_EstadoSolicitud">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="GD_SolicitudDocumentos">
+              <PropertyRef Name="Estadoid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GD_SolicitudDocumentos_GD_MaestroDocumentos">
+          <End Role="GD_MaestroDocumentos" Type="Self.GD_MaestroDocumentos" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="GD_SolicitudDocumentos" Type="Self.GD_SolicitudDocumentos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GD_MaestroDocumentos">
+              <PropertyRef Name="IdDocumento" />
+            </Principal>
+            <Dependent Role="GD_SolicitudDocumentos">
+              <PropertyRef Name="DocumentoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GD_SolicitudDocumentos_GD_TipoSolicitud">
+          <End Role="GD_TipoSolicitud" Type="Self.GD_TipoSolicitud" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="GD_SolicitudDocumentos" Type="Self.GD_SolicitudDocumentos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GD_TipoSolicitud">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="GD_SolicitudDocumentos">
+              <PropertyRef Name="Tipoid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Revisiones_MaestroDocumentos">
+          <End Role="GD_DocumentosControlados" Type="Self.GD_DocumentosControlados" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="GD_Revisiones" Type="Self.GD_Revisiones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GD_DocumentosControlados">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="GD_Revisiones">
+              <PropertyRef Name="DocumentoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Revisiones_TipoRevision">
+          <End Role="GD_TipoRevision" Type="Self.GD_TipoRevision" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="GD_Revisiones" Type="Self.GD_Revisiones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GD_TipoRevision">
+              <PropertyRef Name="IdTipoRevision" />
+            </Principal>
+            <Dependent Role="GD_Revisiones">
+              <PropertyRef Name="TipoRevision" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="GD_CorreosUsuario_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="GD_DocumentosControlados_Activo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="docId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="GD_DocumentosControlados_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="docId" Type="bigint" Mode="In" />
+          <Parameter Name="activo" Type="bit" Mode="In" />
+          <Parameter Name="ubiArchivo" Type="varchar" Mode="In" />
+          <Parameter Name="metRecuperacion" Type="varchar" Mode="In" />
+          <Parameter Name="tiempoRetencion" Type="varchar" Mode="In" />
+          <Parameter Name="dispoFinal" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="GD_DocumentosMaestros_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="docId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="GD_EscanerDocumentos_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdTrabajo" Type="bigint" Mode="In" />
+          <Parameter Name="IdDocumento" Type="bigint" Mode="In" />
+          <Parameter Name="Encontrado" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="GD_EscanerDocumentos_Del" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdTrabajo" Type="bigint" Mode="In" />
+          <Parameter Name="Id" Type="bigint" Mode="In" />
+          <Parameter Name="IdDocumento" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="GD_EscanerDocumentos_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="bigint" Mode="In" />
+          <Parameter Name="IdTrabajo" Type="bigint" Mode="In" />
+          <Parameter Name="IdDocumento" Type="bigint" Mode="In" />
+          <Parameter Name="Encontrado" Type="bit" Mode="In" />
+          <Parameter Name="Observacion" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="GD_EscanerDocumentos_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="bigint" Mode="In" />
+          <Parameter Name="IdTrabajo" Type="bigint" Mode="In" />
+          <Parameter Name="IdDocumento" Type="bigint" Mode="In" />
+          <Parameter Name="Encontrado" Type="bit" Mode="In" />
+          <Parameter Name="RolResponsableCierre" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GD_Estados_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GD_EstadoSolicitud_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Estado" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="GD_EstadoSolicitud_Del" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="GD_EstadoSolicitud_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="Estado" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="GD_EstadoSolicitud_Get_F" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Estado" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="GD_GD_MaestroDocumentos_Get2" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdDocumento" Type="bigint" Mode="In" />
+          <Parameter Name="Documento" Type="varchar" Mode="In" />
+          <Parameter Name="Controlado" Type="bit" Mode="In" />
+          <Parameter Name="Activo" Type="bit" Mode="In" />
+          <Parameter Name="Codigo" Type="varchar" Mode="In" />
+          <Parameter Name="IdProceso" Type="smallint" Mode="In" />
+          <Parameter Name="Responsable" Type="varchar" Mode="In" />
+          <Parameter Name="URL" Type="varchar" Mode="In" />
+          <Parameter Name="Cierre" Type="bit" Mode="In" />
+          <Parameter Name="URLOtroServidor" Type="varchar(max)" Mode="In" />
+          <Parameter Name="TipoArchivo" Type="varchar" Mode="In" />
+          <Parameter Name="Recuperacion" Type="bit" Mode="In" />
+          <Parameter Name="URLRecuperacion" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="GD_GD_RepositorioDocumentos_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nombre" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Url" Type="varchar(max)" Mode="In" />
+          <Parameter Name="DocumentoId" Type="bigint" Mode="In" />
+          <Parameter Name="Version" Type="float" Mode="In" />
+          <Parameter Name="Fecha" Type="datetime" Mode="In" />
+          <Parameter Name="Comentarios" Type="varchar(max)" Mode="In" />
+          <Parameter Name="UsuarioId" Type="bigint" Mode="In" />
+          <Parameter Name="IdContenedor" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="GD_MaestroDocumentos_Add2" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="doc" Type="varchar" Mode="In" />
+          <Parameter Name="controlado" Type="bit" Mode="In" />
+          <Parameter Name="activo" Type="bit" Mode="In" />
+          <Parameter Name="codigo" Type="varchar" Mode="In" />
+          <Parameter Name="idProc" Type="smallint" Mode="In" />
+          <Parameter Name="Responsable" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="GD_MaestroDocumentos_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GD_Procesos_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Proceso" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="GD_Procesos_Del" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idProceso" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="GD_Procesos_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdProceso" Type="int" Mode="In" />
+          <Parameter Name="Proceso" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="GD_Procesos_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GD_Procesos_Get_F" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Proceso" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="GD_RepositorioDocumentos_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="bigint" Mode="In" />
+          <Parameter Name="Nombre" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Url" Type="varchar(max)" Mode="In" />
+          <Parameter Name="DocumentoId" Type="bigint" Mode="In" />
+          <Parameter Name="Version" Type="float" Mode="In" />
+          <Parameter Name="Fecha" Type="datetime" Mode="In" />
+          <Parameter Name="Comentarios" Type="varchar(max)" Mode="In" />
+          <Parameter Name="UsuarioId" Type="bigint" Mode="In" />
+          <Parameter Name="IdContenedor" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="GD_RepositorioDocumentos_GetXTrabajo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="bigint" Mode="In" />
+          <Parameter Name="Nombre" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Url" Type="varchar(max)" Mode="In" />
+          <Parameter Name="DocumentoId" Type="bigint" Mode="In" />
+          <Parameter Name="Version" Type="float" Mode="In" />
+          <Parameter Name="Fecha" Type="datetime" Mode="In" />
+          <Parameter Name="Comentarios" Type="varchar(max)" Mode="In" />
+          <Parameter Name="UsuarioId" Type="bigint" Mode="In" />
+          <Parameter Name="IdContenedor" Type="bigint" Mode="In" />
+          <Parameter Name="esRecuperacion" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="GD_Revisiones_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DocumentoId" Type="int" Mode="In" />
+          <Parameter Name="UsuarioId" Type="int" Mode="In" />
+          <Parameter Name="FechaAprobacion" Type="datetime" Mode="In" />
+          <Parameter Name="TipoRevision" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GD_Revisiones_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdRevision" Type="int" Mode="In" />
+          <Parameter Name="DocumentoId" Type="int" Mode="In" />
+          <Parameter Name="UsuarioId" Type="int" Mode="In" />
+          <Parameter Name="FechaAprobacion" Type="datetime" Mode="In" />
+          <Parameter Name="TipoRevision" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GD_Revisiones_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UsuarioId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GD_Revisiones_GetRev" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UsuarioId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GD_SolDocumentos_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FechaSolicitud" Type="datetime" Mode="In" />
+          <Parameter Name="Solicitante" Type="bigint" Mode="In" />
+          <Parameter Name="Area" Type="varchar" Mode="In" />
+          <Parameter Name="Cargo" Type="varchar" Mode="In" />
+          <Parameter Name="Tipoid" Type="int" Mode="In" />
+          <Parameter Name="DocumentoId" Type="bigint" Mode="In" />
+          <Parameter Name="NombreDocumento" Type="varchar" Mode="In" />
+          <Parameter Name="Codigo" Type="varchar" Mode="In" />
+          <Parameter Name="AreaUso" Type="varchar" Mode="In" />
+          <Parameter Name="SitioAcceso" Type="varchar" Mode="In" />
+          <Parameter Name="RazonSolicitud" Type="varchar" Mode="In" />
+          <Parameter Name="DescripcionSolicitud" Type="varchar" Mode="In" />
+          <Parameter Name="Estadoid" Type="tinyint" Mode="In" />
+          <Parameter Name="FechaEstado" Type="datetime" Mode="In" />
+          <Parameter Name="Comentarios" Type="varchar" Mode="In" />
+          <Parameter Name="Modificacion" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="GD_TipoSolicitud_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Tipo" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="GD_TipoSolicitud_Del" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="GD_TipoSolicitud_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="Tipo" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="GD_TipoSolicitud_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GD_TipoSolicitud_Get_F" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Tipo" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="GD_US_Usuarios_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="ObtenerUsuarios" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="GD_ModelStoreContainer">
+          <EntitySet Name="GD_DocumentosControlados" EntityType="Self.GD_DocumentosControlados" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GD_EscanerDocumentos" EntityType="Self.GD_EscanerDocumentos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GD_EstadoSolicitud" EntityType="Self.GD_EstadoSolicitud" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GD_MaestroDocumentos" EntityType="Self.GD_MaestroDocumentos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GD_RepositorioDocumentos" EntityType="Self.GD_RepositorioDocumentos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GD_Revisiones" EntityType="Self.GD_Revisiones" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GD_SolicitudDocumentos" EntityType="Self.GD_SolicitudDocumentos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GD_TipoRevision" EntityType="Self.GD_TipoRevision" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GD_TipoSolicitud" EntityType="Self.GD_TipoSolicitud" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_GD_DocumentosControlados_GD_MaestroDocumentos" Association="Self.FK_GD_DocumentosControlados_GD_MaestroDocumentos">
+            <End Role="GD_MaestroDocumentos" EntitySet="GD_MaestroDocumentos" />
+            <End Role="GD_DocumentosControlados" EntitySet="GD_DocumentosControlados" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GD_MaestroDocumentos" Association="Self.FK_GD_MaestroDocumentos">
+            <End Role="GD_MaestroDocumentos" EntitySet="GD_MaestroDocumentos" />
+            <End Role="GD_EscanerDocumentos" EntitySet="GD_EscanerDocumentos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GD_RepositorioDocumentos_GD_MaestroDocumentos" Association="Self.FK_GD_RepositorioDocumentos_GD_MaestroDocumentos">
+            <End Role="GD_MaestroDocumentos" EntitySet="GD_MaestroDocumentos" />
+            <End Role="GD_RepositorioDocumentos" EntitySet="GD_RepositorioDocumentos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GD_SolicitudDocumentos_GD_EstadoSolicitud" Association="Self.FK_GD_SolicitudDocumentos_GD_EstadoSolicitud">
+            <End Role="GD_EstadoSolicitud" EntitySet="GD_EstadoSolicitud" />
+            <End Role="GD_SolicitudDocumentos" EntitySet="GD_SolicitudDocumentos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GD_SolicitudDocumentos_GD_MaestroDocumentos" Association="Self.FK_GD_SolicitudDocumentos_GD_MaestroDocumentos">
+            <End Role="GD_MaestroDocumentos" EntitySet="GD_MaestroDocumentos" />
+            <End Role="GD_SolicitudDocumentos" EntitySet="GD_SolicitudDocumentos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GD_SolicitudDocumentos_GD_TipoSolicitud" Association="Self.FK_GD_SolicitudDocumentos_GD_TipoSolicitud">
+            <End Role="GD_TipoSolicitud" EntitySet="GD_TipoSolicitud" />
+            <End Role="GD_SolicitudDocumentos" EntitySet="GD_SolicitudDocumentos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Revisiones_MaestroDocumentos" Association="Self.FK_Revisiones_MaestroDocumentos">
+            <End Role="GD_DocumentosControlados" EntitySet="GD_DocumentosControlados" />
+            <End Role="GD_Revisiones" EntitySet="GD_Revisiones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Revisiones_TipoRevision" Association="Self.FK_Revisiones_TipoRevision">
+            <End Role="GD_TipoRevision" EntitySet="GD_TipoRevision" />
+            <End Role="GD_Revisiones" EntitySet="GD_Revisiones" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="GD_Model" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2009/11/edm" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <EntityContainer Name="GD_Entities" annotation:LazyLoadingEnabled="true" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+          <EntitySet Name="GD_DocumentosControlados" EntityType="GD_Model.GD_DocumentosControlados" />
+          <EntitySet Name="GD_EstadoSolicitud" EntityType="GD_Model.GD_EstadoSolicitud" />
+          <EntitySet Name="GD_MaestroDocumentos" EntityType="GD_Model.GD_MaestroDocumentos" />
+          <EntitySet Name="GD_RepositorioDocumentos" EntityType="GD_Model.GD_RepositorioDocumentos" />
+          <EntitySet Name="GD_Revisiones" EntityType="GD_Model.GD_Revisiones" />
+          <EntitySet Name="GD_SolicitudDocumentos" EntityType="GD_Model.GD_SolicitudDocumentos" />
+          <EntitySet Name="GD_TipoRevision" EntityType="GD_Model.GD_TipoRevision" />
+          <EntitySet Name="GD_TipoSolicitud" EntityType="GD_Model.GD_TipoSolicitud" />
+          <AssociationSet Name="FK_GD_DocumentosControlados_GD_MaestroDocumentos" Association="GD_Model.FK_GD_DocumentosControlados_GD_MaestroDocumentos">
+            <End Role="GD_MaestroDocumentos" EntitySet="GD_MaestroDocumentos" />
+            <End Role="GD_DocumentosControlados" EntitySet="GD_DocumentosControlados" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Revisiones_MaestroDocumentos" Association="GD_Model.FK_Revisiones_MaestroDocumentos">
+            <End Role="GD_DocumentosControlados" EntitySet="GD_DocumentosControlados" />
+            <End Role="GD_Revisiones" EntitySet="GD_Revisiones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GD_SolicitudDocumentos_GD_EstadoSolicitud" Association="GD_Model.FK_GD_SolicitudDocumentos_GD_EstadoSolicitud">
+            <End Role="GD_EstadoSolicitud" EntitySet="GD_EstadoSolicitud" />
+            <End Role="GD_SolicitudDocumentos" EntitySet="GD_SolicitudDocumentos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GD_RepositorioDocumentos_GD_MaestroDocumentos" Association="GD_Model.FK_GD_RepositorioDocumentos_GD_MaestroDocumentos">
+            <End Role="GD_MaestroDocumentos" EntitySet="GD_MaestroDocumentos" />
+            <End Role="GD_RepositorioDocumentos" EntitySet="GD_RepositorioDocumentos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GD_SolicitudDocumentos_GD_MaestroDocumentos" Association="GD_Model.FK_GD_SolicitudDocumentos_GD_MaestroDocumentos">
+            <End Role="GD_MaestroDocumentos" EntitySet="GD_MaestroDocumentos" />
+            <End Role="GD_SolicitudDocumentos" EntitySet="GD_SolicitudDocumentos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Revisiones_TipoRevision" Association="GD_Model.FK_Revisiones_TipoRevision">
+            <End Role="GD_TipoRevision" EntitySet="GD_TipoRevision" />
+            <End Role="GD_Revisiones" EntitySet="GD_Revisiones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GD_SolicitudDocumentos_GD_TipoSolicitud" Association="GD_Model.FK_GD_SolicitudDocumentos_GD_TipoSolicitud">
+            <End Role="GD_TipoSolicitud" EntitySet="GD_TipoSolicitud" />
+            <End Role="GD_SolicitudDocumentos" EntitySet="GD_SolicitudDocumentos" />
+          </AssociationSet>
+          <FunctionImport Name="uploadFile">
+            <Parameter Name="nomDoc" Mode="In" Type="String" />
+            <Parameter Name="url" Mode="In" Type="String" />
+            <Parameter Name="docId" Mode="In" Type="Int64" />
+            <Parameter Name="coment" Mode="In" Type="String" />
+            <Parameter Name="usuarioId" Mode="In" Type="Int64" />
+            <Parameter Name="idContenedor" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="GD_DocumentosControlados_Activo">
+          <Parameter Name="docId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="GD_DocumentosMaestros_Update">
+          <Parameter Name="docId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="GD_Estados_Get" ReturnType="Collection(GD_Model.GD_Estados_Get_Result)" />
+          <FunctionImport Name="GD_CorreosUsuario_Get" ReturnType="Collection(GD_Model.GD_CorreosUsuario_Get_Result)">
+          <Parameter Name="id" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="GD_SolDocumentos_Add">
+            <Parameter Name="FechaSolicitud" Mode="In" Type="DateTime" />
+            <Parameter Name="Solicitante" Mode="In" Type="Int64" />
+            <Parameter Name="Area" Mode="In" Type="String" />
+            <Parameter Name="Cargo" Mode="In" Type="String" />
+            <Parameter Name="Tipoid" Mode="In" Type="Int32" />
+            <Parameter Name="DocumentoId" Mode="In" Type="Int64" />
+            <Parameter Name="NombreDocumento" Mode="In" Type="String" />
+            <Parameter Name="Codigo" Mode="In" Type="String" />
+            <Parameter Name="AreaUso" Mode="In" Type="String" />
+            <Parameter Name="SitioAcceso" Mode="In" Type="String" />
+            <Parameter Name="RazonSolicitud" Mode="In" Type="String" />
+            <Parameter Name="DescripcionSolicitud" Mode="In" Type="String" />
+            <Parameter Name="Estadoid" Mode="In" Type="Byte" />
+            <Parameter Name="FechaEstado" Mode="In" Type="DateTime" />
+            <Parameter Name="Comentarios" Mode="In" Type="String" />
+            <Parameter Name="Modificacion" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GD_Revisiones_Add">
+            <Parameter Name="DocumentoId" Mode="In" Type="Int32" />
+            <Parameter Name="UsuarioId" Mode="In" Type="Int32" />
+            <Parameter Name="FechaAprobacion" Mode="In" Type="DateTime" />
+            <Parameter Name="TipoRevision" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GD_Revisiones_Edit">
+            <Parameter Name="IdRevision" Mode="In" Type="Int32" />
+            <Parameter Name="DocumentoId" Mode="In" Type="Int32" />
+            <Parameter Name="UsuarioId" Mode="In" Type="Int32" />
+            <Parameter Name="FechaAprobacion" Mode="In" Type="DateTime" />
+            <Parameter Name="TipoRevision" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GD_Revisiones_Get" ReturnType="Collection(GD_Model.GD_Revisiones_Get_Result)">
+          <Parameter Name="UsuarioId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GD_Revisiones_GetRev" ReturnType="Collection(GD_Model.GD_Revisiones_Get_Result)">
+          <Parameter Name="UsuarioId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GD_EstadoSolicitud_Add">
+          <Parameter Name="Estado" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GD_EstadoSolicitud_Del">
+          <Parameter Name="id" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="GD_EstadoSolicitud_Edit">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="Estado" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GD_EstadoSolicitud_Get_F" ReturnType="Collection(GD_Model.GD_EstadoSolicitud_Get_F_Result)">
+          <Parameter Name="Estado" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GD_Procesos_Add">
+          <Parameter Name="Proceso" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GD_Procesos_Del">
+          <Parameter Name="idProceso" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="GD_Procesos_Edit">
+            <Parameter Name="IdProceso" Mode="In" Type="Int32" />
+            <Parameter Name="Proceso" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GD_Procesos_Get_F" ReturnType="Collection(GD_Model.GD_Procesos_Get_F_Result)">
+          <Parameter Name="Proceso" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GD_TipoSolicitud_Add">
+          <Parameter Name="Tipo" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GD_TipoSolicitud_Del">
+          <Parameter Name="id" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="GD_TipoSolicitud_Edit">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="Tipo" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GD_TipoSolicitud_Get_F" ReturnType="Collection(GD_Model.GD_TipoSolicitud_Get_F_Result)">
+          <Parameter Name="Tipo" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GD_TipoSolicitud_Get" ReturnType="Collection(GD_Model.GD_TipoSolicitud_Get_Result)" />
+          <FunctionImport Name="GD_Procesos_Get" ReturnType="Collection(GD_Model.GD_Procesos_Get_Result)" />
+          <FunctionImport Name="GD_US_Usuarios_Get" ReturnType="Collection(GD_Model.GD_US_Usuarios_Get_Result)" />
+          <FunctionImport Name="GD_MaestroDocumentos_Get" ReturnType="Collection(GD_Model.GD_MaestroDocumentos_Get_Result)" />
+          <FunctionImport Name="GD_DocumentosControlados_Add">
+            <Parameter Name="docId" Mode="In" Type="Int64" />
+            <Parameter Name="activo" Mode="In" Type="Boolean" />
+            <Parameter Name="ubiArchivo" Mode="In" Type="String" />
+            <Parameter Name="metRecuperacion" Mode="In" Type="String" />
+            <Parameter Name="tiempoRetencion" Mode="In" Type="String" />
+            <Parameter Name="dispoFinal" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GD_MaestroDocumentos_Add2" ReturnType="Collection(GD_Model.GD_MaestroDocumentos_Add2_Result)">
+            <Parameter Name="doc" Mode="In" Type="String" />
+            <Parameter Name="controlado" Mode="In" Type="Boolean" />
+            <Parameter Name="activo" Mode="In" Type="Boolean" />
+            <Parameter Name="codigo" Mode="In" Type="String" />
+            <Parameter Name="idProc" Mode="In" Type="Int16" />
+            <Parameter Name="Responsable" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GD_RepositorioDocumentos_Get" EntitySet="GD_RepositorioDocumentos" ReturnType="Collection(GD_Model.GD_RepositorioDocumentos)">
+            <Parameter Name="Id" Mode="In" Type="Int64" />
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="Url" Mode="In" Type="String" />
+            <Parameter Name="DocumentoId" Mode="In" Type="Int64" />
+            <Parameter Name="Version" Mode="In" Type="Double" />
+            <Parameter Name="Fecha" Mode="In" Type="DateTime" />
+            <Parameter Name="Comentarios" Mode="In" Type="String" />
+            <Parameter Name="UsuarioId" Mode="In" Type="Int64" />
+            <Parameter Name="IdContenedor" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="GD_GD_RepositorioDocumentos_Add" ReturnType="Collection(Decimal)">
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="Url" Mode="In" Type="String" />
+            <Parameter Name="DocumentoId" Mode="In" Type="Int64" />
+            <Parameter Name="Version" Mode="In" Type="Double" />
+            <Parameter Name="Fecha" Mode="In" Type="DateTime" />
+            <Parameter Name="Comentarios" Mode="In" Type="String" />
+            <Parameter Name="UsuarioId" Mode="In" Type="Int64" />
+            <Parameter Name="IdContenedor" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="GD_GD_MaestroDocumentos_Get2" ReturnType="Collection(GD_Model.GD_GD_MaestroDocumentos_Get2_Result)">
+            <Parameter Name="IdDocumento" Mode="In" Type="Int64" />
+            <Parameter Name="Documento" Mode="In" Type="String" />
+            <Parameter Name="Controlado" Mode="In" Type="Boolean" />
+            <Parameter Name="Activo" Mode="In" Type="Boolean" />
+            <Parameter Name="Codigo" Mode="In" Type="String" />
+            <Parameter Name="IdProceso" Mode="In" Type="Int16" />
+            <Parameter Name="Responsable" Mode="In" Type="String" />
+            <Parameter Name="URL" Mode="In" Type="String" />
+            <Parameter Name="Cierre" Mode="In" Type="Boolean" />
+            <Parameter Name="URLOtroServidor" Mode="In" Type="String" />
+            <Parameter Name="TipoArchivo" Mode="In" Type="String" />
+            <Parameter Name="Recuperacion" Mode="In" Type="Boolean" />
+            <Parameter Name="URLRecuperacion" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GD_RepositorioDocumentos_GetXTrabajo" ReturnType="Collection(GD_Model.GD_RepositorioDocumentos_GetXTrabajo_Result)">
+            <Parameter Name="Id" Mode="In" Type="Int64" />
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="Url" Mode="In" Type="String" />
+            <Parameter Name="DocumentoId" Mode="In" Type="Int64" />
+            <Parameter Name="Version" Mode="In" Type="Double" />
+            <Parameter Name="Fecha" Mode="In" Type="DateTime" />
+            <Parameter Name="Comentarios" Mode="In" Type="String" />
+            <Parameter Name="UsuarioId" Mode="In" Type="Int64" />
+            <Parameter Name="IdContenedor" Mode="In" Type="Int64" />
+            <Parameter Name="esRecuperacion" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="GD_EscanerDocumentos_Add" ReturnType="Collection(Decimal)">
+            <Parameter Name="IdTrabajo" Mode="In" Type="Int64" />
+            <Parameter Name="IdDocumento" Mode="In" Type="Int64" />
+            <Parameter Name="Encontrado" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="GD_EscanerDocumentos_Get" ReturnType="Collection(GD_Model.GD_EscanerDocumentos_Get_Result)">
+            <Parameter Name="Id" Mode="In" Type="Int64" />
+            <Parameter Name="IdTrabajo" Mode="In" Type="Int64" />
+            <Parameter Name="IdDocumento" Mode="In" Type="Int64" />
+            <Parameter Name="Encontrado" Mode="In" Type="Boolean" />
+            <Parameter Name="RolResponsableCierre" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GD_EscanerDocumentos_Del">
+            <Parameter Name="IdTrabajo" Mode="In" Type="Int64" />
+            <Parameter Name="Id" Mode="In" Type="Int64" />
+            <Parameter Name="IdDocumento" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="GD_EscanerDocumentos_Edit">
+            <Parameter Name="Id" Mode="In" Type="Int64" />
+            <Parameter Name="IdTrabajo" Mode="In" Type="Int64" />
+            <Parameter Name="IdDocumento" Mode="In" Type="Int64" />
+            <Parameter Name="Encontrado" Mode="In" Type="Boolean" />
+            <Parameter Name="Observacion" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="GD_EscanerDocumentos" EntityType="GD_Model.GD_EscanerDocumentos" />
+          <AssociationSet Name="FK_GD_MaestroDocumentos" Association="GD_Model.FK_GD_MaestroDocumentos">
+            <End Role="GD_MaestroDocumentos" EntitySet="GD_MaestroDocumentos" />
+            <End Role="GD_EscanerDocumentos" EntitySet="GD_EscanerDocumentos" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="GD_DocumentosControlados">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="DocumentoId" Type="Int64" Nullable="false" />
+          <Property Name="Version" Type="Double" />
+          <Property Name="Activo" Type="Boolean" />
+          <Property Name="UbicacionArchivo" Type="String" MaxLength="250" Unicode="false" FixedLength="false" />
+          <Property Name="MetodoRecuperacion" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="TiempoRetencion" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="DisposicionFinal" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="GD_MaestroDocumentos" Relationship="GD_Model.FK_GD_DocumentosControlados_GD_MaestroDocumentos" FromRole="GD_DocumentosControlados" ToRole="GD_MaestroDocumentos" />
+          <NavigationProperty Name="GD_Revisiones" Relationship="GD_Model.FK_Revisiones_MaestroDocumentos" FromRole="GD_DocumentosControlados" ToRole="GD_Revisiones" />
+        </EntityType>
+        <EntityType Name="GD_EstadoSolicitud">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Byte" Nullable="false" />
+          <Property Name="Estado" Type="String" MaxLength="20" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="GD_SolicitudDocumentos" Relationship="GD_Model.FK_GD_SolicitudDocumentos_GD_EstadoSolicitud" FromRole="GD_EstadoSolicitud" ToRole="GD_SolicitudDocumentos" />
+        </EntityType>
+        <EntityType Name="GD_MaestroDocumentos">
+          <Key>
+            <PropertyRef Name="IdDocumento" />
+          </Key>
+          <Property Name="IdDocumento" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="Documento" Type="String" MaxLength="250" Unicode="false" FixedLength="false" />
+          <Property Name="Controlado" Type="Boolean" />
+          <Property Name="Activo" Type="Boolean" />
+          <Property Name="Codigo" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="IdProceso" Type="Int16" />
+          <Property Name="Responsable" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="GD_DocumentosControlados" Relationship="GD_Model.FK_GD_DocumentosControlados_GD_MaestroDocumentos" FromRole="GD_MaestroDocumentos" ToRole="GD_DocumentosControlados" />
+          <NavigationProperty Name="GD_RepositorioDocumentos" Relationship="GD_Model.FK_GD_RepositorioDocumentos_GD_MaestroDocumentos" FromRole="GD_MaestroDocumentos" ToRole="GD_RepositorioDocumentos" />
+          <NavigationProperty Name="GD_SolicitudDocumentos" Relationship="GD_Model.FK_GD_SolicitudDocumentos_GD_MaestroDocumentos" FromRole="GD_MaestroDocumentos" ToRole="GD_SolicitudDocumentos" />
+          <Property Type="String" Name="URL" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Cierre" Type="Boolean" />
+          <Property Name="URLOtroServidor" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="TipoArchivo" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Recuperacion" Type="Boolean" />
+          <Property Name="URLRecuperacion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="TablaId" Type="Byte" />
+          <NavigationProperty Name="GD_EscanerDocumentos" Relationship="GD_Model.FK_GD_MaestroDocumentos" FromRole="GD_MaestroDocumentos" ToRole="GD_EscanerDocumentos" />
+          <Property Name="RolResponsableCierre" Type="Int32" />
+        </EntityType>
+        <EntityType Name="GD_RepositorioDocumentos">
+          <Key>
+            <PropertyRef Name="IdDocumentoRepositorio" />
+          </Key>
+          <Property Name="IdDocumentoRepositorio" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="Nombre" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="Url" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="DocumentoId" Type="Int64" Nullable="false" />
+          <Property Name="Version" Type="Double" />
+          <Property Name="Fecha" Type="DateTime" Precision="3" />
+          <Property Name="Comentarios" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="UsuarioId" Type="Int64" />
+          <Property Name="IdContenedor" Type="Int64" />
+          <NavigationProperty Name="GD_MaestroDocumentos" Relationship="GD_Model.FK_GD_RepositorioDocumentos_GD_MaestroDocumentos" FromRole="GD_RepositorioDocumentos" ToRole="GD_MaestroDocumentos" />
+        </EntityType>
+        <EntityType Name="GD_Revisiones">
+          <Key>
+            <PropertyRef Name="IdRevision" />
+          </Key>
+          <Property Name="IdRevision" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="DocumentoId" Type="Int64" />
+          <Property Name="UsuarioId" Type="Int64" />
+          <Property Name="FechaAprobacion" Type="DateTime" Precision="3" />
+          <Property Name="TipoRevision" Type="Byte" />
+          <NavigationProperty Name="GD_DocumentosControlados" Relationship="GD_Model.FK_Revisiones_MaestroDocumentos" FromRole="GD_Revisiones" ToRole="GD_DocumentosControlados" />
+          <NavigationProperty Name="GD_TipoRevision" Relationship="GD_Model.FK_Revisiones_TipoRevision" FromRole="GD_Revisiones" ToRole="GD_TipoRevision" />
+        </EntityType>
+        <EntityType Name="GD_SolicitudDocumentos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="FechaSolicitud" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Solicitante" Type="Int64" />
+          <Property Name="Area" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="Cargo" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="Tipoid" Type="Int32" Nullable="false" />
+          <Property Name="DocumentoId" Type="Int64" />
+          <Property Name="NombreDocumento" Type="String" MaxLength="250" Unicode="false" FixedLength="false" />
+          <Property Name="Codigo" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="AreaUso" Type="String" MaxLength="250" Unicode="false" FixedLength="false" />
+          <Property Name="SitioAcceso" Type="String" MaxLength="250" Unicode="false" FixedLength="false" />
+          <Property Name="RazonSolicitud" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="DescripcionSolicitud" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="Estadoid" Type="Byte" />
+          <Property Name="FechaEstado" Type="DateTime" Precision="3" />
+          <Property Name="Comentarios" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="Modificacion" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="GD_EstadoSolicitud" Relationship="GD_Model.FK_GD_SolicitudDocumentos_GD_EstadoSolicitud" FromRole="GD_SolicitudDocumentos" ToRole="GD_EstadoSolicitud" />
+          <NavigationProperty Name="GD_MaestroDocumentos" Relationship="GD_Model.FK_GD_SolicitudDocumentos_GD_MaestroDocumentos" FromRole="GD_SolicitudDocumentos" ToRole="GD_MaestroDocumentos" />
+          <NavigationProperty Name="GD_TipoSolicitud" Relationship="GD_Model.FK_GD_SolicitudDocumentos_GD_TipoSolicitud" FromRole="GD_SolicitudDocumentos" ToRole="GD_TipoSolicitud" />
+        </EntityType>
+        <EntityType Name="GD_TipoRevision">
+          <Key>
+            <PropertyRef Name="IdTipoRevision" />
+          </Key>
+          <Property Name="IdTipoRevision" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="Revision" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="GD_Revisiones" Relationship="GD_Model.FK_Revisiones_TipoRevision" FromRole="GD_TipoRevision" ToRole="GD_Revisiones" />
+        </EntityType>
+        <EntityType Name="GD_TipoSolicitud">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="Tipo" Type="String" MaxLength="20" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="GD_SolicitudDocumentos" Relationship="GD_Model.FK_GD_SolicitudDocumentos_GD_TipoSolicitud" FromRole="GD_TipoSolicitud" ToRole="GD_SolicitudDocumentos" />
+        </EntityType>
+        <Association Name="FK_GD_DocumentosControlados_GD_MaestroDocumentos">
+          <End Role="GD_MaestroDocumentos" Type="GD_Model.GD_MaestroDocumentos" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="GD_DocumentosControlados" Type="GD_Model.GD_DocumentosControlados" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GD_MaestroDocumentos">
+              <PropertyRef Name="IdDocumento" />
+            </Principal>
+            <Dependent Role="GD_DocumentosControlados">
+              <PropertyRef Name="DocumentoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Revisiones_MaestroDocumentos">
+          <End Role="GD_DocumentosControlados" Type="GD_Model.GD_DocumentosControlados" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="GD_Revisiones" Type="GD_Model.GD_Revisiones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GD_DocumentosControlados">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="GD_Revisiones">
+              <PropertyRef Name="DocumentoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GD_SolicitudDocumentos_GD_EstadoSolicitud">
+          <End Role="GD_EstadoSolicitud" Type="GD_Model.GD_EstadoSolicitud" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="GD_SolicitudDocumentos" Type="GD_Model.GD_SolicitudDocumentos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GD_EstadoSolicitud">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="GD_SolicitudDocumentos">
+              <PropertyRef Name="Estadoid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GD_RepositorioDocumentos_GD_MaestroDocumentos">
+          <End Role="GD_MaestroDocumentos" Type="GD_Model.GD_MaestroDocumentos" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="GD_RepositorioDocumentos" Type="GD_Model.GD_RepositorioDocumentos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GD_MaestroDocumentos">
+              <PropertyRef Name="IdDocumento" />
+            </Principal>
+            <Dependent Role="GD_RepositorioDocumentos">
+              <PropertyRef Name="DocumentoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GD_SolicitudDocumentos_GD_MaestroDocumentos">
+          <End Role="GD_MaestroDocumentos" Type="GD_Model.GD_MaestroDocumentos" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="GD_SolicitudDocumentos" Type="GD_Model.GD_SolicitudDocumentos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GD_MaestroDocumentos">
+              <PropertyRef Name="IdDocumento" />
+            </Principal>
+            <Dependent Role="GD_SolicitudDocumentos">
+              <PropertyRef Name="DocumentoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Revisiones_TipoRevision">
+          <End Role="GD_TipoRevision" Type="GD_Model.GD_TipoRevision" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="GD_Revisiones" Type="GD_Model.GD_Revisiones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GD_TipoRevision">
+              <PropertyRef Name="IdTipoRevision" />
+            </Principal>
+            <Dependent Role="GD_Revisiones">
+              <PropertyRef Name="TipoRevision" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GD_SolicitudDocumentos_GD_TipoSolicitud">
+          <End Role="GD_TipoSolicitud" Type="GD_Model.GD_TipoSolicitud" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="GD_SolicitudDocumentos" Type="GD_Model.GD_SolicitudDocumentos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GD_TipoSolicitud">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="GD_SolicitudDocumentos">
+              <PropertyRef Name="Tipoid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="GD_Estados_Get_Result">
+          <Property Type="Byte" Name="id" Nullable="false" />
+          <Property Type="String" Name="Estado" Nullable="true" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="GD_CorreosUsuario_Get_Result">
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="250" />
+        </ComplexType>
+        <ComplexType Name="GD_Revisiones_Get_Result">
+          <Property Type="Int64" Name="IdRevision" Nullable="false" />
+          <Property Type="Int64" Name="DocumentoId" Nullable="true" />
+          <Property Type="Int64" Name="UsuarioId" Nullable="true" />
+          <Property Type="DateTime" Name="FechaAprobacion" Nullable="true" Precision="23" />
+          <Property Type="Byte" Name="TipoRevisionId" Nullable="true" />
+          <Property Type="String" Name="TipoRevision" Nullable="true" MaxLength="50" />
+          <Property Type="Int64" Name="DocumentoControladoId" Nullable="false" />
+          <Property Type="String" Name="NombreDocumento" Nullable="true" MaxLength="250" />
+        </ComplexType>
+        <ComplexType Name="GD_EstadoSolicitud_Get_F_Result">
+          <Property Type="Byte" Name="id" Nullable="false" />
+          <Property Type="String" Name="Estado" Nullable="true" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="GD_Procesos_Get_F_Result">
+          <Property Type="Int16" Name="IdProceso" Nullable="false" />
+          <Property Type="String" Name="Proceso" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="GD_TipoSolicitud_Get_F_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="Tipo" Nullable="true" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="GD_TipoSolicitud_Get_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="Tipo" Nullable="true" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="GD_Procesos_Get_Result">
+          <Property Type="Int16" Name="IdProceso" Nullable="false" />
+          <Property Type="String" Name="Proceso" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="GD_US_Usuarios_Get_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="String" Name="Usuario" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Password" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Nombres" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="Apellidos" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="250" />
+          <Property Type="Boolean" Name="Activo" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GD_MaestroDocumentos_Get_Result">
+          <Property Type="Int64" Name="IdDocumento" Nullable="false" />
+          <Property Type="String" Name="Documento" Nullable="true" MaxLength="250" />
+        </ComplexType>
+        <ComplexType Name="GD_MaestroDocumentos_Add2_Result">
+          <Property Type="Decimal" Name="ultimoId" Nullable="true" Precision="38" Scale="0" />
+        </ComplexType>
+        <ComplexType Name="GD_GD_MaestroDocumentos_Get2_Result">
+          <Property Type="Int64" Name="IdDocumento" Nullable="false" />
+          <Property Type="String" Name="Documento" Nullable="true" MaxLength="250" />
+          <Property Type="Boolean" Name="Controlado" Nullable="true" />
+          <Property Type="Boolean" Name="Activo" Nullable="true" />
+          <Property Type="String" Name="Codigo" Nullable="true" MaxLength="100" />
+          <Property Type="Int16" Name="IdProceso" Nullable="true" />
+          <Property Type="String" Name="Responsable" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="URL" Nullable="true" MaxLength="250" />
+          <Property Type="Boolean" Name="Cierre" Nullable="true" />
+          <Property Type="String" Name="URLOtroServidor" Nullable="true" />
+          <Property Type="String" Name="TipoArchivo" Nullable="true" MaxLength="10" />
+          <Property Type="Boolean" Name="Recuperacion" Nullable="true" />
+          <Property Type="String" Name="URLRecuperacion" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GD_RepositorioDocumentos_GetXTrabajo_Result">
+          <Property Type="Int64" Name="IdDocumentoRepositorio" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="true" />
+          <Property Type="String" Name="Url" Nullable="true" />
+          <Property Type="Int64" Name="DocumentoId" Nullable="false" />
+          <Property Type="Double" Name="Version" Nullable="true" />
+          <Property Type="DateTime" Name="Fecha" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Comentarios" Nullable="true" />
+          <Property Type="Int64" Name="UsuarioId" Nullable="true" />
+          <Property Type="Int64" Name="IdContenedor" Nullable="true" />
+          <Property Type="String" Name="URLRecuperacion" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GD_EscanerDocumentos_Get_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="Int64" Name="IdTrabajo" Nullable="true" />
+          <Property Type="Int64" Name="IdDocumento" Nullable="true" />
+          <Property Type="String" Name="Documento" Nullable="true" MaxLength="250" />
+          <Property Type="Boolean" Name="CodEncontrado" Nullable="true" />
+          <Property Type="String" Name="Encontrado" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="Responsable" Nullable="true" MaxLength="100" />
+          <Property Type="DateTime" Name="FechaEscaneo" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Observacion" Nullable="true" />
+          <Property Type="Int32" Name="RolResponsableCierre" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="GD_EscanerDocumentos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdTrabajo" Type="Int64" />
+          <Property Name="IdDocumento" Type="Int64" />
+          <Property Name="Encontrado" Type="Boolean" />
+          <Property Name="FechaEscaneo" Type="DateTime" Precision="3" />
+          <Property Name="Observacion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="GD_MaestroDocumentos" Relationship="GD_Model.FK_GD_MaestroDocumentos" FromRole="GD_EscanerDocumentos" ToRole="GD_MaestroDocumentos" />
+        </EntityType>
+        <Association Name="FK_GD_MaestroDocumentos">
+          <End Type="GD_Model.GD_MaestroDocumentos" Role="GD_MaestroDocumentos" Multiplicity="0..1" />
+          <End Type="GD_Model.GD_EscanerDocumentos" Role="GD_EscanerDocumentos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GD_MaestroDocumentos">
+              <PropertyRef Name="IdDocumento" />
+            </Principal>
+            <Dependent Role="GD_EscanerDocumentos">
+              <PropertyRef Name="IdDocumento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="GD_ModelStoreContainer" CdmEntityContainer="GD_Entities">
+          <EntitySetMapping Name="GD_DocumentosControlados"><EntityTypeMapping TypeName="GD_Model.GD_DocumentosControlados"><MappingFragment StoreEntitySet="GD_DocumentosControlados">
+            <ScalarProperty Name="Id" ColumnName="Id" />
+            <ScalarProperty Name="DocumentoId" ColumnName="DocumentoId" />
+            <ScalarProperty Name="Version" ColumnName="Version" />
+            <ScalarProperty Name="Activo" ColumnName="Activo" />
+            <ScalarProperty Name="UbicacionArchivo" ColumnName="UbicacionArchivo" />
+            <ScalarProperty Name="MetodoRecuperacion" ColumnName="MetodoRecuperacion" />
+            <ScalarProperty Name="TiempoRetencion" ColumnName="TiempoRetencion" />
+            <ScalarProperty Name="DisposicionFinal" ColumnName="DisposicionFinal" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="GD_EstadoSolicitud"><EntityTypeMapping TypeName="GD_Model.GD_EstadoSolicitud"><MappingFragment StoreEntitySet="GD_EstadoSolicitud">
+            <ScalarProperty Name="id" ColumnName="id" />
+            <ScalarProperty Name="Estado" ColumnName="Estado" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="GD_MaestroDocumentos"><EntityTypeMapping TypeName="GD_Model.GD_MaestroDocumentos"><MappingFragment StoreEntitySet="GD_MaestroDocumentos">
+            <ScalarProperty Name="RolResponsableCierre" ColumnName="RolResponsableCierre" />
+                <ScalarProperty Name="TablaId" ColumnName="TablaId" />
+                <ScalarProperty Name="URLRecuperacion" ColumnName="URLRecuperacion" />
+                <ScalarProperty Name="Recuperacion" ColumnName="Recuperacion" />
+                <ScalarProperty Name="TipoArchivo" ColumnName="TipoArchivo" />
+                <ScalarProperty Name="URLOtroServidor" ColumnName="URLOtroServidor" />
+                <ScalarProperty Name="Cierre" ColumnName="Cierre" />
+                <ScalarProperty Name="URL" ColumnName="URL" />
+                <ScalarProperty Name="IdDocumento" ColumnName="IdDocumento" />
+            <ScalarProperty Name="Documento" ColumnName="Documento" />
+            <ScalarProperty Name="Controlado" ColumnName="Controlado" />
+            <ScalarProperty Name="Activo" ColumnName="Activo" />
+            <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+            <ScalarProperty Name="IdProceso" ColumnName="IdProceso" />
+            <ScalarProperty Name="Responsable" ColumnName="Responsable" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="GD_RepositorioDocumentos"><EntityTypeMapping TypeName="GD_Model.GD_RepositorioDocumentos"><MappingFragment StoreEntitySet="GD_RepositorioDocumentos">
+            <ScalarProperty Name="IdDocumentoRepositorio" ColumnName="IdDocumentoRepositorio" />
+            <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+            <ScalarProperty Name="Url" ColumnName="Url" />
+            <ScalarProperty Name="DocumentoId" ColumnName="DocumentoId" />
+            <ScalarProperty Name="Version" ColumnName="Version" />
+            <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+            <ScalarProperty Name="Comentarios" ColumnName="Comentarios" />
+            <ScalarProperty Name="UsuarioId" ColumnName="UsuarioId" />
+            <ScalarProperty Name="IdContenedor" ColumnName="IdContenedor" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="GD_Revisiones"><EntityTypeMapping TypeName="GD_Model.GD_Revisiones"><MappingFragment StoreEntitySet="GD_Revisiones">
+            <ScalarProperty Name="IdRevision" ColumnName="IdRevision" />
+            <ScalarProperty Name="DocumentoId" ColumnName="DocumentoId" />
+            <ScalarProperty Name="UsuarioId" ColumnName="UsuarioId" />
+            <ScalarProperty Name="FechaAprobacion" ColumnName="FechaAprobacion" />
+            <ScalarProperty Name="TipoRevision" ColumnName="TipoRevision" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="GD_SolicitudDocumentos"><EntityTypeMapping TypeName="GD_Model.GD_SolicitudDocumentos"><MappingFragment StoreEntitySet="GD_SolicitudDocumentos">
+            <ScalarProperty Name="Id" ColumnName="Id" />
+            <ScalarProperty Name="FechaSolicitud" ColumnName="FechaSolicitud" />
+            <ScalarProperty Name="Solicitante" ColumnName="Solicitante" />
+            <ScalarProperty Name="Area" ColumnName="Area" />
+            <ScalarProperty Name="Cargo" ColumnName="Cargo" />
+            <ScalarProperty Name="Tipoid" ColumnName="Tipoid" />
+            <ScalarProperty Name="DocumentoId" ColumnName="DocumentoId" />
+            <ScalarProperty Name="NombreDocumento" ColumnName="NombreDocumento" />
+            <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+            <ScalarProperty Name="AreaUso" ColumnName="AreaUso" />
+            <ScalarProperty Name="SitioAcceso" ColumnName="SitioAcceso" />
+            <ScalarProperty Name="RazonSolicitud" ColumnName="RazonSolicitud" />
+            <ScalarProperty Name="DescripcionSolicitud" ColumnName="DescripcionSolicitud" />
+            <ScalarProperty Name="Estadoid" ColumnName="Estadoid" />
+            <ScalarProperty Name="FechaEstado" ColumnName="FechaEstado" />
+            <ScalarProperty Name="Comentarios" ColumnName="Comentarios" />
+            <ScalarProperty Name="Modificacion" ColumnName="Modificacion" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="GD_TipoRevision"><EntityTypeMapping TypeName="GD_Model.GD_TipoRevision"><MappingFragment StoreEntitySet="GD_TipoRevision">
+            <ScalarProperty Name="IdTipoRevision" ColumnName="IdTipoRevision" />
+            <ScalarProperty Name="Revision" ColumnName="Revision" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="GD_TipoSolicitud"><EntityTypeMapping TypeName="GD_Model.GD_TipoSolicitud"><MappingFragment StoreEntitySet="GD_TipoSolicitud">
+            <ScalarProperty Name="id" ColumnName="id" />
+            <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GD_Revisiones_Add" FunctionName="GD_Model.Store.GD_Revisiones_Add" />
+          <FunctionImportMapping FunctionImportName="GD_Revisiones_Edit" FunctionName="GD_Model.Store.GD_Revisiones_Edit" />
+          <FunctionImportMapping FunctionImportName="GD_Revisiones_Get" FunctionName="GD_Model.Store.GD_Revisiones_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="GD_Model.GD_Revisiones_Get_Result">
+                <ScalarProperty Name="IdRevision" ColumnName="IdRevision" />
+                <ScalarProperty Name="DocumentoId" ColumnName="DocumentoId" />
+                <ScalarProperty Name="UsuarioId" ColumnName="UsuarioId" />
+                <ScalarProperty Name="FechaAprobacion" ColumnName="FechaAprobacion" />
+                <ScalarProperty Name="TipoRevisionId" ColumnName="TipoRevisionId" />
+                <ScalarProperty Name="TipoRevision" ColumnName="TipoRevision" />
+                <ScalarProperty Name="DocumentoControladoId" ColumnName="DocumentoControladoId" />
+                <ScalarProperty Name="NombreDocumento" ColumnName="NombreDocumento" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GD_Revisiones_GetRev" FunctionName="GD_Model.Store.GD_Revisiones_GetRev">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="GD_Model.GD_Revisiones_Get_Result">
+                <ScalarProperty Name="IdRevision" ColumnName="IdRevision" />
+                <ScalarProperty Name="DocumentoId" ColumnName="DocumentoId" />
+                <ScalarProperty Name="UsuarioId" ColumnName="UsuarioId" />
+                <ScalarProperty Name="FechaAprobacion" ColumnName="FechaAprobacion" />
+                <ScalarProperty Name="TipoRevisionId" ColumnName="TipoRevisionId" />
+                <ScalarProperty Name="TipoRevision" ColumnName="TipoRevision" />
+                <ScalarProperty Name="DocumentoControladoId" ColumnName="DocumentoControladoId" />
+                <ScalarProperty Name="NombreDocumento" ColumnName="NombreDocumento" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GD_EstadoSolicitud_Add" FunctionName="GD_Model.Store.GD_EstadoSolicitud_Add" />
+          <FunctionImportMapping FunctionImportName="GD_EstadoSolicitud_Del" FunctionName="GD_Model.Store.GD_EstadoSolicitud_Del" />
+          <FunctionImportMapping FunctionImportName="GD_EstadoSolicitud_Edit" FunctionName="GD_Model.Store.GD_EstadoSolicitud_Edit" />
+          <FunctionImportMapping FunctionImportName="GD_EstadoSolicitud_Get_F" FunctionName="GD_Model.Store.GD_EstadoSolicitud_Get_F">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="GD_Model.GD_EstadoSolicitud_Get_F_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GD_Procesos_Add" FunctionName="GD_Model.Store.GD_Procesos_Add" />
+          <FunctionImportMapping FunctionImportName="GD_Procesos_Del" FunctionName="GD_Model.Store.GD_Procesos_Del" />
+          <FunctionImportMapping FunctionImportName="GD_Procesos_Edit" FunctionName="GD_Model.Store.GD_Procesos_Edit" />
+          <FunctionImportMapping FunctionImportName="GD_Procesos_Get_F" FunctionName="GD_Model.Store.GD_Procesos_Get_F">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="GD_Model.GD_Procesos_Get_F_Result">
+                <ScalarProperty Name="IdProceso" ColumnName="IdProceso" />
+                <ScalarProperty Name="Proceso" ColumnName="Proceso" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GD_TipoSolicitud_Add" FunctionName="GD_Model.Store.GD_TipoSolicitud_Add" />
+          <FunctionImportMapping FunctionImportName="GD_TipoSolicitud_Del" FunctionName="GD_Model.Store.GD_TipoSolicitud_Del" />
+          <FunctionImportMapping FunctionImportName="GD_TipoSolicitud_Edit" FunctionName="GD_Model.Store.GD_TipoSolicitud_Edit" />
+          <FunctionImportMapping FunctionImportName="GD_TipoSolicitud_Get_F" FunctionName="GD_Model.Store.GD_TipoSolicitud_Get_F">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="GD_Model.GD_TipoSolicitud_Get_F_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GD_TipoSolicitud_Get" FunctionName="GD_Model.Store.GD_TipoSolicitud_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="GD_Model.GD_TipoSolicitud_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GD_Procesos_Get" FunctionName="GD_Model.Store.GD_Procesos_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="GD_Model.GD_Procesos_Get_Result">
+                <ScalarProperty Name="IdProceso" ColumnName="IdProceso" />
+                <ScalarProperty Name="Proceso" ColumnName="Proceso" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GD_US_Usuarios_Get" FunctionName="GD_Model.Store.GD_US_Usuarios_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="GD_Model.GD_US_Usuarios_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Nombres" ColumnName="Nombres" />
+                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GD_MaestroDocumentos_Get" FunctionName="GD_Model.Store.GD_MaestroDocumentos_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="GD_Model.GD_MaestroDocumentos_Get_Result">
+                <ScalarProperty Name="IdDocumento" ColumnName="IdDocumento" />
+                <ScalarProperty Name="Documento" ColumnName="Documento" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GD_DocumentosControlados_Add" FunctionName="GD_Model.Store.GD_DocumentosControlados_Add" />
+          <FunctionImportMapping FunctionImportName="GD_MaestroDocumentos_Add2" FunctionName="GD_Model.Store.GD_MaestroDocumentos_Add2">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="GD_Model.GD_MaestroDocumentos_Add2_Result">
+                <ScalarProperty Name="ultimoId" ColumnName="ultimoId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GD_RepositorioDocumentos_Get" FunctionName="GD_Model.Store.GD_RepositorioDocumentos_Get" />
+          <FunctionImportMapping FunctionImportName="GD_GD_RepositorioDocumentos_Add" FunctionName="GD_Model.Store.GD_GD_RepositorioDocumentos_Add" />
+          <FunctionImportMapping FunctionImportName="GD_GD_MaestroDocumentos_Get2" FunctionName="GD_Model.Store.GD_GD_MaestroDocumentos_Get2">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="GD_Model.GD_GD_MaestroDocumentos_Get2_Result">
+                <ScalarProperty Name="IdDocumento" ColumnName="IdDocumento" />
+                <ScalarProperty Name="Documento" ColumnName="Documento" />
+                <ScalarProperty Name="Controlado" ColumnName="Controlado" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="IdProceso" ColumnName="IdProceso" />
+                <ScalarProperty Name="Responsable" ColumnName="Responsable" />
+                <ScalarProperty Name="URL" ColumnName="URL" />
+                <ScalarProperty Name="Cierre" ColumnName="Cierre" />
+                <ScalarProperty Name="URLOtroServidor" ColumnName="URLOtroServidor" />
+                <ScalarProperty Name="TipoArchivo" ColumnName="TipoArchivo" />
+                <ScalarProperty Name="Recuperacion" ColumnName="Recuperacion" />
+                <ScalarProperty Name="URLRecuperacion" ColumnName="URLRecuperacion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GD_SolDocumentos_Add" FunctionName="GD_Model.Store.GD_SolDocumentos_Add" />
+          <FunctionImportMapping FunctionImportName="GD_DocumentosControlados_Activo" FunctionName="GD_Model.Store.GD_DocumentosControlados_Activo" />
+          <FunctionImportMapping FunctionImportName="GD_RepositorioDocumentos_GetXTrabajo" FunctionName="GD_Model.Store.GD_RepositorioDocumentos_GetXTrabajo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="GD_Model.GD_RepositorioDocumentos_GetXTrabajo_Result">
+                <ScalarProperty Name="IdDocumentoRepositorio" ColumnName="IdDocumentoRepositorio" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="DocumentoId" ColumnName="DocumentoId" />
+                <ScalarProperty Name="Version" ColumnName="Version" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Comentarios" ColumnName="Comentarios" />
+                <ScalarProperty Name="UsuarioId" ColumnName="UsuarioId" />
+                <ScalarProperty Name="IdContenedor" ColumnName="IdContenedor" />
+                <ScalarProperty Name="URLRecuperacion" ColumnName="URLRecuperacion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GD_EscanerDocumentos_Add" FunctionName="GD_Model.Store.GD_EscanerDocumentos_Add" />
+          <FunctionImportMapping FunctionImportName="GD_EscanerDocumentos_Get" FunctionName="GD_Model.Store.GD_EscanerDocumentos_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="GD_Model.GD_EscanerDocumentos_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdTrabajo" ColumnName="IdTrabajo" />
+                <ScalarProperty Name="IdDocumento" ColumnName="IdDocumento" />
+                <ScalarProperty Name="Documento" ColumnName="Documento" />
+                <ScalarProperty Name="CodEncontrado" ColumnName="CodEncontrado" />
+                <ScalarProperty Name="Encontrado" ColumnName="Encontrado" />
+                <ScalarProperty Name="Responsable" ColumnName="Responsable" />
+                <ScalarProperty Name="FechaEscaneo" ColumnName="FechaEscaneo" />
+                <ScalarProperty Name="Observacion" ColumnName="Observacion" />
+                <ScalarProperty Name="RolResponsableCierre" ColumnName="RolResponsableCierre" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GD_EscanerDocumentos_Del" FunctionName="GD_Model.Store.GD_EscanerDocumentos_Del" />
+          <FunctionImportMapping FunctionImportName="GD_EscanerDocumentos_Edit" FunctionName="GD_Model.Store.GD_EscanerDocumentos_Edit" />
+          <EntitySetMapping Name="GD_EscanerDocumentos">
+            <EntityTypeMapping TypeName="GD_Model.GD_EscanerDocumentos">
+              <MappingFragment StoreEntitySet="GD_EscanerDocumentos">
+                <ScalarProperty Name="Observacion" ColumnName="Observacion" />
+                <ScalarProperty Name="FechaEscaneo" ColumnName="FechaEscaneo" />
+                <ScalarProperty Name="Encontrado" ColumnName="Encontrado" />
+                <ScalarProperty Name="IdDocumento" ColumnName="IdDocumento" />
+                <ScalarProperty Name="IdTrabajo" ColumnName="IdTrabajo" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer>
+    <edmx:Connection>
+      <edmx:DesignerInfoPropertySet>
+        <edmx:DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </edmx:DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <edmx:DesignerInfoPropertySet>
+        <edmx:DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <edmx:DesignerProperty Name="EnablePluralization" Value="False" />
+        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <edmx:DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+        <edmx:DesignerProperty Name="UseLegacyProvider" Value="True" />
+      </edmx:DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <edmx:Diagram Name="GD_Model">
+        <edmx:EntityTypeShape EntityType="GD_Model.GD_DocumentosControlados" Width="1.5" PointX="3" PointY="4.25" Height="2.9417936197916656" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="GD_Model.GD_EstadoSolicitud" Width="1.5" PointX="3.75" PointY="12.625" Height="1.5956835937499996" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="GD_Model.GD_MaestroDocumentos" Width="1.5" PointX="0.75" PointY="6.125" Height="2.9417936197916665" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="GD_Model.GD_RepositorioDocumentos" Width="1.5" PointX="3" PointY="7.875" Height="2.9417936197916665" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="GD_Model.GD_Revisiones" Width="1.5" PointX="5.25" PointY="4.5" Height="2.3648893229166656" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="GD_Model.GD_SolicitudDocumentos" Width="1.5" PointX="6" PointY="8.125" Height="4.8648079427083317" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="GD_Model.GD_TipoRevision" Width="1.5" PointX="3" PointY="0.875" Height="1.5956835937499996" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="GD_Model.GD_TipoSolicitud" Width="1.5" PointX="3.75" PointY="14.875" Height="1.5956835937499996" IsExpanded="true" />
+        <edmx:AssociationConnector Association="GD_Model.FK_GD_DocumentosControlados_GD_MaestroDocumentos" ManuallyRouted="false">
+          <edmx:ConnectorPoint PointX="2.25" PointY="6.6583968098958328" />
+          <edmx:ConnectorPoint PointX="3" PointY="6.6583968098958328" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="GD_Model.FK_Revisiones_MaestroDocumentos" ManuallyRouted="false">
+          <edmx:ConnectorPoint PointX="4.5" PointY="5.6824446614583328" />
+          <edmx:ConnectorPoint PointX="5.25" PointY="5.6824446614583328" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="GD_Model.FK_GD_SolicitudDocumentos_GD_EstadoSolicitud" ManuallyRouted="false">
+          <edmx:ConnectorPoint PointX="5.25" PointY="12.807403971354166" />
+          <edmx:ConnectorPoint PointX="6" PointY="12.807403971354166" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="GD_Model.FK_GD_RepositorioDocumentos_GD_MaestroDocumentos" ManuallyRouted="false">
+          <edmx:ConnectorPoint PointX="2.25" PointY="8.4708968098958337" />
+          <edmx:ConnectorPoint PointX="3" PointY="8.4708968098958337" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="GD_Model.FK_GD_SolicitudDocumentos_GD_MaestroDocumentos" ManuallyRouted="false">
+          <edmx:ConnectorPoint PointX="2.25" PointY="7.5333968098958328" />
+          <edmx:ConnectorPoint PointX="7.0625" PointY="7.5333968098958328" />
+          <edmx:ConnectorPoint PointX="7.0625" PointY="8.125" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="GD_Model.FK_Revisiones_TipoRevision" ManuallyRouted="false">
+          <edmx:ConnectorPoint PointX="4.5" PointY="1.6728417968749998" />
+          <edmx:ConnectorPoint PointX="6" PointY="1.6728417968749998" />
+          <edmx:ConnectorPoint PointX="6" PointY="4.5" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="GD_Model.FK_GD_SolicitudDocumentos_GD_TipoSolicitud" ManuallyRouted="false">
+          <edmx:ConnectorPoint PointX="5.25" PointY="15.735341796875" />
+          <edmx:ConnectorPoint PointX="6.65625" PointY="15.735341796875" />
+          <edmx:ConnectorPoint PointX="6.65625" PointY="12.989807942708332" />
+        </edmx:AssociationConnector>
+        <edmx:EntityTypeShape EntityType="GD_Model.GD_EscanerDocumentos" Width="1.5" PointX="3" PointY="18.125" />
+        <edmx:AssociationConnector Association="GD_Model.FK_GD_MaestroDocumentos" />
+        </edmx:Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,300 @@
+﻿#Moderacion, #ModeracionModal {
+    display: flex;
+    gap: 20px;
+    font-size: 14px;
+}
+
+#Moderacion {
+    padding-bottom: 10px;
+}
+
+    #Moderacion #tipoPlantilla {
+        width: 300px;
+    }
+
+    #Moderacion .columna .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+        #Moderacion .columna .form-group label {
+            height: unset;
+            margin: unset;
+            width: unset;
+            text-align: unset;
+            padding-top: unset;
+        }
+
+        #Moderacion .columna .form-group select {
+            height: unset;
+            margin: unset;
+            width: unset;
+            margin: unset;
+        }
+
+#FormsContainer>#Moderacion .columna .form-group label {
+    height: unset;
+    margin: unset;
+    width: unset;
+    text-align: unset;
+    padding-top: unset;
+}
+
+#FormsContainer>#Moderacion .columna .form-group select {
+    height: unset;
+    margin: unset;
+    width: 100%;
+    margin: unset;
+}
+
+#FormsContainer #Moderacion .columna .form-group input {
+    height: unset;
+    margin: unset;
+    width: 100%;
+    margin: unset;
+    box-sizing: border-box;
+}
+
+#FormsContainer #Moderacion .columna, #ModeracionModal .columna {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#FormsContainer #Moderacion .form-group, #ModeracionModal .form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+#FormsContainer #Moderacion label, #ModeracionModal label {
+    margin-bottom: 5px;
+}
+
+#FormsContainer #Moderacion input, #Moderacion select, #Moderacion textarea, #ModeracionModal input, #ModeracionModal select, #ModeracionModal textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    max-width: 100% !important;
+}
+
+#FormsContainer #Moderacion .infoTitle, #ModeracionModal .infoTitle {
+    font-size: 18px;
+    color: #FFF;
+    background: #077c87;
+    padding: 10px;
+    margin: 10px 0px;
+    text-align: center;
+    font-weight: 600;
+}
+
+#FormsContainer #Moderacion .infoElement, #ModeracionModal .infoElement {
+    color: #000;
+    background: #ccc8c8;
+    padding: 5px;
+    margin: 5px 0px;
+}
+
+#FormsContainer #Moderacion .btn, #ModeracionModal .btn {
+    padding: 5px 10px;
+    text-align: center;
+    color: #FFF;
+    background: #09c6c6;
+    color: #FFF;
+    font-size: 16px;
+    width: auto !important;
+    cursor: pointer;
+}
+
+.ui-datepicker {
+    background: #f7f7f7;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+}
+
+.ui-datepicker-header {
+    background: #077c87;
+    color: white;
+    border-bottom: 1px solid #ddd;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 10px;
+}
+
+.ui-datepicker-title {
+    font-weight: bold;
+}
+
+.ui-datepicker table {
+    width: 100%;
+}
+
+.ui-datepicker th {
+    color: #555;
+    padding: 5px;
+}
+
+.ui-datepicker td {
+    padding: 5px;
+}
+
+.ui-datepicker .ui-state-default {
+    background: #eaeaea;
+    border: 1px solid #ddd;
+    color: #555;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.ui-datepicker .ui-state-hover {
+    background: #ddd;
+    border: 1px solid #ccc;
+    color: #333;
+}
+
+.ui-datepicker .ui-state-active {
+    background: #077c87;
+    color: white;
+}
+
+.ui-datepicker-prev, .ui-datepicker-next {
+    margin-right: 10px;
+    text-decoration: underline;
+}
+
+#searchJobResults, #searchJobResultsInformes {
+    border: 1px solid #ccc;
+    max-height: 150px;
+    overflow-y: auto;
+    display: none;
+}
+
+.result-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+    .result-item:hover {
+        background-color: #f0f0f0;
+    }
+
+.titulo {
+    font-size: 25px;
+    margin: 20px 0px;
+    text-align: center;
+    color: #153bcf;
+}
+
+#ModeracionModal {
+    display: none;
+}
+
+#job, #jobInformes {
+    position: relative;
+    padding-right: 30px;
+}
+
+    #job:after, #jobInformes:after {
+        content: "\1F50D";
+        font-size: 25px;
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+        color: #09c6c6;
+    }
+
+
+.input-like-container {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    display: none;
+}
+
+.input-like {
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 16px;
+    color: #333;
+    background-color: #fff;
+    width: 100%;
+    box-sizing: border-box;
+    outline: none;
+    padding-right: 30px;
+}
+
+    .input-like:focus {
+        border-color: #66afe9;
+        box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
+    }
+
+    .input-like:empty:before {
+        content: attr(data-placeholder);
+        color: #aaa;
+    }
+
+.clear-button {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    cursor: pointer;
+    color: #999;
+}
+
+    .clear-button:hover {
+        color: #333;
+    }
+
+.jobInputContainer {
+    position: relative;
+    display: inline-block;
+}
+
+    .jobInputContainer input[type="text"] {
+        padding: 10px;
+        padding-right: 40px;
+        width: 100%;
+    }
+
+    .jobInputContainer button {
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        padding: 10px 20px;
+        background-color: #09c6c6;
+        color: white;
+        border: none;
+        cursor: pointer;
+        height: 42px;
+    }
+
+#tecnica, #tecnicaInformes {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#TablesContainer table input {
+    margin: unset;
+    width: unset;
+    background-color: cadetblue;
+    color: white;
+}
+
+#TablesContainer .pagination {
+    justify-content: center;
+}
+
+    #TablesContainer .pagination input {
+        width: unset;
+        margin: unset;
+    }

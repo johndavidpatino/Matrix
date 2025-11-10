@@ -1,0 +1,175 @@
+﻿#Moderacion, #ModeracionModal {
+    display: flex;
+    font-size: 14px;
+    gap: 20px;
+}
+
+    #Moderacion .columna .form-group label {
+        height: unset;
+        margin: unset;
+        width: unset;
+        text-align: unset;
+        padding-top: unset;
+    }
+
+    #Moderacion .columna .form-group select {
+        height: unset;
+        margin: unset;
+        width: unset;
+        margin: unset;
+    }
+
+    #Moderacion .columna, #ModeracionModal .columna {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    #Moderacion .form-group, #ModeracionModal .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #Moderacion label, #ModeracionModal label {
+        margin-bottom: 5px;
+    }
+
+    #Moderacion input, #Moderacion select, #Moderacion textarea, #ModeracionModal input, #ModeracionModal select, #ModeracionModal textarea {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    #Moderacion .infoTitle, #ModeracionModal .infoTitle {
+        font-size: 18px;
+        color: #FFF;
+        background: #077c87;
+        padding: 10px;
+        margin: 10px 0px;
+        text-align: center;
+        font-weight: 600;
+    }
+
+    #Moderacion .infoElement, #ModeracionModal .infoElement {
+        color: #000;
+        background: #ccc8c8;
+        padding: 5px;
+        margin: 5px 0px;
+    }
+
+    #Moderacion .btn, #ModeracionModal .btn {
+        padding: 5px 10px;
+        text-align: center;
+        color: #FFF;
+        background: #09c6c6;
+        color: #FFF;
+        font-size: 16px;
+        width: auto !important;
+        cursor: pointer;
+        margin: unset;
+        height: unset;
+    }
+
+.ui-datepicker {
+    background: #f7f7f7;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    z-index: 5151 !important;
+}
+
+.ui-datepicker-header {
+    background: #077c87;
+    color: white;
+    border-bottom: 1px solid #ddd;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 10px;
+}
+
+.ui-datepicker-title {
+    font-weight: bold;
+}
+
+.ui-datepicker table {
+    width: 100%;
+}
+
+.ui-datepicker th {
+    color: #555;
+    padding: 5px;
+}
+
+.ui-datepicker td {
+    padding: 5px;
+}
+
+.ui-datepicker .ui-state-default {
+    background: #eaeaea;
+    border: 1px solid #ddd;
+    color: #555;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.ui-datepicker .ui-state-hover {
+    background: #ddd;
+    border: 1px solid #ccc;
+    color: #333;
+}
+
+.ui-datepicker .ui-state-active {
+    background: #077c87;
+    color: white;
+}
+
+.ui-datepicker-prev, .ui-datepicker-next {
+    margin-right: 10px;
+    text-decoration: underline;
+}
+
+#searchJobResults, #searchJobResultsInformes {
+    border: 1px solid #ccc;
+    max-height: 150px;
+    overflow-y: auto;
+    display: none;
+}
+
+.result-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+    .result-item:hover {
+        background-color: #f0f0f0;
+    }
+
+.titulo {
+    font-size: 25px;
+    margin: 20px 0px;
+    text-align: center;
+    color: #153bcf;
+}
+
+#ModalContainer {
+    width: 100%;
+}
+
+#TablesContainer table input {
+    margin: unset;
+    width: unset;
+    background-color: cadetblue;
+    color: white;
+}
+
+#TablesContainer .pagination {
+    justify-content: center;
+}
+
+    #TablesContainer .pagination input {
+        width: unset;
+        margin: unset;
+    }

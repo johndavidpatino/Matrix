@@ -1,0 +1,312 @@
+﻿<?xml version="1.0"?>
+<!--
+  For more information on how to configure your ASP.NET application, please visit test
+  http://go.microsoft.com/fwlink/?LinkId=169433
+  -->
+<configuration>
+  <configSections>
+    <section name="dataConfiguration" type="Microsoft.Practices.EnterpriseLibrary.Data.Configuration.DatabaseSettings, Microsoft.Practices.EnterpriseLibrary.Data, Version=5.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" requirePermission="true"/>
+    <!-- For more information on Entity Framework configuration, visit http://go.microsoft.com/fwlink/?LinkID=237468 -->
+    <!-- For more information on Entity Framework configuration, visit http://go.microsoft.com/fwlink/?LinkID=237468 -->
+    <section name="entityFramework" type="System.Data.Entity.Internal.ConfigFile.EntityFrameworkSection, EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" requirePermission="false"/>
+    <sectionGroup name="devExpress">
+      <section name="themes" type="DevExpress.Web.ThemesConfigurationSection, DevExpress.Web.v22.2, Version=22.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" requirePermission="false"/>
+      <section name="compression" type="DevExpress.Web.CompressionConfigurationSection, DevExpress.Web.v22.2, Version=22.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" requirePermission="false"/>
+      <section name="settings" type="DevExpress.Web.SettingsConfigurationSection, DevExpress.Web.v22.2, Version=22.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" requirePermission="false"/>
+      <section name="errors" type="DevExpress.Web.ErrorsConfigurationSection, DevExpress.Web.v22.2, Version=22.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" requirePermission="false"/>
+      <section name="resources" type="DevExpress.Web.ResourcesConfigurationSection, DevExpress.Web.v22.2, Version=22.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" requirePermission="false"/>
+    </sectionGroup>
+  </configSections>
+  <dataConfiguration defaultDatabase="GestionCampoConnectionString"/>
+  <connectionStrings>
+    <add name="US_Entities" connectionString="metadata=res://*/US_Model.csdl|res://*/US_Model.ssdl|res://*/US_Model.msl;provider=System.Data.SqlClient;provider connection string=&quot;Data Source=AmCoBogApp1;Initial Catalog=Matrix;Persist Security Info=True;User ID=MatrixUsr;Password=matrix123;multipleactiveresultsets=True;App=EntityFramework&quot;" providerName="System.Data.EntityClient"/>
+    <add name="GD_Entities" connectionString="metadata=res://*/GD_Model.csdl|res://*/GD_Model.ssdl|res://*/GD_Model.msl;provider=System.Data.SqlClient;provider connection string=&quot;Data Source=AmCoBogApp1;Initial Catalog=Matrix;Persist Security Info=True;User ID=MatrixUsr;Password=matrix123;multipleactiveresultsets=True;App=EntityFramework&quot;" providerName="System.Data.EntityClient"/>
+    <add name="CU_Entities" connectionString="metadata=res://*/CU_Model.csdl|res://*/CU_Model.ssdl|res://*/CU_Model.msl;provider=System.Data.SqlClient;provider connection string=&quot;Data Source=AmCoBogApp1;Initial Catalog=Matrix;Persist Security Info=True;User ID=MatrixUsr;Password=matrix123;MultipleActiveResultSets=True&quot;" providerName="System.Data.EntityClient"/>
+    <add name="SG_Entities" connectionString="metadata=res://*/SG_Model.csdl|res://*/SG_Model.ssdl|res://*/SG_Model.msl;provider=System.Data.SqlClient;provider connection string=&quot;Data Source=AmCoBogApp1;Initial Catalog=Matrix;Persist Security Info=True;User ID=MatrixUsr;Password=matrix123;MultipleActiveResultSets=True&quot;" providerName="System.Data.EntityClient"/>
+    <add name="ES_Entities" connectionString="metadata=res://*/ES_Model.csdl|res://*/ES_Model.ssdl|res://*/ES_Model.msl;provider=System.Data.SqlClient;provider connection string=&quot;Data Source=AmCoBogApp1;Initial Catalog=Matrix;Persist Security Info=True;User ID=MatrixUsr;Password=matrix123;MultipleActiveResultSets=True&quot;" providerName="System.Data.EntityClient"/>
+    <add name="OP_Entities" connectionString="metadata=res://*/OP_Model.csdl|res://*/OP_Model.ssdl|res://*/OP_Model.msl;provider=System.Data.SqlClient;provider connection string=&quot;Data Source=AmCoBogApp1;Initial Catalog=Matrix;Persist Security Info=True;User ID=MatrixUsr;Password=matrix123;MultipleActiveResultSets=True&quot;" providerName="System.Data.EntityClient"/>
+    <add name="PY_Entities" connectionString="metadata=res://*/PY_Model.csdl|res://*/PY_Model.ssdl|res://*/PY_Model.msl;provider=System.Data.SqlClient;provider connection string=&quot;Data Source=AmCoBogApp1;Initial Catalog=Matrix;Persist Security Info=True;User ID=MatrixUsr;Password=matrix123;MultipleActiveResultSets=True&quot;" providerName="System.Data.EntityClient"/>
+    <add name="TH_Entities" connectionString="metadata=res://*/TH_Model.csdl|res://*/TH_Model.ssdl|res://*/TH_Model.msl;provider=System.Data.SqlClient;provider connection string=&quot;Data Source=AmCoBogApp1;Initial Catalog=Matrix;Persist Security Info=True;User ID=MatrixUsr;Password=matrix123;MultipleActiveResultSets=True&quot;" providerName="System.Data.EntityClient"/>
+    <add name="OP_Q_Entities" connectionString="metadata=res://*/OP_Cuanti.csdl|res://*/OP_Cuanti.ssdl|res://*/OP_Cuanti.msl;provider=System.Data.SqlClient;provider connection string=&quot;data Source=AmCoBogApp1;Initial Catalog=Matrix-Pruebas;User ID=MatrixUsr;Password=matrix123;multipleactiveresultsets=True;App=EntityFramework&quot;" providerName="System.Data.EntityClient"/>
+    <add name="OP_RO_Entities" connectionString="metadata=res://*/OP_RO_Model.csdl|res://*/OP_RO_Model.ssdl|res://*/OP_RO_Model.msl;provider=System.Data.SqlClient;provider connection string=&quot;Data Source=AmCoBogApp1;Initial Catalog=Matrix;Persist Security Info=True;User ID=MatrixUsr;Password=matrix123;MultipleActiveResultSets=True&quot;" providerName="System.Data.EntityClient"/>
+    <add name="OP_Cuanti" connectionString="metadata=res://*/OP_Cuanti_Model.csdl|res://*/OP_Cuanti_Model.ssdl|res://*/OP_Cuanti_Model.msl;provider=System.Data.SqlClient;provider connection string=&quot;Data Source=AmCoBogApp1;Initial Catalog=Matrix;Persist Security Info=True;User ID=MatrixUsr;Password=matrix123;MultipleActiveResultSets=True&quot;" providerName="System.Data.EntityClient"/>
+    <add name="OP_Cuanti2" connectionString="metadata=res://*/OP_Cuanti2_Model.csdl|res://*/OP_Cuanti2_Model.ssdl|res://*/OP_Cuanti2_Model.msl;provider=System.Data.SqlClient;provider connection string=&quot;Data Source=AmCoBogApp1;Initial Catalog=Matrix;Persist Security Info=True;User ID=MatrixUsr;Password=matrix123;MultipleActiveResultSets=True&quot;" providerName="System.Data.EntityClient"/>
+    <add name="CORE_Entities" connectionString="metadata=res://*/CORE_Model.csdl|res://*/CORE_Model.ssdl|res://*/CORE_Model.msl;provider=System.Data.SqlClient;provider connection string=&quot;Data Source=AmCoBogApp1;Initial Catalog=Matrix;Persist Security Info=True;User ID=MatrixUsr;Password=matrix123;MultipleActiveResultSets=True&quot;" providerName="System.Data.EntityClient"/>
+    <add name="IQ_MODEL" connectionString="metadata=res://*/IQ_MODEL.csdl|res://*/IQ_MODEL.ssdl|res://*/IQ_MODEL.msl;provider=System.Data.SqlClient;provider connection string=&quot;Data Source=AmCoBogApp1;Initial Catalog=Matrix;User ID=MatrixUsr;Password=matrix123;MultipleActiveResultSets=True&quot;" providerName="System.Data.EntityClient"/>
+    <add name="RP_Entities" connectionString="metadata=res://*/REP_Model.csdl|res://*/REP_Model.ssdl|res://*/REP_Model.msl;provider=System.Data.SqlClient;provider connection string=&quot;data Source=AmCoBogApp1;Initial Catalog=Matrix;User ID=MatrixUsr;Password=matrix123;multipleactiveresultsets=True;App=EntityFramework&quot;" providerName="System.Data.EntityClient"/>
+    <add name="PY_CualiEntities" connectionString="metadata=res://*/PY_Cuali.csdl|res://*/PY_Cuali.ssdl|res://*/PY_Cuali.msl;provider=System.Data.SqlClient;provider connection string=&quot;data Source=AmCoBogApp1;Initial Catalog=Matrix;User ID=MatrixUsr;Password=matrix123;multipleactiveresultsets=True;App=EntityFramework&quot;" providerName="System.Data.EntityClient"/>
+    <!--<add name="MatrixConnectionString" connectionString="Data Source=COPL-9Y383T3\SQLEXPRESS;Initial Catalog=Matrix_Req_PlanillasUU;User ID=MatrixUsr;Password=matrix123" providerName="System.Data.SqlClient" />-->
+    <add name="MatrixConnectionString" connectionString="Data Source=AmCoBogApp1;Initial Catalog=Matrix;User ID=MatrixUsr;Password=matrix123" providerName="System.Data.SqlClient"/>
+    <add name="GestionCampoConnectionString" connectionString="Data Source=AmCoBogApp1;Initial Catalog=GestionCampo;User ID=MatrixUsr;Password=matrix123" providerName="System.Data.SqlClient"/>
+    <add name="CC_FinzOpe" connectionString="metadata=res://*/CC_FinzOpe.csdl|res://*/CC_FinzOpe.ssdl|res://*/CC_FinzOpe.msl;provider=System.Data.SqlClient;provider connection string=&quot;Data Source=AmCoBogApp1;Initial Catalog=Matrix;Persist Security Info=True;TrustServerCertificate=True;User ID=MatrixUsr;Password=matrix123;MultipleActiveResultSets=True&quot;" providerName="System.Data.EntityClient"/>
+    <add name="PNCEntities" connectionString="metadata=res://*/PNC_Model.csdl|res://*/PNC_Model.ssdl|res://*/PNC_Model.msl;provider=System.Data.SqlClient;provider connection string=&quot;data Source=AmCoBogApp1;Initial Catalog=Matrix;persist security info=True;user id=MatrixUsr;password=matrix123;multipleactiveresultsets=True;App=EntityFramework&quot;" providerName="System.Data.EntityClient"/>
+    <add name="FI_Entities" connectionString="metadata=res://*/FI_Model.csdl|res://*/FI_Model.ssdl|res://*/FI_Model.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=AmCoBogApp1;Initial Catalog=Matrix;user id=MatrixUsr;password=matrix123;MultipleActiveResultSets=True;App=EntityFramework&quot;" providerName="System.Data.EntityClient"/>
+    <add name="GCEntities" connectionString="metadata=res://*/GestionCampo.csdl|res://*/GestionCampo.ssdl|res://*/GestionCampo.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=AmCoBogApp1;initial catalog=GestionCampo;user id=MatrixUsr;password=matrix123;MultipleActiveResultSets=True;App=EntityFramework&quot;" providerName="System.Data.EntityClient"/>
+    <add name="IPSEntities" connectionString="metadata=res://*/ModeloIPS.csdl|res://*/ModeloIPS.ssdl|res://*/ModeloIPS.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=AmCoBogApp1;Initial Catalog=Matrix;user id=MatrixUsr;password=matrix123;MultipleActiveResultSets=True;App=EntityFramework&quot;" providerName="System.Data.EntityClient"/>
+    <add name="EscanerDocumentos" connectionString="Data Source=AmCoBogApp1;User ID=matrixusr;Password=matrix123" providerName="System.Data.SqlClient"/>
+    <add name="CIEntities" connectionString="metadata=res://*/CI_Model.csdl|res://*/CI_Model.ssdl|res://*/CI_Model.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=AmCoBogApp1;Initial Catalog=Matrix;persist security info=True;user id=matrixusr;password=matrix123;MultipleActiveResultSets=True;App=EntityFramework&quot;" providerName="System.Data.EntityClient"/>
+    <add name="INVEntities" connectionString="metadata=res://*/INV_Model.csdl|res://*/INV_Model.ssdl|res://*/INV_Model.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=AmCoBogApp1;Initial Catalog=Matrix;persist security info=True;user id=matrixusr;password=matrix123;multipleactiveresultsets=True;application name=EntityFramework&quot;" providerName="System.Data.EntityClient"/>
+  </connectionStrings>
+  <appSettings>
+    <add key="Correo" value="matrix@ipsosresearch.com"/>
+    <add key="Host" value="napmta.extranet.iext"/>
+    <add key="Puerto" value="25"/>
+    <add key="CorreoFrom" value="matrix@ipsosresearch.com"/>
+    <add key="CorreoDisplayName" value="Matrix - Ipsos"/>
+    <add key="CorreoAutenticacion" value="null"/>
+    <add key="Clave" value="null"/>
+    <add key="EnabledSSL" value="False"/>
+    <add key="ValidatedCertificate" value="False"/>
+    <add key="ChartImageHandler" value="storage=file;timeout=20;"/>
+    <add key="TamanoMaximoCargaArchivos" value="20480"/>
+    <add key="URLHTMLToPDFGenerator" value="https://ipsoslatam.com/BIPServices/api/ConvertFiles/HTMLToPDF"/>
+    <add key="KeyCredentialManager" value="Wm3jHo26Ou2PZjkk5OKAzVwx0UXkNTpczscFW32j+gU="/>
+    <add key="SisConn_Server" value="BRSAP2-DB12"/>
+    <add key="SisConn_CredentialsDBName" value="Latam_CredentialsManager"/>
+    <add key="SisConn_CredentialsDBNameProd" value="True"/>
+    <add key="CredentialsManager_BI_IdUser_Report_JobAndFinance" value="23"/>
+    <add key="BIDefaultMessage" value="NO se encontraron datos BI, por favor llene los campos solicitados."/>
+    <add key="BI_API_URLBase" value="http://intranetipsos.latam/biapi/Countries/3/Jobs"/>
+  </appSettings>
+  <!--
+    Para obtener una descripción de los cambios de web.config, vea http://go.microsoft.com/fwlink/?LinkId=235367.
+
+    Los siguientes atributos se pueden establecer en la etiqueta <httpRuntime>.
+      <system.Web>
+        <httpRuntime targetFramework="4.8" />
+      </system.Web>
+  -->
+  <system.web>
+    <pages controlRenderingCompatibilityVersion="4.0" validateRequest="true" clientIDMode="Predictable">
+      <controls>
+        <add tagPrefix="asp" namespace="System.Web.UI.DataVisualization.Charting" assembly="System.Web.DataVisualization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"/>
+        <add tagPrefix="asp" assembly="DropDownListChosen" namespace="DropDownListChosen"/>
+        <add tagPrefix="dx" namespace="DevExpress.Data.Linq" assembly="DevExpress.Web.v22.2, Version=22.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a"/>
+        <add tagPrefix="dx" namespace="DevExpress.Web" assembly="DevExpress.Web.v22.2, Version=22.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a"/>
+        <add tagPrefix="dx" namespace="DevExpress.Web.ASPxTreeList" assembly="DevExpress.Web.ASPxTreeList.v22.2, Version=22.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a"/>
+        <add tagPrefix="dx" namespace="DevExpress.Web.ASPxPivotGrid" assembly="DevExpress.Web.ASPxPivotGrid.v22.2, Version=22.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a"/>
+        <add tagPrefix="dx" namespace="DevExpress.Web.ASPxSpellChecker" assembly="DevExpress.Web.ASPxSpellChecker.v22.2, Version=22.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a"/>
+        <add tagPrefix="dx" namespace="DevExpress.Web.ASPxHtmlEditor" assembly="DevExpress.Web.ASPxHtmlEditor.v22.2, Version=22.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a"/>
+        <add tagPrefix="ajaxToolkit" assembly="AjaxControlToolkit" namespace="AjaxControlToolkit"/>
+      </controls>
+    </pages>
+    <httpHandlers>
+      <add path="BusyBoxDotNet.axd" verb="*" type="BusyBoxDotNet.ResourceHttpHandler, BusyBoxDotNet"/>
+      <add path="ChartImg.axd" verb="GET,HEAD,POST" type="System.Web.UI.DataVisualization.Charting.ChartHttpHandler, System.Web.DataVisualization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" validate="false"/>
+      <add type="DevExpress.Web.ASPxHttpHandlerModule, DevExpress.Web.v22.2, Version=22.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" verb="GET,POST" path="DX.ashx" validate="false"/>
+      <add type="DevExpress.Web.ASPxUploadProgressHttpHandler, DevExpress.Web.v22.2, Version=22.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" verb="GET,POST" path="ASPxUploadProgressHandlerPage.ashx" validate="false"/>
+    </httpHandlers>
+    <customErrors mode="Off" defaultRedirect="~\Error\Error.aspx">
+      <error statusCode="403" redirect="~\Error\Error.aspx"/>
+      <error statusCode="404" redirect="~\Error\Error.aspx"/>
+    </customErrors>
+    <healthMonitoring enabled="true">
+      <eventMappings>
+        <clear/>
+        <add name="All Errors" type="System.Web.Management.WebBaseErrorEvent" startEventCode="0" endEventCode="2147483647"/>
+      </eventMappings>
+      <providers>
+        <clear/>
+        <add type="System.Web.Management.SimpleMailWebEventProvider" name="EmailWebEventProvider" buffer="false" from="Cesar.Verano@ipsos.com" to="Cesar.Verano@ipsos.com" subjectPrefix="Book Reviews Runtime Error: "/>
+        <add connectionStringName="MatrixConnectionString" maxEventDetailsLength="1073741823" buffer="false" name="SqlWebEventProvider" type="System.Web.Management.SqlWebEventProvider"/>
+      </providers>
+      <rules>
+        <clear/>
+        <add name="All Errors To E-Mail" eventName="All Errors" provider="EmailWebEventProvider" profile="Default" minInstances="1" maxLimit="Infinite" minInterval="00:00:00"/>
+        <add name="All Errors To Database" eventName="All Errors" provider="SqlWebEventProvider" profile="Default" minInstances="1" maxLimit="Infinite" minInterval="00:00:00"/>
+      </rules>
+    </healthMonitoring>
+    <globalization culture="es-CO" uiCulture="es-CO"/>
+    <httpRuntime executionTimeout="1800" maxRequestLength="102400" requestLengthDiskThreshold="80" useFullyQualifiedRedirectUrl="false" minFreeThreads="8" minLocalRequestFreeThreads="4" appRequestQueueLimit="5000" enableKernelOutputCache="true" enableVersionHeader="true" requireRootedSaveAsPath="true" enable="true" shutdownTimeout="90" delayNotificationTimeout="5" waitChangeNotification="0" maxWaitChangeNotification="0" enableHeaderChecking="true" sendCacheControlHeader="true" apartmentThreading="false"/>
+    <compilation debug="true" strict="false" explicit="true" targetFramework="4.8">
+      <assemblies>
+        <add assembly="System.Web.Extensions.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35"/>
+        <add assembly="System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=B03F5F7F11D50A3A"/>
+        <add assembly="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=B77A5C561934E089"/>
+        <add assembly="System.Web.DataVisualization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35"/>
+        <add assembly="System.Web.Entity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=B77A5C561934E089"/>
+        <add assembly="System.Data.Linq, Version=4.0.0.0, Culture=neutral, PublicKeyToken=B77A5C561934E089"/>
+        <add assembly="DevExpress.Web.ASPxHtmlEditor.v22.2, Version=22.2.6.0, Culture=neutral, PublicKeyToken=B88D1754D700E49A"/>
+        <add assembly="DevExpress.Web.v22.2, Version=22.2.6.0, Culture=neutral, PublicKeyToken=B88D1754D700E49A"/>
+        <add assembly="DevExpress.Web.ASPxSpellChecker.v22.2, Version=22.2.6.0, Culture=neutral, PublicKeyToken=B88D1754D700E49A"/>
+        <add assembly="DevExpress.Office.v22.2.Core, Version=22.2.6.0, Culture=neutral, PublicKeyToken=B88D1754D700E49A"/>
+        <add assembly="DevExpress.Data.v22.2, Version=22.2.6.0, Culture=neutral, PublicKeyToken=B88D1754D700E49A"/>
+        <add assembly="DevExpress.RichEdit.v22.2.Core, Version=22.2.6.0, Culture=neutral, PublicKeyToken=B88D1754D700E49A"/>
+        <add assembly="DevExpress.Printing.v22.2.Core, Version=22.2.6.0, Culture=neutral, PublicKeyToken=B88D1754D700E49A"/>
+        <add assembly="DevExpress.SpellChecker.v22.2.Core, Version=22.2.6.0, Culture=neutral, PublicKeyToken=B88D1754D700E49A"/>
+        <add assembly="DevExpress.Web.ASPxThemes.v22.2, Version=22.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a"/>
+        <add assembly="DevExpress.Web.v22.2, Version=22.2.6.0, Culture=neutral, PublicKeyToken=B88D1754D700E49A"/>
+        <add assembly="DevExpress.Data.v22.2, Version=22.2.6.0, Culture=neutral, PublicKeyToken=B88D1754D700E49A"/>
+        <add assembly="DevExpress.Printing.v22.2.Core, Version=22.2.6.0, Culture=neutral, PublicKeyToken=B88D1754D700E49A"/>
+        <add assembly="DevExpress.Web.Resources.v22.2, Version=22.2.6.0, Culture=neutral, PublicKeyToken=B88D1754D700E49A"/>
+        <add assembly="DevExpress.Web.ASPxSpellChecker.v22.2, Version=22.2.6.0, Culture=neutral, PublicKeyToken=B88D1754D700E49A"/>
+        <add assembly="DevExpress.SpellChecker.v22.2.Core, Version=22.2.6.0, Culture=neutral, PublicKeyToken=B88D1754D700E49A"/>
+        <add assembly="DevExpress.Office.v22.2.Core, Version=22.2.6.0, Culture=neutral, PublicKeyToken=B88D1754D700E49A"/>
+        <add assembly="DevExpress.RichEdit.v22.2.Core, Version=22.2.6.0, Culture=neutral, PublicKeyToken=B88D1754D700E49A"/>
+        <add assembly="DevExpress.Web.ASPxPivotGrid.v22.2, Version=22.2.6.0, Culture=neutral, PublicKeyToken=B88D1754D700E49A"/>
+        <add assembly="DevExpress.PivotGrid.v22.2.Core, Version=22.2.6.0, Culture=neutral, PublicKeyToken=B88D1754D700E49A"/>
+        <add assembly="DevExpress.Drawing.v22.2, Version=22.2.6.0, Culture=neutral, PublicKeyToken=B88D1754D700E49A"/>
+        <add assembly="DevExpress.Web.ASPxGantt.v22.2, Version=22.2.6.0, Culture=neutral, PublicKeyToken=B88D1754D700E49A"/>
+        <add assembly="DevExpress.Web.ASPxTreeList.v22.2, Version=22.2.6.0, Culture=neutral, PublicKeyToken=B88D1754D700E49A"/>
+        <add assembly="DevExpress.Web.ASPxDiagram.v22.2, Version=22.2.6.0, Culture=neutral, PublicKeyToken=B88D1754D700E49A"/>
+      </assemblies>
+      <buildProviders>
+        <!--<add extension=".rdlc" type="Microsoft.Reporting.RdlBuildProvider, Microsoft.ReportViewer.WebForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"/>-->
+      </buildProviders>
+    </compilation>
+    <machineKey validationKey="AutoGenerate,IsolateApps" validation="3DES" decryptionKey="AutoGenerate,IsolateApps" decryption="3DES"/>
+    <sessionState timeout="120"/>
+    <authentication mode="Forms">
+      <forms name=".ASPXAUTH" protection="All" loginUrl="Default.aspx" path="/" timeout="120" defaultUrl="Home/Home.aspx"/>
+    </authentication>
+    <authorization>
+      <deny users="?"/>
+    </authorization>
+    <httpModules>
+      <add type="DevExpress.Web.ASPxHttpHandlerModule, DevExpress.Web.v22.2, Version=22.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" name="ASPxHttpHandlerModule"/>
+    </httpModules>
+  </system.web>
+  <location allowOverride="false" path="img">
+    <system.web>
+      <authorization>
+        <allow users="*"/>
+      </authorization>
+    </system.web>
+  </location>
+  <location allowOverride="false" path="app_offline.htm">
+    <system.web>
+      <authorization>
+        <allow users="*"/>
+      </authorization>
+    </system.web>
+  </location>
+  <location path="OP_Cuantitativo/RegistroProduccionOP.aspx">
+    <system.web>
+      <authorization>
+        <allow users="*"/>
+      </authorization>
+    </system.web>
+  </location>
+  <location path="TH_TalentoHumano/HWH.aspx">
+    <system.web>
+      <authorization>
+        <allow users="*"/>
+      </authorization>
+    </system.web>
+  </location>
+  <location path="Emails/EnvioAUsuarioHWH.aspx">
+    <system.web>
+      <authorization>
+        <allow users="*"/>
+      </authorization>
+    </system.web>
+  </location>
+  <location path="Emails/EnvioAManagerHWH.aspx">
+    <system.web>
+      <authorization>
+        <allow users="*"/>
+      </authorization>
+    </system.web>
+  </location>
+  <location allowOverride="false" path="images">
+    <system.web>
+      <authorization>
+        <allow users="*"/>
+      </authorization>
+    </system.web>
+  </location>
+  <location allowOverride="false" path="Scripts">
+    <system.web>
+      <authorization>
+        <allow users="*"/>
+      </authorization>
+    </system.web>
+  </location>
+  <location allowOverride="false" path="Styles">
+    <system.web>
+      <authorization>
+        <allow users="*"/>
+      </authorization>
+    </system.web>
+  </location>
+  <location allowOverride="false" path="css">
+    <system.web>
+      <authorization>
+        <allow users="*"/>
+      </authorization>
+    </system.web>
+  </location>
+  <location allowOverride="false" path="NewDesign">
+    <system.web>
+      <authorization>
+        <allow users="*"/>
+      </authorization>
+    </system.web>
+  </location>
+  <location path="Default.aspx">
+    <system.web>
+      <authorization>
+        <allow users="*"/>
+      </authorization>
+    </system.web>
+  </location>
+  <system.webServer>
+    <caching enabled="true" enableKernelCache="true">
+      <profiles>
+        <add extension=".png" policy="DontCache" kernelCachePolicy="DontCache"/>
+        <add extension=".gif" policy="DontCache" kernelCachePolicy="DontCache"/>
+        <add extension=".js" policy="DontCache" kernelCachePolicy="DontCache"/>
+        <add extension=".css" policy="DontCache" kernelCachePolicy="DontCache"/>
+      </profiles>
+    </caching>
+    <staticContent>
+      <clientCache cacheControlMode="NoControl"/>
+    </staticContent>
+    <modules runAllManagedModulesForAllRequests="true">
+      <add type="DevExpress.Web.ASPxHttpHandlerModule, DevExpress.Web.v22.2, Version=22.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" name="ASPxHttpHandlerModule"/>
+    </modules>
+    <handlers>
+      <remove name="ChartImageHandler"/>
+      <add name="PNG Images" path="*.png" verb="*" type="System.Web.StaticFileHandler" resourceType="Unspecified" preCondition="integratedMode"/>
+      <add name="Stylesheets" path="*.css" verb="*" type="System.Web.StaticFileHandler" resourceType="Unspecified" preCondition="integratedMode"/>
+      <add name="Gif Images" path="*.Gif" verb="*" type="System.Web.StaticFileHandler" resourceType="Unspecified" preCondition="integratedMode"/>
+      <add name="Javascript" path="*.js" verb="*" type="System.Web.StaticFileHandler" resourceType="Unspecified" preCondition="integratedMode"/>
+      <add name="ChartImageHandler" preCondition="integratedMode" verb="GET,HEAD,POST" path="ChartImg.axd" type="System.Web.UI.DataVisualization.Charting.ChartHttpHandler, System.Web.DataVisualization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"/>
+      <add type="DevExpress.Web.ASPxHttpHandlerModule, DevExpress.Web.v22.2, Version=22.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" verb="GET,POST" path="DX.ashx" name="ASPxHttpHandlerModule" preCondition="integratedMode"/>
+      <add type="DevExpress.Web.ASPxUploadProgressHttpHandler, DevExpress.Web.v22.2, Version=22.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" verb="GET,POST" path="ASPxUploadProgressHandlerPage.ashx" name="ASPxUploadProgressHandler" preCondition="integratedMode"/>
+    </handlers>
+    <validation validateIntegratedModeConfiguration="false"/>
+    <security>
+      <requestFiltering>
+        <requestLimits maxAllowedContentLength="100000000"/>
+      </requestFiltering>
+    </security>
+  </system.webServer>
+  <system.serviceModel>
+    <bindings/>
+    <client/>
+  </system.serviceModel>
+  <devExpress>
+    <themes enableThemesAssembly="true" styleSheetTheme="" theme="" customThemeAssemblies="" baseColor="" font=""/>
+    <compression enableHtmlCompression="false" enableCallbackCompression="true" enableResourceCompression="true" enableResourceMerging="true"/>
+    <settings doctypeMode="Xhtml" rightToLeft="false" embedRequiredClientLibraries="false" ieCompatibilityVersion="edge" accessibilityCompliant="false" checkReferencesToExternalScripts="false" protectControlState="true" bootstrapMode=""/>
+    <errors callbackErrorRedirectUrl=""/>
+  </devExpress>
+  <entityFramework>
+    <defaultConnectionFactory type="System.Data.Entity.Infrastructure.LocalDbConnectionFactory, EntityFramework">
+      <parameters>
+        <parameter value="v11.0"/>
+      </parameters>
+    </defaultConnectionFactory>
+    <providers>
+      <provider invariantName="System.Data.SqlClient" type="System.Data.Entity.SqlServer.SqlProviderServices, EntityFramework.SqlServer"/>
+    </providers>
+  </entityFramework>
+  <system.web.extensions>
+    <scripting>
+      <webServices>
+        <jsonSerialization maxJsonLength="50000000"/>
+      </webServices>
+    </scripting>
+  </system.web.extensions>
+</configuration>

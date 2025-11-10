@@ -1,0 +1,36 @@
+﻿<%@ Master Language="VB" MasterPageFile="~/MasterPage/MPNewMatrix.Master" AutoEventWireup="false" CodeBehind="MPPmoCuanti.master.vb" Inherits="WebMatrix.MPPmoCuanti" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+    <asp:ContentPlaceHolder ID="head" runat="server">
+
+    </asp:ContentPlaceHolder>
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="CPH_TitleSection" runat="server">
+    <asp:ContentPlaceHolder ID="TitleSection" runat="server">
+
+    </asp:ContentPlaceHolder>
+</asp:Content>
+<asp:Content ID="Content3" ContentPlaceHolderID="CPH_SideBar" runat="server">
+    <asp:ContentPlaceHolder ID="SideBar" runat="server">
+
+    </asp:ContentPlaceHolder>
+</asp:Content>
+<asp:Content ID="Content4" ContentPlaceHolderID="CPH_Title" runat="server">
+    <asp:ContentPlaceHolder ID="Title" runat="server">
+
+    </asp:ContentPlaceHolder>
+</asp:Content>
+<asp:Content ID="Content5" ContentPlaceHolderID="CPH_Subtitle" runat="server">
+    <asp:ContentPlaceHolder ID="SubTitle" runat="server">
+
+    </asp:ContentPlaceHolder>
+</asp:Content>
+<asp:Content ID="Content6" ContentPlaceHolderID="CPH_Actions" runat="server">
+    <asp:ContentPlaceHolder ID="Actions" runat="server">
+
+    </asp:ContentPlaceHolder>
+</asp:Content>
+<asp:Content ID="Content7" ContentPlaceHolderID="CPH_Content" runat="server">
+    <asp:ContentPlaceHolder ID="Content" runat="server">
+
+    </asp:ContentPlaceHolder>
+</asp:Content>

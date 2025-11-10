@@ -1,0 +1,204 @@
+table.display
+{
+    border-collapse: collapse;
+    clear: both;
+    margin: 0 auto;
+    width: 100%;
+    line-height: 24px;
+}
+table.display
+{
+    border-collapse: collapse;
+}
+table.display thead th
+{
+    cursor: pointer;
+    padding: 3px 0 3px 10px;
+}
+table.display thead th div.DataTables_sort_wrapper
+{
+    padding-right: 20px;
+    position: relative;
+}
+table.display thead th div.DataTables_sort_wrapper span
+{
+    margin-top: -8px;
+    position: absolute;
+    right: 0;
+    top: 50%;
+}
+table.display tr.odd.gradeA
+{
+    background-color: #DDFFDD;
+}
+table.display tr.even.gradeA
+{
+    background-color: #EEFFEE;
+}
+table.display td
+{
+    padding: 3px 10px;
+}
+tr.odd
+{
+    background: none repeat scroll 0 0 #F5F5F5;
+}
+tr.even
+{
+    background-color: white;
+}
+
+
+.ui-corner-tr
+{
+    border-top-right-radius: 4px;
+}
+.ui-corner-tl
+{
+    border-top-left-radius: 4px;
+}
+.ui-widget-header
+{
+    /*    background: url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 50% 50% #CCCCCC;*/
+    background: #F5F5F5 repeat-x scroll 50% 50%;
+    border: 1px solid #AAAAAA;
+    color: #222222;
+    height: 32px;
+    overflow: hidden;
+    line-height: 26px;
+}
+.ui-state-default, .ui-widget-content .ui-state-default
+{
+    /*background: url("images/ui-bg_glass_75_e6e6e6_1x400.png") repeat-x scroll 50% 50% #E6E6E6;*/
+    border: 1px solid #D3D3D3;
+    color: #555555;
+    font-weight: normal;
+    outline: medium none;
+}
+.ui-state-default .ui-icon
+{
+    background-image: url("images/ui-icons_888888_256x240.png");
+}
+.ui-icon-triangle-1-n
+{
+    background-position: 0 -16px;
+}
+.ui-icon
+{
+    background-image: url("images/ui-icons_222222_256x240.png");
+    height: 16px;
+    width: 16px;
+}
+.ui-icon-carat-2-n-s
+{
+    background-position: -128px 0;
+}
+.ui-icon
+{
+    background-repeat: no-repeat;
+    display: block;
+    overflow: hidden;
+    text-indent: -99999px;
+}
+.ui-icon-triangle-1-s
+{
+    background-position: -64px -16px;
+}
+.ui-state-disabled, .ui-widget-content .ui-state-disabled
+{
+    background-image: none;
+    opacity: 0.35;
+}
+.ui-state-default, .ui-widget-content .ui-state-default
+{
+    /*    background: #F5F5F5 repeat-x scroll 50% 50%;*/
+    border: 1px solid #D3D3D3;
+    color: #555555;
+    font-weight: normal;
+    outline: medium none;
+}
+.ui-state-disabled
+{
+    cursor: default !important;
+}
+
+
+.dataTables_wrapper
+{
+    margin-bottom: 15px;
+}
+.dataTables_wrapper .ui-toolbar
+{
+    padding: 5px;
+}
+.dataTables_length
+{
+    float: left;
+    width: 40%;
+}
+.dataTables_filter
+{
+    float: right;
+    text-align: right;
+    width: 50%;
+}
+.dataTables_info
+{
+    padding-top: 0;
+}
+.dataTables_info
+{
+    float: left;
+    width: 50%;
+    line-height: 33px;
+    font-size: 11px;
+}
+.dataTables_paginate
+{
+    padding-top: 0;
+}
+.dataTables_paginate
+{
+    float: right;
+    text-align: right;
+}
+.dataTables_paginate
+{
+    width: auto;
+}
+.dataTables_paginate
+{
+    float: right;
+    text-align: right;
+    width: 44px;
+}
+.dataTables_paginate .ui-button
+{
+    margin-right: -0.1em !important;
+}
+
+
+
+.paging_full_numbers
+{
+    width: 350px !important;
+}
+
+.paging_full_numbers .ui-button
+{
+    cursor: pointer;
+    margin: 0;
+    padding: 2px 6px;
+}
+
+
+
+.css_right
+{
+    float: right;
+}
+
+
+.fg-toolbar
+{
+}

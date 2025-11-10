@@ -1,0 +1,2488 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="PY_Cuali_Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="OP_CampoCuali">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SegmentoId" Type="bigint" />
+          <Property Name="Moderador" Type="bigint" />
+          <Property Name="PlaneacionPor" Type="bigint" />
+          <Property Name="Lugar" Type="varchar" MaxLength="50" />
+          <Property Name="PersonaContaco" Type="varchar" MaxLength="200" />
+          <Property Name="DatosContacto" Type="varchar" MaxLength="200" />
+          <Property Name="Direccion" Type="varchar" MaxLength="200" />
+          <Property Name="Fecha" Type="date" />
+          <Property Name="Hora" Type="time" Precision="7" />
+          <Property Name="ObservacionesPrevias" Type="varchar(max)" />
+          <Property Name="FechaReal" Type="date" />
+          <Property Name="HoraReal" Type="time" Precision="7" />
+          <Property Name="Asistentes" Type="int" />
+          <Property Name="AsistentesNoCumplen" Type="int" />
+          <Property Name="ObservacionesEjecucion" Type="varchar(max)" />
+          <Property Name="EjecucionPor" Type="bigint" />
+          <Property Name="Caida" Type="bit" />
+          <Property Name="Cancelada" Type="bit" />
+          <Property Name="Ejecutada" Type="bit" />
+          <Property Name="Transcriptor" Type="bigint" />
+        </EntityType>
+        <EntityType Name="OP_EntrevistasCuali_Distribucion">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdEntrevista" Type="bigint" />
+          <Property Name="Numero" Type="int" />
+          <Property Name="TrabajoId" Type="bigint" />
+          <Property Name="GrupoObjetivo" Type="varchar(max)" />
+          <Property Name="CiudadId" Type="int" />
+          <Property Name="Cantidad" Type="float" />
+          <Property Name="FechaInicio" Type="date" />
+          <Property Name="FechaFin" Type="date" />
+          <Property Name="Moderador" Type="bigint" />
+          <Property Name="Estado" Type="int" />
+        </EntityType>
+        <EntityType Name="OP_EstadosSesion">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="tinyint" Nullable="false" />
+          <Property Name="Estado" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="OP_Filtros">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TipoFiltro" Type="int" />
+          <Property Name="IdTrabajo" Type="bigint" />
+          <Property Name="FechaInicio" Type="date" />
+          <Property Name="FechaFin" Type="date" />
+          <Property Name="Activo" Type="bit" />
+        </EntityType>
+        <EntityType Name="OP_LogEntrevistasCuali">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdDistribucion" Type="bigint" />
+          <Property Name="IdEntrevista" Type="bigint" />
+          <Property Name="Fecha" Type="datetime" />
+          <Property Name="Usuario" Type="bigint" />
+          <Property Name="Estado" Type="int" />
+          <Property Name="Observacion" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="OP_LogInHomeCuali">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdSesion" Type="bigint" />
+          <Property Name="Fecha" Type="datetime" />
+          <Property Name="Usuario" Type="bigint" />
+          <Property Name="Estado" Type="int" />
+          <Property Name="Observacion" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="OP_LogRespuestas_Filtro">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdRespuesta" Type="bigint" />
+          <Property Name="Estado" Type="int" />
+          <Property Name="Observacion" Type="varchar(max)" />
+          <Property Name="Fecha" Type="datetime" />
+          <Property Name="Usuario" Type="bigint" />
+        </EntityType>
+        <EntityType Name="OP_LogSesionesCuali">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdSesion" Type="bigint" />
+          <Property Name="Fecha" Type="datetime" />
+          <Property Name="Usuario" Type="bigint" />
+          <Property Name="Estado" Type="int" />
+          <Property Name="Observacion" Type="varchar(max)" />
+          <Property Name="Cantidad" Type="float" />
+        </EntityType>
+        <EntityType Name="OP_MuestraTrabajosCuali">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CiudadId" Type="int" />
+          <Property Name="TrabajoId" Type="bigint" />
+          <Property Name="Cantidad" Type="float" />
+          <Property Name="FechaInicio" Type="date" />
+          <Property Name="FechaFin" Type="date" />
+          <Property Name="NumeroBackup" Type="int" />
+        </EntityType>
+        <EntityType Name="OP_MuestraTrabajosCuali_Entrevistas">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar(max)" />
+          <Property Name="CiudadId" Type="int" />
+          <Property Name="TrabajoId" Type="bigint" />
+          <Property Name="Cantidad" Type="float" />
+          <Property Name="Moderador" Type="bigint" />
+          <Property Name="FechaInicio" Type="date" />
+          <Property Name="FechaFin" Type="date" />
+          <Property Name="NumeroBackup" Type="int" />
+        </EntityType>
+        <EntityType Name="OP_MuestraTrabajosCuali_InHome">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Numero" Type="int" />
+          <Property Name="TrabajoId" Type="bigint" />
+          <Property Name="CiudadId" Type="int" />
+          <Property Name="Cantidad" Type="float" />
+          <Property Name="Fecha" Type="date" />
+          <Property Name="Hora" Type="time" Precision="7" />
+          <Property Name="Moderador" Type="bigint" />
+          <Property Name="GrupoObjetivo" Type="varchar(max)" />
+          <Property Name="Caracteristicas" Type="varchar(max)" />
+          <Property Name="Estado" Type="int" />
+        </EntityType>
+        <EntityType Name="OP_MuestraTrabajosCuali_Sesiones">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Numero" Type="int" />
+          <Property Name="TrabajoId" Type="bigint" />
+          <Property Name="CiudadId" Type="int" />
+          <Property Name="Cantidad" Type="float" />
+          <Property Name="Fecha" Type="date" />
+          <Property Name="Hora" Type="time" Precision="7" />
+          <Property Name="Moderador" Type="bigint" />
+          <Property Name="GrupoObjetivo" Type="varchar(max)" />
+          <Property Name="Caracteristicas" Type="varchar(max)" />
+          <Property Name="Estado" Type="int" />
+        </EntityType>
+        <EntityType Name="OP_Preguntas_Filtro">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdFiltro" Type="bigint" />
+          <Property Name="TipoPregunta" Type="int" />
+          <Property Name="OrdenPregunta" Type="int" />
+          <Property Name="Textopregunta" Type="varchar(max)" />
+          <Property Name="Respuestas" Type="varchar(max)" />
+          <Property Name="Obligatoria" Type="bit" />
+          <Property Name="Fija" Type="bit" />
+          <Property Name="Campo" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="OP_Respuestas_Filtro_Detalle">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdRespuesta" Type="bigint" />
+          <Property Name="IdPregunta" Type="bigint" />
+          <Property Name="Respuesta" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="OP_Respuestas_Filtro_Maestro">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdFiltro" Type="bigint" />
+          <Property Name="Fecha" Type="datetime" />
+          <Property Name="Nombre" Type="varchar(max)" />
+          <Property Name="Cedula" Type="bigint" />
+          <Property Name="Celular" Type="varchar(max)" />
+          <Property Name="Direccion" Type="varchar(max)" />
+          <Property Name="Ciudad" Type="varchar(max)" />
+          <Property Name="Barrio" Type="varchar(max)" />
+          <Property Name="Edad" Type="varchar(max)" />
+          <Property Name="Estrato" Type="varchar(max)" />
+          <Property Name="Reclutador" Type="varchar(max)" />
+          <Property Name="Estado" Type="int" />
+        </EntityType>
+        <EntityType Name="OP_TipoFiltro">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TipoFiltro" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="OP_TipoPregunta_Filtro">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="TipoPregunta" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="PY_AyudasCuali">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="Ayuda" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="PY_AyudasRequeridasCuali">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TrabajoId" Type="bigint" />
+          <Property Name="TipoAyuda" Type="int" />
+        </EntityType>
+        <EntityType Name="PY_EspCuentasCuali">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProyectoId" Type="bigint" />
+          <Property Name="BCPObservaciones" Type="varchar(max)" />
+          <Property Name="BCPTecnica" Type="tinyint" />
+          <Property Name="BCPotraTecnica" Type="varchar" MaxLength="250" />
+          <Property Name="BCPIncentivosEsp" Type="varchar(max)" />
+          <Property Name="BCPBDDEsp" Type="varchar(max)" />
+          <Property Name="BCPProductoEsp" Type="varchar(max)" />
+          <Property Name="BCPReclutamiento" Type="tinyint" />
+          <Property Name="BCPEspReclutamiento" Type="varchar(max)" />
+          <Property Name="BCPEspProducto" Type="bit" />
+          <Property Name="BCPMaterialEval" Type="bit" />
+          <Property Name="BCPObsProducto" Type="varchar(max)" />
+          <Property Name="NoVersion" Type="tinyint" />
+          <Property Name="Fecha" Type="datetime" />
+          <Property Name="Usuario" Type="bigint" />
+        </EntityType>
+        <EntityType Name="PY_EspecifTecTrabajoCuali">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TrabajoId" Type="bigint" Nullable="false" />
+          <Property Name="Moderador" Type="varchar(max)" />
+          <Property Name="EspecificacionesCampo" Type="varchar(max)" />
+          <Property Name="MaterialApoyo" Type="varchar(max)" />
+          <Property Name="Incidencias" Type="varchar(max)" />
+          <Property Name="Auditoria" Type="varchar(max)" />
+          <Property Name="VCSeguridad" Type="varchar(max)" />
+          <Property Name="VCObtencion" Type="varchar(max)" />
+          <Property Name="VCGrupoObjetivo" Type="varchar(max)" />
+          <Property Name="VCAplicacionInstrumentos" Type="varchar(max)" />
+          <Property Name="VCDistribucionCuotas" Type="varchar(max)" />
+          <Property Name="VCMetodologia" Type="varchar(max)" />
+          <Property Name="Incentivos" Type="varchar(max)" />
+          <Property Name="PresupuestoIncentivo" Type="varchar(max)" />
+          <Property Name="DistribucionIncentivo" Type="varchar(max)" />
+          <Property Name="RegaloClientes" Type="varchar(max)" />
+          <Property Name="CompraIpsos" Type="varchar(max)" />
+          <Property Name="PresupuestoCompra" Type="varchar(max)" />
+          <Property Name="DistribucionCompra" Type="varchar(max)" />
+          <Property Name="ExclusionesyRestricciones" Type="varchar(max)" />
+          <Property Name="RecursosPropiedadesCliente" Type="varchar(max)" />
+          <Property Name="HabeasData" Type="varchar(max)" />
+          <Property Name="OtrasEspecificaciones" Type="varchar(max)" />
+          <Property Name="NoVersion" Type="tinyint" />
+          <Property Name="Fecha" Type="datetime" />
+          <Property Name="Usuario" Type="bigint" />
+        </EntityType>
+        <EntityType Name="PY_LugaresCuali">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="Lugar" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="PY_ReclutamientoRequeridoCuali">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TrabajoId" Type="bigint" />
+          <Property Name="TipoReclutamiento" Type="int" />
+        </EntityType>
+        <EntityType Name="PY_SegmentosCuali">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TrabajoId" Type="bigint" />
+          <Property Name="Descripcion" Type="varchar(max)" />
+          <Property Name="Cantidad" Type="int" />
+          <Property Name="ObservacionesMetodologia" Type="varchar(max)" />
+          <Property Name="MetodoReclutamiento" Type="varchar(max)" />
+          <Property Name="NoReclutadoras" Type="int" />
+          <Property Name="FechaInicio" Type="date" />
+          <Property Name="FechaFin" Type="date" />
+          <Property Name="Departamento" Type="int" />
+          <Property Name="Municipio" Type="int" />
+          <Property Name="TipoLugar" Type="int" />
+          <Property Name="EspecificacionesLugar" Type="varchar(max)" />
+          <Property Name="NSE" Type="varchar(max)" />
+          <Property Name="Edades" Type="varchar(max)" />
+          <Property Name="Genero" Type="varchar(max)" />
+          <Property Name="OtrasCaracteristicas" Type="varchar(max)" />
+          <Property Name="ExclusionesYRestricciones" Type="varchar(max)" />
+          <Property Name="NoPersonas" Type="int" />
+          <Property Name="GastosDeViaje" Type="varchar(max)" />
+          <Property Name="Incentivos" Type="varchar(max)" />
+          <Property Name="Alimentacion" Type="varchar(max)" />
+          <Property Name="Transcripcion" Type="bit" />
+          <Property Name="Traduccion" Type="bit" />
+          <Property Name="Video" Type="bit" />
+          <Property Name="Audios" Type="bit" />
+          <Property Name="Filtros" Type="bit" />
+          <Property Name="FlashReport" Type="bit" />
+          <Property Name="OtrosEntregables" Type="varchar(max)" />
+          <Property Name="ObservacionesGenerales" Type="varchar(max)" />
+          <Property Name="OtrasAyudas" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="PY_SegmentosCuali_Moderadores">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TrabajoId" Type="bigint" />
+          <Property Name="SegmentoId" Type="bigint" />
+          <Property Name="Moderador" Type="bigint" />
+          <Property Name="FechaAsignacion" Type="datetime" />
+        </EntityType>
+        <EntityType Name="PY_SegmentosCuali_Reclutadores">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TrabajoId" Type="bigint" />
+          <Property Name="SegmentoId" Type="bigint" />
+          <Property Name="Reclutador" Type="bigint" />
+          <Property Name="FechaAsignacion" Type="datetime" />
+        </EntityType>
+        <EntityType Name="PY_TipoReclutamientoCuali">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="Tipo" Type="varchar(max)" />
+        </EntityType>
+        <Association Name="FK_OP_CampoCuali_PY_SegmentosCuali">
+          <End Role="PY_SegmentosCuali" Type="Self.PY_SegmentosCuali" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="OP_CampoCuali" Type="Self.OP_CampoCuali" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PY_SegmentosCuali">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="OP_CampoCuali">
+              <PropertyRef Name="SegmentoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OP_Filtros_OP_TipoFiltro">
+          <End Role="OP_TipoFiltro" Type="Self.OP_TipoFiltro" Multiplicity="0..1" />
+          <End Role="OP_Filtros" Type="Self.OP_Filtros" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OP_TipoFiltro">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OP_Filtros">
+              <PropertyRef Name="TipoFiltro" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OP_Preguntas_Filtro_OP_Filtros">
+          <End Role="OP_Filtros" Type="Self.OP_Filtros" Multiplicity="0..1" />
+          <End Role="OP_Preguntas_Filtro" Type="Self.OP_Preguntas_Filtro" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OP_Filtros">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OP_Preguntas_Filtro">
+              <PropertyRef Name="IdFiltro" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OP_Preguntas_Filtro_OP_TipoPregunta_Filtro">
+          <End Role="OP_TipoPregunta_Filtro" Type="Self.OP_TipoPregunta_Filtro" Multiplicity="0..1" />
+          <End Role="OP_Preguntas_Filtro" Type="Self.OP_Preguntas_Filtro" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OP_TipoPregunta_Filtro">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OP_Preguntas_Filtro">
+              <PropertyRef Name="TipoPregunta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OP_Respuestas_Filtro_Maestro_OP_Filtros">
+          <End Role="OP_Filtros" Type="Self.OP_Filtros" Multiplicity="0..1" />
+          <End Role="OP_Respuestas_Filtro_Maestro" Type="Self.OP_Respuestas_Filtro_Maestro" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OP_Filtros">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OP_Respuestas_Filtro_Maestro">
+              <PropertyRef Name="IdFiltro" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OP_Respuestas_Filtro_OP_Preguntas_Filtro">
+          <End Role="OP_Preguntas_Filtro" Type="Self.OP_Preguntas_Filtro" Multiplicity="0..1" />
+          <End Role="OP_Respuestas_Filtro_Detalle" Type="Self.OP_Respuestas_Filtro_Detalle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OP_Preguntas_Filtro">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OP_Respuestas_Filtro_Detalle">
+              <PropertyRef Name="IdPregunta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OP_Respuestas_Filtro_OP_Respuestas_Filtro">
+          <End Role="OP_Respuestas_Filtro_Maestro" Type="Self.OP_Respuestas_Filtro_Maestro" Multiplicity="0..1" />
+          <End Role="OP_Respuestas_Filtro_Detalle" Type="Self.OP_Respuestas_Filtro_Detalle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OP_Respuestas_Filtro_Maestro">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OP_Respuestas_Filtro_Detalle">
+              <PropertyRef Name="IdRespuesta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PY_AyudasRequeridasCuali_PY_AyudasCuali">
+          <End Role="PY_AyudasCuali" Type="Self.PY_AyudasCuali" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="PY_AyudasRequeridasCuali" Type="Self.PY_AyudasRequeridasCuali" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PY_AyudasCuali">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="PY_AyudasRequeridasCuali">
+              <PropertyRef Name="TipoAyuda" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PY_SegmentosCuali_Moderadores_PY_SegmentosCuali">
+          <End Role="PY_SegmentosCuali" Type="Self.PY_SegmentosCuali" Multiplicity="0..1" />
+          <End Role="PY_SegmentosCuali_Moderadores" Type="Self.PY_SegmentosCuali_Moderadores" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PY_SegmentosCuali">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="PY_SegmentosCuali_Moderadores">
+              <PropertyRef Name="SegmentoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PY_SegmentosCuali_Reclutadores_PY_SegmentosCuali">
+          <End Role="PY_SegmentosCuali" Type="Self.PY_SegmentosCuali" Multiplicity="0..1" />
+          <End Role="PY_SegmentosCuali_Reclutadores" Type="Self.PY_SegmentosCuali_Reclutadores" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PY_SegmentosCuali">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="PY_SegmentosCuali_Reclutadores">
+              <PropertyRef Name="SegmentoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="OP_CampoCuali_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SegmentoID" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_CampoCualiDuplicar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idCampo" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_EntrevistasCuali_Distribucion_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Cantidad" Type="int" Mode="In" />
+          <Parameter Name="IdEntrevista" Type="bigint" Mode="In" />
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+          <Parameter Name="GrupoObjetivo" Type="varchar(max)" Mode="In" />
+          <Parameter Name="CiudadId" Type="int" Mode="In" />
+          <Parameter Name="FechaInicio" Type="date" Mode="In" />
+          <Parameter Name="FechaFin" Type="date" Mode="In" />
+          <Parameter Name="Moderador" Type="bigint" Mode="In" />
+          <Parameter Name="Usuario" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_EntrevistasCuali_DistribucionGet" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="bigint" Mode="In" />
+          <Parameter Name="IdEntrevista" Type="bigint" Mode="In" />
+          <Parameter Name="Idtrabajo" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_Filtros_CrearCopia" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="bigint" Mode="In" />
+          <Parameter Name="IdFiltro" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_Filtros_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdFiltro" Type="bigint" Mode="In" />
+          <Parameter Name="TipoFiltro" Type="int" Mode="In" />
+          <Parameter Name="IdTrabajo" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_ListadoCampoCualiXSegmento" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdSegmento" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_LogEntrevistasCuali_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdDistribucion" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_LogInHomeCuali_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdSesion" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_LogSesionesCuali_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdSesion" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_MuestraTrabajosCuali_EntrevistasGet" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdMuestra" Type="bigint" Mode="In" />
+          <Parameter Name="Idtrabajo" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_MuestraTrabajosCuali_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdMuestra" Type="bigint" Mode="In" />
+          <Parameter Name="Idtrabajo" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_MuestraTrabajosCuali_InHomeGet" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdMuestra" Type="bigint" Mode="In" />
+          <Parameter Name="Idtrabajo" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_MuestraTrabajosCuali_SesionesGet" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdMuestra" Type="bigint" Mode="In" />
+          <Parameter Name="Idtrabajo" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_Preguntas_Filtro_ActualizarOrden" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdFiltro" Type="bigint" Mode="In" />
+          <Parameter Name="OrdenPregunta" Type="int" Mode="In" />
+        </Function>
+        <Function Name="OP_Preguntas_Filtro_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdFiltro" Type="bigint" Mode="In" />
+          <Parameter Name="TipoFiltro" Type="int" Mode="In" />
+          <Parameter Name="IdTrabajo" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_Preguntas_Filtro_ReOrdenar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdFiltro" Type="bigint" Mode="In" />
+          <Parameter Name="OrdenAnterior" Type="int" Mode="In" />
+          <Parameter Name="OrdenActual" Type="int" Mode="In" />
+        </Function>
+        <Function Name="OP_Respuestas_Filtro_Detalle_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdRespuesta" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_Respuestas_Filtro_Maestro_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdFiltro" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_Respuestas_FiltroReclutamiento_Maestro_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdTrabajo" Type="bigint" Mode="In" />
+          <Parameter Name="Cedula" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="PY_SegmentosCuali_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TRABAJOID" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="PY_SegmentosCuali_Moderadores_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SegmentoId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="PY_SegmentosCuali_Reclutadores_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SegmentoId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="PY_SegmentosCualiDuplicar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idSegmento" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="PY_Trabajo_Entrega_Cualitativo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="PY_TrabajoCuali_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Idtrabajo" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="US_UsuariosModeradoresCualitativos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="US_UsuariosReclutadoresCualitativos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="US_UsuariosTranscriptoresCualitativos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="PY_Cuali_ModelStoreContainer">
+          <EntitySet Name="OP_CampoCuali" EntityType="Self.OP_CampoCuali" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OP_EntrevistasCuali_Distribucion" EntityType="Self.OP_EntrevistasCuali_Distribucion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OP_EstadosSesion" EntityType="Self.OP_EstadosSesion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OP_Filtros" EntityType="Self.OP_Filtros" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OP_LogEntrevistasCuali" EntityType="Self.OP_LogEntrevistasCuali" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OP_LogInHomeCuali" EntityType="Self.OP_LogInHomeCuali" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OP_LogRespuestas_Filtro" EntityType="Self.OP_LogRespuestas_Filtro" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OP_LogSesionesCuali" EntityType="Self.OP_LogSesionesCuali" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OP_MuestraTrabajosCuali" EntityType="Self.OP_MuestraTrabajosCuali" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OP_MuestraTrabajosCuali_Entrevistas" EntityType="Self.OP_MuestraTrabajosCuali_Entrevistas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OP_MuestraTrabajosCuali_InHome" EntityType="Self.OP_MuestraTrabajosCuali_InHome" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OP_MuestraTrabajosCuali_Sesiones" EntityType="Self.OP_MuestraTrabajosCuali_Sesiones" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OP_Preguntas_Filtro" EntityType="Self.OP_Preguntas_Filtro" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OP_Respuestas_Filtro_Detalle" EntityType="Self.OP_Respuestas_Filtro_Detalle" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OP_Respuestas_Filtro_Maestro" EntityType="Self.OP_Respuestas_Filtro_Maestro" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OP_TipoFiltro" EntityType="Self.OP_TipoFiltro" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OP_TipoPregunta_Filtro" EntityType="Self.OP_TipoPregunta_Filtro" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PY_AyudasCuali" EntityType="Self.PY_AyudasCuali" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PY_AyudasRequeridasCuali" EntityType="Self.PY_AyudasRequeridasCuali" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PY_EspCuentasCuali" EntityType="Self.PY_EspCuentasCuali" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PY_EspecifTecTrabajoCuali" EntityType="Self.PY_EspecifTecTrabajoCuali" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PY_LugaresCuali" EntityType="Self.PY_LugaresCuali" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PY_ReclutamientoRequeridoCuali" EntityType="Self.PY_ReclutamientoRequeridoCuali" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PY_SegmentosCuali" EntityType="Self.PY_SegmentosCuali" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PY_SegmentosCuali_Moderadores" EntityType="Self.PY_SegmentosCuali_Moderadores" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PY_SegmentosCuali_Reclutadores" EntityType="Self.PY_SegmentosCuali_Reclutadores" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PY_TipoReclutamientoCuali" EntityType="Self.PY_TipoReclutamientoCuali" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_OP_CampoCuali_PY_SegmentosCuali" Association="Self.FK_OP_CampoCuali_PY_SegmentosCuali">
+            <End Role="PY_SegmentosCuali" EntitySet="PY_SegmentosCuali" />
+            <End Role="OP_CampoCuali" EntitySet="OP_CampoCuali" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OP_Filtros_OP_TipoFiltro" Association="Self.FK_OP_Filtros_OP_TipoFiltro">
+            <End Role="OP_TipoFiltro" EntitySet="OP_TipoFiltro" />
+            <End Role="OP_Filtros" EntitySet="OP_Filtros" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OP_Preguntas_Filtro_OP_Filtros" Association="Self.FK_OP_Preguntas_Filtro_OP_Filtros">
+            <End Role="OP_Filtros" EntitySet="OP_Filtros" />
+            <End Role="OP_Preguntas_Filtro" EntitySet="OP_Preguntas_Filtro" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OP_Preguntas_Filtro_OP_TipoPregunta_Filtro" Association="Self.FK_OP_Preguntas_Filtro_OP_TipoPregunta_Filtro">
+            <End Role="OP_TipoPregunta_Filtro" EntitySet="OP_TipoPregunta_Filtro" />
+            <End Role="OP_Preguntas_Filtro" EntitySet="OP_Preguntas_Filtro" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OP_Respuestas_Filtro_Maestro_OP_Filtros" Association="Self.FK_OP_Respuestas_Filtro_Maestro_OP_Filtros">
+            <End Role="OP_Filtros" EntitySet="OP_Filtros" />
+            <End Role="OP_Respuestas_Filtro_Maestro" EntitySet="OP_Respuestas_Filtro_Maestro" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OP_Respuestas_Filtro_OP_Preguntas_Filtro" Association="Self.FK_OP_Respuestas_Filtro_OP_Preguntas_Filtro">
+            <End Role="OP_Preguntas_Filtro" EntitySet="OP_Preguntas_Filtro" />
+            <End Role="OP_Respuestas_Filtro_Detalle" EntitySet="OP_Respuestas_Filtro_Detalle" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OP_Respuestas_Filtro_OP_Respuestas_Filtro" Association="Self.FK_OP_Respuestas_Filtro_OP_Respuestas_Filtro">
+            <End Role="OP_Respuestas_Filtro_Maestro" EntitySet="OP_Respuestas_Filtro_Maestro" />
+            <End Role="OP_Respuestas_Filtro_Detalle" EntitySet="OP_Respuestas_Filtro_Detalle" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PY_AyudasRequeridasCuali_PY_AyudasCuali" Association="Self.FK_PY_AyudasRequeridasCuali_PY_AyudasCuali">
+            <End Role="PY_AyudasCuali" EntitySet="PY_AyudasCuali" />
+            <End Role="PY_AyudasRequeridasCuali" EntitySet="PY_AyudasRequeridasCuali" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PY_SegmentosCuali_Moderadores_PY_SegmentosCuali" Association="Self.FK_PY_SegmentosCuali_Moderadores_PY_SegmentosCuali">
+            <End Role="PY_SegmentosCuali" EntitySet="PY_SegmentosCuali" />
+            <End Role="PY_SegmentosCuali_Moderadores" EntitySet="PY_SegmentosCuali_Moderadores" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PY_SegmentosCuali_Reclutadores_PY_SegmentosCuali" Association="Self.FK_PY_SegmentosCuali_Reclutadores_PY_SegmentosCuali">
+            <End Role="PY_SegmentosCuali" EntitySet="PY_SegmentosCuali" />
+            <End Role="PY_SegmentosCuali_Reclutadores" EntitySet="PY_SegmentosCuali_Reclutadores" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PY_Cuali_Model" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2009/11/edm" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <EntityContainer Name="PY_CualiEntities" annotation:LazyLoadingEnabled="true" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+          <EntitySet Name="PY_AyudasCuali" EntityType="PY_Cuali_Model.PY_AyudasCuali" />
+          <EntitySet Name="PY_LugaresCuali" EntityType="PY_Cuali_Model.PY_LugaresCuali" />
+          <EntitySet Name="OP_CampoCuali" EntityType="PY_Cuali_Model.OP_CampoCuali" />
+          <FunctionImport Name="OP_CampoCuali_Get" ReturnType="Collection(PY_Cuali_Model.OP_CampoCuali_Get_Result)">
+          <Parameter Name="SegmentoID" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="PY_SegmentosCuali_Get" ReturnType="Collection(PY_Cuali_Model.PY_SegmentosCuali_Get_Result)">
+          <Parameter Name="TRABAJOID" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="PY_SegmentosCualiDuplicar" ReturnType="Collection(Decimal)">
+          <Parameter Name="idSegmento" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <EntitySet Name="PY_SegmentosCuali" EntityType="PY_Cuali_Model.PY_SegmentosCuali" />
+          <AssociationSet Name="FK_OP_CampoCuali_PY_SegmentosCuali" Association="PY_Cuali_Model.FK_OP_CampoCuali_PY_SegmentosCuali">
+            <End Role="PY_SegmentosCuali" EntitySet="PY_SegmentosCuali" />
+            <End Role="OP_CampoCuali" EntitySet="OP_CampoCuali" />
+          </AssociationSet>
+          <FunctionImport Name="OP_CampoCualiDuplicar" ReturnType="Collection(Decimal)">
+          <Parameter Name="idCampo" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="OP_ListadoCampoCualiXSegmento" ReturnType="Collection(PY_Cuali_Model.OP_ListadoCampoCualiXSegmento_Result)">
+          <Parameter Name="IdSegmento" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="US_UsuariosModeradoresCualitativos" ReturnType="Collection(PY_Cuali_Model.US_UsuariosModeradoresCualitativos_Result)" />
+          <FunctionImport Name="US_UsuariosReclutadoresCualitativos" ReturnType="Collection(PY_Cuali_Model.US_UsuariosReclutadoresCualitativos_Result)" />
+          <FunctionImport Name="US_UsuariosTranscriptoresCualitativos" ReturnType="Collection(PY_Cuali_Model.US_UsuariosTranscriptoresCualitativos_Result)" />
+          <EntitySet Name="PY_SegmentosCuali_Moderadores" EntityType="PY_Cuali_Model.PY_SegmentosCuali_Moderadores" />
+          <EntitySet Name="PY_SegmentosCuali_Reclutadores" EntityType="PY_Cuali_Model.PY_SegmentosCuali_Reclutadores" />
+          <AssociationSet Name="FK_PY_SegmentosCuali_Moderadores_PY_SegmentosCuali" Association="PY_Cuali_Model.FK_PY_SegmentosCuali_Moderadores_PY_SegmentosCuali">
+            <End Role="PY_SegmentosCuali" EntitySet="PY_SegmentosCuali" />
+            <End Role="PY_SegmentosCuali_Moderadores" EntitySet="PY_SegmentosCuali_Moderadores" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PY_SegmentosCuali_Reclutadores_PY_SegmentosCuali" Association="PY_Cuali_Model.FK_PY_SegmentosCuali_Reclutadores_PY_SegmentosCuali">
+            <End Role="PY_SegmentosCuali" EntitySet="PY_SegmentosCuali" />
+            <End Role="PY_SegmentosCuali_Reclutadores" EntitySet="PY_SegmentosCuali_Reclutadores" />
+          </AssociationSet>
+          <FunctionImport Name="PY_SegmentosCuali_Moderadores_Get" ReturnType="Collection(PY_Cuali_Model.PY_SegmentosCuali_Moderadores_Get_Result)">
+          <Parameter Name="SegmentoId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="PY_SegmentosCuali_Reclutadores_Get" ReturnType="Collection(PY_Cuali_Model.PY_SegmentosCuali_Reclutadores_Get_Result)">
+          <Parameter Name="SegmentoId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <EntitySet Name="PY_AyudasRequeridasCuali" EntityType="PY_Cuali_Model.PY_AyudasRequeridasCuali" />
+          <AssociationSet Name="FK_PY_AyudasRequeridasCuali_PY_AyudasCuali" Association="PY_Cuali_Model.FK_PY_AyudasRequeridasCuali_PY_AyudasCuali">
+            <End Role="PY_AyudasCuali" EntitySet="PY_AyudasCuali" />
+            <End Role="PY_AyudasRequeridasCuali" EntitySet="PY_AyudasRequeridasCuali" />
+          </AssociationSet>
+          <EntitySet Name="PY_TipoReclutamientoCuali" EntityType="PY_Cuali_Model.PY_TipoReclutamientoCuali" />
+          <FunctionImport Name="PY_TrabajoCuali_Get" ReturnType="Collection(PY_Cuali_Model.PY_TrabajoCuali_Get_Result)">
+          <Parameter Name="Idtrabajo" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <EntitySet Name="PY_ReclutamientoRequeridoCuali" EntityType="PY_Cuali_Model.PY_ReclutamientoRequeridoCuali" />
+          <EntitySet Name="OP_EstadosSesion" EntityType="PY_Cuali_Model.OP_EstadosSesion" />
+          <EntitySet Name="OP_LogSesionesCuali" EntityType="PY_Cuali_Model.OP_LogSesionesCuali" />
+          <FunctionImport Name="OP_LogSesionesCuali_Get" ReturnType="Collection(PY_Cuali_Model.OP_LogSesionesCuali_Get_Result)">
+          <Parameter Name="IdSesion" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <EntitySet Name="OP_LogInHomeCuali" EntityType="PY_Cuali_Model.OP_LogInHomeCuali" />
+          <FunctionImport Name="OP_LogInHomeCuali_Get" ReturnType="Collection(PY_Cuali_Model.OP_LogInHomeCuali_Get_Result)">
+          <Parameter Name="IdSesion" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <EntitySet Name="OP_EntrevistasCuali_Distribucion" EntityType="PY_Cuali_Model.OP_EntrevistasCuali_Distribucion" />
+          <EntitySet Name="OP_LogEntrevistasCuali" EntityType="PY_Cuali_Model.OP_LogEntrevistasCuali" />
+          <FunctionImport Name="OP_EntrevistasCuali_DistribucionGet" ReturnType="Collection(PY_Cuali_Model.OP_EntrevistasCuali_DistribucionGet_Result)">
+            <Parameter Name="Id" Mode="In" Type="Int64" />
+            <Parameter Name="IdEntrevista" Mode="In" Type="Int64" />
+            <Parameter Name="Idtrabajo" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="OP_LogEntrevistasCuali_Get" ReturnType="Collection(PY_Cuali_Model.OP_LogEntrevistasCuali_Get_Result)">
+          <Parameter Name="IdDistribucion" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="OP_EntrevistasCuali_Distribucion_Add">
+            <Parameter Name="Cantidad" Mode="In" Type="Int32" />
+            <Parameter Name="IdEntrevista" Mode="In" Type="Int64" />
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+            <Parameter Name="GrupoObjetivo" Mode="In" Type="String" />
+            <Parameter Name="CiudadId" Mode="In" Type="Int32" />
+            <Parameter Name="FechaInicio" Mode="In" Type="DateTime" />
+            <Parameter Name="FechaFin" Mode="In" Type="DateTime" />
+            <Parameter Name="Moderador" Mode="In" Type="Int64" />
+            <Parameter Name="Usuario" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <EntitySet Name="OP_Filtros" EntityType="PY_Cuali_Model.OP_Filtros" />
+          <EntitySet Name="OP_Preguntas_Filtro" EntityType="PY_Cuali_Model.OP_Preguntas_Filtro" />
+          <EntitySet Name="OP_TipoFiltro" EntityType="PY_Cuali_Model.OP_TipoFiltro" />
+          <EntitySet Name="OP_TipoPregunta_Filtro" EntityType="PY_Cuali_Model.OP_TipoPregunta_Filtro" />
+          <AssociationSet Name="FK_OP_Filtros_OP_TipoFiltro" Association="PY_Cuali_Model.FK_OP_Filtros_OP_TipoFiltro">
+            <End Role="OP_TipoFiltro" EntitySet="OP_TipoFiltro" />
+            <End Role="OP_Filtros" EntitySet="OP_Filtros" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OP_Preguntas_Filtro_OP_Filtros" Association="PY_Cuali_Model.FK_OP_Preguntas_Filtro_OP_Filtros">
+            <End Role="OP_Filtros" EntitySet="OP_Filtros" />
+            <End Role="OP_Preguntas_Filtro" EntitySet="OP_Preguntas_Filtro" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OP_Preguntas_Filtro_OP_TipoPregunta_Filtro" Association="PY_Cuali_Model.FK_OP_Preguntas_Filtro_OP_TipoPregunta_Filtro">
+            <End Role="OP_TipoPregunta_Filtro" EntitySet="OP_TipoPregunta_Filtro" />
+            <End Role="OP_Preguntas_Filtro" EntitySet="OP_Preguntas_Filtro" />
+          </AssociationSet>
+          <FunctionImport Name="OP_Preguntas_Filtro_Get" ReturnType="Collection(PY_Cuali_Model.OP_Preguntas_Filtro_Get_Result)">
+            <Parameter Name="IdFiltro" Mode="In" Type="Int64" />
+            <Parameter Name="TipoFiltro" Mode="In" Type="Int32" />
+            <Parameter Name="IdTrabajo" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="OP_Filtros_Get" ReturnType="Collection(PY_Cuali_Model.OP_Filtros_Get_Result)">
+            <Parameter Name="IdFiltro" Mode="In" Type="Int64" />
+            <Parameter Name="TipoFiltro" Mode="In" Type="Int32" />
+            <Parameter Name="IdTrabajo" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="OP_Preguntas_Filtro_ActualizarOrden">
+            <Parameter Name="IdFiltro" Mode="In" Type="Int64" />
+            <Parameter Name="OrdenPregunta" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="OP_Preguntas_Filtro_ReOrdenar">
+            <Parameter Name="IdFiltro" Mode="In" Type="Int64" />
+            <Parameter Name="OrdenAnterior" Mode="In" Type="Int32" />
+            <Parameter Name="OrdenActual" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="OP_Respuestas_FiltroReclutamiento_Maestro_Get" ReturnType="Collection(PY_Cuali_Model.OP_Respuestas_FiltroReclutamiento_Maestro_Get_Result)">
+            <Parameter Name="IdTrabajo" Mode="In" Type="Int64" />
+            <Parameter Name="Cedula" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <EntitySet Name="OP_Respuestas_Filtro_Detalle" EntityType="PY_Cuali_Model.OP_Respuestas_Filtro_Detalle" />
+          <EntitySet Name="OP_Respuestas_Filtro_Maestro" EntityType="PY_Cuali_Model.OP_Respuestas_Filtro_Maestro" />
+          <AssociationSet Name="FK_OP_Respuestas_Filtro_Maestro_OP_Filtros" Association="PY_Cuali_Model.FK_OP_Respuestas_Filtro_Maestro_OP_Filtros">
+            <End Role="OP_Filtros" EntitySet="OP_Filtros" />
+            <End Role="OP_Respuestas_Filtro_Maestro" EntitySet="OP_Respuestas_Filtro_Maestro" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OP_Respuestas_Filtro_OP_Preguntas_Filtro" Association="PY_Cuali_Model.FK_OP_Respuestas_Filtro_OP_Preguntas_Filtro">
+            <End Role="OP_Preguntas_Filtro" EntitySet="OP_Preguntas_Filtro" />
+            <End Role="OP_Respuestas_Filtro_Detalle" EntitySet="OP_Respuestas_Filtro_Detalle" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OP_Respuestas_Filtro_OP_Respuestas_Filtro" Association="PY_Cuali_Model.FK_OP_Respuestas_Filtro_OP_Respuestas_Filtro">
+            <End Role="OP_Respuestas_Filtro_Maestro" EntitySet="OP_Respuestas_Filtro_Maestro" />
+            <End Role="OP_Respuestas_Filtro_Detalle" EntitySet="OP_Respuestas_Filtro_Detalle" />
+          </AssociationSet>
+          <FunctionImport Name="OP_Filtros_CrearCopia">
+            <Parameter Name="Id" Mode="In" Type="Int64" />
+            <Parameter Name="IdFiltro" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="OP_Respuestas_Filtro_Detalle_Get" ReturnType="Collection(PY_Cuali_Model.OP_Respuestas_Filtro_Detalle_Get_Result)">
+          <Parameter Name="IdRespuesta" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="OP_Respuestas_Filtro_Maestro_Get" ReturnType="Collection(PY_Cuali_Model.OP_Respuestas_Filtro_Maestro_Get_Result)">
+          <Parameter Name="IdFiltro" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <EntitySet Name="OP_LogRespuestas_Filtro" EntityType="PY_Cuali_Model.OP_LogRespuestas_Filtro" />
+          <FunctionImport Name="OP_MuestraTrabajosCuali_EntrevistasGet" ReturnType="Collection(PY_Cuali_Model.OP_MuestraTrabajosCuali_EntrevistasGet_Result)">
+            <Parameter Name="IdMuestra" Mode="In" Type="Int64" />
+            <Parameter Name="Idtrabajo" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="OP_MuestraTrabajosCuali_InHomeGet" ReturnType="Collection(PY_Cuali_Model.OP_MuestraTrabajosCuali_InHomeGet_Result)">
+            <Parameter Name="IdMuestra" Mode="In" Type="Int64" />
+            <Parameter Name="Idtrabajo" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="OP_MuestraTrabajosCuali_SesionesGet" ReturnType="Collection(PY_Cuali_Model.OP_MuestraTrabajosCuali_SesionesGet_Result)">
+            <Parameter Name="IdMuestra" Mode="In" Type="Int64" />
+            <Parameter Name="Idtrabajo" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <EntitySet Name="OP_MuestraTrabajosCuali_Entrevistas" EntityType="PY_Cuali_Model.OP_MuestraTrabajosCuali_Entrevistas" />
+          <EntitySet Name="OP_MuestraTrabajosCuali_InHome" EntityType="PY_Cuali_Model.OP_MuestraTrabajosCuali_InHome" />
+          <EntitySet Name="OP_MuestraTrabajosCuali_Sesiones" EntityType="PY_Cuali_Model.OP_MuestraTrabajosCuali_Sesiones" />
+          <EntitySet Name="OP_MuestraTrabajosCuali" EntityType="PY_Cuali_Model.OP_MuestraTrabajosCuali" />
+          <FunctionImport Name="OP_MuestraTrabajosCuali_Get" ReturnType="Collection(PY_Cuali_Model.OP_MuestraTrabajosCuali_Get_Result)">
+            <Parameter Name="IdMuestra" Mode="In" Type="Int64" />
+            <Parameter Name="Idtrabajo" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="PY_Trabajo_Entrega_Cualitativo" ReturnType="Collection(PY_Cuali_Model.PY_Trabajo_Entrega_Cualitativo_Result)">
+          <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <EntitySet Name="PY_EspCuentasCuali" EntityType="PY_Cuali_Model.PY_EspCuentasCuali" />
+          <EntitySet Name="PY_EspecifTecTrabajoCuali" EntityType="PY_Cuali_Model.PY_EspecifTecTrabajoCuali" />
+          </EntityContainer>
+        <EntityType Name="PY_AyudasCuali">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="Ayuda" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="PY_AyudasRequeridasCuali" Relationship="PY_Cuali_Model.FK_PY_AyudasRequeridasCuali_PY_AyudasCuali" FromRole="PY_AyudasCuali" ToRole="PY_AyudasRequeridasCuali" />
+        </EntityType>
+        <EntityType Name="PY_LugaresCuali">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="Lugar" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="OP_CampoCuali">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int64" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="Int64" Name="SegmentoId" />
+          <Property Type="Int64" Name="Moderador" />
+          <Property Type="Int64" Name="PlaneacionPor" />
+          <Property Type="String" Name="Lugar" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="PersonaContaco" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DatosContacto" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Direccion" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Fecha" Precision="0" />
+          <Property Type="Time" Name="Hora" Precision="7" />
+          <Property Type="String" Name="ObservacionesPrevias" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="FechaReal" Precision="0" />
+          <Property Type="Time" Name="HoraReal" Precision="7" />
+          <Property Type="Int32" Name="Asistentes" />
+          <Property Type="Int32" Name="AsistentesNoCumplen" />
+          <Property Type="String" Name="ObservacionesEjecucion" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="Int64" Name="EjecucionPor" />
+          <Property Type="Boolean" Name="Caida" />
+          <Property Type="Boolean" Name="Cancelada" />
+          <Property Type="Boolean" Name="Ejecutada" />
+          <NavigationProperty Name="PY_SegmentosCuali" Relationship="PY_Cuali_Model.FK_OP_CampoCuali_PY_SegmentosCuali" FromRole="OP_CampoCuali" ToRole="PY_SegmentosCuali" />
+          <Property Name="Transcriptor" Type="Int64" />
+        </EntityType>
+        <ComplexType Name="OP_CampoCuali_Get_Result">
+          <Property Type="Int64" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Lugar" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="Fecha" Nullable="true" />
+          <Property Type="Time" Name="Hora" Nullable="true" />
+          <Property Type="Boolean" Name="Cancelada" Nullable="true" />
+          <Property Type="Boolean" Name="Caida" Nullable="true" />
+          <Property Type="String" Name="Moderador" Nullable="true" MaxLength="501" />
+          <Property Type="String" Name="Transcriptor" Nullable="true" MaxLength="250" />
+          <Property Type="Boolean" Name="Ejecutada" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="PY_SegmentosCuali_Get_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="String" Name="Descripcion" Nullable="true" />
+          <Property Type="Int32" Name="Cantidad" Nullable="true" />
+          <Property Type="DateTime" Name="FechaInicio" Nullable="true" />
+          <Property Type="DateTime" Name="FechaFin" Nullable="true" />
+          <Property Type="Double" Name="AVANCEPLANEACION" Nullable="true" />
+          <Property Type="Double" Name="AVANCEEJECUCION" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="PY_SegmentosCuali">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int64" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="Int64" Name="TrabajoId" />
+          <Property Type="String" Name="Descripcion" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="Cantidad" />
+          <Property Type="String" Name="ObservacionesMetodologia" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="MetodoReclutamiento" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="NoReclutadoras" />
+          <Property Type="DateTime" Name="FechaInicio" Precision="0" />
+          <Property Type="DateTime" Name="FechaFin" Precision="0" />
+          <Property Type="Int32" Name="Departamento" />
+          <Property Type="Int32" Name="Municipio" />
+          <Property Type="Int32" Name="TipoLugar" />
+          <Property Type="String" Name="EspecificacionesLugar" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="NSE" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Edades" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Genero" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="OtrasCaracteristicas" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ExclusionesYRestricciones" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="NoPersonas" />
+          <Property Type="String" Name="GastosDeViaje" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Incentivos" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Alimentacion" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="Transcripcion" />
+          <Property Type="Boolean" Name="Traduccion" />
+          <Property Type="Boolean" Name="Video" />
+          <Property Type="Boolean" Name="Audios" />
+          <Property Type="Boolean" Name="Filtros" />
+          <Property Type="Boolean" Name="FlashReport" />
+          <Property Type="String" Name="OtrosEntregables" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ObservacionesGenerales" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="OtrasAyudas" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="OP_CampoCuali" Relationship="PY_Cuali_Model.FK_OP_CampoCuali_PY_SegmentosCuali" FromRole="PY_SegmentosCuali" ToRole="OP_CampoCuali" />
+          <NavigationProperty Name="PY_SegmentosCuali_Moderadores" Relationship="PY_Cuali_Model.FK_PY_SegmentosCuali_Moderadores_PY_SegmentosCuali" FromRole="PY_SegmentosCuali" ToRole="PY_SegmentosCuali_Moderadores" />
+          <NavigationProperty Name="PY_SegmentosCuali_Reclutadores" Relationship="PY_Cuali_Model.FK_PY_SegmentosCuali_Reclutadores_PY_SegmentosCuali" FromRole="PY_SegmentosCuali" ToRole="PY_SegmentosCuali_Reclutadores" />
+        </EntityType>
+        <Association Name="FK_OP_CampoCuali_PY_SegmentosCuali">
+          <End Type="PY_Cuali_Model.PY_SegmentosCuali" Role="PY_SegmentosCuali" Multiplicity="0..1" />
+          <End Type="PY_Cuali_Model.OP_CampoCuali" Role="OP_CampoCuali" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PY_SegmentosCuali">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="OP_CampoCuali">
+              <PropertyRef Name="SegmentoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="OP_ListadoCampoCualiXSegmento_Result">
+          <Property Type="String" Name="Segmento" Nullable="true" />
+          <Property Type="String" Name="CIUDAD" Nullable="false" MaxLength="255" />
+          <Property Type="String" Name="Lugar" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PersonaContaco" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="DatosContacto" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Direccion" Nullable="true" MaxLength="200" />
+          <Property Type="DateTime" Name="Fecha" Nullable="true" />
+          <Property Type="Time" Name="Hora" Nullable="true" />
+          <Property Type="String" Name="ObservacionesPrevias" Nullable="true" />
+          <Property Type="String" Name="Moderador" Nullable="true" MaxLength="201" />
+          <Property Type="String" Name="PlaneadoPor" Nullable="true" MaxLength="501" />
+          <Property Type="DateTime" Name="FechaReal" Nullable="true" />
+          <Property Type="Time" Name="HoraReal" Nullable="true" />
+          <Property Type="Int32" Name="Asistentes" Nullable="true" />
+          <Property Type="Int32" Name="AsistentesNoCumplen" Nullable="true" />
+          <Property Type="String" Name="ObservacionesEjecucion" Nullable="true" />
+          <Property Type="String" Name="CAIDA" Nullable="false" MaxLength="9" />
+          <Property Type="String" Name="CANCELADA" Nullable="false" MaxLength="9" />
+          <Property Type="String" Name="EJECUTADA" Nullable="false" MaxLength="9" />
+          <Property Type="String" Name="EjecucionPor" Nullable="true" MaxLength="501" />
+        </ComplexType>
+        <ComplexType Name="US_UsuariosModeradoresCualitativos_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="true" MaxLength="500" />
+        </ComplexType>
+        <ComplexType Name="US_UsuariosReclutadoresCualitativos_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="true" MaxLength="250" />
+        </ComplexType>
+        <ComplexType Name="US_UsuariosTranscriptoresCualitativos_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="true" MaxLength="250" />
+        </ComplexType>
+        <EntityType Name="PY_SegmentosCuali_Moderadores">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TrabajoId" Type="Int64" />
+          <Property Name="SegmentoId" Type="Int64" />
+          <Property Name="Moderador" Type="Int64" />
+          <Property Name="FechaAsignacion" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="PY_SegmentosCuali" Relationship="PY_Cuali_Model.FK_PY_SegmentosCuali_Moderadores_PY_SegmentosCuali" FromRole="PY_SegmentosCuali_Moderadores" ToRole="PY_SegmentosCuali" />
+        </EntityType>
+        <EntityType Name="PY_SegmentosCuali_Reclutadores">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TrabajoId" Type="Int64" />
+          <Property Name="SegmentoId" Type="Int64" />
+          <Property Name="Reclutador" Type="Int64" />
+          <Property Name="FechaAsignacion" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="PY_SegmentosCuali" Relationship="PY_Cuali_Model.FK_PY_SegmentosCuali_Reclutadores_PY_SegmentosCuali" FromRole="PY_SegmentosCuali_Reclutadores" ToRole="PY_SegmentosCuali" />
+        </EntityType>
+        <Association Name="FK_PY_SegmentosCuali_Moderadores_PY_SegmentosCuali">
+          <End Type="PY_Cuali_Model.PY_SegmentosCuali" Role="PY_SegmentosCuali" Multiplicity="0..1" />
+          <End Type="PY_Cuali_Model.PY_SegmentosCuali_Moderadores" Role="PY_SegmentosCuali_Moderadores" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PY_SegmentosCuali">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="PY_SegmentosCuali_Moderadores">
+              <PropertyRef Name="SegmentoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PY_SegmentosCuali_Reclutadores_PY_SegmentosCuali">
+          <End Type="PY_Cuali_Model.PY_SegmentosCuali" Role="PY_SegmentosCuali" Multiplicity="0..1" />
+          <End Type="PY_Cuali_Model.PY_SegmentosCuali_Reclutadores" Role="PY_SegmentosCuali_Reclutadores" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PY_SegmentosCuali">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="PY_SegmentosCuali_Reclutadores">
+              <PropertyRef Name="SegmentoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="PY_SegmentosCuali_Moderadores_Get_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="Int64" Name="TrabajoId" Nullable="true" />
+          <Property Type="Int64" Name="SegmentoId" Nullable="true" />
+          <Property Type="Int64" Name="Identificacion" Nullable="true" />
+          <Property Type="String" Name="Nombre" Nullable="true" MaxLength="501" />
+          <Property Type="DateTime" Name="FechaAsignacion" Nullable="true" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="PY_SegmentosCuali_Reclutadores_Get_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="Int64" Name="TrabajoId" Nullable="true" />
+          <Property Type="Int64" Name="SegmentoId" Nullable="true" />
+          <Property Type="Int64" Name="Identificacion" Nullable="true" />
+          <Property Type="String" Name="Nombre" Nullable="true" MaxLength="501" />
+          <Property Type="DateTime" Name="FechaAsignacion" Nullable="true" Precision="23" />
+        </ComplexType>
+        <EntityType Name="PY_AyudasRequeridasCuali">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TrabajoId" Type="Int64" />
+          <Property Name="TipoAyuda" Type="Int32" />
+          <NavigationProperty Name="PY_AyudasCuali" Relationship="PY_Cuali_Model.FK_PY_AyudasRequeridasCuali_PY_AyudasCuali" FromRole="PY_AyudasRequeridasCuali" ToRole="PY_AyudasCuali" />
+        </EntityType>
+        <Association Name="FK_PY_AyudasRequeridasCuali_PY_AyudasCuali">
+          <End Type="PY_Cuali_Model.PY_AyudasCuali" Role="PY_AyudasCuali" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="PY_Cuali_Model.PY_AyudasRequeridasCuali" Role="PY_AyudasRequeridasCuali" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PY_AyudasCuali">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="PY_AyudasRequeridasCuali">
+              <PropertyRef Name="TipoAyuda" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="PY_TipoReclutamientoCuali">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="Tipo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="PY_ReclutamientoRequeridoCuali">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TrabajoId" Type="Int64" />
+          <Property Name="TipoReclutamiento" Type="Int32" />
+        </EntityType>
+        <EntityType Name="OP_EstadosSesion">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Byte" Nullable="false" />
+          <Property Name="Estado" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="OP_LogSesionesCuali">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdSesion" Type="Int64" />
+          <Property Name="Fecha" Type="DateTime" Precision="3" />
+          <Property Name="Usuario" Type="Int64" />
+          <Property Name="Estado" Type="Int32" />
+          <Property Name="Observacion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Cantidad" Type="Double" />
+        </EntityType>
+        <ComplexType Name="OP_LogSesionesCuali_Get_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="Int64" Name="IdSesion" Nullable="true" />
+          <Property Type="Int32" Name="Numero" Nullable="true" />
+          <Property Type="DateTime" Name="Fecha" Nullable="true" Precision="23" />
+          <Property Type="Int64" Name="IdUsuario" Nullable="true" />
+          <Property Type="String" Name="Usuario" Nullable="true" MaxLength="501" />
+          <Property Type="Int32" Name="IdEstado" Nullable="true" />
+          <Property Type="String" Name="Estado" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Observacion" Nullable="true" />
+          <Property Type="Double" Name="Cantidad" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="OP_LogInHomeCuali">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdSesion" Type="Int64" />
+          <Property Name="Fecha" Type="DateTime" Precision="3" />
+          <Property Name="Usuario" Type="Int64" />
+          <Property Name="Estado" Type="Int32" />
+          <Property Name="Observacion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <ComplexType Name="OP_LogInHomeCuali_Get_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="Int64" Name="IdSesion" Nullable="true" />
+          <Property Type="Int32" Name="Numero" Nullable="true" />
+          <Property Type="DateTime" Name="Fecha" Nullable="true" Precision="23" />
+          <Property Type="Int64" Name="IdUsuario" Nullable="true" />
+          <Property Type="String" Name="Usuario" Nullable="true" MaxLength="501" />
+          <Property Type="Int32" Name="IdEstado" Nullable="true" />
+          <Property Type="String" Name="Estado" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Observacion" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="PY_TrabajoCuali_Get_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="String" Name="NombreTrabajo" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="JobBook" Nullable="true" MaxLength="20" />
+          <Property Type="Int64" Name="TrabajoId" Nullable="true" />
+          <Property Type="Boolean" Name="IncentivoEconomico" Nullable="true" />
+          <Property Type="Double" Name="PresupuestoIncentivo" Nullable="true" />
+          <Property Type="String" Name="DistribucionIncentivo" Nullable="true" />
+          <Property Type="Boolean" Name="RegalosCliente" Nullable="true" />
+          <Property Type="Boolean" Name="CompraIpsos" Nullable="true" />
+          <Property Type="Double" Name="PresupuestoCompra" Nullable="true" />
+          <Property Type="String" Name="DistribucionCompra" Nullable="true" />
+          <Property Type="String" Name="ExclusionesRestricciones" Nullable="true" />
+          <Property Type="String" Name="RecursosPropiedadCliente" Nullable="true" />
+          <Property Type="Int32" Name="Backups" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="OP_EntrevistasCuali_Distribucion">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdEntrevista" Type="Int64" />
+          <Property Name="Numero" Type="Int32" />
+          <Property Name="TrabajoId" Type="Int64" />
+          <Property Name="GrupoObjetivo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CiudadId" Type="Int32" />
+          <Property Name="Cantidad" Type="Double" />
+          <Property Name="FechaInicio" Type="DateTime" Precision="0" />
+          <Property Name="FechaFin" Type="DateTime" Precision="0" />
+          <Property Name="Moderador" Type="Int64" />
+          <Property Name="Estado" Type="Int32" />
+        </EntityType>
+        <EntityType Name="OP_LogEntrevistasCuali">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdDistribucion" Type="Int64" />
+          <Property Name="IdEntrevista" Type="Int64" />
+          <Property Name="Fecha" Type="DateTime" Precision="3" />
+          <Property Name="Usuario" Type="Int64" />
+          <Property Name="Estado" Type="Int32" />
+          <Property Name="Observacion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <ComplexType Name="OP_EntrevistasCuali_DistribucionGet_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="Int64" Name="IdEntrevista" Nullable="true" />
+          <Property Type="Int32" Name="Numero" Nullable="true" />
+          <Property Type="String" Name="NombreTrabajo" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="JobBook" Nullable="true" MaxLength="20" />
+          <Property Type="Int64" Name="TrabajoId" Nullable="false" />
+          <Property Type="String" Name="GrupoObjetivo" Nullable="true" />
+          <Property Type="Int32" Name="DepartamentoId" Nullable="false" />
+          <Property Type="String" Name="Departamento" Nullable="false" MaxLength="255" />
+          <Property Type="String" Name="Ciudad" Nullable="false" MaxLength="255" />
+          <Property Type="Int32" Name="CiudadId" Nullable="true" />
+          <Property Type="Double" Name="Cantidad" Nullable="true" />
+          <Property Type="DateTime" Name="FechaInicio" Nullable="true" />
+          <Property Type="DateTime" Name="FechaFin" Nullable="true" />
+          <Property Type="Int64" Name="IdModerador" Nullable="true" />
+          <Property Type="String" Name="Moderador" Nullable="true" MaxLength="201" />
+          <Property Type="Int32" Name="IdEstado" Nullable="true" />
+          <Property Type="String" Name="Estado" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="OP_LogEntrevistasCuali_Get_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="Int64" Name="IdDistribucion" Nullable="true" />
+          <Property Type="Int64" Name="IdEntrevista" Nullable="true" />
+          <Property Type="Int32" Name="Numero" Nullable="true" />
+          <Property Type="DateTime" Name="Fecha" Nullable="true" Precision="23" />
+          <Property Type="Int64" Name="IdUsuario" Nullable="true" />
+          <Property Type="String" Name="Usuario" Nullable="true" MaxLength="501" />
+          <Property Type="Int32" Name="IdEstado" Nullable="true" />
+          <Property Type="String" Name="Estado" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Observacion" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="OP_Filtros">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TipoFiltro" Type="Int32" />
+          <Property Name="IdTrabajo" Type="Int64" />
+          <Property Name="FechaInicio" Type="DateTime" Precision="0" />
+          <Property Name="FechaFin" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="OP_TipoFiltro" Relationship="PY_Cuali_Model.FK_OP_Filtros_OP_TipoFiltro" FromRole="OP_Filtros" ToRole="OP_TipoFiltro" />
+          <NavigationProperty Name="OP_Preguntas_Filtro" Relationship="PY_Cuali_Model.FK_OP_Preguntas_Filtro_OP_Filtros" FromRole="OP_Filtros" ToRole="OP_Preguntas_Filtro" />
+          <Property Name="Activo" Type="Boolean" />
+          <NavigationProperty Name="OP_Respuestas_Filtro_Maestro" Relationship="PY_Cuali_Model.FK_OP_Respuestas_Filtro_Maestro_OP_Filtros" FromRole="OP_Filtros" ToRole="OP_Respuestas_Filtro_Maestro" />
+        </EntityType>
+        <EntityType Name="OP_Preguntas_Filtro">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdFiltro" Type="Int64" />
+          <Property Name="TipoPregunta" Type="Int32" />
+          <Property Name="OrdenPregunta" Type="Int32" />
+          <Property Name="Textopregunta" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Respuestas" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Obligatoria" Type="Boolean" />
+          <NavigationProperty Name="OP_Filtros" Relationship="PY_Cuali_Model.FK_OP_Preguntas_Filtro_OP_Filtros" FromRole="OP_Preguntas_Filtro" ToRole="OP_Filtros" />
+          <NavigationProperty Name="OP_TipoPregunta_Filtro" Relationship="PY_Cuali_Model.FK_OP_Preguntas_Filtro_OP_TipoPregunta_Filtro" FromRole="OP_Preguntas_Filtro" ToRole="OP_TipoPregunta_Filtro" />
+          <Property Name="Fija" Type="Boolean" />
+          <Property Name="Campo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="OP_Respuestas_Filtro_Detalle" Relationship="PY_Cuali_Model.FK_OP_Respuestas_Filtro_OP_Preguntas_Filtro" FromRole="OP_Preguntas_Filtro" ToRole="OP_Respuestas_Filtro_Detalle" />
+        </EntityType>
+        <EntityType Name="OP_TipoFiltro">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TipoFiltro" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="OP_Filtros" Relationship="PY_Cuali_Model.FK_OP_Filtros_OP_TipoFiltro" FromRole="OP_TipoFiltro" ToRole="OP_Filtros" />
+        </EntityType>
+        <EntityType Name="OP_TipoPregunta_Filtro">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="TipoPregunta" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="OP_Preguntas_Filtro" Relationship="PY_Cuali_Model.FK_OP_Preguntas_Filtro_OP_TipoPregunta_Filtro" FromRole="OP_TipoPregunta_Filtro" ToRole="OP_Preguntas_Filtro" />
+        </EntityType>
+        <Association Name="FK_OP_Filtros_OP_TipoFiltro">
+          <End Type="PY_Cuali_Model.OP_TipoFiltro" Role="OP_TipoFiltro" Multiplicity="0..1" />
+          <End Type="PY_Cuali_Model.OP_Filtros" Role="OP_Filtros" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OP_TipoFiltro">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OP_Filtros">
+              <PropertyRef Name="TipoFiltro" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OP_Preguntas_Filtro_OP_Filtros">
+          <End Type="PY_Cuali_Model.OP_Filtros" Role="OP_Filtros" Multiplicity="0..1" />
+          <End Type="PY_Cuali_Model.OP_Preguntas_Filtro" Role="OP_Preguntas_Filtro" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OP_Filtros">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OP_Preguntas_Filtro">
+              <PropertyRef Name="IdFiltro" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OP_Preguntas_Filtro_OP_TipoPregunta_Filtro">
+          <End Type="PY_Cuali_Model.OP_TipoPregunta_Filtro" Role="OP_TipoPregunta_Filtro" Multiplicity="0..1" />
+          <End Type="PY_Cuali_Model.OP_Preguntas_Filtro" Role="OP_Preguntas_Filtro" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OP_TipoPregunta_Filtro">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OP_Preguntas_Filtro">
+              <PropertyRef Name="TipoPregunta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="OP_Preguntas_Filtro_Get_Result">
+          <Property Type="Int64" Name="IdFiltro" Nullable="false" />
+          <Property Type="Int32" Name="IdTipoFiltro" Nullable="true" />
+          <Property Type="String" Name="TipoFiltro" Nullable="true" MaxLength="50" />
+          <Property Type="Int64" Name="IdTrabajo" Nullable="true" />
+          <Property Type="DateTime" Name="FechaInicio" Nullable="true" />
+          <Property Type="DateTime" Name="FechaFin" Nullable="true" />
+          <Property Type="Int32" Name="IdTipoPregunta" Nullable="true" />
+          <Property Type="String" Name="TipoPregunta" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="OrdenPregunta" Nullable="true" />
+          <Property Type="String" Name="Textopregunta" Nullable="true" />
+          <Property Type="String" Name="Respuestas" Nullable="true" />
+          <Property Type="Boolean" Name="IdObligatoria" Nullable="true" />
+          <Property Type="String" Name="Obligatoria" Nullable="false" MaxLength="2" />
+          <Property Type="Int64" Name="IdPregunta" Nullable="false" />
+          <Property Type="Boolean" Name="IdFija" Nullable="true" />
+          <Property Type="String" Name="Fija" Nullable="false" MaxLength="2" />
+          <Property Type="String" Name="Campo" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="OP_Filtros_Get_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="Int32" Name="IdTipoFiltro" Nullable="true" />
+          <Property Type="String" Name="TipoFiltro" Nullable="true" MaxLength="50" />
+          <Property Type="Int64" Name="IdTrabajo" Nullable="true" />
+          <Property Type="DateTime" Name="FechaInicio" Nullable="true" />
+          <Property Type="DateTime" Name="FechaFin" Nullable="true" />
+          <Property Type="Boolean" Name="Activo" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="OP_Respuestas_FiltroReclutamiento_Maestro_Get_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="Int64" Name="IdFiltro" Nullable="true" />
+          <Property Type="DateTime" Name="Fecha" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Nombre" Nullable="true" />
+          <Property Type="Int64" Name="Cedula" Nullable="true" />
+          <Property Type="String" Name="Celular" Nullable="true" />
+          <Property Type="String" Name="Direccion" Nullable="true" />
+          <Property Type="String" Name="Ciudad" Nullable="true" />
+          <Property Type="String" Name="Barrio" Nullable="true" />
+          <Property Type="String" Name="Edad" Nullable="true" />
+          <Property Type="String" Name="Estrato" Nullable="true" />
+          <Property Type="String" Name="Reclutador" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="OP_Respuestas_Filtro_Detalle">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdRespuesta" Type="Int64" />
+          <Property Name="IdPregunta" Type="Int64" />
+          <Property Name="Respuesta" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="OP_Preguntas_Filtro" Relationship="PY_Cuali_Model.FK_OP_Respuestas_Filtro_OP_Preguntas_Filtro" FromRole="OP_Respuestas_Filtro_Detalle" ToRole="OP_Preguntas_Filtro" />
+          <NavigationProperty Name="OP_Respuestas_Filtro_Maestro" Relationship="PY_Cuali_Model.FK_OP_Respuestas_Filtro_OP_Respuestas_Filtro" FromRole="OP_Respuestas_Filtro_Detalle" ToRole="OP_Respuestas_Filtro_Maestro" />
+        </EntityType>
+        <EntityType Name="OP_Respuestas_Filtro_Maestro">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdFiltro" Type="Int64" />
+          <Property Name="Fecha" Type="DateTime" Precision="3" />
+          <Property Name="Nombre" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Cedula" Type="Int64" />
+          <Property Name="Celular" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Direccion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Ciudad" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Barrio" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Edad" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Estrato" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Reclutador" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="OP_Filtros" Relationship="PY_Cuali_Model.FK_OP_Respuestas_Filtro_Maestro_OP_Filtros" FromRole="OP_Respuestas_Filtro_Maestro" ToRole="OP_Filtros" />
+          <NavigationProperty Name="OP_Respuestas_Filtro_Detalle" Relationship="PY_Cuali_Model.FK_OP_Respuestas_Filtro_OP_Respuestas_Filtro" FromRole="OP_Respuestas_Filtro_Maestro" ToRole="OP_Respuestas_Filtro_Detalle" />
+          <Property Name="Estado" Type="Int32" />
+        </EntityType>
+        <Association Name="FK_OP_Respuestas_Filtro_Maestro_OP_Filtros">
+          <End Type="PY_Cuali_Model.OP_Filtros" Role="OP_Filtros" Multiplicity="0..1" />
+          <End Type="PY_Cuali_Model.OP_Respuestas_Filtro_Maestro" Role="OP_Respuestas_Filtro_Maestro" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OP_Filtros">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OP_Respuestas_Filtro_Maestro">
+              <PropertyRef Name="IdFiltro" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OP_Respuestas_Filtro_OP_Preguntas_Filtro">
+          <End Type="PY_Cuali_Model.OP_Preguntas_Filtro" Role="OP_Preguntas_Filtro" Multiplicity="0..1" />
+          <End Type="PY_Cuali_Model.OP_Respuestas_Filtro_Detalle" Role="OP_Respuestas_Filtro_Detalle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OP_Preguntas_Filtro">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OP_Respuestas_Filtro_Detalle">
+              <PropertyRef Name="IdPregunta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OP_Respuestas_Filtro_OP_Respuestas_Filtro">
+          <End Type="PY_Cuali_Model.OP_Respuestas_Filtro_Maestro" Role="OP_Respuestas_Filtro_Maestro" Multiplicity="0..1" />
+          <End Type="PY_Cuali_Model.OP_Respuestas_Filtro_Detalle" Role="OP_Respuestas_Filtro_Detalle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OP_Respuestas_Filtro_Maestro">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OP_Respuestas_Filtro_Detalle">
+              <PropertyRef Name="IdRespuesta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="OP_Respuestas_Filtro_Detalle_Get_Result">
+          <Property Type="Int64" Name="IdFiltro" Nullable="true" />
+          <Property Type="Int64" Name="IdRespuesta" Nullable="true" />
+          <Property Type="Int32" Name="TipoPregunta" Nullable="true" />
+          <Property Type="Int32" Name="OrdenPregunta" Nullable="true" />
+          <Property Type="String" Name="Textopregunta" Nullable="true" />
+          <Property Type="String" Name="Respuesta" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="OP_Respuestas_Filtro_Maestro_Get_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="Int64" Name="IdFiltro" Nullable="true" />
+          <Property Type="DateTime" Name="Fecha" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Nombre" Nullable="true" />
+          <Property Type="Int64" Name="Cedula" Nullable="true" />
+          <Property Type="String" Name="Celular" Nullable="true" />
+          <Property Type="String" Name="Direccion" Nullable="true" />
+          <Property Type="String" Name="Ciudad" Nullable="true" />
+          <Property Type="String" Name="Barrio" Nullable="true" />
+          <Property Type="String" Name="Edad" Nullable="true" />
+          <Property Type="String" Name="Estrato" Nullable="true" />
+          <Property Type="String" Name="Reclutador" Nullable="true" />
+          <Property Type="Int32" Name="IdEstado" Nullable="true" />
+          <Property Type="String" Name="Estado" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <EntityType Name="OP_LogRespuestas_Filtro">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdRespuesta" Type="Int64" />
+          <Property Name="Estado" Type="Int32" />
+          <Property Name="Observacion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Fecha" Type="DateTime" Precision="3" />
+          <Property Name="Usuario" Type="Int64" />
+        </EntityType>
+        <ComplexType Name="OP_MuestraTrabajosCuali_EntrevistasGet_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Descripcion" Nullable="true" />
+          <Property Type="String" Name="Ciudad" Nullable="false" MaxLength="255" />
+          <Property Type="Int32" Name="CiudadId" Nullable="true" />
+          <Property Type="String" Name="NombreTrabajo" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="JobBook" Nullable="true" MaxLength="20" />
+          <Property Type="Int64" Name="TrabajoId" Nullable="false" />
+          <Property Type="Double" Name="Cantidad" Nullable="true" />
+          <Property Type="DateTime" Name="FechaInicio" Nullable="true" />
+          <Property Type="DateTime" Name="FechaFin" Nullable="true" />
+          <Property Type="Int64" Name="IdModerador" Nullable="true" />
+          <Property Type="String" Name="Moderador" Nullable="true" MaxLength="201" />
+          <Property Type="Int32" Name="NumeroBackup" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="OP_MuestraTrabajosCuali_InHomeGet_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="Int32" Name="Numero" Nullable="true" />
+          <Property Type="Int32" Name="DepartamentoId" Nullable="false" />
+          <Property Type="String" Name="Departamento" Nullable="false" MaxLength="255" />
+          <Property Type="String" Name="Ciudad" Nullable="false" MaxLength="255" />
+          <Property Type="Int32" Name="CiudadId" Nullable="true" />
+          <Property Type="String" Name="NombreTrabajo" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="JobBook" Nullable="true" MaxLength="20" />
+          <Property Type="Int64" Name="TrabajoId" Nullable="false" />
+          <Property Type="Double" Name="Cantidad" Nullable="true" />
+          <Property Type="DateTime" Name="Fecha" Nullable="true" />
+          <Property Type="Time" Name="Hora" Nullable="true" />
+          <Property Type="Int64" Name="IdModerador" Nullable="true" />
+          <Property Type="String" Name="Moderador" Nullable="true" MaxLength="201" />
+          <Property Type="String" Name="GrupoObjetivo" Nullable="true" />
+          <Property Type="String" Name="Caracteristicas" Nullable="true" />
+          <Property Type="Int32" Name="IdEstado" Nullable="true" />
+          <Property Type="String" Name="Estado" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="OP_MuestraTrabajosCuali_SesionesGet_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="Int32" Name="Numero" Nullable="true" />
+          <Property Type="Int32" Name="DepartamentoId" Nullable="false" />
+          <Property Type="String" Name="Departamento" Nullable="false" MaxLength="255" />
+          <Property Type="String" Name="Ciudad" Nullable="false" MaxLength="255" />
+          <Property Type="Int32" Name="CiudadId" Nullable="true" />
+          <Property Type="String" Name="NombreTrabajo" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="JobBook" Nullable="true" MaxLength="20" />
+          <Property Type="Int64" Name="TrabajoId" Nullable="false" />
+          <Property Type="Double" Name="Cantidad" Nullable="true" />
+          <Property Type="DateTime" Name="Fecha" Nullable="true" />
+          <Property Type="Time" Name="Hora" Nullable="true" />
+          <Property Type="Int64" Name="IdModerador" Nullable="true" />
+          <Property Type="String" Name="Moderador" Nullable="true" MaxLength="201" />
+          <Property Type="String" Name="GrupoObjetivo" Nullable="true" />
+          <Property Type="String" Name="Caracteristicas" Nullable="true" />
+          <Property Type="Int32" Name="IdEstado" Nullable="true" />
+          <Property Type="String" Name="Estado" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <EntityType Name="OP_MuestraTrabajosCuali_Entrevistas">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CiudadId" Type="Int32" />
+          <Property Name="TrabajoId" Type="Int64" />
+          <Property Name="Cantidad" Type="Double" />
+          <Property Name="Moderador" Type="Int64" />
+          <Property Name="FechaInicio" Type="DateTime" Precision="0" />
+          <Property Name="FechaFin" Type="DateTime" Precision="0" />
+          <Property Name="NumeroBackup" Type="Int32" />
+        </EntityType>
+        <EntityType Name="OP_MuestraTrabajosCuali_InHome">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Numero" Type="Int32" />
+          <Property Name="TrabajoId" Type="Int64" />
+          <Property Name="CiudadId" Type="Int32" />
+          <Property Name="Cantidad" Type="Double" />
+          <Property Name="Fecha" Type="DateTime" Precision="0" />
+          <Property Name="Hora" Type="Time" Precision="7" />
+          <Property Name="Moderador" Type="Int64" />
+          <Property Name="GrupoObjetivo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Caracteristicas" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Estado" Type="Int32" />
+        </EntityType>
+        <EntityType Name="OP_MuestraTrabajosCuali_Sesiones">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Numero" Type="Int32" />
+          <Property Name="TrabajoId" Type="Int64" />
+          <Property Name="CiudadId" Type="Int32" />
+          <Property Name="Cantidad" Type="Double" />
+          <Property Name="Fecha" Type="DateTime" Precision="0" />
+          <Property Name="Hora" Type="Time" Precision="7" />
+          <Property Name="Moderador" Type="Int64" />
+          <Property Name="GrupoObjetivo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Caracteristicas" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Estado" Type="Int32" />
+        </EntityType>
+        <EntityType Name="OP_MuestraTrabajosCuali">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CiudadId" Type="Int32" />
+          <Property Name="TrabajoId" Type="Int64" />
+          <Property Name="Cantidad" Type="Double" />
+          <Property Name="FechaInicio" Type="DateTime" Precision="0" />
+          <Property Name="FechaFin" Type="DateTime" Precision="0" />
+          <Property Name="NumeroBackup" Type="Int32" />
+        </EntityType>
+        <ComplexType Name="OP_MuestraTrabajosCuali_Get_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Ciudad" Nullable="false" MaxLength="255" />
+          <Property Type="Int32" Name="CiudadId" Nullable="true" />
+          <Property Type="String" Name="NombreTrabajo" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="JobBook" Nullable="true" MaxLength="20" />
+          <Property Type="Int64" Name="TrabajoId" Nullable="false" />
+          <Property Type="Double" Name="Cantidad" Nullable="true" />
+          <Property Type="DateTime" Name="FechaInicio" Nullable="true" />
+          <Property Type="DateTime" Name="FechaFin" Nullable="true" />
+          <Property Type="Int32" Name="NumeroBackup" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="PY_Trabajo_Entrega_Cualitativo_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="String" Name="JobBook" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="NombreTrabajo" Nullable="true" MaxLength="250" />
+          <Property Type="Int64" Name="Muestra" Nullable="true" />
+          <Property Type="Int32" Name="Backups" Nullable="true" />
+          <Property Type="DateTime" Name="FechaTentativaInicioCampo" Nullable="true" />
+          <Property Type="DateTime" Name="FechaTentativaFinalizacion" Nullable="true" />
+          <Property Type="String" Name="MetNombre" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Unidad" Nullable="true" MaxLength="50" />
+          <Property Type="Int64" Name="GerenteProyectos" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="PY_EspCuentasCuali">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProyectoId" Type="Int64" />
+          <Property Name="BCPObservaciones" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="BCPTecnica" Type="Byte" />
+          <Property Name="BCPotraTecnica" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="BCPIncentivosEsp" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="BCPBDDEsp" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="BCPProductoEsp" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="BCPReclutamiento" Type="Byte" />
+          <Property Name="BCPEspReclutamiento" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="BCPEspProducto" Type="Boolean" />
+          <Property Name="BCPMaterialEval" Type="Boolean" />
+          <Property Name="BCPObsProducto" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="NoVersion" Type="Byte" />
+          <Property Name="Fecha" Type="DateTime" Precision="3" />
+          <Property Name="Usuario" Type="Int64" />
+        </EntityType>
+        <EntityType Name="PY_EspecifTecTrabajoCuali">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TrabajoId" Type="Int64" Nullable="false" />
+          <Property Name="Moderador" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="EspecificacionesCampo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="MaterialApoyo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Incidencias" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Auditoria" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="VCSeguridad" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="VCObtencion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="VCGrupoObjetivo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="VCAplicacionInstrumentos" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="VCDistribucionCuotas" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="VCMetodologia" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Incentivos" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="PresupuestoIncentivo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="DistribucionIncentivo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="RegaloClientes" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CompraIpsos" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="PresupuestoCompra" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="DistribucionCompra" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ExclusionesyRestricciones" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="RecursosPropiedadesCliente" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="HabeasData" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="OtrasEspecificaciones" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="NoVersion" Type="Byte" />
+          <Property Name="Fecha" Type="DateTime" Precision="3" />
+          <Property Name="Usuario" Type="Int64" />
+        </EntityType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PY_Cuali_ModelStoreContainer" CdmEntityContainer="PY_CualiEntities">
+          <EntitySetMapping Name="PY_AyudasCuali">
+            <EntityTypeMapping TypeName="PY_Cuali_Model.PY_AyudasCuali">
+              <MappingFragment StoreEntitySet="PY_AyudasCuali">
+                <ScalarProperty Name="Ayuda" ColumnName="Ayuda" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PY_LugaresCuali">
+            <EntityTypeMapping TypeName="PY_Cuali_Model.PY_LugaresCuali">
+              <MappingFragment StoreEntitySet="PY_LugaresCuali">
+                <ScalarProperty Name="Lugar" ColumnName="Lugar" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OP_CampoCuali">
+            <EntityTypeMapping TypeName="PY_Cuali_Model.OP_CampoCuali">
+              <MappingFragment StoreEntitySet="OP_CampoCuali">
+                <ScalarProperty Name="Transcriptor" ColumnName="Transcriptor" />
+                <ScalarProperty Name="Ejecutada" ColumnName="Ejecutada" />
+                <ScalarProperty Name="Cancelada" ColumnName="Cancelada" />
+                <ScalarProperty Name="Caida" ColumnName="Caida" />
+                <ScalarProperty Name="EjecucionPor" ColumnName="EjecucionPor" />
+                <ScalarProperty Name="ObservacionesEjecucion" ColumnName="ObservacionesEjecucion" />
+                <ScalarProperty Name="AsistentesNoCumplen" ColumnName="AsistentesNoCumplen" />
+                <ScalarProperty Name="Asistentes" ColumnName="Asistentes" />
+                <ScalarProperty Name="HoraReal" ColumnName="HoraReal" />
+                <ScalarProperty Name="FechaReal" ColumnName="FechaReal" />
+                <ScalarProperty Name="ObservacionesPrevias" ColumnName="ObservacionesPrevias" />
+                <ScalarProperty Name="Hora" ColumnName="Hora" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+                <ScalarProperty Name="DatosContacto" ColumnName="DatosContacto" />
+                <ScalarProperty Name="PersonaContaco" ColumnName="PersonaContaco" />
+                <ScalarProperty Name="Lugar" ColumnName="Lugar" />
+                <ScalarProperty Name="PlaneacionPor" ColumnName="PlaneacionPor" />
+                <ScalarProperty Name="Moderador" ColumnName="Moderador" />
+                <ScalarProperty Name="SegmentoId" ColumnName="SegmentoId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OP_CampoCuali_Get" FunctionName="PY_Cuali_Model.Store.OP_CampoCuali_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PY_Cuali_Model.OP_CampoCuali_Get_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Lugar" ColumnName="Lugar" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Hora" ColumnName="Hora" />
+                <ScalarProperty Name="Cancelada" ColumnName="Cancelada" />
+                <ScalarProperty Name="Caida" ColumnName="Caida" />
+                <ScalarProperty Name="Moderador" ColumnName="Moderador" />
+                <ScalarProperty Name="Transcriptor" ColumnName="Transcriptor" />
+                <ScalarProperty Name="Ejecutada" ColumnName="Ejecutada" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PY_SegmentosCuali_Get" FunctionName="PY_Cuali_Model.Store.PY_SegmentosCuali_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PY_Cuali_Model.PY_SegmentosCuali_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="FechaInicio" ColumnName="FechaInicio" />
+                <ScalarProperty Name="FechaFin" ColumnName="FechaFin" />
+                <ScalarProperty Name="AVANCEPLANEACION" ColumnName="AVANCEPLANEACION" />
+                <ScalarProperty Name="AVANCEEJECUCION" ColumnName="AVANCEEJECUCION" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PY_SegmentosCualiDuplicar" FunctionName="PY_Cuali_Model.Store.PY_SegmentosCualiDuplicar" />
+          <EntitySetMapping Name="PY_SegmentosCuali">
+            <EntityTypeMapping TypeName="PY_Cuali_Model.PY_SegmentosCuali">
+              <MappingFragment StoreEntitySet="PY_SegmentosCuali">
+                <ScalarProperty Name="OtrasAyudas" ColumnName="OtrasAyudas" />
+                <ScalarProperty Name="ObservacionesGenerales" ColumnName="ObservacionesGenerales" />
+                <ScalarProperty Name="OtrosEntregables" ColumnName="OtrosEntregables" />
+                <ScalarProperty Name="FlashReport" ColumnName="FlashReport" />
+                <ScalarProperty Name="Filtros" ColumnName="Filtros" />
+                <ScalarProperty Name="Audios" ColumnName="Audios" />
+                <ScalarProperty Name="Video" ColumnName="Video" />
+                <ScalarProperty Name="Traduccion" ColumnName="Traduccion" />
+                <ScalarProperty Name="Transcripcion" ColumnName="Transcripcion" />
+                <ScalarProperty Name="Alimentacion" ColumnName="Alimentacion" />
+                <ScalarProperty Name="Incentivos" ColumnName="Incentivos" />
+                <ScalarProperty Name="GastosDeViaje" ColumnName="GastosDeViaje" />
+                <ScalarProperty Name="NoPersonas" ColumnName="NoPersonas" />
+                <ScalarProperty Name="ExclusionesYRestricciones" ColumnName="ExclusionesYRestricciones" />
+                <ScalarProperty Name="OtrasCaracteristicas" ColumnName="OtrasCaracteristicas" />
+                <ScalarProperty Name="Genero" ColumnName="Genero" />
+                <ScalarProperty Name="Edades" ColumnName="Edades" />
+                <ScalarProperty Name="NSE" ColumnName="NSE" />
+                <ScalarProperty Name="EspecificacionesLugar" ColumnName="EspecificacionesLugar" />
+                <ScalarProperty Name="TipoLugar" ColumnName="TipoLugar" />
+                <ScalarProperty Name="Municipio" ColumnName="Municipio" />
+                <ScalarProperty Name="Departamento" ColumnName="Departamento" />
+                <ScalarProperty Name="FechaFin" ColumnName="FechaFin" />
+                <ScalarProperty Name="FechaInicio" ColumnName="FechaInicio" />
+                <ScalarProperty Name="NoReclutadoras" ColumnName="NoReclutadoras" />
+                <ScalarProperty Name="MetodoReclutamiento" ColumnName="MetodoReclutamiento" />
+                <ScalarProperty Name="ObservacionesMetodologia" ColumnName="ObservacionesMetodologia" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OP_CampoCualiDuplicar" FunctionName="PY_Cuali_Model.Store.OP_CampoCualiDuplicar" />
+          <FunctionImportMapping FunctionImportName="OP_ListadoCampoCualiXSegmento" FunctionName="PY_Cuali_Model.Store.OP_ListadoCampoCualiXSegmento">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PY_Cuali_Model.OP_ListadoCampoCualiXSegmento_Result">
+                <ScalarProperty Name="Segmento" ColumnName="Segmento" />
+                <ScalarProperty Name="CIUDAD" ColumnName="CIUDAD" />
+                <ScalarProperty Name="Lugar" ColumnName="Lugar" />
+                <ScalarProperty Name="PersonaContaco" ColumnName="PersonaContaco" />
+                <ScalarProperty Name="DatosContacto" ColumnName="DatosContacto" />
+                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Hora" ColumnName="Hora" />
+                <ScalarProperty Name="ObservacionesPrevias" ColumnName="ObservacionesPrevias" />
+                <ScalarProperty Name="Moderador" ColumnName="Moderador" />
+                <ScalarProperty Name="PlaneadoPor" ColumnName="PlaneadoPor" />
+                <ScalarProperty Name="FechaReal" ColumnName="FechaReal" />
+                <ScalarProperty Name="HoraReal" ColumnName="HoraReal" />
+                <ScalarProperty Name="Asistentes" ColumnName="Asistentes" />
+                <ScalarProperty Name="AsistentesNoCumplen" ColumnName="AsistentesNoCumplen" />
+                <ScalarProperty Name="ObservacionesEjecucion" ColumnName="ObservacionesEjecucion" />
+                <ScalarProperty Name="CAIDA" ColumnName="CAIDA" />
+                <ScalarProperty Name="CANCELADA" ColumnName="CANCELADA" />
+                <ScalarProperty Name="EJECUTADA" ColumnName="EJECUTADA" />
+                <ScalarProperty Name="EjecucionPor" ColumnName="EjecucionPor" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_UsuariosModeradoresCualitativos" FunctionName="PY_Cuali_Model.Store.US_UsuariosModeradoresCualitativos">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PY_Cuali_Model.US_UsuariosModeradoresCualitativos_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_UsuariosReclutadoresCualitativos" FunctionName="PY_Cuali_Model.Store.US_UsuariosReclutadoresCualitativos">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PY_Cuali_Model.US_UsuariosReclutadoresCualitativos_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_UsuariosTranscriptoresCualitativos" FunctionName="PY_Cuali_Model.Store.US_UsuariosTranscriptoresCualitativos">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PY_Cuali_Model.US_UsuariosTranscriptoresCualitativos_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="PY_SegmentosCuali_Moderadores">
+            <EntityTypeMapping TypeName="PY_Cuali_Model.PY_SegmentosCuali_Moderadores">
+              <MappingFragment StoreEntitySet="PY_SegmentosCuali_Moderadores">
+                <ScalarProperty Name="FechaAsignacion" ColumnName="FechaAsignacion" />
+                <ScalarProperty Name="Moderador" ColumnName="Moderador" />
+                <ScalarProperty Name="SegmentoId" ColumnName="SegmentoId" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PY_SegmentosCuali_Reclutadores">
+            <EntityTypeMapping TypeName="PY_Cuali_Model.PY_SegmentosCuali_Reclutadores">
+              <MappingFragment StoreEntitySet="PY_SegmentosCuali_Reclutadores">
+                <ScalarProperty Name="FechaAsignacion" ColumnName="FechaAsignacion" />
+                <ScalarProperty Name="Reclutador" ColumnName="Reclutador" />
+                <ScalarProperty Name="SegmentoId" ColumnName="SegmentoId" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="PY_SegmentosCuali_Moderadores_Get" FunctionName="PY_Cuali_Model.Store.PY_SegmentosCuali_Moderadores_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PY_Cuali_Model.PY_SegmentosCuali_Moderadores_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="SegmentoId" ColumnName="SegmentoId" />
+                <ScalarProperty Name="Identificacion" ColumnName="Identificacion" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="FechaAsignacion" ColumnName="FechaAsignacion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PY_SegmentosCuali_Reclutadores_Get" FunctionName="PY_Cuali_Model.Store.PY_SegmentosCuali_Reclutadores_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PY_Cuali_Model.PY_SegmentosCuali_Reclutadores_Get_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="SegmentoId" ColumnName="SegmentoId" />
+                <ScalarProperty Name="Identificacion" ColumnName="Identificacion" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="FechaAsignacion" ColumnName="FechaAsignacion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="PY_AyudasRequeridasCuali">
+            <EntityTypeMapping TypeName="PY_Cuali_Model.PY_AyudasRequeridasCuali">
+              <MappingFragment StoreEntitySet="PY_AyudasRequeridasCuali">
+                <ScalarProperty Name="TipoAyuda" ColumnName="TipoAyuda" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PY_TipoReclutamientoCuali">
+            <EntityTypeMapping TypeName="PY_Cuali_Model.PY_TipoReclutamientoCuali">
+              <MappingFragment StoreEntitySet="PY_TipoReclutamientoCuali">
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="PY_TrabajoCuali_Get" FunctionName="PY_Cuali_Model.Store.PY_TrabajoCuali_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PY_Cuali_Model.PY_TrabajoCuali_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="NombreTrabajo" ColumnName="NombreTrabajo" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="IncentivoEconomico" ColumnName="IncentivoEconomico" />
+                <ScalarProperty Name="PresupuestoIncentivo" ColumnName="PresupuestoIncentivo" />
+                <ScalarProperty Name="DistribucionIncentivo" ColumnName="DistribucionIncentivo" />
+                <ScalarProperty Name="RegalosCliente" ColumnName="RegalosCliente" />
+                <ScalarProperty Name="CompraIpsos" ColumnName="CompraIpsos" />
+                <ScalarProperty Name="PresupuestoCompra" ColumnName="PresupuestoCompra" />
+                <ScalarProperty Name="DistribucionCompra" ColumnName="DistribucionCompra" />
+                <ScalarProperty Name="ExclusionesRestricciones" ColumnName="ExclusionesRestricciones" />
+                <ScalarProperty Name="RecursosPropiedadCliente" ColumnName="RecursosPropiedadCliente" />
+                <ScalarProperty Name="Backups" ColumnName="Backups" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="PY_ReclutamientoRequeridoCuali">
+            <EntityTypeMapping TypeName="PY_Cuali_Model.PY_ReclutamientoRequeridoCuali">
+              <MappingFragment StoreEntitySet="PY_ReclutamientoRequeridoCuali">
+                <ScalarProperty Name="TipoReclutamiento" ColumnName="TipoReclutamiento" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OP_EstadosSesion">
+            <EntityTypeMapping TypeName="PY_Cuali_Model.OP_EstadosSesion">
+              <MappingFragment StoreEntitySet="OP_EstadosSesion">
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OP_LogSesionesCuali">
+            <EntityTypeMapping TypeName="PY_Cuali_Model.OP_LogSesionesCuali">
+              <MappingFragment StoreEntitySet="OP_LogSesionesCuali">
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="Observacion" ColumnName="Observacion" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="IdSesion" ColumnName="IdSesion" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OP_LogSesionesCuali_Get" FunctionName="PY_Cuali_Model.Store.OP_LogSesionesCuali_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PY_Cuali_Model.OP_LogSesionesCuali_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdSesion" ColumnName="IdSesion" />
+                <ScalarProperty Name="Numero" ColumnName="Numero" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Observacion" ColumnName="Observacion" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="OP_LogInHomeCuali">
+            <EntityTypeMapping TypeName="PY_Cuali_Model.OP_LogInHomeCuali">
+              <MappingFragment StoreEntitySet="OP_LogInHomeCuali">
+                <ScalarProperty Name="Observacion" ColumnName="Observacion" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="IdSesion" ColumnName="IdSesion" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OP_LogInHomeCuali_Get" FunctionName="PY_Cuali_Model.Store.OP_LogInHomeCuali_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PY_Cuali_Model.OP_LogInHomeCuali_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdSesion" ColumnName="IdSesion" />
+                <ScalarProperty Name="Numero" ColumnName="Numero" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Observacion" ColumnName="Observacion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="OP_EntrevistasCuali_Distribucion">
+            <EntityTypeMapping TypeName="PY_Cuali_Model.OP_EntrevistasCuali_Distribucion">
+              <MappingFragment StoreEntitySet="OP_EntrevistasCuali_Distribucion">
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Moderador" ColumnName="Moderador" />
+                <ScalarProperty Name="FechaFin" ColumnName="FechaFin" />
+                <ScalarProperty Name="FechaInicio" ColumnName="FechaInicio" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="CiudadId" ColumnName="CiudadId" />
+                <ScalarProperty Name="GrupoObjetivo" ColumnName="GrupoObjetivo" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="Numero" ColumnName="Numero" />
+                <ScalarProperty Name="IdEntrevista" ColumnName="IdEntrevista" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OP_LogEntrevistasCuali">
+            <EntityTypeMapping TypeName="PY_Cuali_Model.OP_LogEntrevistasCuali">
+              <MappingFragment StoreEntitySet="OP_LogEntrevistasCuali">
+                <ScalarProperty Name="Observacion" ColumnName="Observacion" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="IdEntrevista" ColumnName="IdEntrevista" />
+                <ScalarProperty Name="IdDistribucion" ColumnName="IdDistribucion" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OP_EntrevistasCuali_DistribucionGet" FunctionName="PY_Cuali_Model.Store.OP_EntrevistasCuali_DistribucionGet">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PY_Cuali_Model.OP_EntrevistasCuali_DistribucionGet_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdEntrevista" ColumnName="IdEntrevista" />
+                <ScalarProperty Name="Numero" ColumnName="Numero" />
+                <ScalarProperty Name="NombreTrabajo" ColumnName="NombreTrabajo" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="GrupoObjetivo" ColumnName="GrupoObjetivo" />
+                <ScalarProperty Name="DepartamentoId" ColumnName="DepartamentoId" />
+                <ScalarProperty Name="Departamento" ColumnName="Departamento" />
+                <ScalarProperty Name="Ciudad" ColumnName="Ciudad" />
+                <ScalarProperty Name="CiudadId" ColumnName="CiudadId" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="FechaInicio" ColumnName="FechaInicio" />
+                <ScalarProperty Name="FechaFin" ColumnName="FechaFin" />
+                <ScalarProperty Name="IdModerador" ColumnName="IdModerador" />
+                <ScalarProperty Name="Moderador" ColumnName="Moderador" />
+                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OP_LogEntrevistasCuali_Get" FunctionName="PY_Cuali_Model.Store.OP_LogEntrevistasCuali_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PY_Cuali_Model.OP_LogEntrevistasCuali_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdDistribucion" ColumnName="IdDistribucion" />
+                <ScalarProperty Name="IdEntrevista" ColumnName="IdEntrevista" />
+                <ScalarProperty Name="Numero" ColumnName="Numero" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Observacion" ColumnName="Observacion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OP_EntrevistasCuali_Distribucion_Add" FunctionName="PY_Cuali_Model.Store.OP_EntrevistasCuali_Distribucion_Add" />
+          <EntitySetMapping Name="OP_Filtros">
+            <EntityTypeMapping TypeName="PY_Cuali_Model.OP_Filtros">
+              <MappingFragment StoreEntitySet="OP_Filtros">
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="FechaFin" ColumnName="FechaFin" />
+                <ScalarProperty Name="FechaInicio" ColumnName="FechaInicio" />
+                <ScalarProperty Name="IdTrabajo" ColumnName="IdTrabajo" />
+                <ScalarProperty Name="TipoFiltro" ColumnName="TipoFiltro" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OP_Preguntas_Filtro">
+            <EntityTypeMapping TypeName="PY_Cuali_Model.OP_Preguntas_Filtro">
+              <MappingFragment StoreEntitySet="OP_Preguntas_Filtro">
+                <ScalarProperty Name="Campo" ColumnName="Campo" />
+                <ScalarProperty Name="Fija" ColumnName="Fija" />
+                <ScalarProperty Name="Obligatoria" ColumnName="Obligatoria" />
+                <ScalarProperty Name="Respuestas" ColumnName="Respuestas" />
+                <ScalarProperty Name="Textopregunta" ColumnName="Textopregunta" />
+                <ScalarProperty Name="OrdenPregunta" ColumnName="OrdenPregunta" />
+                <ScalarProperty Name="TipoPregunta" ColumnName="TipoPregunta" />
+                <ScalarProperty Name="IdFiltro" ColumnName="IdFiltro" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OP_TipoFiltro">
+            <EntityTypeMapping TypeName="PY_Cuali_Model.OP_TipoFiltro">
+              <MappingFragment StoreEntitySet="OP_TipoFiltro">
+                <ScalarProperty Name="TipoFiltro" ColumnName="TipoFiltro" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OP_TipoPregunta_Filtro">
+            <EntityTypeMapping TypeName="PY_Cuali_Model.OP_TipoPregunta_Filtro">
+              <MappingFragment StoreEntitySet="OP_TipoPregunta_Filtro">
+                <ScalarProperty Name="TipoPregunta" ColumnName="TipoPregunta" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OP_Preguntas_Filtro_Get" FunctionName="PY_Cuali_Model.Store.OP_Preguntas_Filtro_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PY_Cuali_Model.OP_Preguntas_Filtro_Get_Result">
+                <ScalarProperty Name="IdFiltro" ColumnName="IdFiltro" />
+                <ScalarProperty Name="IdTipoFiltro" ColumnName="IdTipoFiltro" />
+                <ScalarProperty Name="TipoFiltro" ColumnName="TipoFiltro" />
+                <ScalarProperty Name="IdTrabajo" ColumnName="IdTrabajo" />
+                <ScalarProperty Name="FechaInicio" ColumnName="FechaInicio" />
+                <ScalarProperty Name="FechaFin" ColumnName="FechaFin" />
+                <ScalarProperty Name="IdTipoPregunta" ColumnName="IdTipoPregunta" />
+                <ScalarProperty Name="TipoPregunta" ColumnName="TipoPregunta" />
+                <ScalarProperty Name="OrdenPregunta" ColumnName="OrdenPregunta" />
+                <ScalarProperty Name="Textopregunta" ColumnName="Textopregunta" />
+                <ScalarProperty Name="Respuestas" ColumnName="Respuestas" />
+                <ScalarProperty Name="IdObligatoria" ColumnName="IdObligatoria" />
+                <ScalarProperty Name="Obligatoria" ColumnName="Obligatoria" />
+                <ScalarProperty Name="IdPregunta" ColumnName="IdPregunta" />
+                <ScalarProperty Name="IdFija" ColumnName="IdFija" />
+                <ScalarProperty Name="Fija" ColumnName="Fija" />
+                <ScalarProperty Name="Campo" ColumnName="Campo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OP_Filtros_Get" FunctionName="PY_Cuali_Model.Store.OP_Filtros_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PY_Cuali_Model.OP_Filtros_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdTipoFiltro" ColumnName="IdTipoFiltro" />
+                <ScalarProperty Name="TipoFiltro" ColumnName="TipoFiltro" />
+                <ScalarProperty Name="IdTrabajo" ColumnName="IdTrabajo" />
+                <ScalarProperty Name="FechaInicio" ColumnName="FechaInicio" />
+                <ScalarProperty Name="FechaFin" ColumnName="FechaFin" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OP_Preguntas_Filtro_ActualizarOrden" FunctionName="PY_Cuali_Model.Store.OP_Preguntas_Filtro_ActualizarOrden" />
+          <FunctionImportMapping FunctionImportName="OP_Preguntas_Filtro_ReOrdenar" FunctionName="PY_Cuali_Model.Store.OP_Preguntas_Filtro_ReOrdenar" />
+          <FunctionImportMapping FunctionImportName="OP_Respuestas_FiltroReclutamiento_Maestro_Get" FunctionName="PY_Cuali_Model.Store.OP_Respuestas_FiltroReclutamiento_Maestro_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PY_Cuali_Model.OP_Respuestas_FiltroReclutamiento_Maestro_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdFiltro" ColumnName="IdFiltro" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Cedula" ColumnName="Cedula" />
+                <ScalarProperty Name="Celular" ColumnName="Celular" />
+                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+                <ScalarProperty Name="Ciudad" ColumnName="Ciudad" />
+                <ScalarProperty Name="Barrio" ColumnName="Barrio" />
+                <ScalarProperty Name="Edad" ColumnName="Edad" />
+                <ScalarProperty Name="Estrato" ColumnName="Estrato" />
+                <ScalarProperty Name="Reclutador" ColumnName="Reclutador" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="OP_Respuestas_Filtro_Detalle">
+            <EntityTypeMapping TypeName="PY_Cuali_Model.OP_Respuestas_Filtro_Detalle">
+              <MappingFragment StoreEntitySet="OP_Respuestas_Filtro_Detalle">
+                <ScalarProperty Name="Respuesta" ColumnName="Respuesta" />
+                <ScalarProperty Name="IdPregunta" ColumnName="IdPregunta" />
+                <ScalarProperty Name="IdRespuesta" ColumnName="IdRespuesta" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OP_Respuestas_Filtro_Maestro">
+            <EntityTypeMapping TypeName="PY_Cuali_Model.OP_Respuestas_Filtro_Maestro">
+              <MappingFragment StoreEntitySet="OP_Respuestas_Filtro_Maestro">
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Reclutador" ColumnName="Reclutador" />
+                <ScalarProperty Name="Estrato" ColumnName="Estrato" />
+                <ScalarProperty Name="Edad" ColumnName="Edad" />
+                <ScalarProperty Name="Barrio" ColumnName="Barrio" />
+                <ScalarProperty Name="Ciudad" ColumnName="Ciudad" />
+                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+                <ScalarProperty Name="Celular" ColumnName="Celular" />
+                <ScalarProperty Name="Cedula" ColumnName="Cedula" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="IdFiltro" ColumnName="IdFiltro" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OP_Filtros_CrearCopia" FunctionName="PY_Cuali_Model.Store.OP_Filtros_CrearCopia" />
+          <FunctionImportMapping FunctionImportName="OP_Respuestas_Filtro_Detalle_Get" FunctionName="PY_Cuali_Model.Store.OP_Respuestas_Filtro_Detalle_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PY_Cuali_Model.OP_Respuestas_Filtro_Detalle_Get_Result">
+                <ScalarProperty Name="IdFiltro" ColumnName="IdFiltro" />
+                <ScalarProperty Name="IdRespuesta" ColumnName="IdRespuesta" />
+                <ScalarProperty Name="TipoPregunta" ColumnName="TipoPregunta" />
+                <ScalarProperty Name="OrdenPregunta" ColumnName="OrdenPregunta" />
+                <ScalarProperty Name="Textopregunta" ColumnName="Textopregunta" />
+                <ScalarProperty Name="Respuesta" ColumnName="Respuesta" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OP_Respuestas_Filtro_Maestro_Get" FunctionName="PY_Cuali_Model.Store.OP_Respuestas_Filtro_Maestro_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PY_Cuali_Model.OP_Respuestas_Filtro_Maestro_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdFiltro" ColumnName="IdFiltro" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Cedula" ColumnName="Cedula" />
+                <ScalarProperty Name="Celular" ColumnName="Celular" />
+                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+                <ScalarProperty Name="Ciudad" ColumnName="Ciudad" />
+                <ScalarProperty Name="Barrio" ColumnName="Barrio" />
+                <ScalarProperty Name="Edad" ColumnName="Edad" />
+                <ScalarProperty Name="Estrato" ColumnName="Estrato" />
+                <ScalarProperty Name="Reclutador" ColumnName="Reclutador" />
+                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="OP_LogRespuestas_Filtro">
+            <EntityTypeMapping TypeName="PY_Cuali_Model.OP_LogRespuestas_Filtro">
+              <MappingFragment StoreEntitySet="OP_LogRespuestas_Filtro">
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Observacion" ColumnName="Observacion" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="IdRespuesta" ColumnName="IdRespuesta" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OP_MuestraTrabajosCuali_EntrevistasGet" FunctionName="PY_Cuali_Model.Store.OP_MuestraTrabajosCuali_EntrevistasGet">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PY_Cuali_Model.OP_MuestraTrabajosCuali_EntrevistasGet_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Ciudad" ColumnName="Ciudad" />
+                <ScalarProperty Name="CiudadId" ColumnName="CiudadId" />
+                <ScalarProperty Name="NombreTrabajo" ColumnName="NombreTrabajo" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="FechaInicio" ColumnName="FechaInicio" />
+                <ScalarProperty Name="FechaFin" ColumnName="FechaFin" />
+                <ScalarProperty Name="IdModerador" ColumnName="IdModerador" />
+                <ScalarProperty Name="Moderador" ColumnName="Moderador" />
+                <ScalarProperty Name="NumeroBackup" ColumnName="NumeroBackup" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OP_MuestraTrabajosCuali_InHomeGet" FunctionName="PY_Cuali_Model.Store.OP_MuestraTrabajosCuali_InHomeGet">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PY_Cuali_Model.OP_MuestraTrabajosCuali_InHomeGet_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Numero" ColumnName="Numero" />
+                <ScalarProperty Name="DepartamentoId" ColumnName="DepartamentoId" />
+                <ScalarProperty Name="Departamento" ColumnName="Departamento" />
+                <ScalarProperty Name="Ciudad" ColumnName="Ciudad" />
+                <ScalarProperty Name="CiudadId" ColumnName="CiudadId" />
+                <ScalarProperty Name="NombreTrabajo" ColumnName="NombreTrabajo" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Hora" ColumnName="Hora" />
+                <ScalarProperty Name="IdModerador" ColumnName="IdModerador" />
+                <ScalarProperty Name="Moderador" ColumnName="Moderador" />
+                <ScalarProperty Name="GrupoObjetivo" ColumnName="GrupoObjetivo" />
+                <ScalarProperty Name="Caracteristicas" ColumnName="Caracteristicas" />
+                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OP_MuestraTrabajosCuali_SesionesGet" FunctionName="PY_Cuali_Model.Store.OP_MuestraTrabajosCuali_SesionesGet">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PY_Cuali_Model.OP_MuestraTrabajosCuali_SesionesGet_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Numero" ColumnName="Numero" />
+                <ScalarProperty Name="DepartamentoId" ColumnName="DepartamentoId" />
+                <ScalarProperty Name="Departamento" ColumnName="Departamento" />
+                <ScalarProperty Name="Ciudad" ColumnName="Ciudad" />
+                <ScalarProperty Name="CiudadId" ColumnName="CiudadId" />
+                <ScalarProperty Name="NombreTrabajo" ColumnName="NombreTrabajo" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Hora" ColumnName="Hora" />
+                <ScalarProperty Name="IdModerador" ColumnName="IdModerador" />
+                <ScalarProperty Name="Moderador" ColumnName="Moderador" />
+                <ScalarProperty Name="GrupoObjetivo" ColumnName="GrupoObjetivo" />
+                <ScalarProperty Name="Caracteristicas" ColumnName="Caracteristicas" />
+                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="OP_MuestraTrabajosCuali_Entrevistas">
+            <EntityTypeMapping TypeName="PY_Cuali_Model.OP_MuestraTrabajosCuali_Entrevistas">
+              <MappingFragment StoreEntitySet="OP_MuestraTrabajosCuali_Entrevistas">
+                <ScalarProperty Name="NumeroBackup" ColumnName="NumeroBackup" />
+                <ScalarProperty Name="FechaFin" ColumnName="FechaFin" />
+                <ScalarProperty Name="FechaInicio" ColumnName="FechaInicio" />
+                <ScalarProperty Name="Moderador" ColumnName="Moderador" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="CiudadId" ColumnName="CiudadId" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OP_MuestraTrabajosCuali_InHome">
+            <EntityTypeMapping TypeName="PY_Cuali_Model.OP_MuestraTrabajosCuali_InHome">
+              <MappingFragment StoreEntitySet="OP_MuestraTrabajosCuali_InHome">
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Caracteristicas" ColumnName="Caracteristicas" />
+                <ScalarProperty Name="GrupoObjetivo" ColumnName="GrupoObjetivo" />
+                <ScalarProperty Name="Moderador" ColumnName="Moderador" />
+                <ScalarProperty Name="Hora" ColumnName="Hora" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="CiudadId" ColumnName="CiudadId" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="Numero" ColumnName="Numero" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OP_MuestraTrabajosCuali_Sesiones">
+            <EntityTypeMapping TypeName="PY_Cuali_Model.OP_MuestraTrabajosCuali_Sesiones">
+              <MappingFragment StoreEntitySet="OP_MuestraTrabajosCuali_Sesiones">
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Caracteristicas" ColumnName="Caracteristicas" />
+                <ScalarProperty Name="GrupoObjetivo" ColumnName="GrupoObjetivo" />
+                <ScalarProperty Name="Moderador" ColumnName="Moderador" />
+                <ScalarProperty Name="Hora" ColumnName="Hora" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="CiudadId" ColumnName="CiudadId" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="Numero" ColumnName="Numero" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OP_MuestraTrabajosCuali">
+            <EntityTypeMapping TypeName="PY_Cuali_Model.OP_MuestraTrabajosCuali">
+              <MappingFragment StoreEntitySet="OP_MuestraTrabajosCuali">
+                <ScalarProperty Name="NumeroBackup" ColumnName="NumeroBackup" />
+                <ScalarProperty Name="FechaFin" ColumnName="FechaFin" />
+                <ScalarProperty Name="FechaInicio" ColumnName="FechaInicio" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="CiudadId" ColumnName="CiudadId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OP_MuestraTrabajosCuali_Get" FunctionName="PY_Cuali_Model.Store.OP_MuestraTrabajosCuali_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PY_Cuali_Model.OP_MuestraTrabajosCuali_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Ciudad" ColumnName="Ciudad" />
+                <ScalarProperty Name="CiudadId" ColumnName="CiudadId" />
+                <ScalarProperty Name="NombreTrabajo" ColumnName="NombreTrabajo" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="FechaInicio" ColumnName="FechaInicio" />
+                <ScalarProperty Name="FechaFin" ColumnName="FechaFin" />
+                <ScalarProperty Name="NumeroBackup" ColumnName="NumeroBackup" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PY_Trabajo_Entrega_Cualitativo" FunctionName="PY_Cuali_Model.Store.PY_Trabajo_Entrega_Cualitativo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PY_Cuali_Model.PY_Trabajo_Entrega_Cualitativo_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="NombreTrabajo" ColumnName="NombreTrabajo" />
+                <ScalarProperty Name="Muestra" ColumnName="Muestra" />
+                <ScalarProperty Name="Backups" ColumnName="Backups" />
+                <ScalarProperty Name="FechaTentativaInicioCampo" ColumnName="FechaTentativaInicioCampo" />
+                <ScalarProperty Name="FechaTentativaFinalizacion" ColumnName="FechaTentativaFinalizacion" />
+                <ScalarProperty Name="MetNombre" ColumnName="MetNombre" />
+                <ScalarProperty Name="Unidad" ColumnName="Unidad" />
+                <ScalarProperty Name="GerenteProyectos" ColumnName="GerenteProyectos" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="PY_EspCuentasCuali">
+            <EntityTypeMapping TypeName="PY_Cuali_Model.PY_EspCuentasCuali">
+              <MappingFragment StoreEntitySet="PY_EspCuentasCuali">
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="NoVersion" ColumnName="NoVersion" />
+                <ScalarProperty Name="BCPObsProducto" ColumnName="BCPObsProducto" />
+                <ScalarProperty Name="BCPMaterialEval" ColumnName="BCPMaterialEval" />
+                <ScalarProperty Name="BCPEspProducto" ColumnName="BCPEspProducto" />
+                <ScalarProperty Name="BCPEspReclutamiento" ColumnName="BCPEspReclutamiento" />
+                <ScalarProperty Name="BCPReclutamiento" ColumnName="BCPReclutamiento" />
+                <ScalarProperty Name="BCPProductoEsp" ColumnName="BCPProductoEsp" />
+                <ScalarProperty Name="BCPBDDEsp" ColumnName="BCPBDDEsp" />
+                <ScalarProperty Name="BCPIncentivosEsp" ColumnName="BCPIncentivosEsp" />
+                <ScalarProperty Name="BCPotraTecnica" ColumnName="BCPotraTecnica" />
+                <ScalarProperty Name="BCPTecnica" ColumnName="BCPTecnica" />
+                <ScalarProperty Name="BCPObservaciones" ColumnName="BCPObservaciones" />
+                <ScalarProperty Name="ProyectoId" ColumnName="ProyectoId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PY_EspecifTecTrabajoCuali">
+            <EntityTypeMapping TypeName="PY_Cuali_Model.PY_EspecifTecTrabajoCuali">
+              <MappingFragment StoreEntitySet="PY_EspecifTecTrabajoCuali">
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="NoVersion" ColumnName="NoVersion" />
+                <ScalarProperty Name="OtrasEspecificaciones" ColumnName="OtrasEspecificaciones" />
+                <ScalarProperty Name="HabeasData" ColumnName="HabeasData" />
+                <ScalarProperty Name="RecursosPropiedadesCliente" ColumnName="RecursosPropiedadesCliente" />
+                <ScalarProperty Name="ExclusionesyRestricciones" ColumnName="ExclusionesyRestricciones" />
+                <ScalarProperty Name="DistribucionCompra" ColumnName="DistribucionCompra" />
+                <ScalarProperty Name="PresupuestoCompra" ColumnName="PresupuestoCompra" />
+                <ScalarProperty Name="CompraIpsos" ColumnName="CompraIpsos" />
+                <ScalarProperty Name="RegaloClientes" ColumnName="RegaloClientes" />
+                <ScalarProperty Name="DistribucionIncentivo" ColumnName="DistribucionIncentivo" />
+                <ScalarProperty Name="PresupuestoIncentivo" ColumnName="PresupuestoIncentivo" />
+                <ScalarProperty Name="Incentivos" ColumnName="Incentivos" />
+                <ScalarProperty Name="VCMetodologia" ColumnName="VCMetodologia" />
+                <ScalarProperty Name="VCDistribucionCuotas" ColumnName="VCDistribucionCuotas" />
+                <ScalarProperty Name="VCAplicacionInstrumentos" ColumnName="VCAplicacionInstrumentos" />
+                <ScalarProperty Name="VCGrupoObjetivo" ColumnName="VCGrupoObjetivo" />
+                <ScalarProperty Name="VCObtencion" ColumnName="VCObtencion" />
+                <ScalarProperty Name="VCSeguridad" ColumnName="VCSeguridad" />
+                <ScalarProperty Name="Auditoria" ColumnName="Auditoria" />
+                <ScalarProperty Name="Incidencias" ColumnName="Incidencias" />
+                <ScalarProperty Name="MaterialApoyo" ColumnName="MaterialApoyo" />
+                <ScalarProperty Name="EspecificacionesCampo" ColumnName="EspecificacionesCampo" />
+                <ScalarProperty Name="Moderador" ColumnName="Moderador" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer>
+    <edmx:Connection>
+      <edmx:DesignerInfoPropertySet>
+        <edmx:DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </edmx:DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <edmx:DesignerInfoPropertySet>
+        <edmx:DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <edmx:DesignerProperty Name="EnablePluralization" Value="False" />
+        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <edmx:DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+        <edmx:DesignerProperty Name="UseLegacyProvider" Value="True" />
+      </edmx:DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <edmx:Diagram Name="PY_Cuali" ZoomLevel="69">
+        <edmx:EntityTypeShape EntityType="PY_Cuali_Model.PY_AyudasCuali" Width="1.5" PointX="6" PointY="0.75" Height="1.59568359375" />
+        <edmx:EntityTypeShape EntityType="PY_Cuali_Model.PY_LugaresCuali" Width="1.5" PointX="0.75" PointY="4.75" Height="1.4033821614583326" />
+        <edmx:EntityTypeShape EntityType="PY_Cuali_Model.OP_CampoCuali" Width="1.5" PointX="5.25" PointY="3.875" Height="5.0571093750000014" />
+        <edmx:EntityTypeShape EntityType="PY_Cuali_Model.PY_SegmentosCuali" Width="1.5" PointX="3" PointY="2.75" Height="7.3647265624999978" />
+        <edmx:AssociationConnector Association="PY_Cuali_Model.FK_OP_CampoCuali_PY_SegmentosCuali">
+          <edmx:ConnectorPoint PointX="4.5" PointY="6.4035546875000007" />
+          <edmx:ConnectorPoint PointX="5.25" PointY="6.4035546875000007" />
+        </edmx:AssociationConnector>
+        <edmx:EntityTypeShape EntityType="PY_Cuali_Model.PY_SegmentosCuali_Moderadores" Width="1.5" PointX="7.375" PointY="7.75" />
+        <edmx:EntityTypeShape EntityType="PY_Cuali_Model.PY_SegmentosCuali_Reclutadores" Width="1.75" PointX="8.375" PointY="0.75" />
+        <edmx:AssociationConnector Association="PY_Cuali_Model.FK_PY_SegmentosCuali_Moderadores_PY_SegmentosCuali" />
+        <edmx:AssociationConnector Association="PY_Cuali_Model.FK_PY_SegmentosCuali_Reclutadores_PY_SegmentosCuali" />
+        <edmx:EntityTypeShape EntityType="PY_Cuali_Model.PY_AyudasRequeridasCuali" Width="1.5" PointX="8.25" PointY="4.125" />
+        <edmx:AssociationConnector Association="PY_Cuali_Model.FK_PY_AyudasRequeridasCuali_PY_AyudasCuali" />
+        <edmx:EntityTypeShape EntityType="PY_Cuali_Model.PY_TipoReclutamientoCuali" Width="1.5" PointX="5.375" PointY="10.75" />
+        <edmx:EntityTypeShape EntityType="PY_Cuali_Model.PY_ReclutamientoRequeridoCuali" Width="1.5" PointX="11.375" PointY="0.75" />
+        <edmx:EntityTypeShape EntityType="PY_Cuali_Model.OP_EstadosSesion" Width="1.5" PointX="10.75" PointY="3.75" />
+        <edmx:EntityTypeShape EntityType="PY_Cuali_Model.OP_LogSesionesCuali" Width="1.5" PointX="11.375" PointY="6.75" />
+        <edmx:EntityTypeShape EntityType="PY_Cuali_Model.OP_LogInHomeCuali" Width="1.5" PointX="7.375" PointY="11.75" />
+        <edmx:EntityTypeShape EntityType="PY_Cuali_Model.OP_EntrevistasCuali_Distribucion" Width="1.5" PointX="13.375" PointY="0.75" />
+        <edmx:EntityTypeShape EntityType="PY_Cuali_Model.OP_LogEntrevistasCuali" Width="1.5" PointX="3.375" PointY="13.75" />
+        <edmx:EntityTypeShape EntityType="PY_Cuali_Model.OP_Filtros" Width="1.5" PointX="15.625" PointY="5.375" />
+        <edmx:EntityTypeShape EntityType="PY_Cuali_Model.OP_Preguntas_Filtro" Width="1.5" PointX="17.875" PointY="5" />
+        <edmx:EntityTypeShape EntityType="PY_Cuali_Model.OP_TipoFiltro" Width="1.5" PointX="13.375" PointY="5.75" />
+        <edmx:EntityTypeShape EntityType="PY_Cuali_Model.OP_TipoPregunta_Filtro" Width="1.5" PointX="15.625" PointY="2.75" />
+        <edmx:AssociationConnector Association="PY_Cuali_Model.FK_OP_Filtros_OP_TipoFiltro" />
+        <edmx:AssociationConnector Association="PY_Cuali_Model.FK_OP_Preguntas_Filtro_OP_Filtros" />
+        <edmx:AssociationConnector Association="PY_Cuali_Model.FK_OP_Preguntas_Filtro_OP_TipoPregunta_Filtro" />
+        <edmx:EntityTypeShape EntityType="PY_Cuali_Model.OP_Respuestas_Filtro_Detalle" Width="1.5" PointX="20.125" PointY="8.25" />
+        <edmx:EntityTypeShape EntityType="PY_Cuali_Model.OP_Respuestas_Filtro_Maestro" Width="1.5" PointX="17.875" PointY="9.875" />
+        <edmx:AssociationConnector Association="PY_Cuali_Model.FK_OP_Respuestas_Filtro_Maestro_OP_Filtros" />
+        <edmx:AssociationConnector Association="PY_Cuali_Model.FK_OP_Respuestas_Filtro_OP_Preguntas_Filtro" />
+        <edmx:AssociationConnector Association="PY_Cuali_Model.FK_OP_Respuestas_Filtro_OP_Respuestas_Filtro" />
+        <edmx:EntityTypeShape EntityType="PY_Cuali_Model.OP_LogRespuestas_Filtro" Width="1.5" PointX="13.375" PointY="9.75" />
+        <edmx:EntityTypeShape EntityType="PY_Cuali_Model.OP_MuestraTrabajosCuali_Entrevistas" Width="1.5" PointX="0.75" PointY="11.75" />
+        <edmx:EntityTypeShape EntityType="PY_Cuali_Model.OP_MuestraTrabajosCuali_InHome" Width="1.5" PointX="11.75" PointY="12.75" />
+        <edmx:EntityTypeShape EntityType="PY_Cuali_Model.OP_MuestraTrabajosCuali_Sesiones" Width="1.5" PointX="13.75" PointY="12.75" />
+        <edmx:EntityTypeShape EntityType="PY_Cuali_Model.OP_MuestraTrabajosCuali" Width="1.5" PointX="5.375" PointY="14.75" />
+        <edmx:EntityTypeShape EntityType="PY_Cuali_Model.PY_EspCuentasCuali" Width="1.5" PointX="7.75" PointY="14.75" />
+        <edmx:EntityTypeShape EntityType="PY_Cuali_Model.PY_EspecifTecTrabajoCuali" Width="1.5" PointX="0.75" PointY="15.75" />
+        </edmx:Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

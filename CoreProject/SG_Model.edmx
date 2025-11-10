@@ -1,0 +1,991 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="SG_Model.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="SG_ModelStoreContainer">
+          <EntitySet Name="SG_Actas" EntityType="SG_Model.Store.SG_Actas" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+        </EntityContainer>
+        <EntityType Name="SG_Actas">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Denominacion" Type="varchar" MaxLength="250" />
+          <Property Name="NoActa" Type="bigint" />
+          <Property Name="TipoId" Type="tinyint" />
+          <Property Name="UnidadId" Type="int" />
+          <Property Name="Secretario" Type="bigint" />
+          <Property Name="Lider" Type="bigint" />
+          <Property Name="SeguimientoCompromisos" Type="varchar(max)" />
+          <Property Name="SeguimientoAcciones" Type="varchar(max)" />
+          <Property Name="TemasTratados" Type="varchar(max)" />
+          <Property Name="CompromisosConclusiones" Type="varchar(max)" />
+          <Property Name="Activa" Type="bit" />
+          <Property Name="Form" Type="int" />
+          <Property Name="FormId" Type="int" />
+          <Property Name="FechaCreacion" Type="datetime" />
+          <Property Name="Publica" Type="bit" />
+        </EntityType>
+        <Function Name="SG_Acta_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Denominacion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="NoActa" Type="int" Mode="In" />
+          <Parameter Name="TipoId" Type="int" Mode="In" />
+          <Parameter Name="UnidadId" Type="int" Mode="In" />
+          <Parameter Name="Secretario" Type="int" Mode="In" />
+          <Parameter Name="Lider" Type="int" Mode="In" />
+          <Parameter Name="SeguimientoCompromisos" Type="varchar(max)" Mode="In" />
+          <Parameter Name="SeguimientoAcciones" Type="varchar(max)" Mode="In" />
+          <Parameter Name="TemasTratados" Type="varchar(max)" Mode="In" />
+          <Parameter Name="CompromisosConclusiones" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Activa" Type="bit" Mode="In" />
+          <Parameter Name="Form" Type="int" Mode="In" />
+          <Parameter Name="FormId" Type="int" Mode="In" />
+          <Parameter Name="Publica" Type="bit" Mode="In" />
+          <Parameter Name="FechaCreacion" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="SG_Acta_Del" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SG_Acta_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+          <Parameter Name="Denominacion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="NoActa" Type="int" Mode="In" />
+          <Parameter Name="TipoId" Type="int" Mode="In" />
+          <Parameter Name="UnidadId" Type="int" Mode="In" />
+          <Parameter Name="Secretario" Type="int" Mode="In" />
+          <Parameter Name="Lider" Type="int" Mode="In" />
+          <Parameter Name="SeguimientoCompromisos" Type="varchar(max)" Mode="In" />
+          <Parameter Name="SeguimientoAcciones" Type="varchar(max)" Mode="In" />
+          <Parameter Name="TemasTratados" Type="varchar(max)" Mode="In" />
+          <Parameter Name="CompromisosConclusiones" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Activa" Type="bit" Mode="In" />
+          <Parameter Name="Form" Type="int" Mode="In" />
+          <Parameter Name="FormId" Type="int" Mode="In" />
+          <Parameter Name="Publica" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="SG_Acta_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SG_Acta_Get_NoActa" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="NoActa" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SG_Acta_Get_TipoActa" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TipoActa" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SG_Acta_Get_TipoActa_combo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SG_Acta_Get_Unidad" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Unidad" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SG_Acta_GetPQR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PqrId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SG_Acta_UltimoNoActa" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TipoId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SG_ActaComite_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Fecha" Type="date" Mode="In" />
+          <Parameter Name="UnidadId" Type="int" Mode="In" />
+          <Parameter Name="NoActa" Type="int" Mode="In" />
+          <Parameter Name="TipoReunionId" Type="int" Mode="In" />
+          <Parameter Name="Contenedor" Type="int" Mode="In" />
+          <Parameter Name="ContenedorId" Type="int" Mode="In" />
+          <Parameter Name="OrdenDia" Type="nvarchar" Mode="In" />
+          <Parameter Name="Conclusiones" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Descripcion" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="UsuarioCrea" Type="int" Mode="In" />
+          <Parameter Name="UsuarioLidera" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SG_ActaComite_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="UnidadId" Type="int" Mode="In" />
+          <Parameter Name="NoActa" Type="int" Mode="In" />
+          <Parameter Name="TipoReunionId" Type="int" Mode="In" />
+          <Parameter Name="Contenedor" Type="int" Mode="In" />
+          <Parameter Name="ContenedorId" Type="int" Mode="In" />
+          <Parameter Name="OrdenDia" Type="nvarchar" Mode="In" />
+          <Parameter Name="Conclusiones" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Descripcion" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="UsuarioCrea" Type="int" Mode="In" />
+          <Parameter Name="UsuarioLidera" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SG_ActaComite_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SG_ActaComite_Get_Id" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SG_AsistenteActaComite_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UsuarioId" Type="int" Mode="In" />
+          <Parameter Name="ActaId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SG_AsistenteActaComite_Del" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SG_AsistenteActaComite_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+          <Parameter Name="UsuarioId" Type="int" Mode="In" />
+          <Parameter Name="ActaId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SG_AsistenteActaComite_Get_ActaId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ActaId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SG_EstadoSeguimiento_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SG_ParticipanteActa_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ActaId" Type="int" Mode="In" />
+          <Parameter Name="UsuarioId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SG_ParticipanteActa_Del" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SG_ParticipanteActa_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="ActaId" Type="int" Mode="In" />
+          <Parameter Name="UsuarioId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SG_ParticipanteActa_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SG_ParticipanteActa_Get_ActaId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ActaId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SG_Seguimiento_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="TareaId" Type="int" Mode="In" />
+          <Parameter Name="Seguimiento" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Usuario" Type="int" Mode="In" />
+          <Parameter Name="CierraTarea" Type="bit" Mode="In" />
+          <Parameter Name="FechaSeguimiento" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="SG_Seguimiento_Del" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SG_Seguimiento_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="TareaId" Type="int" Mode="In" />
+          <Parameter Name="Seguimiento" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Usuario" Type="int" Mode="In" />
+          <Parameter Name="CierraTarea" Type="bit" Mode="In" />
+          <Parameter Name="FechaSeguimiento" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="SG_Seguimiento_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SG_Seguimiento_Get_TareaId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TareaId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SG_Seguimiento_Ultimo_Id" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SG_SeguimientosActaComite_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ActaId" Type="int" Mode="In" />
+          <Parameter Name="Accion" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Responsable" Type="bigint" Mode="In" />
+          <Parameter Name="FechaInicio" Type="date" Mode="In" />
+          <Parameter Name="FechaCompromiso" Type="date" Mode="In" />
+          <Parameter Name="Estado" Type="bigint" Mode="In" />
+          <Parameter Name="FechaCierre" Type="date" Mode="In" />
+        </Function>
+        <Function Name="SG_SeguimientosActaComite_Del" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SG_SeguimientosActaComite_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+          <Parameter Name="ActaId" Type="int" Mode="In" />
+          <Parameter Name="Accion" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Responsable" Type="bigint" Mode="In" />
+          <Parameter Name="FechaInicio" Type="date" Mode="In" />
+          <Parameter Name="FechaCompromiso" Type="date" Mode="In" />
+          <Parameter Name="Estado" Type="bigint" Mode="In" />
+          <Parameter Name="FechaCierre" Type="date" Mode="In" />
+        </Function>
+        <Function Name="SG_SeguimientosActaComite_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ActaId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SG_Tarea_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ActaId" Type="int" Mode="In" />
+          <Parameter Name="Tarea" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Responsable" Type="int" Mode="In" />
+          <Parameter Name="Cerrada" Type="bit" Mode="In" />
+          <Parameter Name="Fecha" Type="datetime" Mode="In" />
+          <Parameter Name="FechaInicioEjecucion" Type="datetime" Mode="In" />
+          <Parameter Name="FechaLimite" Type="datetime" Mode="In" />
+          <Parameter Name="FechaCierre" Type="datetime" Mode="In" />
+          <Parameter Name="EstadoId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SG_Tarea_Del" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SG_Tarea_Edit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+          <Parameter Name="ActaId" Type="int" Mode="In" />
+          <Parameter Name="Tarea" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Responsable" Type="int" Mode="In" />
+          <Parameter Name="Cerrada" Type="bit" Mode="In" />
+          <Parameter Name="Fecha" Type="datetime" Mode="In" />
+          <Parameter Name="FechaInicioEjecucion" Type="datetime" Mode="In" />
+          <Parameter Name="FechaLimite" Type="datetime" Mode="In" />
+          <Parameter Name="FechaCierre" Type="datetime" Mode="In" />
+          <Parameter Name="EstadoId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SG_Tarea_EditEstadoId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+          <Parameter Name="EstadoId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SG_Tarea_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SG_Tarea_Get_ActaId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ActaId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SG_TipoReunion_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="US_Unidad_Get_Combo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="US_Usuarios_Get_Combo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SG_Model" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2009/11/edm" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <EntityContainer Name="SG_Entities" annotation:LazyLoadingEnabled="true" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+          <FunctionImport Name="SG_Acta_Add" ReturnType="Collection(SG_Model.SG_Acta_Add_Result)">
+            <Parameter Name="Denominacion" Mode="In" Type="String" />
+            <Parameter Name="NoActa" Mode="In" Type="Int32" />
+            <Parameter Name="TipoId" Mode="In" Type="Int32" />
+            <Parameter Name="UnidadId" Mode="In" Type="Int32" />
+            <Parameter Name="Secretario" Mode="In" Type="Int32" />
+            <Parameter Name="Lider" Mode="In" Type="Int32" />
+            <Parameter Name="SeguimientoCompromisos" Mode="In" Type="String" />
+            <Parameter Name="SeguimientoAcciones" Mode="In" Type="String" />
+            <Parameter Name="TemasTratados" Mode="In" Type="String" />
+            <Parameter Name="CompromisosConclusiones" Mode="In" Type="String" />
+            <Parameter Name="Activa" Mode="In" Type="Boolean" />
+            <Parameter Name="Form" Mode="In" Type="Int32" />
+            <Parameter Name="FormId" Mode="In" Type="Int32" />
+            <Parameter Name="Publica" Mode="In" Type="Boolean" />
+            <Parameter Name="FechaCreacion" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="SG_Acta_Edit">
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+            <Parameter Name="Denominacion" Mode="In" Type="String" />
+            <Parameter Name="NoActa" Mode="In" Type="Int32" />
+            <Parameter Name="TipoId" Mode="In" Type="Int32" />
+            <Parameter Name="UnidadId" Mode="In" Type="Int32" />
+            <Parameter Name="Secretario" Mode="In" Type="Int32" />
+            <Parameter Name="Lider" Mode="In" Type="Int32" />
+            <Parameter Name="SeguimientoCompromisos" Mode="In" Type="String" />
+            <Parameter Name="SeguimientoAcciones" Mode="In" Type="String" />
+            <Parameter Name="TemasTratados" Mode="In" Type="String" />
+            <Parameter Name="CompromisosConclusiones" Mode="In" Type="String" />
+            <Parameter Name="Activa" Mode="In" Type="Boolean" />
+            <Parameter Name="Form" Mode="In" Type="Int32" />
+            <Parameter Name="FormId" Mode="In" Type="Int32" />
+            <Parameter Name="Publica" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="SG_Acta_Del">
+          <Parameter Name="Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SG_Acta_Get" ReturnType="Collection(SG_Model.SG_Acta_Result)" />
+          <FunctionImport Name="SG_Acta_Get_NoActa" ReturnType="Collection(SG_Model.SG_Acta_Result)">
+          <Parameter Name="NoActa" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SG_Acta_Get_TipoActa" ReturnType="Collection(SG_Model.SG_Acta_Result)">
+          <Parameter Name="TipoActa" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SG_Acta_Get_TipoActa_combo" ReturnType="Collection(SG_Model.TipoActaCombo_Result)" />
+          <FunctionImport Name="SG_Acta_Get_Unidad" ReturnType="Collection(SG_Model.SG_Acta_Result)">
+          <Parameter Name="Unidad" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="US_Unidad_Get_Combo" ReturnType="Collection(SG_Model.UnidadCombo_Result)" />
+          <FunctionImport Name="SG_Acta_UltimoNoActa" ReturnType="Collection(SG_Model.UltimoNoActa_Result)">
+          <Parameter Name="TipoId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SG_ParticipanteActa_Add">
+            <Parameter Name="ActaId" Mode="In" Type="Int32" />
+            <Parameter Name="UsuarioId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SG_ParticipanteActa_Del">
+          <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SG_ParticipanteActa_Get" ReturnType="Collection(SG_Model.SG_ParticipanteActa_Result)" />
+          <FunctionImport Name="SG_ParticipanteActa_Get_ActaId" ReturnType="Collection(SG_Model.SG_ParticipanteActa_Result)">
+          <Parameter Name="ActaId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SG_ParticipanteActa_Edit">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="ActaId" Mode="In" Type="Int32" />
+            <Parameter Name="UsuarioId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SG_Seguimiento_Add">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="TareaId" Mode="In" Type="Int32" />
+            <Parameter Name="Seguimiento" Mode="In" Type="String" />
+            <Parameter Name="Usuario" Mode="In" Type="Int32" />
+            <Parameter Name="CierraTarea" Mode="In" Type="Boolean" />
+            <Parameter Name="FechaSeguimiento" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="SG_Seguimiento_Del">
+          <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SG_Seguimiento_Edit">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="TareaId" Mode="In" Type="Int32" />
+            <Parameter Name="Seguimiento" Mode="In" Type="String" />
+            <Parameter Name="Usuario" Mode="In" Type="Int32" />
+            <Parameter Name="CierraTarea" Mode="In" Type="Boolean" />
+            <Parameter Name="FechaSeguimiento" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="SG_Seguimiento_Get" ReturnType="Collection(SG_Model.SG_Seguimiento_Result)" />
+          <FunctionImport Name="SG_Seguimiento_Get_TareaId" ReturnType="Collection(SG_Model.SG_Seguimiento_Result)">
+          <Parameter Name="TareaId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SG_Seguimiento_Ultimo_Id" ReturnType="Collection(SG_Model.SeguimientoUltimo_Id_Result)" />
+          <FunctionImport Name="SG_Tarea_Add" ReturnType="Collection(SG_Model.SG_Tarea_Add_Result)">
+            <Parameter Name="ActaId" Mode="In" Type="Int32" />
+            <Parameter Name="Tarea" Mode="In" Type="String" />
+            <Parameter Name="Responsable" Mode="In" Type="Int32" />
+            <Parameter Name="Cerrada" Mode="In" Type="Boolean" />
+            <Parameter Name="Fecha" Mode="In" Type="DateTime" />
+            <Parameter Name="FechaInicioEjecucion" Mode="In" Type="DateTime" />
+            <Parameter Name="FechaLimite" Mode="In" Type="DateTime" />
+            <Parameter Name="FechaCierre" Mode="In" Type="DateTime" />
+            <Parameter Name="EstadoId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SG_Tarea_Del">
+          <Parameter Name="Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SG_Tarea_Edit">
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+            <Parameter Name="ActaId" Mode="In" Type="Int32" />
+            <Parameter Name="Tarea" Mode="In" Type="String" />
+            <Parameter Name="Responsable" Mode="In" Type="Int32" />
+            <Parameter Name="Cerrada" Mode="In" Type="Boolean" />
+            <Parameter Name="Fecha" Mode="In" Type="DateTime" />
+            <Parameter Name="FechaInicioEjecucion" Mode="In" Type="DateTime" />
+            <Parameter Name="FechaLimite" Mode="In" Type="DateTime" />
+            <Parameter Name="FechaCierre" Mode="In" Type="DateTime" />
+            <Parameter Name="EstadoId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SG_Tarea_Get" ReturnType="Collection(SG_Model.SG_Tarea_Result)" />
+          <FunctionImport Name="SG_ActasTareasEstado_Get" ReturnType="Collection(SG_Model.SG_ActasTareasEstado_Result)" />
+          <FunctionImport Name="SG_Tarea_Get_ActaId" ReturnType="Collection(SG_Model.SG_Tarea_Result)">
+          <Parameter Name="ActaId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SG_Tarea_EditEstadoId">
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+            <Parameter Name="EstadoId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="SG_Actas" EntityType="SG_Model.SG_Actas" />
+          <FunctionImport Name="SG_Acta_GetPQR" ReturnType="Collection(SG_Model.SG_Acta_Result)">
+          <Parameter Name="PqrId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SG_ActaComite_Add" ReturnType="Collection(SG_Model.SG_ActaComite_Add_Result)">
+            <Parameter Name="Fecha" Mode="In" Type="DateTime" />
+            <Parameter Name="UnidadId" Mode="In" Type="Int32" />
+            <Parameter Name="NoActa" Mode="In" Type="Int32" />
+            <Parameter Name="TipoReunionId" Mode="In" Type="Int32" />
+            <Parameter Name="Contenedor" Mode="In" Type="Int32" />
+            <Parameter Name="ContenedorId" Mode="In" Type="Int32" />
+            <Parameter Name="OrdenDia" Mode="In" Type="String" />
+            <Parameter Name="Conclusiones" Mode="In" Type="String" />
+            <Parameter Name="Descripcion" Mode="In" Type="String" />
+            <Parameter Name="UsuarioCrea" Mode="In" Type="Int32" />
+            <Parameter Name="UsuarioLidera" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SG_TipoReunion_Get" ReturnType="Collection(SG_Model.SG_TipoReunion_Get_Result)" />
+          <FunctionImport Name="SG_AsistenteActaComite_Add">
+            <Parameter Name="UsuarioId" Mode="In" Type="Int32" />
+            <Parameter Name="ActaId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SG_AsistenteActaComite_Del">
+          <Parameter Name="Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SG_AsistenteActaComite_Edit">
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+            <Parameter Name="UsuarioId" Mode="In" Type="Int32" />
+            <Parameter Name="ActaId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SG_AsistenteActaComite_Get_ActaId" ReturnType="Collection(SG_Model.SG_AsistenteActaComite_Get_ActaId_Result)">
+          <Parameter Name="ActaId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SG_SeguimientosActaComite_Add">
+            <Parameter Name="ActaId" Mode="In" Type="Int32" />
+            <Parameter Name="Accion" Mode="In" Type="String" />
+            <Parameter Name="Responsable" Mode="In" Type="Int64" />
+            <Parameter Name="FechaInicio" Mode="In" Type="DateTime" />
+            <Parameter Name="FechaCompromiso" Mode="In" Type="DateTime" />
+            <Parameter Name="Estado" Mode="In" Type="Int64" />
+            <Parameter Name="FechaCierre" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="SG_SeguimientosActaComite_Del">
+          <Parameter Name="Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SG_SeguimientosActaComite_Edit">
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+            <Parameter Name="ActaId" Mode="In" Type="Int32" />
+            <Parameter Name="Accion" Mode="In" Type="String" />
+            <Parameter Name="Responsable" Mode="In" Type="Int64" />
+            <Parameter Name="FechaInicio" Mode="In" Type="DateTime" />
+            <Parameter Name="FechaCompromiso" Mode="In" Type="DateTime" />
+            <Parameter Name="Estado" Mode="In" Type="Int64" />
+            <Parameter Name="FechaCierre" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="SG_SeguimientosActaComite_Get" ReturnType="Collection(SG_Model.SG_SeguimientosActaComite_Get_Result)">
+          <Parameter Name="ActaId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SG_EstadoSeguimiento_Get" ReturnType="Collection(SG_Model.SG_EstadoSeguimiento_Get_Result)" />
+          <FunctionImport Name="SG_ActaComite_Edit">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="UnidadId" Mode="In" Type="Int32" />
+            <Parameter Name="NoActa" Mode="In" Type="Int32" />
+            <Parameter Name="TipoReunionId" Mode="In" Type="Int32" />
+            <Parameter Name="Contenedor" Mode="In" Type="Int32" />
+            <Parameter Name="ContenedorId" Mode="In" Type="Int32" />
+            <Parameter Name="OrdenDia" Mode="In" Type="String" />
+            <Parameter Name="Conclusiones" Mode="In" Type="String" />
+            <Parameter Name="Descripcion" Mode="In" Type="String" />
+            <Parameter Name="UsuarioCrea" Mode="In" Type="Int32" />
+            <Parameter Name="UsuarioLidera" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SG_ActaComite_Get" ReturnType="Collection(SG_Model.SG_ActaComite_Get_Result)" />
+          <FunctionImport Name="SG_ActaComite_Get_Id" ReturnType="Collection(SG_Model.SG_ActaComite_Get_Result)">
+          <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="SG_Acta_Add_Result">
+          <Property Type="Decimal" Name="id" Nullable="true" Precision="38" Scale="0" />
+        </ComplexType>
+        <ComplexType Name="TipoActaCombo_Result">
+          <Property Type="Byte" Name="id" Nullable="false" />
+          <Property Type="String" Name="Tipo" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="UnidadCombo_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="Unidad" Nullable="true" MaxLength="250" />
+        </ComplexType>
+        <ComplexType Name="UltimoNoActa_Result">
+          <Property Type="Int64" Name="MaxId" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="SG_ParticipanteActa_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="Int64" Name="ActaId" Nullable="true" />
+          <Property Type="Int64" Name="UsuarioId" Nullable="true" />
+          <Property Type="String" Name="Usuario" Nullable="true" MaxLength="501" />
+        </ComplexType>
+        <ComplexType Name="SeguimientoUltimo_Id_Result">
+          <Property Type="Int64" Name="MaxId" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="SG_Tarea_Add_Result">
+          <Property Type="Decimal" Name="id" Nullable="true" Precision="38" Scale="0" />
+        </ComplexType>
+        <ComplexType Name="SG_ActasTareasEstado_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="TareaEstado" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SG_Seguimiento_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="Int64" Name="TareaId" Nullable="true" />
+          <Property Type="String" Name="Seguimiento" Nullable="true" />
+          <Property Type="Int64" Name="Usuario" Nullable="true" />
+          <Property Type="String" Name="NombreUsuario" Nullable="true" MaxLength="501" />
+          <Property Type="Boolean" Name="CierraTarea" Nullable="true" />
+          <Property Type="DateTime" Name="FechaSeguimiento" Nullable="true" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="SG_Acta_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="String" Name="Denominacion" Nullable="true" MaxLength="250" />
+          <Property Type="Int64" Name="NoActa" Nullable="true" />
+          <Property Type="Byte" Name="TipoId" Nullable="true" />
+          <Property Type="String" Name="Tipo" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="UnidadId" Nullable="true" />
+          <Property Type="String" Name="Unidad" Nullable="true" MaxLength="50" />
+          <Property Type="Int64" Name="Secretario" Nullable="true" />
+          <Property Type="String" Name="NombreSecretario" Nullable="true" MaxLength="501" />
+          <Property Type="Int64" Name="Lider" Nullable="true" />
+          <Property Type="String" Name="NombreLider" Nullable="true" MaxLength="501" />
+          <Property Type="String" Name="SeguimientoCompromisos" Nullable="true" />
+          <Property Type="String" Name="SeguimientoAcciones" Nullable="true" />
+          <Property Type="String" Name="TemasTratados" Nullable="true" />
+          <Property Type="String" Name="CompromisosConclusiones" Nullable="true" />
+          <Property Type="Boolean" Name="Activa" Nullable="true" />
+          <Property Type="Int32" Name="Form" Nullable="true" />
+          <Property Type="Int32" Name="FormId" Nullable="true" />
+          <Property Type="Boolean" Name="Publica" Nullable="true" />
+          <Property Type="DateTime" Name="FechaCreacion" Nullable="false" />
+        </ComplexType>
+        <EntityType Name="SG_Actas">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int64" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="String" Name="Denominacion" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Type="Int64" Name="NoActa" />
+          <Property Type="Byte" Name="TipoId" />
+          <Property Type="Int32" Name="UnidadId" />
+          <Property Type="Int64" Name="Secretario" />
+          <Property Type="Int64" Name="Lider" />
+          <Property Type="String" Name="SeguimientoCompromisos" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SeguimientoAcciones" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TemasTratados" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CompromisosConclusiones" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="Activa" />
+          <Property Type="Int32" Name="Form" />
+          <Property Type="Int32" Name="FormId" />
+          <Property Type="DateTime" Name="FechaCreacion" />
+          <Property Type="Boolean" Name="Publica" />
+        </EntityType>
+        <ComplexType Name="SG_Tarea_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="Int64" Name="ActaId" Nullable="true" />
+          <Property Type="String" Name="Tarea" Nullable="true" />
+          <Property Type="Int64" Name="Responsable" Nullable="true" />
+          <Property Type="String" Name="NombreResponsable" Nullable="true" MaxLength="501" />
+          <Property Type="Boolean" Name="Cerrada" Nullable="true" />
+          <Property Type="DateTime" Name="Fecha" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="FechaInicioEjecucion" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="FechaLimite" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="FechaCierre" Nullable="true" Precision="23" />
+          <Property Type="Byte" Name="EstadoId" Nullable="true" />
+          <Property Type="String" Name="TareaEstado" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SG_ActaComite_Add_Result">
+          <Property Type="Decimal" Name="Id" Nullable="true" Precision="38" Scale="0" />
+        </ComplexType>
+        <ComplexType Name="SG_TipoReunion_Get_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="String" Name="TipoReunion" Nullable="true" MaxLength="150" />
+        </ComplexType>
+        <ComplexType Name="SG_AsistenteActaComite_Get_ActaId_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="Int64" Name="UsuarioId" Nullable="false" />
+          <Property Type="String" Name="Usuario" Nullable="true" MaxLength="501" />
+          <Property Type="Int64" Name="ActaId" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="SG_SeguimientosActaComite_Get_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="Int64" Name="ActaId" Nullable="true" />
+          <Property Type="String" Name="Accion" Nullable="true" />
+          <Property Type="Int64" Name="ResponsableId" Nullable="true" />
+          <Property Type="String" Name="Responsable" Nullable="true" MaxLength="501" />
+          <Property Type="DateTime" Name="FechaInicio" Nullable="true" />
+          <Property Type="DateTime" Name="FechaCompromiso" Nullable="true" />
+          <Property Type="Int64" Name="EstadoId" Nullable="true" />
+          <Property Type="String" Name="Estado" Nullable="true" MaxLength="250" />
+          <Property Type="DateTime" Name="FechaCierre" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SG_EstadoSeguimiento_Get_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="String" Name="EstadoSeguimiento" Nullable="true" MaxLength="250" />
+        </ComplexType>
+        <ComplexType Name="SG_ActaComite_Get_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="DateTime" Name="Fecha" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="UnidadId" Nullable="true" />
+          <Property Type="Int64" Name="NoActa" Nullable="true" />
+          <Property Type="Int64" Name="TipoReunionId" Nullable="true" />
+          <Property Type="Int64" Name="Contenedor" Nullable="true" />
+          <Property Type="Int64" Name="ContenedorId" Nullable="true" />
+          <Property Type="String" Name="OrdenDia" Nullable="true" />
+          <Property Type="String" Name="Conclusiones" Nullable="true" />
+          <Property Type="String" Name="Descripcion" Nullable="true" />
+          <Property Type="Int64" Name="UsuarioCrea" Nullable="true" />
+          <Property Type="Int64" Name="UsuarioLidera" Nullable="true" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SG_ModelStoreContainer" CdmEntityContainer="SG_Entities">
+          <FunctionImportMapping FunctionImportName="SG_Acta_Add" FunctionName="SG_Model.Store.SG_Acta_Add">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SG_Model.SG_Acta_Add_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SG_Acta_Edit" FunctionName="SG_Model.Store.SG_Acta_Edit" />
+          <FunctionImportMapping FunctionImportName="SG_Acta_Del" FunctionName="SG_Model.Store.SG_Acta_Del" />
+          <FunctionImportMapping FunctionImportName="SG_Acta_Get_NoActa" FunctionName="SG_Model.Store.SG_Acta_Get_NoActa">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SG_Model.SG_Acta_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Denominacion" ColumnName="Denominacion" />
+                <ScalarProperty Name="NoActa" ColumnName="NoActa" />
+                <ScalarProperty Name="TipoId" ColumnName="TipoId" />
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+                <ScalarProperty Name="UnidadId" ColumnName="UnidadId" />
+                <ScalarProperty Name="Unidad" ColumnName="Unidad" />
+                <ScalarProperty Name="Secretario" ColumnName="Secretario" />
+                <ScalarProperty Name="NombreSecretario" ColumnName="NombreSecretario" />
+                <ScalarProperty Name="Lider" ColumnName="Lider" />
+                <ScalarProperty Name="NombreLider" ColumnName="NombreLider" />
+                <ScalarProperty Name="SeguimientoCompromisos" ColumnName="SeguimientoCompromisos" />
+                <ScalarProperty Name="SeguimientoAcciones" ColumnName="SeguimientoAcciones" />
+                <ScalarProperty Name="TemasTratados" ColumnName="TemasTratados" />
+                <ScalarProperty Name="CompromisosConclusiones" ColumnName="CompromisosConclusiones" />
+                <ScalarProperty Name="Activa" ColumnName="Activa" />
+                <ScalarProperty Name="Form" ColumnName="Form" />
+                <ScalarProperty Name="FormId" ColumnName="FormId" />
+                <ScalarProperty Name="Publica" ColumnName="Publica" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SG_Acta_Get_TipoActa" FunctionName="SG_Model.Store.SG_Acta_Get_TipoActa">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SG_Model.SG_Acta_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Denominacion" ColumnName="Denominacion" />
+                <ScalarProperty Name="NoActa" ColumnName="NoActa" />
+                <ScalarProperty Name="TipoId" ColumnName="TipoId" />
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+                <ScalarProperty Name="UnidadId" ColumnName="UnidadId" />
+                <ScalarProperty Name="Unidad" ColumnName="Unidad" />
+                <ScalarProperty Name="Secretario" ColumnName="Secretario" />
+                <ScalarProperty Name="NombreSecretario" ColumnName="NombreSecretario" />
+                <ScalarProperty Name="Lider" ColumnName="Lider" />
+                <ScalarProperty Name="NombreLider" ColumnName="NombreLider" />
+                <ScalarProperty Name="SeguimientoCompromisos" ColumnName="SeguimientoCompromisos" />
+                <ScalarProperty Name="SeguimientoAcciones" ColumnName="SeguimientoAcciones" />
+                <ScalarProperty Name="TemasTratados" ColumnName="TemasTratados" />
+                <ScalarProperty Name="CompromisosConclusiones" ColumnName="CompromisosConclusiones" />
+                <ScalarProperty Name="Activa" ColumnName="Activa" />
+                <ScalarProperty Name="Form" ColumnName="Form" />
+                <ScalarProperty Name="FormId" ColumnName="FormId" />
+                <ScalarProperty Name="Publica" ColumnName="Publica" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SG_Acta_Get_TipoActa_combo" FunctionName="SG_Model.Store.SG_Acta_Get_TipoActa_combo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SG_Model.TipoActaCombo_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SG_Acta_Get_Unidad" FunctionName="SG_Model.Store.SG_Acta_Get_Unidad">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SG_Model.SG_Acta_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Denominacion" ColumnName="Denominacion" />
+                <ScalarProperty Name="NoActa" ColumnName="NoActa" />
+                <ScalarProperty Name="TipoId" ColumnName="TipoId" />
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+                <ScalarProperty Name="UnidadId" ColumnName="UnidadId" />
+                <ScalarProperty Name="Unidad" ColumnName="Unidad" />
+                <ScalarProperty Name="Secretario" ColumnName="Secretario" />
+                <ScalarProperty Name="NombreSecretario" ColumnName="NombreSecretario" />
+                <ScalarProperty Name="Lider" ColumnName="Lider" />
+                <ScalarProperty Name="NombreLider" ColumnName="NombreLider" />
+                <ScalarProperty Name="SeguimientoCompromisos" ColumnName="SeguimientoCompromisos" />
+                <ScalarProperty Name="SeguimientoAcciones" ColumnName="SeguimientoAcciones" />
+                <ScalarProperty Name="TemasTratados" ColumnName="TemasTratados" />
+                <ScalarProperty Name="CompromisosConclusiones" ColumnName="CompromisosConclusiones" />
+                <ScalarProperty Name="Activa" ColumnName="Activa" />
+                <ScalarProperty Name="Form" ColumnName="Form" />
+                <ScalarProperty Name="FormId" ColumnName="FormId" />
+                <ScalarProperty Name="Publica" ColumnName="Publica" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="US_Unidad_Get_Combo" FunctionName="SG_Model.Store.US_Unidad_Get_Combo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SG_Model.UnidadCombo_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Unidad" ColumnName="Unidad" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SG_Acta_UltimoNoActa" FunctionName="SG_Model.Store.SG_Acta_UltimoNoActa">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SG_Model.UltimoNoActa_Result">
+                <ScalarProperty Name="MaxId" ColumnName="MaxId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SG_ParticipanteActa_Add" FunctionName="SG_Model.Store.SG_ParticipanteActa_Add" />
+          <FunctionImportMapping FunctionImportName="SG_ParticipanteActa_Del" FunctionName="SG_Model.Store.SG_ParticipanteActa_Del" />
+          <FunctionImportMapping FunctionImportName="SG_ParticipanteActa_Get" FunctionName="SG_Model.Store.SG_ParticipanteActa_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SG_Model.SG_ParticipanteActa_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="ActaId" ColumnName="ActaId" />
+                <ScalarProperty Name="UsuarioId" ColumnName="UsuarioId" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SG_ParticipanteActa_Get_ActaId" FunctionName="SG_Model.Store.SG_ParticipanteActa_Get_ActaId">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SG_Model.SG_ParticipanteActa_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="ActaId" ColumnName="ActaId" />
+                <ScalarProperty Name="UsuarioId" ColumnName="UsuarioId" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SG_ParticipanteActa_Edit" FunctionName="SG_Model.Store.SG_ParticipanteActa_Edit" />
+          <FunctionImportMapping FunctionImportName="SG_Seguimiento_Add" FunctionName="SG_Model.Store.SG_Seguimiento_Add" />
+          <FunctionImportMapping FunctionImportName="SG_Seguimiento_Del" FunctionName="SG_Model.Store.SG_Seguimiento_Del" />
+          <FunctionImportMapping FunctionImportName="SG_Seguimiento_Edit" FunctionName="SG_Model.Store.SG_Seguimiento_Edit" />
+          <FunctionImportMapping FunctionImportName="SG_Seguimiento_Get" FunctionName="SG_Model.Store.SG_Seguimiento_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SG_Model.SG_Seguimiento_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="TareaId" ColumnName="TareaId" />
+                <ScalarProperty Name="Seguimiento" ColumnName="Seguimiento" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="NombreUsuario" ColumnName="NombreUsuario" />
+                <ScalarProperty Name="CierraTarea" ColumnName="CierraTarea" />
+                <ScalarProperty Name="FechaSeguimiento" ColumnName="FechaSeguimiento" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SG_Seguimiento_Get_TareaId" FunctionName="SG_Model.Store.SG_Seguimiento_Get_TareaId">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SG_Model.SG_Seguimiento_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="TareaId" ColumnName="TareaId" />
+                <ScalarProperty Name="Seguimiento" ColumnName="Seguimiento" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="NombreUsuario" ColumnName="NombreUsuario" />
+                <ScalarProperty Name="CierraTarea" ColumnName="CierraTarea" />
+                <ScalarProperty Name="FechaSeguimiento" ColumnName="FechaSeguimiento" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SG_Seguimiento_Ultimo_Id" FunctionName="SG_Model.Store.SG_Seguimiento_Ultimo_Id">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SG_Model.SeguimientoUltimo_Id_Result">
+                <ScalarProperty Name="MaxId" ColumnName="MaxId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SG_Tarea_Add" FunctionName="SG_Model.Store.SG_Tarea_Add">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SG_Model.SG_Tarea_Add_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SG_Tarea_Del" FunctionName="SG_Model.Store.SG_Tarea_Del" />
+          <FunctionImportMapping FunctionImportName="SG_Tarea_Edit" FunctionName="SG_Model.Store.SG_Tarea_Edit" />
+          <FunctionImportMapping FunctionImportName="SG_Tarea_Get" FunctionName="SG_Model.Store.SG_Tarea_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SG_Model.SG_Tarea_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="ActaId" ColumnName="ActaId" />
+                <ScalarProperty Name="Tarea" ColumnName="Tarea" />
+                <ScalarProperty Name="Responsable" ColumnName="Responsable" />
+                <ScalarProperty Name="NombreResponsable" ColumnName="NombreResponsable" />
+                <ScalarProperty Name="Cerrada" ColumnName="Cerrada" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="FechaInicioEjecucion" ColumnName="FechaInicioEjecucion" />
+                <ScalarProperty Name="FechaLimite" ColumnName="FechaLimite" />
+                <ScalarProperty Name="FechaCierre" ColumnName="FechaCierre" />
+                <ScalarProperty Name="EstadoId" ColumnName="EstadoId" />
+                <ScalarProperty Name="TareaEstado" ColumnName="TareaEstado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SG_Acta_Get" FunctionName="SG_Model.Store.SG_Acta_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SG_Model.SG_Acta_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Denominacion" ColumnName="Denominacion" />
+                <ScalarProperty Name="NoActa" ColumnName="NoActa" />
+                <ScalarProperty Name="TipoId" ColumnName="TipoId" />
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+                <ScalarProperty Name="UnidadId" ColumnName="UnidadId" />
+                <ScalarProperty Name="Unidad" ColumnName="Unidad" />
+                <ScalarProperty Name="Secretario" ColumnName="Secretario" />
+                <ScalarProperty Name="NombreSecretario" ColumnName="NombreSecretario" />
+                <ScalarProperty Name="Lider" ColumnName="Lider" />
+                <ScalarProperty Name="NombreLider" ColumnName="NombreLider" />
+                <ScalarProperty Name="SeguimientoCompromisos" ColumnName="SeguimientoCompromisos" />
+                <ScalarProperty Name="SeguimientoAcciones" ColumnName="SeguimientoAcciones" />
+                <ScalarProperty Name="TemasTratados" ColumnName="TemasTratados" />
+                <ScalarProperty Name="CompromisosConclusiones" ColumnName="CompromisosConclusiones" />
+                <ScalarProperty Name="Activa" ColumnName="Activa" />
+                <ScalarProperty Name="Form" ColumnName="Form" />
+                <ScalarProperty Name="FormId" ColumnName="FormId" />
+                <ScalarProperty Name="Publica" ColumnName="Publica" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SG_Tarea_Get_ActaId" FunctionName="SG_Model.Store.SG_Tarea_Get_ActaId">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SG_Model.SG_Tarea_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="ActaId" ColumnName="ActaId" />
+                <ScalarProperty Name="Tarea" ColumnName="Tarea" />
+                <ScalarProperty Name="Responsable" ColumnName="Responsable" />
+                <ScalarProperty Name="NombreResponsable" ColumnName="NombreResponsable" />
+                <ScalarProperty Name="Cerrada" ColumnName="Cerrada" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="FechaInicioEjecucion" ColumnName="FechaInicioEjecucion" />
+                <ScalarProperty Name="FechaLimite" ColumnName="FechaLimite" />
+                <ScalarProperty Name="FechaCierre" ColumnName="FechaCierre" />
+                <ScalarProperty Name="EstadoId" ColumnName="EstadoId" />
+                <ScalarProperty Name="TareaEstado" ColumnName="TareaEstado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SG_Tarea_EditEstadoId" FunctionName="SG_Model.Store.SG_Tarea_EditEstadoId" />
+          <EntitySetMapping Name="SG_Actas">
+            <EntityTypeMapping TypeName="SG_Model.SG_Actas">
+              <MappingFragment StoreEntitySet="SG_Actas">
+                <ScalarProperty Name="Publica" ColumnName="Publica" />
+                <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
+                <ScalarProperty Name="FormId" ColumnName="FormId" />
+                <ScalarProperty Name="Form" ColumnName="Form" />
+                <ScalarProperty Name="Activa" ColumnName="Activa" />
+                <ScalarProperty Name="CompromisosConclusiones" ColumnName="CompromisosConclusiones" />
+                <ScalarProperty Name="TemasTratados" ColumnName="TemasTratados" />
+                <ScalarProperty Name="SeguimientoAcciones" ColumnName="SeguimientoAcciones" />
+                <ScalarProperty Name="SeguimientoCompromisos" ColumnName="SeguimientoCompromisos" />
+                <ScalarProperty Name="Lider" ColumnName="Lider" />
+                <ScalarProperty Name="Secretario" ColumnName="Secretario" />
+                <ScalarProperty Name="UnidadId" ColumnName="UnidadId" />
+                <ScalarProperty Name="TipoId" ColumnName="TipoId" />
+                <ScalarProperty Name="NoActa" ColumnName="NoActa" />
+                <ScalarProperty Name="Denominacion" ColumnName="Denominacion" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SG_Acta_GetPQR" FunctionName="SG_Model.Store.SG_Acta_GetPQR">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SG_Model.SG_Acta_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Denominacion" ColumnName="Denominacion" />
+                <ScalarProperty Name="NoActa" ColumnName="NoActa" />
+                <ScalarProperty Name="TipoId" ColumnName="TipoId" />
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+                <ScalarProperty Name="UnidadId" ColumnName="UnidadId" />
+                <ScalarProperty Name="Unidad" ColumnName="Unidad" />
+                <ScalarProperty Name="Secretario" ColumnName="Secretario" />
+                <ScalarProperty Name="NombreSecretario" ColumnName="NombreSecretario" />
+                <ScalarProperty Name="Lider" ColumnName="Lider" />
+                <ScalarProperty Name="NombreLider" ColumnName="NombreLider" />
+                <ScalarProperty Name="SeguimientoCompromisos" ColumnName="SeguimientoCompromisos" />
+                <ScalarProperty Name="SeguimientoAcciones" ColumnName="SeguimientoAcciones" />
+                <ScalarProperty Name="TemasTratados" ColumnName="TemasTratados" />
+                <ScalarProperty Name="CompromisosConclusiones" ColumnName="CompromisosConclusiones" />
+                <ScalarProperty Name="Activa" ColumnName="Activa" />
+                <ScalarProperty Name="Form" ColumnName="Form" />
+                <ScalarProperty Name="FormId" ColumnName="FormId" />
+                <ScalarProperty Name="Publica" ColumnName="Publica" />
+                <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SG_ActaComite_Add" FunctionName="SG_Model.Store.SG_ActaComite_Add">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SG_Model.SG_ActaComite_Add_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SG_TipoReunion_Get" FunctionName="SG_Model.Store.SG_TipoReunion_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SG_Model.SG_TipoReunion_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="TipoReunion" ColumnName="TipoReunion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SG_AsistenteActaComite_Add" FunctionName="SG_Model.Store.SG_AsistenteActaComite_Add" />
+          <FunctionImportMapping FunctionImportName="SG_AsistenteActaComite_Del" FunctionName="SG_Model.Store.SG_AsistenteActaComite_Del" />
+          <FunctionImportMapping FunctionImportName="SG_AsistenteActaComite_Edit" FunctionName="SG_Model.Store.SG_AsistenteActaComite_Edit" />
+          <FunctionImportMapping FunctionImportName="SG_AsistenteActaComite_Get_ActaId" FunctionName="SG_Model.Store.SG_AsistenteActaComite_Get_ActaId">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SG_Model.SG_AsistenteActaComite_Get_ActaId_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UsuarioId" ColumnName="UsuarioId" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="ActaId" ColumnName="ActaId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SG_SeguimientosActaComite_Add" FunctionName="SG_Model.Store.SG_SeguimientosActaComite_Add" />
+          <FunctionImportMapping FunctionImportName="SG_SeguimientosActaComite_Del" FunctionName="SG_Model.Store.SG_SeguimientosActaComite_Del" />
+          <FunctionImportMapping FunctionImportName="SG_SeguimientosActaComite_Edit" FunctionName="SG_Model.Store.SG_SeguimientosActaComite_Edit" />
+          <FunctionImportMapping FunctionImportName="SG_SeguimientosActaComite_Get" FunctionName="SG_Model.Store.SG_SeguimientosActaComite_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SG_Model.SG_SeguimientosActaComite_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ActaId" ColumnName="ActaId" />
+                <ScalarProperty Name="Accion" ColumnName="Accion" />
+                <ScalarProperty Name="ResponsableId" ColumnName="ResponsableId" />
+                <ScalarProperty Name="Responsable" ColumnName="Responsable" />
+                <ScalarProperty Name="FechaInicio" ColumnName="FechaInicio" />
+                <ScalarProperty Name="FechaCompromiso" ColumnName="FechaCompromiso" />
+                <ScalarProperty Name="EstadoId" ColumnName="EstadoId" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="FechaCierre" ColumnName="FechaCierre" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SG_EstadoSeguimiento_Get" FunctionName="SG_Model.Store.SG_EstadoSeguimiento_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SG_Model.SG_EstadoSeguimiento_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="EstadoSeguimiento" ColumnName="EstadoSeguimiento" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SG_ActaComite_Edit" FunctionName="SG_Model.Store.SG_ActaComite_Edit" />
+          <FunctionImportMapping FunctionImportName="SG_ActaComite_Get" FunctionName="SG_Model.Store.SG_ActaComite_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SG_Model.SG_ActaComite_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="UnidadId" ColumnName="UnidadId" />
+                <ScalarProperty Name="NoActa" ColumnName="NoActa" />
+                <ScalarProperty Name="TipoReunionId" ColumnName="TipoReunionId" />
+                <ScalarProperty Name="Contenedor" ColumnName="Contenedor" />
+                <ScalarProperty Name="ContenedorId" ColumnName="ContenedorId" />
+                <ScalarProperty Name="OrdenDia" ColumnName="OrdenDia" />
+                <ScalarProperty Name="Conclusiones" ColumnName="Conclusiones" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="UsuarioCrea" ColumnName="UsuarioCrea" />
+                <ScalarProperty Name="UsuarioLidera" ColumnName="UsuarioLidera" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SG_ActaComite_Get_Id" FunctionName="SG_Model.Store.SG_ActaComite_Get_Id">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SG_Model.SG_ActaComite_Get_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="UnidadId" ColumnName="UnidadId" />
+                <ScalarProperty Name="NoActa" ColumnName="NoActa" />
+                <ScalarProperty Name="TipoReunionId" ColumnName="TipoReunionId" />
+                <ScalarProperty Name="Contenedor" ColumnName="Contenedor" />
+                <ScalarProperty Name="ContenedorId" ColumnName="ContenedorId" />
+                <ScalarProperty Name="OrdenDia" ColumnName="OrdenDia" />
+                <ScalarProperty Name="Conclusiones" ColumnName="Conclusiones" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="UsuarioCrea" ColumnName="UsuarioCrea" />
+                <ScalarProperty Name="UsuarioLidera" ColumnName="UsuarioLidera" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer>
+    <edmx:Connection>
+      <edmx:DesignerInfoPropertySet>
+        <edmx:DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </edmx:DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <edmx:DesignerInfoPropertySet>
+        <edmx:DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <edmx:DesignerProperty Name="EnablePluralization" Value="False" />
+        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <edmx:DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </edmx:DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <edmx:Diagram Name="SG_Model" ZoomLevel="90">
+        <edmx:EntityTypeShape EntityType="SG_Model.SG_Actas" Width="1.5" PointX="0.75" PointY="0.75" Height="4.0956022135416656" />
+      </edmx:Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

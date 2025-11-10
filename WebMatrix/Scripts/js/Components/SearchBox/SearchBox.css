@@ -1,0 +1,17 @@
+﻿.SearchBox {
+    display: grid;
+    grid-template-columns: 100px auto;
+    justify-content: center;
+}
+
+    .SearchBox input[type="text"] {
+        border-style: solid;
+    }
+
+    .SearchBox button {
+        border-width: 1px 1px 1px 0;
+    }
+
+        .SearchBox button img {
+            vertical-align: unset;
+        }

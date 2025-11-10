@@ -1,0 +1,40 @@
+﻿#ModalContentEvaluacion {
+    display: grid;
+    grid-template-rows: auto 1fr auto auto;
+    row-gap: 10px;
+}
+
+#GroupObservaciones {
+    display: flex;
+    flex-direction: column;
+}
+
+input[type=button] {
+    border-radius: 5px;
+    background-color: cadetblue;
+    color: white;
+    cursor: pointer;
+    padding: 3px;
+}
+
+#ContainerPage {
+    display: grid;
+    column-gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+}
+
+    #ContainerPage #ProcesosPendientesEvaluacion {
+        display: grid;
+        grid-template-rows: 40px 300px;
+    }
+
+
+.invalid {
+    border-color: red !important;
+}
+
+#ContainerPage #EvaluacionesRealizadas {
+    display: grid;
+    grid-template-rows: 40px 300px;
+    grid-template-columns: 100%;
+}

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <edmx:Designer>
+    <edmx:Diagrams>
+      <edmx:Diagram Name="ES_Model" >
+        <edmx:EntityTypeShape EntityType="ES_Model.ES_BriefDisenoMuestral" Width="1.5" PointX="0.75" PointY="3" />
+        <edmx:EntityTypeShape EntityType="ES_Model.ES_DisenoMuestral" Width="1.5" PointX="3" PointY="1.125" />
+        <edmx:EntityTypeShape EntityType="ES_Model.ES_MetodologiaCampo" Width="1.5" PointX="5.75" PointY="0.75" />
+        <edmx:AssociationConnector Association="ES_Model.FK_ES_DisenoMuestral_ES_BriefDisenoMuestral" />
+        <edmx:EntityTypeShape EntityType="ES_Model.ES_AprobacionMetodologia" Width="1.5" PointX="8.375" PointY="0.75" />
+      </edmx:Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

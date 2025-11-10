@@ -1,0 +1,143 @@
+
+
+input {
+	color:#666;
+	border:none;
+}
+
+input:hover {
+	background-color:#F4F4F4;
+}
+
+label {
+    text-align: left;
+	color:#FFF;
+	font-family: 'Metrophobic', Arial, serif; font-weight: 200;
+	font-size:14px;
+}
+
+select{
+	color:#666;
+	background-color:#FFF;
+	width:200px;
+	height:20px;
+	margin-top:4px;
+	margin-bottom:10px;
+	border:none;
+}
+
+textarea{
+	color:#666;
+	background-color:#FFF;
+	width:230px;
+	height:60px;
+	margin-top:4px;
+	margin-bottom:10px;
+	border:none;
+}
+
+textarea:hover {
+	background-color:#F4F4F4;
+}
+
+
+
+#campo-formulario1 {
+	float:left;
+	margin-top:10px;
+	margin-right:15px;
+	width: 200px;
+	min-height:150px;
+	background-image:url(../images/fnd-form1.jpg);
+	padding:45px;
+	border-radius:5px;
+}
+#campo-formulario2 {
+	float:left;
+	margin-top:10px;
+	margin-right:15px;
+	width: 250px;
+	min-height:150px;
+	background-image:url('../images/fnd-form2.jpg');
+	padding:30px;
+	border-radius:10px;
+    height: 720px;
+}
+
+#campo-formulario3 {
+	float:left;
+	margin-top:10px;
+	margin-right:15px;
+	min-height:150px;
+    width: 700px;
+	background-image:url(../images/fnd-form3.jpg);
+	padding:30px;
+	border-radius:10px;
+}
+
+#campo-formulario4 {
+	float:left;
+	margin-top:10px;
+	margin-right:15px;
+	width: 100%;
+	background-color:#284694;
+	padding:30px;
+	border-radius:10px;
+}
+
+#campo-formulario5 {
+	float:left;
+	margin-top:10px;
+	margin-right:15px;
+	width: 100%;
+	background-color:#08AFA7;
+	padding:30px;
+	border-radius:10px;
+}
+
+
+.button {
+	color:#FFF;
+	height:25px;
+	width:76px;
+    background: #1AAFA4;
+	border:none;
+}
+
+.button:hover{
+    background: #3ADBCC;
+	border:none;
+}
+
+#container {
+	width: 1114px;
+	margin: 0 auto;
+	padding-left:40px;
+	background-image:url(../images/fnd-section.png);
+	background-position:right;
+	background-repeat:no-repeat;
+}
+
+input[type=radio] {
+  width: 19px;
+  height: 15px;
+  padding: 0 5px 0 0;
+}
+
+form label
+{
+    display:inline;
+    font-size:14px;
+    font-weight:bold;
+    margin-bottom:5px;
+}
+.table{
+    display:block;
+    border:none;
+    -webkit-box-shadow:none;
+}
+.divBorder {
+    -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+    border: 1px solid #d3d3d3;
+}
+/*overflow:hidden;*/

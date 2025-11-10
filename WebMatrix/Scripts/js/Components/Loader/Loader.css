@@ -1,0 +1,33 @@
+﻿.Loader {
+	background: #0000004D 0% 0% no-repeat padding-box;
+	backdrop-filter: blur(7px);
+	position: fixed;
+	bottom: 0;
+	top: 0;
+	left: 0;
+	right: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 2000;
+	opacity: 1;
+}
+
+	.Loader .Spinner {
+		border: 4px solid rgba(0,0,0,.1);
+		width: 36px;
+		height: 36px;
+		border-radius: 50%;
+		border-left-color: #09f;
+		animation: spin 1s ease infinite;
+	}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
+}

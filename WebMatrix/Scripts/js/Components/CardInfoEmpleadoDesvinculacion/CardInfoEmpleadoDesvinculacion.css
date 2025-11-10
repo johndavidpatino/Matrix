@@ -1,0 +1,40 @@
+﻿.CardInfoEmpleadoDesvinculacion {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    border-style: dashed;
+    border-width: 1px;
+    height: 180px;
+}
+
+    .CardInfoEmpleadoDesvinculacion .imgContainer {
+        padding: 10px;
+    }
+
+    .CardInfoEmpleadoDesvinculacion .imgContainer img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .CardInfoEmpleadoDesvinculacion .EmpleadoInfo {
+        padding: 10px;
+        min-width: 0;
+    }
+
+        .CardInfoEmpleadoDesvinculacion .EmpleadoInfo p {
+            margin: 0px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .CardInfoEmpleadoDesvinculacion .EmpleadoInfo .button {
+            border-width: 0px;
+            background-color: transparent;
+            opacity: 0.8;
+            padding: 0px;
+        }
+
+            .CardInfoEmpleadoDesvinculacion .EmpleadoInfo .button:hover {
+                opacity: 1;
+            }

@@ -1,0 +1,109 @@
+﻿
+input[type=text] {
+    border-style: none;
+    border-color: inherit;
+    border-width: medium;
+}
+
+    input[type=text]:hover {
+        background-color: #F4F4F4;
+    }
+
+input[type=radio] {
+    width: 19px;
+    height: 25px;
+    padding: 0 5px 0 0;
+}
+
+
+label {
+    text-align: left;
+    /*color:#FFF;*/
+    font-family: 'Metrophobic', Arial, serif;
+    font-weight: 200;
+    font-size: 14px;
+}
+
+input[type=submit] {
+    border-style: none;
+    border-color: inherit;
+    border-width: medium;
+    color: #FFF;
+    /*width:76px;*/
+    background: #1AAFA4;
+    font-weight: 700;
+    height:45px;
+    border-radius:6px;
+}
+
+    input[type=submit]:hover {
+        background: #3ADBCC;
+        border: none;
+    }
+
+select {
+    color: #666;
+    background-color: #FFF;
+    width: 250px;
+    /*height:20px;
+    margin-top:4px;
+    margin-bottom:10px;*/
+    border: none;
+}
+
+textarea {
+    border-style: none;
+    border-color: inherit;
+    border-width: medium;
+    color: #666;
+    background-color: #FFF;
+    margin-top: 4px;
+    margin-bottom: 10px;
+    width: 90%;
+}
+
+    textarea:hover {
+        background-color: #F4F4F4;
+    }
+
+.button {
+    color: #FFF;
+    height: 25px;
+    /*width:76px;*/
+    background: #1AAFA4;
+    border-radius: 6px;
+}
+
+    .button:hover {
+        background: #3ADBCC;
+        border: none;
+    }
+
+/*
+#campo-formulario {
+    float:left;
+    margin-top:10px;
+    margin-right:15px;
+    width: 230px;
+    max-width: 230px;
+    height:280px;
+    background-image:url(../images/fnd-form1.jpg);
+    padding:30px;
+    border-radius:10px;
+}
+#campo-formulario2 {
+    float:left;
+    margin-top:10px;
+    margin-right:15px;
+    width: 230px;
+    max-width: 230px;
+    height:280px;
+    background-image:url(../images/fnd-form2.jpg);
+    padding:30px;
+    border-radius:10px;
+}
+*/
+
+.error {
+    color: Red;
+}

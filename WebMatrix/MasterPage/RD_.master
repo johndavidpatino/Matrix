@@ -1,0 +1,16 @@
+﻿<%@ Master Language="VB" MasterPageFile="~/MasterPage/Site.Master" AutoEventWireup="false" CodeBehind="RD_.master.vb" Inherits="WebMatrix.RD_" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+    <asp:ContentPlaceHolder ID="CPH_Head" runat="server">
+        
+    </asp:ContentPlaceHolder>
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="CPH_Icono" runat="server">
+</asp:Content>
+<asp:Content ID="Content3" ContentPlaceHolderID="CPH_FraseGeneral" runat="server">
+    <a>Recolección de Datos</a>
+</asp:Content>
+<asp:Content ID="Content4" ContentPlaceHolderID="CPH_Section" runat="server">
+    <asp:ContentPlaceHolder ID="CPH_Section" runat="server">
+
+    </asp:ContentPlaceHolder>
+</asp:Content>

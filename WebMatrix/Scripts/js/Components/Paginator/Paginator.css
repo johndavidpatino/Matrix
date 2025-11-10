@@ -1,0 +1,21 @@
+﻿.pagination {
+    display: flex;
+    position: sticky;
+    bottom: 0;
+    background-color: white;
+    align-items: center;
+    max-height: 30px;
+}
+
+    .pagination .paginationControls {
+        display: flex;
+    }
+
+        .pagination .paginationControls > input[type] {
+            color: #444a4d;
+        }
+
+        .pagination .paginationControls .currentPage {
+            padding: 5px;
+            color: #444a4d;
+        }

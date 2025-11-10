@@ -1,0 +1,65 @@
+table
+{
+    /*color: #E6E6E6;*/
+    font: 12px/15px Arial, Helvetica, sans-serif;
+    border: 1px solid #d3d3d3; /*overflow:hidden;
+    background-color:#fefefe;*/
+    margin: 0% auto 0; /*Propiedad de centrado, borrar para dejarlo normal*/
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -ms-border-radius: 5px;
+    border-radius: 5px;
+    -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+    -ms-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+    -o-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+}
+table a 
+{
+	color: #E6E6E6;
+	text-decoration:none;
+}
+
+td 
+{
+	/*border-top:1px solid #e0e0e0; 
+	border-right:1px solid #e0e0e0; */
+	max-width:200px;
+	/*background-image:url(../images/fondo-td.jpg);
+	background-repeat:repeat-x;*/
+	
+}
+
+th 
+{
+	/*padding-top:22px; */
+	text-shadow: 1px 1px 1px #fff; 
+	background:#e8eaeb; 
+	/*background-image:url(../images/fondo-th.jpg); 
+	background-repeat:repeat-x;*/
+}
+
+th:hover 
+{
+	text-shadow: 1px 1px 1px #fff; 
+	background:#e8eaeb; 
+	color: #555;
+	/*background-image:url(../images/fondo2-th.jpg);
+	background-repeat:repeat-x;*/
+}
+
+th, td 
+{
+	/*padding:18px 28px 18px; */
+	padding:1px 6px 1px;
+	}
+
+tr th 
+{
+	color: #E6E6E6;
+}
+
+tr:hover 
+{
+	/*color:#049D9C;*/
+}

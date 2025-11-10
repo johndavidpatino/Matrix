@@ -1,0 +1,1138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="OP_Cuanti2_Model.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="OP_Cuanti2_ModelStoreContainer">
+          <EntitySet Name="_Divipola" EntityType="OP_Cuanti2_Model.Store._Divipola" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="OP_Encuestadores" EntityType="OP_Cuanti2_Model.Store.OP_Encuestadores" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="OP_PersonasAsignadasTrabajo" EntityType="OP_Cuanti2_Model.Store.OP_PersonasAsignadasTrabajo" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="OP_TipoEncuestador" EntityType="OP_Cuanti2_Model.Store.OP_TipoEncuestador" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="PY_Trabajo" EntityType="OP_Cuanti2_Model.Store.PY_Trabajo" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="TH_Capacitaciones" EntityType="OP_Cuanti2_Model.Store.TH_Capacitaciones" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="TH_CapacitacionesParticipantes" EntityType="OP_Cuanti2_Model.Store.TH_CapacitacionesParticipantes" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="TH_Cargos" EntityType="OP_Cuanti2_Model.Store.TH_Cargos" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="TH_Personas" EntityType="OP_Cuanti2_Model.Store.TH_Personas" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="TH_TipoContratacion" EntityType="OP_Cuanti2_Model.Store.TH_TipoContratacion" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <AssociationSet Name="FK_OP_Encuestadores_OP_TipoEncuestador" Association="OP_Cuanti2_Model.Store.FK_OP_Encuestadores_OP_TipoEncuestador">
+            <End Role="OP_TipoEncuestador" EntitySet="OP_TipoEncuestador" />
+            <End Role="OP_Encuestadores" EntitySet="OP_Encuestadores" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OP_Encuestadores_TH_Personas" Association="OP_Cuanti2_Model.Store.FK_OP_Encuestadores_TH_Personas">
+            <End Role="TH_Personas" EntitySet="TH_Personas" />
+            <End Role="OP_Encuestadores" EntitySet="OP_Encuestadores" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OP_PersonasAsignadasTrabajo_PY_Trabajo" Association="OP_Cuanti2_Model.Store.FK_OP_PersonasAsignadasTrabajo_PY_Trabajo">
+            <End Role="PY_Trabajo" EntitySet="PY_Trabajo" />
+            <End Role="OP_PersonasAsignadasTrabajo" EntitySet="OP_PersonasAsignadasTrabajo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OP_PersonasAsignadasTrabajo_TH_Personas" Association="OP_Cuanti2_Model.Store.FK_OP_PersonasAsignadasTrabajo_TH_Personas">
+            <End Role="TH_Personas" EntitySet="TH_Personas" />
+            <End Role="OP_PersonasAsignadasTrabajo" EntitySet="OP_PersonasAsignadasTrabajo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TH_Capacitaciones_PY_Trabajo" Association="OP_Cuanti2_Model.Store.FK_TH_Capacitaciones_PY_Trabajo">
+            <End Role="PY_Trabajo" EntitySet="PY_Trabajo" />
+            <End Role="TH_Capacitaciones" EntitySet="TH_Capacitaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TH_Personas__Divipola" Association="OP_Cuanti2_Model.Store.FK_TH_Personas__Divipola">
+            <End Role="_Divipola" EntitySet="_Divipola" />
+            <End Role="TH_Personas" EntitySet="TH_Personas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TH_Personas_TH_Cargos" Association="OP_Cuanti2_Model.Store.FK_TH_Personas_TH_Cargos">
+            <End Role="TH_Cargos" EntitySet="TH_Cargos" />
+            <End Role="TH_Personas" EntitySet="TH_Personas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TH_Personas_TH_TipoContratacion" Association="OP_Cuanti2_Model.Store.FK_TH_Personas_TH_TipoContratacion">
+            <End Role="TH_TipoContratacion" EntitySet="TH_TipoContratacion" />
+            <End Role="TH_Personas" EntitySet="TH_Personas" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="_Divipola">
+          <Key>
+            <PropertyRef Name="DivMunicipio" />
+          </Key>
+          <Property Name="DivDeptoMunicipio" Type="int" Nullable="false" />
+          <Property Name="DivDepto" Type="smallint" Nullable="false" />
+          <Property Name="DivMunicipio" Type="int" Nullable="false" />
+          <Property Name="DivDeptoNombre" Type="varchar" Nullable="false" MaxLength="255" />
+          <Property Name="DivMuniNombre" Type="varchar" Nullable="false" MaxLength="255" />
+          <Property Name="DivOrden" Type="smallint" />
+          <Property Name="Pais" Type="int" />
+          <Property Name="Agrupacion" Type="int" />
+          <Property Name="Agrupacion2" Type="int" />
+          <Property Name="Agrupacion3" Type="int" />
+        </EntityType>
+        <EntityType Name="OP_Encuestadores">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" Nullable="false" />
+          <Property Name="TipoId" Type="tinyint" />
+          <Property Name="Vetado" Type="bit" />
+          <Property Name="FechaVetado" Type="datetime" />
+          <Property Name="VetadoPor" Type="bigint" />
+          <Property Name="RazonVeto" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="OP_PersonasAsignadasTrabajo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="TrabajoId" Type="bigint" />
+          <Property Name="Persona" Type="bigint" />
+          <Property Name="Ciudad" Type="int" />
+        </EntityType>
+        <EntityType Name="OP_TipoEncuestador">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="tinyint" Nullable="false" />
+          <Property Name="Tipo" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="PY_Trabajo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ProyectoId" Type="bigint" />
+          <Property Name="OP_MetodologiaId" Type="int" />
+          <Property Name="PresupuestoId" Type="bigint" />
+          <Property Name="NombreTrabajo" Type="varchar" MaxLength="250" />
+          <Property Name="Muestra" Type="bigint" />
+          <Property Name="FechaTentativaInicioCampo" Type="date" />
+          <Property Name="FechaTentativaFinalizacion" Type="date" />
+          <Property Name="COE" Type="bigint" />
+          <Property Name="Unidad" Type="int" />
+          <Property Name="JobBook" Type="varchar" MaxLength="20" />
+          <Property Name="TipoRecoleccionId" Type="tinyint" />
+          <Property Name="Estado" Type="tinyint" />
+          <Property Name="IdPropuesta" Type="bigint" />
+          <Property Name="Alternativa" Type="int" />
+          <Property Name="MetCodigo" Type="int" />
+          <Property Name="Fase" Type="int" />
+          <Property Name="NoMedicion" Type="int" />
+        </EntityType>
+        <EntityType Name="TH_Capacitaciones">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Ubicacion" Type="varchar" MaxLength="50" />
+          <Property Name="Fecha" Type="date" />
+          <Property Name="Duracion" Type="tinyint" />
+          <Property Name="Actividad" Type="varchar" MaxLength="100" />
+          <Property Name="Responsable" Type="bigint" />
+          <Property Name="Capacitador" Type="varchar" MaxLength="100" />
+          <Property Name="ObjetivoActividad" Type="varchar" MaxLength="500" />
+          <Property Name="ModoEvaluacion" Type="varchar" MaxLength="100" />
+          <Property Name="TrabajoId" Type="bigint" />
+        </EntityType>
+        <EntityType Name="TH_CapacitacionesParticipantes">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="CapacitacionId" Type="bigint" />
+          <Property Name="Participante" Type="bigint" />
+          <Property Name="Eficacia" Type="float" />
+          <Property Name="OportunidadMejora" Type="varchar" MaxLength="150" />
+          <Property Name="Aprobo" Type="bit" />
+        </EntityType>
+        <EntityType Name="TH_Cargos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Cargo" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="TH_Personas">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" Nullable="false" />
+          <Property Name="TipoId" Type="int" />
+          <Property Name="LugarExpedicion" Type="varchar" MaxLength="100" />
+          <Property Name="FechaExpedicion" Type="date" />
+          <Property Name="Nombres" Type="varchar" MaxLength="100" />
+          <Property Name="Apellidos" Type="varchar" MaxLength="100" />
+          <Property Name="Nacionalidad" Type="varchar" MaxLength="50" />
+          <Property Name="Sexo" Type="varchar" MaxLength="2" />
+          <Property Name="GrupoSanguineo" Type="int" />
+          <Property Name="EstadoCivil" Type="int" />
+          <Property Name="FechaNacimiento" Type="date" />
+          <Property Name="CiudadId" Type="int" />
+          <Property Name="BarrioResidencia" Type="varchar" MaxLength="100" />
+          <Property Name="Direccion" Type="varchar" MaxLength="250" />
+          <Property Name="Telefono1" Type="varchar" MaxLength="50" />
+          <Property Name="Telefono2" Type="varchar" MaxLength="50" />
+          <Property Name="Celular" Type="varchar" MaxLength="50" />
+          <Property Name="EmailPersonal" Type="varchar" MaxLength="250" />
+          <Property Name="NivelEducativo" Type="int" />
+          <Property Name="Profesion" Type="varchar" MaxLength="100" />
+          <Property Name="BU" Type="int" />
+          <Property Name="Area" Type="int" />
+          <Property Name="Sede" Type="int" />
+          <Property Name="Cargo" Type="bigint" />
+          <Property Name="JefeInmediato" Type="int" />
+          <Property Name="FechaIngreso" Type="date" />
+          <Property Name="TipoContratacion" Type="tinyint" />
+          <Property Name="Empresa" Type="int" />
+          <Property Name="TipoSalario" Type="int" />
+          <Property Name="FormaSalario" Type="int" />
+          <Property Name="SalarioActual" Type="float" />
+          <Property Name="UltimoSalario" Type="float" />
+          <Property Name="FechaUltimoAscenso" Type="date" />
+          <Property Name="UltimoCargo" Type="int" />
+          <Property Name="EstadoActual" Type="int" />
+          <Property Name="FechaVencimientoContrato" Type="date" />
+          <Property Name="FechaRetiro" Type="date" />
+          <Property Name="MotivoRetiro" Type="varchar(max)" />
+          <Property Name="Banco" Type="int" />
+          <Property Name="TipoCuenta" Type="int" />
+          <Property Name="CuentaBanco" Type="varchar" MaxLength="50" />
+          <Property Name="FondoPensiones" Type="int" />
+          <Property Name="FondoCesantias" Type="int" />
+          <Property Name="EPS" Type="int" />
+          <Property Name="CajaCompensacion" Type="int" />
+          <Property Name="ARL" Type="int" />
+          <Property Name="Activo" Type="bit" />
+          <Property Name="Contratista" Type="bigint" />
+          <Property Name="NivelBI" Type="int" />
+          <Property Name="HeadCount" Type="bit" />
+        </EntityType>
+        <EntityType Name="TH_TipoContratacion">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="tinyint" Nullable="false" />
+          <Property Name="Tipo" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_OP_Encuestadores_OP_TipoEncuestador">
+          <End Role="OP_TipoEncuestador" Type="OP_Cuanti2_Model.Store.OP_TipoEncuestador" Multiplicity="0..1" />
+          <End Role="OP_Encuestadores" Type="OP_Cuanti2_Model.Store.OP_Encuestadores" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OP_TipoEncuestador">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="OP_Encuestadores">
+              <PropertyRef Name="TipoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OP_Encuestadores_TH_Personas">
+          <End Role="TH_Personas" Type="OP_Cuanti2_Model.Store.TH_Personas" Multiplicity="1" />
+          <End Role="OP_Encuestadores" Type="OP_Cuanti2_Model.Store.OP_Encuestadores" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="TH_Personas">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="OP_Encuestadores">
+              <PropertyRef Name="id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OP_PersonasAsignadasTrabajo_PY_Trabajo">
+          <End Role="PY_Trabajo" Type="OP_Cuanti2_Model.Store.PY_Trabajo" Multiplicity="0..1" />
+          <End Role="OP_PersonasAsignadasTrabajo" Type="OP_Cuanti2_Model.Store.OP_PersonasAsignadasTrabajo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PY_Trabajo">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="OP_PersonasAsignadasTrabajo">
+              <PropertyRef Name="TrabajoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OP_PersonasAsignadasTrabajo_TH_Personas">
+          <End Role="TH_Personas" Type="OP_Cuanti2_Model.Store.TH_Personas" Multiplicity="0..1" />
+          <End Role="OP_PersonasAsignadasTrabajo" Type="OP_Cuanti2_Model.Store.OP_PersonasAsignadasTrabajo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TH_Personas">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="OP_PersonasAsignadasTrabajo">
+              <PropertyRef Name="Persona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TH_Capacitaciones_PY_Trabajo">
+          <End Role="PY_Trabajo" Type="OP_Cuanti2_Model.Store.PY_Trabajo" Multiplicity="0..1" />
+          <End Role="TH_Capacitaciones" Type="OP_Cuanti2_Model.Store.TH_Capacitaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PY_Trabajo">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TH_Capacitaciones">
+              <PropertyRef Name="TrabajoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TH_Personas__Divipola">
+          <End Role="_Divipola" Type="OP_Cuanti2_Model.Store._Divipola" Multiplicity="0..1" />
+          <End Role="TH_Personas" Type="OP_Cuanti2_Model.Store.TH_Personas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="_Divipola">
+              <PropertyRef Name="DivMunicipio" />
+            </Principal>
+            <Dependent Role="TH_Personas">
+              <PropertyRef Name="CiudadId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TH_Personas_TH_Cargos">
+          <End Role="TH_Cargos" Type="OP_Cuanti2_Model.Store.TH_Cargos" Multiplicity="0..1" />
+          <End Role="TH_Personas" Type="OP_Cuanti2_Model.Store.TH_Personas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TH_Cargos">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TH_Personas">
+              <PropertyRef Name="Cargo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TH_Personas_TH_TipoContratacion">
+          <End Role="TH_TipoContratacion" Type="OP_Cuanti2_Model.Store.TH_TipoContratacion" Multiplicity="0..1" />
+          <End Role="TH_Personas" Type="OP_Cuanti2_Model.Store.TH_Personas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TH_TipoContratacion">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TH_Personas">
+              <PropertyRef Name="TipoContratacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="OP_ListadoPersonasAsignadasTrabajo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="trabajoid" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_PersonalSinProduccion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fecha" Type="date" Mode="In" />
+          <Parameter Name="cargo" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_PersonasAsignadasTrabajo_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+          <Parameter Name="CargoId" Type="bigint" Mode="In" />
+          <Parameter Name="Ciudad" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="OP_PersonasCapacitadasSinAsignadarTrabajo_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TrabajoId" Type="bigint" Mode="In" />
+          <Parameter Name="CargoId" Type="bigint" Mode="In" />
+          <Parameter Name="Ciudad" Type="bigint" Mode="In" />
+        </Function>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="OP_Cuanti2_Model" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2009/11/edm" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <EntityContainer Name="OP_Cuanti2" annotation:LazyLoadingEnabled="true" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+          <EntitySet Name="C_Divipola" EntityType="OP_Cuanti2_Model.C_Divipola2" />
+          <EntitySet Name="OP_TipoEncuestador" EntityType="OP_Cuanti2_Model.OP_TipoEncuestador" />
+          <EntitySet Name="PY_Trabajo" EntityType="OP_Cuanti2_Model.PY_Trabajo2" />
+          <EntitySet Name="TH_Capacitaciones" EntityType="OP_Cuanti2_Model.TH_Capacitaciones" />
+          <EntitySet Name="TH_CapacitacionesParticipantes" EntityType="OP_Cuanti2_Model.TH_CapacitacionesParticipantes" />
+          <EntitySet Name="TH_Cargos" EntityType="OP_Cuanti2_Model.TH_Cargos" />
+          <EntitySet Name="TH_Personas" EntityType="OP_Cuanti2_Model.TH_Personas" />
+          <EntitySet Name="TH_TipoContratacion" EntityType="OP_Cuanti2_Model.TH_TipoContratacion" />
+          <AssociationSet Name="FK_TH_Personas__Divipola" Association="OP_Cuanti2_Model.FK_TH_Personas__Divipola">
+            <End Role="C_Divipola" EntitySet="C_Divipola" />
+            <End Role="TH_Personas" EntitySet="TH_Personas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TH_Capacitaciones_PY_Trabajo" Association="OP_Cuanti2_Model.FK_TH_Capacitaciones_PY_Trabajo">
+            <End Role="PY_Trabajo" EntitySet="PY_Trabajo" />
+            <End Role="TH_Capacitaciones" EntitySet="TH_Capacitaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TH_CapacitacionesParticipantes_TH_Capacitaciones" Association="OP_Cuanti2_Model.FK_TH_CapacitacionesParticipantes_TH_Capacitaciones">
+            <End Role="TH_Capacitaciones" EntitySet="TH_Capacitaciones" />
+            <End Role="TH_CapacitacionesParticipantes" EntitySet="TH_CapacitacionesParticipantes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TH_CapacitacionesParticipantes_TH_Personas" Association="OP_Cuanti2_Model.FK_TH_CapacitacionesParticipantes_TH_Personas">
+            <End Role="TH_Personas" EntitySet="TH_Personas" />
+            <End Role="TH_CapacitacionesParticipantes" EntitySet="TH_CapacitacionesParticipantes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TH_Personas_TH_Cargos" Association="OP_Cuanti2_Model.FK_TH_Personas_TH_Cargos">
+            <End Role="TH_Cargos" EntitySet="TH_Cargos" />
+            <End Role="TH_Personas" EntitySet="TH_Personas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TH_Personas_TH_TipoContratacion" Association="OP_Cuanti2_Model.FK_TH_Personas_TH_TipoContratacion">
+            <End Role="TH_TipoContratacion" EntitySet="TH_TipoContratacion" />
+            <End Role="TH_Personas" EntitySet="TH_Personas" />
+          </AssociationSet>
+          <EntitySet Name="OP_Encuestadores" EntityType="OP_Cuanti2_Model.OP_Encuestadores" />
+          <AssociationSet Name="FK_OP_Encuestadores_OP_TipoEncuestador" Association="OP_Cuanti2_Model.FK_OP_Encuestadores_OP_TipoEncuestador">
+            <End Role="OP_TipoEncuestador" EntitySet="OP_TipoEncuestador" />
+            <End Role="OP_Encuestadores" EntitySet="OP_Encuestadores" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OP_Encuestadores_TH_Personas" Association="OP_Cuanti2_Model.FK_OP_Encuestadores_TH_Personas">
+            <End Role="TH_Personas" EntitySet="TH_Personas" />
+            <End Role="OP_Encuestadores" EntitySet="OP_Encuestadores" />
+          </AssociationSet>
+          <FunctionImport Name="OP_PersonasAsignadasTrabajo_Get" ReturnType="Collection(OP_Cuanti2_Model.OP_PersonasAsignacion_Result)">
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+            <Parameter Name="CargoId" Mode="In" Type="Int64" />
+            <Parameter Name="Ciudad" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="OP_PersonasCapacitadasSinAsignadarTrabajo_Get" ReturnType="Collection(OP_Cuanti2_Model.OP_PersonasAsignacion_Result)">
+            <Parameter Name="TrabajoId" Mode="In" Type="Int64" />
+            <Parameter Name="CargoId" Mode="In" Type="Int64" />
+            <Parameter Name="Ciudad" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <EntitySet Name="OP_PersonasAsignadasTrabajo" EntityType="OP_Cuanti2_Model.OP_PersonasAsignadasTrabajo" />
+          <AssociationSet Name="FK_OP_PersonasAsignadasTrabajo_PY_Trabajo" Association="OP_Cuanti2_Model.FK_OP_PersonasAsignadasTrabajo_PY_Trabajo">
+            <End Role="PY_Trabajo2" EntitySet="PY_Trabajo" />
+            <End Role="OP_PersonasAsignadasTrabajo" EntitySet="OP_PersonasAsignadasTrabajo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OP_PersonasAsignadasTrabajo_TH_Personas" Association="OP_Cuanti2_Model.FK_OP_PersonasAsignadasTrabajo_TH_Personas">
+            <End Role="TH_Personas" EntitySet="TH_Personas" />
+            <End Role="OP_PersonasAsignadasTrabajo" EntitySet="OP_PersonasAsignadasTrabajo" />
+          </AssociationSet>
+          <FunctionImport Name="OP_ListadoPersonasAsignadasTrabajo" ReturnType="Collection(OP_Cuanti2_Model.OP_ListadoPersonasAsignadasTrabajo_Result)">
+          <Parameter Name="trabajoid" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="OP_PersonalSinProduccion" ReturnType="Collection(OP_Cuanti2_Model.OP_PersonalSinProduccion_Result)">
+            <Parameter Name="fecha" Mode="In" Type="DateTime" />
+            <Parameter Name="cargo" Mode="In" Type="Int64" />
+          </FunctionImport>
+        </EntityContainer>
+        <EntityType Name="C_Divipola2">
+          <Key>
+            <PropertyRef Name="DivMunicipio" />
+          </Key>
+          <Property Type="Int32" Name="DivDeptoMunicipio" Nullable="false" />
+          <Property Type="Int16" Name="DivDepto" Nullable="false" />
+          <Property Type="Int32" Name="DivMunicipio" Nullable="false" />
+          <Property Type="String" Name="DivDeptoNombre" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DivMuniNombre" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="DivOrden" />
+          <Property Type="Int32" Name="Pais" />
+          <NavigationProperty Name="TH_Personas" Relationship="OP_Cuanti2_Model.FK_TH_Personas__Divipola" FromRole="C_Divipola" ToRole="TH_Personas" />
+          <Property Type="Int32" Name="Agrupacion" />
+          <Property Type="Int32" Name="Agrupacion2" />
+          <Property Type="Int32" Name="Agrupacion3" />
+        </EntityType>
+        <EntityType Name="OP_TipoEncuestador">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Byte" Name="id" Nullable="false" />
+          <Property Type="String" Name="Tipo" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="OP_Encuestadores" Relationship="OP_Cuanti2_Model.FK_OP_Encuestadores_OP_TipoEncuestador" FromRole="OP_TipoEncuestador" ToRole="OP_Encuestadores" />
+        </EntityType>
+        <EntityType Name="PY_Trabajo2">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int64" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="Int64" Name="ProyectoId" />
+          <Property Type="Int32" Name="OP_MetodologiaId" />
+          <Property Type="Int64" Name="PresupuestoId" />
+          <Property Type="String" Name="NombreTrabajo" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Type="Int64" Name="Muestra" />
+          <Property Type="DateTime" Name="FechaTentativaInicioCampo" />
+          <Property Type="DateTime" Name="FechaTentativaFinalizacion" />
+          <Property Type="Int64" Name="COE" />
+          <Property Type="Int32" Name="Unidad" />
+          <NavigationProperty Name="TH_Capacitaciones" Relationship="OP_Cuanti2_Model.FK_TH_Capacitaciones_PY_Trabajo" FromRole="PY_Trabajo" ToRole="TH_Capacitaciones" />
+          <Property Type="String" Name="JobBook" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="Byte" Name="TipoRecoleccionId" />
+          <Property Type="Byte" Name="Estado" />
+          <Property Type="Int64" Name="IdPropuesta" />
+          <Property Type="Int32" Name="Alternativa" />
+          <Property Type="Int32" Name="MetCodigo" />
+          <Property Type="Int32" Name="Fase" />
+          <Property Type="Int32" Name="NoMedicion" />
+          <NavigationProperty Name="OP_PersonasAsignadasTrabajo" Relationship="OP_Cuanti2_Model.FK_OP_PersonasAsignadasTrabajo_PY_Trabajo" FromRole="PY_Trabajo2" ToRole="OP_PersonasAsignadasTrabajo" />
+        </EntityType>
+        <EntityType Name="TH_Capacitaciones">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int64" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="String" Name="Ubicacion" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Fecha" />
+          <Property Type="Byte" Name="Duracion" />
+          <Property Type="String" Name="Actividad" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="Int64" Name="Responsable" />
+          <Property Type="String" Name="Capacitador" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ObjetivoActividad" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ModoEvaluacion" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="Int64" Name="TrabajoId" />
+          <NavigationProperty Name="PY_Trabajo" Relationship="OP_Cuanti2_Model.FK_TH_Capacitaciones_PY_Trabajo" FromRole="TH_Capacitaciones" ToRole="PY_Trabajo" />
+          <NavigationProperty Name="TH_CapacitacionesParticipantes" Relationship="OP_Cuanti2_Model.FK_TH_CapacitacionesParticipantes_TH_Capacitaciones" FromRole="TH_Capacitaciones" ToRole="TH_CapacitacionesParticipantes" />
+        </EntityType>
+        <EntityType Name="TH_CapacitacionesParticipantes">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int64" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="Int64" Name="CapacitacionId" />
+          <Property Type="Int64" Name="Participante" />
+          <Property Type="Byte" Name="Eficacia" />
+          <Property Type="String" Name="OportunidadMejora" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="Aprobo" />
+          <NavigationProperty Name="TH_Capacitaciones" Relationship="OP_Cuanti2_Model.FK_TH_CapacitacionesParticipantes_TH_Capacitaciones" FromRole="TH_CapacitacionesParticipantes" ToRole="TH_Capacitaciones" />
+          <NavigationProperty Name="TH_Personas" Relationship="OP_Cuanti2_Model.FK_TH_CapacitacionesParticipantes_TH_Personas" FromRole="TH_CapacitacionesParticipantes" ToRole="TH_Personas" />
+        </EntityType>
+        <EntityType Name="TH_Cargos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int64" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="String" Name="Cargo" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="TH_Personas" Relationship="OP_Cuanti2_Model.FK_TH_Personas_TH_Cargos" FromRole="TH_Cargos" ToRole="TH_Personas" />
+        </EntityType>
+        <EntityType Name="TH_Personas">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="String" Name="Nombres" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Apellidos" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="Int64" Name="Cargo" />
+          <Property Type="Int32" Name="CiudadId" />
+          <Property Type="Byte" Name="TipoContratacion" />
+          <Property Type="DateTime" Name="FechaIngreso" />
+          <Property Type="DateTime" Name="FechaNacimiento" />
+          <Property Type="Boolean" Name="Activo" />
+          <NavigationProperty Name="C_Divipola" Relationship="OP_Cuanti2_Model.FK_TH_Personas__Divipola" FromRole="TH_Personas" ToRole="C_Divipola" />
+          <NavigationProperty Name="TH_CapacitacionesParticipantes" Relationship="OP_Cuanti2_Model.FK_TH_CapacitacionesParticipantes_TH_Personas" FromRole="TH_Personas" ToRole="TH_CapacitacionesParticipantes" />
+          <NavigationProperty Name="TH_Cargos" Relationship="OP_Cuanti2_Model.FK_TH_Personas_TH_Cargos" FromRole="TH_Personas" ToRole="TH_Cargos" />
+          <NavigationProperty Name="TH_TipoContratacion" Relationship="OP_Cuanti2_Model.FK_TH_Personas_TH_TipoContratacion" FromRole="TH_Personas" ToRole="TH_TipoContratacion" />
+          <NavigationProperty Name="OP_Encuestadores" Relationship="OP_Cuanti2_Model.FK_OP_Encuestadores_TH_Personas" FromRole="TH_Personas" ToRole="OP_Encuestadores" />
+          <Property Type="Int32" Name="TipoId" />
+          <Property Type="String" Name="LugarExpedicion" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="FechaExpedicion" />
+          <Property Type="String" Name="Nacionalidad" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Sexo" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="GrupoSanguineo" />
+          <Property Type="Int32" Name="EstadoCivil" />
+          <Property Type="String" Name="BarrioResidencia" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Direccion" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Telefono1" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Telefono2" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Celular" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="EmailPersonal" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="NivelEducativo" />
+          <Property Type="String" Name="Profesion" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="BU" />
+          <Property Type="Int32" Name="Area" />
+          <Property Type="Int32" Name="Sede" />
+          <Property Type="Int32" Name="JefeInmediato" />
+          <Property Type="Int32" Name="Empresa" />
+          <Property Type="Int32" Name="TipoSalario" />
+          <Property Type="Int32" Name="FormaSalario" />
+          <Property Type="Double" Name="SalarioActual" />
+          <Property Type="Double" Name="UltimoSalario" />
+          <Property Type="DateTime" Name="FechaUltimoAscenso" />
+          <Property Type="Int32" Name="UltimoCargo" />
+          <Property Type="Int32" Name="EstadoActual" />
+          <Property Type="DateTime" Name="FechaVencimientoContrato" />
+          <Property Type="DateTime" Name="FechaRetiro" />
+          <Property Type="String" Name="MotivoRetiro" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="Banco" />
+          <Property Type="Int32" Name="TipoCuenta" />
+          <Property Type="String" Name="CuentaBanco" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="FondoPensiones" />
+          <Property Type="Int32" Name="FondoCesantias" />
+          <Property Type="Int32" Name="EPS" />
+          <Property Type="Int32" Name="CajaCompensacion" />
+          <Property Type="Int32" Name="ARL" />
+          <Property Type="Int64" Name="Contratista" />
+          <Property Type="Int32" Name="NivelBI" />
+          <Property Type="Boolean" Name="HeadCount" />
+          <NavigationProperty Name="OP_PersonasAsignadasTrabajo" Relationship="OP_Cuanti2_Model.FK_OP_PersonasAsignadasTrabajo_TH_Personas" FromRole="TH_Personas" ToRole="OP_PersonasAsignadasTrabajo" />
+        </EntityType>
+        <EntityType Name="TH_TipoContratacion">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Byte" Name="id" Nullable="false" />
+          <Property Type="String" Name="Tipo" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="TH_Personas" Relationship="OP_Cuanti2_Model.FK_TH_Personas_TH_TipoContratacion" FromRole="TH_TipoContratacion" ToRole="TH_Personas" />
+        </EntityType>
+        <Association Name="FK_TH_Personas__Divipola">
+          <End Type="OP_Cuanti2_Model.C_Divipola2" Role="C_Divipola" Multiplicity="0..1" />
+          <End Type="OP_Cuanti2_Model.TH_Personas" Role="TH_Personas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="C_Divipola">
+              <PropertyRef Name="DivMunicipio" />
+            </Principal>
+            <Dependent Role="TH_Personas">
+              <PropertyRef Name="CiudadId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TH_Capacitaciones_PY_Trabajo">
+          <End Type="OP_Cuanti2_Model.PY_Trabajo2" Role="PY_Trabajo" Multiplicity="0..1" />
+          <End Type="OP_Cuanti2_Model.TH_Capacitaciones" Role="TH_Capacitaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PY_Trabajo">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TH_Capacitaciones">
+              <PropertyRef Name="TrabajoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TH_CapacitacionesParticipantes_TH_Capacitaciones">
+          <End Type="OP_Cuanti2_Model.TH_Capacitaciones" Role="TH_Capacitaciones" Multiplicity="0..1" />
+          <End Type="OP_Cuanti2_Model.TH_CapacitacionesParticipantes" Role="TH_CapacitacionesParticipantes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TH_Capacitaciones">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TH_CapacitacionesParticipantes">
+              <PropertyRef Name="CapacitacionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TH_CapacitacionesParticipantes_TH_Personas">
+          <End Type="OP_Cuanti2_Model.TH_Personas" Role="TH_Personas" Multiplicity="0..1" />
+          <End Type="OP_Cuanti2_Model.TH_CapacitacionesParticipantes" Role="TH_CapacitacionesParticipantes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TH_Personas">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TH_CapacitacionesParticipantes">
+              <PropertyRef Name="Participante" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TH_Personas_TH_Cargos">
+          <End Type="OP_Cuanti2_Model.TH_Cargos" Role="TH_Cargos" Multiplicity="0..1" />
+          <End Type="OP_Cuanti2_Model.TH_Personas" Role="TH_Personas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TH_Cargos">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TH_Personas">
+              <PropertyRef Name="Cargo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TH_Personas_TH_TipoContratacion">
+          <End Type="OP_Cuanti2_Model.TH_TipoContratacion" Role="TH_TipoContratacion" Multiplicity="0..1" />
+          <End Type="OP_Cuanti2_Model.TH_Personas" Role="TH_Personas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TH_TipoContratacion">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TH_Personas">
+              <PropertyRef Name="TipoContratacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="OP_Encuestadores">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="Byte" Name="TipoId" />
+          <Property Type="Boolean" Name="Vetado" />
+          <Property Type="DateTime" Name="FechaVetado" />
+          <Property Type="Int64" Name="VetadoPor" />
+          <Property Type="String" Name="RazonVeto" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="OP_TipoEncuestador" Relationship="OP_Cuanti2_Model.FK_OP_Encuestadores_OP_TipoEncuestador" FromRole="OP_Encuestadores" ToRole="OP_TipoEncuestador" />
+          <NavigationProperty Name="TH_Personas" Relationship="OP_Cuanti2_Model.FK_OP_Encuestadores_TH_Personas" FromRole="OP_Encuestadores" ToRole="TH_Personas" />
+        </EntityType>
+        <Association Name="FK_OP_Encuestadores_OP_TipoEncuestador">
+          <End Type="OP_Cuanti2_Model.OP_TipoEncuestador" Role="OP_TipoEncuestador" Multiplicity="0..1" />
+          <End Type="OP_Cuanti2_Model.OP_Encuestadores" Role="OP_Encuestadores" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OP_TipoEncuestador">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="OP_Encuestadores">
+              <PropertyRef Name="TipoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OP_Encuestadores_TH_Personas">
+          <End Type="OP_Cuanti2_Model.TH_Personas" Role="TH_Personas" Multiplicity="1" />
+          <End Type="OP_Cuanti2_Model.OP_Encuestadores" Role="OP_Encuestadores" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="TH_Personas">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="OP_Encuestadores">
+              <PropertyRef Name="id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="OP_PersonasAsignacion_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="String" Name="NOMBRE" Nullable="true" MaxLength="201" />
+          <Property Type="String" Name="Ciudad" Nullable="false" MaxLength="255" />
+          <Property Type="String" Name="Cargo" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="TipoContratacion" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="TipoEncuestador" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <EntityType Name="OP_PersonasAsignadasTrabajo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int64" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="Int64" Name="TrabajoId" />
+          <Property Type="Int64" Name="Persona" />
+          <Property Type="Int32" Name="Ciudad" />
+          <NavigationProperty Name="PY_Trabajo" Relationship="OP_Cuanti2_Model.FK_OP_PersonasAsignadasTrabajo_PY_Trabajo" FromRole="OP_PersonasAsignadasTrabajo" ToRole="PY_Trabajo2" />
+          <NavigationProperty Name="TH_Personas" Relationship="OP_Cuanti2_Model.FK_OP_PersonasAsignadasTrabajo_TH_Personas" FromRole="OP_PersonasAsignadasTrabajo" ToRole="TH_Personas" />
+        </EntityType>
+        <Association Name="FK_OP_PersonasAsignadasTrabajo_PY_Trabajo">
+          <End Type="OP_Cuanti2_Model.PY_Trabajo2" Role="PY_Trabajo2" Multiplicity="0..1" />
+          <End Type="OP_Cuanti2_Model.OP_PersonasAsignadasTrabajo" Role="OP_PersonasAsignadasTrabajo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PY_Trabajo2">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="OP_PersonasAsignadasTrabajo">
+              <PropertyRef Name="TrabajoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OP_PersonasAsignadasTrabajo_TH_Personas">
+          <End Type="OP_Cuanti2_Model.TH_Personas" Role="TH_Personas" Multiplicity="0..1" />
+          <End Type="OP_Cuanti2_Model.OP_PersonasAsignadasTrabajo" Role="OP_PersonasAsignadasTrabajo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TH_Personas">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="OP_PersonasAsignadasTrabajo">
+              <PropertyRef Name="Persona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="OP_ListadoPersonasAsignadasTrabajo_Result">
+          <Property Type="Int64" Name="IdAsignacion" Nullable="false" />
+          <Property Type="Int64" Name="TrabajoId" Nullable="true" />
+          <Property Type="String" Name="Nombres" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Apellidos" Nullable="true" MaxLength="100" />
+          <Property Type="Int64" Name="Identificacion" Nullable="false" />
+          <Property Type="String" Name="Cargo" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="CodDane" Nullable="true" />
+          <Property Type="String" Name="Ciudad" Nullable="true" MaxLength="255" />
+          <Property Type="DateTime" Name="FechaAsignacion" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Tipo" Nullable="true" MaxLength="50" />
+          <Property Type="Int64" Name="IDCONTRATISTA" Nullable="true" />
+          <Property Type="String" Name="CONTRATISTA" Nullable="true" MaxLength="250" />
+        </ComplexType>
+        <ComplexType Name="OP_PersonalSinProduccion_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="Int32" Name="TipoId" Nullable="true" />
+          <Property Type="String" Name="LugarExpedicion" Nullable="true" MaxLength="100" />
+          <Property Type="DateTime" Name="FechaExpedicion" Nullable="true" />
+          <Property Type="String" Name="Nombres" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Apellidos" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Nacionalidad" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Sexo" Nullable="true" MaxLength="2" />
+          <Property Type="Int32" Name="GrupoSanguineo" Nullable="true" />
+          <Property Type="Int32" Name="EstadoCivil" Nullable="true" />
+          <Property Type="DateTime" Name="FechaNacimiento" Nullable="true" />
+          <Property Type="Int32" Name="CiudadId" Nullable="true" />
+          <Property Type="String" Name="BarrioResidencia" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Direccion" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="Telefono1" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Telefono2" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Celular" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="EmailPersonal" Nullable="true" MaxLength="250" />
+          <Property Type="Int32" Name="NivelEducativo" Nullable="true" />
+          <Property Type="String" Name="Profesion" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="BU" Nullable="true" />
+          <Property Type="Int32" Name="Area" Nullable="true" />
+          <Property Type="Int32" Name="Sede" Nullable="true" />
+          <Property Type="Int64" Name="Cargo" Nullable="true" />
+          <Property Type="Int32" Name="JefeInmediato" Nullable="true" />
+          <Property Type="DateTime" Name="FechaIngreso" Nullable="true" />
+          <Property Type="Byte" Name="TipoContratacion" Nullable="true" />
+          <Property Type="Int32" Name="Empresa" Nullable="true" />
+          <Property Type="Int32" Name="TipoSalario" Nullable="true" />
+          <Property Type="Int32" Name="FormaSalario" Nullable="true" />
+          <Property Type="Double" Name="SalarioActual" Nullable="true" />
+          <Property Type="Double" Name="UltimoSalario" Nullable="true" />
+          <Property Type="DateTime" Name="FechaUltimoAscenso" Nullable="true" />
+          <Property Type="Int32" Name="UltimoCargo" Nullable="true" />
+          <Property Type="Int32" Name="EstadoActual" Nullable="true" />
+          <Property Type="DateTime" Name="FechaVencimientoContrato" Nullable="true" />
+          <Property Type="DateTime" Name="FechaRetiro" Nullable="true" />
+          <Property Type="String" Name="MotivoRetiro" Nullable="true" />
+          <Property Type="Int32" Name="Banco" Nullable="true" />
+          <Property Type="Int32" Name="TipoCuenta" Nullable="true" />
+          <Property Type="String" Name="CuentaBanco" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="FondoPensiones" Nullable="true" />
+          <Property Type="Int32" Name="FondoCesantias" Nullable="true" />
+          <Property Type="Int32" Name="EPS" Nullable="true" />
+          <Property Type="Int32" Name="CajaCompensacion" Nullable="true" />
+          <Property Type="Int32" Name="ARL" Nullable="true" />
+          <Property Type="Boolean" Name="Activo" Nullable="true" />
+          <Property Type="Int64" Name="Contratista" Nullable="true" />
+          <Property Type="Int32" Name="NivelBI" Nullable="true" />
+          <Property Type="Boolean" Name="HeadCount" Nullable="true" />
+          <Property Type="String" Name="NombreCiudad" Nullable="false" MaxLength="255" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <Alias Key="Model" Value="OP_Cuanti2_Model" />
+        <Alias Key="Target" Value="OP_Cuanti2_Model.Store" />
+        <EntityContainerMapping CdmEntityContainer="OP_Cuanti2" StorageEntityContainer="OP_Cuanti2_ModelStoreContainer">
+          <EntitySetMapping Name="C_Divipola">
+            <EntityTypeMapping TypeName="OP_Cuanti2_Model.C_Divipola2">
+              <MappingFragment StoreEntitySet="_Divipola">
+                <ScalarProperty Name="Agrupacion3" ColumnName="Agrupacion3" />
+                <ScalarProperty Name="Agrupacion2" ColumnName="Agrupacion2" />
+                <ScalarProperty Name="Agrupacion" ColumnName="Agrupacion" />
+                <ScalarProperty Name="Pais" ColumnName="Pais" />
+                <ScalarProperty Name="DivOrden" ColumnName="DivOrden" />
+                <ScalarProperty Name="DivMuniNombre" ColumnName="DivMuniNombre" />
+                <ScalarProperty Name="DivDeptoNombre" ColumnName="DivDeptoNombre" />
+                <ScalarProperty Name="DivMunicipio" ColumnName="DivMunicipio" />
+                <ScalarProperty Name="DivDepto" ColumnName="DivDepto" />
+                <ScalarProperty Name="DivDeptoMunicipio" ColumnName="DivDeptoMunicipio" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OP_TipoEncuestador">
+            <EntityTypeMapping TypeName="OP_Cuanti2_Model.OP_TipoEncuestador">
+              <MappingFragment StoreEntitySet="OP_TipoEncuestador">
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PY_Trabajo">
+            <EntityTypeMapping TypeName="OP_Cuanti2_Model.PY_Trabajo2">
+              <MappingFragment StoreEntitySet="PY_Trabajo">
+                <ScalarProperty Name="NoMedicion" ColumnName="NoMedicion" />
+                <ScalarProperty Name="Fase" ColumnName="Fase" />
+                <ScalarProperty Name="MetCodigo" ColumnName="MetCodigo" />
+                <ScalarProperty Name="Alternativa" ColumnName="Alternativa" />
+                <ScalarProperty Name="IdPropuesta" ColumnName="IdPropuesta" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="TipoRecoleccionId" ColumnName="TipoRecoleccionId" />
+                <ScalarProperty Name="JobBook" ColumnName="JobBook" />
+                <ScalarProperty Name="Unidad" ColumnName="Unidad" />
+                <ScalarProperty Name="COE" ColumnName="COE" />
+                <ScalarProperty Name="FechaTentativaFinalizacion" ColumnName="FechaTentativaFinalizacion" />
+                <ScalarProperty Name="FechaTentativaInicioCampo" ColumnName="FechaTentativaInicioCampo" />
+                <ScalarProperty Name="Muestra" ColumnName="Muestra" />
+                <ScalarProperty Name="NombreTrabajo" ColumnName="NombreTrabajo" />
+                <ScalarProperty Name="PresupuestoId" ColumnName="PresupuestoId" />
+                <ScalarProperty Name="OP_MetodologiaId" ColumnName="OP_MetodologiaId" />
+                <ScalarProperty Name="ProyectoId" ColumnName="ProyectoId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TH_Capacitaciones">
+            <EntityTypeMapping TypeName="OP_Cuanti2_Model.TH_Capacitaciones">
+              <MappingFragment StoreEntitySet="TH_Capacitaciones">
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="ModoEvaluacion" ColumnName="ModoEvaluacion" />
+                <ScalarProperty Name="ObjetivoActividad" ColumnName="ObjetivoActividad" />
+                <ScalarProperty Name="Capacitador" ColumnName="Capacitador" />
+                <ScalarProperty Name="Responsable" ColumnName="Responsable" />
+                <ScalarProperty Name="Actividad" ColumnName="Actividad" />
+                <ScalarProperty Name="Duracion" ColumnName="Duracion" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Ubicacion" ColumnName="Ubicacion" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TH_CapacitacionesParticipantes">
+            <EntityTypeMapping TypeName="OP_Cuanti2_Model.TH_CapacitacionesParticipantes">
+              <MappingFragment StoreEntitySet="TH_CapacitacionesParticipantes">
+                <ScalarProperty Name="Aprobo" ColumnName="Aprobo" />
+                <ScalarProperty Name="OportunidadMejora" ColumnName="OportunidadMejora" />
+                <ScalarProperty Name="Eficacia" ColumnName="Eficacia" />
+                <ScalarProperty Name="Participante" ColumnName="Participante" />
+                <ScalarProperty Name="CapacitacionId" ColumnName="CapacitacionId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TH_Cargos">
+            <EntityTypeMapping TypeName="OP_Cuanti2_Model.TH_Cargos">
+              <MappingFragment StoreEntitySet="TH_Cargos">
+                <ScalarProperty Name="Cargo" ColumnName="Cargo" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TH_Personas">
+            <EntityTypeMapping TypeName="OP_Cuanti2_Model.TH_Personas">
+              <MappingFragment StoreEntitySet="TH_Personas">
+                <ScalarProperty Name="HeadCount" ColumnName="HeadCount" />
+                <ScalarProperty Name="NivelBI" ColumnName="NivelBI" />
+                <ScalarProperty Name="Contratista" ColumnName="Contratista" />
+                <ScalarProperty Name="ARL" ColumnName="ARL" />
+                <ScalarProperty Name="CajaCompensacion" ColumnName="CajaCompensacion" />
+                <ScalarProperty Name="EPS" ColumnName="EPS" />
+                <ScalarProperty Name="FondoCesantias" ColumnName="FondoCesantias" />
+                <ScalarProperty Name="FondoPensiones" ColumnName="FondoPensiones" />
+                <ScalarProperty Name="CuentaBanco" ColumnName="CuentaBanco" />
+                <ScalarProperty Name="TipoCuenta" ColumnName="TipoCuenta" />
+                <ScalarProperty Name="Banco" ColumnName="Banco" />
+                <ScalarProperty Name="MotivoRetiro" ColumnName="MotivoRetiro" />
+                <ScalarProperty Name="FechaRetiro" ColumnName="FechaRetiro" />
+                <ScalarProperty Name="FechaVencimientoContrato" ColumnName="FechaVencimientoContrato" />
+                <ScalarProperty Name="EstadoActual" ColumnName="EstadoActual" />
+                <ScalarProperty Name="UltimoCargo" ColumnName="UltimoCargo" />
+                <ScalarProperty Name="FechaUltimoAscenso" ColumnName="FechaUltimoAscenso" />
+                <ScalarProperty Name="UltimoSalario" ColumnName="UltimoSalario" />
+                <ScalarProperty Name="SalarioActual" ColumnName="SalarioActual" />
+                <ScalarProperty Name="FormaSalario" ColumnName="FormaSalario" />
+                <ScalarProperty Name="TipoSalario" ColumnName="TipoSalario" />
+                <ScalarProperty Name="Empresa" ColumnName="Empresa" />
+                <ScalarProperty Name="JefeInmediato" ColumnName="JefeInmediato" />
+                <ScalarProperty Name="Sede" ColumnName="Sede" />
+                <ScalarProperty Name="Area" ColumnName="Area" />
+                <ScalarProperty Name="BU" ColumnName="BU" />
+                <ScalarProperty Name="Profesion" ColumnName="Profesion" />
+                <ScalarProperty Name="NivelEducativo" ColumnName="NivelEducativo" />
+                <ScalarProperty Name="EmailPersonal" ColumnName="EmailPersonal" />
+                <ScalarProperty Name="Celular" ColumnName="Celular" />
+                <ScalarProperty Name="Telefono2" ColumnName="Telefono2" />
+                <ScalarProperty Name="Telefono1" ColumnName="Telefono1" />
+                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+                <ScalarProperty Name="BarrioResidencia" ColumnName="BarrioResidencia" />
+                <ScalarProperty Name="EstadoCivil" ColumnName="EstadoCivil" />
+                <ScalarProperty Name="GrupoSanguineo" ColumnName="GrupoSanguineo" />
+                <ScalarProperty Name="Sexo" ColumnName="Sexo" />
+                <ScalarProperty Name="Nacionalidad" ColumnName="Nacionalidad" />
+                <ScalarProperty Name="FechaExpedicion" ColumnName="FechaExpedicion" />
+                <ScalarProperty Name="LugarExpedicion" ColumnName="LugarExpedicion" />
+                <ScalarProperty Name="TipoId" ColumnName="TipoId" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="FechaNacimiento" ColumnName="FechaNacimiento" />
+                <ScalarProperty Name="FechaIngreso" ColumnName="FechaIngreso" />
+                <ScalarProperty Name="TipoContratacion" ColumnName="TipoContratacion" />
+                <ScalarProperty Name="CiudadId" ColumnName="CiudadId" />
+                <ScalarProperty Name="Cargo" ColumnName="Cargo" />
+                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+                <ScalarProperty Name="Nombres" ColumnName="Nombres" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TH_TipoContratacion">
+            <EntityTypeMapping TypeName="OP_Cuanti2_Model.TH_TipoContratacion">
+              <MappingFragment StoreEntitySet="TH_TipoContratacion">
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OP_Encuestadores">
+            <EntityTypeMapping TypeName="OP_Cuanti2_Model.OP_Encuestadores">
+              <MappingFragment StoreEntitySet="OP_Encuestadores">
+                <ScalarProperty Name="RazonVeto" ColumnName="RazonVeto" />
+                <ScalarProperty Name="VetadoPor" ColumnName="VetadoPor" />
+                <ScalarProperty Name="FechaVetado" ColumnName="FechaVetado" />
+                <ScalarProperty Name="Vetado" ColumnName="Vetado" />
+                <ScalarProperty Name="TipoId" ColumnName="TipoId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OP_PersonasAsignadasTrabajo_Get" FunctionName="OP_Cuanti2_Model.Store.OP_PersonasAsignadasTrabajo_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OP_Cuanti2_Model.OP_PersonasAsignacion_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="Ciudad" ColumnName="Ciudad" />
+                <ScalarProperty Name="Cargo" ColumnName="Cargo" />
+                <ScalarProperty Name="TipoContratacion" ColumnName="TipoContratacion" />
+                <ScalarProperty Name="TipoEncuestador" ColumnName="TipoEncuestador" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OP_PersonasCapacitadasSinAsignadarTrabajo_Get" FunctionName="OP_Cuanti2_Model.Store.OP_PersonasCapacitadasSinAsignadarTrabajo_Get">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OP_Cuanti2_Model.OP_PersonasAsignacion_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="Ciudad" ColumnName="Ciudad" />
+                <ScalarProperty Name="Cargo" ColumnName="Cargo" />
+                <ScalarProperty Name="TipoContratacion" ColumnName="TipoContratacion" />
+                <ScalarProperty Name="TipoEncuestador" ColumnName="TipoEncuestador" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="OP_PersonasAsignadasTrabajo">
+            <EntityTypeMapping TypeName="OP_Cuanti2_Model.OP_PersonasAsignadasTrabajo">
+              <MappingFragment StoreEntitySet="OP_PersonasAsignadasTrabajo">
+                <ScalarProperty Name="Ciudad" ColumnName="Ciudad" />
+                <ScalarProperty Name="Persona" ColumnName="Persona" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OP_ListadoPersonasAsignadasTrabajo" FunctionName="OP_Cuanti2_Model.Store.OP_ListadoPersonasAsignadasTrabajo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OP_Cuanti2_Model.OP_ListadoPersonasAsignadasTrabajo_Result">
+                <ScalarProperty Name="IdAsignacion" ColumnName="IdAsignacion" />
+                <ScalarProperty Name="TrabajoId" ColumnName="TrabajoId" />
+                <ScalarProperty Name="Nombres" ColumnName="Nombres" />
+                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+                <ScalarProperty Name="Identificacion" ColumnName="Identificacion" />
+                <ScalarProperty Name="Cargo" ColumnName="Cargo" />
+                <ScalarProperty Name="CodDane" ColumnName="CodDane" />
+                <ScalarProperty Name="Ciudad" ColumnName="Ciudad" />
+                <ScalarProperty Name="FechaAsignacion" ColumnName="FechaAsignacion" />
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+                <ScalarProperty Name="IDCONTRATISTA" ColumnName="IDCONTRATISTA" />
+                <ScalarProperty Name="CONTRATISTA" ColumnName="CONTRATISTA" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OP_PersonalSinProduccion" FunctionName="OP_Cuanti2_Model.Store.OP_PersonalSinProduccion">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OP_Cuanti2_Model.OP_PersonalSinProduccion_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="TipoId" ColumnName="TipoId" />
+                <ScalarProperty Name="LugarExpedicion" ColumnName="LugarExpedicion" />
+                <ScalarProperty Name="FechaExpedicion" ColumnName="FechaExpedicion" />
+                <ScalarProperty Name="Nombres" ColumnName="Nombres" />
+                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+                <ScalarProperty Name="Nacionalidad" ColumnName="Nacionalidad" />
+                <ScalarProperty Name="Sexo" ColumnName="Sexo" />
+                <ScalarProperty Name="GrupoSanguineo" ColumnName="GrupoSanguineo" />
+                <ScalarProperty Name="EstadoCivil" ColumnName="EstadoCivil" />
+                <ScalarProperty Name="FechaNacimiento" ColumnName="FechaNacimiento" />
+                <ScalarProperty Name="CiudadId" ColumnName="CiudadId" />
+                <ScalarProperty Name="BarrioResidencia" ColumnName="BarrioResidencia" />
+                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+                <ScalarProperty Name="Telefono1" ColumnName="Telefono1" />
+                <ScalarProperty Name="Telefono2" ColumnName="Telefono2" />
+                <ScalarProperty Name="Celular" ColumnName="Celular" />
+                <ScalarProperty Name="EmailPersonal" ColumnName="EmailPersonal" />
+                <ScalarProperty Name="NivelEducativo" ColumnName="NivelEducativo" />
+                <ScalarProperty Name="Profesion" ColumnName="Profesion" />
+                <ScalarProperty Name="BU" ColumnName="BU" />
+                <ScalarProperty Name="Area" ColumnName="Area" />
+                <ScalarProperty Name="Sede" ColumnName="Sede" />
+                <ScalarProperty Name="Cargo" ColumnName="Cargo" />
+                <ScalarProperty Name="JefeInmediato" ColumnName="JefeInmediato" />
+                <ScalarProperty Name="FechaIngreso" ColumnName="FechaIngreso" />
+                <ScalarProperty Name="TipoContratacion" ColumnName="TipoContratacion" />
+                <ScalarProperty Name="Empresa" ColumnName="Empresa" />
+                <ScalarProperty Name="TipoSalario" ColumnName="TipoSalario" />
+                <ScalarProperty Name="FormaSalario" ColumnName="FormaSalario" />
+                <ScalarProperty Name="SalarioActual" ColumnName="SalarioActual" />
+                <ScalarProperty Name="UltimoSalario" ColumnName="UltimoSalario" />
+                <ScalarProperty Name="FechaUltimoAscenso" ColumnName="FechaUltimoAscenso" />
+                <ScalarProperty Name="UltimoCargo" ColumnName="UltimoCargo" />
+                <ScalarProperty Name="EstadoActual" ColumnName="EstadoActual" />
+                <ScalarProperty Name="FechaVencimientoContrato" ColumnName="FechaVencimientoContrato" />
+                <ScalarProperty Name="FechaRetiro" ColumnName="FechaRetiro" />
+                <ScalarProperty Name="MotivoRetiro" ColumnName="MotivoRetiro" />
+                <ScalarProperty Name="Banco" ColumnName="Banco" />
+                <ScalarProperty Name="TipoCuenta" ColumnName="TipoCuenta" />
+                <ScalarProperty Name="CuentaBanco" ColumnName="CuentaBanco" />
+                <ScalarProperty Name="FondoPensiones" ColumnName="FondoPensiones" />
+                <ScalarProperty Name="FondoCesantias" ColumnName="FondoCesantias" />
+                <ScalarProperty Name="EPS" ColumnName="EPS" />
+                <ScalarProperty Name="CajaCompensacion" ColumnName="CajaCompensacion" />
+                <ScalarProperty Name="ARL" ColumnName="ARL" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="Contratista" ColumnName="Contratista" />
+                <ScalarProperty Name="NivelBI" ColumnName="NivelBI" />
+                <ScalarProperty Name="HeadCount" ColumnName="HeadCount" />
+                <ScalarProperty Name="NombreCiudad" ColumnName="NombreCiudad" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer>
+    <edmx:Connection>
+      <edmx:DesignerInfoPropertySet>
+        <edmx:DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </edmx:DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <edmx:DesignerInfoPropertySet>
+        <edmx:DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <edmx:DesignerProperty Name="EnablePluralization" Value="False" />
+        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <edmx:DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </edmx:DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <edmx:Diagram Name="OP_Cuanti2_Model" ZoomLevel="85">
+        <edmx:EntityTypeShape EntityType="OP_Cuanti2_Model.C_Divipola2" Width="1.5" PointX="3" PointY="8.375" Height="3.1340950520833317" />
+        <edmx:EntityTypeShape EntityType="OP_Cuanti2_Model.OP_TipoEncuestador" Width="1.5" PointX="0.75" PointY="4.25" Height="1.5956835937499996" />
+        <edmx:EntityTypeShape EntityType="OP_Cuanti2_Model.PY_Trabajo2" Width="1.5" PointX="3" PointY="17.125" Height="4.8648079427083388" />
+        <edmx:EntityTypeShape EntityType="OP_Cuanti2_Model.TH_Capacitaciones" Width="1.5" PointX="5.25" PointY="17.125" Height="3.3263964843749996" />
+        <edmx:EntityTypeShape EntityType="OP_Cuanti2_Model.TH_CapacitacionesParticipantes" Width="1.5" PointX="7.5" PointY="0.75" Height="2.5571907552083339" />
+        <edmx:EntityTypeShape EntityType="OP_Cuanti2_Model.TH_Cargos" Width="1.5" PointX="3" PointY="11.625" Height="1.5956835937499996" />
+        <edmx:EntityTypeShape EntityType="OP_Cuanti2_Model.TH_Personas" Width="1.5" PointX="5.25" PointY="3.125" Height="3.9033007812499996" />
+        <edmx:EntityTypeShape EntityType="OP_Cuanti2_Model.TH_TipoContratacion" Width="1.5" PointX="3" PointY="14" Height="1.5956835937499996" />
+        <edmx:AssociationConnector Association="OP_Cuanti2_Model.FK_TH_Personas__Divipola">
+          <edmx:ConnectorPoint PointX="4.5" PointY="9.9420475260416659" />
+          <edmx:ConnectorPoint PointX="5.25" PointY="9.9420475260416659" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="OP_Cuanti2_Model.FK_TH_Capacitaciones_PY_Trabajo">
+          <edmx:ConnectorPoint PointX="4.5" PointY="18.788198242187498" />
+          <edmx:ConnectorPoint PointX="5.25" PointY="18.788198242187498" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="OP_Cuanti2_Model.FK_TH_CapacitacionesParticipantes_TH_Capacitaciones">
+          <edmx:ConnectorPoint PointX="6.75" PointY="17.126152846153843" />
+          <edmx:ConnectorPoint PointX="7.125" PointY="16.751152846153843" />
+          <edmx:ConnectorPoint PointX="7.125" PointY="2.0285953776041667" />
+          <edmx:ConnectorPoint PointX="7.5" PointY="2.0285953776041667" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="OP_Cuanti2_Model.FK_TH_CapacitacionesParticipantes_TH_Personas">
+          <edmx:ConnectorPoint PointX="6" PointY="3.125" />
+          <edmx:ConnectorPoint PointX="6" PointY="1.3580451888020824" />
+          <edmx:ConnectorPoint PointX="7.5" PointY="1.3580451888020824" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="OP_Cuanti2_Model.FK_TH_Personas_TH_Cargos">
+          <edmx:ConnectorPoint PointX="4.5" PointY="12.422841796875" />
+          <edmx:ConnectorPoint PointX="5.25" PointY="12.422841796875" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="OP_Cuanti2_Model.FK_TH_Personas_TH_TipoContratacion">
+          <edmx:ConnectorPoint PointX="4.5" PointY="14.456329752604166" />
+          <edmx:ConnectorPoint PointX="5.25" PointY="14.456329752604166" />
+        </edmx:AssociationConnector>
+        <edmx:EntityTypeShape EntityType="OP_Cuanti2_Model.OP_Encuestadores" Width="1.5" PointX="10.5" PointY="3.75" Height="2.5571907552083335" />
+        <edmx:AssociationConnector Association="OP_Cuanti2_Model.FK_OP_Encuestadores_OP_TipoEncuestador">
+          <edmx:ConnectorPoint PointX="2.25" PointY="5.4130911341145822" />
+          <edmx:ConnectorPoint PointX="5" PointY="5.4130911341145822" />
+          <edmx:ConnectorPoint PointX="5" PointY="7.0859993489583317" />
+          <edmx:ConnectorPoint PointX="7.041666666666667" PointY="7.0859993489583308" />
+          <edmx:ConnectorPoint PointX="7.208333333333333" PointY="7.0859993489583317" />
+          <edmx:ConnectorPoint PointX="11.25" PointY="7.0859993489583317" />
+          <edmx:ConnectorPoint PointX="11.25" PointY="6.3071907552083335" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="OP_Cuanti2_Model.FK_OP_Encuestadores_TH_Personas">
+          <edmx:ConnectorPoint PointX="6.75" PointY="5.0285953776041667" />
+          <edmx:ConnectorPoint PointX="7.041666666666667" PointY="5.0285953776041659" />
+          <edmx:ConnectorPoint PointX="7.208333333333333" PointY="5.0285953776041667" />
+          <edmx:ConnectorPoint PointX="10.5" PointY="5.0285953776041667" />
+        </edmx:AssociationConnector>
+        <edmx:EntityTypeShape EntityType="OP_Cuanti2_Model.OP_PersonasAsignadasTrabajo" Width="1.5" PointX="7.5" PointY="11.5" Height="2.1725878906250031" />
+        <edmx:AssociationConnector Association="OP_Cuanti2_Model.FK_OP_PersonasAsignadasTrabajo_PY_Trabajo">
+          <edmx:ConnectorPoint PointX="4.5" PointY="21.251852213541667" />
+          <edmx:ConnectorPoint PointX="8.25" PointY="21.251852213541667" />
+          <edmx:ConnectorPoint PointX="8.25" PointY="13.672587890625003" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="OP_Cuanti2_Model.FK_OP_PersonasAsignadasTrabajo_TH_Personas">
+          <edmx:ConnectorPoint PointX="6.75" PointY="12.586293945312502" />
+          <edmx:ConnectorPoint PointX="7.041666666666667" PointY="12.586293945312502" />
+          <edmx:ConnectorPoint PointX="7.208333333333333" PointY="12.586293945312502" />
+          <edmx:ConnectorPoint PointX="7.5" PointY="12.586293945312502" />
+        </edmx:AssociationConnector>
+      </edmx:Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

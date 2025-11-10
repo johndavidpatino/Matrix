@@ -1,0 +1,24 @@
+﻿<%@ Page Language="vb" AutoEventWireup="false" CodeBehind="JBIAsignadoProyectos.aspx.vb" Inherits="WebMatrix.JBIAsignadoMail" %>
+
+<!DOCTYPE html >
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+</head>
+<body>
+    <form id="form1" runat="server">
+    <div>
+        <asp:Label ID="lblAsunto" Text="Matrix: JobBook Interno Asignado" runat="server"></asp:Label>
+        <asp:Panel ID="pnlBody" runat="server" Width="90%">
+            <div style="font-size:12px; font-family: 'Metrophobic', Arial, serif; font-weight: 400;color:#333333;">
+                <p style="margin:0 0 0 0;padding:0 0 0 0;">Ha sido asignado el JobBook Interno <asp:Label ID="lblJBI" runat="server"></asp:Label> 
+                    &nbsp;para el proyecto <asp:Label ID="lblProyecto" runat="server"></asp:Label> &nbsp; en 
+                    la metodología <asp:Label ID="lblMetodologia" runat="server"></asp:Label>. Ya puede continuar con la creación de trabajos apra esta metodología.</p><br />
+                <p style="margin:0 0 0 0;padding:0 0 0 0;">Para ver el listado de proyectos asignados <asp:HyperLink ID="hplLink" runat="server" Text="haga clic aquí"></asp:HyperLink> (solo gerentes de proyectos)</p>
+            </div>
+        </asp:Panel>
+    </div>
+    </form>
+</body>
+</html>

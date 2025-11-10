@@ -1,0 +1,32 @@
+﻿<%@ Master Language="VB" MasterPageFile="~/MasterPage/NewSiteNotForm.Master" AutoEventWireup="false" CodeBehind="MasterTareas.master.vb" Inherits="WebMatrix.MasterTareas" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+    <asp:ContentPlaceHolder ID="CPH_Head" runat="server">
+    </asp:ContentPlaceHolder>
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="CPH_Menu" runat="server">
+    <ul class="mi-menu">
+        <li>
+            <a href="../Home/Default.aspx">IR AL INICIO</a>
+        </li>
+    </ul>
+</asp:Content>
+<asp:Content ID="Content3" ContentPlaceHolderID="CPH_BreadCumbs" runat="server">
+</asp:Content>
+<asp:Content ID="Content4" ContentPlaceHolderID="CPH_TituloGeneral" runat="server">
+    <asp:ContentPlaceHolder ID="CPH_OpcionesMenu" runat="server">
+    </asp:ContentPlaceHolder>
+    <a>Tareas</a>
+</asp:Content>
+<asp:Content ID="Content5" ContentPlaceHolderID="CPH_Titulo" runat="server">
+    <asp:ContentPlaceHolder ID="CPH_Titulo" runat="server">
+    </asp:ContentPlaceHolder>
+</asp:Content>
+<asp:Content ID="Content6" ContentPlaceHolderID="CPH_Subtitulo" runat="server">
+    <asp:ContentPlaceHolder ID="CPH_ComentFormulario" runat="server">
+    </asp:ContentPlaceHolder>
+</asp:Content>
+<asp:Content ID="Content7" ContentPlaceHolderID="CPH_Content" runat="server">
+    <asp:ContentPlaceHolder ID="CPH_ContentForm" runat="server">
+    </asp:ContentPlaceHolder>
+</asp:Content>
