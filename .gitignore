@@ -1,0 +1,5 @@
+MVCMatrix/
+MVCMatrix/
+**/bin/
+**/obj/
+.vscode/

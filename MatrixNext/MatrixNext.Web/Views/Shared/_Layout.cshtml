@@ -1,0 +1,146 @@
+﻿<!DOCTYPE html>
+<html lang="en" dir="ltr" data-nav-layout="vertical" data-theme-mode="light" data-header-styles="transparent" data-width="fullwidth" data-menu-styles="transparent" data-page-style="flat" data-toggled="close" data-vertical-style="doublemenu" data-toggled="double-menu-open">
+
+    <head>
+
+        <!-- Meta Data -->
+        <meta charset="UTF-8">
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="Description" content="Asp.Net Mvc5 Bootstrap Responsive Admin Web Dashboard Template">
+        <meta name="Author" content="Spruko Technologies Private Limited">
+        <meta name="keywords" content="dashboard, admin panel ui, admin template, dot net, asp net admin panel, asp net admin template, net core mvc, framework dot net, aspnet , netcore, asp core, net mvc, dashboard ui, template dashboard, adminpanel dashboard.">
+    
+        <!-- Title -->
+        <title>@ViewData["Title"] Vyzor - Asp.Net Mvc5 Bootstrap 5 Premium Admin & Dashboard Template</title>
+
+        <!-- Favicon -->
+        <link rel="icon" href="@Url.Content("~/assets/images/brand-logos/favicon.ico")" type="image/x-icon">
+        
+        <!-- Choices JS -->
+        <script src="@Url.Content("~/assets/libs/choices.js/public/assets/scripts/choices.min.js")"></script>
+
+        <!-- Main Theme Js -->
+        <script src="@Url.Content("~/assets/js/main.js")"></script>
+        
+        <!-- Bootstrap Css -->
+        <link id="style" href="@Url.Content("~/assets/libs/bootstrap/css/bootstrap.min.css")" rel="stylesheet" >
+
+        <!-- Style Css -->
+        <link href="@Url.Content("~/assets/css/styles.css")" rel="stylesheet" >
+
+        <!-- Icons Css -->
+        <link href="@Url.Content("~/assets/css/icons.css")" rel="stylesheet" >
+
+        <!-- Node Waves Css -->
+        <link href="@Url.Content("~/assets/libs/node-waves/waves.min.css")" rel="stylesheet" > 
+
+        <!-- Simplebar Css -->
+        <link href="@Url.Content("~/assets/libs/simplebar/simplebar.min.css")" rel="stylesheet" >
+        
+        <!-- Color Picker Css -->
+        <link rel="stylesheet" href="@Url.Content("~/assets/libs/@simonwep/pickr/themes/nano.min.css")"> 
+
+        <!-- Choices Css -->
+        <link rel="stylesheet" href="@Url.Content("~/assets/libs/choices.js/public/assets/styles/choices.min.css")"> 
+
+        <!-- FlatPickr CSS -->
+        <link rel="stylesheet" href="@Url.Content("~/assets/libs/flatpickr/flatpickr.min.css")"> 
+
+        <!-- Auto Complete CSS -->
+        <link rel="stylesheet" href="@Url.Content("~/assets/libs/@tarekraafat/autocomplete.js/css/autoComplete.css")"> 
+        
+        @await RenderSectionAsync("Styles", required: false)
+
+    </head>
+
+    <body class="">
+
+        <div class="progress-top-bar"></div>
+
+		<!-- Start::main-switcher -->
+		<partial name="~/Views/Shared/layouts/_switcher.cshtml" />
+		<!-- End::main-switcher -->
+
+        <!-- Loader -->
+        <div id="loader" >
+            <img src="@Url.Content("~/assets/images/media/loader.svg")" alt="">
+        </div>
+        <!-- Loader -->
+
+        <!-- Page -->
+		<div class="page">
+
+            <!-- Start::main-header -->
+            <partial name="~/Views/Shared/layouts/_main-header.cshtml" />
+            <!-- End::main-header -->
+
+            <!-- Start::main-sidebar -->
+            <partial name="~/Views/Shared/layouts/_main-sidebar.cshtml" />
+            <!-- End::main-sidebar -->
+
+            <!-- Start::main-content -->
+            <div class="main-content app-content">
+                <div class="container-fluid page-container main-body-container">
+                    @RenderBody()
+                </div>
+            </div>
+            <!-- End Main Content-->
+            
+            <!-- Start::main-footer -->
+            <partial name="~/Views/Shared/layouts/_footer.cshtml" />
+            <!-- End::main-footer -->          
+
+            <!-- Start::main-modal -->
+            <partial name="~/Views/Shared/layouts/_modal.cshtml" />
+            <!-- End::main-modal -->          
+
+		</div>
+		<!-- End Page -->
+
+        <!-- Scroll To Top -->
+        <div class="scrollToTop">
+            <span class="arrow lh-1"><i class="ti ti-arrow-big-up fs-18"></i></span>
+        </div>
+        <div id="responsive-overlay"></div>
+        <!-- Scroll To Top -->
+
+        <!-- Popper JS -->
+        <script src="@Url.Content("~/assets/libs/@popperjs/core/umd/popper.min.js")"></script>
+
+        <!-- Bootstrap JS -->
+        <script src="@Url.Content("~/assets/libs/bootstrap/js/bootstrap.bundle.min.js")"></script>
+
+        <!-- Defaultmenu JS -->
+        <script src="@Url.Content("~/assets/js/defaultmenu.min.js")"></script>
+
+        <!-- Node Waves JS-->
+        <script src="@Url.Content("~/assets/libs/node-waves/waves.min.js")"></script>
+
+        <!-- Sticky JS -->
+        <script src="@Url.Content("~/assets/js/sticky.js")"></script>
+
+        <!-- Simplebar JS -->
+        <script src="@Url.Content("~/assets/libs/simplebar/simplebar.min.js")"></script>
+        <script src="@Url.Content("~/assets/js/simplebar.js")"></script>
+
+        <!-- Auto Complete JS -->
+        <script src="@Url.Content("~/assets/libs/@tarekraafat/autocomplete.js/autoComplete.min.js")"></script>
+
+        <!-- Color Picker JS -->
+        <script src="@Url.Content("~/assets/libs/@simonwep/pickr/pickr.es5.min.js")"></script>
+
+        <!-- Date & Time Picker JS -->
+        <script src="@Url.Content("~/assets/libs/flatpickr/flatpickr.min.js")"></script>
+            
+        @await RenderSectionAsync("Scripts", required: false)
+            
+        <!-- Custom-Switcher JS -->
+        <script src="@Url.Content("~/assets/js/custom-switcher.min.js")"></script>
+
+        <!-- Custom JS -->
+        <script src="@Url.Content("~/assets/js/custom.js")"></script>
+            
+    </body>
+
+</html>

@@ -1,0 +1,113 @@
+@{
+    Layout = null;
+    ViewData["Title"] = "Login - Matrix";
+}
+
+<!DOCTYPE html>
+<html lang="es" dir="ltr" data-nav-layout="vertical" data-vertical-style="overlay" data-theme-mode="light" data-header-styles="light" data-menu-styles="light" data-toggled="close">
+<head>
+    <meta charset="UTF-8">
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="Description" content="IPSOS Game Changers - Matrix Login">
+    <meta name="Author" content="IPSOS">
+    <title>@ViewData["Title"]</title>
+    <link rel="shortcut icon" href="~/favicon.ico" type="image/x-icon" />
+    
+    <!-- Main Theme JS -->
+    <script src="~/assets/js/authentication-main.js"></script>
+    
+    <!-- Bootstrap CSS -->
+    <link href="~/assets/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Style CSS -->
+    <link href="~/assets/css/styles.css" rel="stylesheet">
+    
+    <!-- Icons CSS -->
+    <link href="~/assets/css/icons.css" rel="stylesheet">
+    
+    <style>
+        .authentication-basic-background img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body class="authentication-background">
+    <div class="authentication-basic-background">
+        <img src="~/assets/images/media/backgrounds/9.png" alt="Background">
+    </div>
+
+    <div class="container">
+        <div class="row justify-content-center align-items-center authentication authentication-basic h-100">
+            <div class="col-xxl-4 col-xl-5 col-lg-6 col-md-6 col-sm-8 col-12">
+                <div class="card custom-card border-0 my-4">
+                    <div class="card-body p-5">
+                        <div class="mb-4">
+                            <a href="javascript:void(0);">
+                                <img src="~/Newlogo.png" alt="Matrix" class="desktop-dark" style="max-width: 200px;">
+                            </a>
+                        </div>
+                        <div>
+                            <h4 class="mb-1 fw-semibold">¡Bienvenido!</h4>
+                            <p class="mb-4 text-muted fw-normal">Ingrese sus credenciales de acceso</p>
+                        </div>
+
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                @foreach (var modelState in ViewData.ModelState.Values)
+                                {
+                                    @foreach (var error in modelState.Errors)
+                                    {
+                                        <div>@error.ErrorMessage</div>
+                                    }
+                                }
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        }
+
+                        <form method="post" action="@Url.Action("Index", "Login")">
+                            <div class="row gy-3">
+                                <div class="col-xl-12">
+                                    <label for="usuario" class="form-label text-default">Usuario</label>
+                                    <input type="text" class="form-control" id="usuario" name="usuario" placeholder="Ingrese su usuario" required>
+                                </div>
+                                <div class="col-xl-12 mb-2">
+                                    <label for="contrasena" class="form-label text-default d-block">Contraseña</label>
+                                    <div class="position-relative">
+                                        <input type="password" class="form-control" id="contrasena" name="contrasena" placeholder="Ingrese su contraseña" required>
+                                        <a href="javascript:void(0);" class="show-password-button text-muted" onclick="createpassword('contrasena',this)" id="button-addon2"><i class="ri-eye-off-line align-middle"></i></a>
+                                    </div>
+                                    <div class="mt-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="rememberMe" name="rememberMe">
+                                            <label class="form-check-label" for="rememberMe">
+                                                Recuérdame
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-grid mt-4">
+                                <button type="submit" class="btn btn-primary">Entrar</button>
+                            </div>
+                        </form>
+
+                        <div class="text-center mt-3 fw-medium">
+                            <small class="text-muted">© 2025 IPSOS Game Changers - Matrix</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="~/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Show Password JS -->
+    <script src="~/assets/js/show-password.js"></script>
+</body>
+</html>
