@@ -79,10 +79,15 @@
 - **Contexto**: `REP_Model`
 - **Notas**: Consultas complejas → ideal para Dapper
 
-#### 9. **TH_TalentoHumano** (28 páginas) ⭐ Próximo a migrar
+#### 9. **TH_TalentoHumano** (28 páginas) ✅ EN PROGRESO
 - **Carpeta**: `WebMatrix/TH_TalentoHumano/`
 - **Contexto**: `TH_Model` (CoreProject)
 - **Dependencias**: Medias (empleados, usuarios, catálogos)
+- **Estado**: 
+  - ✅ **Ausencias** (4 páginas) - COMPLETADO
+  - 🔄 **Empleados** (pendiente)
+  - 🔄 **Nómina** (pendiente)
+  - 🔄 **Otros** (pendiente)
 
 **Análisis Detallado - GESTIÓN DE AUSENCIAS (4 páginas - Prioridad Alta dentro del módulo)**
 
