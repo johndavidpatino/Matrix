@@ -1,5 +1,9 @@
 # Mapa de Módulos para Migración WebMatrix → MatrixNext
 
+⚠️ **IMPORTANTE**: Antes de migrar cualquier módulo, leer [DIRECTRICES_MIGRACION.md](DIRECTRICES_MIGRACION.md) que contiene las 15 reglas obligatorias para garantizar consistencia y calidad.
+
+---
+
 ## Módulos Identificados y Clasificados por Prioridad
 
 ### 🔴 CRÍTICA (Implementar primero)
@@ -320,3 +324,23 @@ mkdir Adapters
 ```
 
 **Luego**: Migrar primera página (Usuarios.aspx) como demo del patrón
+---
+
+## 📖 DOCUMENTACIÓN DE REFERENCIA
+
+### Documentos Maestros
+
+| Documento | Propósito | Aplicable |
+|-----------|-----------|-----------|
+| [DIRECTRICES_MIGRACION.md](DIRECTRICES_MIGRACION.md) | 15 reglas obligatorias para todas las migraciones | **LEER ANTES DE CUALQUIER MÓDULO** |
+| [VERIFICACION_AUSENCIAS_MIGRACION.md](VERIFICACION_AUSENCIAS_MIGRACION.md) | Caso de estudio: verificación completa de TH_Ausencias | Referencia de calidad |
+| [PLAN_MIGRACION_PY_PROYECTOS.md](PLAN_MIGRACION_PY_PROYECTOS.md) | Plan detallado para próximo módulo | Plantilla para futuros módulos |
+| [DASHBOARD_MIGRACION.md](DASHBOARD_MIGRACION.md) | Estado, métricas, timeline de todo el esfuerzo | Actualizar semanalmente |
+| [RESUMEN_MIGRACION_AUSENCIAS.md](RESUMEN_MIGRACION_AUSENCIAS.md) | Resumen ejecutivo de TH_Ausencias | Stakeholders/Gerencia |
+
+### Cómo Usar Documentación
+
+1. **Iniciando módulo**: Leer DIRECTRICES_MIGRACION.md completo
+2. **Planificando**: Usar PLAN_MIGRACION_PY_PROYECTOS.md como plantilla
+3. **Verificando**: Comparar contra VERIFICACION_AUSENCIAS_MIGRACION.md
+4. **Reportando**: Actualizar DASHBOARD_MIGRACION.md
