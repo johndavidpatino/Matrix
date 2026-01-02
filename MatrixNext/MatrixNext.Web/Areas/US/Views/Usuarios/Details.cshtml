@@ -1,0 +1,384 @@
+@using MatrixNext.Data.Modules.US.Usuarios.Models
+@model UsuarioDetailViewModel
+
+@{
+    ViewData["Title"] = "Detalle del Usuario";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2><i class="bi bi-person-badge me-2"></i>Detalle del Usuario</h2>
+        </div>
+        <div class="col-md-4 text-end">
+            <a asp-area="US" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                <i class="bi bi-pencil me-2"></i>Editar
+            </a>
+            <a asp-area="US" asp-action="Index" class="btn btn-secondary">
+                <i class="bi bi-arrow-left me-2"></i>Volver
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-file-earmark-text me-2"></i>Información Personal</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <h6 class="text-muted">Usuario</h6>
+                            <p class="fs-6"><strong>@Model.NombreUsuario</strong></p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted">Email</h6>
+                            <p class="fs-6">
+                                <a href="mailto:@Model.Email">@Model.Email</a>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <h6 class="text-muted">Nombre Completo</h6>
+                            <p class="fs-6">@Model.NombreCompleto</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted">Estado</h6>
+                            <p class="fs-6">
+                                @if (Model.Activo)
+                                {
+                                    <span class="badge bg-success"><i class="bi bi-check-lg me-1"></i>Activo</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary"><i class="bi bi-x-lg me-1"></i>Inactivo</span>
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow mb-3">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="bi bi-shield-lock me-2"></i>Roles</h5>
+                </div>
+                <div class="card-body">
+                    <div id="roles-assigned">
+                        @if (Model.Roles.Any())
+                        {
+                            <ul class="list-unstyled">
+                                @foreach (var rol in Model.Roles)
+                                {
+                                    <li class="mb-2">
+                                        <span class="badge bg-primary me-2">@rol.Nombre</span>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <p class="text-muted small">Sin roles asignados</p>
+                        }
+                    </div>
+
+                    <div class="input-group mt-3">
+                        <select id="roles-available" class="form-select"></select>
+                        <button id="btn-add-role" class="btn btn-primary">Agregar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow mb-3">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="bi bi-building me-2"></i>Unidades</h5>
+                </div>
+                <div class="card-body">
+                    <div id="unidades-assigned">
+                        @if (Model.Unidades.Any())
+                        {
+                            <ul class="list-unstyled">
+                                @foreach (var unidad in Model.Unidades)
+                                {
+                                    <li class="mb-2">
+                                        <span class="badge bg-success me-2">@unidad.Nombre</span>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <p class="text-muted small">Sin unidades asignadas</p>
+                        }
+                    </div>
+
+                    <div class="input-group mt-3">
+                        <select id="unidades-available" class="form-select"></select>
+                        <button id="btn-add-unidad" class="btn btn-success">Agregar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0"><i class="bi bi-key me-2"></i>Permisos</h5>
+                </div>
+                <div class="card-body">
+                    <div id="permisos-assigned">
+                        @if (Model.Permisos.Any())
+                        {
+                            <ul class="list-unstyled">
+                                @foreach (var permiso in Model.Permisos)
+                                {
+                                    <li class="mb-2">
+                                        <span class="badge bg-secondary me-2">@permiso.Permiso</span>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <p class="text-muted small">Sin permisos asignados</p>
+                        }
+                    </div>
+
+                    <div class="input-group mt-3">
+                        <select id="permisos-available" class="form-select"></select>
+                        <button id="btn-add-permiso" class="btn btn-secondary">Agregar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const usuarioId = @Model.Id;
+
+    // Toast container
+    (function ensureToastContainer() {
+        if (!document.getElementById('toast-container')) {
+            const container = document.createElement('div');
+            container.id = 'toast-container';
+            container.className = 'position-fixed bottom-0 end-0 p-3';
+            container.style.zIndex = 1080;
+            document.body.appendChild(container);
+        }
+    })();
+
+    function showToast(message, type = 'info', timeout = 4000) {
+        try {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast align-items-center text-white border-0 mb-2';
+            toast.setAttribute('role', 'alert');
+            toast.setAttribute('aria-live', 'assertive');
+            toast.setAttribute('aria-atomic', 'true');
+
+            const bg = type === 'success' ? 'bg-success' : (type === 'danger' ? 'bg-danger' : 'bg-secondary');
+            toast.classList.add(bg);
+
+            toast.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">${message}</div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>`;
+
+            container.appendChild(toast);
+
+            if (window.bootstrap && bootstrap.Toast) {
+                const bToast = new bootstrap.Toast(toast, { delay: timeout });
+                bToast.show();
+                toast.addEventListener('hidden.bs.toast', () => toast.remove());
+            } else {
+                // fallback
+                setTimeout(() => toast.remove(), timeout);
+            }
+        } catch (e) {
+            console.error('Toast error', e);
+            alert(message);
+        }
+    }
+
+    async function fetchJson(url) {
+        const res = await fetch(url);
+        return await res.json();
+    }
+
+    async function postJson(url, body) {
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+        return await res.json();
+    }
+
+    // Roles
+    async function loadRoles() {
+        const assigned = await fetchJson(`/US/Usuarios/GetRolesAsignados/${usuarioId}`);
+        const avail = await fetchJson(`/US/Usuarios/GetRolesDisponibles/${usuarioId}`);
+
+        const assignedEl = document.getElementById('roles-assigned');
+        const availSel = document.getElementById('roles-available');
+        assignedEl.innerHTML = '';
+        availSel.innerHTML = '';
+
+        if (assigned.success && assigned.data.length) {
+            const ul = document.createElement('ul'); ul.className = 'list-unstyled';
+            assigned.data.forEach(r => {
+                const li = document.createElement('li'); li.className = 'mb-2';
+                li.innerHTML = `<span class="badge bg-primary me-2">${r.nombre}</span><button class="btn btn-sm btn-outline-danger">Quitar</button>`;
+                li.querySelector('button').addEventListener('click', () => removeRole(r.id));
+                ul.appendChild(li);
+            });
+            assignedEl.appendChild(ul);
+        } else {
+            assignedEl.innerHTML = '<p class="text-muted small">Sin roles asignados</p>';
+        }
+
+        if (avail.success && avail.data.length) {
+            availSel.disabled = false;
+            avail.data.forEach(r => {
+                const opt = document.createElement('option'); opt.value = r.id; opt.text = r.nombre; availSel.appendChild(opt);
+            });
+        } else {
+            availSel.disabled = true;
+            const opt = document.createElement('option'); opt.text = '--Sin roles disponibles--'; availSel.appendChild(opt);
+        }
+    }
+
+    async function addRole() {
+        const sel = document.getElementById('roles-available');
+        const val = parseInt(sel.value);
+        if (!val || val < 0) return showToast('Seleccione un rol', 'danger');
+        const res = await postJson('/US/Usuarios/AssignRole', { usuarioId: usuarioId, rolId: val });
+        if (!res.success) return showToast(res.message || 'Error asignando rol', 'danger');
+        showToast(res.message || 'Rol asignado', 'success');
+        await loadRoles();
+    }
+
+    async function removeRole(rolId) {
+        const res = await postJson('/US/Usuarios/RemoveRole', { usuarioId: usuarioId, rolId });
+        if (!res.success) return showToast(res.message || 'Error removiendo rol', 'danger');
+        showToast(res.message || 'Rol removido', 'success');
+        await loadRoles();
+    }
+
+    // Unidades
+    async function loadUnidades() {
+        const assigned = await fetchJson(`/US/Usuarios/GetUnidadesAsignadas/${usuarioId}`);
+        const avail = await fetchJson(`/US/Usuarios/GetUnidadesDisponibles/${usuarioId}`);
+
+        const assignedEl = document.getElementById('unidades-assigned');
+        const availSel = document.getElementById('unidades-available');
+        assignedEl.innerHTML = '';
+        availSel.innerHTML = '';
+
+        if (assigned.success && assigned.data.length) {
+            const ul = document.createElement('ul'); ul.className = 'list-unstyled';
+            assigned.data.forEach(u => {
+                const li = document.createElement('li'); li.className = 'mb-2';
+                li.innerHTML = `<span class="badge bg-success me-2">${u.nombre}</span><button class="btn btn-sm btn-outline-danger">Quitar</button>`;
+                li.querySelector('button').addEventListener('click', () => removeUnidad(u.id));
+                ul.appendChild(li);
+            });
+            assignedEl.appendChild(ul);
+        } else {
+            assignedEl.innerHTML = '<p class="text-muted small">Sin unidades asignadas</p>';
+        }
+
+        if (avail.success && avail.data.length) {
+            availSel.disabled = false;
+            avail.data.forEach(u => {
+                const opt = document.createElement('option'); opt.value = u.id; opt.text = u.nombre; availSel.appendChild(opt);
+            });
+        } else {
+            availSel.disabled = true;
+            const opt = document.createElement('option'); opt.text = '--Sin unidades disponibles--'; availSel.appendChild(opt);
+        }
+    }
+
+    async function addUnidad() {
+        const sel = document.getElementById('unidades-available');
+        const val = parseInt(sel.value);
+        if (!val || val < 0) return showToast('Seleccione una unidad', 'danger');
+        const res = await postJson('/US/Usuarios/AssignUnidad', { usuarioId: usuarioId, grupoUnidadId: val });
+        if (!res.success) return showToast(res.message || 'Error asignando unidad', 'danger');
+        showToast(res.message || 'Unidad asignada', 'success');
+        await loadUnidades();
+    }
+
+    async function removeUnidad(grupoId) {
+        const res = await postJson('/US/Usuarios/RemoveUnidad', { usuarioId: usuarioId, grupoUnidadId: grupoId });
+        if (!res.success) return showToast(res.message || 'Error removiendo unidad', 'danger');
+        showToast(res.message || 'Unidad removida', 'success');
+        await loadUnidades();
+    }
+
+    // Permisos
+    async function loadPermisos() {
+        const assigned = await fetchJson(`/US/Usuarios/GetPermisosAsignados/${usuarioId}`);
+        const avail = await fetchJson(`/US/Usuarios/GetPermisosDisponibles/${usuarioId}`);
+
+        const assignedEl = document.getElementById('permisos-assigned');
+        const availSel = document.getElementById('permisos-available');
+        assignedEl.innerHTML = '';
+        availSel.innerHTML = '';
+
+        if (assigned.success && assigned.data.length) {
+            const ul = document.createElement('ul'); ul.className = 'list-unstyled';
+            assigned.data.forEach(p => {
+                const li = document.createElement('li'); li.className = 'mb-2';
+                li.innerHTML = `<span class="badge bg-secondary me-2">${p.permiso}</span><button class="btn btn-sm btn-outline-danger">Quitar</button>`;
+                li.querySelector('button').addEventListener('click', () => removePermiso(p.id));
+                ul.appendChild(li);
+            });
+            assignedEl.appendChild(ul);
+        } else {
+            assignedEl.innerHTML = '<p class="text-muted small">Sin permisos asignados</p>';
+        }
+
+        if (avail.success && avail.data.length) {
+            availSel.disabled = false;
+            avail.data.forEach(p => {
+                const opt = document.createElement('option'); opt.value = p.id; opt.text = p.permiso; availSel.appendChild(opt);
+            });
+        } else {
+            availSel.disabled = true;
+            const opt = document.createElement('option'); opt.text = '--Sin permisos disponibles--'; availSel.appendChild(opt);
+        }
+    }
+
+    async function addPermiso() {
+        const sel = document.getElementById('permisos-available');
+        const val = parseInt(sel.value);
+        if (!val || val < 0) return showToast('Seleccione un permiso', 'danger');
+        const res = await postJson('/US/Usuarios/AssignPermiso', { usuarioId: usuarioId, permisoId: val });
+        if (!res.success) return showToast(res.message || 'Error asignando permiso', 'danger');
+        showToast(res.message || 'Permiso asignado', 'success');
+        await loadPermisos();
+    }
+
+    async function removePermiso(permisoId) {
+        const res = await postJson('/US/Usuarios/RemovePermiso', { usuarioId: usuarioId, permisoId });
+        if (!res.success) return showToast(res.message || 'Error removiendo permiso', 'danger');
+        showToast(res.message || 'Permiso removido', 'success');
+        await loadPermisos();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        loadRoles();
+        loadUnidades();
+        loadPermisos();
+
+        document.getElementById('btn-add-role').addEventListener('click', addRole);
+        document.getElementById('btn-add-unidad').addEventListener('click', addUnidad);
+        document.getElementById('btn-add-permiso').addEventListener('click', addPermiso);
+    });
+</script>

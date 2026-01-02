@@ -1,0 +1,76 @@
+@model IEnumerable<MatrixNext.Data.Models.Usuarios.RolViewModel>
+
+@{
+    ViewData["Title"] = "Roles";
+}
+
+<div class="container mt-4">
+    <h3>Roles</h3>
+    <div class="card">
+        <div class="card-body">
+            @if (Model != null && Model.Any())
+            {
+                <div class="d-flex justify-content-end mb-3">
+                    <button id="btnNuevoRol" class="btn btn-sm btn-primary">Nuevo Rol</button>
+                </div>
+                <ul class="list-group">
+                    @foreach (var r in Model)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>@r.Nombre</strong> - @r.Descripcion
+                            </div>
+                            <div>
+                                <button data-id="@r.Id" class="btn btn-sm btn-warning btn-edit-rol" title="Editar"><i class="bi bi-pencil"></i></button>
+                                <button data-id="@r.Id" class="btn btn-sm btn-danger btn-delete-rol" title="Eliminar"><i class="bi bi-trash"></i></button>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <div class="alert alert-info">No hay roles definidos.</div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('btnNuevoRol')?.addEventListener('click', function(){
+            fetch('/Usuarios/Roles/CreateModal')
+                .then(r => r.text())
+                .then(html => {
+                    document.getElementById('usuarios-modal-create-container').innerHTML = html;
+                    var modalEl = document.getElementById('modalCreateRol');
+                    var modal = new bootstrap.Modal(modalEl);
+                    modal.show();
+                });
+        });
+
+        document.querySelectorAll('.btn-edit-rol').forEach(btn => btn.addEventListener('click', function(){
+            var id = this.getAttribute('data-id');
+            fetch('/Usuarios/Roles/EditModal/' + id)
+                .then(r => r.text())
+                .then(html => {
+                    document.getElementById('usuarios-modal-edit-container').innerHTML = html;
+                    var modalEl = document.getElementById('modalEditRol');
+                    var modal = new bootstrap.Modal(modalEl);
+                    modal.show();
+                });
+        }));
+
+        document.querySelectorAll('.btn-delete-rol').forEach(btn => btn.addEventListener('click', function(){
+            var id = this.getAttribute('data-id');
+            fetch('/Usuarios/Roles/DeleteModal/' + id)
+                .then(r => r.text())
+                .then(html => {
+                    document.getElementById('usuarios-modal-delete-container').innerHTML = html;
+                    var modalEl = document.getElementById('modalDeleteRol');
+                    var modal = new bootstrap.Modal(modalEl);
+                    modal.show();
+                });
+        }));
+    </script>
+}

@@ -1,0 +1,33 @@
+@using System
+@{
+    var id = ViewData["Id"] as string ?? $"ql_{Guid.NewGuid():N}";
+    var name = ViewData["Name"] as string ?? id;
+    var label = ViewData["Label"] as string ?? "Texto";
+    var placeholder = ViewData["Placeholder"] as string ?? "Escribe aquí...";
+    var value = ViewData["Value"] as string ?? string.Empty;
+    var required = ViewData["Required"] as bool? ?? false;
+    var idHidden = ViewData["HiddenId"] as string ?? $"{id}_hidden";
+}
+<link rel="stylesheet" href="@Url.Content("~/assets/libs/quill/quill.snow.css")" />
+<div class="mb-3">
+    <label class="form-label" for="@id">@label@(required ? " *" : string.Empty)</label>
+    <div id="@id" class="form-control" style="min-height: 160px;">@Html.Raw(value)</div>
+    <textarea name="@name" id="@idHidden" class="d-none" required="@(required ? "required" : null)">@value</textarea>
+</div>
+<script src="@Url.Content("~/assets/libs/quill/quill.min.js")"></script>
+<script>
+(function() {
+    if (!window.Quill) {
+        console.warn('Quill no está disponible.');
+        return;
+    }
+    if (!window.__quillEditors) {
+        window.__quillEditors = {};
+    }
+    if (window.__quillEditors['@id']) return;
+    var quill = new Quill('#@id', { theme: 'snow', placeholder: '@placeholder' });
+    window.__quillEditors['@id'] = quill;
+    var hidden = document.getElementById('@idHidden');
+    quill.on('text-change', function () { hidden.value = quill.root.innerHTML; });
+})();
+</script>

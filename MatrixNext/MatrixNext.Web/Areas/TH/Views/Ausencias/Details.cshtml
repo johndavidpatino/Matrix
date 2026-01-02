@@ -1,0 +1,246 @@
+@model MatrixNext.Data.Modules.TH.Ausencias.Models.AusenciaViewModel
+
+@{
+    ViewData["Title"] = "Detalles de Ausencia";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <div class="card">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">Detalles de Solicitud #@Model.Id</h4>
+                    <a href="@Url.Action("Index", "Ausencias", new { area = "TH" })" class="btn btn-light btn-sm">Volver</a>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <h6 class="text-muted">Información General</h6>
+                            <table class="table table-sm">
+                                <tr>
+                                    <td><strong>ID Solicitud:</strong></td>
+                                    <td>@Model.Id</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>ID Empleado:</strong></td>
+                                    <td>@Model.IdEmpleado</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tipo:</strong></td>
+                                    <td>
+                                        @{
+                                            string tipoAusencia = Model.Tipo switch
+                                            {
+                                                1 => "Vacaciones",
+                                                2 => "Incapacidad",
+                                                3 => "Permiso",
+                                                4 => "Licencia",
+                                                _ => "Otro"
+                                            };
+                                        }
+                                        @tipoAusencia
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Estado:</strong></td>
+                                    <td>
+                                        @{
+                                            string estadoClass = Model.Estado switch
+                                            {
+                                                0 => "bg-warning",
+                                                1 => "bg-success",
+                                                2 => "bg-danger",
+                                                _ => "bg-secondary"
+                                            };
+                                            string estadoText = Model.Estado switch
+                                            {
+                                                0 => "Pendiente",
+                                                1 => "Aprobado",
+                                                2 => "Rechazado",
+                                                _ => "Desconocido"
+                                            };
+                                        }
+                                        <span class="badge @estadoClass">@estadoText</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="col-md-6">
+                            <h6 class="text-muted">Período de Ausencia</h6>
+                            <table class="table table-sm">
+                                <tr>
+                                    <td><strong>Fecha Inicio:</strong></td>
+                                    <td>@(Model.FechaInicio?.ToString("dd/MM/yyyy") ?? "-")</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Fecha Fin:</strong></td>
+                                    <td>@(Model.FechaFin?.ToString("dd/MM/yyyy") ?? "-")</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Días Calendario:</strong></td>
+                                    <td>@Model.DiasCalendario</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Días Laborales:</strong></td>
+                                    <td>
+                                        <span class="badge bg-info">@Model.DiasLaborales días</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <!-- Período de Causación -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <h6 class="text-muted">Período de Causación</h6>
+                            <table class="table table-sm">
+                                <tr>
+                                    <td><strong>Inicio:</strong></td>
+                                    <td>@(Model.FiniCausacion.HasValue ? Model.FiniCausacion.Value.ToString("dd/MM/yyyy") : "-")</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Fin:</strong></td>
+                                    <td>@(Model.FFinCausacion.HasValue ? Model.FFinCausacion.Value.ToString("dd/MM/yyyy") : "-")</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Aprobaciones -->
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <h6 class="text-muted">Aprobaciones</h6>
+                            <table class="table table-sm">
+                                <tr>
+                                    <td><strong>Aprobado Por:</strong></td>
+                                    <td>@(Model.AprobadoPor > 0 ? Model.AprobadoPor.ToString() : "-")</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Fecha Aprobación:</strong></td>
+                                    <td>@(Model.FechaAprobacion.HasValue ? Model.FechaAprobacion.Value.ToString("dd/MM/yyyy HH:mm") : "-")</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>VoBo 1:</strong></td>
+                                    <td>@(Model.VoBo1.HasValue ? (Model.VoBo1 == 1 ? "✓ Aprobado" : "✗ Rechazado") : "-")</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Fecha VoBo 1:</strong></td>
+                                    <td>@(Model.FechaVoBo1.HasValue ? Model.FechaVoBo1.Value.ToString("dd/MM/yyyy HH:mm") : "-")</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Observaciones -->
+                    @if (!string.IsNullOrEmpty(Model.ObservacionesSolicitud) || !string.IsNullOrEmpty(Model.ObservacionesAprobacion))
+                    {
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <h6 class="text-muted">Observaciones</h6>
+                                @if (!string.IsNullOrEmpty(Model.ObservacionesSolicitud))
+                                {
+                                    <p><strong>Solicitud:</strong></p>
+                                    <p>@Model.ObservacionesSolicitud</p>
+                                }
+                                @if (!string.IsNullOrEmpty(Model.ObservacionesAprobacion))
+                                {
+                                    <p><strong>Aprobación:</strong></p>
+                                    <p>@Model.ObservacionesAprobacion</p>
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Botones de Acción -->
+                    <div class="d-flex justify-content-between">
+                        <a href="@Url.Action("Index", "Ausencias", new { area = "TH" })" class="btn btn-secondary">Volver</a>
+                        @if (Model.Estado == 0) // Pendiente
+                        {
+                            <div>
+                                <button type="button" class="btn btn-warning" 
+                                        onclick="editarSolicitud(@Model.Id)">
+                                    <i class="fas fa-edit"></i> Editar
+                                </button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab de Incapacidades -->
+            <div class="card mt-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Datos de Incapacidad (si aplica)</h5>
+                </div>
+                <div class="card-body" id="incapacidadSection">
+                    <div class="text-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            cargarIncapacidad();
+        });
+
+        function cargarIncapacidad() {
+            var idSolicitud = @Model.Id;
+
+            $.ajax({
+                url: '/TH/Ausencias/ObtenerIncapacidad/' + idSolicitud,
+                type: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success && response.data) {
+                        var incapacidad = response.data;
+                        var html = `
+                            <table class="table table-sm">
+                                <tr>
+                                    <td><strong>Registro Médico:</strong></td>
+                                    <td>${incapacidad.registroMedico || '-'}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>IPS:</strong></td>
+                                    <td>${incapacidad.ips || '-'}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tipo Incapacidad:</strong></td>
+                                    <td>${incapacidad.tipoIncapacidad || '-'}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>CIE:</strong></td>
+                                    <td>${incapacidad.cie || '-'}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Comentarios:</strong></td>
+                                    <td>${incapacidad.comentarios || '-'}</td>
+                                </tr>
+                            </table>
+                        `;
+                        $('#incapacidadSection').html(html);
+                    } else {
+                        $('#incapacidadSection').html('<p class="text-muted">No hay datos de incapacidad</p>');
+                    }
+                },
+                error: function () {
+                    $('#incapacidadSection').html('<p class="text-danger">Error cargando incapacidad</p>');
+                }
+            });
+        }
+
+        function editarSolicitud(id) {
+            alert('Función de edición será implementada próximamente');
+        }
+    </script>
+}

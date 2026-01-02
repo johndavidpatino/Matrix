@@ -1,4 +1,5 @@
 using MatrixNext.Data.Services;
+using UsuarioAuthService = MatrixNext.Data.Modules.US.Usuarios.Services.UsuarioAuthService;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;

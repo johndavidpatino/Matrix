@@ -1,0 +1,39 @@
+@using System
+@using System.Collections.Generic
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    var id = ViewData["Id"] as string ?? $"sel_{Guid.NewGuid():N}";
+    var name = ViewData["Name"] as string ?? id;
+    var label = ViewData["Label"] as string ?? "Seleccionar";
+    var placeholder = ViewData["Placeholder"] as string ?? "Buscar...";
+    var required = ViewData["Required"] as bool? ?? false;
+    var items = ViewData["Items"] as IEnumerable<SelectListItem> ?? Array.Empty<SelectListItem>();
+    var value = ViewData["Value"] as string;
+}
+<div class="mb-3">
+    <label for="@id" class="form-label">@label@(required ? " *" : string.Empty)</label>
+    <select id="@id" name="@name" class="form-select js-choice-search" required="@(required ? "required" : null)">
+        <option value="">@placeholder</option>
+        @foreach (var item in items)
+        {
+            var selected = (!string.IsNullOrWhiteSpace(value) && item.Value == value) || item.Selected;
+            <option value="@item.Value" selected="@(selected ? "selected" : null)">@item.Text</option>
+        }
+    </select>
+</div>
+
+<script>
+(function () {
+    if (window.__choicesInit) return;
+    window.__choicesInit = true;
+    document.addEventListener('DOMContentLoaded', function () {
+        if (!window.Choices) {
+            console.warn('Choices no está disponible para inicializar selects con búsqueda.');
+            return;
+        }
+        document.querySelectorAll('.js-choice-search').forEach(function (el) {
+            new window.Choices(el, { searchEnabled: true, itemSelectText: '' });
+        });
+    });
+})();
+</script>

@@ -1,0 +1,106 @@
+@using MatrixNext.Data.Modules.US.Usuarios.Models
+@model UsuarioDetailViewModel
+
+@{
+    ViewData["Title"] = "Eliminar Usuario";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2><i class="bi bi-trash me-2"></i>Eliminar Usuario</h2>
+        </div>
+        <div class="col-md-4 text-end">
+            <a asp-area="US" asp-action="Index" class="btn btn-secondary">
+                <i class="bi bi-arrow-left me-2"></i>Volver
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="alert alert-danger" role="alert">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                <strong>Advertencia:</strong> Esta acción no se puede deshacer. El usuario será marcado como inactivo.
+            </div>
+
+            <div class="card shadow">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0"><i class="bi bi-file-earmark-text me-2"></i>Información del Usuario a Eliminar</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <h6 class="text-muted">Usuario</h6>
+                            <p class="fs-6"><strong>@Model.NombreUsuario</strong></p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted">Email</h6>
+                            <p class="fs-6">@Model.Email</p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <h6 class="text-muted">Nombre Completo</h6>
+                            <p class="fs-6">@Model.NombreCompleto</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted">Estado Actual</h6>
+                            <p class="fs-6">
+                                @if (Model.Activo)
+                                {
+                                    <span class="badge bg-success"><i class="bi bi-check-lg me-1"></i>Activo</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary"><i class="bi bi-x-lg me-1"></i>Inactivo</span>
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-info mt-3" role="alert">
+                <i class="bi bi-info-circle me-2"></i>
+                <strong>Nota:</strong> El usuario será marcado como inactivo. Sus datos se conservarán en el sistema para auditoría.
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                <a asp-area="US" asp-action="Index" class="btn btn-secondary">
+                    <i class="bi bi-x-circle me-2"></i>Cancelar
+                </a>
+                <form asp-area="US" asp-action="DeleteConfirmed" asp-route-id="@Model.Id" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('¿Estás completamente seguro de que deseas eliminar este usuario?')">
+                        <i class="bi bi-check-circle me-2"></i>Confirmar Eliminación
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow bg-light">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0"><i class="bi bi-shield-alert me-2"></i>Importante</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled small">
+                        <li class="mb-2">
+                            <i class="bi bi-info-circle text-info me-2"></i>
+                            <strong>Soft Delete:</strong> El usuario se marcará como inactivo
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-shield-lock text-info me-2"></i>
+                            <strong>Datos preservados:</strong> Se mantiene el historial de auditoría
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-clock-history text-info me-2"></i>
+                            <strong>Recuperable:</strong> Un administrador puede reactivarlo
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

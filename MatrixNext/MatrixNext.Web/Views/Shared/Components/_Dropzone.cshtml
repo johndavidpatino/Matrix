@@ -1,0 +1,40 @@
+@using System
+@{
+    var id = ViewData["Id"] as string ?? $"dz_{Guid.NewGuid():N}";
+    var uploadUrl = ViewData["UploadUrl"] as string ?? "/upload";
+    var label = ViewData["Label"] as string ?? "Adjuntar archivos";
+    var maxFiles = ViewData["MaxFiles"] as int? ?? 3;
+    var maxFileSizeMb = ViewData["MaxFileSizeMb"] as int? ?? 5;
+}
+<link rel="stylesheet" href="@Url.Content("~/assets/libs/dropzone/dropzone.css")" />
+<div class="mb-3">
+    <label class="form-label">@label</label>
+    <form action="@uploadUrl" class="dropzone" id="@id">
+        <div class="dz-message needsclick">
+            <div class="mb-1"><i class="ti ti-upload fs-24 text-primary"></i></div>
+            <span>Arrastre y suelte archivos aquí o haga clic para cargar</span>
+        </div>
+    </form>
+</div>
+<script src="@Url.Content("~/assets/libs/dropzone/dropzone-min.js")"></script>
+<script>
+(function() {
+    if (!window.Dropzone) {
+        console.warn('Dropzone no está disponible.');
+        return;
+    }
+    Dropzone.autoDiscover = false;
+    if (!window.__dropzoneInit) {
+        window.__dropzoneInit = {};
+    }
+    if (window.__dropzoneInit['@id']) return;
+    window.__dropzoneInit['@id'] = true;
+    new Dropzone('#@id', {
+        url: '@uploadUrl',
+        maxFiles: @maxFiles,
+        maxFilesize: @maxFileSizeMb,
+        addRemoveLinks: true,
+        dictDefaultMessage: 'Arrastra y suelta aquí o haz clic para cargar'
+    });
+})();
+</script>

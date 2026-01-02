@@ -1,0 +1,37 @@
+@using System
+@{
+    var id = ViewData["Id"] as string ?? $"dp_{Guid.NewGuid():N}";
+    var name = ViewData["Name"] as string ?? id;
+    var label = ViewData["Label"] as string ?? "Fecha";
+    var placeholder = ViewData["Placeholder"] as string ?? "Seleccione la fecha";
+    var required = ViewData["Required"] as bool? ?? false;
+    var value = ViewData["Value"] as string ?? string.Empty;
+    var minDate = ViewData["MinDate"] as string ?? "today";
+}
+<div class="mb-3">
+    <label for="@id" class="form-label">@label@(required ? " *" : string.Empty)</label>
+    <div class="input-group">
+        <div class="input-group-text text-muted"><i class="ri-calendar-line"></i></div>
+        <input id="@id" name="@name" type="text" class="form-control js-date-picker" placeholder="@placeholder" data-mindate="@minDate" value="@value" @(required ? "required" : string.Empty) />
+    </div>
+</div>
+
+<script>
+(function() {
+    if (window.__datePickerInit) return;
+    window.__datePickerInit = true;
+    document.addEventListener('DOMContentLoaded', function () {
+        if (!window.flatpickr) {
+            console.warn('flatpickr no está disponible para inicializar date pickers.');
+            return;
+        }
+        document.querySelectorAll('.js-date-picker').forEach(function (el) {
+            var minDate = el.getAttribute('data-mindate') || 'today';
+            window.flatpickr(el, {
+                dateFormat: 'Y-m-d',
+                minDate: minDate
+            });
+        });
+    });
+})();
+</script>

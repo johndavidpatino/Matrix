@@ -22,9 +22,6 @@ public class UsuarioListViewModel
 
     [Display(Name = "Activo")]
     public bool Activo { get; set; }
-
-    [Display(Name = "Fecha Creación")]
-    public DateTime? FechaCreacion { get; set; }
 }
 
 /// <summary>
@@ -61,7 +58,6 @@ public class UsuarioFormViewModel
 
     [Display(Name = "Confirmar Contraseña")]
     [DataType(DataType.Password)]
-    [Compare("Password", ErrorMessage = "Las contraseñas no coinciden")]
     public string ConfirmPassword { get; set; }
 
     [Display(Name = "Activo")]
@@ -91,6 +87,16 @@ public class UnidadViewModel
 }
 
 /// <summary>
+/// ViewModel para Permiso
+/// </summary>
+public class PermisoViewModel
+{
+    public int Id { get; set; }
+    public string Permiso { get; set; }
+    public string Descripcion { get; set; }
+}
+
+/// <summary>
 /// ViewModel para detalle de usuario
 /// </summary>
 public class UsuarioDetailViewModel
@@ -107,11 +113,34 @@ public class UsuarioDetailViewModel
 
     public bool Activo { get; set; }
 
-    public DateTime? FechaCreacion { get; set; }
-
     public string NombreCompleto => $"{Nombres} {Apellidos}";
 
     public List<RolViewModel> Roles { get; set; } = new List<RolViewModel>();
 
     public List<UnidadViewModel> Unidades { get; set; } = new List<UnidadViewModel>();
+
+    public List<PermisoViewModel> Permisos { get; set; } = new List<PermisoViewModel>();
+}
+
+/// <summary>
+/// ViewModel para cambio de contraseña
+/// </summary>
+public class UsuarioChangePasswordViewModel
+{
+    public int Id { get; set; }
+
+    [Display(Name = "Usuario")]
+    public string NombreUsuario { get; set; }
+
+    [Display(Name = "Contraseña actual")]
+    [DataType(DataType.Password)]
+    public string CurrentPassword { get; set; }
+
+    [Display(Name = "Nueva contraseña")]
+    [DataType(DataType.Password)]
+    public string NewPassword { get; set; }
+
+    [Display(Name = "Confirmar nueva contraseña")]
+    [DataType(DataType.Password)]
+    public string ConfirmNewPassword { get; set; }
 }

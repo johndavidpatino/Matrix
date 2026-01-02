@@ -1,0 +1,154 @@
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model MatrixNext.Data.Modules.TH.Ausencias.Models.SolicitudAusenciaFormViewModel
+
+@{
+    ViewData["Title"] = "Nueva Solicitud de Ausencia";
+    var tiposItems = ((IEnumerable<dynamic>)ViewBag.TiposAusencia ?? Enumerable.Empty<dynamic>())
+        .Select(t => new SelectListItem { Value = $"{t.Id}", Text = $"{t.Nombre}" });
+    var aprobadorItems = ((IEnumerable<dynamic>)ViewBag.Aprobadores ?? Enumerable.Empty<dynamic>())
+        .Select(a => new SelectListItem { Value = $"{a.Id}", Text = $"{a.Nombre}" });
+}
+
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Nueva Solicitud de Ausencia</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" id="ausenciaForm" class="needs-validation" novalidate>
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger d-none"></div>
+
+                        <!-- Tipo de Ausencia -->
+                        @await Html.PartialAsync("~/Views/Shared/Components/_SearchSelect.cshtml", null, new ViewDataDictionary(ViewData)
+                        {
+                            { "Id", "TipoAusencia" },
+                            { "Name", "TipoAusencia" },
+                            { "Label", "Tipo de Ausencia" },
+                            { "Placeholder", "-- Seleccionar --" },
+                            { "Required", true },
+                            { "Items", tiposItems }
+                        })
+                        <span asp-validation-for="TipoAusencia" class="text-danger"></span>
+
+                        <!-- Período de la Ausencia -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                @await Html.PartialAsync("~/Views/Shared/Components/_DatePicker.cshtml", null, new ViewDataDictionary(ViewData)
+                                {
+                                    { "Id", "fechaInicio" },
+                                    { "Name", "FechaInicio" },
+                                    { "Label", "Fecha Inicio" },
+                                    { "Placeholder", "Seleccione la fecha" },
+                                    { "Required", true },
+                                    { "MinDate", "today" },
+                                    { "Value", Model.FechaInicio == default ? string.Empty : Model.FechaInicio.ToString("yyyy-MM-dd") }
+                                })
+                                <span asp-validation-for="FechaInicio" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                @await Html.PartialAsync("~/Views/Shared/Components/_DatePicker.cshtml", null, new ViewDataDictionary(ViewData)
+                                {
+                                    { "Id", "fechaFin" },
+                                    { "Name", "FechaFin" },
+                                    { "Label", "Fecha Fin" },
+                                    { "Placeholder", "Seleccione la fecha" },
+                                    { "Required", true },
+                                    { "MinDate", "today" },
+                                    { "Value", Model.FechaFin == default ? string.Empty : Model.FechaFin.ToString("yyyy-MM-dd") }
+                                })
+                                <span asp-validation-for="FechaFin" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!-- Aprobador -->
+                        @await Html.PartialAsync("~/Views/Shared/Components/_SearchSelect.cshtml", null, new ViewDataDictionary(ViewData)
+                        {
+                            { "Id", "AprobadorId" },
+                            { "Name", "AprobadorId" },
+                            { "Label", "Aprobador" },
+                            { "Placeholder", "-- Seleccionar --" },
+                            { "Required", true },
+                            { "Items", aprobadorItems }
+                        })
+                        <span asp-validation-for="AprobadorId" class="text-danger"></span>
+
+                        <!-- Observaciones -->
+                        @await Html.PartialAsync("~/Views/Shared/Components/_QuillEditor.cshtml", null, new ViewDataDictionary(ViewData)
+                        {
+                            { "Id", "observacionesEditor" },
+                            { "Name", "Observaciones" },
+                            { "Label", "Observaciones" },
+                            { "Placeholder", "Agrega observaciones…" },
+                            { "Value", Model.Observaciones }
+                        })
+                        <span asp-validation-for="Observaciones" class="text-danger"></span>
+
+                        <!-- Botones -->
+                        <div class="d-flex justify-content-between">
+                            <a href="@Url.Action("Index", "Ausencias", new { area = "TH" })" class="btn btn-secondary">Cancelar</a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Enviar Solicitud
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const startInput = document.getElementById('fechaInicio');
+            const endInput = document.getElementById('fechaFin');
+            const startPicker = startInput?._flatpickr;
+            const endPicker = endInput?._flatpickr;
+
+            function calcularDias() {
+                const fInicio = startInput?.value;
+                const fFin = endInput?.value;
+                if (fInicio && fFin) {
+                    const inicio = new Date(fInicio);
+                    const fin = new Date(fFin);
+                    if (fin < inicio) return;
+                    const diasCalendario = Math.ceil((fin - inicio) / (1000 * 60 * 60 * 24)) + 1;
+                    console.log('Días calculados: ' + diasCalendario);
+                }
+            }
+
+            if (startPicker && endPicker) {
+                startPicker.set('minDate', 'today');
+                endPicker.set('minDate', 'today');
+
+                startPicker.config.onChange.push(function (selectedDates, dateStr) {
+                    endPicker.set('minDate', dateStr || 'today');
+                    const endDate = endPicker.selectedDates?.[0];
+                    if (!endDate || (selectedDates[0] && endDate < selectedDates[0])) {
+                        endPicker.setDate(dateStr, true);
+                    }
+                    calcularDias();
+                });
+
+                endPicker.config.onChange.push(function (selectedDates) {
+                    const startDate = startPicker.selectedDates?.[0];
+                    if (startDate && selectedDates[0] && selectedDates[0] < startDate) {
+                        endPicker.setDate(startDate, true);
+                    }
+                    calcularDias();
+                });
+            }
+
+            const form = document.getElementById('ausenciaForm');
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    form.classList.add('was-validated');
+                }
+            });
+        });
+    </script>
+}

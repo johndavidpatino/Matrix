@@ -1,0 +1,203 @@
+@using MatrixNext.Data.Modules.US.Usuarios.Models
+@model IEnumerable<UsuarioListViewModel>
+
+@{
+    ViewData["Title"] = "Gestión de Usuarios";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2><i class="bi bi-people-fill me-2"></i>Gestión de Usuarios</h2>
+        </div>
+        <div class="col-md-4 text-end">
+            <button id="btnNuevoUsuario" class="btn btn-primary">
+                <i class="bi bi-person-plus me-2"></i>Nuevo Usuario
+            </button>
+        </div>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-2"></i>@TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-circle me-2"></i>@TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="bi bi-list me-2"></i>Listado de Usuarios</h5>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <input id="usuarios-search" class="form-control" placeholder="Buscar por usuario, nombre o email..." />
+                </div>
+                <div class="col-md-6 text-end">
+                    <small class="text-muted">Resultados en tiempo real</small>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div id="usuarios-table-container">
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width: 15%;">Usuario</th>
+                                <th style="width: 25%;">Nombre Completo</th>
+                                <th style="width: 25%;">Email</th>
+                                <th style="width: 10%;" class="text-center">Estado</th>
+                                <th style="width: 10%;" class="text-center">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var usuario in Model)
+                            {
+                                <tr>
+                                    <td><strong>@usuario.NombreUsuario</strong></td>
+                                    <td>@usuario.NombreCompleto</td>
+                                    <td>@usuario.Email</td>
+                                    <td class="text-center">
+                                        @if (usuario.Activo)
+                                        {
+                                            <span class="badge bg-success"><i class="bi bi-check-lg me-1"></i>Activo</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary"><i class="bi bi-x-lg me-1"></i>Inactivo</span>
+                                        }
+                                    </td>
+                                    <td class="text-center">
+                                        <a asp-area="US" asp-action="Details" asp-route-id="@usuario.Id" 
+                                           class="btn btn-sm btn-info" title="Ver detalle">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <button data-id="@usuario.Id" class="btn btn-sm btn-warning btn-edit-usuario" title="Editar">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button data-id="@usuario.Id" class="btn btn-sm btn-danger btn-delete-usuario" title="Eliminar">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info m-4" role="alert">
+                    <i class="bi bi-info-circle me-2"></i>No hay usuarios registrados.
+                </div>
+            }
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Confirmación de eliminación
+        // Load Create modal
+        document.getElementById('btnNuevoUsuario').addEventListener('click', function () {
+            fetch('/US/Usuarios/CreateModal')
+                .then(r => r.text())
+                .then(html => {
+                    document.getElementById('usuarios-modal-create-container').innerHTML = html;
+                    var modalEl = document.getElementById('modalCreateUsuario');
+                    var modal = new bootstrap.Modal(modalEl);
+                    modal.show();
+                });
+        });
+
+        // Re-bind edit/delete buttons after dynamic render
+        function bindRowButtons(container) {
+            container.querySelectorAll('.btn-edit-usuario').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    var id = this.getAttribute('data-id');
+                    fetch('/US/Usuarios/EditModal/' + id)
+                        .then(r => r.text())
+                        .then(html => {
+                            document.getElementById('usuarios-modal-edit-container').innerHTML = html;
+                            var modalEl = document.getElementById('modalEditUsuario');
+                            var modal = new bootstrap.Modal(modalEl);
+                            modal.show();
+                        });
+                });
+            });
+
+            container.querySelectorAll('.btn-delete-usuario').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    var id = this.getAttribute('data-id');
+                    fetch('/US/Usuarios/DeleteModal/' + id)
+                        .then(r => r.text())
+                        .then(html => {
+                            document.getElementById('usuarios-modal-delete-container').innerHTML = html;
+                            var modalEl = document.getElementById('modalDeleteUsuario');
+                            var modal = new bootstrap.Modal(modalEl);
+                            modal.show();
+                        });
+                });
+            });
+        }
+
+        // Initial bind for server-rendered rows
+        bindRowButtons(document);
+
+        // Search handling (debounced)
+        let searchTimer = null;
+        document.getElementById('usuarios-search').addEventListener('input', function () {
+            clearTimeout(searchTimer);
+            const q = this.value;
+            searchTimer = setTimeout(() => performSearch(q), 300);
+        });
+
+        async function performSearch(q) {
+            try {
+                const resp = await fetch('/US/Usuarios/Search?q=' + encodeURIComponent(q || ''));
+                const json = await resp.json();
+                const container = document.getElementById('usuarios-table-container');
+                if (!json.success) {
+                    container.innerHTML = '<div class="alert alert-danger m-4">' + (json.message || 'Error buscando') + '</div>';
+                    return;
+                }
+
+                const users = json.data || [];
+                if (!users.length) {
+                    container.innerHTML = '<div class="alert alert-info m-4" role="alert"><i class="bi bi-info-circle me-2"></i>No hay usuarios coincidentes.</div>';
+                    return;
+                }
+
+                // Build table HTML
+                let html = '<div class="table-responsive"><table class="table table-hover mb-0"><thead class="table-light"><tr><th style="width: 15%;">Usuario</th><th style="width: 25%;">Nombre Completo</th><th style="width: 25%;">Email</th><th style="width: 10%;" class="text-center">Estado</th><th style="width: 10%;" class="text-center">Acciones</th></tr></thead><tbody>';
+                users.forEach(u => {
+                    const estado = u.activo ? '<span class="badge bg-success"><i class="bi bi-check-lg me-1"></i>Activo</span>' : '<span class="badge bg-secondary"><i class="bi bi-x-lg me-1"></i>Inactivo</span>';
+                    html += `<tr><td><strong>${escapeHtml(u.nombreUsuario)}</strong></td><td>${escapeHtml(u.nombreCompleto)}</td><td>${escapeHtml(u.email)}</td><td class="text-center">${estado}</td><td class="text-center"><a href="/US/Usuarios/Details/${u.id}" class="btn btn-sm btn-info" title="Ver detalle"><i class="bi bi-eye"></i></a> <button data-id="${u.id}" class="btn btn-sm btn-warning btn-edit-usuario" title="Editar"><i class="bi bi-pencil"></i></button> <button data-id="${u.id}" class="btn btn-sm btn-danger btn-delete-usuario" title="Eliminar"><i class="bi bi-trash"></i></button></td></tr>`;
+                });
+                html += '</tbody></table></div>';
+                container.innerHTML = html;
+
+                // rebind buttons inside container
+                bindRowButtons(container);
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function escapeHtml(s) { return (s || '').toString().replace(/[&<>"']/g, function (c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]; }); }
+    </script>
+}

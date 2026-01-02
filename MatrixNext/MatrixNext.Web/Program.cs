@@ -1,3 +1,5 @@
+using MatrixNext.Data.Modules.TH;
+using MatrixNext.Data.Modules.US;
 using MatrixNext.Data.Services;
 using MatrixNext.Data.Services.Usuarios;
 using MatrixNext.Web.Middleware;
@@ -35,9 +37,15 @@ builder.Services.AddHealthChecks()
 
 // Register data services
 var connectionString = builder.Configuration.GetConnectionString("MatrixDb");
-builder.Services.AddScoped(sp => new UsuarioAuthService(connectionString!));
 builder.Services.AddScoped(sp => new LogService(connectionString!));
-builder.Services.AddScoped<UsuarioService>();
+// US module (Usuarios)
+builder.Services.AddUSModule(builder.Configuration);
+// Usuarios auxiliary services for US area controllers
+builder.Services.AddScoped<RolService>();
+builder.Services.AddScoped<PermisosService>();
+builder.Services.AddScoped<GrupoUnidadService>();
+// Register TH module services (Ausencias slice)
+builder.Services.AddTHModule(builder.Configuration);
 
 var app = builder.Build();
 
@@ -65,9 +73,13 @@ app.UseAuthorization();
 app.MapHealthChecks("/health");
 
 app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
     name: "usuariosRoute",
     pattern: "Usuarios/{action=Index}/{id?}",
-    defaults: new { controller = "Usuarios", area = "Usuarios" });
+    defaults: new { controller = "Usuarios", area = "US" });
 
 app.MapControllerRoute(
     name: "default",

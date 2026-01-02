@@ -1,0 +1,76 @@
+@model IEnumerable<MatrixNext.Data.Models.Usuarios.UnidadViewModel>
+
+@{
+    ViewData["Title"] = "Unidades";
+}
+
+<div class="container mt-4">
+    <h3>Unidades / Grupos</h3>
+    <div class="card">
+        <div class="card-body">
+            @if (Model != null && Model.Any())
+            {
+                <div class="d-flex justify-content-end mb-3">
+                    <button id="btnNuevaUnidad" class="btn btn-sm btn-primary">Nueva Unidad</button>
+                </div>
+                <ul class="list-group">
+                    @foreach (var u in Model)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>@u.Nombre</strong> - @u.Descripcion
+                            </div>
+                            <div>
+                                <button data-id="@u.Id" class="btn btn-sm btn-warning btn-edit-unidad" title="Editar"><i class="bi bi-pencil"></i></button>
+                                <button data-id="@u.Id" class="btn btn-sm btn-danger btn-delete-unidad" title="Eliminar"><i class="bi bi-trash"></i></button>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <div class="alert alert-info">No hay unidades definidas.</div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('btnNuevaUnidad')?.addEventListener('click', function(){
+            fetch('/Usuarios/GrupoUnidad/CreateModal')
+                .then(r => r.text())
+                .then(html => {
+                    document.getElementById('usuarios-modal-create-container').innerHTML = html;
+                    var modalEl = document.getElementById('modalCreateUnidad');
+                    var modal = new bootstrap.Modal(modalEl);
+                    modal.show();
+                });
+        });
+
+        document.querySelectorAll('.btn-edit-unidad').forEach(btn => btn.addEventListener('click', function(){
+            var id = this.getAttribute('data-id');
+            fetch('/Usuarios/GrupoUnidad/EditModal/' + id)
+                .then(r => r.text())
+                .then(html => {
+                    document.getElementById('usuarios-modal-edit-container').innerHTML = html;
+                    var modalEl = document.getElementById('modalEditUnidad');
+                    var modal = new bootstrap.Modal(modalEl);
+                    modal.show();
+                });
+        }));
+
+        document.querySelectorAll('.btn-delete-unidad').forEach(btn => btn.addEventListener('click', function(){
+            var id = this.getAttribute('data-id');
+            fetch('/Usuarios/GrupoUnidad/DeleteModal/' + id)
+                .then(r => r.text())
+                .then(html => {
+                    document.getElementById('usuarios-modal-delete-container').innerHTML = html;
+                    var modalEl = document.getElementById('modalDeleteUnidad');
+                    var modal = new bootstrap.Modal(modalEl);
+                    modal.show();
+                });
+        }));
+    </script>
+}

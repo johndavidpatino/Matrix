@@ -1,0 +1,536 @@
+@{
+    ViewData["Title"] = "Gestión de Ausencias - RRHH";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">Panel de Gestión de Ausencias - RRHH</h4>
+                </div>
+                <div class="card-body">
+                    <!-- Tabs Navigation -->
+                    <ul class="nav nav-tabs mb-3" id="gestionTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="aprobaciones-tab" data-bs-toggle="tab" 
+                                    data-bs-target="#aprobaciones" type="button" role="tab" aria-controls="aprobaciones">
+                                <i class="fas fa-check-circle"></i> Aprobaciones
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="vacaciones-tab" data-bs-toggle="tab" 
+                                    data-bs-target="#vacaciones" type="button" role="tab" aria-controls="vacaciones">
+                                <i class="fas fa-calendar"></i> Vacaciones
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="incapacidades-tab" data-bs-toggle="tab" 
+                                    data-bs-target="#incapacidades" type="button" role="tab" aria-controls="incapacidades">
+                                <i class="fas fa-hospital"></i> Incapacidades
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="ausentismo-tab" data-bs-toggle="tab" 
+                                    data-bs-target="#ausentismo" type="button" role="tab" aria-controls="ausentismo">
+                                <i class="fas fa-chart-bar"></i> Ausentismo
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="beneficios-tab" data-bs-toggle="tab" 
+                                    data-bs-target="#beneficios" type="button" role="tab" aria-controls="beneficios">
+                                <i class="fas fa-gift"></i> Beneficios
+                            </button>
+                        </li>
+                    </ul>
+
+                    <!-- Tabs Content -->
+                    <div class="tab-content" id="gestionTabContent">
+                        <!-- Aprobaciones Tab -->
+                        <div class="tab-pane fade show active" id="aprobaciones" role="tabpanel">
+                            <h5 class="mb-3">Solicitudes Pendientes de Aprobación</h5>
+                            <div class="table-responsive">
+                                <table id="aprobacionesTable" class="table table-striped">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Empleado</th>
+                                            <th>Tipo</th>
+                                            <th>Fecha Inicio</th>
+                                            <th>Fecha Fin</th>
+                                            <th>Días Laborales</th>
+                                            <th>Fecha Solicitud</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="aprobacionesBody">
+                                        <tr>
+                                            <td colspan="8" class="text-center text-muted">Cargando...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Vacaciones Tab -->
+                        <div class="tab-pane fade" id="vacaciones" role="tabpanel">
+                            <h5 class="mb-3">Reporte de Vacaciones</h5>
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    @await Html.PartialAsync("~/Views/Shared/Components/_DatePicker.cshtml", null, new ViewDataDictionary(ViewData)
+                                    {
+                                        { "Id", "vacFechaInicio" },
+                                        { "Name", "vacFechaInicio" },
+                                        { "Label", "Fecha Inicio" },
+                                        { "Placeholder", "Seleccione fecha" },
+                                        { "Required", false },
+                                        { "MinDate", null }
+                                    })
+                                </div>
+                                <div class="col-md-3">
+                                    @await Html.PartialAsync("~/Views/Shared/Components/_DatePicker.cshtml", null, new ViewDataDictionary(ViewData)
+                                    {
+                                        { "Id", "vacFechaFin" },
+                                        { "Name", "vacFechaFin" },
+                                        { "Label", "Fecha Fin" },
+                                        { "Placeholder", "Seleccione fecha" },
+                                        { "Required", false },
+                                        { "MinDate", null }
+                                    })
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Empleado (opcional):</label>
+                                    <input type="text" id="vacEmpleado" class="form-control" placeholder="ID o Nombre">
+                                </div>
+                                <div class="col-md-3">
+                                    <label>&nbsp;</label>
+                                    <button class="btn btn-primary w-100" onclick="generarReporteVacaciones()">
+                                        <i class="fas fa-file-excel"></i> Generar Reporte
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table id="vacacionesTable" class="table table-striped">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Empleado</th>
+                                            <th>Fecha Ingreso</th>
+                                            <th>Último Período</th>
+                                            <th>Días (disfrutados/pendientes)</th>
+                                            <th>Estado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="vacacionesBody">
+                                        <tr>
+                                            <td colspan="6" class="text-center text-muted">Use los filtros para generar el reporte</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Incapacidades Tab -->
+                        <div class="tab-pane fade" id="incapacidades" role="tabpanel">
+                            <h5 class="mb-3">Reporte de Incapacidades</h5>
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    @await Html.PartialAsync("~/Views/Shared/Components/_DatePicker.cshtml", null, new ViewDataDictionary(ViewData)
+                                    {
+                                        { "Id", "incFechaInicio" },
+                                        { "Name", "incFechaInicio" },
+                                        { "Label", "Fecha Inicio" },
+                                        { "Placeholder", "Seleccione fecha" },
+                                        { "Required", false },
+                                        { "MinDate", null }
+                                    })
+                                </div>
+                                <div class="col-md-3">
+                                    @await Html.PartialAsync("~/Views/Shared/Components/_DatePicker.cshtml", null, new ViewDataDictionary(ViewData)
+                                    {
+                                        { "Id", "incFechaFin" },
+                                        { "Name", "incFechaFin" },
+                                        { "Label", "Fecha Fin" },
+                                        { "Placeholder", "Seleccione fecha" },
+                                        { "Required", false },
+                                        { "MinDate", null }
+                                    })
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Empleado (opcional):</label>
+                                    <input type="text" id="incEmpleado" class="form-control" placeholder="ID o Nombre">
+                                </div>
+                                <div class="col-md-3">
+                                    <label>&nbsp;</label>
+                                    <button class="btn btn-primary w-100" onclick="generarReporteIncapacidades()">
+                                        <i class="fas fa-file-excel"></i> Generar Reporte
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table id="incapacidadesTable" class="table table-striped">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Identificación</th>
+                                            <th>Empleado</th>
+                                            <th>Registro Médico</th>
+                                            <th>Tipo</th>
+                                            <th>IPS</th>
+                                            <th>CIE</th>
+                                            <th>Fecha Accidente</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="incapacidadesBody">
+                                        <tr>
+                                            <td colspan="7" class="text-center text-muted">Use los filtros para generar el reporte</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Ausentismo Tab -->
+                        <div class="tab-pane fade" id="ausentismo" role="tabpanel">
+                            <h5 class="mb-3">Reporte de Ausentismo</h5>
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    @await Html.PartialAsync("~/Views/Shared/Components/_DatePicker.cshtml", null, new ViewDataDictionary(ViewData)
+                                    {
+                                        { "Id", "ausFechaInicio" },
+                                        { "Name", "ausFechaInicio" },
+                                        { "Label", "Fecha Inicio" },
+                                        { "Placeholder", "Seleccione fecha" },
+                                        { "Required", false },
+                                        { "MinDate", null }
+                                    })
+                                </div>
+                                <div class="col-md-3">
+                                    @await Html.PartialAsync("~/Views/Shared/Components/_DatePicker.cshtml", null, new ViewDataDictionary(ViewData)
+                                    {
+                                        { "Id", "ausFechaFin" },
+                                        { "Name", "ausFechaFin" },
+                                        { "Label", "Fecha Fin" },
+                                        { "Placeholder", "Seleccione fecha" },
+                                        { "Required", false },
+                                        { "MinDate", null }
+                                    })
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Empleado (opcional):</label>
+                                    <input type="text" id="ausEmpleado" class="form-control" placeholder="ID o Nombre">
+                                </div>
+                                <div class="col-md-3">
+                                    <label>&nbsp;</label>
+                                    <button class="btn btn-primary w-100" onclick="generarReporteAusentismo()">
+                                        <i class="fas fa-file-excel"></i> Generar Reporte
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table id="ausentismoTable" class="table table-striped">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Empleado</th>
+                                            <th>Tipo</th>
+                                            <th>Días laborables</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ausentismoBody">
+                                        <tr>
+                                            <td colspan="3" class="text-center text-muted">Use los filtros para generar el reporte</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Beneficios Tab -->
+                        <div class="tab-pane fade" id="beneficios" role="tabpanel">
+                            <h5 class="mb-3">Beneficios Pendientes por Empleado</h5>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>Empleado:</label>
+                                    <input type="text" id="benEmpleado" class="form-control" placeholder="ID Empleado">
+                                </div>
+                                <div class="col-md-6">
+                                    <label>&nbsp;</label>
+                                    <button class="btn btn-primary w-100" onclick="generarReporteBeneficios()">
+                                        <i class="fas fa-search"></i> Consultar
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="beneficiosContent">
+                                <p class="text-muted">Ingrese un ID de empleado para consultar sus beneficios pendientes</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Aprobar/Rechazar -->
+<div class="modal fade" id="aprobarModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Procesar Solicitud</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label>Acción:</label>
+                    <select id="accion" class="form-select">
+                        <option value="">-- Seleccionar --</option>
+                        <option value="aprobar">Aprobar</option>
+                        <option value="rechazar">Rechazar</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label>Observaciones:</label>
+                    <textarea id="observaciones" class="form-control" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="procesarSolicitud()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let solicitudActual = null;
+
+        $(document).ready(function () {
+            cargarAprobaciones();
+        });
+
+        function cargarAprobaciones() {
+            $.ajax({
+                url: '/TH/GestionAusencia/GetSolicitudesPorAprobar',
+                type: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success && response.data && response.data.length > 0) {
+                        let html = '';
+                        response.data.forEach(function (solicitud) {
+                            html += `
+                                <tr>
+                                    <td>${solicitud.idSolicitud ?? solicitud.identificacion ?? '-'}</td>
+                                    <td>${solicitud.nombreEmpleado || solicitud.identificacion || '-'}</td>
+                                    <td>${getTipoAusencia(solicitud.tipo)}</td>
+                                    <td>${solicitud.fechaInicio ? new Date(solicitud.fechaInicio).toLocaleDateString() : '-'}</td>
+                                    <td>${solicitud.fechaFin ? new Date(solicitud.fechaFin).toLocaleDateString() : '-'}</td>
+                                    <td><span class="badge bg-info">${solicitud.diasLaboralesSolicitados ?? solicitud.diasCalendarioSolicitados ?? '-'}</span></td>
+                                    <td>${solicitud.fechaSolicitud ? new Date(solicitud.fechaSolicitud).toLocaleDateString() : '-'}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-success" onclick="abrirModal(${solicitud.idSolicitud ?? solicitud.identificacion}, 'aprobar')">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger" onclick="abrirModal(${solicitud.idSolicitud ?? solicitud.identificacion}, 'rechazar')">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            `;
+                        });
+                        $('#aprobacionesBody').html(html);
+                    } else {
+                        $('#aprobacionesBody').html('<tr><td colspan="8" class="text-center text-muted">No hay solicitudes pendientes</td></tr>');
+                    }
+                }
+            });
+        }
+
+        function getTipoAusencia(tipo) {
+            const tipos = { 1: 'Vacaciones', 2: 'Incapacidad', 3: 'Permiso', 4: 'Licencia' };
+            if (typeof tipo === 'number') {
+                return tipos[tipo] || 'Otro';
+            }
+            return tipo || 'Otro';
+        }
+
+        function abrirModal(idSolicitud, accion) {
+            solicitudActual = idSolicitud;
+            $('#accion').val(accion);
+            $('#observaciones').val('');
+            new bootstrap.Modal(document.getElementById('aprobarModal')).show();
+        }
+
+        function procesarSolicitud() {
+            var accion = $('#accion').val();
+            var observaciones = $('#observaciones').val();
+
+            if (accion === 'aprobar') {
+                $.ajax({
+                    url: '/TH/GestionAusencia/AprobarSolicitud',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        idSolicitud: solicitudActual,
+                        idAprobador: 1, // TODO: Obtener del contexto
+                        voBo: 1,
+                        observaciones: observaciones
+                    }),
+                    success: function (response) {
+                        alert(response.message);
+                        bootstrap.Modal.getInstance(document.getElementById('aprobarModal')).hide();
+                        cargarAprobaciones();
+                    }
+                });
+            } else if (accion === 'rechazar') {
+                $.ajax({
+                    url: '/TH/GestionAusencia/RechazarSolicitud',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        idSolicitud: solicitudActual,
+                        motivo: observaciones
+                    }),
+                    success: function (response) {
+                        alert(response.message);
+                        bootstrap.Modal.getInstance(document.getElementById('aprobarModal')).hide();
+                        cargarAprobaciones();
+                    }
+                });
+            }
+        }
+
+        function generarReporteVacaciones() {
+            var filtro = {
+                fechaInicio: $('#vacFechaInicio').val() || null,
+                fechaFin: $('#vacFechaFin').val() || null,
+                idEmpleado: $('#vacEmpleado').val() || null,
+                tipo: 1 // Vacaciones
+            };
+
+            $.ajax({
+                url: '/TH/GestionAusencia/ReporteVacaciones',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(filtro),
+                success: function (response) {
+                    let html = '';
+                    if (response.data && response.data.length > 0) {
+                        response.data.forEach(function (row) {
+                            html += `
+                                <tr>
+                                    <td>${row.identificacion}</td>
+                                    <td>${row.nombreEmpleado}</td>
+                                    <td>${row.fechaIngreso ? new Date(row.fechaIngreso).toLocaleDateString() : '-'}</td>
+                                    <td>${row.ultimoPeriodoCausado || '-'}</td>
+                                    <td>${row.diasDisfrutados} / ${row.diasPendientes}</td>
+                                    <td><span class="badge bg-success">${row.estado || 'N/A'}</span></td>
+                                </tr>
+                            `;
+                        });
+                    }
+                    $('#vacacionesBody').html(html || '<tr><td colspan="6" class="text-center">Sin resultados</td></tr>');
+                }
+            });
+        }
+
+        function generarReporteAusentismo() {
+            var filtro = {
+                fechaInicio: $('#ausFechaInicio').val() || null,
+                fechaFin: $('#ausFechaFin').val() || null,
+                idEmpleado: $('#ausEmpleado').val() || null
+            };
+
+            $.ajax({
+                url: '/TH/GestionAusencia/ReporteAusentismo',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(filtro),
+                success: function (response) {
+                    let html = '';
+                    if (response.data && response.data.length > 0) {
+                        response.data.forEach(function (row) {
+                            html += `
+                                <tr>
+                                    <td>${row.nombreEmpleado || row.identificacion}</td>
+                                    <td>${row.tipoAusentismo || '-'}</td>
+                                    <td>${row.diasLaborales ?? row.diasCalendario ?? '-'}</td>
+                                </tr>
+                            `;
+                        });
+                    }
+                    $('#ausentismoBody').html(html || '<tr><td colspan="3" class="text-center">Sin resultados</td></tr>');
+                }
+            });
+        }
+
+        function generarReporteIncapacidades() {
+            var filtro = {
+                fechaInicio: $('#incFechaInicio').val() || null,
+                fechaFin: $('#incFechaFin').val() || null,
+                idEmpleado: $('#incEmpleado').val() || null
+            };
+
+            $.ajax({
+                url: '/TH/GestionAusencia/ReporteIncapacidades',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(filtro),
+                success: function (response) {
+                    let html = '';
+                    if (response.data && response.data.length > 0) {
+                        response.data.forEach(function (row) {
+                            html += `
+                                <tr>
+                                    <td>${row.identificacion}</td>
+                                    <td>${row.nombreEmpleado}</td>
+                                    <td>${row.noRegistroMedico || '-'}</td>
+                                    <td>${row.tipoIncapacidad || '-'}</td>
+                                    <td>${row.ipsPrestadora || '-'}</td>
+                                    <td>${row.cie || '-'}</td>
+                                    <td>${row.fechaAccidenteTrabajo ? new Date(row.fechaAccidenteTrabajo).toLocaleDateString() : '-'}</td>
+                                </tr>
+                            `;
+                        });
+                    }
+                    $('#incapacidadesBody').html(html || '<tr><td colspan="7" class="text-center">Sin resultados</td></tr>');
+                }
+            });
+        }
+
+        function generarReporteBeneficios() {
+            var idEmpleado = $('#benEmpleado').val();
+            if (!idEmpleado) {
+                alert('Ingrese un ID de empleado');
+                return;
+            }
+
+            $.ajax({
+                url: '/TH/GestionAusencia/ReporteBeneficios',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ idEmpleado: parseInt(idEmpleado) }),
+                success: function (response) {
+                    let html = '<div class="row">';
+                    if (response.data && response.data.length > 0) {
+                        response.data.forEach(function (beneficio) {
+                            html += `
+                                <div class="col-md-4 mb-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h6 class="card-title">${beneficio.tipoBeneficio || 'Beneficio'}</h6>
+                                            <p class="card-text">Saldo: <strong>${beneficio.diasLaborales ?? beneficio.diasCalendario ?? 0}</strong> días</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                    } else {
+                        html = '<p class="text-muted">No tiene beneficios pendientes</p>';
+                    }
+                    html += '</div>';
+                    $('#beneficiosContent').html(html);
+                }
+            });
+        }
+    </script>
+}

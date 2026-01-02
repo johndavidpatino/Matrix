@@ -33,7 +33,7 @@ namespace MatrixNext.Data.Adapters
                 {
                     conn.Open();
                     var usuarios = conn.Query<UsuarioDTO>(
-                        "SELECT Id, Usuario, Nombres, Apellidos, Email, Password, Activo, FechaCreacion FROM US_Usuarios ORDER BY Usuario"
+                        "SELECT Id, Usuario, Nombres, Apellidos, Email, Password, Activo FROM US_Usuarios ORDER BY Usuario"
                     ).ToList();
                     return usuarios ?? new List<UsuarioDTO>();
                 }
@@ -55,7 +55,7 @@ namespace MatrixNext.Data.Adapters
                 {
                     conn.Open();
                     var usuario = conn.QueryFirstOrDefault<UsuarioDTO>(
-                        "SELECT Id, Usuario, Nombres, Apellidos, Email, Password, Activo, FechaCreacion FROM US_Usuarios WHERE Id = @Id",
+                        "SELECT Id, Usuario, Nombres, Apellidos, Email, Password, Activo FROM US_Usuarios WHERE Id = @Id",
                         new { Id = id }
                     );
                     return usuario;
@@ -78,7 +78,7 @@ namespace MatrixNext.Data.Adapters
                 {
                     conn.Open();
                     var usuarios = conn.Query<UsuarioDTO>(
-                        "SELECT Id, Usuario, Nombres, Apellidos, Email, Password, Activo, FechaCreacion FROM US_Usuarios WHERE Activo = @Activo ORDER BY Usuario",
+                        "SELECT Id, Usuario, Nombres, Apellidos, Email, Password, Activo FROM US_Usuarios WHERE Activo = @Activo ORDER BY Usuario",
                         new { Activo = activo }
                     ).ToList();
                     return usuarios ?? new List<UsuarioDTO>();
@@ -104,7 +104,7 @@ namespace MatrixNext.Data.Adapters
                 {
                     conn.Open();
                     var result = conn.QueryFirstOrDefault<UsuarioDTO>(
-                        "SELECT Id, Usuario, Nombres, Apellidos, Email, Password, Activo, FechaCreacion FROM US_Usuarios WHERE Usuario = @Usuario",
+                        "SELECT Id, Usuario, Nombres, Apellidos, Email, Password, Activo FROM US_Usuarios WHERE Usuario = @Usuario",
                         new { Usuario = usuario }
                     );
                     return result;
@@ -129,9 +129,9 @@ namespace MatrixNext.Data.Adapters
                 using (SqlConnection conn = new SqlConnection(_connectionString))
                 {
                     conn.Open();
-                    var sql = @"INSERT INTO US_Usuarios (Usuario, Nombres, Apellidos, Email, Password, Activo, FechaCreacion) 
+                    var sql = @"INSERT INTO US_Usuarios (Usuario, Nombres, Apellidos, Email, Password, Activo) 
                                OUTPUT INSERTED.Id
-                               VALUES (@Usuario, @Nombres, @Apellidos, @Email, @Password, @Activo, @FechaCreacion)";
+                               VALUES (@Usuario, @Nombres, @Apellidos, @Email, @Password, @Activo)";
                     
                     int newId = conn.QuerySingle<int>(sql, usuario);
                     return newId;
@@ -221,6 +221,84 @@ namespace MatrixNext.Data.Adapters
 
         #endregion
 
+        #region Roles - assign/unassign
+
+        /// <summary>
+        /// Asigna un rol a un usuario (evita duplicados)
+        /// </summary>
+        public bool GuardarRolUsuario(int usuarioId, int rolId)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(_connectionString))
+                {
+                    conn.Open();
+                    // Evitar duplicados
+                    var exists = conn.QueryFirstOrDefault<int?>(
+                        "SELECT 1 FROM US_RolesUsuarios WHERE UsuarioId = @UsuarioId AND RolId = @RolId",
+                        new { UsuarioId = usuarioId, RolId = rolId });
+                    if (exists.HasValue)
+                        return false;
+
+                    int result = conn.Execute(
+                        "INSERT INTO US_RolesUsuarios (UsuarioId, RolId) VALUES (@UsuarioId, @RolId)",
+                        new { UsuarioId = usuarioId, RolId = rolId });
+                    return result > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Error al asignar rol al usuario {usuarioId}", ex);
+            }
+        }
+
+        public bool EliminarRolUsuario(int usuarioId, int rolId)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(_connectionString))
+                {
+                    conn.Open();
+                    int result = conn.Execute(
+                        "DELETE FROM US_RolesUsuarios WHERE UsuarioId = @UsuarioId AND RolId = @RolId",
+                        new { UsuarioId = usuarioId, RolId = rolId });
+                    return result > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Error al eliminar rol del usuario {usuarioId}", ex);
+            }
+        }
+
+        /// <summary>
+        /// Obtiene roles disponibles (no asignados) para un usuario
+        /// </summary>
+        public List<RolDTO> ObtenerRolesNoAsignados(int usuarioId)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(_connectionString))
+                {
+                    conn.Open();
+                                        var roles = conn.Query<RolDTO>(
+                                                @"SELECT r.id AS Id, r.Rol AS Rol, '' AS Descripcion, 1 AS Activo
+                                                    FROM US_Roles r
+                                                    WHERE r.id NOT IN (SELECT RolId FROM US_RolesUsuarios WHERE UsuarioId = @UsuarioId)
+                                                    ORDER BY r.Rol",
+                        new { UsuarioId = usuarioId }
+                    ).ToList();
+                    return roles ?? new List<RolDTO>();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Error al obtener roles no asignados para usuario {usuarioId}", ex);
+            }
+        }
+
+        #endregion
+
         #region Roles
 
         /// <summary>
@@ -233,14 +311,14 @@ namespace MatrixNext.Data.Adapters
                 using (SqlConnection conn = new SqlConnection(_connectionString))
                 {
                     conn.Open();
-                    var roles = conn.Query<RolDTO>(
-                        @"SELECT DISTINCT r.Id, r.Rol, r.Descripcion, r.Activo, r.FechaCreacion 
-                          FROM US_RolesUsuarios ru
-                          INNER JOIN US_Roles r ON ru.IdRol = r.Id
-                          WHERE ru.IdUsuario = @UsuarioId AND r.Activo = 1
-                          ORDER BY r.Rol",
-                        new { UsuarioId = usuarioId }
-                    ).ToList();
+                                        var roles = conn.Query<RolDTO>(
+                                                @"SELECT DISTINCT r.id AS Id, r.Rol AS Rol, '' AS Descripcion, 1 AS Activo
+                                                    FROM US_RolesUsuarios ru
+                                                    INNER JOIN US_Roles r ON ru.RolId = r.id
+                                                    WHERE ru.UsuarioId = @UsuarioId
+                                                    ORDER BY r.Rol",
+                                                new { UsuarioId = usuarioId }
+                                        ).ToList();
                     return roles ?? new List<RolDTO>();
                 }
             }
@@ -261,7 +339,7 @@ namespace MatrixNext.Data.Adapters
                 {
                     conn.Open();
                     var roles = conn.Query<RolDTO>(
-                        "SELECT Id, Rol, Descripcion, Activo, FechaCreacion FROM US_Roles WHERE Activo = 1 ORDER BY Rol"
+                        "SELECT id AS Id, Rol AS Rol, '' AS Descripcion, 1 AS Activo FROM US_Roles ORDER BY Rol"
                     ).ToList();
                     return roles ?? new List<RolDTO>();
                 }
@@ -269,6 +347,167 @@ namespace MatrixNext.Data.Adapters
             catch (Exception ex)
             {
                 throw new InvalidOperationException("Error al obtener roles", ex);
+            }
+        }
+
+        #endregion
+
+        #region Unidades - assign/unassign
+
+        public bool GuardarUsuariosUnidades(int usuarioId, int grupoUnidadId)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(_connectionString))
+                {
+                    conn.Open();
+                    var exists = conn.QueryFirstOrDefault<int?>(
+                        "SELECT 1 FROM US_UsuariosUnidades WHERE UsuarioId = @UsuarioId AND UnidadId = @UnidadId",
+                        new { UsuarioId = usuarioId, UnidadId = grupoUnidadId });
+                    if (exists.HasValue)
+                        return false;
+
+                    int result = conn.Execute(
+                        "INSERT INTO US_UsuariosUnidades (UsuarioId, UnidadId) VALUES (@UsuarioId, @UnidadId)",
+                        new { UsuarioId = usuarioId, UnidadId = grupoUnidadId });
+                    return result > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Error al asignar unidad al usuario {usuarioId}", ex);
+            }
+        }
+
+        public bool EliminarUsuariosUnidades(int usuarioId, int grupoUnidadId)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(_connectionString))
+                {
+                    conn.Open();
+                    int result = conn.Execute(
+                        "DELETE FROM US_UsuariosUnidades WHERE UsuarioId = @UsuarioId AND UnidadId = @UnidadId",
+                        new { UsuarioId = usuarioId, UnidadId = grupoUnidadId });
+                    return result > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Error al eliminar unidad del usuario {usuarioId}", ex);
+            }
+        }
+
+        public List<UnidadDTO> ObtenerUnidadesNoAsignadas(int usuarioId)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(_connectionString))
+                {
+                    conn.Open();
+                                        var unidades = conn.Query<UnidadDTO>(
+                                                @"SELECT u.id AS Id, u.Unidad AS Nombre, '' AS Descripcion, 1 AS Activo
+                                                    FROM US_Unidades u
+                                                    WHERE u.id NOT IN (SELECT UnidadId FROM US_UsuariosUnidades WHERE UsuarioId = @UsuarioId)
+                                                    ORDER BY u.Unidad",
+                                                new { UsuarioId = usuarioId }
+                                        ).ToList();
+                    return unidades ?? new List<UnidadDTO>();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Error al obtener unidades no asignadas para usuario {usuarioId}", ex);
+            }
+        }
+
+        #endregion
+
+        #region Permisos
+
+        public class PermisoDTO
+        {
+            public int Id { get; set; }
+            public string Permiso { get; set; }
+            public string Descripcion { get; set; }
+            public bool Activo { get; set; }
+        }
+
+        public List<PermisoDTO> ObtenerPermisosUsuario(int usuarioId, bool asignados)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(_connectionString))
+                {
+                    conn.Open();
+                    if (asignados)
+                    {
+                                                var list = conn.Query<PermisoDTO>(
+                                                        @"SELECT p.id AS Id, p.Permiso AS Permiso, '' AS Descripcion, 1 AS Activo
+                                                            FROM US_PermisosUsuarios pu
+                                                            INNER JOIN US_Permisos p ON pu.PermisoId = p.id
+                                                            WHERE pu.UsuarioId = @UsuarioId
+                                                            ORDER BY p.Permiso",
+                                                        new { UsuarioId = usuarioId }).ToList();
+                        return list ?? new List<PermisoDTO>();
+                    }
+
+                                        var available = conn.Query<PermisoDTO>(
+                                                @"SELECT p.id AS Id, p.Permiso AS Permiso, '' AS Descripcion, 1 AS Activo
+                                                    FROM US_Permisos p
+                                                    WHERE p.id NOT IN (SELECT PermisoId FROM US_PermisosUsuarios WHERE UsuarioId = @UsuarioId)
+                                                    ORDER BY p.Permiso",
+                                                new { UsuarioId = usuarioId }).ToList();
+                    return available ?? new List<PermisoDTO>();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Error al obtener permisos para usuario {usuarioId}", ex);
+            }
+        }
+
+        public bool GuardarPermisoUsuario(int usuarioId, int permisoId)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(_connectionString))
+                {
+                    conn.Open();
+                    var exists = conn.QueryFirstOrDefault<int?>(
+                        "SELECT 1 FROM US_PermisosUsuarios WHERE UsuarioId = @UsuarioId AND PermisoId = @PermisoId",
+                        new { UsuarioId = usuarioId, PermisoId = permisoId });
+                    if (exists.HasValue)
+                        return false;
+
+                    int result = conn.Execute(
+                        "INSERT INTO US_PermisosUsuarios (UsuarioId, PermisoId) VALUES (@UsuarioId, @PermisoId)",
+                        new { UsuarioId = usuarioId, PermisoId = permisoId });
+                    return result > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Error al asignar permiso al usuario {usuarioId}", ex);
+            }
+        }
+
+        public bool EliminarPermisoUsuario(int usuarioId, int permisoId)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(_connectionString))
+                {
+                    conn.Open();
+                    int result = conn.Execute(
+                        "DELETE FROM US_PermisosUsuarios WHERE UsuarioId = @UsuarioId AND PermisoId = @PermisoId",
+                        new { UsuarioId = usuarioId, PermisoId = permisoId });
+                    return result > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Error al eliminar permiso del usuario {usuarioId}", ex);
             }
         }
 
@@ -286,14 +525,14 @@ namespace MatrixNext.Data.Adapters
                 using (SqlConnection conn = new SqlConnection(_connectionString))
                 {
                     conn.Open();
-                    var unidades = conn.Query<UnidadDTO>(
-                        @"SELECT DISTINCT gu.Id, gu.Nombre, gu.Descripcion, gu.Activo, gu.FechaCreacion 
-                          FROM US_UsuariosUnidades uu
-                          INNER JOIN GR_GruposUnidad gu ON uu.IdGrupoUnidad = gu.Id
-                          WHERE uu.IdUsuario = @UsuarioId AND gu.Activo = 1
-                          ORDER BY gu.Nombre",
-                        new { UsuarioId = usuarioId }
-                    ).ToList();
+                                        var unidades = conn.Query<UnidadDTO>(
+                                                @"SELECT DISTINCT u.id AS Id, u.Unidad AS Nombre, '' AS Descripcion, 1 AS Activo
+                                                    FROM US_UsuariosUnidades uu
+                                                    INNER JOIN US_Unidades u ON uu.UnidadId = u.id
+                                                    WHERE uu.UsuarioId = @UsuarioId
+                                                    ORDER BY u.Unidad",
+                                                new { UsuarioId = usuarioId }
+                                        ).ToList();
                     return unidades ?? new List<UnidadDTO>();
                 }
             }
@@ -314,7 +553,7 @@ namespace MatrixNext.Data.Adapters
                 {
                     conn.Open();
                     var unidades = conn.Query<UnidadDTO>(
-                        "SELECT Id, Nombre, Descripcion, Activo, FechaCreacion FROM GR_GruposUnidad WHERE Activo = 1 ORDER BY Nombre"
+                        "SELECT id AS Id, Unidad AS Nombre, '' AS Descripcion, 1 AS Activo FROM US_Unidades ORDER BY Unidad"
                     ).ToList();
                     return unidades ?? new List<UnidadDTO>();
                 }
@@ -349,7 +588,6 @@ namespace MatrixNext.Data.Adapters
         public string Email { get; set; }
         public string Password { get; set; }
         public bool Activo { get; set; }
-        public DateTime FechaCreacion { get; set; }
 
         public string NombreCompleto => $"{Nombres} {Apellidos}".Trim();
     }
@@ -363,7 +601,6 @@ namespace MatrixNext.Data.Adapters
         public string Rol { get; set; }
         public string Descripcion { get; set; }
         public bool Activo { get; set; }
-        public DateTime FechaCreacion { get; set; }
     }
 
     /// <summary>
@@ -375,6 +612,5 @@ namespace MatrixNext.Data.Adapters
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
         public bool Activo { get; set; }
-        public DateTime FechaCreacion { get; set; }
     }
 }

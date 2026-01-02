@@ -1,0 +1,23 @@
+@model int
+
+<div class="modal fade" id="modalDeleteUnidad" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form asp-area="US" asp-action="Delete" asp-controller="GrupoUnidad" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="Id" value="@Model" />
+        <div class="modal-header">
+          <h5 class="modal-title">Eliminar Unidad</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>¿Eliminar unidad con Id <strong>@Model</strong>?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-danger">Eliminar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

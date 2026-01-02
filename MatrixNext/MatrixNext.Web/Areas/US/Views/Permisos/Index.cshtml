@@ -1,0 +1,26 @@
+@model IEnumerable<string>
+
+@{
+    ViewData["Title"] = "Permisos";
+}
+
+<div class="container mt-4">
+    <h3>Permisos</h3>
+    <div class="card">
+        <div class="card-body">
+            @if (Model != null && Model.Any())
+            {
+                <ul class="list-group">
+                    @foreach (var p in Model)
+                    {
+                        <li class="list-group-item">@p</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <div class="alert alert-info">No hay permisos definidos (placeholder).</div>
+            }
+        </div>
+    </div>
+</div>

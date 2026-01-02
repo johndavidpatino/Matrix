@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MatrixNext.Data.Adapters;
 using MatrixNext.Data.Models.Usuarios;
+using MatrixNext.Data.Utilities;
 using Microsoft.Extensions.Configuration;
 
 namespace MatrixNext.Data.Services.Usuarios
@@ -26,7 +27,7 @@ namespace MatrixNext.Data.Services.Usuarios
         /// <summary>
         /// Obtiene lista de usuarios activos
         /// </summary>
-        public (bool success, string message, List<UsuarioListViewModel> data) ObtenerListaUsuarios()
+        public (bool success, string message, List<UsuarioListViewModel> data) ObtenerListaUsuarios(string filtro = null)
         {
             try
             {
@@ -40,11 +41,23 @@ namespace MatrixNext.Data.Services.Usuarios
                             NombreUsuario = u.Usuario,
                             NombreCompleto = u.NombreCompleto,
                             Email = u.Email,
-                            Activo = u.Activo,
-                            FechaCreacion = u.FechaCreacion
+                            Activo = u.Activo
                         })
-                        .OrderBy(u => u.NombreUsuario)
                         .ToList();
+
+                    if (!string.IsNullOrWhiteSpace(filtro))
+                    {
+                        var f = filtro.Trim().ToLowerInvariant();
+                        viewModels = viewModels.Where(u =>
+                            (u.NombreUsuario ?? "").ToLowerInvariant().Contains(f) ||
+                            (u.NombreCompleto ?? "").ToLowerInvariant().Contains(f) ||
+                            (u.Email ?? "").ToLowerInvariant().Contains(f)
+                        ).OrderBy(u => u.NombreUsuario).ToList();
+                    }
+                    else
+                    {
+                        viewModels = viewModels.OrderBy(u => u.NombreUsuario).ToList();
+                    }
 
                     return (true, "Listado obtenido exitosamente", viewModels);
                 }
@@ -77,10 +90,27 @@ namespace MatrixNext.Data.Services.Usuarios
                         Apellidos = usuario.Apellidos,
                         Email = usuario.Email,
                         Activo = usuario.Activo,
-                        FechaCreacion = usuario.FechaCreacion,
                         Roles = new List<RolViewModel>(),
                         Unidades = new List<UnidadViewModel>()
                     };
+
+                    // Cargar roles y unidades asignadas
+                    var roles = adapter.ObtenerRolesUsuario(usuario.Id);
+                    viewModel.Roles = roles.Select(r => new RolViewModel { Id = r.Id, Nombre = r.Rol, Descripcion = r.Descripcion }).ToList();
+
+                    var unidades = adapter.ObtenerUnidadesUsuario(usuario.Id);
+                    viewModel.Unidades = unidades.Select(u => new UnidadViewModel { Id = u.Id, Nombre = u.Nombre, Descripcion = u.Descripcion }).ToList();
+
+                    // Cargar permisos asignados
+                    try
+                    {
+                        var permisos = adapter.ObtenerPermisosUsuario(usuario.Id, true);
+                        viewModel.Permisos = permisos.Select(p => new PermisoViewModel { Id = p.Id, Permiso = p.Permiso, Descripcion = p.Descripcion }).ToList();
+                    }
+                    catch
+                    {
+                        viewModel.Permisos = new List<PermisoViewModel>();
+                    }
 
                     return (true, "Detalle obtenido exitosamente", viewModel);
                 }
@@ -90,6 +120,191 @@ namespace MatrixNext.Data.Services.Usuarios
                 return (false, $"Error al obtener detalle: {ex.Message}", null);
             }
         }
+
+        #region Roles/Unidades/Permisos management
+
+        // Roles
+        public (bool success, string message, List<RolViewModel> data) ObtenerRolesAsignados(int usuarioId)
+        {
+            try
+            {
+                using var adapter = new UsuarioDataAdapter(_connectionString);
+                var list = adapter.ObtenerRolesUsuario(usuarioId);
+                var vm = list.Select(r => new RolViewModel { Id = r.Id, Nombre = r.Rol, Descripcion = r.Descripcion }).ToList();
+                return (true, "Roles obtenidos", vm);
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message, new List<RolViewModel>());
+            }
+        }
+
+        public (bool success, string message, List<RolViewModel> data) ObtenerRolesDisponibles(int usuarioId)
+        {
+            try
+            {
+                using var adapter = new UsuarioDataAdapter(_connectionString);
+                var list = adapter.ObtenerRolesNoAsignados(usuarioId);
+                var vm = list.Select(r => new RolViewModel { Id = r.Id, Nombre = r.Rol, Descripcion = r.Descripcion }).ToList();
+                return (true, "Roles disponibles obtenidos", vm);
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message, new List<RolViewModel>());
+            }
+        }
+
+        public (bool success, string message) AsignarRol(int usuarioId, int rolId)
+        {
+            try
+            {
+                using var adapter = new UsuarioDataAdapter(_connectionString);
+                var ok = adapter.GuardarRolUsuario(usuarioId, rolId);
+                return ok ? (true, "Rol asignado") : (false, "El rol ya estaba asignado o no se pudo asignar");
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message);
+            }
+        }
+
+        public (bool success, string message) EliminarRol(int usuarioId, int rolId)
+        {
+            try
+            {
+                using var adapter = new UsuarioDataAdapter(_connectionString);
+                var ok = adapter.EliminarRolUsuario(usuarioId, rolId);
+                return ok ? (true, "Rol removido") : (false, "No se pudo remover el rol");
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message);
+            }
+        }
+
+        // Unidades
+        public (bool success, string message, List<UnidadViewModel> data) ObtenerUnidadesAsignadas(int usuarioId)
+        {
+            try
+            {
+                using var adapter = new UsuarioDataAdapter(_connectionString);
+                var list = adapter.ObtenerUnidadesUsuario(usuarioId);
+                var vm = list.Select(u => new UnidadViewModel { Id = u.Id, Nombre = u.Nombre, Descripcion = u.Descripcion }).ToList();
+                return (true, "Unidades obtenidas", vm);
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message, new List<UnidadViewModel>());
+            }
+        }
+
+        public (bool success, string message, List<UnidadViewModel> data) ObtenerUnidadesDisponibles(int usuarioId)
+        {
+            try
+            {
+                using var adapter = new UsuarioDataAdapter(_connectionString);
+                var list = adapter.ObtenerUnidadesNoAsignadas(usuarioId);
+                var vm = list.Select(u => new UnidadViewModel { Id = u.Id, Nombre = u.Nombre, Descripcion = u.Descripcion }).ToList();
+                return (true, "Unidades disponibles obtenidas", vm);
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message, new List<UnidadViewModel>());
+            }
+        }
+
+        public (bool success, string message) AsignarUnidad(int usuarioId, int grupoUnidadId)
+        {
+            try
+            {
+                using var adapter = new UsuarioDataAdapter(_connectionString);
+                var ok = adapter.GuardarUsuariosUnidades(usuarioId, grupoUnidadId);
+                return ok ? (true, "Unidad asignada") : (false, "La unidad ya estaba asignada o no se pudo asignar");
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message);
+            }
+        }
+
+        public (bool success, string message) EliminarUnidad(int usuarioId, int grupoUnidadId)
+        {
+            try
+            {
+                using var adapter = new UsuarioDataAdapter(_connectionString);
+                var ok = adapter.EliminarUsuariosUnidades(usuarioId, grupoUnidadId);
+                return ok ? (true, "Unidad removida") : (false, "No se pudo remover la unidad");
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message);
+            }
+        }
+
+        // Permisos
+        public (bool success, string message, List<object> data) ObtenerPermisos(int usuarioId, bool asignados)
+        {
+            try
+            {
+                using var adapter = new UsuarioDataAdapter(_connectionString);
+                var list = adapter.ObtenerPermisosUsuario(usuarioId, asignados);
+                var vm = list.Select(p => new { p.Id, p.Permiso, p.Descripcion }).Cast<object>().ToList();
+                return (true, "Permisos obtenidos", vm);
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message, new List<object>());
+            }
+        }
+
+        public (bool success, string message) AsignarPermiso(int usuarioId, int permisoId)
+        {
+            try
+            {
+                using var adapter = new UsuarioDataAdapter(_connectionString);
+                var ok = adapter.GuardarPermisoUsuario(usuarioId, permisoId);
+                return ok ? (true, "Permiso asignado") : (false, "El permiso ya estaba asignado o no se pudo asignar");
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message);
+            }
+        }
+
+        public (bool success, string message) EliminarPermiso(int usuarioId, int permisoId)
+        {
+            try
+            {
+                using var adapter = new UsuarioDataAdapter(_connectionString);
+                var ok = adapter.EliminarPermisoUsuario(usuarioId, permisoId);
+                return ok ? (true, "Permiso removido") : (false, "No se pudo remover el permiso");
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Obtiene el Id de usuario por nombre de usuario (login)
+        /// </summary>
+        public (bool success, string message, int usuarioId) ObtenerIdPorNombre(string nombreUsuario)
+        {
+            try
+            {
+                using var adapter = new UsuarioDataAdapter(_connectionString);
+                var usuario = adapter.ObtenerUsuarioPorUsuario(nombreUsuario);
+                if (usuario == null)
+                    return (false, "Usuario no encontrado", 0);
+                return (true, "OK", (int)usuario.Id);
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message, 0);
+            }
+        }
+
+        #endregion
 
         /// <summary>
         /// Crea un nuevo usuario
@@ -117,8 +332,7 @@ namespace MatrixNext.Data.Services.Usuarios
                         Apellidos = viewModel.Apellidos ?? "",
                         Email = viewModel.Email ?? "",
                         Password = EncriptarPassword(viewModel.Password ?? ""),
-                        Activo = viewModel.Activo,
-                        FechaCreacion = DateTime.Now
+                        Activo = viewModel.Activo
                     };
 
                     int newId = adapter.CrearUsuario(usuarioDTO);
@@ -243,16 +457,41 @@ namespace MatrixNext.Data.Services.Usuarios
         {
             if (string.IsNullOrEmpty(password))
                 return "";
-            
+
+            return EncryptionService.EncryptPassword(password);
+        }
+
+        /// <summary>
+        /// Cambia la contraseña del usuario verificando la contraseña actual
+        /// </summary>
+        public (bool success, string message) CambiarContrasena(int usuarioId, string contrasenaActual, string contrasenaNueva)
+        {
             try
             {
-                // TODO: Implementar TripleDES encryption compatible con legacy
-                // Por ahora retorna la contraseña como placeholder
-                return password; // Placeholder
+                if (string.IsNullOrEmpty(contrasenaNueva))
+                    return (false, "La nueva contraseña no puede estar vacía");
+
+                using (var adapter = new UsuarioDataAdapter(_connectionString))
+                {
+                    var usuario = adapter.ObtenerUsuarioPorId(usuarioId);
+                    if (usuario == null)
+                        return (false, "Usuario no encontrado");
+
+                    var actualEsValida = EncryptionService.VerifyPassword(contrasenaActual ?? "", usuario.Password);
+                    if (!actualEsValida)
+                        return (false, "La contraseña actual es incorrecta");
+
+                    var nuevaEncriptada = EncriptarPassword(contrasenaNueva);
+                    var ok = adapter.ActualizarPassword(usuarioId, nuevaEncriptada);
+                    if (!ok)
+                        return (false, "Error al actualizar la contraseña");
+
+                    return (true, "Contraseña actualizada exitosamente");
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                return password;
+                return (false, $"Error al cambiar contraseña: {ex.Message}");
             }
         }
 
