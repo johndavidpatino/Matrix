@@ -1,0 +1,120 @@
+@model MatrixNext.Data.Modules.CU.Models.ClonarBriefViewModel
+
+<!-- TODO-P0-03: Modal para clonar Brief a otra unidad -->
+<div class="modal-header">
+    <h5 class="modal-title">Clonar Brief a otra unidad</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<div class="modal-body">
+    <form id="formClonarBrief">
+        <input type="hidden" id="idBrief" name="idBrief" value="@Model.IdBrief" />
+        
+        <div class="form-group">
+            <label>Brief original</label>
+            <input type="text" class="form-control" value="@Model.TituloOriginal" readonly />
+        </div>
+        
+        <div class="form-group">
+            <label for="ddlUnidades">Unidad destino <span class="text-danger">*</span></label>
+            <select class="form-control" id="ddlUnidades" name="idUnidad" required>
+                <option value="">Seleccione una unidad...</option>
+                @foreach (var unidad in Model.Unidades)
+                {
+                    <option value="@unidad.Id">@unidad.Nombre</option>
+                }
+            </select>
+            <small class="form-text text-muted">Seleccione la unidad donde se clonará el Brief</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="txtNuevoTitulo">Nuevo título <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="txtNuevoTitulo" name="nuevoNombre" 
+                   placeholder="Ingrese el título para el Brief clonado"
+                   maxlength="200" required />
+            <small class="form-text text-muted">Título del Brief clonado (máximo 200 caracteres)</small>
+        </div>
+
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            Se clonará el Brief con toda su información a la unidad seleccionada.
+        </div>
+    </form>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+        <i class="fas fa-times"></i> Cancelar
+    </button>
+    <button type="button" class="btn btn-primary" onclick="ejecutarClonarBrief()">
+        <i class="fas fa-clone"></i> Clonar Brief
+    </button>
+</div>
+
+<script>
+function ejecutarClonarBrief() {
+    var form = $('#formClonarBrief');
+    
+    // Validar formulario
+    if (!form[0].checkValidity()) {
+        form[0].reportValidity();
+        return;
+    }
+    
+    // Obtener datos
+    var idBrief = $('#idBrief').val();
+    var idUnidad = $('#ddlUnidades').val();
+    var nuevoNombre = $('#txtNuevoTitulo').val().trim();
+    
+    if (!idUnidad || !nuevoNombre) {
+        alert('Por favor complete todos los campos requeridos');
+        return;
+    }
+    
+    // Deshabilitar botón mientras procesa
+    var btnClonar = event.target;
+    btnClonar.disabled = true;
+    btnClonar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Clonando...';
+    
+    // Ejecutar clonación
+    $.ajax({
+        url: '@Url.Action("Clonar", "Cuentas")',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            idBrief: parseInt(idBrief),
+            idUnidad: parseInt(idUnidad),
+            nuevoNombre: nuevoNombre
+        }),
+        success: function(result) {
+            if (result.success) {
+                $('#modalClonar').modal('hide');
+                
+                // Mostrar mensaje de éxito
+                if (typeof showNotification === 'function') {
+                    showNotification('success', result.message || 'Brief clonado exitosamente');
+                } else {
+                    alert(result.message || 'Brief clonado exitosamente');
+                }
+                
+                // Opcional: recargar grid de resultados
+                if (typeof recargarBusqueda === 'function') {
+                    recargarBusqueda();
+                }
+            } else {
+                alert('Error: ' + (result.message || 'No se pudo clonar el Brief'));
+                btnClonar.disabled = false;
+                btnClonar.innerHTML = '<i class="fas fa-clone"></i> Clonar Brief';
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error clonando brief:', error);
+            alert('Error al clonar el Brief. Por favor intente nuevamente.');
+            btnClonar.disabled = false;
+            btnClonar.innerHTML = '<i class="fas fa-clone"></i> Clonar Brief';
+        }
+    });
+}
+</script>

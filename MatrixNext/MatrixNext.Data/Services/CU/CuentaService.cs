@@ -9,11 +9,13 @@ namespace MatrixNext.Data.Services.CU
     public class CuentaService
     {
         private readonly CuentaDataAdapter _adapter;
+        private readonly BriefService _briefService;
         private readonly ILogger<CuentaService> _logger;
 
-        public CuentaService(CuentaDataAdapter adapter, ILogger<CuentaService> logger)
+        public CuentaService(CuentaDataAdapter adapter, BriefService briefService, ILogger<CuentaService> logger)
         {
             _adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
+            _briefService = briefService ?? throw new ArgumentNullException(nameof(briefService));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -56,17 +58,13 @@ namespace MatrixNext.Data.Services.CU
         {
             try
             {
-                _adapter.ClonarBrief(idBrief, idUsuario, idUnidad, nuevoNombre);
-                return (true, "Brief clonado correctamente");
-            }
-            catch (NotImplementedException nie)
-            {
-                _logger.LogWarning(nie, "CloneBrief pendiente de confirmacion en legacy");
-                return (false, "Clonación de Brief no implementada. Revisar MatrixNext/Areas/CU/TODO_CU_CUENTAS.md (falta confirmar SP legacy).");
+                // TODO-P0-03: Delegar la clonación al BriefService
+                var (success, message, nuevoId) = _briefService.ClonarBrief(idBrief, idUsuario, idUnidad, nuevoNombre);
+                return (success, message);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error clonando brief");
+                _logger.LogError(ex, "Error clonando brief {IdBrief}", idBrief);
                 return (false, ex.Message);
             }
         }

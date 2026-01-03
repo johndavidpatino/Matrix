@@ -69,4 +69,14 @@ namespace MatrixNext.Data.Modules.CU.Models
         public int Id { get; set; }
         public string? Nombre { get; set; }
     }
+
+    // TODO-P0-03: ViewModel para clonación de Brief
+    public class ClonarBriefViewModel
+    {
+        public long IdBrief { get; set; }
+        public string? TituloOriginal { get; set; }
+        public int IdUnidad { get; set; }
+        public string? NuevoNombre { get; set; }
+        public IEnumerable<UnidadViewModel> Unidades { get; set; } = Array.Empty<UnidadViewModel>();
+    }
 }

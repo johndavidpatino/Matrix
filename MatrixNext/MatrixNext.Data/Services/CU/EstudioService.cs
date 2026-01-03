@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using MatrixNext.Data.Adapters.CU;
 using MatrixNext.Data.Entities;
 using MatrixNext.Data.Modules.CU.Models;
@@ -10,11 +11,13 @@ namespace MatrixNext.Data.Services.CU
     public class EstudioService
     {
         private readonly EstudioDataAdapter _adapter;
+        private readonly PresupuestoDataAdapter _presupuestoAdapter;
         private readonly ILogger<EstudioService> _logger;
 
-        public EstudioService(EstudioDataAdapter adapter, ILogger<EstudioService> logger)
+        public EstudioService(EstudioDataAdapter adapter, PresupuestoDataAdapter presupuestoAdapter, ILogger<EstudioService> logger)
         {
             _adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
+            _presupuestoAdapter = presupuestoAdapter ?? throw new ArgumentNullException(nameof(presupuestoAdapter));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -44,6 +47,17 @@ namespace MatrixNext.Data.Services.CU
                 if (entidad != null)
                 {
                     vm.Estudio = MapEntidad(entidad);
+                    
+                    // TODO-P0-02: Cargar presupuestos asignados si es edición
+                    try
+                    {
+                        var presupuestosAsignados = _presupuestoAdapter.ObtenerPresupuestosAsignadosXEstudio(idEstudio.Value);
+                        vm.Estudio.PresupuestosSeleccionados = presupuestosAsignados.Select(p => p.Id).ToList();
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogWarning(ex, "Error cargando presupuestos asignados al estudio {IdEstudio}", idEstudio.Value);
+                    }
                 }
             }
             else if (idPropuesta.HasValue)
@@ -54,6 +68,17 @@ namespace MatrixNext.Data.Services.CU
                 vm.Estudio.Plazo = 30;
                 vm.Estudio.TiempoRetencionAnnos = 1;
                 vm.Estudio.FechaInicio = DateTime.Now.Date;
+                
+                // TODO-P0-02: Obtener presupuestos aprobados de la propuesta
+                try
+                {
+                    vm.PresupuestosAprobados = _presupuestoAdapter.ObtenerPresupuestosAprobados(idPropuesta.Value);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "Error obteniendo presupuestos aprobados para propuesta {IdPropuesta}", idPropuesta.Value);
+                    vm.PresupuestosAprobados = new List<PresupuestoAprobadoViewModel>();
+                }
             }
 
             return vm;
@@ -89,6 +114,23 @@ namespace MatrixNext.Data.Services.CU
                 entidad.Estado = entidad.Estado == 0 ? (byte)1 : entidad.Estado;
 
                 var id = _adapter.Guardar(entidad);
+                
+                // TODO-P0-02: Asignar presupuestos aprobados al estudio
+                if (model.PresupuestosSeleccionados != null && model.PresupuestosSeleccionados.Any())
+                {
+                    try
+                    {
+                        _presupuestoAdapter.AsignarPresupuestosAEstudio(id, model.PresupuestosSeleccionados);
+                        _logger.LogInformation("Asignados {Count} presupuestos al estudio {IdEstudio}", 
+                            model.PresupuestosSeleccionados.Count, id);
+                    }
+                    catch (Exception exPresu)
+                    {
+                        _logger.LogError(exPresu, "Error asignando presupuestos al estudio {IdEstudio}", id);
+                        // No falla la operación, solo registra el error
+                    }
+                }
+                
                 return (true, "Estudio guardado correctamente", id);
             }
             catch (Exception ex)
@@ -123,6 +165,11 @@ namespace MatrixNext.Data.Services.CU
         {
             if (model == null) return "Modelo vacio";
             if (model.PropuestaId <= 0) return "Propuesta requerida";
+            
+            // TODO-P0-02: Validar que se seleccionó al menos un presupuesto
+            if (model.PresupuestosSeleccionados == null || !model.PresupuestosSeleccionados.Any())
+                return "Debe seleccionar al menos un presupuesto aprobado";
+            
             if (string.IsNullOrWhiteSpace(model.JobBook) || model.JobBook.EndsWith("00"))
                 return "Debe escribir un JobBook valido";
             if (model.FechaInicioCampo == null) return "Digite la fecha de inicio de campo";

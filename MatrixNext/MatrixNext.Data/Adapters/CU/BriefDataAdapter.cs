@@ -1,5 +1,8 @@
 using System;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
+using Dapper;
 using MatrixNext.Data.Entities;
 using Microsoft.Extensions.Configuration;
 
@@ -16,6 +19,8 @@ namespace MatrixNext.Data.Adapters.CU
         }
 
         private MatrixDbContext CreateContext() => new MatrixDbContext(_connectionString);
+
+        private IDbConnection CreateConnection() => new SqlConnection(_connectionString);
 
         public CU_Brief? ObtenerPorId(long id)
         {
@@ -37,6 +42,35 @@ namespace MatrixNext.Data.Adapters.CU
 
             context.SaveChanges();
             return entidad.Id;
+        }
+
+        /// <summary>
+        /// Clona un Brief a otra unidad usando el SP CU_Brief_Clone
+        /// </summary>
+        /// <param name="idBrief">ID del Brief original</param>
+        /// <param name="idUsuario">ID del usuario que clona</param>
+        /// <param name="idUnidad">ID de la unidad destino</param>
+        /// <param name="nuevoTitulo">Nuevo título para el Brief clonado</param>
+        /// <returns>ID del nuevo Brief clonado</returns>
+        public long ClonarBrief(long idBrief, long idUsuario, int idUnidad, string nuevoTitulo)
+        {
+            using var connection = CreateConnection();
+            var parameters = new
+            {
+                IdBrief = idBrief,
+                IdUsuario = idUsuario,
+                IdUnidad = idUnidad,
+                NuevoNombre = nuevoTitulo
+            };
+
+            // El SP CU_Brief_Clone retorna el ID del nuevo Brief clonado
+            var result = connection.ExecuteScalar<long>(
+                "CU_Brief_Clone",
+                parameters,
+                commandType: CommandType.StoredProcedure
+            );
+
+            return result;
         }
     }
 }

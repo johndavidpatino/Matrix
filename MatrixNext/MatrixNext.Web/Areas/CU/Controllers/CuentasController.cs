@@ -15,11 +15,13 @@ namespace MatrixNext.Web.Areas.CU.Controllers
     public class CuentasController : Controller
     {
         private readonly CuentaService _cuentaService;
+        private readonly BriefService _briefService;
         private readonly ILogger<CuentasController> _logger;
 
-        public CuentasController(CuentaService cuentaService, ILogger<CuentasController> logger)
+        public CuentasController(CuentaService cuentaService, BriefService briefService, ILogger<CuentasController> logger)
         {
             _cuentaService = cuentaService ?? throw new ArgumentNullException(nameof(cuentaService));
+            _briefService = briefService ?? throw new ArgumentNullException(nameof(briefService));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -79,6 +81,23 @@ namespace MatrixNext.Web.Areas.CU.Controllers
             }
 
             return RedirectToAction("Index", "Brief", new { area = "CU", id = contexto.IdBrief });
+        }
+
+        // TODO-P0-03: Action para mostrar modal de clonación
+        [HttpGet("MostrarModalClonar")]
+        public IActionResult MostrarModalClonar(long idBrief, string? tituloOriginal)
+        {
+            var usuarioId = GetCurrentUserId();
+            var unidades = _briefService.PrepararFormulario(null, usuarioId).Unidades;
+            
+            var model = new Data.Modules.CU.Models.ClonarBriefViewModel
+            {
+                IdBrief = idBrief,
+                TituloOriginal = tituloOriginal ?? $"Brief ID: {idBrief}",
+                Unidades = unidades
+            };
+            
+            return PartialView("_ModalClonar", model);
         }
 
         [HttpPost("Clonar")]

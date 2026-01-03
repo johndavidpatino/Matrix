@@ -12,12 +12,14 @@ namespace MatrixNext.Data.Services.CU
     public class BriefService
     {
         private readonly BriefDataAdapter _adapter;
+        private readonly PropuestaService _propuestaService;
         private readonly IConfiguration _configuration;
         private readonly ILogger<BriefService> _logger;
 
-        public BriefService(BriefDataAdapter adapter, IConfiguration configuration, ILogger<BriefService> logger)
+        public BriefService(BriefDataAdapter adapter, PropuestaService propuestaService, IConfiguration configuration, ILogger<BriefService> logger)
         {
             _adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
+            _propuestaService = propuestaService ?? throw new ArgumentNullException(nameof(propuestaService));
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -108,7 +110,9 @@ namespace MatrixNext.Data.Services.CU
                 entidad.DI17 = model.DI17;
                 entidad.DI18 = model.DI18;
 
-                if (entidad.Id == 0)
+                var esNuevo = entidad.Id == 0;
+
+                if (esNuevo)
                 {
                     entidad.TipoBrief = 1;
                     entidad.GerenteCuentas = usuarioId;
@@ -118,6 +122,35 @@ namespace MatrixNext.Data.Services.CU
                 }
 
                 var id = _adapter.Guardar(entidad);
+
+                // TODO-P0-01: Auto-crear propuesta cuando es un Brief nuevo
+                if (esNuevo)
+                {
+                    var propuesta = new PropuestaViewModel
+                    {
+                        BriefId = id,
+                        Titulo = model.Titulo,
+                        EstadoId = 1, // Creada
+                        ProbabilidadId = 0.25m, // 25% inicial
+                        Internacional = false,
+                        Tracking = true,
+                        Anticipo = 70,
+                        Saldo = 30,
+                        Plazo = 30,
+                        RequestHabeasData = "Por definir"
+                    };
+
+                    var (successPropuesta, messagePropuesta, idPropuesta) = _propuestaService.Guardar(propuesta);
+                    if (!successPropuesta)
+                    {
+                        _logger.LogWarning($"Brief {id} creado pero fallo auto-creacion de propuesta: {messagePropuesta}");
+                    }
+                    else
+                    {
+                        _logger.LogInformation($"Brief {id} creado con propuesta {idPropuesta} auto-generada");
+                    }
+                }
+
                 return (true, "Brief guardado correctamente", id);
             }
             catch (Exception ex)
@@ -145,6 +178,42 @@ namespace MatrixNext.Data.Services.CU
             {
                 _logger.LogError(ex, "Error actualizando viabilidad");
                 return (false, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// TODO-P0-03: Clona un Brief a otra unidad
+        /// </summary>
+        public (bool success, string message, long id) ClonarBrief(long idBrief, long idUsuario, int idUnidad, string nuevoTitulo)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(nuevoTitulo))
+                {
+                    return (false, "Debe proporcionar un título para el Brief clonado", 0);
+                }
+
+                if (idUnidad <= 0)
+                {
+                    return (false, "Debe seleccionar una unidad destino", 0);
+                }
+
+                var nuevoId = _adapter.ClonarBrief(idBrief, idUsuario, idUnidad, nuevoTitulo.Trim());
+                
+                if (nuevoId > 0)
+                {
+                    _logger.LogInformation("Brief {IdOriginal} clonado exitosamente. Nuevo ID: {IdNuevo}", idBrief, nuevoId);
+                    return (true, $"Brief clonado exitosamente con ID {nuevoId}", nuevoId);
+                }
+                else
+                {
+                    return (false, "Error al clonar el Brief", 0);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error clonando brief {IdBrief}", idBrief);
+                return (false, ex.Message, 0);
             }
         }
 
