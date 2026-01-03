@@ -19,6 +19,12 @@ namespace MatrixNext.Data.Entities
         public DbSet<TH_SolicitudAusencia> SolicitudesAusencia => Set<TH_SolicitudAusencia>();
         public DbSet<TH_Ausencia_Incapacidades> AusenciaIncapacidades => Set<TH_Ausencia_Incapacidades>();
 
+        public DbSet<CU_Brief> Briefs => Set<CU_Brief>();
+        public DbSet<CU_Propuestas> Propuestas => Set<CU_Propuestas>();
+        public DbSet<CU_Estudios> Estudios => Set<CU_Estudios>();
+        public DbSet<CU_Estudios_Presupuestos> EstudiosPresupuestos => Set<CU_Estudios_Presupuestos>();
+        public DbSet<CU_SeguimientoPropuestas> SeguimientoPropuestas => Set<CU_SeguimientoPropuestas>();
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -74,6 +80,37 @@ namespace MatrixNext.Data.Entities
                 entity.Property(e => e.FechaAccidenteTrabajo).HasColumnName("FechaAccidenteTrabajo");
                 entity.Property(e => e.Comentarios).HasColumnName("Comentarios");
                 entity.Property(e => e.CIE).HasColumnName("CIE");
+            });
+
+            modelBuilder.Entity<CU_Brief>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnName("Id");
+            });
+
+            modelBuilder.Entity<CU_Propuestas>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnName("Id");
+            });
+
+            modelBuilder.Entity<CU_Estudios>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnName("id");
+            });
+
+            modelBuilder.Entity<CU_Estudios_Presupuestos>(entity =>
+            {
+                entity.HasKey(e => new { e.EstudioId, e.PresupuestoId });
+                entity.Property(e => e.EstudioId).HasColumnName("EstudioId");
+                entity.Property(e => e.PresupuestoId).HasColumnName("PresupuestoId");
+            });
+
+            modelBuilder.Entity<CU_SeguimientoPropuestas>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnName("Id");
             });
         }
     }

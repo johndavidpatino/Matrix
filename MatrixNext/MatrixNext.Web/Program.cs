@@ -1,4 +1,5 @@
 using MatrixNext.Data.Modules.TH;
+using MatrixNext.Data.Modules.CU;
 using MatrixNext.Data.Modules.US;
 using MatrixNext.Data.Services;
 using MatrixNext.Data.Services.Usuarios;
@@ -47,6 +48,8 @@ builder.Services.AddScoped<PermisosService>();
 builder.Services.AddScoped<GrupoUnidadService>();
 // Register TH module services (Ausencias slice)
 builder.Services.AddTHModule(builder.Configuration);
+// Register CU_Cuentas module services
+builder.Services.AddCUModule(builder.Configuration);
 
 var app = builder.Build();
 

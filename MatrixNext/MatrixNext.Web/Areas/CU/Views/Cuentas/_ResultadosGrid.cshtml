@@ -1,0 +1,63 @@
+@model IEnumerable<JobBookResultViewModel>
+
+@{
+    var resultados = Model?.ToList() ?? new List<JobBookResultViewModel>();
+}
+
+@if (resultados.Count == 0)
+{
+    <div class="alert alert-info mb-0">No se encontraron registros.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>Titulo</th>
+                    <th>JobBook</th>
+                    <th>Cliente</th>
+                    <th>Estado</th>
+                    <th>Unidad</th>
+                    <th>Viabilidad</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in resultados)
+                {
+                    <tr>
+                        <td>@item.Titulo</td>
+                        <td>@item.NumJobBook</td>
+                        <td>@item.Cliente</td>
+                        <td>@item.Estado</td>
+                        <td>@item.Unidad</td>
+                        <td>
+                            @if (item.Viabilidad == true)
+                            {
+                                <span class="badge bg-success">Viable</span>
+                            }
+                            else if (item.Viabilidad == false)
+                            {
+                                <span class="badge bg-danger">No viable</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">N/D</span>
+                            }
+                        </td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-primary" title="Ver"
+                               href="@Url.Action("Abrir", "Cuentas", new { area = "CU", idBrief = item.IdBrief, idPropuesta = item.IdPropuesta, idEstudio = item.IdEstudio })">
+                                Ver
+                            </a>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" disabled title="Clonacion pendiente (ver TODO)">
+                                Clonar
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

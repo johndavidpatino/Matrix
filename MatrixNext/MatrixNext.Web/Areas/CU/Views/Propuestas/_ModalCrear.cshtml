@@ -1,0 +1,103 @@
+@model PropuestaFormViewModel
+
+<div class="modal fade" id="propuestaModal" tabindex="-1" aria-labelledby="propuestaModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="propuestaModalLabel">@((Model?.Propuesta?.Id ?? 0) == 0 ? "Nueva Propuesta" : "Editar Propuesta")</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="propuestaForm">
+                    <input type="hidden" name="Id" value="@Model?.Propuesta?.Id" />
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Titulo</label>
+                            <input type="text" class="form-control" name="Titulo" value="@Model?.Propuesta?.Titulo" required />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Id Brief</label>
+                            <input type="number" class="form-control" name="BriefId" value="@Model?.Propuesta?.BriefId" min="1" required />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Probabilidad</label>
+                            <select class="form-select" id="ProbabilidadId" name="ProbabilidadId" required>
+                                <option value="">Seleccione...</option>
+                                @foreach (var p in Model.Probabilidades)
+                                {
+                                    <option value="@p.Id" selected="@(Model.Propuesta?.ProbabilidadId == p.Id ? "selected" : null)">@p.Nombre</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Estado</label>
+                            <select class="form-select" id="EstadoId" name="EstadoId" required>
+                                <option value="">Seleccione...</option>
+                                @foreach (var e in Model.Estados)
+                                {
+                                    <option value="@e.Id" selected="@(Model.Propuesta?.EstadoId == e.Id ? "selected" : null)">@e.Nombre</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Fecha envio</label>
+                            <input type="date" class="form-control" id="FechaEnvio" name="FechaEnvio" value="@(Model?.Propuesta?.FechaEnvio?.ToString("yyyy-MM-dd"))" />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Fecha aprobacion / no aprobacion</label>
+                            <input type="date" class="form-control" id="FechaAprob" name="FechaAprob" value="@(Model?.Propuesta?.FechaAprob?.ToString("yyyy-MM-dd"))" />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Razon no aprobacion</label>
+                            <select class="form-select" id="RazonNoAprobId" name="RazonNoAprobId">
+                                <option value="">Seleccione...</option>
+                                @foreach (var r in Model.Razones)
+                                {
+                                    <option value="@r.Id" selected="@(Model.Propuesta?.RazonNoAprobId == r.Id ? "selected" : null)">@r.Nombre</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Fecha inicio campo</label>
+                            <input type="date" class="form-control" id="FechaInicioCampo" name="FechaInicioCampo" value="@(Model?.Propuesta?.FechaInicioCampo?.ToString("yyyy-MM-dd"))" />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">JobBook</label>
+                            <input type="text" class="form-control" id="JobBook" name="JobBook" value="@Model?.Propuesta?.JobBook" placeholder="99-999999" />
+                        </div>
+                        <div class="col-md-4 d-flex align-items-center">
+                            <div class="form-check me-3">
+                                <input class="form-check-input" type="checkbox" id="Internacional" name="Internacional" value="true" @(Model?.Propuesta?.Internacional == true ? "checked" : "") />
+                                <label class="form-check-label" for="Internacional">Internacional</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="Tracking" name="Tracking" value="true" @(Model?.Propuesta?.Tracking == true ? "checked" : "") />
+                                <label class="form-check-label" for="Tracking">Tracking</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">% Anticipo</label>
+                            <input type="number" class="form-control" name="Anticipo" value="@Model?.Propuesta?.Anticipo" min="0" max="100" />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">% Saldo</label>
+                            <input type="number" class="form-control" name="Saldo" value="@Model?.Propuesta?.Saldo" min="0" max="100" />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Plazo (dias)</label>
+                            <input type="number" class="form-control" name="Plazo" value="@Model?.Propuesta?.Plazo" min="0" />
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">Requerimientos Habeas Data / Confidencialidad / Privacidad</label>
+                            <textarea class="form-control" name="RequestHabeasData" rows="3" required>@Model?.Propuesta?.RequestHabeasData</textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" form="propuestaForm" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>

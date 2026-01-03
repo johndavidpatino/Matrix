@@ -888,15 +888,14 @@ MatrixNext/
 
 | Riesgo | Descripción | Impacto | Probabilidad | Mitigación | Prioridad |
 |--------|-------------|---------|--------------|------------|-----------|
-| **DevExpress HtmlEditor** | `Frame.aspx` usa `DevExpress.Web.ASPxHtmlEditor` para los 4 campos HTML (Situación, Complicación, Pregunta, Evidencia). **NO tiene equivalente directo** en ASP.NET Core | 🔴 CRÍTICO | 100% | **Migrar a CKEditor 5** (comercial) o **Quill.js** (open source). Crear componente Razor que encapsule el editor. Pre-cargar templates en JavaScript. Validar que el HTML generado sea compatible con el almacenado en BD. | **P0** |
-| **Session State (InfoJobBook)** | Uso extensivo de `Session("InfoJobBook")` para mantener contexto entre páginas (Default → Frame → Propuestas → Estudio). En ASP.NET Core, Session requiere configuración explícita y serialización JSON | 🔴 ALTO | 100% | **Migrar a `TempData`** (persiste solo hasta la siguiente request) o **Session distribuida** (Redis/SQL Server). Crear clase `JobBookContextViewModel` serializable. Usar patrón `TempData.Peek()` para mantener datos entre redirecciones. Alternativa: pasar `idBrief`/`idPropuesta` en QueryString y recargar contexto en cada página. | **P0** |
+| **QuillEditor Integration** | `Frame.aspx` usa `DevExpress.Web.ASPxHtmlEditor` para los 4 campos HTML (Situación, Complicación, Pregunta, Evidencia). MatrixNext ya tiene componente QuillEditor implementado | 🟢 BAJO | 100% | **Usar componente QuillEditor existente** de MatrixNext. Validar que el HTML generado sea compatible con el almacenado en BD. Pre-cargar templates si es necesario. | **P1** |
+| **Session State Migration** | Uso de `Session("InfoJobBook")` para mantener contexto entre páginas (Default → Frame → Propuestas → Estudio). Migrar a patrón MVC estándar | 🟠 MEDIO | 100% | **Eliminar dependencia de Session**. Pasar contexto necesario vía: 1) Parámetros de acción (`idBrief`, `idPropuesta`), 2) Recargar datos desde BD en cada request, 3) `TempData` solo para mensajes flash. Seguir patrón PRG (Post-Redirect-Get). | **P0** |
 | **UpdatePanel (AJAX legacy)** | `Estudio.aspx` usa `<asp:UpdatePanel>` para actualizaciones parciales (líneas 125, 441). En ASP.NET Core no existe `UpdatePanel` | 🟠 MEDIO | 100% | **Reemplazar con AJAX moderno**: Usar `fetch()` API o jQuery AJAX con retorno de `PartialView`. Crear actions específicas que retornen `PartialViewResult`. Ejemplo: `return PartialView("_GridEstudios", model);` | **P1** |
 | **AjaxControlToolkit (ModalPopupExtender)** | `Estudio.aspx` usa `<asp:ModalPopupExtender>` para mostrar modales (línea 128). No compatible con ASP.NET Core | 🟠 MEDIO | 100% | **Reemplazar con Bootstrap 5 Modals**. Crear partial views `_Modal.cshtml` con estructura Bootstrap. Usar JavaScript para show/hide. Mantener UX similar (fondo oscuro, no cerrar al hacer clic fuera). | **P1** |
 | **ViewState** | WebForms usa ViewState para mantener estado entre postbacks. Aunque no se encontró uso explícito en el código analizado, puede estar habilitado por defecto | 🟡 BAJO | 50% | **No aplicable en MVC**. Reemplazar con `TempData`, `Session`, o `HiddenFields` en formularios según sea necesario. Validar que no haya lógica dependiente de ViewState. | **P2** |
 | **Validación de fechas legacy** | `Estudio.aspx.vb` tiene función `ValidarFecha()` custom (líneas 187, 197). Puede tener lógica específica de formato DD/MM/YYYY | 🟠 MEDIO | 80% | **Migrar validaciones a FluentValidation** o Data Annotations. Crear validador `[DataType(DataType.Date)]` con formato configurable. Probar con fechas edge case (29/02, 31/04, etc.). | **P1** |
-| **Symphony (Sistema Externo)** | El JobBook **oficial** se genera en un sistema externo llamado "Symphony" (evidencia: Estudio.aspx tooltip línea 160). La integración no está documentada | 🔴 ALTO | 100% | **Investigar integración con Symphony**: ¿Es API REST? ¿Base de datos compartida? ¿Proceso manual?. Documentar flujo de creación de JobBook. Si es manual, dejar campo `txtJobBook` como entrada libre con validaciones. Si es automático, crear servicio `SymphonyService.GenerarJobBook()`. | **P0** |
 | **Emails de notificación** | `Estudio.aspx.vb` envía emails al crear estudio (líneas 248, 270, 272): `EnviarEmailAnuncio()`, `EnviarEmail()`, `EnviarEmailJBI()`. No se conoce implementación | 🟠 MEDIO | 100% | **Crear `IEmailService`** con configuración en `appsettings.json`. Usar templates Razor para HTML de emails. Implementar envío asíncrono con cola (Hangfire o Azure Service Bus). Prioridad menor: puede implementarse después del CRUD básico. | **P1** |
-| **Dependencia de PY_Proyectos** | Al crear un Estudio, se crean automáticamente proyectos en `PY_Proyectos` (líneas 252-290 Estudio.aspx.vb). Si PY_Proyectos no está migrado, esto falla | 🔴 CRÍTICO | 100% | **Opción 1**: Migrar PY_Proyectos **antes** de CU_Cuentas (cambiar orden). **Opción 2**: Crear stub/mock de `ProyectoService.CrearProyecto()` que solo inserte registro básico en tabla `PY_Proyectos` legacy. **Opción 3**: Permitir crear Estudio sin crear Proyecto (checkbox "Crear proyecto después"). | **P0** |
+| **Creación de Proyectos (PY_Proyectos)** | Al crear un Estudio, se crean automáticamente proyectos en `PY_Proyectos` (líneas 252-290 Estudio.aspx.vb). **Esta funcionalidad se migrará posteriormente** | 🟡 BAJO | 100% | **Opción elegida: Deshabilitar temporalmente**. No crear proyectos al guardar Estudio. Agregar checkbox "Proyecto creado manualmente" para indicar cuando se crea en el sistema legacy. Cuando PY_Proyectos esté migrado, reactivar funcionalidad. | **P2** |
 | **Permisos (VerificarPermisoUsuario)** | `Default.aspx.vb` valida permiso `22` (línea 16). Sistema de permisos debe estar migrado en US_Usuarios | 🟠 MEDIO | 100% | **Validar que módulo US_Usuarios** esté completamente migrado con sistema de permisos. Crear atributo `[Authorize(Policy = "Permiso22")]` en controllers. Si US no está listo, usar `[Authorize(Roles = "GerenteCuentas")]` temporalmente. | **P1** |
 | **Clonación de Brief** | `Default.aspx` permite clonar Briefs a otra unidad (líneas 52-93). No está claro si existe SP `CloneBrief` o si se hace manualmente | 🟡 BAJO | 80% | **Revisar código completo** de `CU_JobBook.DAL.CloneBrief()`. Si existe SP, usar Dapper. Si no, crear método en `BriefService` que: 1) Lee Brief original, 2) Clona entidad (sin Id), 3) Cambia Unidad y Titulo, 4) Inserta con EF. | **P2** |
 | **Accordion UI (jQuery UI)** | `Propuestas.aspx` usa jQuery UI Accordion (línea 62). Compatible pero puede tener conflictos de estilos con Bootstrap | 🟡 BAJO | 50% | **Reemplazar con Bootstrap Collapse** (accordions nativos). Migrar lógica de `ActivateAccordion()` a JavaScript moderno. Alternativa: mantener jQuery UI si no hay conflictos. | **P2** |
@@ -950,7 +949,6 @@ MatrixNext/
 
 | Componente | Descripción | Tecnología | Ubicación | Prioridad | Estimación |
 |------------|-------------|-----------|-----------|-----------|------------|
-| **HtmlEditorComponent** | Editor HTML rico para los 4 campos de Brief | **CKEditor 5** (recomendado) o Quill.js | `Views/Shared/_HtmlEditor.cshtml` | 🔴 **P0** | 8h (config + integración + templates) |
 | **FileUploadComponent** | Carga de documentos con drag & drop | **Dropzone.js** + Razor Partial | `Views/Shared/_FileUpload.cshtml` | 🟠 **P1** | 6h (upload + listado + delete) |
 | **JobBookContextBanner** | Banner superior con contexto del JobBook | Razor Partial + TempData | `Views/Shared/_JobBookContext.cshtml` | 🔴 **P0** | 2h (diseño + integración) |
 | **ValidationHelpersJS** | Validaciones dinámicas según estado de Propuesta | JavaScript vanilla o jQuery | `wwwroot/js/cu-validations.js` | 🔴 **P0** | 4h (lógica + testing) |
@@ -963,7 +961,7 @@ MatrixNext/
 
 | Librería | Propósito | Licencia | Instalación | Alternativas |
 |----------|-----------|----------|-------------|--------------|
-| **CKEditor 5** | Editor HTML rico | 💰 Comercial (GPL para open source) | NPM: `npm install @ckeditor/ckeditor5-build-classic` | Quill.js (MIT, gratis), TinyMCE (GPL) |
+| **Quill.js** | Editor HTML rico | 🆓 MIT | ✅ **Ya instalado en MatrixNext** | CKEditor 5 (comercial), TinyMCE (GPL) |
 | **Dropzone.js** | Upload de archivos | 🆓 MIT | NPM: `npm install dropzone` | FilePond, Uppy |
 | **InputMask.js** | Máscaras de entrada | 🆓 MIT | NPM: `npm install inputmask` | jQuery Mask Plugin |
 | **Flatpickr** | Date picker moderno | 🆓 MIT | NPM: `npm install flatpickr` | jQuery UI Datepicker (ya en uso en MatrixNext) |
@@ -984,26 +982,22 @@ MatrixNext/
 | P0-02 | Migrar modelos de BD | Crear entidades EF: `CU_Brief`, `CU_Propuestas`, `CU_Estudios`, catálogos | 4h | P0-01 | 1 |
 | P0-03 | Configurar DbContext | `CuentasDbContext` con configuración Fluent API | 2h | P0-02 | 1 |
 | P0-04 | Crear DataAdapters | `BriefDataAdapter`, `PropuestaDataAdapter`, `EstudioDataAdapter` con Dapper | 8h | P0-03 | 1 |
-| P0-05 | Implementar HtmlEditor | Integrar Quill.js o CKEditor en componente Razor | 8h | - | 1 |
-| P0-06 | Crear JobBookContextBanner | Banner superior con info del JobBook (TempData) | 2h | - | 1 |
-| P0-07 | Implementar ValidationHelpersJS | Validaciones dinámicas de Propuesta por estado | 4h | - | 1 |
-| P0-08 | **CuentasController.Index** | Búsqueda de JobBooks (Default.aspx) | 6h | P0-04 | 2 |
-| P0-09 | **CuentasController.Buscar** | AJAX de búsqueda con filtros | 4h | P0-08 | 2 |
-| P0-10 | **BriefController.Index** (GET) | Cargar formulario Brief (crear/editar) | 6h | P0-04, P0-05 | 2 |
-| P0-11 | **BriefController.Guardar** (POST) | Guardar Brief + crear Propuesta automática | 8h | P0-10 | 2 |
-| P0-12 | **BriefService** completo | Lógica de negocio de Brief (validaciones, cálculos) | 6h | P0-04 | 2 |
-| P0-13 | **PropuestasController.Index** | Listar propuestas del gerente | 5h | P0-04 | 3 |
-| P0-14 | **PropuestasController.Guardar** | Crear/editar propuesta con validaciones complejas | 10h | P0-13, P0-07 | 3 |
-| P0-15 | **PropuestaService** completo | Lógica de negocio + validaciones por estado | 8h | P0-04 | 3 |
-| P0-16 | **EstudiosController.Index** | Listar estudios de una propuesta | 5h | P0-04 | 4 |
-| P0-17 | **EstudiosController.Crear** | Modal crear estudio con presupuestos | 8h | P0-16 | 4 |
-| P0-18 | **EstudiosController.Guardar** | Guardar estudio + asignar presupuesto + crear proyecto | 12h | P0-17 | 4 |
-| P0-19 | **EstudioService** completo | Lógica de negocio + integración con PY_Proyectos | 10h | P0-04 | 4 |
-| P0-20 | Investigar integración Symphony | Documentar cómo se genera JobBook oficial | 4h | - | 1 |
-| P0-21 | Resolver dependencia PY_Proyectos | Opción 1: migrar PY. Opción 2: stub. Opción 3: deshabilitar | 8h | - | 1 |
-| P0-22 | Testing funcional P0 | Probar flujo completo: Buscar → Brief → Propuesta → Estudio | 12h | P0-08 a P0-19 | 5 |
+| P0-05 | Implementar ValidationHelpersJS | Validaciones dinámicas de Propuesta por estado | 4h | - | 1 |
+| P0-06 | **CuentasController.Index** | Búsqueda de JobBooks (Default.aspx) | 6h | P0-04 | 2 |
+| P0-07 | **CuentasController.Buscar** | AJAX de búsqueda con filtros | 4h | P0-06 | 2 |
+| P0-08 | **BriefController.Index** (GET) | Cargar formulario Brief (crear/editar) con QuillEditor | 6h | P0-04 | 2 |
+| P0-09 | **BriefController.Guardar** (POST) | Guardar Brief + crear Propuesta automática (sin Session) | 8h | P0-08 | 2 |
+| P0-10 | **BriefService** completo | Lógica de negocio de Brief (validaciones, cálculos) | 6h | P0-04 | 2 |
+| P0-11 | **PropuestasController.Index** | Listar propuestas del gerente | 5h | P0-04 | 3 |
+| P0-12 | **PropuestasController.Guardar** | Crear/editar propuesta con validaciones complejas | 10h | P0-11, P0-05 | 3 |
+| P0-13 | **PropuestaService** completo | Lógica de negocio + validaciones por estado | 8h | P0-04 | 3 |
+| P0-14 | **EstudiosController.Index** | Listar estudios de una propuesta | 5h | P0-04 | 4 |
+| P0-15 | **EstudiosController.Crear** | Modal crear estudio con presupuestos | 8h | P0-14 | 4 |
+| P0-16 | **EstudiosController.Guardar** | Guardar estudio + asignar presupuesto (sin crear proyecto PY) | 8h | P0-15 | 4 |
+| P0-17 | **EstudioService** completo | Lógica de negocio (sin integración PY_Proyectos) | 6h | P0-04 | 4 |
+| P0-18 | Testing funcional P0 | Probar flujo completo: Buscar → Brief → Propuesta → Estudio | 12h | P0-06 a P0-17 | 5 |
 
-**Total P0**: **133 horas** (~3.3 semanas a 40h/semana)
+**Total P0**: **106 horas** (~2.7 semanas a 40h/semana)
 
 ---
 
@@ -1055,12 +1049,12 @@ MatrixNext/
 
 | Prioridad | Horas | Semanas (40h) | Descripción |
 |-----------|-------|---------------|-------------|
-| **P0** | 133h | 3.3 semanas | MVP funcional (flujo completo Brief → Estudio) |
+| **P0** | 106h | 2.7 semanas | MVP funcional (flujo completo Brief → Estudio) |
 | **P1** | 91h | 2.3 semanas | Features secundarias (clonación, documentos, emails, permisos) |
 | **P2** | 55h | 1.4 semanas | Mejoras y limpieza (auditoría, optimización, testing) |
-| **TOTAL** | **279h** | **~7 semanas** | Migración completa del módulo CU_Cuentas (Fase 1) |
+| **TOTAL** | **252h** | **~6.3 semanas** | Migración completa del módulo CU_Cuentas (Fase 1) |
 
-**Nota**: Estimación asume 1 desarrollador full-time. Con 2 desarrolladores en paralelo: **~4 semanas**.
+**Nota**: Estimación asume 1 desarrollador full-time. Con 2 desarrolladores en paralelo: **~3.5 semanas**.
 
 ---
 
@@ -1082,16 +1076,17 @@ MatrixNext/
 - [ ] ✅ **Sin asunciones**: Todo marcado como ⚠️ POR CONFIRMAR donde no hay evidencia
 - [ ] ✅ **Directrices aplicadas**: Reglas 1-10 de DIRECTRICES_MIGRACION.md respetadas
 - [ ] ✅ **Área "CU" confirmada**: Estructura de carpetas planificada
-- [ ] ⚠️ **Dependencias resueltas**: Symphony y PY_Proyectos **requieren investigación** (P0-20, P0-21)
+- [ ] ✅ **Dependencias resueltas**: Symphony omitido, PY_Proyectos posterga, QuillEditor existente
+- [ ] ✅ **Session State eliminado**: Migración a patrón MVC estándar aprobada
 
-### Validaciones Pendientes
+### Validaciones Pendientes (Pre-Sprint 1)
 
 - [ ] ⚠️ **Confirmar existencia de SP `CloneBrief`**: Revisar `CU_JobBook.DAL` completo
 - [ ] ⚠️ **Confirmar formato de emails**: Revisar métodos `EnviarEmailAnuncio()`, `EnviarEmail()`, `EnviarEmailJBI()`
-- [ ] ⚠️ **Validar integración Symphony**: Documentar cómo se genera JobBook oficial
 - [ ] ⚠️ **Confirmar si todos los 70 campos de Brief se usan**: Consultar con negocio
 - [ ] ⚠️ **Validar datos legacy**: Ejecutar query de "datos inconsistentes" en BD
 - [ ] ⚠️ **Confirmar lógica de `ValidarFecha()`**: Revisar código completo para validaciones custom
+- [ ] ✅ **Validar API de QuillEditor**: Revisar componente existente en MatrixNext
 
 ---
 
@@ -1110,7 +1105,7 @@ MatrixNext/
 | **Máscaras de Input** | **InputMask.js** | MIT License, soporte vanilla JS + jQuery, ligero | jQuery Mask Plugin (requiere jQuery obligatorio) |
 | **Emails** | **Razor Email Templates + IEmailService** | Templates en C#, fácil de mantener, testeable | Plantillas HTML estáticas (difícil mantener variables) |
 | **Autorización** | **Policy-based** `[Authorize(Policy = "Permiso22")]` | Flexible, basado en Claims, fácil de extender | Role-based simple (menos flexible) |
-| **Mitigación PY_Proyectos** | **Opción 2: Stub/Mock** (corto plazo) → **Opción 1: Migrar PY primero** (largo plazo) | Permite avanzar sin bloqueo, stub simple de implementar | Opción 3: Checkbox "crear después" (cambia UX, confunde usuarios) |
+| **Creación de Proyectos** | **Deshabilitar temporalmente** | PY_Proyectos se migrará posteriormente. Checkbox manual indica si proyecto fue creado en legacy | Stub/Mock (complejidad innecesaria), Migrar PY primero (cambia orden) |
 
 ---
 
@@ -1127,13 +1122,14 @@ MatrixNext/
 | **ViewModels** | 20-25 | JobBookSearch, JobBookResult, Brief (con 70+ props), Propuesta, Estudio, Observacion, etc. |
 | **Views (.cshtml)** | 15-20 | Index + Modales por controller + Partials |
 | **SP a mapear** | 11 | 7 queries + 4 CRUD |
-| **Componentes nuevos** | 6 | HtmlEditor, FileUpload, JobBookContext, ValidationHelpers, MaskedInput, Accordion |
+| **Componentes nuevos** | 5 | FileUpload, JobBookContext, ValidationHelpers, MaskedInput, Accordion |
+| **Componentes reutilizados** | 10 | QuillEditor, Modal, DatePicker, Grid, Notification, ValidationSummary, Spinner, etc. |
 | **Tablas BD** | 6 principales + 6 catálogos | Brief, Propuestas, Estudios, Estudios_Presupuestos, SeguimientoPropuestas, Presupuestos (consulta) |
-| **Horas estimadas (P0)** | 133h | MVP funcional |
-| **Horas estimadas (P0+P1)** | 224h | Funcionalidad completa |
-| **Horas estimadas (TOTAL)** | 279h | Con mejoras y limpieza |
-| **Semanas estimadas (1 dev)** | 7 semanas | A 40h/semana |
-| **Semanas estimadas (2 devs)** | 4 semanas | Trabajo en paralelo |
+| **Horas estimadas (P0)** | 106h | MVP funcional |
+| **Horas estimadas (P0+P1)** | 197h | Funcionalidad completa |
+| **Horas estimadas (TOTAL)** | 252h | Con mejoras y limpieza |
+| **Semanas estimadas (1 dev)** | 6.3 semanas | A 40h/semana |
+| **Semanas estimadas (2 devs)** | 3.5 semanas | Trabajo en paralelo |
 | **Complejidad** | 🟠 **MEDIA-ALTA** | Menos complejo que FI_Administrativo, similar a OP_Cuantitativo |
 
 ### Comparación con TH_Ausencias (Referencia)
@@ -1143,15 +1139,16 @@ MatrixNext/
 | Páginas | 4 | 4 | 1:1 |
 | LOC (legacy) | ~2,000 | ~2,000 | 1:1 |
 | Complejidad BD | 🟢 Baja (5 tablas) | 🟠 Media (12 tablas) | 2.4x |
-| Dependencias externas | ❌ Ninguna | 🔴 Symphony + PY_Proyectos | Alto riesgo |
-| Componentes custom | 1 (DatePicker) | 6 (HtmlEditor, FileUpload, etc.) | 6x |
-| Estimación (horas) | ~100h | ~279h | 2.8x |
+| Dependencias externas | ❌ Ninguna | ✅ Ninguna (PY posterga, Symphony omite) | Equivalente |
+| Componentes custom | 1 (DatePicker) | 5 (FileUpload, ValidationHelpers, etc.) | 5x |
+| Componentes reutilizados | 3 | 10 (QuillEditor, Modal, Grid, etc.) | Alto reuso |
+| Estimación (horas) | ~100h | ~252h | 2.5x |
 
-**Conclusión**: CU_Cuentas es **~2.8x más complejo** que TH_Ausencias debido a:
-- Dependencias externas (Symphony, PY)
-- Componentes custom necesarios (HtmlEditor, FileUpload)
+**Conclusión**: CU_Cuentas es **~2.5x más complejo** que TH_Ausencias debido a:
+- Componentes custom necesarios (FileUpload, ValidationHelpers)
 - 70+ campos en Brief
-- Lógica de negocio compleja (validaciones por estado, auto-creación de Propuesta/Proyecto)
+- Lógica de negocio compleja (validaciones por estado, auto-creación de Propuesta)
+- **Ventaja**: Reutilización de QuillEditor reduce complejidad original
 
 ---
 
@@ -1165,16 +1162,15 @@ MatrixNext/
    - Validar si todos los 70 campos de Brief se usan
    - Confirmar flujo de viabilidad (auto-creación de Propuesta)
 
-2. **Investigación Técnica** (12h)
-   - **P0-20**: Documentar integración con Symphony (¿API? ¿BD compartida? ¿Manual?)
-   - **P0-21**: Decidir estrategia para PY_Proyectos (migrar primero vs. stub)
+2. **Investigación Técnica** (6h)
    - Revisar código completo de `CloneBrief`, `EnviarEmail*`, `ValidarFecha`
    - Ejecutar query de "datos inconsistentes" en BD de desarrollo
+   - Validar componente QuillEditor existente y su API
 
-3. **Setup de Proyecto** (8h)
+3. **Setup de Proyecto** (6h)
    - Crear rama `feature/cu-cuentas` en Git
    - Configurar Área CU en MatrixNext (P0-01)
-   - Instalar librerías NPM (Quill.js, Dropzone.js, InputMask.js)
+   - Instalar librerías NPM (Dropzone.js, InputMask.js)
    - Configurar build pipeline para assets JS/CSS
 
 4. **Limpieza de Datos** (6h)
@@ -1185,33 +1181,33 @@ MatrixNext/
 ### Fase de Implementación (Semanas 2-6)
 
 **Sprint 1 (Semana 2)**: Infraestructura + Default.aspx
-- P0-02 a P0-07 (modelos, adapters, componentes base)
-- P0-08 a P0-09 (búsqueda de JobBooks)
+- P0-01 a P0-05 (modelos, adapters, componentes base)
+- P0-06 a P0-07 (búsqueda de JobBooks)
 
 **Sprint 2 (Semana 3)**: Frame.aspx (Brief)
-- P0-10 a P0-12 (CRUD de Brief)
+- P0-08 a P0-10 (CRUD de Brief con QuillEditor)
 - P1-02 (viabilidad), P1-13 (tabs)
 
 **Sprint 3 (Semana 4)**: Propuestas.aspx
-- P0-13 a P0-15 (CRUD de Propuestas)
+- P0-11 a P0-13 (CRUD de Propuestas)
 - P1-01 (clonar), P1-05 a P1-07 (detalles, observaciones, eliminar)
 - P1-12 (permisos)
 
 **Sprint 4 (Semana 5)**: Estudio.aspx
-- P0-16 a P0-19 (CRUD de Estudios + integración PY)
+- P0-14 a P0-17 (CRUD de Estudios sin integración PY)
 - P1-04 (FileUpload), P1-03, P1-09 (documentos)
 
 **Sprint 5 (Semana 6)**: Testing y Refinamiento
-- P0-22 (testing funcional P0)
+- P0-18 (testing funcional P0)
 - P1-10 a P1-11 (emails)
 - P1-14 a P1-16 (paginación, índices, testing P1)
 
-### Fase de Mejoras (Semana 7)
+### Fase de Mejoras (Semana 6-7)
 
 **Sprint 6 (Semana 7)**: Post-MVP
 - P2-01 a P2-10 (componentes extras, auditoría, optimización, docs)
 
-### Fase de Validación (Semana 8)
+### Fase de Validación (Semana 7)
 
 1. **Testing Integral** (16h)
    - Testing manual de flujos completos
@@ -1240,10 +1236,11 @@ El módulo CU_Cuentas se considera **COMPLETAMENTE MIGRADO** si:
 - ✅ **Documentación completa**: VERIFICACION_CU_CUENTAS_MIGRACION.md creado
 - ✅ **Permisos configurados**: Solo usuarios autorizados pueden acceder
 - ✅ **Performance aceptable**: Búsqueda < 2s, guardado < 1s
-- ✅ **Integración con Symphony** documentada y funcional (o stub implementado)
-- ✅ **Integración con PY_Proyectos** funcional (o stub implementado)
+- ✅ **QuillEditor integrado**: 4 campos HTML del Brief funcionan correctamente
+- ✅ **Sin dependencia de Session**: Contexto se pasa vía parámetros o recarga desde BD
 - ✅ **Emails de notificación** funcionan
 - ✅ **Datos migrados** sin inconsistencias críticas
+- ⚠️ **Creación de Proyectos**: Marcado como "manual" hasta que PY_Proyectos esté migrado
 
 ---
 
@@ -1258,24 +1255,24 @@ El módulo CU_Cuentas se considera **COMPLETAMENTE MIGRADO** si:
 
 ### Hallazgos Clave
 
-1. **Complejidad**: 🟠 **MEDIA-ALTA** (~2.8x más complejo que TH_Ausencias)
-2. **Riesgos Críticos**: 🔴 **4** (DevExpress, Symphony, PY_Proyectos, Session State)
-3. **Componentes Nuevos**: **6** (HtmlEditor es el más complejo)
-4. **Estimación Total**: **279 horas** (~7 semanas con 1 desarrollador)
+1. **Complejidad**: 🟠 **MEDIA** (~2.5x más complejo que TH_Ausencias)
+2. **Riesgos Críticos**: 🟢 **RESUELTOS** (QuillEditor existente, Session eliminado, Symphony omitido, PY posterga)
+3. **Componentes Nuevos**: **5** (FileUpload es el más complejo)
+4. **Componentes Reutilizados**: **10** (QuillEditor, Modal, Grid, DatePicker, etc.)
+5. **Estimación Total**: **252 horas** (~6.3 semanas con 1 desarrollador, ~3.5 con 2)
 
 ### Recomendaciones
 
-1. ✅ **Aprobar migración**: El módulo es viable de migrar
-2. 🔴 **Resolver dependencias ANTES de codear**: Symphony (P0-20) y PY_Proyectos (P0-21)
-3. 🟠 **Considerar dividir en 2 fases**:
-   - **Fase 1A**: Default + Brief + Propuestas (sin crear Estudio) - 4 semanas
-   - **Fase 1B**: Estudios (requiere PY migrado) - 3 semanas
+1. ✅ **APROBADO PARA DESARROLLO**: Todos los riesgos críticos resueltos
+2. ✅ **Usar QuillEditor existente**: No crear componente custom, reutilizar implementación de MatrixNext
+3. ✅ **Patrón MVC estándar**: Eliminar dependencia de Session, pasar contexto vía parámetros
 4. ⚠️ **Validar con negocio** si 70 campos de Brief son todos necesarios (posible refactor)
-5. ✅ **Usar Quill.js** en lugar de CKEditor 5 (evitar costos de licencia)
+5. ✅ **Crear Estudios sin Proyectos**: Checkbox manual "Proyecto creado" hasta que PY_Proyectos esté migrado
+6. ✅ **Omitir Symphony**: No es necesario para la funcionalidad core del módulo
 
 ### Próximo Paso Inmediato
 
-**Ejecutar P0-20 y P0-21** (investigación de dependencias) **ANTES** de iniciar desarrollo.
+**Iniciar Sprint 1** (Semana 1): Validación con stakeholders + Setup de proyecto + Infraestructura base.
 
 ---
 

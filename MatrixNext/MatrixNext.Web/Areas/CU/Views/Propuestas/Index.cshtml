@@ -1,0 +1,255 @@
+@model PropuestasIndexViewModel
+
+@{
+    ViewData["Title"] = "Propuestas";
+    var contexto = ViewBag.JobBookContext as JobBookContextViewModel;
+}
+
+<div class="container-fluid mt-4">
+    @if (contexto != null)
+    {
+        <div class="alert alert-secondary d-flex justify-content-between align-items-center">
+            <div>
+                <strong>JobBook:</strong> @contexto.NumJobBook &nbsp;|&nbsp;
+                <strong>Titulo:</strong> @contexto.Titulo &nbsp;|&nbsp;
+                <strong>Cliente:</strong> @contexto.Cliente
+            </div>
+            <div>
+                <a class="btn btn-sm btn-outline-primary" href="@Url.Action("Index","Cuentas", new { area="CU"})">Cambiar JobBook</a>
+            </div>
+        </div>
+    }
+
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Propuestas</h4>
+            <div class="d-flex gap-2">
+                <form id="filtroForm" class="d-flex align-items-center">
+                    <label class="me-2 mb-0">Estado</label>
+                    <select class="form-select form-select-sm" name="estadoId" id="estadoFiltro">
+                        <option value="">Todos</option>
+                        @foreach (var e in Model.Estados)
+                        {
+                            <option value="@e.Id" selected="@(Model.EstadoFiltro == e.Id ? "selected" : null)">@e.Nombre</option>
+                        }
+                    </select>
+                </form>
+                <button class="btn btn-primary btn-sm" id="btnNuevaPropuesta" data-brief="@Model.IdBriefContext">Nueva propuesta</button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped align-middle" id="propuestasTabla">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Titulo</th>
+                            <th>Cliente</th>
+                            <th>Estado</th>
+                            <th>Probabilidad</th>
+                            <th>JobBook</th>
+                            <th>Fecha envio</th>
+                            <th class="text-end">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Propuestas.Count == 0)
+                        {
+                            <tr><td colspan="8" class="text-muted">Sin propuestas</td></tr>
+                        }
+                        else
+                        {
+                            foreach (var item in Model.Propuestas)
+                            {
+                                <tr data-id="@item.Id">
+                                    <td>@item.Id</td>
+                                    <td>@item.Titulo</td>
+                                    <td>@item.Cliente</td>
+                                    <td>@item.Estado</td>
+                                    <td>@item.Probabilidad</td>
+                                    <td>@item.JobBook</td>
+                                    <td>@item.FechaEnvio?.ToString("yyyy-MM-dd")</td>
+                                    <td class="text-end">
+                                        <button class="btn btn-sm btn-outline-primary btn-editar" data-id="@item.Id">Editar</button>
+                                        <button class="btn btn-sm btn-outline-secondary btn-observaciones" data-id="@item.Id">Observaciones</button>
+                                        <a class="btn btn-sm btn-success" href="@Url.Action("Index","Estudios", new { area="CU", idPropuesta = item.Id })">Estudios</a>
+                                        <button class="btn btn-sm btn-outline-danger btn-eliminar" data-id="@item.Id">Eliminar</button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalCrearContainer"></div>
+<div id="modalObsContainer"></div>
+
+@section Scripts {
+    <script>
+        (function () {
+            const filtroForm = document.getElementById('filtroForm');
+            const estadoFiltro = document.getElementById('estadoFiltro');
+            const btnNueva = document.getElementById('btnNuevaPropuesta');
+            const modalContainer = document.getElementById('modalCrearContainer');
+            const obsContainer = document.getElementById('modalObsContainer');
+
+            estadoFiltro.addEventListener('change', () => {
+                filtroForm.submit();
+            });
+
+            btnNueva.addEventListener('click', () => {
+                const briefId = btnNueva.getAttribute('data-brief');
+                let url = '@Url.Action("Crear", "Propuestas", new { area = "CU" })';
+                if (briefId && briefId !== "0") {
+                    url += `?idBrief=${briefId}`;
+                }
+                abrirModalPropuesta(url);
+            });
+
+            document.querySelectorAll('.btn-editar').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = btn.getAttribute('data-id');
+                    const url = '@Url.Action("Editar", "Propuestas", new { area = "CU" })' + `/${id}`;
+                    abrirModalPropuesta(url);
+                });
+            });
+
+            document.querySelectorAll('.btn-observaciones').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = btn.getAttribute('data-id');
+                    abrirModalObservaciones(id);
+                });
+            });
+
+            document.querySelectorAll('.btn-eliminar').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = btn.getAttribute('data-id');
+                    if (!confirm('Eliminar la propuesta seleccionada?')) return;
+                    fetch(`@Url.Action("Eliminar", "Propuestas", new { area = "CU" })/${id}`, { method: 'POST' })
+                        .then(r => r.json())
+                        .then(res => {
+                            alert(res.message);
+                            if (res.success) {
+                                window.location.reload();
+                            }
+                        })
+                        .catch(err => console.error(err));
+                });
+            });
+
+            function abrirModalPropuesta(url) {
+                fetch(url)
+                    .then(r => r.text())
+                    .then(html => {
+                        modalContainer.innerHTML = html;
+                        const modalEl = document.getElementById('propuestaModal');
+                        const modal = new bootstrap.Modal(modalEl);
+                        wirePropuestaForm(modal);
+                        modal.show();
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert('No fue posible cargar el formulario');
+                    });
+            }
+
+            function wirePropuestaForm(modal) {
+                const form = document.getElementById('propuestaForm');
+                if (!form) return;
+
+                const estadoSelect = document.getElementById('EstadoId');
+                const fechaEnvio = document.getElementById('FechaEnvio');
+                const fechaAprob = document.getElementById('FechaAprob');
+                const razon = document.getElementById('RazonNoAprobId');
+                const jobBook = document.getElementById('JobBook');
+                const fechaInicioCampo = document.getElementById('FechaInicioCampo');
+
+                const applyRules = () => {
+                    const estado = parseInt(estadoSelect.value || '0');
+                    fechaEnvio.disabled = !(estado === 2 || estado === 3);
+                    fechaAprob.disabled = !(estado === 3 || estado === 4);
+                    razon.disabled = estado !== 4;
+                    if (estado === 4) {
+                        fechaEnvio.value = '';
+                        jobBook.removeAttribute('required');
+                    }
+                    if (estado === 3) {
+                        jobBook.setAttribute('required', 'required');
+                    } else {
+                        jobBook.removeAttribute('required');
+                    }
+                    if (estado === 4) {
+                        fechaInicioCampo.value = '';
+                    }
+                };
+
+                estadoSelect.addEventListener('change', applyRules);
+                applyRules();
+
+                form.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const formData = new FormData(form);
+                    fetch('@Url.Action("Guardar", "Propuestas", new { area = "CU" })', {
+                        method: 'POST',
+                        body: formData
+                    })
+                        .then(r => r.json())
+                        .then(res => {
+                            alert(res.message);
+                            if (res.success) {
+                                modal.hide();
+                                window.location.reload();
+                            }
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            alert('No fue posible guardar la propuesta');
+                        });
+                });
+            }
+
+            function abrirModalObservaciones(id) {
+                fetch(`@Url.Action("Observaciones", "Propuestas", new { area = "CU" })/${id}`)
+                    .then(r => r.text())
+                    .then(html => {
+                        obsContainer.innerHTML = html;
+                        const modalEl = document.getElementById('observacionesModal');
+                        const modal = new bootstrap.Modal(modalEl);
+                        wireObservaciones(modal);
+                        modal.show();
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert('No fue posible cargar las observaciones');
+                    });
+            }
+
+            function wireObservaciones(modal) {
+                const btnGuardar = document.getElementById('btnGuardarObservacion');
+                if (!btnGuardar) return;
+                btnGuardar.addEventListener('click', () => {
+                    const obs = document.getElementById('nuevaObservacionTexto').value;
+                    const idProp = document.getElementById('obsPropuestaId').value;
+                    fetch('@Url.Action("AgregarObservacion", "Propuestas", new { area = "CU" })', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: `idPropuesta=${encodeURIComponent(idProp)}&observacion=${encodeURIComponent(obs)}`
+                    })
+                        .then(r => r.json())
+                        .then(res => {
+                            alert(res.message);
+                            if (res.success) {
+                                modal.hide();
+                                window.location.reload();
+                            }
+                        })
+                        .catch(err => console.error(err));
+                });
+            }
+        })();
+    </script>
+}

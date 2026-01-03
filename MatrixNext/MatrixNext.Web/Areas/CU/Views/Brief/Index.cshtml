@@ -1,0 +1,222 @@
+@model BriefFormViewModel
+
+@{
+    ViewData["Title"] = "Brief";
+    var ctx = Model.Contexto;
+}
+
+<div class="container-fluid mt-4">
+    @if (ctx != null)
+    {
+        <div class="alert alert-secondary d-flex justify-content-between align-items-center">
+            <div>
+                <strong>JobBook:</strong> @ctx.NumJobBook &nbsp;|&nbsp;
+                <strong>Titulo:</strong> @ctx.Titulo &nbsp;|&nbsp;
+                <strong>Cliente:</strong> @ctx.Cliente
+            </div>
+            <div>
+                <a class="btn btn-sm btn-outline-primary" href="@Url.Action("Index","Cuentas", new { area="CU"})">Cambiar JobBook</a>
+            </div>
+        </div>
+    }
+
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">@((Model.Brief.Id == 0) ? "Nuevo Brief" : $"Editar Brief #{Model.Brief.Id}")</h4>
+            <div class="d-flex align-items-center gap-2">
+                <span class="badge @(Model.Brief.Viabilidad == false ? "bg-danger" : "bg-success")">
+                    @(Model.Brief.Viabilidad == false ? "No viable" : "Viable")
+                </span>
+                <button type="button" class="btn btn-outline-success btn-sm" id="btnViable" @(Model.Brief.Id == 0 ? "disabled" : null)>Marcar viable</button>
+                <button type="button" class="btn btn-outline-warning btn-sm" id="btnNoViable" @(Model.Brief.Id == 0 ? "disabled" : null)>Marcar no viable</button>
+            </div>
+        </div>
+        <div class="card-body">
+            <form id="briefForm">
+                <input type="hidden" name="Id" value="@Model.Brief.Id" />
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label">Fecha</label>
+                        <input type="date" class="form-control" name="Fecha" value="@(Model.Brief.Fecha?.ToString("yyyy-MM-dd"))" required />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Unidad</label>
+                        <select class="form-select" name="Unidad" required>
+                            <option value="">Seleccione...</option>
+                            @foreach (var u in Model.Unidades)
+                            {
+                                <option value="@u.Id" selected="@(Model.Brief.Unidad == u.Id ? "selected" : null)">@u.Nombre</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Empresa / Cliente</label>
+                        <input type="text" class="form-control" name="Cliente" value="@Model.Brief.Cliente" required />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Solicitante</label>
+                        <input type="text" class="form-control" name="Contacto" value="@Model.Brief.Contacto" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Producto / Marca</label>
+                        <input type="text" class="form-control" name="MarcaCategoria" value="@Model.Brief.MarcaCategoria" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Nombre del proyecto</label>
+                        <input type="text" class="form-control" name="Titulo" value="@Model.Brief.Titulo" required />
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="NewClient" name="NewClient" value="true" @(Model.Brief.NewClient ? "checked" : null) />
+                            <label class="form-check-label" for="NewClient">Cliente nuevo</label>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+                @await Html.PartialAsync("~/Views/Shared/Components/_QuillEditor.cshtml", null, new ViewDataDictionary(ViewData)
+                {
+                    ["Id"] = "editorAntecedentes",
+                    ["Name"] = "Antecedentes",
+                    ["Label"] = "Situacion",
+                    ["Value"] = Model.Brief.Antecedentes,
+                    ["Placeholder"] = "Describe la situacion actual",
+                    ["Required"] = true
+                })
+
+                @await Html.PartialAsync("~/Views/Shared/Components/_QuillEditor.cshtml", null, new ViewDataDictionary(ViewData)
+                {
+                    ["Id"] = "editorObjetivos",
+                    ["Name"] = "Objetivos",
+                    ["Label"] = "Complicacion",
+                    ["Value"] = Model.Brief.Objetivos,
+                    ["Placeholder"] = "Describe la complicacion"
+                })
+
+                @await Html.PartialAsync("~/Views/Shared/Components/_QuillEditor.cshtml", null, new ViewDataDictionary(ViewData)
+                {
+                    ["Id"] = "editorAction",
+                    ["Name"] = "ActionStandars",
+                    ["Label"] = "Pregunta / Hipotesis",
+                    ["Value"] = Model.Brief.ActionStandars,
+                    ["Placeholder"] = "Pregunta de negocio, hipotesis, KPI"
+                })
+
+                @await Html.PartialAsync("~/Views/Shared/Components/_QuillEditor.cshtml", null, new ViewDataDictionary(ViewData)
+                {
+                    ["Id"] = "editorMetodologia",
+                    ["Name"] = "Metodologia",
+                    ["Label"] = "Evidencia y metodologias",
+                    ["Value"] = Model.Brief.Metodologia,
+                    ["Placeholder"] = "Metodologias sugeridas, evidencias"
+                })
+
+                <div class="accordion" id="accordionCampos">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingAdicionales">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAdicionales">
+                                Campos adicionales (O*, D*, C*, M*, DI*)
+                            </button>
+                        </h2>
+                        <div id="collapseAdicionales" class="accordion-collapse collapse" data-bs-parent="#accordionCampos">
+                            <div class="accordion-body">
+                                <div class="row g-2">
+                                    <div class="col-md-2"><label class="form-label">O1</label><input class="form-control" name="O1" value="@Model.Brief.O1" /></div>
+                                    <div class="col-md-2"><label class="form-label">O2</label><input class="form-control" name="O2" value="@Model.Brief.O2" /></div>
+                                    <div class="col-md-2"><label class="form-label">O3</label><input class="form-control" name="O3" value="@Model.Brief.O3" /></div>
+                                    <div class="col-md-2"><label class="form-label">O4</label><input class="form-control" name="O4" value="@Model.Brief.O4" /></div>
+                                    <div class="col-md-2"><label class="form-label">O5</label><input class="form-control" name="O5" value="@Model.Brief.O5" /></div>
+                                    <div class="col-md-2"><label class="form-label">O6</label><input class="form-control" name="O6" value="@Model.Brief.O6" /></div>
+                                    <div class="col-md-2"><label class="form-label">O7</label><input class="form-control" name="O7" value="@Model.Brief.O7" /></div>
+
+                                    <div class="col-md-2"><label class="form-label">D1</label><input class="form-control" name="D1" value="@Model.Brief.D1" /></div>
+                                    <div class="col-md-2"><label class="form-label">D2</label><input class="form-control" name="D2" value="@Model.Brief.D2" /></div>
+                                    <div class="col-md-2"><label class="form-label">D3</label><input class="form-control" name="D3" value="@Model.Brief.D3" /></div>
+
+                                    <div class="col-md-2"><label class="form-label">C1</label><input class="form-control" name="C1" value="@Model.Brief.C1" /></div>
+                                    <div class="col-md-2"><label class="form-label">C2</label><input class="form-control" name="C2" value="@Model.Brief.C2" /></div>
+                                    <div class="col-md-2"><label class="form-label">C3</label><input class="form-control" name="C3" value="@Model.Brief.C3" /></div>
+                                    <div class="col-md-2"><label class="form-label">C4</label><input class="form-control" name="C4" value="@Model.Brief.C4" /></div>
+                                    <div class="col-md-2"><label class="form-label">C5</label><input class="form-control" name="C5" value="@Model.Brief.C5" /></div>
+
+                                    <div class="col-md-2"><label class="form-label">M1</label><input class="form-control" name="M1" value="@Model.Brief.M1" /></div>
+                                    <div class="col-md-2"><label class="form-label">M2</label><input class="form-control" name="M2" value="@Model.Brief.M2" /></div>
+                                    <div class="col-md-2"><label class="form-label">M3</label><input class="form-control" name="M3" value="@Model.Brief.M3" /></div>
+
+                                    @for (int i = 1; i <= 18; i++)
+                                    {
+                                        var prop = Model.Brief.GetType().GetProperty($"DI{i}");
+                                        var val = prop?.GetValue(Model.Brief) as string;
+                                        <div class="col-md-2">
+                                            <label class="form-label">DI@i</label>
+                                            <input class="form-control" name="DI@i" value="@val" />
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-3 d-flex justify-content-end gap-2">
+                    <a class="btn btn-secondary" href="@Url.Action("Index","Cuentas", new { area="CU"})">Cancelar</a>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            const form = document.getElementById('briefForm');
+            const btnViable = document.getElementById('btnViable');
+            const btnNoViable = document.getElementById('btnNoViable');
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                const formData = new FormData(form);
+                fetch('@Url.Action("Guardar", "Brief", new { area = "CU" })', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(r => r.json())
+                    .then(res => {
+                        alert(res.message);
+                        if (res.success) {
+                            window.location.href = '@Url.Action("Index","Propuestas", new { area = "CU" })';
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert('No fue posible guardar el brief');
+                    });
+            });
+
+            function actualizarViabilidad(viable) {
+                const id = document.querySelector('input[name="Id"]').value;
+                if (!id || id === "0") return;
+                const data = new URLSearchParams();
+                data.append('id', id);
+                data.append('viable', viable ? 'true' : 'false');
+                fetch('@Url.Action("Viabilidad", "Brief", new { area = "CU" })', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: data
+                })
+                    .then(r => r.json())
+                    .then(res => {
+                        alert(res.message);
+                        if (res.success) {
+                            window.location.reload();
+                        }
+                    })
+                    .catch(err => console.error(err));
+            }
+
+            btnViable?.addEventListener('click', () => actualizarViabilidad(true));
+            btnNoViable?.addEventListener('click', () => actualizarViabilidad(false));
+        })();
+    </script>
+}

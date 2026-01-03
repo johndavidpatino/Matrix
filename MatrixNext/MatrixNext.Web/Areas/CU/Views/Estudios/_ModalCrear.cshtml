@@ -1,0 +1,79 @@
+@model EstudioFormViewModel
+
+<div class="modal fade" id="estudioModal" tabindex="-1" aria-labelledby="estudioModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="estudioModalLabel">@((Model?.Estudio?.Id ?? 0) == 0 ? "Nuevo Estudio" : "Editar Estudio")</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning">Asignacion de presupuestos y carga de documentos pendientes (ver TODO).</div>
+                <form id="estudioForm">
+                    <input type="hidden" name="Id" value="@Model?.Estudio?.Id" />
+                    <input type="hidden" name="PropuestaId" value="@Model?.Estudio?.PropuestaId" />
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">JobBook</label>
+                            <input type="text" class="form-control" name="JobBook" value="@Model?.Estudio?.JobBook" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Nombre</label>
+                            <input type="text" class="form-control" name="Nombre" value="@Model?.Estudio?.Nombre" />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Valor</label>
+                            <input type="number" step="0.01" class="form-control" name="Valor" value="@Model?.Estudio?.Valor" />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Fecha inicio</label>
+                            <input type="date" class="form-control" name="FechaInicio" value="@(Model?.Estudio?.FechaInicio?.ToString("yyyy-MM-dd"))" required />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Fecha terminacion</label>
+                            <input type="date" class="form-control" name="FechaTerminacion" value="@(Model?.Estudio?.FechaTerminacion?.ToString("yyyy-MM-dd"))" required />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Fecha inicio campo</label>
+                            <input type="date" class="form-control" name="FechaInicioCampo" value="@(Model?.Estudio?.FechaInicioCampo?.ToString("yyyy-MM-dd"))" required />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">% Anticipo</label>
+                            <input type="number" class="form-control" name="Anticipo" value="@Model?.Estudio?.Anticipo" min="0" max="100" />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">% Saldo</label>
+                            <input type="number" class="form-control" name="Saldo" value="@Model?.Estudio?.Saldo" min="0" max="100" />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Plazo (dias)</label>
+                            <input type="number" class="form-control" name="Plazo" value="@Model?.Estudio?.Plazo" min="0" />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Documento soporte</label>
+                            <select class="form-select" name="DocumentoSoporte" required>
+                                <option value="">Seleccione...</option>
+                                @foreach (var d in Model.DocumentosSoporte)
+                                {
+                                    <option value="@d.Id" selected="@(Model?.Estudio?.DocumentoSoporte == d.Id ? "selected" : null)">@d.Nombre</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Tiempo retencion (años)</label>
+                            <input type="number" class="form-control" name="TiempoRetencionAnnos" value="@Model?.Estudio?.TiempoRetencionAnnos" min="0" />
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Observaciones</label>
+                            <textarea class="form-control" name="Observaciones" rows="3">@Model?.Estudio?.Observaciones</textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" form="estudioForm" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>

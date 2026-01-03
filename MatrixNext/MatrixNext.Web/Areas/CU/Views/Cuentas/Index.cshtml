@@ -1,0 +1,91 @@
+@model JobBookSearchViewModel
+
+@{
+    ViewData["Title"] = "Cuentas - JobBooks";
+}
+
+<div class="container-fluid mt-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Busqueda de JobBooks</h4>
+        </div>
+        <div class="card-body">
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-warning">@TempData["ErrorMessage"]</div>
+            }
+            <form id="searchForm">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label">Alcance</label>
+                        <div class="d-flex gap-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="TypeSearch" value="1" @(Model.TypeSearch == 1 ? "checked" : "") />
+                                <label class="form-check-label">Mis jobs</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="TypeSearch" value="2" @(Model.TypeSearch == 2 ? "checked" : "") />
+                                <label class="form-check-label">Unidad</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="TypeSearch" value="3" @(Model.TypeSearch == 3 ? "checked" : "") />
+                                <label class="form-check-label">Todos</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="txtTituloSearch" class="form-label">Titulo</label>
+                        <input type="text" id="txtTituloSearch" name="Titulo" class="form-control" value="@Model.Titulo" placeholder="Buscar por titulo" />
+                    </div>
+                    <div class="col-md-3">
+                        <label for="txtJobBookSearch" class="form-label">JobBook</label>
+                        <input type="text" id="txtJobBookSearch" name="JobBook" class="form-control" value="@Model.JobBook" placeholder="XX-XXXXXX" />
+                    </div>
+                    <div class="col-md-2">
+                        <label for="txtIdPropuestaSearch" class="form-label">Id Propuesta</label>
+                        <input type="number" id="txtIdPropuestaSearch" name="IdPropuesta" class="form-control" value="@(Model.IdPropuesta?.ToString() ?? string.Empty)" />
+                    </div>
+                    <div class="col-md-1 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100">Buscar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card mt-3">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Resultados</h5>
+            <span class="text-muted small">Acciones: Ver detalle, clonacion pendiente</span>
+        </div>
+        <div class="card-body" id="resultadosContainer">
+            @await Html.PartialAsync("_ResultadosGrid", Model.Resultados)
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            const form = document.getElementById('searchForm');
+            const resultsContainer = document.getElementById('resultadosContainer');
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                const formData = new FormData(form);
+                fetch('@Url.Action("Buscar", "Cuentas", new { area = "CU" })', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(r => r.text())
+                    .then(html => {
+                        resultsContainer.innerHTML = html;
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert('No fue posible ejecutar la busqueda.');
+                    });
+            });
+        })();
+    </script>
+}

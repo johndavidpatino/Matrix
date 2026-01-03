@@ -1,0 +1,57 @@
+@model IEnumerable<ObservacionViewModel>
+@{
+    var obs = Model?.ToList() ?? new List<ObservacionViewModel>();
+    var idPropuesta = ViewBag.IdPropuesta as long? ?? 0;
+}
+
+<div class="modal fade" id="observacionesModal" tabindex="-1" aria-labelledby="observacionesModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="observacionesModalLabel">Observaciones Propuesta @idPropuesta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Nueva observacion</label>
+                    <textarea class="form-control" id="nuevaObservacionTexto" rows="3"></textarea>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Usuario</th>
+                                <th>Observacion</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (obs.Count == 0)
+                            {
+                                <tr>
+                                    <td colspan="3" class="text-muted">Sin observaciones</td>
+                                </tr>
+                            }
+                            else
+                            {
+                                foreach (var item in obs)
+                                {
+                                    <tr>
+                                        <td>@item.Fecha.ToString("yyyy-MM-dd HH:mm")</td>
+                                        <td>@item.Usuario</td>
+                                        <td>@item.Observacion</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" id="obsPropuestaId" value="@idPropuesta" />
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="btnGuardarObservacion">Guardar observacion</button>
+            </div>
+        </div>
+    </div>
+</div>
