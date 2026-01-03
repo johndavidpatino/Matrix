@@ -49,6 +49,8 @@ namespace MatrixNext.Data.Modules.TH.Ausencias.Services
                 var diasCalendario = (short)calculo.DiasCalendario;
                 var diasLaborales = (byte)calculo.DiasLaborales;
 
+                var observaciones = modelo.Observaciones ?? string.Empty;
+
                 var id = _adapter.CrearSolicitudAusencia(
                     idEmpleado,
                     modelo.TipoAusencia,
@@ -57,7 +59,7 @@ namespace MatrixNext.Data.Modules.TH.Ausencias.Services
                     diasCalendario,
                     diasLaborales,
                     modelo.AprobadorId,
-                    modelo.Observaciones,
+                    observaciones,
                     idEmpleado,
                     modelo.FiniCausacion,
                     modelo.FFinCausacion
@@ -81,7 +83,7 @@ namespace MatrixNext.Data.Modules.TH.Ausencias.Services
         /// Aprueba una solicitud de ausencia
         /// </summary>
         public (bool success, string message) AprobarSolicitud(long idSolicitud, long idAprobador,
-            string observaciones = null)
+            string? observaciones = null)
         {
             try
             {
@@ -107,7 +109,7 @@ namespace MatrixNext.Data.Modules.TH.Ausencias.Services
         /// Rechaza una solicitud de ausencia
         /// </summary>
         public (bool success, string message) RechazarSolicitud(long idSolicitud, long idAprobador,
-            string observaciones = null)
+            string? observaciones = null)
         {
             try
             {
@@ -136,7 +138,7 @@ namespace MatrixNext.Data.Modules.TH.Ausencias.Services
         /// <summary>
         /// Obtiene solicitud por ID
         /// </summary>
-        public (bool success, AusenciaViewModel data) ObtenerPorId(long id)
+        public (bool success, AusenciaViewModel? data) ObtenerPorId(long id)
         {
             try
             {
@@ -202,14 +204,14 @@ namespace MatrixNext.Data.Modules.TH.Ausencias.Services
                 var result = _adapter.CrearIncapacidad(
                     idSolicitud,
                     modelo.EntidadConsulta,
-                    modelo.IPS,
-                    modelo.RegistroMedico,
+                    modelo.IPS ?? string.Empty,
+                    modelo.RegistroMedico ?? string.Empty,
                     modelo.TipoIncapacidad,
                     modelo.ClaseAusencia,
                     modelo.SOAT,
                     modelo.FechaAccidenteTrabajo,
-                    modelo.Comentarios,
-                    modelo.CIE
+                    modelo.Comentarios ?? string.Empty,
+                    modelo.CIE ?? string.Empty
                 );
 
                 if (!result)
@@ -228,7 +230,7 @@ namespace MatrixNext.Data.Modules.TH.Ausencias.Services
         /// <summary>
         /// Obtiene incapacidad de una solicitud
         /// </summary>
-        public (bool success, IncapacidadViewModel data) ObtenerIncapacidad(long idSolicitud)
+        public (bool success, IncapacidadViewModel? data) ObtenerIncapacidad(long idSolicitud)
         {
             try
             {
@@ -284,7 +286,7 @@ namespace MatrixNext.Data.Modules.TH.Ausencias.Services
 
         #region OPERACIONES TH LEGADO
 
-        public (bool success, CalculoDiasViewModel data) CalcularDias(long idEmpleado, DateTime? inicio, DateTime? fin, bool incluirSabadoComoDiaLaboral = false)
+        public (bool success, CalculoDiasViewModel? data) CalcularDias(long idEmpleado, DateTime? inicio, DateTime? fin, bool incluirSabadoComoDiaLaboral = false)
         {
             try
             {
@@ -298,7 +300,7 @@ namespace MatrixNext.Data.Modules.TH.Ausencias.Services
             }
         }
 
-        public (bool success, ResultadoValidacionViewModel data) ValidarSolicitudAusencia(long idEmpleado, DateTime? inicio, DateTime? fin, int? tipo)
+        public (bool success, ResultadoValidacionViewModel? data) ValidarSolicitudAusencia(long idEmpleado, DateTime? inicio, DateTime? fin, int? tipo)
         {
             try
             {

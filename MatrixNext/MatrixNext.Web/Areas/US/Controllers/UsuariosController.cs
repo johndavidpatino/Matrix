@@ -555,7 +555,7 @@ namespace MatrixNext.Web.Areas.US.Controllers
 
                 var model = new UsuarioChangePasswordViewModel
                 {
-                    Id = (int)vm.Id,
+                    Id = (int)(vm.Id ?? 0),
                     NombreUsuario = vm.NombreUsuario
                 };
 

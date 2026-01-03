@@ -52,7 +52,7 @@ namespace MatrixNext.Web.Areas.TH.Controllers
             public short DiasLaborales { get; set; }
             public byte Tipo { get; set; }
             public long AprobadoPor { get; set; }
-            public string ObservacionesSolicitud { get; set; }
+            public string? ObservacionesSolicitud { get; set; }
         }
 
         public class AprobarSolicitudRequest
@@ -60,28 +60,28 @@ namespace MatrixNext.Web.Areas.TH.Controllers
             public long idSolicitud { get; set; }
             public long AprobadoPor { get; set; }
             public byte VoBo { get; set; }
-            public string ObservacionesAprobacion { get; set; }
+            public string? ObservacionesAprobacion { get; set; }
         }
 
         public class RechazarSolicitudRequest
         {
             public long idSolicitud { get; set; }
             public long AprobadoPor { get; set; }
-            public string Motivo { get; set; }
+            public string? Motivo { get; set; }
         }
 
         public class CrearIncapacidadRequest
         {
             public long idSolicitudAusencia { get; set; }
             public byte? EntidadConsulta { get; set; }
-            public string IPS { get; set; }
-            public string RegistroMedico { get; set; }
+            public string? IPS { get; set; }
+            public string? RegistroMedico { get; set; }
             public byte? TipoIncapacidad { get; set; }
             public byte? ClaseAusencia { get; set; }
             public byte? SOAT { get; set; }
             public DateTime? FechaAccidenteTrabajo { get; set; }
-            public string Comentarios { get; set; }
-            public string CIE { get; set; }
+            public string? Comentarios { get; set; }
+            public string? CIE { get; set; }
         }
 
         #region Views

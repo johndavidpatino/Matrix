@@ -11,14 +11,14 @@ public class UsuarioListViewModel
     public long Id { get; set; }
     
     [Display(Name = "Usuario")]
-    public string NombreUsuario { get; set; }
+    public string? NombreUsuario { get; set; }
 
     [Display(Name = "Nombre Completo")]
-    public string NombreCompleto { get; set; }
+    public string? NombreCompleto { get; set; }
 
     [Display(Name = "Email")]
     [EmailAddress]
-    public string Email { get; set; }
+    public string? Email { get; set; }
 
     [Display(Name = "Activo")]
     public bool Activo { get; set; }
@@ -34,31 +34,31 @@ public class UsuarioFormViewModel
     [Required(ErrorMessage = "El usuario es requerido")]
     [Display(Name = "Usuario")]
     [StringLength(50)]
-    public string NombreUsuario { get; set; }
+    public string? NombreUsuario { get; set; }
 
     [Required(ErrorMessage = "Los nombres son requeridos")]
     [Display(Name = "Nombres")]
     [StringLength(100)]
-    public string Nombres { get; set; }
+    public string? Nombres { get; set; }
 
     [Required(ErrorMessage = "Los apellidos son requeridos")]
     [Display(Name = "Apellidos")]
     [StringLength(100)]
-    public string Apellidos { get; set; }
+    public string? Apellidos { get; set; }
 
     [Display(Name = "Email")]
     [EmailAddress(ErrorMessage = "Email inválido")]
     [StringLength(100)]
-    public string Email { get; set; }
+    public string? Email { get; set; }
 
     [Display(Name = "Contraseña")]
     [DataType(DataType.Password)]
     [StringLength(255)]
-    public string Password { get; set; }
+    public string? Password { get; set; }
 
     [Display(Name = "Confirmar Contraseña")]
     [DataType(DataType.Password)]
-    public string ConfirmPassword { get; set; }
+    public string? ConfirmPassword { get; set; }
 
     [Display(Name = "Activo")]
     public bool Activo { get; set; } = true;
@@ -72,8 +72,8 @@ public class UsuarioFormViewModel
 public class RolViewModel
 {
     public int Id { get; set; }
-    public string Nombre { get; set; }
-    public string Descripcion { get; set; }
+    public string? Nombre { get; set; }
+    public string? Descripcion { get; set; }
 }
 
 /// <summary>
@@ -82,8 +82,8 @@ public class RolViewModel
 public class UnidadViewModel
 {
     public int Id { get; set; }
-    public string Nombre { get; set; }
-    public string Descripcion { get; set; }
+    public string? Nombre { get; set; }
+    public string? Descripcion { get; set; }
 }
 
 /// <summary>
@@ -92,8 +92,8 @@ public class UnidadViewModel
 public class PermisoViewModel
 {
     public int Id { get; set; }
-    public string Permiso { get; set; }
-    public string Descripcion { get; set; }
+    public string? Permiso { get; set; }
+    public string? Descripcion { get; set; }
 }
 
 /// <summary>
@@ -103,13 +103,13 @@ public class UsuarioDetailViewModel
 {
     public int Id { get; set; }
 
-    public string NombreUsuario { get; set; }
+    public string? NombreUsuario { get; set; }
 
-    public string Nombres { get; set; }
+    public string? Nombres { get; set; }
 
-    public string Apellidos { get; set; }
+    public string? Apellidos { get; set; }
 
-    public string Email { get; set; }
+    public string? Email { get; set; }
 
     public bool Activo { get; set; }
 
@@ -130,17 +130,17 @@ public class UsuarioChangePasswordViewModel
     public int Id { get; set; }
 
     [Display(Name = "Usuario")]
-    public string NombreUsuario { get; set; }
+    public string? NombreUsuario { get; set; }
 
     [Display(Name = "Contraseña actual")]
     [DataType(DataType.Password)]
-    public string CurrentPassword { get; set; }
+    public string? CurrentPassword { get; set; }
 
     [Display(Name = "Nueva contraseña")]
     [DataType(DataType.Password)]
-    public string NewPassword { get; set; }
+    public string? NewPassword { get; set; }
 
     [Display(Name = "Confirmar nueva contraseña")]
     [DataType(DataType.Password)]
-    public string ConfirmNewPassword { get; set; }
+    public string? ConfirmNewPassword { get; set; }
 }

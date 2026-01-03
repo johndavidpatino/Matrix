@@ -298,10 +298,10 @@ namespace MatrixNext.Web.Areas.TH.Controllers
                 var dto = new ExperienciaLaboralDTO
                 {
                     Identificacion = identificacion.ToString(),
-                    Empresa = request.Empresa,
+                    Empresa = request.Empresa ?? string.Empty,
                     FechaInicio = request.FechaInicio,
                     FechaFin = request.FechaFin == default ? null : request.FechaFin,
-                    Cargo = request.Cargo
+                    Cargo = request.Cargo ?? string.Empty
                 };
 
                 var (success, message) = await _service.GuardarExperienciaLaboral(dto);
@@ -367,8 +367,8 @@ namespace MatrixNext.Web.Areas.TH.Controllers
                 {
                     Identificacion = identificacion.ToString(),
                     NivelEducativo = request.Tipo.ToString(),
-                    TituloObtenido = request.Titulo,
-                    Institucion = request.Institucion,
+                    TituloObtenido = request.Titulo ?? string.Empty,
+                    Institucion = request.Institucion ?? string.Empty,
                     FechaInicio = request.FechaInicio,
                     FechaFin = request.FechaFin,
                     Graduado = request.Estado == 1,
@@ -715,7 +715,7 @@ namespace MatrixNext.Web.Areas.TH.Controllers
                 var (success, message) = await _service.RetirarEmpleado(
                     identificacion.ToString(),
                     request.FechaRetiro,
-                    request.Observacion,
+                    request.Observacion ?? string.Empty,
                     usuarioId.ToString()
                 );
 
@@ -765,20 +765,20 @@ namespace MatrixNext.Web.Areas.TH.Controllers
 
         public class ExperienciaRequest
         {
-            public string Empresa { get; set; }
+            public string? Empresa { get; set; }
             public DateTime FechaInicio { get; set; }
             public DateTime FechaFin { get; set; }
-            public string Cargo { get; set; }
+            public string? Cargo { get; set; }
             public bool EsInvestigacion { get; set; }
         }
 
         public class EducacionRequest
         {
             public ushort Tipo { get; set; }
-            public string Titulo { get; set; }
-            public string Institucion { get; set; }
-            public string Pais { get; set; }
-            public string Ciudad { get; set; }
+            public string? Titulo { get; set; }
+            public string? Institucion { get; set; }
+            public string? Pais { get; set; }
+            public string? Ciudad { get; set; }
             public DateTime FechaInicio { get; set; }
             public DateTime? FechaFin { get; set; }
             public ushort Modalidad { get; set; }
@@ -787,16 +787,16 @@ namespace MatrixNext.Web.Areas.TH.Controllers
 
         public class HijoRequest
         {
-            public string Nombres { get; set; }
-            public string Apellidos { get; set; }
+            public string? Nombres { get; set; }
+            public string? Apellidos { get; set; }
             public byte Genero { get; set; }
             public DateTime FechaNacimiento { get; set; }
         }
 
         public class ContactoEmergenciaRequest
         {
-            public string Nombres { get; set; }
-            public string Apellidos { get; set; }
+            public string? Nombres { get; set; }
+            public string? Apellidos { get; set; }
             public byte Parentesco { get; set; }
             public long? TelefonoFijo { get; set; }
             public long? TelefonoCelular { get; set; }
@@ -822,7 +822,7 @@ namespace MatrixNext.Web.Areas.TH.Controllers
         public class RetiroRequest
         {
             public DateTime FechaRetiro { get; set; }
-            public string Observacion { get; set; }
+            public string? Observacion { get; set; }
         }
 
         public class ReintegroRequest

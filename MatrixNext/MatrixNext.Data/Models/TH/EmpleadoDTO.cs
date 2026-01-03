@@ -9,19 +9,19 @@ namespace MatrixNext.Data.Models.TH
     public class EmpleadoResumenDTO
     {
         public long Id { get; set; }
-        public string TipoIdentificacion { get; set; }
+        public string? TipoIdentificacion { get; set; }
         public long Identificacion { get; set; }
-        public string Nombres { get; set; }
-        public string Apellidos { get; set; }
+        public string? Nombres { get; set; }
+        public string? Apellidos { get; set; }
         public DateTime? FechaNacimiento { get; set; }
-        public string CorreoIpsos { get; set; }
-        public string Celular { get; set; }
-        public string GrupoSanguineoTxt { get; set; }
-        public string SedeTxt { get; set; }
-        public string AreaTxt { get; set; }
+        public string? CorreoIpsos { get; set; }
+        public string? Celular { get; set; }
+        public string? GrupoSanguineoTxt { get; set; }
+        public string? SedeTxt { get; set; }
+        public string? AreaTxt { get; set; }
         public decimal PorcentajeDiligenciamiento { get; set; }
         public bool Activo { get; set; }
-        public string UrlFoto { get; set; }
+        public string? UrlFoto { get; set; }
     }
 
     /// <summary>
@@ -30,8 +30,8 @@ namespace MatrixNext.Data.Models.TH
     public class EmpleadoFiltroDTO
     {
         public long? Id { get; set; }
-        public string Nombres { get; set; }
-        public string Apellidos { get; set; }
+        public string? Nombres { get; set; }
+        public string? Apellidos { get; set; }
         public bool? Activo { get; set; }
         public ushort? AreaServiceLine { get; set; }
         public byte? Cargo { get; set; }
@@ -45,8 +45,8 @@ namespace MatrixNext.Data.Models.TH
     {
         public long Id { get; set; }
         public long PersonaId { get; set; }
-        public string Empresa { get; set; }
-        public string Cargo { get; set; }
+        public string? Empresa { get; set; }
+        public string? Cargo { get; set; }
         public DateTime FechaInicio { get; set; }
         public DateTime FechaFin { get; set; }
         public bool EsInvestigacion { get; set; }
@@ -60,10 +60,10 @@ namespace MatrixNext.Data.Models.TH
         public long Id { get; set; }
         public long PersonaId { get; set; }
         public ushort Tipo { get; set; }
-        public string Titulo { get; set; }
-        public string Institucion { get; set; }
-        public string Pais { get; set; }
-        public string Ciudad { get; set; }
+        public string? Titulo { get; set; }
+        public string? Institucion { get; set; }
+        public string? Pais { get; set; }
+        public string? Ciudad { get; set; }
         public DateTime FechaInicio { get; set; }
         public DateTime? FechaFin { get; set; }
         public ushort Modalidad { get; set; }
@@ -77,8 +77,8 @@ namespace MatrixNext.Data.Models.TH
     {
         public long Id { get; set; }
         public long PersonaId { get; set; }
-        public string Nombres { get; set; }
-        public string Apellidos { get; set; }
+        public string? Nombres { get; set; }
+        public string? Apellidos { get; set; }
         public byte Genero { get; set; }
         public DateTime FechaNacimiento { get; set; }
     }
@@ -90,8 +90,8 @@ namespace MatrixNext.Data.Models.TH
     {
         public long Id { get; set; }
         public long PersonaId { get; set; }
-        public string Nombres { get; set; }
-        public string Apellidos { get; set; }
+        public string? Nombres { get; set; }
+        public string? Apellidos { get; set; }
         public byte Parentesco { get; set; }
         public long? TelefonoFijo { get; set; }
         public long? TelefonoCelular { get; set; }
@@ -130,10 +130,10 @@ namespace MatrixNext.Data.Models.TH
     public class EstadoDiligenciamientoEmpleadoDTO
     {
         public long PersonaId { get; set; }
-        public string Nombres { get; set; }
-        public string Apellidos { get; set; }
-        public string AreaTxt { get; set; }
-        public string CorreoIpsos { get; set; }
+        public string? Nombres { get; set; }
+        public string? Apellidos { get; set; }
+        public string? AreaTxt { get; set; }
+        public string? CorreoIpsos { get; set; }
 
         public bool ExperienciaLaboral { get; set; }
         public bool Educacion { get; set; }

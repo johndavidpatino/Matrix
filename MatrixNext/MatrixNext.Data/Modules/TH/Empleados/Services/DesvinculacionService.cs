@@ -37,7 +37,7 @@ namespace MatrixNext.Data.Services.TH
         /// Obtiene listado paginado de procesos de desvinculación
         /// Equivalente a WebMethod DesvinculacionesEmpleadosEstatus
         /// </summary>
-        public async Task<(bool success, string message, DesvinculacionesPaginadasDTO data)> 
+        public async Task<(bool success, string message, DesvinculacionesPaginadasDTO? data)>
             ObtenerDesvinculacionesPaginadas(DesvinculacionFiltroDTO filtro)
         {
             try
@@ -88,7 +88,7 @@ namespace MatrixNext.Data.Services.TH
         /// Obtiene empleados activos disponibles para desvinculación
         /// Equivalente a WebMethod EmpleadosActivos
         /// </summary>
-        public async Task<(bool success, string message, IEnumerable<EmpleadoActivoDTO> data)> 
+        public async Task<(bool success, string message, IEnumerable<EmpleadoActivoDTO>? data)>
             ObtenerEmpleadosActivos()
         {
             try
@@ -157,7 +157,7 @@ namespace MatrixNext.Data.Services.TH
         /// Obtiene evaluaciones de áreas para una desvinculación
         /// Equivalente a WebMethod DesvinculacionEmpleadosEstatusEvaluacionesPor
         /// </summary>
-        public async Task<(bool success, string message, IEnumerable<DesvinculacionEvaluacionDTO> data)> 
+        public async Task<(bool success, string message, IEnumerable<DesvinculacionEvaluacionDTO>? data)>
             ObtenerEvaluacionesPorDesvinculacion(int desvinculacionEmpleadoId)
         {
             if (desvinculacionEmpleadoId <= 0)
@@ -180,7 +180,7 @@ namespace MatrixNext.Data.Services.TH
 
         #region Gestión Área
 
-        public async Task<(bool success, string message, IEnumerable<DesvinculacionEmpleadoPendientePorEvaluarAreaDTO> data)>
+        public async Task<(bool success, string message, IEnumerable<DesvinculacionEmpleadoPendientePorEvaluarAreaDTO>? data)>
             ProcesosPendientesPorArea(int areaId)
         {
             if (areaId <= 0) return (false, "AreaId inválido", null);
@@ -195,7 +195,7 @@ namespace MatrixNext.Data.Services.TH
             }
         }
 
-        public async Task<(bool success, string message, IEnumerable<DesvinculacionEmpleadoPendienteEvaluarPorEvaluadorDTO> data)>
+        public async Task<(bool success, string message, IEnumerable<DesvinculacionEmpleadoPendienteEvaluarPorEvaluadorDTO>? data)>
             ProcesosPendientesPorEvaluarUsuarioActual(long usuarioId)
         {
             if (usuarioId <= 0) return (false, "Usuario inválido", null);
@@ -210,7 +210,7 @@ namespace MatrixNext.Data.Services.TH
             }
         }
 
-        public async Task<(bool success, string message, IEnumerable<DesvinculacionEmpleadosAreaItemVerificarDTO> data)>
+        public async Task<(bool success, string message, IEnumerable<DesvinculacionEmpleadosAreaItemVerificarDTO>? data)>
             ItemsVerificarPorArea(int areaId)
         {
             if (areaId <= 0) return (false, "AreaId inválido", null);
@@ -225,7 +225,7 @@ namespace MatrixNext.Data.Services.TH
             }
         }
 
-        public async Task<(bool success, string message, DesvinculacionEmpleadoEmpleadoInfoDTO data)>
+        public async Task<(bool success, string message, DesvinculacionEmpleadoEmpleadoInfoDTO? data)>
             InformacionEmpleadoPor(int desvinculacionEmpleadoId)
         {
             if (desvinculacionEmpleadoId <= 0) return (false, "Id inválido", null);
@@ -280,7 +280,7 @@ namespace MatrixNext.Data.Services.TH
             }
         }
 
-        public async Task<(bool success, string message, IEnumerable<DesvinculacionEmpleadoEvaluacionRealizadaPorEvaluadorDTO> data)>
+        public async Task<(bool success, string message, IEnumerable<DesvinculacionEmpleadoEvaluacionRealizadaPorEvaluadorDTO>? data)>
             EvaluacionesRealizadasPorUsuarioActual(long usuarioId)
         {
             if (usuarioId <= 0) return (false, "Usuario inválido", null);
@@ -316,7 +316,7 @@ namespace MatrixNext.Data.Services.TH
         /// Genera PDF de formato de desvinculación
         /// Equivalente a WebMethod PDFFormato
         /// </summary>
-        public async Task<(bool success, string message, string pdfBase64)> 
+        public async Task<(bool success, string message, string? pdfBase64)>
             GenerarPDFFormato(int desvinculacionEmpleadoId, string templatePath)
         {
             if (desvinculacionEmpleadoId <= 0)
@@ -393,7 +393,7 @@ namespace MatrixNext.Data.Services.TH
             if (dict == null || !dict.TryGetValue("pdfBase64String", out var pdfObj) || pdfObj == null)
                 throw new InvalidOperationException("Respuesta inválida del servicio HTMLToPDF");
 
-            return pdfObj.ToString();
+            return pdfObj?.ToString() ?? string.Empty;
         }
 
         private async Task DispararCorreoLegacyAsync(string relativeUrl)

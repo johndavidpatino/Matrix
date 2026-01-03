@@ -47,7 +47,7 @@ namespace MatrixNext.Data.Modules.US.Usuarios.Adapters
         /// <summary>
         /// Obtiene un usuario específico por su Id
         /// </summary>
-        public UsuarioDTO ObtenerUsuarioPorId(int id)
+        public UsuarioDTO? ObtenerUsuarioPorId(int id)
         {
             try
             {
@@ -93,7 +93,7 @@ namespace MatrixNext.Data.Modules.US.Usuarios.Adapters
         /// <summary>
         /// Obtiene un usuario por su nombre de usuario (login)
         /// </summary>
-        public UsuarioDTO ObtenerUsuarioPorUsuario(string usuario)
+        public UsuarioDTO? ObtenerUsuarioPorUsuario(string? usuario)
         {
             if (string.IsNullOrWhiteSpace(usuario))
                 return null;
@@ -428,8 +428,8 @@ namespace MatrixNext.Data.Modules.US.Usuarios.Adapters
         public class PermisoDTO
         {
             public int Id { get; set; }
-            public string Permiso { get; set; }
-            public string Descripcion { get; set; }
+            public string? Permiso { get; set; }
+            public string? Descripcion { get; set; }
             public bool Activo { get; set; }
         }
 
@@ -582,11 +582,11 @@ namespace MatrixNext.Data.Modules.US.Usuarios.Adapters
     public class UsuarioDTO
     {
         public int Id { get; set; }
-        public string Usuario { get; set; }
-        public string Nombres { get; set; }
-        public string Apellidos { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
+        public string? Usuario { get; set; }
+        public string? Nombres { get; set; }
+        public string? Apellidos { get; set; }
+        public string? Email { get; set; }
+        public string? Password { get; set; }
         public bool Activo { get; set; }
 
         public string NombreCompleto => $"{Nombres} {Apellidos}".Trim();
@@ -598,8 +598,8 @@ namespace MatrixNext.Data.Modules.US.Usuarios.Adapters
     public class RolDTO
     {
         public int Id { get; set; }
-        public string Rol { get; set; }
-        public string Descripcion { get; set; }
+        public string? Rol { get; set; }
+        public string? Descripcion { get; set; }
         public bool Activo { get; set; }
     }
 
@@ -609,8 +609,8 @@ namespace MatrixNext.Data.Modules.US.Usuarios.Adapters
     public class UnidadDTO
     {
         public int Id { get; set; }
-        public string Nombre { get; set; }
-        public string Descripcion { get; set; }
+        public string? Nombre { get; set; }
+        public string? Descripcion { get; set; }
         public bool Activo { get; set; }
     }
 }

@@ -27,7 +27,7 @@ namespace MatrixNext.Data.Services.Usuarios
         /// <summary>
         /// Obtiene lista de usuarios activos
         /// </summary>
-        public (bool success, string message, List<UsuarioListViewModel> data) ObtenerListaUsuarios(string filtro = null)
+        public (bool success, string message, List<UsuarioListViewModel> data) ObtenerListaUsuarios(string? filtro = null)
         {
             try
             {
@@ -71,7 +71,7 @@ namespace MatrixNext.Data.Services.Usuarios
         /// <summary>
         /// Obtiene detalle de un usuario por su Id
         /// </summary>
-        public (bool success, string message, UsuarioDetailViewModel data) ObtenerDetalle(int usuarioId)
+        public (bool success, string message, UsuarioDetailViewModel? data) ObtenerDetalle(int usuarioId)
         {
             try
             {
@@ -288,11 +288,14 @@ namespace MatrixNext.Data.Services.Usuarios
         /// <summary>
         /// Obtiene el Id de usuario por nombre de usuario (login)
         /// </summary>
-        public (bool success, string message, int usuarioId) ObtenerIdPorNombre(string nombreUsuario)
+        public (bool success, string message, int usuarioId) ObtenerIdPorNombre(string? nombreUsuario)
         {
             try
             {
                 using var adapter = new UsuarioDataAdapter(_connectionString);
+                if (string.IsNullOrWhiteSpace(nombreUsuario))
+                    return (false, "Usuario no encontrado", 0);
+
                 var usuario = adapter.ObtenerUsuarioPorUsuario(nombreUsuario);
                 if (usuario == null)
                     return (false, "Usuario no encontrado", 0);
@@ -420,7 +423,7 @@ namespace MatrixNext.Data.Services.Usuarios
         /// <summary>
         /// Obtiene usuario para formulario de edición
         /// </summary>
-        public (bool success, UsuarioFormViewModel data) ObtenerParaEdicion(int usuarioId)
+        public (bool success, UsuarioFormViewModel? data) ObtenerParaEdicion(int usuarioId)
         {
             try
             {
@@ -464,7 +467,7 @@ namespace MatrixNext.Data.Services.Usuarios
         /// <summary>
         /// Cambia la contraseña del usuario verificando la contraseña actual
         /// </summary>
-        public (bool success, string message) CambiarContrasena(int usuarioId, string contrasenaActual, string contrasenaNueva)
+        public (bool success, string message) CambiarContrasena(int usuarioId, string? contrasenaActual, string? contrasenaNueva)
         {
             try
             {
@@ -477,11 +480,11 @@ namespace MatrixNext.Data.Services.Usuarios
                     if (usuario == null)
                         return (false, "Usuario no encontrado");
 
-                    var actualEsValida = EncryptionService.VerifyPassword(contrasenaActual ?? "", usuario.Password);
+                    var actualEsValida = EncryptionService.VerifyPassword(contrasenaActual ?? string.Empty, usuario.Password ?? string.Empty);
                     if (!actualEsValida)
                         return (false, "La contraseña actual es incorrecta");
 
-                    var nuevaEncriptada = EncriptarPassword(contrasenaNueva);
+                    var nuevaEncriptada = EncriptarPassword(contrasenaNueva ?? string.Empty);
                     var ok = adapter.ActualizarPassword(usuarioId, nuevaEncriptada);
                     if (!ok)
                         return (false, "Error al actualizar la contraseña");

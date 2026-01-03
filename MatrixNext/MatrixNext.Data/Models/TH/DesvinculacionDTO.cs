@@ -9,10 +9,10 @@ namespace MatrixNext.Data.Models.TH
     {
         public int Id { get; set; }
         public long EmpleadoId { get; set; }
-        public string NombreEmpleadoCompleto { get; set; }
-        public string Cargo { get; set; }
+        public string? NombreEmpleadoCompleto { get; set; }
+        public string? Cargo { get; set; }
         public DateTime FechaRetiro { get; set; }
-        public string EstadoProceso { get; set; }
+        public string? EstadoProceso { get; set; }
         public DateTime FechaRegistro { get; set; }
         public long RegistradoPor { get; set; }
     }
@@ -24,10 +24,10 @@ namespace MatrixNext.Data.Models.TH
     /// </summary>
     public class DesvinculacionEmpleadoInfoDTO
     {
-        public string NombreEmpleadoCompleto { get; set; }
-        public string EmpleadoId { get; set; }
-        public string Cargo { get; set; }
-        public string FechaRetiro { get; set; }
+        public string? NombreEmpleadoCompleto { get; set; }
+        public string? EmpleadoId { get; set; }
+        public string? Cargo { get; set; }
+        public string? FechaRetiro { get; set; }
     }
 
 

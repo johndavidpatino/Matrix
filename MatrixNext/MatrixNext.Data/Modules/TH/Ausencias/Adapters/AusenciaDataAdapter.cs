@@ -134,9 +134,9 @@ namespace MatrixNext.Data.Modules.TH.Ausencias.Adapters
         /// Crea un registro de incapacidad
         /// Inserta en TH_Ausencia_Incapacidades
         /// </summary>
-        public bool CrearIncapacidad(long idSolicitudAusencia, byte? entidadConsulta, string ips,
-            string registroMedico, byte? tipoIncapacidad, byte? claseAusencia, byte? soat,
-            DateTime? fechaAccidenteTrabajo, string comentarios, string cie)
+        public bool CrearIncapacidad(long idSolicitudAusencia, byte? entidadConsulta, string? ips,
+            string? registroMedico, byte? tipoIncapacidad, byte? claseAusencia, byte? soat,
+            DateTime? fechaAccidenteTrabajo, string? comentarios, string? cie)
         {
             using var context = CreateContext();
 
@@ -166,7 +166,7 @@ namespace MatrixNext.Data.Modules.TH.Ausencias.Adapters
         /// Aprueba una solicitud de ausencia
         /// Actualiza Estado, FechaAprobacion, VoBo1, FechaVoBo1
         /// </summary>
-        public bool AprobarSolicitud(long idSolicitud, long aprobadorId, string observacionesAprobacion = null)
+        public bool AprobarSolicitud(long idSolicitud, long aprobadorId, string? observacionesAprobacion = null)
         {
             using var context = CreateContext();
 
@@ -190,7 +190,7 @@ namespace MatrixNext.Data.Modules.TH.Ausencias.Adapters
         /// Rechaza una solicitud de ausencia
         /// Actualiza Estado = 10, FechaAprobacion, VoBo1, FechaVoBo1
         /// </summary>
-        public bool RechazarSolicitud(long idSolicitud, long aprobadorId, string observacionesAprobacion = null)
+        public bool RechazarSolicitud(long idSolicitud, long aprobadorId, string? observacionesAprobacion = null)
         {
             using var context = CreateContext();
 
@@ -217,7 +217,7 @@ namespace MatrixNext.Data.Modules.TH.Ausencias.Adapters
         /// <summary>
         /// Obtiene una solicitud por ID
         /// </summary>
-        public AusenciaViewModel ObtenerPorId(long id)
+        public AusenciaViewModel? ObtenerPorId(long id)
         {
             using var connection = new SqlConnection(_connectionString);
 
@@ -272,7 +272,7 @@ namespace MatrixNext.Data.Modules.TH.Ausencias.Adapters
         /// <summary>
         /// Obtiene incapacidad por ID de solicitud
         /// </summary>
-        public IncapacidadViewModel ObtenerIncapacidadPorSolicitud(long idSolicitud)
+        public IncapacidadViewModel? ObtenerIncapacidadPorSolicitud(long idSolicitud)
         {
             using var context = CreateContext();
 
@@ -397,7 +397,7 @@ namespace MatrixNext.Data.Modules.TH.Ausencias.Adapters
 
         #region CATÁLOGOS Y VALIDACIONES LEGADO
 
-        public CalculoDiasViewModel CalcularDias(DateTime? inicio, DateTime? fin, bool incluirSabadoComoDiaLaboral, long idEmpleado)
+        public CalculoDiasViewModel? CalcularDias(DateTime? inicio, DateTime? fin, bool incluirSabadoComoDiaLaboral, long idEmpleado)
         {
             using var connection = new SqlConnection(_connectionString);
 
@@ -412,7 +412,7 @@ namespace MatrixNext.Data.Modules.TH.Ausencias.Adapters
             return connection.QueryFirstOrDefault<CalculoDiasViewModel>(sql, dp, commandType: CommandType.StoredProcedure);
         }
 
-        public ResultadoValidacionViewModel ValidarSolicitudAusencia(long idEmpleado, DateTime? inicio, DateTime? fin, int? tipo)
+        public ResultadoValidacionViewModel? ValidarSolicitudAusencia(long idEmpleado, DateTime? inicio, DateTime? fin, int? tipo)
         {
             using var connection = new SqlConnection(_connectionString);
 
