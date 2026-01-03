@@ -3,3 +3,4 @@ MVCMatrix/
 **/bin/
 **/obj/
 .vscode/
+.vs/

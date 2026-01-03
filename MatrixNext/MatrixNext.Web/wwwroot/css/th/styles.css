@@ -1,0 +1,10 @@
+.cardPerson{display:flex;align-items:center;padding:8px;border:1px solid #ddd;margin:6px;border-radius:6px}
+.cardPerson img{border-radius:4px;margin-right:8px}
+#modalEditar,#modalIniciar,#modalEvaluaciones{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);background:#fff;padding:16px;border-radius:6px;box-shadow:0 6px 18px rgba(0,0,0,0.12);z-index:1001;max-width:90%;max-height:80%;overflow:auto}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:1000;display:none}
+.toast{position:fixed;right:16px;bottom:16px;background:#323232;color:#fff;padding:10px 14px;border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,0.2);opacity:0;transform:translateY(10px);transition:all .25s}
+.toast.show{opacity:1;transform:translateY(0)}
+.loader{display:inline-block;width:18px;height:18px;border:3px solid #eee;border-top-color:#3498db;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* Responsive adjustments */
+@media(max-width:720px){.cardPerson{flex-direction:row;gap:8px}.filters input{width:100%;display:block;margin-bottom:8px}}

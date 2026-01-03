@@ -1,0 +1,342 @@
+@{
+    ViewData["Title"] = "Administración de Empleados";
+}
+
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Administración de Empleados</h1>
+    </div>
+</div>
+
+<div id="empleadoApp" class="row">
+    <div class="col-xl-12">
+        <div class="card custom-card">
+            <div class="card-header">
+                <div class="card-title">Filtros de Búsqueda</div>
+            </div>
+            <div class="card-body">
+                <div class="row gy-3">
+                    <div class="col-xl-3">
+                        <input id="filterIdentificacion" class="form-control" placeholder="Identificación" />
+                    </div>
+                    <div class="col-xl-3">
+                        <input id="filterNombre" class="form-control" placeholder="Nombre" />
+                    </div>
+                    <div class="col-xl-3">
+                        <button id="btnSearch" class="btn btn-primary"><i class="ri-search-line"></i> Buscar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card custom-card">
+            <div class="card-header">
+                <div class="card-title">Empleados</div>
+            </div>
+            <div class="card-body">
+                <div id="cardsContainer" class="row">
+                    <!-- tarjetas dinámicas -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Editar Empleado -->
+<div class="modal fade" id="modalEditar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form id="empleadoForm" novalidate>
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Empleado</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="PersonaId" />
+                    <div class="mb-3">
+                        <label class="form-label">Tipo Identificación</label>
+                        <input id="TipoIdentificacion" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Identificación</label>
+                        <input id="Identificacion" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Primer Nombre</label>
+                        <input id="PrimerNombre" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Primer Apellido</label>
+                        <input id="PrimerApellido" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="FotoFile" class="form-label">Foto</label>
+                        <input type="file" id="FotoFile" class="form-control" accept="image/*" aria-describedby="fotoHelp" />
+                        <div id="fotoHelp" class="form-text">Solo JPG/PNG. Max 2MB.</div>
+                        <input type="hidden" id="FotoBase64" />
+                        <div class="mt-2"><img id="FotoPreview" src="/images/sin-foto.jpg" alt="Foto empleado" class="img-thumbnail" style="max-width:150px;max-height:150px;"/></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" id="btnSaveEmpleado" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Toast container -->
+<div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="empleadoToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <strong class="me-auto">Empleados</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" id="empleadoToastBody">
+        </div>
+    </div>
+</div>
+
+<script src="/js/th/empleados.js"></script>
+@{
+    ViewData["Title"] = "Administración de Empleados";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h1>@ViewData["Title"]</h1>
+            <p class="text-muted">Gestión integral de información de empleados</p>
+        </div>
+    </div>
+
+    <!-- Panel de Filtros -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-filter"></i> Filtros de Búsqueda
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="filterIdentificacion">Identificación</label>
+                                <input type="text" class="form-control" id="filterIdentificacion" placeholder="Cédula">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="filterNombres">Nombres</label>
+                                <input type="text" class="form-control" id="filterNombres" placeholder="Nombres">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="filterApellidos">Apellidos</label>
+                                <input type="text" class="form-control" id="filterApellidos" placeholder="Apellidos">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="filterActivo">Estado</label>
+                                <select class="form-control" id="filterActivo">
+                                    <option value="">Todos</option>
+                                    <option value="true" selected>Activos</option>
+                                    <option value="false">Inactivos</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button type="button" class="btn btn-primary" id="btnBuscar">
+                                <i class="fas fa-search"></i> Buscar
+                            </button>
+                            <button type="button" class="btn btn-secondary" id="btnLimpiar">
+                                <i class="fas fa-eraser"></i> Limpiar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenedor de Tarjetas de Empleados -->
+    <div class="row" id="containerEmpleados">
+        <!-- Las tarjetas se generarán dinámicamente aquí -->
+    </div>
+
+    <!-- Loading Spinner -->
+    <div class="row d-none" id="loadingSpinner">
+        <div class="col-md-12 text-center">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Cargando...</span>
+            </div>
+            <p>Cargando empleados...</p>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Detalles de Empleado -->
+<div class="modal fade" id="modalDetalleEmpleado" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitleEmpleado">Información del Empleado</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Tabs para diferentes secciones -->
+                <ul class="nav nav-tabs" id="tabsEmpleado" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="tab-general" data-toggle="tab" href="#general" role="tab">General</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tab-experiencia" data-toggle="tab" href="#experiencia" role="tab">Experiencia</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tab-educacion" data-toggle="tab" href="#educacion" role="tab">Educación</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tab-hijos" data-toggle="tab" href="#hijos" role="tab">Hijos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tab-contactos" data-toggle="tab" href="#contactos" role="tab">Contactos</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="tabContentEmpleado">
+                    <div class="tab-pane fade show active" id="general" role="tabpanel">
+                        <!-- Información general del empleado -->
+                        <div id="infoGeneral" class="mt-3"></div>
+                    </div>
+                    <div class="tab-pane fade" id="experiencia" role="tabpanel">
+                        <!-- Tabla de experiencia laboral -->
+                        <div id="infoExperiencia" class="mt-3"></div>
+                    </div>
+                    <div class="tab-pane fade" id="educacion" role="tabpanel">
+                        <!-- Tabla de educación -->
+                        <div id="infoEducacion" class="mt-3"></div>
+                    </div>
+                    <div class="tab-pane fade" id="hijos" role="tabpanel">
+                        <!-- Tabla de hijos -->
+                        <div id="infoHijos" class="mt-3"></div>
+                    </div>
+                    <div class="tab-pane fade" id="contactos" role="tabpanel">
+                        <!-- Tabla de contactos de emergencia -->
+                        <div id="infoContactos" class="mt-3"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Cargar empleados al iniciar
+            buscarEmpleados();
+
+            // Event listeners
+            $('#btnBuscar').on('click', buscarEmpleados);
+            $('#btnLimpiar').on('click', limpiarFiltros);
+
+            function buscarEmpleados() {
+                const filtro = {
+                    id: $('#filterIdentificacion').val() || null,
+                    nombres: $('#filterNombres').val() || null,
+                    apellidos: $('#filterApellidos').val() || null,
+                    activo: $('#filterActivo').val() === '' ? null : $('#filterActivo').val() === 'true'
+                };
+
+                $('#loadingSpinner').removeClass('d-none');
+                $('#containerEmpleados').empty();
+
+                $.ajax({
+                    url: '/TH/Empleados/Search',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(filtro),
+                    success: function(response) {
+                        $('#loadingSpinner').addClass('d-none');
+                        if (response.success) {
+                            mostrarEmpleados(response.data);
+                        } else {
+                            alert(response.message || 'Error al buscar empleados');
+                        }
+                    },
+                    error: function() {
+                        $('#loadingSpinner').addClass('d-none');
+                        alert('Error al conectar con el servidor');
+                    }
+                });
+            }
+
+            function mostrarEmpleados(empleados) {
+                if (!empleados || empleados.length === 0) {
+                    $('#containerEmpleados').html('<div class="col-12"><p class="text-muted">No se encontraron empleados</p></div>');
+                    return;
+                }
+
+                empleados.forEach(function(emp) {
+                    const card = `
+                        <div class="col-md-3 mb-4">
+                            <div class="card h-100 empleado-card" data-id="${emp.id}" style="cursor: pointer;">
+                                <div class="card-body text-center">
+                                    <img src="${emp.urlFoto || '/images/sin-foto.jpg'}" 
+                                         class="rounded-circle mb-3" 
+                                         style="width: 80px; height: 80px; object-fit: cover;" 
+                                         alt="Foto">
+                                    <h5 class="card-title">${emp.nombres} ${emp.apellidos}</h5>
+                                    <p class="card-text">
+                                        <small class="text-muted">
+                                            <i class="fas fa-id-card"></i> ${emp.identificacion}<br>
+                                            <i class="fas fa-envelope"></i> ${emp.correoIpsos || 'N/A'}<br>
+                                            <i class="fas fa-phone"></i> ${emp.celular || 'N/A'}<br>
+                                            <i class="fas fa-building"></i> ${emp.areaTxt || 'N/A'}<br>
+                                            <i class="fas fa-chart-line"></i> ${emp.porcentajeDiligenciamiento}% diligenciado
+                                        </small>
+                                    </p>
+                                    ${emp.activo 
+                                        ? '<span class="badge badge-success">Activo</span>' 
+                                        : '<span class="badge badge-danger">Inactivo</span>'}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    $('#containerEmpleados').append(card);
+                });
+
+                // Agregar evento click a las tarjetas
+                $('.empleado-card').on('click', function() {
+                    const id = $(this).data('id');
+                    abrirDetalleEmpleado(id);
+                });
+            }
+
+            function abrirDetalleEmpleado(identificacion) {
+                // TODO: Implementar carga de detalles y mostrar modal
+                $('#modalDetalleEmpleado').modal('show');
+                $('#modalTitleEmpleado').text('Empleado: ' + identificacion);
+            }
+
+            function limpiarFiltros() {
+                $('#filterIdentificacion').val('');
+                $('#filterNombres').val('');
+                $('#filterApellidos').val('');
+                $('#filterActivo').val('true');
+            }
+        });
+    </script>
+}

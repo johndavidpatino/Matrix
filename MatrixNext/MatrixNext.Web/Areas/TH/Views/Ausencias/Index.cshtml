@@ -41,20 +41,14 @@
                                         <tr>
                                             <td>@ausencia.Id</td>
                                             <td>
-                                                @{
-                                                    string tipoAusencia = ausencia.Tipo switch
-                                                    {
-                                                        1 => "Vacaciones",
-                                                        2 => "Incapacidad",
-                                                        3 => "Permiso",
-                                                        4 => "Licencia",
-                                                        _ => "Otro"
-                                                    };
-                                                }
-                                                @tipoAusencia
+                                                @ausencia.TipoNombre
                                             </td>
-                                            <td>@(ausencia.FechaInicio?.ToString("dd/MM/yyyy") ?? "-")</td>
-                                            <td>@(ausencia.FechaFin?.ToString("dd/MM/yyyy") ?? "-")</td>
+                                            <td data-order="@((ausencia.FechaInicio?.ToString("yyyy-MM-dd")) ?? "")">
+                                                @(ausencia.FechaInicio?.ToString("dd/MM/yyyy") ?? "-")
+                                            </td>
+                                            <td data-order="@((ausencia.FechaFin?.ToString("yyyy-MM-dd")) ?? "")">
+                                                @(ausencia.FechaFin?.ToString("dd/MM/yyyy") ?? "-")
+                                            </td>
                                             <td>
                                                 <span class="badge bg-info">@ausencia.DiasLaborales días</span>
                                             </td>
@@ -67,15 +61,8 @@
                                                         2 => "bg-danger",
                                                         _ => "bg-secondary"
                                                     };
-                                                    string estadoText = ausencia.Estado switch
-                                                    {
-                                                        0 => "Pendiente",
-                                                        1 => "Aprobado",
-                                                        2 => "Rechazado",
-                                                        _ => "Desconocido"
-                                                    };
                                                 }
-                                                <span class="badge @estadoClass">@estadoText</span>
+                                                <span class="badge @estadoClass">@ausencia.EstadoNombre</span>
                                             </td>
                                             <td>@ausencia.AprobadoPor</td>
                                             <td>

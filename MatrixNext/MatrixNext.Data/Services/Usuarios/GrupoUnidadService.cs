@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MatrixNext.Data.Adapters;
-using MatrixNext.Data.Models.Usuarios;
+using MatrixNext.Data.Modules.US.Usuarios.Adapters;
+using MatrixNext.Data.Modules.US.Usuarios.Models;
 using Microsoft.Extensions.Configuration;
 
 namespace MatrixNext.Data.Services.Usuarios
