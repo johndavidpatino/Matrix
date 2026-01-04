@@ -25,15 +25,13 @@
   - Feedback.aspx
   - SeguimientoFeedback.aspx
 - **Dependencias**: Bajo (infraestructura solo)
-- **Status**: 🔄 EN PROGRESO (modales y CambioContrasena implementados)
-
-- **Notas de progreso**: Se agregaron entradas de menú y partials/modal para Create/Edit/Delete en `Views/Usuarios/` y se implementó la página `ChangePassword` (GET/POST) y el método `CambiarContrasena` en `UsuarioService`.
-
-#### Asignaciones del usuario (Roles / Unidades / Permisos)
-- Se añadieron métodos en `MatrixNext.Data.Adapters.UsuarioDataAdapter` para asignar/remover roles (`US_RolesUsuarios`), unidades (`US_UsuariosUnidades`) y permisos (`US_PermisosUsuarios`).
-- Se expusieron operaciones en `MatrixNext.Data.Services.Usuarios.UsuarioService` para: obtener asignados/disponibles y asignar/remover.
-- Se agregaron endpoints AJAX en `MatrixNext.Web.Controllers.Usuarios.UsuariosController` para invocar las operaciones desde la UI.
-- El proyecto `MatrixNext.Web` compila correctamente tras los cambios (compilación exitosa con advertencias sobre nullable warnings en DTOs).
+- **Status**: ✅ COMPLETADO
+- **Componentes migrados**:
+  - CRUD usuarios completo
+  - Cambio de contraseña
+  - Asignaciones (Roles/Unidades/Permisos)
+  - 14 páginas migradas
+- **LOC migradas**: ~800 líneas
 
 #### 2. **Home** (3 páginas)
 - **Carpeta**: `WebMatrix/Home/`
@@ -219,8 +217,15 @@
 #### 10. **CU_Cuentas** (Clientes)
 - **Contexto**: `CU_Model`
 - **Dependencias**: Medias
-- **Estado**: Fase 1 (Brief/Propuesta/Estudio) migrada; **Fase 2 Presupuesto** en progreso con entidades IQ_* y pantalla de alternativas (datos generales) ya disponibles.
-- **Pendientes Fase 2**: formulario completo de Presupuesto.aspx (IQuote, muestra F2F/CATI/Online, JBI/JBE, simulador y autorizacion GM).
+- **Estado**: ✅ COMPLETADO
+  - ✅ Fase 1: Default.aspx (Búsqueda JobBooks), Brief/Frame.aspx, Propuestas.aspx, Estudio.aspx
+  - ✅ Fase 2: Presupuesto.aspx completo (IQuote, alternativas, muestra, JBI/JBE, simulador, autorización GM)
+- **Componentes migrados**:
+  - Controllers: CuentasController, BriefController, PropuestasController, EstudiosController, PresupuestoController
+  - Services: CuentaService, BriefService, PropuestaService, EstudioService, PresupuestoService, IQuoteCalculatorService
+  - DataAdapters: CuentaDataAdapter, BriefDataAdapter, PropuestaDataAdapter, EstudioDataAdapter, PresupuestoDataAdapter
+  - Views: 22 vistas Razor (Index, modales, grids, paneles)
+- **LOC migradas**: ~3,500+ líneas
 
 #### 11. **CC_FinzOpe** (Financiera - Operacional)
 - **Contexto**: `CC_FinzOpe`

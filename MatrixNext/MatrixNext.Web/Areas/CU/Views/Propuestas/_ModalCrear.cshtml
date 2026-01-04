@@ -23,9 +23,10 @@
                             <label class="form-label">Probabilidad</label>
                             <select class="form-select" id="ProbabilidadId" name="ProbabilidadId" required>
                                 <option value="">Seleccione...</option>
-                                @foreach (var p in Model.Probabilidades)
+                                @foreach (var p in Model!.Probabilidades)
                                 {
-                                    <option value="@p.Id" selected="@(Model.Propuesta?.ProbabilidadId == p.Id ? "selected" : null)">@p.Nombre</option>
+                                    var isSelected = Model.Propuesta!.ProbabilidadId == p.Id;
+                                    <option value="@p.Id" selected="@isSelected">@p.Nombre</option>
                                 }
                             </select>
                         </div>
@@ -35,7 +36,8 @@
                                 <option value="">Seleccione...</option>
                                 @foreach (var e in Model.Estados)
                                 {
-                                    <option value="@e.Id" selected="@(Model.Propuesta?.EstadoId == e.Id ? "selected" : null)">@e.Nombre</option>
+                                    var isSelected = Model.Propuesta!.EstadoId == e.Id;
+                                    <option value="@e.Id" selected="@isSelected">@e.Nombre</option>
                                 }
                             </select>
                         </div>
@@ -51,9 +53,10 @@
                             <label class="form-label">Razon no aprobacion</label>
                             <select class="form-select" id="RazonNoAprobId" name="RazonNoAprobId">
                                 <option value="">Seleccione...</option>
-                                @foreach (var r in Model.Razones)
+                                @foreach (var r in Model!.Razones)
                                 {
-                                    <option value="@r.Id" selected="@(Model.Propuesta?.RazonNoAprobId == r.Id ? "selected" : null)">@r.Nombre</option>
+                                    var isSelected = Model.Propuesta!.RazonNoAprobId == r.Id;
+                                    <option value="@r.Id" selected="@isSelected">@r.Nombre</option>
                                 }
                             </select>
                         </div>

@@ -414,7 +414,7 @@ namespace MatrixNext.Data.Adapters.CU
                 // Mapear 110+ propiedades
                 parametros.TecCodigo = model.TecCodigo;
                 parametros.TipoProyecto = model.TipoProyecto;
-                parametros.ParGrupoObjetivo = model.ParGrupoObjetivo?.Trim();
+                parametros.ParGrupoObjetivo = (model.ParGrupoObjetivo?.Trim()) ?? string.Empty;
                 parametros.ParIncidencia = model.ParIncidencia;
                 parametros.ParProductividad = model.ParProductividad;
                 parametros.ParProbabilistico = model.ParProbabilistico;

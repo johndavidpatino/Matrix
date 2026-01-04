@@ -53,9 +53,10 @@
                             <label class="form-label">Documento soporte</label>
                             <select class="form-select" name="DocumentoSoporte" required>
                                 <option value="">Seleccione...</option>
-                                @foreach (var d in Model.DocumentosSoporte)
+                                @foreach (var d in Model!.DocumentosSoporte)
                                 {
-                                    <option value="@d.Id" selected="@(Model?.Estudio?.DocumentoSoporte == d.Id ? "selected" : null)">@d.Nombre</option>
+                                    var isSelected = Model.Estudio!.DocumentoSoporte == d.Id;
+                                    <option value="@d.Id" selected="@isSelected">@d.Nombre</option>
                                 }
                             </select>
                         </div>

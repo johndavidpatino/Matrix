@@ -6,8 +6,8 @@
 ┌─────────────────────────────────────────────────────────────────┐
 │  MIGRACIÓN WEBMATRIX → MATRIXNEXT                               │
 │  ================================================================ │
-│  Módulos Completados:        2/25    [████░░░░░░░░░░░░░░░░] 8%  │
-│  Líneas Código Migradas:  ~5,000+    [████░░░░░░░░░░░░░░░░] 8%  │
+│  Módulos Completados:        3/25    [█████░░░░░░░░░░░░░░░] 12% │
+│  Líneas Código Migradas:  ~9,300+    [██████░░░░░░░░░░░░░░] 15% │
 │  Compilación sin Errores:   ✅ SÍ                               │
 │  Documentación Completa:     ✅ SÍ                               │
 │  Testing Funcional:          ⏳ Pendiente (staging)              │
@@ -84,7 +84,6 @@
 
 | Módulo | Páginas | Estado |
 |--------|---------|--------|
-| CU_Cuentas | ~10 | �YY� En progreso (Presupuesto F2 - alternativas) |
 | CC_FinzOpe | ~12 | 📋 Backlog |
 | PY_ControlCalidad | ~5 | 📋 Backlog |
 | OP_RO, OP_Trafico | ~8 | 📋 Backlog |
@@ -97,18 +96,18 @@
 ### Líneas de Código Migradas por Componente
 
 ```
-Adapters:              ~1,100 LOC  ████████░░ 22%
-Services:              ~  850 LOC  ██████░░░░ 17%
-Controllers:           ~1,200 LOC  █████████░ 24%
-Views (Razor):         ~  600 LOC  █████░░░░ 12%
-ViewModels:            ~  400 LOC  ████░░░░░░ 8%
-Configuration (DI):    ~  150 LOC  █░░░░░░░░░ 3%
+Adapters:              ~2,000 LOC  ████████░░ 21%
+Services:              ~1,800 LOC  ███████░░░ 19%
+Controllers:           ~2,000 LOC  █████████░ 22%
+Views (Razor):         ~2,100 LOC  █████████░ 23%
+ViewModels:            ~  800 LOC  ████░░░░░░ 9%
+Configuration (DI):    ~  200 LOC  █░░░░░░░░░ 2%
 Tests (Pending):       ~    0 LOC  ░░░░░░░░░░ 0%
 ─────────────────────────────────────────────
-Total:                ~5,000+ LOC
+Total:                ~9,300+ LOC
 
-Target (WebMatrix):   ~25,000+ LOC
-Progress:             20% aproximadamente
+Target (WebMatrix):   ~60,000+ LOC
+Progress:             15% aproximadamente
 ```
 
 ---
@@ -215,7 +214,8 @@ Semana    Módulo                    Estado           Horas
 ═════════════════════════════════════════════════════════════
 1-2       US_Usuarios               ✅ COMPLETADO    ~60
 3         TH_Ausencias              ✅ COMPLETADO    ~40
-4-9       PY_Proyectos              🔜 PRÓXIMO       ~148
+4-8       CU_Cuentas                ✅ COMPLETADO    ~110
+9-14      PY_Proyectos              🔜 PRÓXIMO       ~148
 10-16     OP_Cuantitativo           📋 EN COLA       ~180
 17-23     OP_Cualitativo            📋 EN COLA       ~160
 24-33     FI_Administrativo         📋 EN COLA       ~240
