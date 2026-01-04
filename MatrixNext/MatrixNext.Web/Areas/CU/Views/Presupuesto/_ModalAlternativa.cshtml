@@ -1,0 +1,114 @@
+@model EditarAlternativaViewModel
+
+<div class="modal fade" id="modalAlternativa" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Alternativa @Model.ParAlternativa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formAlternativa">
+                    <input type="hidden" name="IdPropuesta" value="@Model.IdPropuesta" />
+                    <input type="hidden" name="ParAlternativa" value="@Model.ParAlternativa" />
+
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <label class="form-label">Descripción</label>
+                            <input type="text" class="form-control" name="Descripcion" value="@Model.Descripcion" maxlength="300" required />
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Observaciones</label>
+                            <textarea class="form-control" name="Observaciones" rows="3">@Model.Observaciones</textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Número IQuote</label>
+                            <input type="text" class="form-control" name="NoIQuote" value="@Model.NoIQuote" maxlength="50" />
+                            <small class="text-muted">Campo informativo usado en Presupuesto.aspx.</small>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label class="form-label">Días Campo</label>
+                            <input type="number" class="form-control" name="DiasCampo" value="@Model.DiasCampo" min="1" required />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Días Diseño</label>
+                            <input type="number" class="form-control" name="DiasDiseno" value="@(Model.DiasDiseno ?? 0)" min="0" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Días Procesamiento</label>
+                            <input type="number" class="form-control" name="DiasProcesamiento" value="@(Model.DiasProcesamiento ?? 0)" min="0" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Días Informes</label>
+                            <input type="number" class="form-control" name="DiasInformes" value="@(Model.DiasInformes ?? 0)" min="0" />
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Número de mediciones</label>
+                            <input type="number" class="form-control" name="NumeroMediciones" value="@(Model.NumeroMediciones ?? 1)" min="0" />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Meses entre mediciones</label>
+                            <input type="number" class="form-control" name="MesesMediciones" value="@(Model.MesesMediciones ?? 1)" min="0" />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Tipo de presupuesto</label>
+                            <input type="number" class="form-control" name="TipoPresupuesto" value="@(Model.TipoPresupuesto ?? 1)" min="0" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="btnGuardarAlternativa">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        const modalEl = document.getElementById('modalAlternativa');
+        const form = document.getElementById('formAlternativa');
+        const btnGuardar = document.getElementById('btnGuardarAlternativa');
+
+        if (!btnGuardar || !form || !modalEl) {
+            return;
+        }
+
+        const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+
+        btnGuardar.addEventListener('click', function () {
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const formData = new FormData(form);
+            fetch('@Url.Action("GuardarAlternativa", "Presupuesto", new { area = "CU" })', {
+                method: 'POST',
+                body: formData
+            })
+                .then(r => r.json())
+                .then(res => {
+                    alert(res.message);
+                    if (res.success) {
+                        modal.hide();
+                        window.location.reload();
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert('Ocurrió un error guardando la alternativa');
+                });
+        });
+    })();
+</script>

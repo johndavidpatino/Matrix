@@ -84,7 +84,7 @@
 
 | Módulo | Páginas | Estado |
 |--------|---------|--------|
-| CU_Cuentas | ~10 | 📋 Backlog |
+| CU_Cuentas | ~10 | �YY� En progreso (Presupuesto F2 - alternativas) |
 | CC_FinzOpe | ~12 | 📋 Backlog |
 | PY_ControlCalidad | ~5 | 📋 Backlog |
 | OP_RO, OP_Trafico | ~8 | 📋 Backlog |

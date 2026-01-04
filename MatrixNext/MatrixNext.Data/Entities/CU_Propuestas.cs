@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MatrixNext.Data.Entities
@@ -62,5 +63,8 @@ namespace MatrixNext.Data.Entities
 
         [Column("FormaEnvio")]
         public string? FormaEnvio { get; set; }
+
+        public virtual ICollection<CU_Presupuestos> CU_Presupuestos { get; set; }
+            = new HashSet<CU_Presupuestos>();
     }
 }

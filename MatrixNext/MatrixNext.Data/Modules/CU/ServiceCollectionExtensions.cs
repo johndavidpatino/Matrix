@@ -23,6 +23,7 @@ namespace MatrixNext.Data.Modules.CU
             
             // TODO-P0-02: Registrar PresupuestoDataAdapter
             services.AddScoped(sp => new PresupuestoDataAdapter(configuration));
+            services.AddScoped<PresupuestoService>();
 
             return services;
         }

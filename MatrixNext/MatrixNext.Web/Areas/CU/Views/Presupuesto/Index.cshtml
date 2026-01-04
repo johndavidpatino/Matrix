@@ -1,0 +1,124 @@
+@model PresupuestoIndexViewModel
+@{
+    ViewData["Title"] = "Presupuesto";
+    var contexto = Model.JobBookContext;
+}
+
+<div class="container-fluid mt-4">
+    @if (contexto != null)
+    {
+        <div class="alert alert-secondary d-flex justify-content-between align-items-center">
+            <div>
+                <strong>JobBook:</strong> @contexto.NumJobBook &nbsp;|&nbsp;
+                <strong>Titulo:</strong> @contexto.Titulo &nbsp;|&nbsp;
+                <strong>Cliente:</strong> @contexto.Cliente
+            </div>
+            <div>
+                <a class="btn btn-sm btn-outline-primary" href="@Url.Action("Index","Cuentas", new { area="CU"})">Cambiar JobBook</a>
+            </div>
+        </div>
+    }
+
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+                <h4 class="mb-0">Alternativas de Presupuesto</h4>
+                <small class="text-muted">Datos generales migrados desde Presupuesto.aspx (Fase 2).</small>
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-primary btn-sm" id="btnNuevaAlternativa" data-propuesta="@Model.IdPropuesta">Nueva alternativa</button>
+            </div>
+        </div>
+        <div class="card-body">
+            @if (Model.Alternativas.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-striped align-middle">
+                        <thead>
+                            <tr>
+                                <th>Alternativa</th>
+                                <th>Descripción</th>
+                                <th>Días</th>
+                                <th>Mediciones</th>
+                                <th class="text-end">Presupuestos</th>
+                                <th class="text-end">Valor total</th>
+                                <th class="text-end">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var alt in Model.Alternativas)
+                            {
+                                var diasTotal = alt.DiasCampo + (alt.DiasDiseno ?? 0) + (alt.DiasProcesamiento ?? 0) + (alt.DiasInformes ?? 0);
+                                <tr>
+                                    <td>@alt.ParAlternativa</td>
+                                    <td>@alt.Descripcion</td>
+                                    <td>@diasTotal</td>
+                                    <td>
+                                        <span title="Número de mediciones / meses">@((alt.NumeroMediciones ?? 0) > 0 ? alt.NumeroMediciones.ToString() : "-") / @((alt.MesesMediciones ?? 0) > 0 ? alt.MesesMediciones.ToString() : "-")</span>
+                                    </td>
+                                    <td class="text-end">@((alt.TotalPresupuestos ?? 0).ToString("N0"))</td>
+                                    <td class="text-end">@(alt.ValorTotal.HasValue ? alt.ValorTotal.Value.ToString("N0") : "-")</td>
+                                    <td class="text-end">
+                                        <button class="btn btn-sm btn-outline-primary btn-editar" data-alternativa="@alt.ParAlternativa" data-propuesta="@alt.IdPropuesta">Editar</button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    No hay alternativas registradas para esta propuesta. Use "Nueva alternativa" para iniciar.
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div id="modalAlternativaContainer"></div>
+
+@section Scripts {
+    <script>
+        (function () {
+            const modalContainer = document.getElementById('modalAlternativaContainer');
+            const btnNueva = document.getElementById('btnNuevaAlternativa');
+
+            if (btnNueva) {
+                btnNueva.addEventListener('click', () => {
+                    const propuesta = btnNueva.getAttribute('data-propuesta');
+                    abrirModalAlternativa(propuesta, null);
+                });
+            }
+
+            document.querySelectorAll('.btn-editar').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const alt = btn.getAttribute('data-alternativa');
+                    const propuesta = btn.getAttribute('data-propuesta');
+                    abrirModalAlternativa(propuesta, alt);
+                });
+            });
+
+            function abrirModalAlternativa(idPropuesta, alternativa) {
+                let url = '@Url.Action("Alternativa", "Presupuesto", new { area = "CU" })' + `?idPropuesta=${idPropuesta}`;
+                if (alternativa) {
+                    url += `&alternativa=${alternativa}`;
+                }
+
+                fetch(url)
+                    .then(r => r.text())
+                    .then(html => {
+                        modalContainer.innerHTML = html;
+                        const modalEl = document.getElementById('modalAlternativa');
+                        const modal = new bootstrap.Modal(modalEl);
+                        modal.show();
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert('No fue posible cargar la alternativa.');
+                    });
+            }
+        })();
+    </script>
+}

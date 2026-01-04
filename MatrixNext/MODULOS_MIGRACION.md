@@ -219,6 +219,8 @@
 #### 10. **CU_Cuentas** (Clientes)
 - **Contexto**: `CU_Model`
 - **Dependencias**: Medias
+- **Estado**: Fase 1 (Brief/Propuesta/Estudio) migrada; **Fase 2 Presupuesto** en progreso con entidades IQ_* y pantalla de alternativas (datos generales) ya disponibles.
+- **Pendientes Fase 2**: formulario completo de Presupuesto.aspx (IQuote, muestra F2F/CATI/Online, JBI/JBE, simulador y autorizacion GM).
 
 #### 11. **CC_FinzOpe** (Financiera - Operacional)
 - **Contexto**: `CC_FinzOpe`
