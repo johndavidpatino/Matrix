@@ -1,0 +1,67 @@
+@model MatrixNext.Data.Modules.CU.Models.EditarPresupuestoViewModel
+
+<div class="row">
+    <div class="col-md-3 mb-3">
+        <label for="ParNProcesosDC" class="form-label">Data Clean</label>
+        <input type="number" id="ParNProcesosDC" name="ParNProcesosDC" class="form-control" 
+               min="0" value="@(Model.ParNProcesosDC ?? 0)" />
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <label for="ParNProcesosTopLines" class="form-label">Top Lines</label>
+        <input type="number" id="ParNProcesosTopLines" name="ParNProcesosTopLines" class="form-control" 
+               min="0" value="@(Model.ParNProcesosTopLines ?? 0)" />
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <label for="ParNProcesosTablas" class="form-label">Tablas</label>
+        <input type="number" id="ParNProcesosTablas" name="ParNProcesosTablas" class="form-control" 
+               min="0" value="@(Model.ParNProcesosTablas ?? 0)" />
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <label for="ParNProcesosBases" class="form-label">Archivos/Bases</label>
+        <input type="number" id="ParNProcesosBases" name="ParNProcesosBases" class="form-control" 
+               min="0" value="@(Model.ParNProcesosBases ?? 0)" />
+    </div>
+
+    <div class="col-12">
+        <hr />
+        <h6>Data Processing</h6>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="form-check">
+            <input type="checkbox" id="DPTransformacion" name="DPTransformacion" class="form-check-input" 
+                   @(Model.DPTransformacion == true ? "checked" : "") />
+            <label class="form-check-label" for="DPTransformacion">Transformación</label>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="form-check">
+            <input type="checkbox" id="DPUnificacion" name="DPUnificacion" class="form-check-input" 
+                   @(Model.DPUnificacion == true ? "checked" : "") />
+            <label class="form-check-label" for="DPUnificacion">Unificación</label>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <label for="DPComplejidad" class="form-label">Complejidad DP</label>
+        <select id="DPComplejidad" name="DPComplejidad" class="form-select">
+            <option value="0">Sin especificar</option>
+            <option value="1">Baja</option>
+            <option value="2">Media</option>
+            <option value="3">Alta</option>
+        </select>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <label for="DPPonderacion" class="form-label">Ponderación</label>
+        <select id="DPPonderacion" name="DPPonderacion" class="form-select">
+            <option value="0">Sin ponderación</option>
+            <option value="1">Simple</option>
+            <option value="2">Compleja</option>
+        </select>
+    </div>
+</div>

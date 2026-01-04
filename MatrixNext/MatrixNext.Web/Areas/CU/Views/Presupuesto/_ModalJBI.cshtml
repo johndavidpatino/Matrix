@@ -1,0 +1,139 @@
+@model MatrixNext.Data.Modules.CU.Models.EditarPresupuestoViewModel
+
+<!-- JobBook Interno (JBI) Modal -->
+<div class="modal fade" id="modalJBI" tabindex="-1" role="dialog" aria-labelledby="modalJBILabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="modalJBILabel">
+                    <i class="bi bi-file-text"></i> JobBook Interno (JBI)
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <strong>Información General</strong>
+                            </div>
+                            <div class="card-body">
+                                <p>
+                                    <strong>ID Propuesta:</strong>
+                                    <span id="jbiIdPropuesta">@Model?.IdPropuesta</span>
+                                </p>
+                                <p>
+                                    <strong>Alternativa:</strong>
+                                    <span id="jbiParAlternativa">@Model?.ParAlternativa</span>
+                                </p>
+                                <p>
+                                    <strong>Técnica:</strong>
+                                    <span id="jbiTecnica">@Model?.TecCodigo</span>
+                                </p>
+                                <p>
+                                    <strong>Grupo Objetivo:</strong>
+                                    <span id="jbiGrupoObjetivo">@Model?.ParGrupoObjetivo</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <strong>Costos</strong>
+                            </div>
+                            <div class="card-body">
+                                <p>
+                                    <strong>Costo Directo:</strong>
+                                    <br />
+                                    <span class="badge bg-warning text-dark" id="jbiCostoDirecto">$0</span>
+                                </p>
+                                <p>
+                                    <strong>Valor Venta (Interno):</strong>
+                                    <br />
+                                    <span class="badge bg-success" id="jbiValorVenta">$0</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Desglose Detallado -->
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <strong>Desglose de Costos Detallado</strong>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-sm table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Concepto</th>
+                                        <th class="text-end">Cantidad</th>
+                                        <th class="text-end">Valor Unitario</th>
+                                        <th class="text-end">Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Encuestadores (Costo Directo)</td>
+                                        <td class="text-end" id="jbiCantEncuestadores">-</td>
+                                        <td class="text-end">$80,000</td>
+                                        <td class="text-end" id="jbiCostoEncuestadores">$0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Supervisores</td>
+                                        <td class="text-end" id="jbiCantSupervisores">-</td>
+                                        <td class="text-end">$120,000</td>
+                                        <td class="text-end" id="jbiCostoSupervisores">$0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Coordinadores</td>
+                                        <td class="text-end" id="jbiCantCoordinadores">-</td>
+                                        <td class="text-end">$150,000</td>
+                                        <td class="text-end" id="jbiCostoCoordinadores">$0</td>
+                                    </tr>
+                                    <tr class="table-light">
+                                        <td><strong>Procesamiento de Datos</strong></td>
+                                        <td class="text-end">-</td>
+                                        <td class="text-end">Según complejidad</td>
+                                        <td class="text-end" id="jbiCostoProcessamiento"><strong>$0</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3" class="text-end"><strong>TOTAL COSTO DIRECTO</strong></td>
+                                        <td class="text-end"><strong id="jbiTotalCosto">$0</strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notas -->
+                <div class="alert alert-info mb-0">
+                    <strong>Nota:</strong> Este JobBook es de uso interno. Los valores están basados en los parámetros ingresados en el presupuesto.
+                    Los cálculos incluyen productividad, viáticos y contingencia según la metodología seleccionada.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="exportarJBIExcel()">
+                    <i class="bi bi-download"></i> Descargar Excel
+                </button>
+                <button type="button" class="btn btn-success" onclick="imprimirJBI()">
+                    <i class="bi bi-printer"></i> Imprimir
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function exportarJBIExcel() {
+        alert('Exportación de JBI a Excel (próximamente - usar ClosedXML)');
+    }
+
+    function imprimirJBI() {
+        window.print();
+    }
+</script>

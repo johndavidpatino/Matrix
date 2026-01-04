@@ -1,0 +1,184 @@
+@model MatrixNext.Data.Modules.CU.Models.EditarPresupuestoViewModel
+
+<div class="row">
+    <div class="col-12 mb-3">
+        <h6>Agregar Muestra</h6>
+        <div class="row g-2">
+            <div class="col-md-4">
+                <input type="number" id="muCantidad" class="form-control" placeholder="Cantidad" min="1" />
+            </div>
+            <div class="col-md-6">
+                <select id="muIdentificador" class="form-select">
+                    <option value="">Seleccione tipo...</option>
+                    <option value="1">NSE Alto (5 y 6)</option>
+                    <option value="2">NSE Medio (4)</option>
+                    <option value="3">NSE Bajo (1, 2, 3)</option>
+                    <option value="4">Alta Dificultad</option>
+                    <option value="5">Baja Dificultad</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-success w-100" id="btnAgregarMuestra">
+                    <i class="bi bi-plus-circle"></i> Agregar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <table class="table table-sm table-striped" id="tableMuestra">
+            <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Cantidad</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Muestra != null && Model.Muestra.Any())
+                {
+                    foreach (var m in Model.Muestra)
+                    {
+                        <tr data-muestra-id="@m.MuIdentificador" data-ciudad="@m.CiuCodigo">
+                            <td>@m.IdentificadorNombre</td>
+                            <td>@m.MuCantidad</td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-danger btn-eliminar-muestra"
+                                        data-id="@m.MuIdentificador" data-ciudad="@m.CiuCodigo">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Total:</th>
+                    <th id="totalMuestra">@(Model.Muestra?.Sum(m => m.MuCantidad) ?? 0)</th>
+                    <th></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        const idPropuesta = $('#IdPropuesta').val();
+        const alternativa = $('#ParAlternativa').val();
+        const metCodigo = $('#MetCodigo').val();
+        const nacional = $('#ParNacional').val();
+
+        function getNombreTipo(id) {
+            const tipos = {
+                '1': 'NSE Alto (5 y 6)',
+                '2': 'NSE Medio (4)',
+                '3': 'NSE Bajo (1, 2, 3)',
+                '4': 'Alta Dificultad',
+                '5': 'Baja Dificultad'
+            };
+            return tipos[id] || 'Desconocido';
+        }
+
+        $('#btnAgregarMuestra').on('click', function() {
+            const cantidad = parseInt($('#muCantidad').val());
+            const identificador = $('#muIdentificador').val();
+
+            if (!cantidad || cantidad <= 0 || !identificador) {
+                showToast('Error', 'Complete cantidad y tipo de muestra', 'warning');
+                return;
+            }
+
+            const data = {
+                IdPropuesta: parseInt(idPropuesta),
+                ParAlternativa: parseInt(alternativa),
+                MetCodigo: parseInt(metCodigo),
+                CiuCodigo: 0, // Por ahora sin ciudad específica
+                MuIdentificador: parseInt(identificador),
+                ParNacional: parseInt(nacional),
+                MuCantidad: cantidad
+            };
+
+            $.ajax({
+                url: '/CU/Presupuesto/AgregarMuestra',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function(response) {
+                    if (response.success) {
+                        const nombreTipo = getNombreTipo(identificador);
+                        const row = `<tr data-muestra-id="${identificador}" data-ciudad="0">
+                            <td>${nombreTipo}</td>
+                            <td>${cantidad}</td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-danger btn-eliminar-muestra"
+                                        data-id="${identificador}" data-ciudad="0">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>`;
+                        
+                        $('#tableMuestra tbody').append(row);
+                        $('#muCantidad').val('');
+                        $('#muIdentificador').val('');
+                        actualizarTotalMuestra();
+                        showToast('Éxito', response.message, 'success');
+                    } else {
+                        showToast('Error', response.message, 'error');
+                    }
+                },
+                error: function() {
+                    showToast('Error', 'Error agregando muestra', 'error');
+                }
+            });
+        });
+
+        $(document).on('click', '.btn-eliminar-muestra', function() {
+            const btn = $(this);
+            const muId = btn.data('id');
+            const ciudad = btn.data('ciudad');
+
+            if (!confirm('¿Está seguro de eliminar esta muestra?')) {
+                return;
+            }
+
+            const data = {
+                IdPropuesta: parseInt(idPropuesta),
+                ParAlternativa: parseInt(alternativa),
+                MetCodigo: parseInt(metCodigo),
+                CiuCodigo: parseInt(ciudad),
+                MuIdentificador: parseInt(muId),
+                ParNacional: parseInt(nacional)
+            };
+
+            $.ajax({
+                url: '/CU/Presupuesto/EliminarMuestra',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function(response) {
+                    if (response.success) {
+                        btn.closest('tr').remove();
+                        actualizarTotalMuestra();
+                        showToast('Éxito', response.message, 'success');
+                    } else {
+                        showToast('Error', response.message, 'error');
+                    }
+                },
+                error: function() {
+                    showToast('Error', 'Error eliminando muestra', 'error');
+                }
+            });
+        });
+
+        function actualizarTotalMuestra() {
+            let total = 0;
+            $('#tableMuestra tbody tr').each(function() {
+                const cantidad = parseInt($(this).find('td:eq(1)').text());
+                total += cantidad;
+            });
+            $('#totalMuestra').text(total);
+        }
+    });
+</script>

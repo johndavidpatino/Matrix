@@ -1,0 +1,83 @@
+@model MatrixNext.Data.Modules.CU.Models.EditarPresupuestoViewModel
+
+<div class="row">
+    <div class="col-md-4 mb-3">
+        <label for="PregCerradas" class="form-label">Preguntas Cerradas</label>
+        <input type="number" id="PregCerradas" name="PregCerradas" class="form-control pregunta-input" 
+               min="0" value="@(Model.PregCerradas ?? 0)" />
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <label for="PregCerradasMultiples" class="form-label">Cerradas Múltiples</label>
+        <input type="number" id="PregCerradasMultiples" name="PregCerradasMultiples" class="form-control pregunta-input" 
+               min="0" value="@(Model.PregCerradasMultiples ?? 0)" />
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <label for="PregAbiertas" class="form-label">Preguntas Abiertas</label>
+        <input type="number" id="PregAbiertas" name="PregAbiertas" class="form-control pregunta-input" 
+               min="0" value="@(Model.PregAbiertas ?? 0)" />
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <label for="PregAbiertasMultiples" class="form-label">Abiertas Múltiples</label>
+        <input type="number" id="PregAbiertasMultiples" name="PregAbiertasMultiples" class="form-control pregunta-input" 
+               min="0" value="@(Model.PregAbiertasMultiples ?? 0)" />
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <label for="PregOtras" class="form-label">Otras (Baterías/Grillas)</label>
+        <input type="number" id="PregOtras" name="PregOtras" class="form-control pregunta-input" 
+               min="0" value="@(Model.PregOtras ?? 0)" />
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <label for="PregDemograficos" class="form-label">Demográficos</label>
+        <input type="number" id="PregDemograficos" name="PregDemograficos" class="form-control pregunta-input" 
+               min="0" value="@(Model.PregDemograficos ?? 15)" />
+    </div>
+
+    <div class="col-12 mb-3">
+        <div class="alert alert-info">
+            <strong>Total de Preguntas:</strong> <span id="totalPreguntas">0</span>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <label for="Complejidad" class="form-label">Complejidad Cuestionario</label>
+        <select id="Complejidad" name="Complejidad" class="form-select">
+            <option value="0">Sin especificar</option>
+            <option value="1">Baja</option>
+            <option value="2">Media</option>
+            <option value="3">Alta</option>
+        </select>
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <label for="ComplejidadCodificacion" class="form-label">Complejidad Codificación</label>
+        <select id="ComplejidadCodificacion" name="ComplejidadCodificacion" class="form-select">
+            <option value="0">Sin especificar</option>
+            <option value="1">Baja</option>
+            <option value="2">Media</option>
+            <option value="3">Alta</option>
+        </select>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        function calcularTotalPreguntas() {
+            const total = parseInt($('#PregCerradas').val() || 0) +
+                          parseInt($('#PregCerradasMultiples').val() || 0) +
+                          parseInt($('#PregAbiertas').val() || 0) +
+                          parseInt($('#PregAbiertasMultiples').val() || 0) +
+                          parseInt($('#PregOtras').val() || 0) +
+                          parseInt($('#PregDemograficos').val() || 0);
+            
+            $('#totalPreguntas').text(total);
+        }
+
+        $('.pregunta-input').on('input', calcularTotalPreguntas);
+        calcularTotalPreguntas();
+    });
+</script>

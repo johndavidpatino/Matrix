@@ -1,0 +1,225 @@
+@model MatrixNext.Data.Modules.CU.Models.EditarPresupuestoViewModel
+
+<div class="modal fade" id="modalPresupuesto" tabindex="-1" aria-labelledby="modalPresupuestoLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalPresupuestoLabel">
+                    @(Model.MetCodigo > 0 ? "Editar Presupuesto" : "Nuevo Presupuesto")
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="formPresupuesto" autocomplete="off">
+                    <input type="hidden" id="IdPropuesta" name="IdPropuesta" value="@Model.IdPropuesta" />
+                    <input type="hidden" id="ParAlternativa" name="ParAlternativa" value="@Model.ParAlternativa" />
+                    <input type="hidden" id="MetCodigo" name="MetCodigo" value="@Model.MetCodigo" />
+                    <input type="hidden" id="ParNacional" name="ParNacional" value="@Model.ParNacional" />
+
+                    <!-- Tabs de secciones -->
+                    <ul class="nav nav-tabs" id="presupuestoTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="tab-general" data-bs-toggle="tab" data-bs-target="#panel-general" type="button" role="tab">
+                                General
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="tab-preguntas" data-bs-toggle="tab" data-bs-target="#panel-preguntas" type="button" role="tab">
+                                Cuestionario
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="tab-muestra" data-bs-toggle="tab" data-bs-target="#panel-muestra" type="button" role="tab">
+                                Muestra
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="tab-procesos" data-bs-toggle="tab" data-bs-target="#panel-procesos" type="button" role="tab">
+                                Procesos
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="tab-avanzado" data-bs-toggle="tab" data-bs-target="#panel-avanzado" type="button" role="tab">
+                                Configuraciones Avanzadas
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content border border-top-0 p-3" id="presupuestoTabsContent">
+                        <!-- Tab General -->
+                        <div class="tab-pane fade show active" id="panel-general" role="tabpanel">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="TecCodigo" class="form-label">Técnica <span class="text-danger">*</span></label>
+                                    <select id="TecCodigo" name="TecCodigo" class="form-select" required>
+                                        <option value="">Seleccione...</option>
+                        <option value="100">Face-to-Face (F2F)</option>
+                        <option value="200">CATI (Telefónica)</option>
+                        <option value="300">Online</option>
+                                    <label for="ParIncidencia" class="form-label">Incidencia (%) <span class="text-danger">*</span></label>
+                                    <input type="number" id="ParIncidencia" name="ParIncidencia" class="form-control" 
+                                           min="1" max="100" value="@Model.ParIncidencia" />
+                                </div>
+
+                                <div class="col-12 mb-3">
+                                    <label for="ParGrupoObjetivo" class="form-label">Grupo Objetivo <span class="text-danger">*</span></label>
+                                    <textarea id="ParGrupoObjetivo" name="ParGrupoObjetivo" class="form-control" rows="3" 
+                                              maxlength="300" required>@Model.ParGrupoObjetivo</textarea>
+                                    <small class="form-text text-muted">Máximo 300 caracteres</small>
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <label for="ParProductividad" class="form-label">Productividad</label>
+                                    <input type="number" step="0.01" id="ParProductividad" name="ParProductividad" 
+                                           class="form-control" value="@Model.ParProductividad" />
+                                    <small class="form-text text-muted">Dejar en blanco para cálculo automático</small>
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <label for="ParTiempoEncuesta" class="form-label">Duración (min)</label>
+                                    <input type="number" id="ParTiempoEncuesta" name="ParTiempoEncuesta" 
+                                           class="form-control" min="1" value="@(Model.ParTiempoEncuesta ?? 20)" />
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <label for="ParEncuestadoresPunto" class="form-label">Encuestadores/Punto</label>
+                                    <input type="number" id="ParEncuestadoresPunto" name="ParEncuestadoresPunto" 
+                                           class="form-control" min="1" value="@(Model.ParEncuestadoresPunto ?? 1)" />
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-check">
+                                        <input type="checkbox" id="ParProbabilistico" name="ParProbabilistico" 
+                                               class="form-check-input" @(Model.ParProbabilistico == true ? "checked" : "") />
+                                        <label class="form-check-label" for="ParProbabilistico">
+                                            Muestreo Probabilístico
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3" id="divF2FVirtual" style="display: none;">
+                                    <div class="form-check">
+                                        <input type="checkbox" id="F2FVirtual" name="F2FVirtual" 
+                                               class="form-check-input" @(Model.F2FVirtual == true ? "checked" : "") />
+                                        <label class="form-check-label" for="F2FVirtual">
+                                            F2F Virtual (App/Tablet)
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 mb-3">
+                                    <label for="ParObservaciones" class="form-label">Observaciones</label>
+                                    <textarea id="ParObservaciones" name="ParObservaciones" class="form-control" rows="3">@Model.ParObservaciones</textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab Cuestionario -->
+                        <div class="tab-pane fade" id="panel-preguntas" role="tabpanel">
+                            <partial name="_PreguntasPanel" model="Model" />
+                        </div>
+
+                        <!-- Tab Muestra -->
+                        <div class="tab-pane fade" id="panel-muestra" role="tabpanel">
+                            <partial name="_MuestraPanel" model="Model" />
+                        </div>
+
+                        <!-- Tab Procesos -->
+                        <div class="tab-pane fade" id="panel-procesos" role="tabpanel">
+                            <partial name="_ProcesosPanel" model="Model" />
+                        </div>
+
+                        <!-- Tab Avanzado -->
+                        <div class="tab-pane fade" id="panel-avanzado" role="tabpanel">
+                            <partial name="_ConfigAvanzadaPanel" model="Model" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="btnGuardarPresupuesto">Guardar Presupuesto</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            const modalPresupuesto = $('#modalPresupuesto');
+
+            // Mostrar/ocultar campos según técnica
+            $('#TecCodigo').on('change', function() {
+                const tecnica = parseInt($(this).val());
+                const divIncidencia = $('#ParIncidencia').closest('.mb-3');
+                const divF2FVirtual = $('#divF2FVirtual');
+
+                if (tecnica === 100) { // F2F
+                    divIncidencia.show();
+                    divF2FVirtual.show();
+                } else if (tecnica === 200) { // CATI
+                    divIncidencia.show();
+                    divF2FVirtual.hide();
+                } else { // Online
+                    divIncidencia.hide();
+                    divF2FVirtual.hide();
+                }
+            }).trigger('change');
+
+            // Guardar presupuesto
+            $('#btnGuardarPresupuesto').on('click', function() {
+                const form = $('#formPresupuesto');
+                
+                if (!form[0].checkValidity()) {
+                    form[0].reportValidity();
+                    return;
+                }
+
+                const data = serializeFormToJSON(form);
+
+                $.ajax({
+                    url: '/CU/Presupuesto/GuardarPresupuesto',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    success: function(response) {
+                        if (response.success) {
+                            showToast('Éxito', response.message, 'success');
+                            modalPresupuesto.modal('hide');
+                            location.reload(); // Recargar para mostrar presupuesto guardado
+                        } else {
+                            showToast('Error', response.message, 'error');
+                        }
+                    },
+                    error: function() {
+                        showToast('Error', 'Error guardando presupuesto', 'error');
+                    }
+                });
+            });
+
+            function serializeFormToJSON(form) {
+                const obj = {};
+                const formData = form.serializeArray();
+
+                $.each(formData, function(i, field) {
+                    // Convertir valores numéricos
+                    let value = field.value;
+                    if (value && !isNaN(value)) {
+                        value = parseFloat(value);
+                    }
+                    obj[field.name] = value;
+                });
+
+                // Checkboxes
+                form.find('input[type="checkbox"]').each(function() {
+                    obj[this.name] = this.checked;
+                });
+
+                return obj;
+            }
+        });
+    </script>
+}

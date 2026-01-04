@@ -1,0 +1,186 @@
+@model IEnumerable<MatrixNext.Data.Modules.CU.Models.PresupuestoListItemViewModel>
+
+<div class="table-responsive">
+    <table id="gvPresupuestos" class="table table-striped table-hover">
+        <thead class="table-light">
+            <tr>
+                <th>ID</th>
+                <th>Alternativa</th>
+                <th>Metodología</th>
+                <th>Fase</th>
+                <th>Técnica</th>
+                <th>Nacional</th>
+                <th>Muestra</th>
+                <th>Valor Venta</th>
+                <th>GM %</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.IdPropuesta</td>
+                        <td>@item.ParAlternativa</td>
+                        <td>@item.MetodologiaNombre</td>
+                        <td>@item.FaseNombre</td>
+                        <td>@item.TecnicaNombre</td>
+                        <td>
+                            @if (item.ParNacional == 1)
+                            {
+                                <span class="badge bg-success">Sí</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">No</span>
+                            }
+                        </td>
+                        <td>@item.TotalMuestra</td>
+                        <td class="text-end">
+                            @if (item.ValorVenta.HasValue)
+                            {
+                                @($"${item.ValorVenta:N0}")
+                            }
+                        </td>
+                        <td class="text-end">
+                            @if (item.GrossMargin.HasValue)
+                            {
+                                @($"{item.GrossMargin:F2}%")
+                            }
+                        </td>
+                        <td>
+                            @if (item.Revisado == true)
+                            {
+                                <span class="badge bg-info">Revisado</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning">Pendiente</span>
+                            }
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <!-- Edit button -->
+                                <button type="button" class="btn btn-primary" title="Editar" 
+                                        onclick="editarPresupuesto(@item.IdPropuesta, @item.ParAlternativa, @item.MetCodigo)">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                
+                                <!-- Delete button -->
+                                <button type="button" class="btn btn-danger" title="Eliminar"
+                                        onclick="eliminarPresupuesto(@item.IdPropuesta, @item.ParAlternativa)">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                                
+                                <!-- Copy button -->
+                                <button type="button" class="btn btn-info" title="Copiar"
+                                        onclick="copiarPresupuesto(@item.IdPropuesta, @item.ParAlternativa)">
+                                    <i class="bi bi-files"></i>
+                                </button>
+                                
+                                <!-- Review button -->
+                                <button type="button" class="btn btn-success" title="Revisar"
+                                        onclick="revisarPresupuesto(@item.IdPropuesta, @item.ParAlternativa)">
+                                    <i class="bi bi-check-circle"></i>
+                                </button>
+                                
+                                <!-- More actions dropdown -->
+                                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-three-dots-vertical"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#" onclick="exportarJBI(@item.IdPropuesta, @item.ParAlternativa); return false;">
+                                        <i class="bi bi-download"></i> Exportar JBI
+                                    </a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="exportarJBE(@item.IdPropuesta, @item.ParAlternativa); return false;">
+                                        <i class="bi bi-download"></i> Exportar JBE
+                                    </a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="#" onclick="verSimulador(@item.IdPropuesta, @item.ParAlternativa); return false;">
+                                        <i class="bi bi-calculator"></i> Ver Simulador
+                                    </a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="ejecutarCalculos(@item.IdPropuesta, @item.ParAlternativa); return false;">
+                                        <i class="bi bi-lightning-fill"></i> Ejecutar Cálculos
+                                    </a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="11" class="text-center text-muted py-4">
+                        No hay presupuestos registrados
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function editarPresupuesto(idPropuesta, parAlternativa, metCodigo) {
+        $.get('/CU/Presupuesto/ModalPresupuesto', 
+            { idPropuesta: idPropuesta, parAlternativa: parAlternativa, metCodigo: metCodigo },
+            function(html) {
+                var modal = $(html);
+                $('body').append(modal);
+                var bsModal = new bootstrap.Modal(modal.find('.modal')[0]);
+                bsModal.show();
+                modal.find('.modal').on('hidden.bs.modal', function() {
+                    modal.remove();
+                });
+            });
+    }
+
+    function eliminarPresupuesto(idPropuesta, parAlternativa) {
+        if (confirm('¿Está seguro de que desea eliminar este presupuesto?')) {
+            $.ajax({
+                url: '/CU/Presupuesto/EliminarPresupuesto',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ idPropuesta: idPropuesta, parAlternativa: parAlternativa }),
+                success: function(response) {
+                    if (response.success) {
+                        alert('Presupuesto eliminado correctamente');
+                        location.reload();
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                },
+                error: function() {
+                    alert('Error al eliminar el presupuesto');
+                }
+            });
+        }
+    }
+
+    function copiarPresupuesto(idPropuesta, parAlternativa) {
+        alert('Funcionalidad de copiar presupuesto (próximamente)');
+    }
+
+    function revisarPresupuesto(idPropuesta, parAlternativa) {
+        alert('Funcionalidad de revisar presupuesto (próximamente)');
+    }
+
+    function exportarJBI(idPropuesta, parAlternativa) {
+        alert('Exportación de JobBook Interno (próximamente)');
+    }
+
+    function exportarJBE(idPropuesta, parAlternativa) {
+        alert('Exportación de JobBook Externo (próximamente)');
+    }
+
+    function verSimulador(idPropuesta, parAlternativa) {
+        alert('Visualizar simulador de costos (próximamente)');
+    }
+
+    function ejecutarCalculos(idPropuesta, parAlternativa) {
+        alert('Ejecutar cálculos automáticos (próximamente)');
+    }
+</script>

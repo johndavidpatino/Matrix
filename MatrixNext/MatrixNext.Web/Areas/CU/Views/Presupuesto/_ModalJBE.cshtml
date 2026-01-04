@@ -1,0 +1,182 @@
+@model MatrixNext.Data.Modules.CU.Models.EditarPresupuestoViewModel
+
+<!-- JobBook Externo (JBE) Modal -->
+<div class="modal fade" id="modalJBE" tabindex="-1" role="dialog" aria-labelledby="modalJBELabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="modalJBELabel">
+                    <i class="bi bi-file-pdf"></i> JobBook Externo (JBE)
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Client Header -->
+                <div class="row mb-4 pb-3 border-bottom">
+                    <div class="col-md-8">
+                        <h4><strong>Propuesta de Estudio de Mercado</strong></h4>
+                        <p class="text-muted mb-1">
+                            <strong>Propuesta ID:</strong> <span id="jbeIdPropuesta">@Model?.IdPropuesta</span>
+                        </p>
+                        <p class="text-muted mb-1">
+                            <strong>Alternativa:</strong> <span id="jbeParAlternativa">@Model?.ParAlternativa</span>
+                        </p>
+                        <p class="text-muted mb-0">
+                            <strong>Fecha:</strong> <span id="jbeFecha">@DateTime.Now.ToShortDateString()</span>
+                        </p>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h6 class="text-muted">Valor Total de la Propuesta</h6>
+                                <h3 class="text-success" id="jbeValorTotal">$0</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Description -->
+                <div class="card mb-3">
+                    <div class="card-header bg-light">
+                        <strong>Descripción del Proyecto</strong>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <p>
+                                    <strong>Grupo Objetivo:</strong>
+                                    <br />
+                                    <span id="jbeGrupoObjetivo">@Model?.ParGrupoObjetivo</span>
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <p>
+                                    <strong>Metodología:</strong>
+                                    <br />
+                                    <span id="jbeTecnica">@Model?.TecCodigo</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <p>
+                                    <strong>Total Muestra:</strong>
+                                    <br />
+                                    <span id="jbeTotalMuestra" class="badge bg-primary">0</span>
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <p>
+                                    <strong>Duración Estimada:</strong>
+                                    <br />
+                                    <span id="jbeDias" class="badge bg-warning text-dark">0 días</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scope and Services -->
+                <div class="card mb-3">
+                    <div class="card-header bg-light">
+                        <strong>Alcance de Servicios</strong>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <i class="bi bi-check-circle-fill text-success"></i>
+                                Diseño y validación de cuestionario
+                            </li>
+                            <li class="list-group-item">
+                                <i class="bi bi-check-circle-fill text-success"></i>
+                                Ejecución de trabajo de campo
+                            </li>
+                            <li class="list-group-item">
+                                <i class="bi bi-check-circle-fill text-success"></i>
+                                Crítica y codificación de datos
+                            </li>
+                            <li class="list-group-item">
+                                <i class="bi bi-check-circle-fill text-success"></i>
+                                Digitación y procesamiento
+                            </li>
+                            <li class="list-group-item">
+                                <i class="bi bi-check-circle-fill text-success"></i>
+                                Análisis estadístico y reporte ejecutivo
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Investment Summary -->
+                <div class="card mb-3">
+                    <div class="card-header bg-light">
+                        <strong>Resumen de Inversión</strong>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-md-4">
+                                <div class="bg-light p-3 rounded mb-2">
+                                    <h6 class="text-muted">Tarifa por Entrevista</h6>
+                                    <h4 id="jbeTarifaPorEntrevista" class="text-primary">$0</h4>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="bg-light p-3 rounded mb-2">
+                                    <h6 class="text-muted">Total Muestra</h6>
+                                    <h4 id="jbeTotalMuestraResumen" class="text-info">0</h4>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="bg-success text-white p-3 rounded mb-2">
+                                    <h6>Valor Total Propuesta</h6>
+                                    <h4 id="jbeValorTotalResumen">$0</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Terms and Conditions -->
+                <div class="card mb-3">
+                    <div class="card-header bg-light">
+                        <strong>Términos y Condiciones</strong>
+                    </div>
+                    <div class="card-body">
+                        <ul class="small">
+                            <li>Vigencia de la propuesta: 30 días</li>
+                            <li>Forma de pago: 50% al inicio, 50% contra entrega de reportes</li>
+                            <li>Tiempo de ejecución: Según cronograma acordado</li>
+                            <li>Incluye: Encuesta, crítica, codificación, digitación y análisis básico</li>
+                            <li>No incluye: Servicios adicionales o cambios en alcance después de inicio</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Footer Note -->
+                <div class="alert alert-info mb-0">
+                    <strong>Nota:</strong> Este documento es una propuesta comercial dirigida al cliente. 
+                    Incluye solo la información relevante para la presentación y venta del proyecto.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="exportarJBEPDF()">
+                    <i class="bi bi-download"></i> Descargar PDF
+                </button>
+                <button type="button" class="btn btn-success" onclick="imprimirJBE()">
+                    <i class="bi bi-printer"></i> Imprimir
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function exportarJBEPDF() {
+        alert('Exportación de JBE a PDF (próximamente - usar iTextSharp o Rotativa)');
+    }
+
+    function imprimirJBE() {
+        window.print();
+    }
+</script>
