@@ -4,6 +4,9 @@ using MatrixNext.Data.Modules.US;
 using MatrixNext.Data.Services;
 using MatrixNext.Data.Services.Usuarios;
 using MatrixNext.Web.Middleware;
+using MatrixNext.Web.Areas.EQ.Services;
+using MatrixNext.Web.Areas.EQ.Services.Internal;
+using MatrixNext.Web.Areas.EQ.Services.Masters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,6 +53,12 @@ builder.Services.AddScoped<GrupoUnidadService>();
 builder.Services.AddTHModule(builder.Configuration);
 // Register CU_Cuentas module services
 builder.Services.AddCUModule(builder.Configuration);
+// EQ module services
+builder.Services.AddScoped<EasyQuoteService>();
+builder.Services.AddScoped<EasyQuoteAdminService>();
+builder.Services.AddScoped<EasyQuoteAdapter>();
+builder.Services.AddScoped<QuoteCalculator>();
+builder.Services.AddScoped<EasyQuoteMasterService>();
 
 var app = builder.Build();
 

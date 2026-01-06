@@ -1,0 +1,239 @@
+using System;
+using System.Linq;
+using MatrixNext.Web.Areas.EQ.Models;
+using MatrixNext.Web.Areas.EQ.Services.Masters;
+
+namespace MatrixNext.Web.Areas.EQ.Services.Internal
+{
+    /// <summary>
+    /// Motor de calculo basado en tablas maestras (sin hardcodes): campo, incentivos, insumos, staff OPS/SL, mystery y margenes basicos.
+    /// </summary>
+    public class QuoteCalculator
+    {
+        private readonly EasyQuoteMasterService _masters;
+
+        public QuoteCalculator(EasyQuoteMasterService masters)
+        {
+            _masters = masters;
+        }
+
+        public EQSummary Calcular(EasyQuoteViewModel vm)
+        {
+            if (vm == null) return new EQSummary();
+            var q = vm.Questionnaire ?? new EQQuestionnaire();
+
+            var metodologia = vm.Methodology?.MetodologiaRecoleccion;
+            if (string.IsNullOrWhiteSpace(metodologia)) metodologia = "F2F";
+            var duracion = q.DuracionMin <= 0 ? 5 : q.DuracionMin;
+            var penetracion = string.IsNullOrWhiteSpace(q.PenetracionCodigo) ? "MAS82" : q.PenetracionCodigo;
+
+            decimal Total(Func<EQSampleCity, decimal> selector) => vm.SampleCities?.Where(c => c.Activa).Sum(selector) ?? 0;
+            var totalMuestra = Total(c => c.MuestraTotal);
+            var n1 = Total(c => c.NSE1);
+            var n2 = Total(c => c.NSE2);
+            var n3 = Total(c => c.NSE3);
+            var n4 = Total(c => c.NSE4);
+            var n5 = Total(c => c.NSE5);
+            var n6 = Total(c => c.NSE6);
+
+            var valorEncuesta = _masters.GetPrecioEncuesta(metodologia, penetracion, duracion) ?? 0;
+            var factorSiembra = q.Siembra ? 2m : 1m;
+            var costoCampo = valorEncuesta * totalMuestra * factorSiembra;
+
+            // Productividad/dias de campo por ciudad (desde tabla eq_productividad_ciudad)
+            decimal GetEnc(string ciudad)
+            {
+                var row = _masters.AllProductividad().FirstOrDefault(p => string.Equals(p.Ciudad, ciudad, StringComparison.OrdinalIgnoreCase));
+                return row?.Encuestadores ?? 7;
+            }
+            decimal GetProd(string ciudad)
+            {
+                var row = _masters.AllProductividad().FirstOrDefault(p => string.Equals(p.Ciudad, ciudad, StringComparison.OrdinalIgnoreCase));
+                return row?.Productividad ?? 4;
+            }
+            var diasCampo = 0m;
+            foreach (var c in vm.SampleCities.Where(x => x.Activa))
+            {
+                var enc = GetEnc(c.Ciudad);
+                var prod = GetProd(c.Ciudad);
+                if (enc * prod > 0)
+                {
+                    var dias = Math.Ceiling((c.MuestraTotal) / (enc * prod));
+                    if (dias > diasCampo) diasCampo = dias;
+                }
+            }
+            if (diasCampo == 0 && totalMuestra > 0)
+                diasCampo = Math.Ceiling(totalMuestra / (7 * 4));
+
+            // Mystery / Shopper
+            var costoMystery = 0m;
+            if (vm.MysteryVisits != null)
+            {
+                foreach (var v in vm.MysteryVisits)
+                {
+                    if (string.IsNullOrWhiteSpace(v.TipoVisita)) continue;
+                    var baseTarifa = _masters.GetMysteryTarifa(v.TipoVisita, v.Complejidad)?.VrUnitario ?? 0;
+                    costoMystery += baseTarifa * Math.Max(1, v.NumOlas);
+                    costoMystery += (v.Desplazamientos ?? 0) + (v.Tanqueos ?? 0) + (v.Alertas ?? 0) +
+                                    (v.Edicion ?? 0) + (v.AlquilerEquipos ?? 0) + (v.CompraDispositivos ?? 0);
+                }
+            }
+
+            // Reclutamiento e incentivos (valores por NSE)
+            decimal Reclu(string nse) => _masters.GetCostoInsumo("Reclutamiento", nse);
+            decimal Obs(string nse) => _masters.GetCostoInsumo("Obsequio", nse);
+            var reclutamiento = Reclu("NSE1_2") * (n1 + n2)
+                                + Reclu("NSE3") * n3
+                                + Reclu("NSE4") * n4
+                                + Reclu("NSE5_6") * (n5 + n6);
+            var obsequios = Obs("NSE1_2") * (n1 + n2)
+                            + Obs("NSE3") * n3
+                            + Obs("NSE4") * n4
+                            + Obs("NSE5_6") * (n5 + n6);
+            var incentivos = obsequios / 0.93m; // 7% comision de bonos
+            var insumos = reclutamiento;
+
+            // Staff OPS (scripting, procesamiento, datacleaning, toplines, harmoni, graficacion, ASCII, estadistica)
+            var horas = _masters.GetHoras(duracion);
+            decimal MultScript(string tipo) => tipo?.ToLowerInvariant() switch
+            {
+                "duplicado" => 4m,
+                "reutilizacion" => 2m,
+                _ => 1m
+            };
+
+            decimal TarifaOps(string actividadPrefix, decimal fallback)
+            {
+                var row = _masters.GetCostUnitario(actividadPrefix);
+                return row?.Tarifa ?? fallback;
+            }
+
+            var tarifaOpsDefault = _masters.GetValorHoraOps("L6") ?? 54000m;
+            var costoScripting = q.Scripting ? horas.HorasScript * MultScript(q.ScriptingTipo) * TarifaOps("Scripting", tarifaOpsDefault) : 0;
+            var costoProc = q.Procesamiento ? horas.HorasProcesamiento * Math.Max(1, q.NumProcesamientos) * TarifaOps("Procesamiento", tarifaOpsDefault) : 0;
+            var dcFactor = string.Equals(q.DataCleaning, "Parcial", StringComparison.OrdinalIgnoreCase) ? 0.6m :
+                           string.Equals(q.DataCleaning, "No", StringComparison.OrdinalIgnoreCase) ? 0m : 1m;
+            var costoDC = horas.HorasProcesamiento * dcFactor * TarifaOps("Datacleaning", tarifaOpsDefault);
+            var costoTopline = q.TopLine ? horas.HorasGraficacion * TarifaOps("TopLines", tarifaOpsDefault) : 0;
+            var costoHarmoni = horas.HorasHarmoni * TarifaOps("Harmoni", tarifaOpsDefault);
+            var costoGraf = horas.HorasGraficacion * TarifaOps("Graficacion", tarifaOpsDefault);
+            var costoAscii = q.ASCIIFlag ? (horas.HorasHarmoni > 0 ? horas.HorasHarmoni : 9m) * TarifaOps("Conversi", tarifaOpsDefault) : 0;
+            var costoEstadistica = q.ProcesoEstadistico ? (_masters.GetRateEstadisticaDefault()?.PrecioReferencia ?? 0) : 0;
+            var staffOps = costoScripting + costoProc + costoDC + costoTopline + costoHarmoni + costoGraf + costoAscii + costoEstadistica;
+
+            // Staff SL (tarifa default si viene en cero)
+            var staffSl = 0m;
+            if (vm.StaffSL != null)
+            {
+                foreach (var s in vm.StaffSL)
+                {
+                    var tarifa = s.Tarifa > 0 ? s.Tarifa : (_masters.GetValorHoraOps(s.Nivel) ?? tarifaOpsDefault);
+                    staffSl += s.HorasPresup * tarifa;
+                }
+            }
+
+            var compraProducto = q.CompraProducto;
+
+            // Locaciones (tarifa gross * dias setup+campo)
+            var costoLocaciones = 0m;
+            foreach (var c in vm.SampleCities.Where(x => x.Activa))
+            {
+                var loc = _masters.GetLocacion(c.Ciudad);
+                if (loc == null) continue;
+                var dias = loc.DiasBase > 0 ? loc.DiasBase : diasCampo;
+                if (dias == 0) dias = diasCampo;
+                var tarifa = loc.TarifaConGross > 0 ? loc.TarifaConGross : loc.TarifaBase;
+                costoLocaciones += tarifa * dias;
+            }
+            if (q.Refrigeracion)
+            {
+                var factorRef = _masters.GetMisc("FACTOR_REFRIGERACION")?.ValorDecimal ?? 1.1m;
+                costoLocaciones *= factorRef;
+                var costoNevera = _masters.GetMisc("COSTO_NEVERA")?.ValorDecimal ?? 970000m;
+                costoLocaciones += costoNevera;
+            }
+
+            // Envios: tipologia segun cantidad de ciudades; divisor volumetrico parametrico
+            var costoEnvio = 0m;
+            if (vm.Methodology?.EnvioCiudades == true && vm.Methodology.PesoProductoGr > 0)
+            {
+                var pesoKgReal = vm.Methodology.PesoProductoGr / 1000m;
+                var divisorVol = _masters.GetMisc("DIVISOR_VOLUMETRICO")?.ValorDecimal ?? (_masters.GetEnvioParam()?.DivisorVolumetrico ?? 5000m);
+                var pesoVolumetrico = pesoKgReal; // sin dimensiones, igual al real; actualizar cuando existan
+                var pesoKg = Math.Max(pesoKgReal, pesoVolumetrico);
+                var ciudadesActivas = vm.SampleCities?.Count(x => x.Activa) ?? 0;
+                var envioParam = _masters.GetEnvioParam();
+                var tipologia = ciudadesActivas <= 1 ? (envioParam?.TipologiaUrbano ?? "URBANO") : (envioParam?.TipologiaNacional ?? "NACIONAL");
+                var tarifaEnv = _masters.GetEnvio(tipologia) ?? _masters.GetEnvio("URBANO");
+                if (tarifaEnv != null && ciudadesActivas > 0)
+                {
+                    var adicionalKg = Math.Max(0m, pesoKg - 1m);
+                    var seguro = Math.Max(tarifaEnv.ValorDeclaradoMin * tarifaEnv.SeguroPct, 0);
+                    var costoUnit = tarifaEnv.KiloInicial + adicionalKg * tarifaEnv.KiloAdicional + seguro;
+                    costoEnvio = costoUnit * ciudadesActivas;
+                }
+            }
+
+            // Base de datos (parametrizado)
+            var costoBaseDatos = 0m;
+            if (!string.IsNullOrWhiteSpace(vm.Methodology?.BaseDatos) && !vm.Methodology.BaseDatos.Equals("No requiere", StringComparison.OrdinalIgnoreCase))
+            {
+                var val = _masters.GetBaseDatos(vm.Methodology.BaseDatos);
+                if (val.HasValue) costoBaseDatos = val.Value;
+            }
+
+            // Viaticos: transporte PST encuestadores/supervisores * diasCampo
+            var viaticos = 0m;
+            var diasViaticos = diasCampo;
+            var tEnc = _masters.GetCostUnitario("Transportes PST Encuestadores");
+            var tSup = _masters.GetCostUnitario("Transportes PST Supervisores");
+            var totalEncuestadores = vm.SampleCities.Where(x=>x.Activa).Sum(x=>GetEnc(x.Ciudad));
+            var totalSupervisores = vm.SampleCities.Any(x=>x.Activa) ? vm.SampleCities.Count(x=>x.Activa) * 1.75m : 0;
+            if (tEnc != null) viaticos += (tEnc.Tarifa * totalEncuestadores) * diasViaticos;
+            if (tSup != null) viaticos += (tSup.Tarifa * totalSupervisores) * diasViaticos;
+
+            // Codificacion
+            var costoCodif = 0m;
+            if (q.Codificacion && (q.PregAbiertas > 0 || q.PregAbiertasMult > 0))
+            {
+                var cod = _masters.GetCodificacionDefault();
+                if (cod != null)
+                {
+                    costoCodif = cod.ValorIpsos;
+                }
+            }
+
+            // Proveedor externo / internacional
+            var proveedores = (vm.Header?.ValorProveedorExterno ?? 0) + (vm.Header?.ValorProveedorInternacional ?? 0);
+
+            // Margenes principales
+            var directCost = costoCampo + costoMystery + incentivos + insumos + staffOps + staffSl + compraProducto + costoLocaciones + costoEnvio + proveedores + costoBaseDatos + viaticos + costoCodif;
+            var gmOps = directCost * 0.2145m;
+            var pbRmf = -directCost * 0.043m;
+            var profTime = -staffSl;
+            var aot = directCost + gmOps;
+            var op = gmOps + pbRmf + profTime;
+            var porcOp = aot == 0 ? 0 : op / aot;
+
+            return new EQSummary
+            {
+                CostoCampo = costoCampo + costoMystery,
+                CostoCalidad = 0,
+                Viaticos = viaticos,
+                Incentivos = incentivos,
+                Insumos = insumos,
+                StaffOps = staffOps,
+                StaffSL = staffSl,
+                CompraProducto = compraProducto,
+                Tablets = 0,
+                DirectCostOps = directCost,
+                GM = gmOps,
+                PB_RMF = pbRmf,
+                ProfTime = profTime,
+                OP = op,
+                AOT = aot,
+                PorcOP = porcOp
+            };
+        }
+    }
+}

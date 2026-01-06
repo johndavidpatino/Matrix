@@ -1,0 +1,158 @@
+@model MatrixNext.Web.Areas.EQ.Models.EasyQuoteAdminViewModel
+@{
+    ViewData["Title"] = "Admin EasyQuote";
+}
+
+<div class="container-fluid">
+    <h1 class="mb-3">Administración EasyQuote</h1>
+    <p class="text-muted">Editar parámetros base. Cambios se escriben directo en tablas maestras.</p>
+    @Html.AntiForgeryToken()
+
+    <ul class="nav nav-tabs mb-3" role="tablist">
+        <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-precios" type="button">Precios</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-horas" type="button">Horas Script/Proc</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-valorhora" type="button">Valor Hora OPS</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-insumos" type="button">Insumos</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-locaciones" type="button">Locaciones</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-envios" type="button">Envios</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-codif" type="button">Codificación</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-mystery" type="button">Mystery</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-costunit" type="button">Costos Unitarios</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-estad" type="button">Tarifario Estadística</button></li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane fade show active" id="tab-precios">
+            <div class="alert alert-secondary p-2 mb-2">
+                <div class="row g-2 align-items-end">
+                    <div class="col-md-2"><label class="form-label">Metodología</label><input class="form-control form-control-sm" id="pre-met" /></div>
+                    <div class="col-md-2"><label class="form-label">Penetración</label><input class="form-control form-control-sm" id="pre-pen" /></div>
+                    <div class="col-md-2"><label class="form-label">Min</label><input class="form-control form-control-sm" id="pre-min" type="number" /></div>
+                    <div class="col-md-2"><label class="form-label">Valor Total</label><input class="form-control form-control-sm" id="pre-val" type="number" /></div>
+                    <div class="col-md-2"><button class="btn btn-sm btn-primary w-100" id="btn-precio">Guardar</button></div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered align-middle">
+                    <thead><tr><th>Metodología</th><th>Penetración</th><th>Min</th><th>Valor Total</th></tr></thead>
+                    <tbody>
+                    @foreach (var p in Model.Precios.OrderBy(x=>x.MetodologiaCodigo).ThenBy(x=>x.PenetracionCodigo).ThenBy(x=>x.DuracionMin))
+                    {
+                        <tr>
+                            <td>@p.MetodologiaCodigo</td><td>@p.PenetracionCodigo</td><td>@p.DuracionMin</td><td class="text-end">@p.ValorTotal.ToString("N0")</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="tab-horas">
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered align-middle">
+                    <thead><tr><th>Minutos</th><th>Script</th><th>Procesamiento</th><th>Harmoni</th><th>Graficación</th></tr></thead>
+                    <tbody>
+                    @foreach (var h in Model.Horas.OrderBy(x=>x.DuracionMin))
+                    {
+                        <tr><td>@h.DuracionMin</td><td>@h.HorasScript</td><td>@h.HorasProcesamiento</td><td>@h.HorasHarmoni</td><td>@h.HorasGraficacion</td></tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="tab-valorhora">
+            <div class="alert alert-secondary p-2 mb-2">
+                <div class="row g-2 align-items-end">
+                    <div class="col-md-3"><label class="form-label">Nivel</label><input class="form-control form-control-sm" id="vh-nivel" /></div>
+                    <div class="col-md-3"><label class="form-label">Variante</label><input class="form-control form-control-sm" id="vh-var" /></div>
+                    <div class="col-md-3"><label class="form-label">Valor Hora</label><input class="form-control form-control-sm" id="vh-valor" type="number" /></div>
+                    <div class="col-md-2"><button class="btn btn-sm btn-primary w-100" id="btn-vh">Guardar</button></div>
+                </div>
+            </div>
+            <table class="table table-sm table-bordered"><thead><tr><th>Nivel</th><th>Variante</th><th>Valor Hora</th></tr></thead><tbody>
+            @foreach (var v in Model.ValorHoraOps) { <tr><td>@v.Nivel</td><td>@v.Variante</td><td class="text-end">@v.ValorHora.ToString("N0")</td></tr>; }
+            </tbody></table>
+        </div>
+        <div class="tab-pane fade" id="tab-insumos">
+            <div class="alert alert-secondary p-2 mb-2">
+                <div class="row g-2 align-items-end">
+                    <div class="col-md-3"><label class="form-label">NSE</label><input class="form-control form-control-sm" id="in-nse" /></div>
+                    <div class="col-md-3"><label class="form-label">Tipo</label><input class="form-control form-control-sm" id="in-tipo" /></div>
+                    <div class="col-md-3"><label class="form-label">Valor</label><input class="form-control form-control-sm" id="in-valor" type="number" /></div>
+                    <div class="col-md-2"><button class="btn btn-sm btn-primary w-100" id="btn-insumo">Guardar</button></div>
+                </div>
+            </div>
+            <table class="table table-sm table-bordered"><thead><tr><th>NSE</th><th>Tipo</th><th>Valor</th></tr></thead><tbody>
+            @foreach (var i in Model.CostInsumos) { <tr><td>@i.NSE</td><td>@i.Tipo</td><td class="text-end">@i.ValorUnitario.ToString("N0")</td></tr>; }
+            </tbody></table>
+        </div>
+        <div class="tab-pane fade" id="tab-locaciones">
+            <table class="table table-sm table-bordered"><thead><tr><th>Ciudad</th><th>Tarifa Base</th><th>Tarifa Gross</th><th>Días Base</th></tr></thead><tbody>
+            @foreach (var l in Model.Locaciones) { <tr><td>@l.Ciudad</td><td class="text-end">@l.TarifaBase.ToString("N0")</td><td class="text-end">@l.TarifaConGross.ToString("N0")</td><td>@l.DiasBase</td></tr>; }
+            </tbody></table>
+        </div>
+        <div class="tab-pane fade" id="tab-envios">
+            <div class="alert alert-secondary p-2 mb-2">
+                <div class="row g-2 align-items-end">
+                    <div class="col-md-2"><label class="form-label">Tipología</label><input class="form-control form-control-sm" id="en-tip" /></div>
+                    <div class="col-md-2"><label class="form-label">Kilo inicial</label><input class="form-control form-control-sm" id="en-kini" type="number" /></div>
+                    <div class="col-md-2"><label class="form-label">Kilo adicional</label><input class="form-control form-control-sm" id="en-kadd" type="number" /></div>
+                    <div class="col-md-2"><label class="form-label">Seguro %</label><input class="form-control form-control-sm" id="en-seg" type="number" step="0.0001" /></div>
+                    <div class="col-md-2"><label class="form-label">Valor decl. min</label><input class="form-control form-control-sm" id="en-vmin" type="number" /></div>
+                    <div class="col-md-2"><button class="btn btn-sm btn-primary w-100" id="btn-envio">Guardar</button></div>
+                </div>
+            </div>
+            <table class="table table-sm table-bordered"><thead><tr><th>Tipología</th><th>Kilo Inicial</th><th>Kilo Adicional</th><th>Seguro %</th><th>Valor decl. mínimo</th></tr></thead><tbody>
+            @foreach (var e in Model.Envios) { <tr><td>@e.Tipologia</td><td class="text-end">@e.KiloInicial.ToString("N0")</td><td class="text-end">@e.KiloAdicional.ToString("N0")</td><td>@e.SeguroPct</td><td class="text-end">@e.ValorDeclaradoMin.ToString("N0")</td></tr>; }
+            </tbody></table>
+        </div>
+        <div class="tab-pane fade" id="tab-codif">
+            <table class="table table-sm table-bordered"><thead><tr><th>Escenario</th><th>Registros</th><th>P.Abiertas</th><th>P.Abiertas Mult</th><th>Días</th><th>Horas</th><th>Valor Ipsos</th></tr></thead><tbody>
+            @foreach (var c in Model.Codificacion) { <tr><td>@c.Escenario</td><td>@c.Registros</td><td>@c.PregAbiertas</td><td>@c.PregAbiertasMult</td><td>@c.Dias</td><td>@c.Horas</td><td class="text-end">@c.ValorIpsos.ToString("N0")</td></tr>; }
+            </tbody></table>
+        </div>
+        <div class="tab-pane fade" id="tab-mystery">
+            <table class="table table-sm table-bordered"><thead><tr><th>Tipo Visita</th><th>Complejidad</th><th>Vr Unitario</th><th>Olas default</th></tr></thead><tbody>
+            @foreach (var m in Model.Mystery) { <tr><td>@m.TipoVisita</td><td>@m.Complejidad</td><td class="text-end">@m.VrUnitario.ToString("N0")</td><td>@m.OlasDefault</td></tr>; }
+            </tbody></table>
+        </div>
+        <div class="tab-pane fade" id="tab-costunit">
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered"><thead><tr><th>CodMatrix</th><th>Actividad</th><th>Tarifa</th><th>Unidad</th><th>Horas</th></tr></thead><tbody>
+                @foreach (var c in Model.CostUnitarios.OrderBy(x=>x.CodMatrix)) { <tr><td>@c.CodMatrix</td><td>@c.Actividad</td><td class="text-end">@c.Tarifa.ToString("N0")</td><td>@c.Unidad</td><td>@c.Horas</td></tr>; }
+                </tbody></table>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="tab-estad">
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered"><thead><tr><th>Categoría</th><th>Servicio</th><th>Horas</th><th>Precio Ref</th><th>Factor Escala</th></tr></thead><tbody>
+                @foreach (var r in Model.Estadistica) { <tr><td>@r.Categoria</td><td>@r.Servicio</td><td>@r.HorasEstimadas</td><td class="text-end">@r.PrecioReferencia.ToString("N0")</td><td>@r.FactorEscala</td></tr>; }
+                </tbody></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+    const $ = (id) => document.getElementById(id);
+    const post = async (url, payload, onOk) => {
+        const res = await fetch(url, { method:'POST', headers:{'Content-Type':'application/json','RequestVerificationToken':token}, body: JSON.stringify(payload)});
+        const r = await res.json();
+        if (r.success && onOk) onOk();
+        if (!r.success) alert(r.message || 'Error');
+    };
+    $('btn-precio').addEventListener('click', ()=>{
+        post('@Url.Action("UpsertPrecio")', {MetodologiaCodigo: $('pre-met').value, PenetracionCodigo: $('pre-pen').value, DuracionMin:+$('pre-min').value, ValorTotal:+$('pre-val').value}, ()=>location.reload());
+    });
+    $('btn-vh').addEventListener('click', ()=>{
+        post('@Url.Action("UpsertValorHora")', {Nivel:$('vh-nivel').value,Variante:$('vh-var').value,ValorHora:+$('vh-valor').value}, ()=>location.reload());
+    });
+    $('btn-insumo').addEventListener('click', ()=>{
+        post('@Url.Action("UpsertInsumo")', {NSE:$('in-nse').value,Tipo:$('in-tipo').value,ValorUnitario:+$('in-valor').value}, ()=>location.reload());
+    });
+    $('btn-envio').addEventListener('click', ()=>{
+        post('@Url.Action("UpsertEnvio")', {Tipologia:$('en-tip').value,KiloInicial:+$('en-kini').value,KiloAdicional:+$('en-kadd').value,SeguroPct:+$('en-seg').value,ValorDeclaradoMin:+$('en-vmin').value}, ()=>location.reload());
+    });
+</script>
+}
