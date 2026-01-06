@@ -140,6 +140,26 @@
 
 ---
 
+## 🏢 DOCUMENTACIÓN DE MÓDULOS (FI_CC)
+
+### Carpeta: [FI_CC/](FI_CC/)
+**Documentación especializada para módulos de Finanzas/Compras (FI) y FinzOpe (CC)**
+
+1. **[FI_CC/README.md](FI_CC/README.md)** - Índice de módulos FI y CC
+2. **[FI_CC/ANALISIS_CU_CUENTAS.md](FI_CC/ANALISIS_CU_CUENTAS.md)** - Análisis del módulo Cuentas
+3. **[FI_CC/ANALISIS_CU_PRESUPUESTO.md](FI_CC/ANALISIS_CU_PRESUPUESTO.md)** - Análisis del módulo Presupuestos
+4. **[FI_CC/REPORT_CU_CUENTAS_IMPLEMENTACION.md](FI_CC/REPORT_CU_CUENTAS_IMPLEMENTACION.md)** - Reporte de implementación Cuentas
+5. **[FI_CC/REPORT_CU_PRESUPUESTO.md](FI_CC/REPORT_CU_PRESUPUESTO.md)** - Reporte de implementación Presupuestos
+
+**Contenido**:
+- Análisis técnico detallado de módulos CU (Cuentas/Presupuestos)
+- Estructuras de datos y SP relacionados
+- Requerimientos funcionales y no funcionales
+- Checklists de migración pre-implementación
+- Matrices de cambios técnicos y riesgos
+
+---
+
 ## 🗂️ ESTRUCTURA RECOMENDADA DE LECTURA
 
 ### Para Desarrollador Nuevo (Onboarding)
