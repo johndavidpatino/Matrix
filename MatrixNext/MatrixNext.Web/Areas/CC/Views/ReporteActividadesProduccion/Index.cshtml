@@ -1,0 +1,212 @@
+@{
+    ViewData["Title"] = "Actividades de Producción";
+}
+
+<div class="container-fluid py-3">
+    <div class="row mb-4 align-items-center">
+        <div class="col-md-8">
+            <h2 class="fw-bold text-success mb-0">
+                <i class="bi bi-gear-wide-connected"></i> Actividades de Producción
+            </h2>
+            <p class="text-muted">Seguimiento de registros productivos y sus costos</p>
+        </div>
+        <div class="col-md-4 text-md-end">
+            <button class="btn btn-success" id="btnExportar">
+                <i class="bi bi-file-earmark-excel"></i> Exportar Excel
+            </button>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100" style="background: linear-gradient(135deg, #198754, #66bb6a);">
+                <div class="card-body text-white">
+                    <div class="small text-uppercase">Registros</div>
+                    <h4 class="mb-0" id="metricRegistros">0</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100" style="background: linear-gradient(135deg, #0d6efd, #6ea8fe);">
+                <div class="card-body text-white">
+                    <div class="small text-uppercase">Costo Total</div>
+                    <h4 class="mb-0" id="metricCostoTotal">$0</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100" style="background: linear-gradient(135deg, #6f42c1, #b490ff);">
+                <div class="card-body text-white">
+                    <div class="small text-uppercase">Costo Unitario Prom.</div>
+                    <h4 class="mb-0" id="metricCostoUnitario">$0</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+            <span><i class="bi bi-funnel"></i> Filtros</span>
+            <div>
+                <button class="btn btn-sm btn-outline-light me-2" id="btnBuscar"><i class="bi bi-search"></i> Buscar</button>
+                <button class="btn btn-sm btn-outline-light" id="btnLimpiar"><i class="bi bi-eraser"></i> Limpiar</button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-2">
+                    <label class="form-label">Período</label>
+                    <input type="number" class="form-control" id="filtroPeriodo" placeholder="2025" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Id Trabajo</label>
+                    <input type="number" class="form-control" id="filtroTrabajo" placeholder="Ej: 1203" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Fecha Inicio</label>
+                    <input type="date" class="form-control" id="filtroFechaInicio" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Fecha Fin</label>
+                    <input type="date" class="form-control" id="filtroFechaFin" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped" id="tableActividades">
+                    <thead class="table-success">
+                        <tr>
+                            <th>Código Trabajo</th>
+                            <th>Trabajo</th>
+                            <th>Actividad</th>
+                            <th>Cantidad</th>
+                            <th>Costo Unitario</th>
+                            <th>Costo Total</th>
+                            <th>Fecha</th>
+                            <th>Usuario</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(function () {
+            let table;
+
+            function initTable() {
+                if ($.fn.DataTable.isDataTable('#tableActividades')) {
+                    $('#tableActividades').DataTable().destroy();
+                }
+
+                table = $('#tableActividades').DataTable({
+                    language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json' },
+                    data: [],
+                    columns: [
+                        { data: 'codigoTrabajo', defaultContent: '-' },
+                        { data: 'nombreTrabajo', defaultContent: '-' },
+                        { data: 'actividad', defaultContent: '-' },
+                        {
+                            data: 'cantidad',
+                            render: function (data) {
+                                return parseFloat(data || 0).toLocaleString('es-CO', { minimumFractionDigits: 2 });
+                            }
+                        },
+                        {
+                            data: 'costoUnitario',
+                            render: function (data) {
+                                return '$' + parseFloat(data || 0).toLocaleString('es-CO', { minimumFractionDigits: 2 });
+                            }
+                        },
+                        {
+                            data: 'costoTotal',
+                            render: function (data) {
+                                return '$' + parseFloat(data || 0).toLocaleString('es-CO', { minimumFractionDigits: 2 });
+                            }
+                        },
+                        {
+                            data: 'fechaRegistro',
+                            render: function (data) {
+                                return data ? new Date(data).toLocaleDateString('es-CO') : '-';
+                            }
+                        },
+                        { data: 'usuarioRegistro', defaultContent: '-' },
+                        { data: 'estado', defaultContent: '-' }
+                    ],
+                    order: [[6, 'desc']],
+                    pageLength: 25
+                });
+            }
+
+            function buildFilters() {
+                return {
+                    periodo: $('#filtroPeriodo').val() ? parseInt($('#filtroPeriodo').val()) : null,
+                    idTrabajo: $('#filtroTrabajo').val() ? parseInt($('#filtroTrabajo').val()) : null,
+                    fechaInicio: $('#filtroFechaInicio').val() || null,
+                    fechaFin: $('#filtroFechaFin').val() || null
+                };
+            }
+
+            function actualizarMetricas(rows) {
+                const registros = rows.length;
+                const costoTotal = rows.reduce((acc, x) => acc + (x.costoTotal || 0), 0);
+                const costoUnitProm = registros ? costoTotal / registros : 0;
+                $('#metricRegistros').text(registros);
+                $('#metricCostoTotal').text('$' + costoTotal.toLocaleString('es-CO', { minimumFractionDigits: 2 }));
+                $('#metricCostoUnitario').text('$' + costoUnitProm.toLocaleString('es-CO', { minimumFractionDigits: 2 }));
+            }
+
+            function cargarDatos() {
+                const filtros = buildFilters();
+                $.ajax({
+                    url: '@Url.Action("ObtenerActividades")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(filtros)
+                }).done(function (response) {
+                    if (response.success) {
+                        table.clear().rows.add(response.data).draw();
+                        actualizarMetricas(response.data);
+                    } else {
+                        toastr.error(response.message || 'No fue posible obtener los registros');
+                    }
+                }).fail(function () {
+                    toastr.error('Error de comunicación con el servidor');
+                });
+            }
+
+            function limpiar() {
+                $('#filtroPeriodo, #filtroTrabajo').val('');
+                $('#filtroFechaInicio, #filtroFechaFin').val('');
+                cargarDatos();
+            }
+
+            function exportar() {
+                const filtros = buildFilters();
+                const clean = {};
+                Object.entries(filtros).forEach(([key, value]) => {
+                    if (value !== null && value !== '') clean[key] = value;
+                });
+                const query = $.param(clean);
+                const url = '@Url.Action("Exportar")' + (query ? `?${query}` : '');
+                window.location = url;
+            }
+
+            $('#btnBuscar').on('click', cargarDatos);
+            $('#btnLimpiar').on('click', limpiar);
+            $('#btnExportar').on('click', exportar);
+
+            initTable();
+            cargarDatos();
+        });
+    </script>
+}

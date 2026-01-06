@@ -1,0 +1,244 @@
+@{
+    ViewData["Title"] = "Reporte de Pagos";
+}
+
+<div class="container-fluid py-3">
+    <div class="row mb-4 align-items-center">
+        <div class="col-md-8">
+            <h2 class="fw-bold text-primary mb-0">
+                <i class="bi bi-cash-coin"></i> Reporte de Pagos
+            </h2>
+            <p class="text-muted">Visibilidad de pagos con filtros por período, trabajo y empleado</p>
+        </div>
+        <div class="col-md-4 text-md-end">
+            <button class="btn btn-success" id="btnExportar">
+                <i class="bi bi-file-earmark-excel"></i> Exportar Excel
+            </button>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100" style="background: linear-gradient(135deg, #0d6efd, #63b3ed);">
+                <div class="card-body text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="small text-uppercase">Total Pagado</div>
+                            <h4 class="mb-0" id="metricTotalPagado">$0</h4>
+                        </div>
+                        <i class="bi bi-wallet2 fs-3 opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100" style="background: linear-gradient(135deg, #198754, #6ccf95);">
+                <div class="card-body text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="small text-uppercase">Pagos</div>
+                            <h4 class="mb-0" id="metricCantidadPagos">0</h4>
+                        </div>
+                        <i class="bi bi-list-check fs-3 opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100" style="background: linear-gradient(135deg, #fd7e14, #f9b17a);">
+                <div class="card-body text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="small text-uppercase">Último Pago</div>
+                            <h4 class="mb-0" id="metricUltimoPago">-</h4>
+                        </div>
+                        <i class="bi bi-clock-history fs-3 opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+            <span><i class="bi bi-funnel"></i> Filtros</span>
+            <div>
+                <button class="btn btn-sm btn-outline-light me-2" id="btnBuscar"><i class="bi bi-search"></i> Buscar</button>
+                <button class="btn btn-sm btn-outline-light" id="btnLimpiar"><i class="bi bi-eraser"></i> Limpiar</button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-2">
+                    <label class="form-label">Período</label>
+                    <input type="number" class="form-control" id="filtroPeriodo" placeholder="2025" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Id Trabajo</label>
+                    <input type="number" class="form-control" id="filtroTrabajo" placeholder="Ej: 1203" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Id Empleado</label>
+                    <input type="number" class="form-control" id="filtroEmpleado" placeholder="Ej: 45021" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Estado</label>
+                    <select class="form-select" id="filtroEstado">
+                        <option value="">Todos</option>
+                        <option value="1">Pendiente</option>
+                        <option value="2">Pagado</option>
+                        <option value="3">Anulado</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Fecha Inicio</label>
+                    <input type="date" class="form-control" id="filtroFechaInicio" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Fecha Fin</label>
+                    <input type="date" class="form-control" id="filtroFechaFin" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover" id="tablePagos">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Período</th>
+                            <th>Código Trabajo</th>
+                            <th>Trabajo</th>
+                            <th>Empleado</th>
+                            <th>Valor Pagado</th>
+                            <th>Fecha Pago</th>
+                            <th>Estado</th>
+                            <th>Medio Pago</th>
+                            <th>Observaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(function () {
+            let table;
+
+            function initTable() {
+                if ($.fn.DataTable.isDataTable('#tablePagos')) {
+                    $('#tablePagos').DataTable().destroy();
+                }
+
+                table = $('#tablePagos').DataTable({
+                    language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json' },
+                    data: [],
+                    columns: [
+                        { data: 'periodo' },
+                        { data: 'codigoTrabajo', defaultContent: '-' },
+                        { data: 'nombreTrabajo', defaultContent: '-' },
+                        { data: 'nombreEmpleado', defaultContent: '-' },
+                        {
+                            data: 'valorPagado',
+                            render: function (data) {
+                                return '$' + parseFloat(data || 0).toLocaleString('es-CO', { minimumFractionDigits: 2 });
+                            }
+                        },
+                        {
+                            data: 'fechaPago',
+                            render: function (data) {
+                                return data ? new Date(data).toLocaleDateString('es-CO') : '-';
+                            }
+                        },
+                        {
+                            data: 'estado',
+                            render: function (data) {
+                                const badge = {
+                                    'Pendiente': 'warning',
+                                    'Pagado': 'success',
+                                    'Anulado': 'secondary'
+                                }[data] || 'primary';
+                                return `<span class="badge bg-${badge}">${data || '-'}</span>`;
+                            }
+                        },
+                        { data: 'medioPago', defaultContent: '-' },
+                        { data: 'observaciones', defaultContent: '-' }
+                    ],
+                    pageLength: 25,
+                    order: [[5, 'desc']]
+                });
+            }
+
+            function buildFilters() {
+                const estado = $('#filtroEstado').val();
+                return {
+                    periodo: $('#filtroPeriodo').val() ? parseInt($('#filtroPeriodo').val()) : null,
+                    idTrabajo: $('#filtroTrabajo').val() ? parseInt($('#filtroTrabajo').val()) : null,
+                    idEmpleado: $('#filtroEmpleado').val() ? parseInt($('#filtroEmpleado').val()) : null,
+                    estado: estado ? parseInt(estado) : null,
+                    fechaInicio: $('#filtroFechaInicio').val() || null,
+                    fechaFin: $('#filtroFechaFin').val() || null
+                };
+            }
+
+            function actualizarMetricas(rows) {
+                const total = rows.reduce((acc, x) => acc + (x.valorPagado || 0), 0);
+                $('#metricTotalPagado').text('$' + total.toLocaleString('es-CO', { minimumFractionDigits: 2 }));
+                $('#metricCantidadPagos').text(rows.length);
+                const fechas = rows.map(x => x.fechaPago ? new Date(x.fechaPago) : null).filter(Boolean);
+                const ultima = fechas.length ? new Date(Math.max.apply(null, fechas)) : null;
+                $('#metricUltimoPago').text(ultima ? ultima.toLocaleDateString('es-CO') : '-');
+            }
+
+            function cargarDatos() {
+                const filtros = buildFilters();
+                $.ajax({
+                    url: '@Url.Action("ObtenerPagos")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(filtros)
+                }).done(function (response) {
+                    if (response.success) {
+                        table.clear().rows.add(response.data).draw();
+                        actualizarMetricas(response.data);
+                    } else {
+                        toastr.error(response.message || 'No fue posible obtener los pagos');
+                    }
+                }).fail(function () {
+                    toastr.error('Error de comunicación con el servidor');
+                });
+            }
+
+            function limpiar() {
+                $('#filtroPeriodo, #filtroTrabajo, #filtroEmpleado').val('');
+                $('#filtroEstado').val('');
+                $('#filtroFechaInicio, #filtroFechaFin').val('');
+                cargarDatos();
+            }
+
+            function exportar() {
+                const filtros = buildFilters();
+                const clean = {};
+                Object.entries(filtros).forEach(([key, value]) => {
+                    if (value !== null && value !== '') clean[key] = value;
+                });
+                const query = $.param(clean);
+                const url = '@Url.Action("Exportar")' + (query ? `?${query}` : '');
+                window.location = url;
+            }
+
+            $('#btnBuscar').on('click', cargarDatos);
+            $('#btnLimpiar').on('click', limpiar);
+            $('#btnExportar').on('click', exportar);
+
+            initTable();
+            cargarDatos();
+        });
+    </script>
+}

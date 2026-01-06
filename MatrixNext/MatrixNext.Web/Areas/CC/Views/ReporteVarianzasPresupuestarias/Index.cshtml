@@ -1,0 +1,212 @@
+@{
+    ViewData["Title"] = "Varianzas Presupuestarias";
+}
+
+<div class="container-fluid py-3">
+    <div class="row mb-4 align-items-center">
+        <div class="col-md-8">
+            <h2 class="fw-bold text-danger mb-0">
+                <i class="bi bi-graph-down"></i> Varianzas Presupuestarias
+            </h2>
+            <p class="text-muted">Control de desviaciones entre presupuesto y ejecutado</p>
+        </div>
+        <div class="col-md-4 text-md-end">
+            <button class="btn btn-success" id="btnExportar">
+                <i class="bi bi-file-earmark-excel"></i> Exportar Excel
+            </button>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card shadow-sm h-100" style="background: linear-gradient(135deg, #20c997, #7ce0be);">
+                <div class="card-body text-white">
+                    <div class="small text-uppercase">Presupuesto</div>
+                    <h4 class="mb-0" id="metricPresupuesto">$0</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm h-100" style="background: linear-gradient(135deg, #0d6efd, #6ea8fe);">
+                <div class="card-body text-white">
+                    <div class="small text-uppercase">Ejecutado</div>
+                    <h4 class="mb-0" id="metricEjecutado">$0</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm h-100" style="background: linear-gradient(135deg, #dc3545, #f17b88);">
+                <div class="card-body text-white">
+                    <div class="small text-uppercase">Varianza</div>
+                    <h4 class="mb-0" id="metricVarianza">$0</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm h-100" style="background: linear-gradient(135deg, #ffc107, #ffd76f);">
+                <div class="card-body text-dark">
+                    <div class="small text-uppercase">% Varianza</div>
+                    <h4 class="mb-0" id="metricPorcentaje">0%</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
+            <span><i class="bi bi-funnel"></i> Filtros</span>
+            <div>
+                <button class="btn btn-sm btn-outline-light me-2" id="btnBuscar"><i class="bi bi-search"></i> Buscar</button>
+                <button class="btn btn-sm btn-outline-light" id="btnLimpiar"><i class="bi bi-eraser"></i> Limpiar</button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Período</label>
+                    <input type="number" class="form-control" id="filtroPeriodo" placeholder="2025" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Id Trabajo</label>
+                    <input type="number" class="form-control" id="filtroTrabajo" placeholder="Ej: 1203" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped" id="tableVarianzas">
+                    <thead class="table-danger">
+                        <tr>
+                            <th>Período</th>
+                            <th>Código Trabajo</th>
+                            <th>Trabajo</th>
+                            <th>Presupuesto</th>
+                            <th>Ejecutado</th>
+                            <th>Varianza</th>
+                            <th>% Varianza</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(function () {
+            let table;
+
+            function initTable() {
+                if ($.fn.DataTable.isDataTable('#tableVarianzas')) {
+                    $('#tableVarianzas').DataTable().destroy();
+                }
+
+                table = $('#tableVarianzas').DataTable({
+                    language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json' },
+                    data: [],
+                    columns: [
+                        { data: 'periodo' },
+                        { data: 'codigoTrabajo', defaultContent: '-' },
+                        { data: 'nombreTrabajo', defaultContent: '-' },
+                        {
+                            data: 'presupuesto',
+                            render: function (data) {
+                                return '$' + parseFloat(data || 0).toLocaleString('es-CO', { minimumFractionDigits: 2 });
+                            }
+                        },
+                        {
+                            data: 'ejecutado',
+                            render: function (data) {
+                                return '$' + parseFloat(data || 0).toLocaleString('es-CO', { minimumFractionDigits: 2 });
+                            }
+                        },
+                        {
+                            data: 'varianza',
+                            render: function (data) {
+                                const valor = parseFloat(data || 0);
+                                const clase = valor < 0 ? 'text-danger fw-bold' : 'text-success fw-bold';
+                                return `<span class="${clase}">$${valor.toLocaleString('es-CO', { minimumFractionDigits: 2 })}</span>`;
+                            }
+                        },
+                        {
+                            data: 'porcentajeVarianza',
+                            render: function (data) {
+                                const valor = parseFloat(data || 0);
+                                const clase = valor < 100 ? 'text-success fw-bold' : 'text-danger fw-bold';
+                                return `<span class="${clase}">${valor.toFixed(2)}%</span>`;
+                            }
+                        }
+                    ],
+                    order: [[0, 'desc']],
+                    pageLength: 25
+                });
+            }
+
+            function buildFilters() {
+                return {
+                    periodo: $('#filtroPeriodo').val() ? parseInt($('#filtroPeriodo').val()) : null,
+                    idTrabajo: $('#filtroTrabajo').val() ? parseInt($('#filtroTrabajo').val()) : null
+                };
+            }
+
+            function actualizarMetricas(rows) {
+                const presupuesto = rows.reduce((acc, x) => acc + (x.presupuesto || 0), 0);
+                const ejecutado = rows.reduce((acc, x) => acc + (x.ejecutado || 0), 0);
+                const varianza = ejecutado - presupuesto;
+                const porcentaje = presupuesto > 0 ? (ejecutado / presupuesto) * 100 : 0;
+
+                $('#metricPresupuesto').text('$' + presupuesto.toLocaleString('es-CO', { minimumFractionDigits: 2 }));
+                $('#metricEjecutado').text('$' + ejecutado.toLocaleString('es-CO', { minimumFractionDigits: 2 }));
+                $('#metricVarianza').text('$' + varianza.toLocaleString('es-CO', { minimumFractionDigits: 2 }));
+                $('#metricPorcentaje').text(porcentaje.toFixed(2) + '%');
+            }
+
+            function cargarDatos() {
+                const filtros = buildFilters();
+                $.ajax({
+                    url: '@Url.Action("ObtenerVarianzas")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(filtros)
+                }).done(function (response) {
+                    if (response.success) {
+                        table.clear().rows.add(response.data).draw();
+                        actualizarMetricas(response.data);
+                    } else {
+                        toastr.error(response.message || 'No fue posible obtener las varianzas');
+                    }
+                }).fail(function () {
+                    toastr.error('Error de comunicación con el servidor');
+                });
+            }
+
+            function limpiar() {
+                $('#filtroPeriodo, #filtroTrabajo').val('');
+                cargarDatos();
+            }
+
+            function exportar() {
+                const filtros = buildFilters();
+                const clean = {};
+                Object.entries(filtros).forEach(([key, value]) => {
+                    if (value !== null && value !== '') clean[key] = value;
+                });
+                const query = $.param(clean);
+                const url = '@Url.Action("Exportar")' + (query ? `?${query}` : '');
+                window.location = url;
+            }
+
+            $('#btnBuscar').on('click', cargarDatos);
+            $('#btnLimpiar').on('click', limpiar);
+            $('#btnExportar').on('click', exportar);
+
+            initTable();
+            cargarDatos();
+        });
+    </script>
+}

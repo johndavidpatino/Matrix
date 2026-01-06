@@ -41,6 +41,11 @@ namespace MatrixNext.Data.Modules.CC
             services.AddScoped<CcProcesosInternosAdapter>(sp => 
                 new CcProcesosInternosAdapter(dbConnection));
             services.AddScoped<ICcProcesosInternosService, CcProcesosInternosService>();
+
+            // CC Reportes Module (Sprint 4)
+            services.AddScoped<CcReportesAdapter>(sp =>
+                new CcReportesAdapter(dbConnection));
+            services.AddScoped<ICcReportesService, CcReportesService>();
             
             return services;
         }
