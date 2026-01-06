@@ -30,20 +30,20 @@
             @if (Model != null && Model.Any())
             {
                 <div class="timeline">
-                    @foreach (var item in Model.OrderByDescending(h => h.FechaModificacion))
+                    @foreach (var item in Model.OrderByDescending(h => h.FechaCambio))
                     {
                         <div class="timeline-item mb-4">
                             <div class="row">
                                 <div class="col-md-2 text-end">
                                     <div class="timeline-date">
-                                        <strong>@item.FechaModificacion?.ToString("dd/MM/yyyy")</strong><br />
-                                        <small class="text-muted">@item.FechaModificacion?.ToString("HH:mm:ss")</small>
+                                        <strong>@item.FechaCambio.ToString("dd/MM/yyyy")</strong><br />
+                                        <small class="text-muted">@item.FechaCambio.ToString("HH:mm:ss")</small>
                                     </div>
                                 </div>
                                 <div class="col-md-1 text-center">
                                     <div class="timeline-marker">
                                         @{
-                                            var iconoAccion = item.Accion?.ToLower() switch
+                                            var iconoAccion = item.TipoCambio?.ToLower() switch
                                             {
                                                 "insertar" or "crear" => "bi-plus-circle text-success",
                                                 "actualizar" or "modificar" => "bi-pencil text-primary",
@@ -59,10 +59,10 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <h6 class="card-title fw-bold">
-                                                @item.Accion
-                                                @if (!string.IsNullOrEmpty(item.Usuario))
+                                                @item.TipoCambio
+                                                @if (!string.IsNullOrEmpty(item.UsuarioCambio))
                                                 {
-                                                    <span class="badge bg-secondary ms-2">@item.Usuario</span>
+                                                    <span class="badge bg-secondary ms-2">@item.UsuarioCambio</span>
                                                 }
                                             </h6>
                                             @if (!string.IsNullOrEmpty(item.ValorAnterior) || !string.IsNullOrEmpty(item.ValorNuevo))
@@ -84,11 +84,11 @@
                                                     }
                                                 </div>
                                             }
-                                            @if (!string.IsNullOrEmpty(item.Observaciones))
+                                            @if (!string.IsNullOrEmpty(item.Motivo))
                                             {
                                                 <div class="mt-2">
-                                                    <strong>Observaciones:</strong>
-                                                    <p class="text-muted mb-0">@item.Observaciones</p>
+                                                    <strong>Motivo:</strong>
+                                                    <p class="text-muted mb-0">@item.Motivo</p>
                                                 </div>
                                             }
                                         </div>

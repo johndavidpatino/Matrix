@@ -96,7 +96,7 @@ WHEN NOT MATCHED THEN INSERT (Tipo,Valor) VALUES (@Tipo,@Valor);";
             var rows = new List<EasyQuoteMasterService.PrecioRow>();
             using (var reader = new StreamReader(file.OpenReadStream()))
             {
-                string line;
+                string? line;
                 bool first = true;
                 while ((line = reader.ReadLine()) != null)
                 {
@@ -141,7 +141,7 @@ WHEN NOT MATCHED THEN INSERT (Clave,ValorTexto) VALUES ('PRECIOS_VERSION',@ver);
             var rows = new List<EasyQuoteMasterService.ValorHoraRow>();
             using (var reader = new StreamReader(file.OpenReadStream()))
             {
-                string line;
+                string? line;
                 bool first = true;
                 while ((line = reader.ReadLine()) != null)
                 {

@@ -39,7 +39,7 @@ namespace MatrixNext.Web.Areas.EQ.Services.Internal
             }
         };
 
-        public EasyQuoteViewModel ObtenerQuote(long id)
+        public EasyQuoteViewModel? ObtenerQuote(long id)
         {
             using var conn = new SqlConnection(_connString);
             using var multi = conn.QueryMultiple("EQ_Quote_Get", new { Id = id }, commandType: CommandType.StoredProcedure);

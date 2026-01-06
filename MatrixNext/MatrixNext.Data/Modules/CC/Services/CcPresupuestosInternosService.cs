@@ -168,6 +168,28 @@ namespace MatrixNext.Data.Modules.CC.Services
             await _adapter.AprobarPresupuestoInternoAsync(idPresupuestoInterno, usuarioAprobacion);
         }
 
+                    public async Task<long> GuardarDetallePresupuestoInternoAsync(
+                        DetallePresupuestoInternoDto detalle)
+                    {
+                        if (detalle.MontoAsignado < 0)
+                        {
+                            throw new ArgumentException("El monto asignado debe ser positivo");
+                        }
+
+                        _logger.LogInformation(
+                            "Guardar detalle presupuesto interno {Detalle} para presupuesto {Presupuesto}",
+                            detalle.IdDetalle,
+                            detalle.IdPresupuestoInterno);
+
+                        return await _adapter.GuardarDetallePresupuestoInternoAsync(detalle);
+                    }
+
+                    public async Task EliminarDetallePresupuestoInternoAsync(long idDetalle)
+                    {
+                        _logger.LogInformation("Eliminar detalle presupuesto interno {Detalle}", idDetalle);
+                        await _adapter.EliminarDetallePresupuestoInternoAsync(idDetalle);
+                    }
+
         public async Task<byte[]> ExportarPresupuestosInternosExcelAsync(
             IEnumerable<PresupuestoInternoDto> presupuestos)
         {

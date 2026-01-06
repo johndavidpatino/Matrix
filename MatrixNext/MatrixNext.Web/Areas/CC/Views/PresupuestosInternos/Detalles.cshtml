@@ -1,7 +1,7 @@
 @model MatrixNext.Data.Modules.CC.DTOs.PresupuestosInternos.PresupuestoInternoDto
 
 @{
-    ViewData["Title"] = $"Detalles Presupuesto #{Model?.IdPresupuesto}";
+    ViewData["Title"] = $"Detalles Presupuesto #{Model?.IdPresupuestoInterno}";
 }
 
 <div class="container-fluid">
@@ -13,7 +13,7 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="@Url.Action("Index")">Presupuestos Internos</a></li>
-                    <li class="breadcrumb-item active">Detalles #@Model?.IdPresupuesto</li>
+                    <li class="breadcrumb-item active">Detalles #@Model?.IdPresupuestoInterno</li>
                 </ol>
             </nav>
         </div>
@@ -28,7 +28,7 @@
             <div class="row">
                 <div class="col-md-3">
                     <strong>ID Presupuesto:</strong>
-                    <p class="text-muted">@Model?.IdPresupuesto</p>
+                    <p class="text-muted">@Model?.IdPresupuestoInterno</p>
                 </div>
                 <div class="col-md-3">
                     <strong>Período:</strong>
@@ -40,7 +40,7 @@
                 </div>
                 <div class="col-md-3">
                     <strong>División:</strong>
-                    <p class="text-muted">@(Model?.CodigoDivision ?? "-")</p>
+                    <p class="text-muted">@(Model?.Division ?? "-")</p>
                 </div>
             </div>
             <div class="row mt-3">
@@ -49,8 +49,8 @@
                     <p class="text-success fw-bold">@Model?.MontoTotal.ToString("C2")</p>
                 </div>
                 <div class="col-md-3">
-                    <strong>Monto Ejecutado:</strong>
-                    <p class="text-info fw-bold">@Model?.MontoEjecutado.ToString("C2")</p>
+                    <strong>Monto Utilizado:</strong>
+                    <p class="text-info fw-bold">@Model?.MontoUtilizado.ToString("C2")</p>
                 </div>
                 <div class="col-md-3">
                     <strong>Saldo Disponible:</strong>
@@ -73,15 +73,6 @@
                     <p>@Html.Raw(estadoBadge)</p>
                 </div>
             </div>
-            @if (!string.IsNullOrEmpty(Model?.Observaciones))
-            {
-                <div class="row mt-3">
-                    <div class="col-12">
-                        <strong>Observaciones:</strong>
-                        <p class="text-muted">@Model.Observaciones</p>
-                    </div>
-                </div>
-            }
         </div>
     </div>
 
@@ -129,7 +120,7 @@
         <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
             <i class="bi bi-arrow-left"></i> Volver
         </a>
-        <a href="@Url.Action("Historico", new { id = Model?.IdPresupuesto })" class="btn btn-outline-info">
+        <a href="@Url.Action("Historico", new { id = Model?.IdPresupuestoInterno })" class="btn btn-outline-info">
             <i class="bi bi-clock-history"></i> Ver Histórico
         </a>
     </div>
@@ -146,7 +137,7 @@
             <div class="modal-body">
                 <form id="formLinea">
                     <input type="hidden" id="idDetalle" />
-                    <input type="hidden" id="idPresupuesto" value="@Model?.IdPresupuesto" />
+                    <input type="hidden" id="idPresupuesto" value="@Model?.IdPresupuestoInterno" />
                     
                     <div class="mb-3">
                         <label for="codigoCentroCosto" class="form-label required">Centro de Costo</label>
@@ -177,7 +168,7 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            const idPresupuesto = @Model?.IdPresupuesto;
+            const idPresupuesto = @Model?.IdPresupuestoInterno;
 
             // Cargar detalles
             function cargarDetalles() {

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using MatrixNext.Web.Areas.EQ.Models;
 using MatrixNext.Web.Areas.EQ.Services.Masters;
@@ -17,21 +18,25 @@ namespace MatrixNext.Web.Areas.EQ.Services.Internal
             _masters = masters;
         }
 
-    public EQSummary Calcular(EasyQuoteViewModel vm, DateTime? fechaCotizacion = null)
+    public EQSummary Calcular(EasyQuoteViewModel? vm, DateTime? fechaCotizacion = null)
     {
         if (vm == null) return new EQSummary();
         
         // Sprint 2.1: Usar fecha de cotización, o hoy si no se especifica
         var fechaLookup = fechaCotizacion ?? DateTime.Now;
-        
+        var header = vm.Header ?? new EQHeader();
         var q = vm.Questionnaire ?? new EQQuestionnaire();
+        var methodology = vm.Methodology ?? new EQMethodology();
+        var logistica = vm.Logistica ?? new EQLogistica();
+        var sampleCities = vm.SampleCities ?? new List<EQSampleCity>();
+        var mysteryVisits = vm.MysteryVisits ?? new List<EQMysteryVisit>();
+        var staffSlList = vm.StaffSL ?? new List<EQStaffSL>();
 
-            var metodologia = vm.Methodology?.MetodologiaRecoleccion;
-            if (string.IsNullOrWhiteSpace(metodologia)) metodologia = "F2F";
+            var metodologia = string.IsNullOrWhiteSpace(methodology.MetodologiaRecoleccion) ? "F2F" : methodology.MetodologiaRecoleccion;
             var duracion = q.DuracionMin <= 0 ? 5 : q.DuracionMin;
             var penetracion = string.IsNullOrWhiteSpace(q.PenetracionCodigo) ? "MAS82" : q.PenetracionCodigo;
 
-            decimal Total(Func<EQSampleCity, decimal> selector) => vm.SampleCities?.Where(c => c.Activa).Sum(selector) ?? 0;
+            decimal Total(Func<EQSampleCity, decimal> selector) => sampleCities.Where(c => c.Activa).Sum(selector);
             var totalMuestra = Total(c => c.MuestraTotal);
             var n1 = Total(c => c.NSE1);
             var n2 = Total(c => c.NSE2);
@@ -75,7 +80,7 @@ namespace MatrixNext.Web.Areas.EQ.Services.Internal
                 return row?.Productividad ?? 4;
             }
             var diasCampo = 0m;
-            foreach (var c in vm.SampleCities.Where(x => x.Activa))
+            foreach (var c in sampleCities.Where(x => x.Activa))
             {
                 var enc = GetEnc(c.Ciudad);
                 var prod = GetProd(c.Ciudad);
@@ -90,17 +95,14 @@ namespace MatrixNext.Web.Areas.EQ.Services.Internal
 
             // FORMULA 5: Mystery completo (D73-D75: Edicion/AlquilerEquipo/CompraDispositivos)
             var costoMystery = 0m;
-            if (vm.MysteryVisits != null)
+            foreach (var v in mysteryVisits)
             {
-                foreach (var v in vm.MysteryVisits)
-                {
-                    if (string.IsNullOrWhiteSpace(v.TipoVisita)) continue;
-                    var baseTarifa = _masters.GetMysteryTarifa(v.TipoVisita, v.Complejidad)?.VrUnitario ?? 0;
-                    costoMystery += baseTarifa * Math.Max(1, v.NumOlas);
-                    costoMystery += (v.Desplazamientos ?? 0) + (v.Tanqueos ?? 0) + (v.Alertas ?? 0);
-                    // D73, D74, D75 - Edicion, Alquiler, Compra
-                    costoMystery += (v.Edicion ?? 0) + (v.AlquilerEquipos ?? 0) + (v.CompraDispositivos ?? 0);
-                }
+                if (string.IsNullOrWhiteSpace(v.TipoVisita)) continue;
+                var baseTarifa = _masters.GetMysteryTarifa(v.TipoVisita, v.Complejidad)?.VrUnitario ?? 0;
+                costoMystery += baseTarifa * Math.Max(1, v.NumOlas);
+                costoMystery += (v.Desplazamientos ?? 0) + (v.Tanqueos ?? 0) + (v.Alertas ?? 0);
+                // D73, D74, D75 - Edicion, Alquiler, Compra
+                costoMystery += (v.Edicion ?? 0) + (v.AlquilerEquipos ?? 0) + (v.CompraDispositivos ?? 0);
             }
 
             // Reclutamiento e incentivos (valores por NSE)
@@ -166,22 +168,19 @@ namespace MatrixNext.Web.Areas.EQ.Services.Internal
 
             // FORMULA 20: Staff SL con KEY lookup (SL|RecordDetail|MetodologiaSL)
             var staffSl = 0m;
-            if (vm.StaffSL != null)
+            foreach (var s in staffSlList)
             {
-                foreach (var s in vm.StaffSL)
-                {
-                    var tarifa = s.Tarifa > 0 ? s.Tarifa : (_masters.GetValorHoraOps(s.Nivel) ?? tarifaOpsDefault);
-                    var horasMin = _masters.GetHorasMinimas(vm.Header?.SL, vm.Header?.RecordDetail, vm.Header?.MetodologiaSL, s.Nivel) ?? 0;
-                    var horasReal = Math.Max(s.HorasPresup, horasMin);
-                    staffSl += horasReal * tarifa;
-                }
+                var tarifa = s.Tarifa > 0 ? s.Tarifa : (_masters.GetValorHoraOps(s.Nivel) ?? tarifaOpsDefault);
+                var horasMin = _masters.GetHorasMinimas(header.SL, header.RecordDetail, header.MetodologiaSL, s.Nivel) ?? 0;
+                var horasReal = Math.Max(s.HorasPresup, horasMin);
+                staffSl += horasReal * tarifa;
             }
             
             // FORMULA 14: Siembra telefónica (si ApoyoReclutamientoTipo)
             var costoSiembraTel = 0m;
-            if (!string.IsNullOrWhiteSpace(vm.Logistica?.ApoyoReclutamientoTipo))
+            if (!string.IsNullOrWhiteSpace(logistica.ApoyoReclutamientoTipo))
             {
-                var factorApoyo = _masters.GetFactorCodigo("APOYO_RECLUTAMIENTO", vm.Logistica.ApoyoReclutamientoTipo) ?? 1m;
+                var factorApoyo = _masters.GetFactorCodigo("APOYO_RECLUTAMIENTO", logistica.ApoyoReclutamientoTipo) ?? 1m;
                 costoSiembraTel = factorApoyo * totalMuestra;
             }
             
@@ -190,20 +189,24 @@ namespace MatrixNext.Web.Areas.EQ.Services.Internal
             if (q.PatinadoresCiudad > 0)
             {
                 var tarifaTablet = _masters.GetMisc("COSTO_TABLET")?.ValorDecimal ?? 25000m;
-                costoTablets = q.PatinadoresCiudad * tarifaTablet * (vm.SampleCities?.Count(x => x.Activa) ?? 1);
+                costoTablets = q.PatinadoresCiudad * tarifaTablet * (sampleCities.Count(x => x.Activa));
+                if (costoTablets == 0)
+                {
+                    costoTablets = q.PatinadoresCiudad * tarifaTablet;
+                }
             }
 
             var compraProducto = q.CompraProducto;
             
             // FORMULA 8: Transporte niños (EstudioNinos checkbox = 15000)
-            var transporteNinos = (vm.Logistica?.EstudioNinos ?? false) ? 15000m * totalMuestra : 0;
+            var transporteNinos = logistica.EstudioNinos ? 15000m * totalMuestra : 0;
             
             // FORMULA 9: Transporte bebidas/producto (TaxiParticipantes = 28000)
-            var transporteBebidas = (vm.Logistica?.TaxiParticipantes ?? false) ? 28000m * totalMuestra : 0;
+            var transporteBebidas = logistica.TaxiParticipantes ? 28000m * totalMuestra : 0;
 
             // Locaciones (tarifa gross * dias setup+campo)
             var costoLocaciones = 0m;
-            foreach (var c in vm.SampleCities.Where(x => x.Activa))
+            foreach (var c in sampleCities.Where(x => x.Activa))
             {
                 var loc = _masters.GetLocacion(c.Ciudad);
                 if (loc == null) continue;
@@ -223,19 +226,19 @@ namespace MatrixNext.Web.Areas.EQ.Services.Internal
 
             // FORMULA 10: Envios volumétrico (DimensionLargoCm * AnchoCm * AltoCm / 5000)
             var costoEnvio = 0m;
-            if (vm.Methodology?.EnvioCiudades == true && vm.Methodology.PesoProductoGr > 0)
+            if (methodology.EnvioCiudades && methodology.PesoProductoGr > 0)
             {
-                var pesoKgReal = vm.Methodology.PesoProductoGr / 1000m;
+                var pesoKgReal = methodology.PesoProductoGr / 1000m;
                 var divisorVol = _masters.GetMisc("DIVISOR_VOLUMETRICO")?.ValorDecimal ?? (_masters.GetEnvioParam()?.DivisorVolumetrico ?? 5000m);
                 
                 var pesoVolumetrico = pesoKgReal;
-                if (vm.Logistica?.DimensionLargoCm > 0 && vm.Logistica?.DimensionAnchoCm > 0 && vm.Logistica?.DimensionAltoCm > 0)
+                if (logistica.DimensionLargoCm > 0 && logistica.DimensionAnchoCm > 0 && logistica.DimensionAltoCm > 0)
                 {
-                    pesoVolumetrico = (vm.Logistica.DimensionLargoCm ?? 0) * (vm.Logistica.DimensionAnchoCm ?? 0) * (vm.Logistica.DimensionAltoCm ?? 0) / divisorVol;
+                    pesoVolumetrico = (logistica.DimensionLargoCm ?? 0) * (logistica.DimensionAnchoCm ?? 0) * (logistica.DimensionAltoCm ?? 0) / divisorVol;
                 }
                 
                 var pesoKg = Math.Max(pesoKgReal, pesoVolumetrico);
-                var ciudadesActivas = vm.SampleCities?.Count(x => x.Activa) ?? 0;
+                var ciudadesActivas = sampleCities.Count(x => x.Activa);
                 var envioParam = _masters.GetEnvioParam();
                 var tipologia = ciudadesActivas <= 1 ? (envioParam?.TipologiaUrbano ?? "URBANO") : (envioParam?.TipologiaNacional ?? "NACIONAL");
                 var tarifaEnv = _masters.GetEnvio(tipologia) ?? _masters.GetEnvio("URBANO");
@@ -250,35 +253,35 @@ namespace MatrixNext.Web.Areas.EQ.Services.Internal
 
             // Base de datos (parametrizado)
             var costoBaseDatos = 0m;
-            if (!string.IsNullOrWhiteSpace(vm.Methodology?.BaseDatos) && !vm.Methodology.BaseDatos.Equals("No requiere", StringComparison.OrdinalIgnoreCase))
+            if (!string.IsNullOrWhiteSpace(methodology.BaseDatos) && !methodology.BaseDatos.Equals("No requiere", StringComparison.OrdinalIgnoreCase))
             {
-                var val = _masters.GetBaseDatos(vm.Methodology.BaseDatos);
+                var val = _masters.GetBaseDatos(methodology.BaseDatos);
                 if (val.HasValue) costoBaseDatos = val.Value;
             }
 
             // FORMULA 12: Reprografia (ReprografiaPaginas * factor)
             var costoReprografia = 0m;
-            if ((vm.Logistica?.ReprografiaPaginas ?? 0) > 0)
+            if (logistica.ReprografiaPaginas > 0)
             {
                 var factorReprograf = _masters.GetMisc("COSTO_REPROGRAFIA_PAGINA")?.ValorDecimal ?? 50m;
-                costoReprografia = (vm.Logistica?.ReprografiaPaginas ?? 0) * factorReprograf * totalMuestra;
+                costoReprografia = logistica.ReprografiaPaginas * factorReprograf * totalMuestra;
             }
             
             // FORMULA 21: Viaticos diferenciados (override o calculados, + dias setup/campo)
             var viaticos = 0m;
-            var diasSetup = vm.Logistica?.DiasSetup ?? 0;
-            var diasViaticos = Math.Max(diasCampo, vm.Logistica?.DiasCampo ?? 0) + diasSetup;
+            var diasSetup = logistica.DiasSetup;
+            var diasViaticos = Math.Max(diasCampo, logistica.DiasCampo) + diasSetup;
             
-            if (vm.Logistica?.ViaticasCampoOverride.HasValue == true)
+            if (logistica.ViaticasCampoOverride.HasValue)
             {
-                viaticos = vm.Logistica.ViaticasCampoOverride.Value;
+                viaticos = logistica.ViaticasCampoOverride.Value;
             }
             else
             {
                 var tEnc = _masters.GetCostUnitario("Transportes PST Encuestadores");
                 var tSup = _masters.GetCostUnitario("Transportes PST Supervisores");
-                var totalEncuestadores = vm.SampleCities.Where(x=>x.Activa).Sum(x=>GetEnc(x.Ciudad));
-                var totalSupervisores = vm.SampleCities.Any(x=>x.Activa) ? vm.SampleCities.Count(x=>x.Activa) * 1.75m : 0;
+                var totalEncuestadores = sampleCities.Where(x=>x.Activa).Sum(x=>GetEnc(x.Ciudad));
+                var totalSupervisores = sampleCities.Any(x=>x.Activa) ? sampleCities.Count(x=>x.Activa) * 1.75m : 0;
                 if (tEnc != null) viaticos += (tEnc.Tarifa * totalEncuestadores) * diasViaticos;
                 if (tSup != null) viaticos += (tSup.Tarifa * totalSupervisores) * diasViaticos;
             }
@@ -297,10 +300,10 @@ namespace MatrixNext.Web.Areas.EQ.Services.Internal
             }
 
             // Proveedor externo / internacional
-            var proveedores = (vm.Header?.ValorProveedorExterno ?? 0) + (vm.Header?.ValorProveedorInternacional ?? 0);
+            var proveedores = header.ValorProveedorExterno + header.ValorProveedorInternacional;
             
             // Otros costos varios
-            var otrosCostos = q.OtrosCostos + (vm.Logistica?.OtrosIncentivos ?? 0);
+            var otrosCostos = q.OtrosCostos + logistica.OtrosIncentivos;
 
             // FORMULA 13, 22-26: Margenes GM, PB+RMF, ProfTime, OP, %OP
             var directCost = costoCampo + costoMystery + incentivos + insumos + staffOps + staffSl + compraProducto + 

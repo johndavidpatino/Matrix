@@ -66,8 +66,8 @@ namespace MatrixNext.Web.Areas.EQ.Services.Masters
         public List<ProductividadCiudadRow> AllProductividad() => Cache.ProductividadCiudad;
         public List<FactorRow> AllFactores() => Cache.Factores;
         public List<RateHoraRow> AllRateHoras() => Cache.RateHoras;
-        public ParamMiscRow GetMisc(string clave) => Cache.ParamMisc.FirstOrDefault(p => string.Equals(p.Clave, clave, StringComparison.OrdinalIgnoreCase));
-        public EnvioParamRow GetEnvioParam() => Cache.EnvioParam;
+        public ParamMiscRow? GetMisc(string clave) => Cache.ParamMisc.FirstOrDefault(p => string.Equals(p.Clave, clave, StringComparison.OrdinalIgnoreCase));
+        public EnvioParamRow? GetEnvioParam() => Cache.EnvioParam;
         public decimal? GetBaseDatos(string tipo) => Cache.BaseDatos.FirstOrDefault(b => string.Equals(b.Tipo, tipo, StringComparison.OrdinalIgnoreCase))?.Valor;
         public List<ParamMiscRow> AllMisc() => Cache.ParamMisc;
         public List<BaseDatosRow> AllBaseDatos() => Cache.BaseDatos;
@@ -79,8 +79,13 @@ namespace MatrixNext.Web.Areas.EQ.Services.Masters
                 string.Equals(f.Codigo, codigo, StringComparison.OrdinalIgnoreCase))?.Factor;
         }
         
-        public decimal? GetHorasMinimas(string sl, string recordDetail, string metodologiaSL, string nivel)
+        public decimal? GetHorasMinimas(string? sl, string? recordDetail, string? metodologiaSL, string? nivel)
         {
+            if (string.IsNullOrWhiteSpace(sl) || string.IsNullOrWhiteSpace(recordDetail) || string.IsNullOrWhiteSpace(metodologiaSL) || string.IsNullOrWhiteSpace(nivel))
+            {
+                return null;
+            }
+
             var key = $"{sl}|{recordDetail}|{metodologiaSL}";
             var row = Cache.RateHoras.FirstOrDefault(r => string.Equals(r.Key, key, StringComparison.OrdinalIgnoreCase));
             if (row == null) return null;
@@ -121,7 +126,7 @@ namespace MatrixNext.Web.Areas.EQ.Services.Masters
             var ordered = Cache.HorasScriptProc.OrderBy(h => h.DuracionMin).ToList();
             var exact = ordered.FirstOrDefault(h => h.DuracionMin == duracionMin);
             if (exact != null) return exact;
-            return ordered.LastOrDefault(h => h.DuracionMin <= duracionMin) ?? ordered.LastOrDefault();
+            return ordered.LastOrDefault(h => h.DuracionMin <= duracionMin) ?? ordered.LastOrDefault() ?? new HorasRow();
         }
 
         public decimal? GetValorHoraOps(string nivel)
@@ -136,26 +141,26 @@ namespace MatrixNext.Web.Areas.EQ.Services.Masters
                 string.Equals(c.NSE, nseCodigo, StringComparison.OrdinalIgnoreCase))?.ValorUnitario ?? 0;
         }
 
-        public LocacionRow GetLocacion(string ciudad) =>
+        public LocacionRow? GetLocacion(string ciudad) =>
             Cache.Locaciones.FirstOrDefault(l => string.Equals(l.Ciudad, ciudad, StringComparison.OrdinalIgnoreCase));
 
-        public EnvioTarifaRow GetEnvio(string tipologia) =>
+        public EnvioTarifaRow? GetEnvio(string tipologia) =>
             Cache.EnvioTarifas.FirstOrDefault(e => string.Equals(e.Tipologia, tipologia, StringComparison.OrdinalIgnoreCase));
 
-        public CodificacionRow GetCodificacionDefault() => Cache.Codificacion.FirstOrDefault();
+        public CodificacionRow? GetCodificacionDefault() => Cache.Codificacion.FirstOrDefault();
 
-        public MysteryTarifaRow GetMysteryTarifa(string tipo, string complejidad) =>
+        public MysteryTarifaRow? GetMysteryTarifa(string tipo, string complejidad) =>
             Cache.MysteryTarifa.FirstOrDefault(m =>
                 string.Equals(m.TipoVisita, tipo, StringComparison.OrdinalIgnoreCase) &&
                 string.Equals(m.Complejidad, complejidad, StringComparison.OrdinalIgnoreCase));
 
-        public CostUnitarioOpsRow GetCostUnitario(string actividadStartsWith)
+        public CostUnitarioOpsRow? GetCostUnitario(string actividadStartsWith)
         {
             return Cache.CostUnitarioOps.FirstOrDefault(c =>
                 c.Actividad.StartsWith(actividadStartsWith, StringComparison.OrdinalIgnoreCase));
         }
 
-        public RateEstadisticaRow GetRateEstadisticaDefault() =>
+        public RateEstadisticaRow? GetRateEstadisticaDefault() =>
             Cache.RateEstadistica.FirstOrDefault();
 
         private class MasterCache
@@ -172,7 +177,7 @@ namespace MatrixNext.Web.Areas.EQ.Services.Masters
             public List<RateEstadisticaRow> RateEstadistica { get; set; } = new();
             public List<ProductividadCiudadRow> ProductividadCiudad { get; set; } = new();
             public List<ParamMiscRow> ParamMisc { get; set; } = new();
-            public EnvioParamRow EnvioParam { get; set; }
+            public EnvioParamRow? EnvioParam { get; set; }
             public List<BaseDatosRow> BaseDatos { get; set; } = new();
             public List<FactorRow> Factores { get; set; } = new();
             public List<RateHoraRow> RateHoras { get; set; } = new();

@@ -1,4 +1,5 @@
 using ClosedXML.Excel;
+using MatrixNext.Data.Modules.CC.Adapters;
 using MatrixNext.Data.Modules.CC.DTOs.Produccion;
 using Microsoft.Extensions.Logging;
 using System;

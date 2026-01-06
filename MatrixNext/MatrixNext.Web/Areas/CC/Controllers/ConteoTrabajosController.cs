@@ -1,10 +1,14 @@
 using MatrixNext.Data.Modules.CC.DTOs;
+using MatrixNext.Data.Modules.CC.DTOs.ProcesosInternos;
 using MatrixNext.Data.Modules.CC.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MatrixNext.Areas.CC.Controllers
+namespace MatrixNext.Web.Areas.CC.Controllers
 {
     [Area("CC")]
+    [Route("CC/[controller]")]
+    [Authorize]
     public class ConteoTrabajosController : Controller
     {
         private readonly ICcProcesosInternosService _service;
