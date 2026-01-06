@@ -7,13 +7,17 @@
 }
 
 <div class="container-fluid">
+    <div id="alert-container" style="position: fixed; top: 20px; right: 20px; max-width: 400px; z-index: 9999;"></div>
     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
         <div>
             <h1 class="h3 mb-0">EasyQuote (Área EQ)</h1>
             <small class="text-muted">Grid editable estilo Excel con cálculo en backend; todo persiste vía TVP/SP.</small>
         </div>
         <div class="d-flex gap-2">
-            <button class="btn btn-outline-secondary" type="button" id="btn-calcular">Calcular</button>
+            <button class="btn btn-outline-secondary position-relative" type="button" id="btn-calcular">
+                <span class="spinner-border spinner-border-sm d-none me-2" id="spinner-calcular" role="status" aria-hidden="true"></span>
+                Calcular
+            </button>
             <button class="btn btn-primary" type="button" id="btn-guardar">Guardar</button>
         </div>
     </div>
@@ -167,11 +171,17 @@
         <div class="tab-pane fade" id="tab-cuestionario" role="tabpanel">
             <div class="row g-3">
                 <div class="col-md-2">
-                    <label class="form-label">Duración (min)</label>
+                    <label class="form-label">
+                        Duración (min)
+                        <i class="bi bi-question-circle-fill" data-bs-toggle="tooltip" title="Tiempo aproximado por entrevista. Rango válido: 5-60 minutos"></i>
+                    </label>
                     <input class="form-control" type="number" id="DuracionMin" />
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label">Penetración</label>
+                    <label class="form-label">
+                        Penetración
+                        <i class="bi bi-question-circle-fill" data-bs-toggle="tooltip" title="Porcentaje de población que cumple criterios de estudio. Afecta tarifas de reclutamiento"></i>
+                    </label>
                     <select class="form-select" id="PenetracionCodigo">
                         <option value="MAS82">Mas 82%</option>
                         <option value="75_82">75%-82%</option>
@@ -194,7 +204,10 @@
                     <input class="form-control" type="number" id="NumProcesamientos" />
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label">Clase de prueba</label>
+                    <label class="form-label">
+                        Clase de prueba
+                        <i class="bi bi-question-circle-fill" data-bs-toggle="tooltip" title="Tipo de producto a evaluar (Monódica/Secuencial). Afecta costos de reclutamiento y material"></i>
+                    </label>
                     <input class="form-control" id="ClasePrueba" placeholder="Monódica / Secuencial / N/A" />
                 </div>
                 <div class="col-md-3">
@@ -317,7 +330,10 @@
             </div>
 
             <div class="d-flex justify-content-between align-items-center mb-2">
-                <h6 class="mb-0">Ciudades y NSE</h6>
+                <h6 class="mb-0">
+                    Ciudades y NSE
+                    <i class="bi bi-question-circle-fill" data-bs-toggle="tooltip" title="Nivel Socioeconómico (1-6). Afecta tarifas y disponibilidad de participantes. La suma de NSE debe igualar el total por ciudad"></i>
+                </h6>
                 <button class="btn btn-sm btn-outline-primary" type="button" id="btn-add-city">+ Ciudad</button>
             </div>
             <div class="table-responsive">
@@ -351,7 +367,10 @@
                 </table>
             </div>
 
-            <h6 class="mt-4 mb-2">Logística operativa</h6>
+            <h6 class="mt-4 mb-2">
+                Logística operativa
+                <i class="bi bi-question-circle-fill" data-bs-toggle="tooltip" title="Parámetros logísticos que afectan el costo final y viabilidad del estudio"></i>
+            </h6>
             <div class="row g-3">
                 <div class="col-md-2">
                     <label class="form-label">Días setup</label>
@@ -385,11 +404,17 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label">Reprografía (páginas)</label>
+                    <label class="form-label">
+                        Reprografía (páginas)
+                        <i class="bi bi-question-circle-fill" data-bs-toggle="tooltip" title="Número de páginas a imprimir del material de estudio. Se multiplica por cantidad de participantes"></i>
+                    </label>
                     <input class="form-control" type="number" id="ReprografiaPaginas" />
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label">Viáticos campo (override)</label>
+                    <label class="form-label">
+                        Viáticos campo (override)
+                        <i class="bi bi-question-circle-fill" data-bs-toggle="tooltip" title="Transporte y alimentación del personal en campo (por día). Si está vacío usa valor default del sistema"></i>
+                    </label>
                     <input class="form-control" type="number" step="0.01" id="ViaticasCampoOverride" placeholder="Opcional" />
                 </div>
                 <div class="col-md-3">
@@ -625,6 +650,37 @@
         $('sample-n6').textContent = fmt(sum('NSE6'));
         $('TotalMuestra').value = fmt(sum('MuestraTotal'));
         $('badge-ciudades').textContent = `Ciudades activas: ${active.length}`;
+        
+        // T2.3.2: Validación visual - NSE sums must equal total per city
+        document.querySelectorAll('#sample-body tr').forEach((row, idx) => {
+            const city = state.SampleCities[idx];
+            if (!city) return;
+            
+            const nseSum = toNumber(city.NSE1 || 0) + toNumber(city.NSE2 || 0) + 
+                          toNumber(city.NSE3 || 0) + toNumber(city.NSE4 || 0) + 
+                          toNumber(city.NSE5 || 0) + toNumber(city.NSE6 || 0);
+            const total = toNumber(city.MuestraTotal || 0);
+            
+            // Check if sum matches total (allow 0.5 tolerance for rounding)
+            if (total > 0 && Math.abs(nseSum - total) > 0.5) {
+                row.classList.add('table-danger');
+                row.style.borderLeft = '4px solid #dc3545';
+                // Remove old error message if exists
+                const oldError = row.querySelector('.validation-error');
+                if (oldError) oldError.remove();
+                // Add new error message
+                const errorCell = document.createElement('div');
+                errorCell.className = 'validation-error';
+                errorCell.style.cssText = 'color: #dc3545; font-size: 0.75em; white-space: nowrap; margin-top: 2px;';
+                errorCell.textContent = `⚠️ Suma: ${nseSum.toFixed(0)} vs Total: ${total.toFixed(0)}`;
+                row.appendChild(errorCell);
+            } else {
+                row.classList.remove('table-danger');
+                row.style.borderLeft = '';
+                const errorCell = row.querySelector('.validation-error');
+                if (errorCell) errorCell.remove();
+            }
+        });
     }
 
     function renderMystery() {
@@ -813,12 +869,30 @@
         $('badge-pct').textContent = `%OP: ${((s.PorcOP || 0) * 100).toFixed(2)}%`;
     }
 
+    // T2.3.4: Mejorados mensajes de error con alertas Bootstrap y auto-dismiss
     function showStatus(msg, ok = true) {
-        const box = $('status-box');
-        if (!box) return;
-        box.textContent = msg;
-        box.classList.toggle('alert-success', ok);
-        box.classList.toggle('alert-danger', !ok);
+        const container = $('alert-container');
+        if (!container) return;
+        
+        // Crear alerta
+        const alertDiv = document.createElement('div');
+        const alertType = ok ? 'success' : 'danger';
+        const icon = ok ? '✓' : '⚠️';
+        alertDiv.className = `alert alert-${alertType} alert-dismissible fade show mb-2`;
+        alertDiv.innerHTML = `
+            <span>${icon} ${msg}</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        container.appendChild(alertDiv);
+        
+        // Auto-dismiss después de 5 segundos (solo si es success)
+        if (ok) {
+            setTimeout(() => {
+                alertDiv.classList.remove('show');
+                setTimeout(() => alertDiv.remove(), 150);
+            }, 5000);
+        }
     }
 
     async function callApi(url, payload) {
@@ -837,6 +911,13 @@
     async function calcular() {
         syncPrimitivesToState();
         syncTablesToState();
+        
+        // T2.3.3: Show spinner and disable button
+        const btn = $('btn-calcular');
+        const spinner = $('spinner-calcular');
+        btn.disabled = true;
+        spinner.classList.remove('d-none');
+        
         try {
             const result = await callApi(urls.calc, state);
             state.Summary = result;
@@ -845,6 +926,10 @@
         } catch (e) {
             console.error(e);
             showStatus('Error al calcular', false);
+        } finally {
+            // Hide spinner and enable button
+            spinner.classList.add('d-none');
+            btn.disabled = false;
         }
     }
 
@@ -873,6 +958,10 @@
         renderMystery();
         renderStaff();
         renderSummary(state.Summary);
+        
+        // T2.3.1: Inicializar tooltips Bootstrap
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
     });
 
     $('btn-add-city').addEventListener('click', () => {
@@ -942,5 +1031,89 @@
     const saveButtons = ['btn-guardar', 'btn-guardar-2'];
     saveButtons.forEach(id => $(id)?.addEventListener('click', guardar));
 </script>
-}
 
+<!-- T2.3.5: Responsive design para móvil -->
+<style>
+    @media (max-width: 768px) {
+        .container-fluid {
+            padding: 0.5rem;
+        }
+        
+        .form-control, .form-select {
+            font-size: 16px; /* Prevent iOS auto-zoom on focus */
+            padding: 0.5rem 0.75rem;
+        }
+        
+        .table-responsive {
+            font-size: 0.8rem;
+        }
+        
+        .table th, .table td {
+            padding: 0.5rem 0.25rem;
+        }
+        
+        .btn {
+            width: 100%;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .d-flex.gap-2 {
+            flex-direction: column;
+        }
+        
+        .nav-tabs {
+            font-size: 0.85rem;
+        }
+        
+        .nav-tabs .nav-link {
+            padding: 0.5rem 0.75rem;
+        }
+        
+        .col-md-2, .col-md-3, .col-md-4 {
+            padding: 0.25rem;
+        }
+        
+        h1.h3 {
+            font-size: 1.25rem;
+        }
+        
+        h6 {
+            font-size: 0.95rem;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .container-fluid {
+            padding: 0.25rem;
+        }
+        
+        .form-label {
+            font-size: 0.8rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .form-control, .form-select {
+            font-size: 15px;
+            padding: 0.4rem 0.5rem;
+        }
+        
+        .btn {
+            padding: 0.4rem 0.75rem;
+            font-size: 0.8rem;
+        }
+        
+        .badge {
+            font-size: 0.65rem;
+        }
+    }
+    
+    /* Alert container fixed position responsive */
+    @media (max-width: 576px) {
+        #alert-container {
+            max-width: 90% !important;
+            right: 5% !important;
+            left: 5% !important;
+        }
+    }
+</style>
