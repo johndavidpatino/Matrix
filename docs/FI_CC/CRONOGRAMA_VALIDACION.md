@@ -156,7 +156,46 @@ ENTREGABLES SPRINT PRE-1 ✅:
 
 ## SPRINT 1: Control Presupuestos (Semanas 3-4, 92 horas)
 
-### Cronograma Semanal
+### Estado Actual: 🔄 EN CURSO (Enero 6, 2026)
+
+**Completado**:
+- ✅ PresupuestoDto.cs con 5 clases DTO (~80 líneas)
+- ✅ CcControlPresupuestosAdapter.cs con 9 métodos SP (~160 líneas)
+- ✅ CcControlPresupuestosService.cs interface + implementación (~140 líneas)
+- ✅ ServiceCollectionExtensions actualizado para DI
+- ✅ ControlPresupuestosController.cs con 9 endpoints REST (~210 líneas)
+- ✅ ControlPresupuestosViewModel.cs con 6 ViewModels (~80 líneas)
+- ✅ Index.cshtml (500+ líneas) con:
+  * 4-tab interface (Presupuestos, Verificación, Nómina, Asignación)
+  * DataTables integration
+  * Bootstrap 5 responsive design
+  * AJAX CRUD operations
+  * Modal forms
+  * Currency formatting
+- ✅ Verificacion.cshtml (160 líneas) con:
+  * Summary cards (presupuesto, realizado, varianza)
+  * Comparison table
+  * Export functionality
+- ✅ Nomina.cshtml (200 líneas) con:
+  * Dynamic distribution interface
+  * Percentage inputs
+  * Auto-calculation
+  * Save functionality
+- ✅ Asignacion.cshtml (250 líneas) con:
+  * Availability indicators
+  * Progress bar for allocation
+  * CRUD for assignments
+  * Validation
+
+**Total archivos**: 10 | **Total líneas**: ~1,900 | **Compilación**: 0 errores ✅
+
+**Próximos pasos**:
+1. Crear vistas adicionales (si es necesario)
+2. Testing funcional completo
+3. Integration con datos reales
+4. UAT y sign-off
+
+### Cronograma Original (Referencia)
 
 **SEMANA 3: Models, Controllers, Views** (40 horas)
 
