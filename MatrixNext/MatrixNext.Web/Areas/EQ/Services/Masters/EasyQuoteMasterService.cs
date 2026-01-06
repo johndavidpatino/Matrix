@@ -96,8 +96,12 @@ namespace MatrixNext.Web.Areas.EQ.Services.Masters
             };
         }
 
-        public decimal? GetPrecioEncuesta(string metodologia, string penetracion, int duracionMin)
+        public decimal? GetPrecioEncuesta(string metodologia, string penetracion, int duracionMin, DateTime? fechaLookup = null)
         {
+            // Sprint 2.1: Si se proporciona fecha, usar datos vigentes a esa fecha
+            // Por ahora usa el cache actual (vigentes hoy)
+            // Nota: Para lookups por fecha histórica, sería necesario cargar datos históricos
+            
             var precios = Cache.Precios
                 .Where(p => string.Equals(p.MetodologiaCodigo, metodologia, StringComparison.OrdinalIgnoreCase)
                          && string.Equals(p.PenetracionCodigo, penetracion, StringComparison.OrdinalIgnoreCase))

@@ -2,6 +2,72 @@
 -- Definición de tablas, tipos, procedimientos y seeds para EasyQuote en MatrixNext (área EQ).
 -- Ejecutar en SQL Server antes de implementar el módulo.
 
+------------------------------------------------------------
+- LIMPIEZA PREVIA AL RECREADO
+------------------------------------------------------------
+IF OBJECT_ID('dbo.EQ_Quote_Save','P') IS NOT NULL
+    DROP PROCEDURE dbo.EQ_Quote_Save;
+
+IF OBJECT_ID('dbo.EQ_Quote_Get','P') IS NOT NULL
+    DROP PROCEDURE dbo.EQ_Quote_Get;
+
+IF OBJECT_ID('dbo.sp_eq_desactivar_maestro','P') IS NOT NULL
+    DROP PROCEDURE dbo.sp_eq_desactivar_maestro;
+
+IF OBJECT_ID('dbo.sp_eq_obtener_versiones','P') IS NOT NULL
+    DROP PROCEDURE dbo.sp_eq_obtener_versiones;
+
+IF OBJECT_ID('dbo.vw_eq_param_precio_vigente','V') IS NOT NULL
+    DROP VIEW dbo.vw_eq_param_precio_vigente;
+
+IF OBJECT_ID('dbo.vw_eq_param_cati_vigente','V') IS NOT NULL
+    DROP VIEW dbo.vw_eq_param_cati_vigente;
+
+IF OBJECT_ID('dbo.vw_eq_param_online_vigente','V') IS NOT NULL
+    DROP VIEW dbo.vw_eq_param_online_vigente;
+
+-- Tablas de operación (orden inverso para evitar FK)
+IF OBJECT_ID('dbo.eq_logistica','U') IS NOT NULL DROP TABLE dbo.eq_logistica;
+IF OBJECT_ID('dbo.eq_staff_sl','U') IS NOT NULL DROP TABLE dbo.eq_staff_sl;
+IF OBJECT_ID('dbo.eq_mystery_visit','U') IS NOT NULL DROP TABLE dbo.eq_mystery_visit;
+IF OBJECT_ID('dbo.eq_sample_city','U') IS NOT NULL DROP TABLE dbo.eq_sample_city;
+IF OBJECT_ID('dbo.eq_methodology','U') IS NOT NULL DROP TABLE dbo.eq_methodology;
+IF OBJECT_ID('dbo.eq_questionnaire','U') IS NOT NULL DROP TABLE dbo.eq_questionnaire;
+IF OBJECT_ID('dbo.eq_quote_header','U') IS NOT NULL DROP TABLE dbo.eq_quote_header;
+
+-- Tablas maestras
+IF OBJECT_ID('dbo.eq_rate_horas','U') IS NOT NULL DROP TABLE dbo.eq_rate_horas;
+IF OBJECT_ID('dbo.eq_param_factores','U') IS NOT NULL DROP TABLE dbo.eq_param_factores;
+IF OBJECT_ID('dbo.eq_param_online','U') IS NOT NULL DROP TABLE dbo.eq_param_online;
+IF OBJECT_ID('dbo.eq_param_cati','U') IS NOT NULL DROP TABLE dbo.eq_param_cati;
+IF OBJECT_ID('dbo.eq_cost_base_datos','U') IS NOT NULL DROP TABLE dbo.eq_cost_base_datos;
+IF OBJECT_ID('dbo.eq_envio_param','U') IS NOT NULL DROP TABLE dbo.eq_envio_param;
+IF OBJECT_ID('dbo.eq_param_misc','U') IS NOT NULL DROP TABLE dbo.eq_param_misc;
+IF OBJECT_ID('dbo.eq_productividad_ciudad','U') IS NOT NULL DROP TABLE dbo.eq_productividad_ciudad;
+IF OBJECT_ID('dbo.eq_cost_unitario_ops','U') IS NOT NULL DROP TABLE dbo.eq_cost_unitario_ops;
+IF OBJECT_ID('dbo.eq_insumos_prueba','U') IS NOT NULL DROP TABLE dbo.eq_insumos_prueba;
+IF OBJECT_ID('dbo.eq_tarifa_mystery','U') IS NOT NULL DROP TABLE dbo.eq_tarifa_mystery;
+IF OBJECT_ID('dbo.eq_codificacion_param','U') IS NOT NULL DROP TABLE dbo.eq_codificacion_param;
+IF OBJECT_ID('dbo.eq_envio_tarifa','U') IS NOT NULL DROP TABLE dbo.eq_envio_tarifa;
+IF OBJECT_ID('dbo.eq_locaciones','U') IS NOT NULL DROP TABLE dbo.eq_locaciones;
+IF OBJECT_ID('dbo.eq_cost_insumos','U') IS NOT NULL DROP TABLE dbo.eq_cost_insumos;
+IF OBJECT_ID('dbo.eq_rate_estadistica','U') IS NOT NULL DROP TABLE dbo.eq_rate_estadistica;
+IF OBJECT_ID('dbo.eq_valor_hora_ops','U') IS NOT NULL DROP TABLE dbo.eq_valor_hora_ops;
+IF OBJECT_ID('dbo.eq_param_script_proc','U') IS NOT NULL DROP TABLE dbo.eq_param_script_proc;
+IF OBJECT_ID('dbo.eq_param_precio','U') IS NOT NULL DROP TABLE dbo.eq_param_precio;
+IF OBJECT_ID('dbo.eq_param_metodologia','U') IS NOT NULL DROP TABLE dbo.eq_param_metodologia;
+IF OBJECT_ID('dbo.eq_param_penetracion','U') IS NOT NULL DROP TABLE dbo.eq_param_penetracion;
+
+IF OBJECT_ID('dbo.eq_audit_maestras','U') IS NOT NULL DROP TABLE dbo.eq_audit_maestras;
+
+-- Tipos de tabla
+IF TYPE_ID(N'dbo.EQ_SampleCityType') IS NOT NULL DROP TYPE dbo.EQ_SampleCityType;
+IF TYPE_ID(N'dbo.EQ_MysteryVisitType') IS NOT NULL DROP TYPE dbo.EQ_MysteryVisitType;
+IF TYPE_ID(N'dbo.EQ_StaffSLType') IS NOT NULL DROP TYPE dbo.EQ_StaffSLType;
+IF TYPE_ID(N'dbo.EQ_QuestionnaireType') IS NOT NULL DROP TYPE dbo.EQ_QuestionnaireType;
+IF TYPE_ID(N'dbo.EQ_MethodologyType') IS NOT NULL DROP TYPE dbo.EQ_MethodologyType;
+IF TYPE_ID(N'dbo.EQ_LogisticaType') IS NOT NULL DROP TYPE dbo.EQ_LogisticaType;
+
 SET NOCOUNT ON;
 
 ------------------------------------------------------------
@@ -19,81 +85,67 @@ BEGIN
     );
 END;
 
-IF OBJECT_ID('dbo.eq_param_metodologia','U') IS NULL
-BEGIN
-    CREATE TABLE dbo.eq_param_metodologia (
-        Id INT IDENTITY(1,1) PRIMARY KEY,
-        Codigo VARCHAR(50) NOT NULL UNIQUE,
-        Descripcion VARCHAR(100) NOT NULL
-    );
-END;
-ELSE
-BEGIN
-    -- Aumentar longitud si ya existe (requiere soltar FK temporal)
-    IF EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('dbo.eq_param_metodologia') AND name = 'Codigo' AND max_length < 100)
-    BEGIN
-        IF EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = 'FK_eq_param_precio_metodologia')
-            ALTER TABLE dbo.eq_param_precio DROP CONSTRAINT FK_eq_param_precio_metodologia;
-        ALTER TABLE dbo.eq_param_metodologia ALTER COLUMN Codigo VARCHAR(50) NOT NULL;
-    END
-END;
+CREATE TABLE dbo.eq_param_metodologia (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Codigo VARCHAR(50) NOT NULL UNIQUE,
+    Descripcion VARCHAR(100) NOT NULL,
+    Version INT DEFAULT 1,
+    VigenteDesde DATE NOT NULL DEFAULT CAST(GETDATE() AS DATE),
+    VigenteHasta DATE NULL
+);
 
-IF OBJECT_ID('dbo.eq_param_precio','U') IS NULL
-BEGIN
-    CREATE TABLE dbo.eq_param_precio (
-        Id INT IDENTITY(1,1) PRIMARY KEY,
-        MetodologiaCodigo VARCHAR(50) NOT NULL,
-        PenetracionCodigo VARCHAR(20) NOT NULL,
-        DuracionMin INT NOT NULL,
-        ValorPerfil DECIMAL(18,2) NOT NULL,
-        ValorCoordinacion DECIMAL(18,2) NOT NULL,
-        ValorTotal DECIMAL(18,2) NOT NULL,
-        CONSTRAINT FK_eq_param_precio_metodologia FOREIGN KEY (MetodologiaCodigo) REFERENCES dbo.eq_param_metodologia(Codigo),
-        CONSTRAINT FK_eq_param_precio_penetracion FOREIGN KEY (PenetracionCodigo) REFERENCES dbo.eq_param_penetracion(Codigo)
-    );
-END;
-ELSE
-BEGIN
-    IF EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('dbo.eq_param_precio') AND name = 'MetodologiaCodigo' AND max_length < 100)
-        ALTER TABLE dbo.eq_param_precio ALTER COLUMN MetodologiaCodigo VARCHAR(50) NOT NULL;
-END;
+CREATE TABLE dbo.eq_param_precio (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    MetodologiaCodigo VARCHAR(50) NOT NULL,
+    PenetracionCodigo VARCHAR(20) NOT NULL,
+    DuracionMin INT NOT NULL,
+    ValorPerfil DECIMAL(18,2) NOT NULL,
+    ValorCoordinacion DECIMAL(18,2) NOT NULL,
+    ValorTotal DECIMAL(18,2) NOT NULL,
+    Version INT DEFAULT 1,
+    VigenteDesde DATE NOT NULL DEFAULT CAST(GETDATE() AS DATE),
+    VigenteHasta DATE NULL,
+    CONSTRAINT FK_eq_param_precio_metodologia FOREIGN KEY (MetodologiaCodigo) REFERENCES dbo.eq_param_metodologia(Codigo),
+    CONSTRAINT FK_eq_param_precio_penetracion FOREIGN KEY (PenetracionCodigo) REFERENCES dbo.eq_param_penetracion(Codigo),
+    CONSTRAINT UQ_eq_param_precio UNIQUE (MetodologiaCodigo, PenetracionCodigo, DuracionMin, Version)
+);
 
 -- Re-crear FK si se eliminó
 IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = 'FK_eq_param_precio_metodologia')
     ALTER TABLE dbo.eq_param_precio ADD CONSTRAINT FK_eq_param_precio_metodologia FOREIGN KEY (MetodologiaCodigo) REFERENCES dbo.eq_param_metodologia(Codigo);
 
-IF OBJECT_ID('dbo.eq_param_script_proc','U') IS NULL
-BEGIN
-    CREATE TABLE dbo.eq_param_script_proc (
-        DuracionMin INT PRIMARY KEY,
-        HorasScript DECIMAL(10,2) NOT NULL,
-        HorasProcesamiento DECIMAL(10,2) NOT NULL,
-        HorasHarmoni DECIMAL(10,2) NOT NULL,
-        HorasGraficacion DECIMAL(10,2) NOT NULL
-    );
-END;
+CREATE TABLE dbo.eq_param_script_proc (
+    DuracionMin INT PRIMARY KEY,
+    HorasScript DECIMAL(10,2) NOT NULL,
+    HorasProcesamiento DECIMAL(10,2) NOT NULL,
+    HorasHarmoni DECIMAL(10,2) NOT NULL,
+    HorasGraficacion DECIMAL(10,2) NOT NULL,
+    Version INT DEFAULT 1,
+    VigenteDesde DATE NOT NULL DEFAULT CAST(GETDATE() AS DATE),
+    VigenteHasta DATE NULL
+);
 
-IF OBJECT_ID('dbo.eq_valor_hora_ops','U') IS NULL
-BEGIN
-    CREATE TABLE dbo.eq_valor_hora_ops (
-        Nivel VARCHAR(10) PRIMARY KEY,
-        Variante VARCHAR(20) NOT NULL,
-        ValorHora DECIMAL(18,2) NOT NULL
-    );
-END;
+CREATE TABLE dbo.eq_valor_hora_ops (
+    Nivel VARCHAR(10) PRIMARY KEY,
+    Variante VARCHAR(20) NOT NULL,
+    ValorHora DECIMAL(18,2) NOT NULL,
+    Version INT DEFAULT 1,
+    VigenteDesde DATE NOT NULL DEFAULT CAST(GETDATE() AS DATE),
+    VigenteHasta DATE NULL
+);
 
-IF OBJECT_ID('dbo.eq_rate_estadistica','U') IS NULL
-BEGIN
-    CREATE TABLE dbo.eq_rate_estadistica (
-        Id INT IDENTITY(1,1) PRIMARY KEY,
-        Categoria VARCHAR(100) NOT NULL,
-        Servicio VARCHAR(200) NOT NULL,
-        HorasEstimadas DECIMAL(10,2) NOT NULL,
-        PrecioReferencia DECIMAL(18,2) NOT NULL,
-        FactorEscala DECIMAL(10,2) NOT NULL,
-        LeadTime VARCHAR(50) NULL
-    );
-END;
+CREATE TABLE dbo.eq_rate_estadistica (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Categoria VARCHAR(100) NOT NULL,
+    Servicio VARCHAR(200) NOT NULL,
+    HorasEstimadas DECIMAL(10,2) NOT NULL,
+    PrecioReferencia DECIMAL(18,2) NOT NULL,
+    FactorEscala DECIMAL(10,2) NOT NULL,
+    LeadTime VARCHAR(50) NULL,
+    Version INT DEFAULT 1,
+    VigenteDesde DATE NOT NULL DEFAULT CAST(GETDATE() AS DATE),
+    VigenteHasta DATE NULL
+);
 
 IF OBJECT_ID('dbo.eq_cost_insumos','U') IS NULL
 BEGIN
@@ -220,7 +272,7 @@ END;
 -- Matriz CATI (duracion vs penetracion para CATI)
 IF OBJECT_ID('dbo.eq_param_cati','U') IS NULL
 BEGIN
-    CREATE TABLE dbo.eq_param_cati (
+CREATE TABLE dbo.eq_param_cati (
         Id INT IDENTITY(1,1) PRIMARY KEY,
         DuracionMin INT NOT NULL,
         PenetracionCodigo VARCHAR(20) NOT NULL,
@@ -228,7 +280,7 @@ BEGIN
         ValorCoordinacion DECIMAL(18,2) NOT NULL,
         ValorTotal DECIMAL(18,2) NOT NULL,
         Version INT DEFAULT 1,
-        VigenteDesde DATE NULL,
+        VigenteDesde DATE NOT NULL DEFAULT CAST(GETDATE() AS DATE),
         VigenteHasta DATE NULL,
         CONSTRAINT UQ_CATI_Duracion_Penetracion UNIQUE (DuracionMin, PenetracionCodigo, Version)
     );
@@ -237,7 +289,7 @@ END;
 -- Matriz Online/Auto (duracion vs penetracion para Online)
 IF OBJECT_ID('dbo.eq_param_online','U') IS NULL
 BEGIN
-    CREATE TABLE dbo.eq_param_online (
+CREATE TABLE dbo.eq_param_online (
         Id INT IDENTITY(1,1) PRIMARY KEY,
         DuracionMin INT NOT NULL,
         PenetracionCodigo VARCHAR(20) NOT NULL,
@@ -245,54 +297,54 @@ BEGIN
         ValorCoordinacion DECIMAL(18,2) NOT NULL,
         ValorTotal DECIMAL(18,2) NOT NULL,
         Version INT DEFAULT 1,
-        VigenteDesde DATE NULL,
+        VigenteDesde DATE NOT NULL DEFAULT CAST(GETDATE() AS DATE),
         VigenteHasta DATE NULL,
         CONSTRAINT UQ_ONLINE_Duracion_Penetracion UNIQUE (DuracionMin, PenetracionCodigo, Version)
     );
 END;
 
 -- Factores (script tipo, clase prueba, apoyo, etiquetado, prob aprobacion)
-IF OBJECT_ID('dbo.eq_param_factores','U') IS NULL
-BEGIN
-    CREATE TABLE dbo.eq_param_factores (
-        Id INT IDENTITY(1,1) PRIMARY KEY,
-        Tipo VARCHAR(50) NOT NULL, -- 'SCRIPT_TIPO', 'CLASE_PRUEBA', 'APOYO_RECLUTAMIENTO', 'ETIQUETADO', 'PROB_APROBACION'
-        Codigo VARCHAR(50) NOT NULL,
-        Descripcion VARCHAR(200) NOT NULL,
-        Factor DECIMAL(10,4) NOT NULL DEFAULT 1.0,
-        Orden INT NOT NULL,
-        Activo BIT DEFAULT 1,
-        CONSTRAINT UQ_Factores_Tipo_Codigo UNIQUE (Tipo, Codigo)
-    );
-END;
+CREATE TABLE dbo.eq_param_factores (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Tipo VARCHAR(50) NOT NULL, -- 'SCRIPT_TIPO', 'CLASE_PRUEBA', 'APOYO_RECLUTAMIENTO', 'ETIQUETADO', 'PROB_APROBACION'
+    Codigo VARCHAR(50) NOT NULL,
+    Descripcion VARCHAR(200) NOT NULL,
+    Factor DECIMAL(10,4) NOT NULL DEFAULT 1.0,
+    Orden INT NOT NULL,
+    Activo BIT DEFAULT 1,
+    Version INT DEFAULT 1,
+    VigenteDesde DATE NOT NULL DEFAULT CAST(GETDATE() AS DATE),
+    VigenteHasta DATE NULL,
+    CONSTRAINT UQ_Factores_Tipo_Codigo UNIQUE (Tipo, Codigo, Version)
+);
 
 -- Tabla Horas SL (horas minimas por SL + RecordDetail + MetodologiaSL)
-IF OBJECT_ID('dbo.eq_rate_horas','U') IS NULL
-BEGIN
-    CREATE TABLE dbo.eq_rate_horas (
-        Id INT IDENTITY(1,1) PRIMARY KEY,
-        SL VARCHAR(50) NOT NULL,
-        RecordDetail VARCHAR(100) NOT NULL,
-        MetodologiaSL VARCHAR(100) NOT NULL,
-        HorasL3 DECIMAL(10,2) DEFAULT 0,
-        HorasL4 DECIMAL(10,2) DEFAULT 0,
-        HorasL5 DECIMAL(10,2) DEFAULT 0,
-        HorasL6 DECIMAL(10,2) DEFAULT 0,
-        HorasL7 DECIMAL(10,2) DEFAULT 0,
-        LoadedRateL3 DECIMAL(18,2) DEFAULT 0,
-        LoadedRateL4 DECIMAL(18,2) DEFAULT 0,
-        LoadedRateL5 DECIMAL(18,2) DEFAULT 0,
-        LoadedRateL6 DECIMAL(18,2) DEFAULT 0,
-        LoadedRateL7 DECIMAL(18,2) DEFAULT 0,
-        BillingRateL3 DECIMAL(18,2) DEFAULT 0,
-        BillingRateL4 DECIMAL(18,2) DEFAULT 0,
-        BillingRateL5 DECIMAL(18,2) DEFAULT 0,
-        BillingRateL6 DECIMAL(18,2) DEFAULT 0,
-        BillingRateL7 DECIMAL(18,2) DEFAULT 0,
-        [Key] AS (SL + '|' + RecordDetail + '|' + MetodologiaSL) PERSISTED,
-        CONSTRAINT UQ_Horas_Key UNIQUE (SL, RecordDetail, MetodologiaSL)
-    );
-END;
+CREATE TABLE dbo.eq_rate_horas (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    SL VARCHAR(50) NOT NULL,
+    RecordDetail VARCHAR(100) NOT NULL,
+    MetodologiaSL VARCHAR(100) NOT NULL,
+    HorasL3 DECIMAL(10,2) DEFAULT 0,
+    HorasL4 DECIMAL(10,2) DEFAULT 0,
+    HorasL5 DECIMAL(10,2) DEFAULT 0,
+    HorasL6 DECIMAL(10,2) DEFAULT 0,
+    HorasL7 DECIMAL(10,2) DEFAULT 0,
+    LoadedRateL3 DECIMAL(18,2) DEFAULT 0,
+    LoadedRateL4 DECIMAL(18,2) DEFAULT 0,
+    LoadedRateL5 DECIMAL(18,2) DEFAULT 0,
+    LoadedRateL6 DECIMAL(18,2) DEFAULT 0,
+    LoadedRateL7 DECIMAL(18,2) DEFAULT 0,
+    BillingRateL3 DECIMAL(18,2) DEFAULT 0,
+    BillingRateL4 DECIMAL(18,2) DEFAULT 0,
+    BillingRateL5 DECIMAL(18,2) DEFAULT 0,
+    BillingRateL6 DECIMAL(18,2) DEFAULT 0,
+    BillingRateL7 DECIMAL(18,2) DEFAULT 0,
+    Version INT DEFAULT 1,
+    VigenteDesde DATE NOT NULL DEFAULT CAST(GETDATE() AS DATE),
+    VigenteHasta DATE NULL,
+    [Key] AS (SL + '|' + RecordDetail + '|' + MetodologiaSL + '|' + CAST(Version AS VARCHAR(10))) PERSISTED,
+    CONSTRAINT UQ_Horas_Key UNIQUE (SL, RecordDetail, MetodologiaSL, Version)
+);
 
 ------------------------------------------------------------
 -- TABLAS DE OPERACION
@@ -1397,4 +1449,162 @@ WHEN NOT MATCHED THEN INSERT (DuracionMin, PenetracionCodigo, ValorPerfil, Valor
 VALUES (src.DuracionMin, src.PenetracionCodigo, src.ValorPerfil, src.ValorCoordinacion, src.ValorTotal);
 
 PRINT 'EQ schema y seeds creados/actualizados correctamente (incluye CATI, Online, Factores, Rate Horas).';
+
+------------------------------------------------------------
+-- VERSIONADO, INDICES, VISTAS Y AUDITORIA
+------------------------------------------------------------
+
+CREATE TABLE dbo.eq_audit_maestras (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    tabla_nombre VARCHAR(100) NOT NULL,
+    registro_id INT NOT NULL,
+    fecha_cambio DATETIME DEFAULT GETDATE(),
+    tipo_cambio VARCHAR(20) NOT NULL, -- INSERT, UPDATE, DELETE
+    datos_antes NVARCHAR(MAX) NULL,
+    datos_despues NVARCHAR(MAX) NULL,
+    usuario_cambio NVARCHAR(128) DEFAULT SYSTEM_USER
+);
+PRINT 'Tabla eq_audit_maestras creada';
+
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_eq_param_precio_vigencia' AND object_id = OBJECT_ID('dbo.eq_param_precio'))
+BEGIN
+    CREATE NONCLUSTERED INDEX IX_eq_param_precio_vigencia 
+    ON dbo.eq_param_precio (VigenteDesde, VigenteHasta)
+    INCLUDE (MetodologiaCodigo, PenetracionCodigo, DuracionMin, ValorTotal);
+    PRINT 'Indice IX_eq_param_precio_vigencia creado';
+END;
+
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_eq_param_cati_vigencia' AND object_id = OBJECT_ID('dbo.eq_param_cati'))
+BEGIN
+    CREATE NONCLUSTERED INDEX IX_eq_param_cati_vigencia 
+    ON dbo.eq_param_cati (VigenteDesde, VigenteHasta)
+    INCLUDE (DuracionMin, PenetracionCodigo, ValorTotal);
+    PRINT 'Indice IX_eq_param_cati_vigencia creado';
+END;
+
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_eq_param_online_vigencia' AND object_id = OBJECT_ID('dbo.eq_param_online'))
+BEGIN
+    CREATE NONCLUSTERED INDEX IX_eq_param_online_vigencia 
+    ON dbo.eq_param_online (VigenteDesde, VigenteHasta)
+    INCLUDE (DuracionMin, PenetracionCodigo, ValorTotal);
+    PRINT 'Indice IX_eq_param_online_vigencia creado';
+END;
+
+-- Vistas vigentes
+IF OBJECT_ID('dbo.vw_eq_param_precio_vigente','V') IS NOT NULL
+    DROP VIEW dbo.vw_eq_param_precio_vigente;
+
+CREATE VIEW dbo.vw_eq_param_precio_vigente AS
+SELECT 
+    Id,
+    MetodologiaCodigo,
+    PenetracionCodigo,
+    DuracionMin,
+    ValorPerfil,
+    ValorCoordinacion,
+    ValorTotal,
+    Version,
+    VigenteDesde,
+    VigenteHasta
+FROM dbo.eq_param_precio
+WHERE VigenteDesde <= CAST(GETDATE() AS DATE) 
+  AND (VigenteHasta IS NULL OR VigenteHasta > CAST(GETDATE() AS DATE));
+
+PRINT 'Vista vw_eq_param_precio_vigente creada';
+GO
+
+IF OBJECT_ID('dbo.vw_eq_param_cati_vigente','V') IS NOT NULL
+    DROP VIEW dbo.vw_eq_param_cati_vigente;
+
+CREATE VIEW dbo.vw_eq_param_cati_vigente AS
+SELECT 
+    Id,
+    DuracionMin,
+    PenetracionCodigo,
+    ValorPerfil,
+    ValorCoordinacion,
+    ValorTotal,
+    Version,
+    VigenteDesde,
+    VigenteHasta
+FROM dbo.eq_param_cati
+WHERE VigenteDesde <= CAST(GETDATE() AS DATE) 
+  AND (VigenteHasta IS NULL OR VigenteHasta > CAST(GETDATE() AS DATE));
+
+PRINT 'Vista vw_eq_param_cati_vigente creada';
+GO
+
+IF OBJECT_ID('dbo.vw_eq_param_online_vigente','V') IS NOT NULL
+    DROP VIEW dbo.vw_eq_param_online_vigente;
+
+CREATE VIEW dbo.vw_eq_param_online_vigente AS
+SELECT 
+    Id,
+    DuracionMin,
+    PenetracionCodigo,
+    ValorPerfil,
+    ValorCoordinacion,
+    ValorTotal,
+    Version,
+    VigenteDesde,
+    VigenteHasta
+FROM dbo.eq_param_online
+WHERE VigenteDesde <= CAST(GETDATE() AS DATE) 
+  AND (VigenteHasta IS NULL OR VigenteHasta > CAST(GETDATE() AS DATE));
+
+PRINT 'Vista vw_eq_param_online_vigente creada';
+GO
+
+IF OBJECT_ID('dbo.sp_eq_desactivar_maestro','P') IS NOT NULL
+    DROP PROCEDURE dbo.sp_eq_desactivar_maestro;
+GO
+
+CREATE PROCEDURE dbo.sp_eq_desactivar_maestro
+    @tabla_nombre VARCHAR(100),
+    @id INT,
+    @fecha_fin DATE = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    IF @fecha_fin IS NULL
+        SET @fecha_fin = CAST(GETDATE() AS DATE);
+    
+    IF @fecha_fin <= CAST(GETDATE() AS DATE)
+    BEGIN
+        RAISERROR('La fecha de vigencia debe ser posterior a hoy', 16, 1);
+        RETURN;
+    END;
+    
+    DECLARE @sqlUpdate NVARCHAR(MAX);
+    SET @sqlUpdate = 'UPDATE dbo.' + @tabla_nombre + ' SET VigenteHasta = @fecha_fin WHERE Id = @id;';
+    
+    EXEC sp_executesql @sqlUpdate, N'@fecha_fin DATE, @id INT', @fecha_fin, @id;
+    
+    INSERT INTO dbo.eq_audit_maestras (tabla_nombre, registro_id, tipo_cambio)
+    VALUES (@tabla_nombre, @id, 'DESACTIVATION');
+    
+    PRINT 'Registro ' + CAST(@id AS VARCHAR) + ' en ' + @tabla_nombre + ' desactivado para ' + CAST(@fecha_fin AS VARCHAR);
+END;
+GO
+
+IF OBJECT_ID('dbo.sp_eq_obtener_versiones','P') IS NOT NULL
+    DROP PROCEDURE dbo.sp_eq_obtener_versiones;
+GO
+
+CREATE PROCEDURE dbo.sp_eq_obtener_versiones
+    @tabla_nombre VARCHAR(100),
+    @id INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    DECLARE @sqlSelect NVARCHAR(MAX);
+    SET @sqlSelect = 'SELECT * FROM dbo.' + @tabla_nombre + ' WHERE Id = @id ORDER BY VigenteDesde DESC;';
+    
+    EXEC sp_executesql @sqlSelect, N'@id INT', @id;
+END;
+GO
+
+PRINT 'Versionado y auditoria definidos';
 

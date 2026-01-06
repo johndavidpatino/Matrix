@@ -1,0 +1,64 @@
+@{
+    ViewData["Title"] = "Administración de Maestras";
+    var tablas = (List<string>)ViewBag.Tablas;
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h1 class="h3 mb-0">Administración de Maestras EasyQuote</h1>
+            <small class="text-muted">Sprint 2.1: Versionado y vigencias de tablas maestras</small>
+        </div>
+    </div>
+
+    <div class="alert alert-info">
+        <strong>Versionado de Maestras</strong>: Controla qué datos se usan en cada fecha. Desactiva un registro para una fecha futura y se dejará de usar automáticamente.
+    </div>
+
+    <div class="row g-3">
+        <div class="col-lg-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Tablas Maestras</h5>
+                    <div class="list-group">
+                        @foreach (var tabla in tablas)
+                        {
+                            <a href="@Url.Action("Tabla", new { nombreTabla = tabla })" class="list-group-item list-group-item-action">
+                                @tabla
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-9">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Selecciona una tabla</h5>
+                    <p class="text-muted">Haz clic en una tabla maestra para ver sus registros y gestionar vigencias.</p>
+                    
+                    <div class="alert alert-warning mt-3">
+                        <strong>Funcionalidades disponibles:</strong>
+                        <ul class="mb-0 mt-2">
+                            <li>Ver todos los registros (activos e inactivos)</li>
+                            <li>Desactivar un registro a partir de una fecha</li>
+                            <li>Ver historial de versiones</li>
+                            <li>Revisar cuál es el dato vigente hoy</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .list-group-item {
+        font-size: 0.9rem;
+    }
+    
+    .list-group-item:hover {
+        background-color: #f8f9fa;
+    }
+</style>

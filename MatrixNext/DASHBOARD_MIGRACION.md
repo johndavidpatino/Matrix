@@ -46,6 +46,20 @@
 
 ## 🔜 EN COLA
 
+### EN CURSO: **FI_AdministrativoFinanciero** 🎯 META: 8-10 Semanas
+
+| Aspecto | Detalle |
+|---------|---------|
+| **Páginas** | ~21 (según Default.aspx) |
+| **Alcance** | Excluye compras/OC/OS y radicación/aprobación facturas |
+| **Stored Procedures** | Alto uso de SP en FI_Model/CC_FinzOpe |
+| **Complejidad** | 🔴 Muy alta |
+| **Dependencias** | CU_Cuentas, CC_FinzOpe, TH, CAP, Inventario |
+| **Impacto Negocio** | 🔴 Crítico (finanzas y producción) |
+| **Plan Detallado** | ✅ MIGRACION_FI_ADMINISTRATIVO.md (en progreso) |
+| **Inicio Estimado** | Semana actual (análisis) |
+| **Horas Estimadas** | ~240 horas |
+
 ### PRÓXIMO: **PY_Proyectos** 🎯 META: 5-6 Semanas
 
 | Aspecto | Detalle |
@@ -57,7 +71,7 @@
 | **Dependencias** | US_Usuarios ✅, Catálogos |
 | **Impacto Negocio** | 🟠 Alto (gestión central) |
 | **Plan Detallado** | ✅ PLAN_MIGRACION_PY_PROYECTOS.md |
-| **Inicio Estimado** | Semana próxima |
+| **Inicio Estimado** | Después de FI análisis inicial |
 | **Horas Estimadas** | 148 horas |
 
 ---
@@ -68,9 +82,9 @@
 
 | Posición | Módulo | Páginas | Complejidad | Semanas Est. | Estado |
 |----------|--------|---------|-------------|--------------|--------|
-| 3 | **OP_Cuantitativo** | ~15 | 🔴 Alta | 6-7 | 📋 Análisis |
-| 4 | **OP_Cualitativo** | ~12 | 🔴 Alta | 6-7 | 📋 Análisis |
-| 5 | **FI_Administrativo** | 21 | 🔴 MUY ALTA | 8-10 | 📋 Análisis |
+| 3 | **FI_Administrativo** | 21 | 🔴 MUY ALTA | 8-10 | 🔄 En curso (análisis) |
+| 4 | **OP_Cuantitativo** | ~15 | 🔴 Alta | 6-7 | 📋 Análisis |
+| 5 | **OP_Cualitativo** | ~12 | 🔴 Alta | 6-7 | 📋 Análisis |
 
 ### MEDIA PRIORIDAD 🟠
 
@@ -215,10 +229,10 @@ Semana    Módulo                    Estado           Horas
 1-2       US_Usuarios               ✅ COMPLETADO    ~60
 3         TH_Ausencias              ✅ COMPLETADO    ~40
 4-8       CU_Cuentas                ✅ COMPLETADO    ~110
-9-14      PY_Proyectos              🔜 PRÓXIMO       ~148
-10-16     OP_Cuantitativo           📋 EN COLA       ~180
-17-23     OP_Cualitativo            📋 EN COLA       ~160
-24-33     FI_Administrativo         📋 EN COLA       ~240
+9-16      FI_Administrativo         🔄 EN CURSO      ~240
+17-22     PY_Proyectos              🔜 PRÓXIMO       ~148
+23-29     OP_Cuantitativo           📋 EN COLA       ~180
+30-36     OP_Cualitativo            📋 EN COLA       ~160
 34+       Módulos Restantes (13+)   📋 BACKLOG       ~500+
 
 TOTAL ESTIMADO:                                    ~1,300+ horas
@@ -233,16 +247,16 @@ TOTAL ESTIMADO:                                    ~1,300+ horas
 ### Semana 1 (Inmediata)
 
 - [ ] Testing funcional de TH_Ausencias en staging
-- [ ] Obtener aprobación RRHH para deploy
-- [ ] Crear estructura base de PY_Proyectos
-- [ ] Análisis detallado de tablas PY_*
+- [ ] Documentar análisis de FI (Default.aspx) en MIGRACION_FI_ADMINISTRATIVO.md
+- [ ] Mapear SP y dependencias de Control Presupuestos (grupo 1)
+- [ ] Ajustar timeline y alcance FI con stakeholders
 
 ### Semana 2
 
-- [ ] Implementar CRUD Proyectos
-- [ ] CRUD Actividades y Hitos
-- [ ] Primeras pruebas unitarias
-- [ ] Documentación de PY progresando
+- [ ] Completar análisis grupos 2 y 3 de FI
+- [ ] Definir estructura base área FI en MatrixNext
+- [ ] Priorizar flujos críticos FI para primer sprint
+- [ ] Replanificar inicio PY_Proyectos tras FI kick-off
 
 ---
 

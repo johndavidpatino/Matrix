@@ -65,9 +65,19 @@
 
 #### 6. **FI_AdministrativoFinanciero** (21 páginas)
 - **Carpeta**: `WebMatrix/FI_AdministrativoFinanciero/`
-- **Contexto**: `FI_Model` (CoreProject)
-- **Dependencias**: Altas (compras, órdenes, facturas)
+- **Contexto**: `FI_Model` + `CC_FinzOpe` + `CAP` (CoreProject)
+- **Dependencias**: Altas (finanzas, producción, TH, CU, inventario)
 - **Volumen**: Muy grande
+- **Estado**: 🔄 En curso (análisis inicial)
+- **Documento**: [MIGRACION_FI_ADMINISTRATIVO.md](MIGRACION_FI_ADMINISTRATIVO.md)
+- **Alcance actual**: Excluye creación/aprobación de compras, órdenes de compra/servicio y radicación/aprobación de facturas.
+- **Links origen (Default.aspx)**:
+  - Control presupuestos: ControlPresupuestos.aspx, ListadoEstudios.aspx, ListadoPropuestas.aspx, NominaDistribucionCostos.aspx
+  - Presupuestos internos: GenerarRequerimientos.aspx, PresupuestosInternosIndex.aspx, ListadoTrabajos.aspx, ConsultaLog.aspx
+  - Procesos internos: ConteoTrabajos.aspx, ReporteConteoTrabajos.aspx, ResumenesdeProduccion.aspx, Contratistas.aspx, Contratacion.aspx, PrestacionServicios-CT.aspx (excluye OrdenesdeServicio.aspx)
+  - Reportes: ReportePagos.aspx, ReporteActividadesProduccion.aspx, ReporteContabilizacionPST.aspx, ReporteLegalizaciones.aspx (excluye RecepcionCuentasdeCobro.aspx, ListadoCuentasRecibidas.aspx, ReporteOrdenesdeServicio.aspx)
+  - Producción: Produccion.aspx, EliminarCargueProduccion.aspx, GenerarBonificacion.aspx, ExportarProduccionIDs.aspx, EstadoJobBooks.aspx, ReportePSTSinProduccion.aspx, CargueDescuentosSS.aspx, LiquidarPlanillasActividades.aspx, LiquidarProductividadPST.aspx
+  - Inventario: RegistroArticulos.aspx
 
 ---
 

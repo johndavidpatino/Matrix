@@ -17,10 +17,14 @@ namespace MatrixNext.Web.Areas.EQ.Services.Internal
             _masters = masters;
         }
 
-        public EQSummary Calcular(EasyQuoteViewModel vm)
-        {
-            if (vm == null) return new EQSummary();
-            var q = vm.Questionnaire ?? new EQQuestionnaire();
+    public EQSummary Calcular(EasyQuoteViewModel vm, DateTime? fechaCotizacion = null)
+    {
+        if (vm == null) return new EQSummary();
+        
+        // Sprint 2.1: Usar fecha de cotización, o hoy si no se especifica
+        var fechaLookup = fechaCotizacion ?? DateTime.Now;
+        
+        var q = vm.Questionnaire ?? new EQQuestionnaire();
 
             var metodologia = vm.Methodology?.MetodologiaRecoleccion;
             if (string.IsNullOrWhiteSpace(metodologia)) metodologia = "F2F";
@@ -37,18 +41,19 @@ namespace MatrixNext.Web.Areas.EQ.Services.Internal
             var n6 = Total(c => c.NSE6);
 
             // FORMULA 3 y 4: CATI/Online lookup (si metodologia es CATI o AUTO=Online)
+            // Sprint 2.1: Usar fecha de cotización para lookups
             decimal valorEncuesta = 0m;
             if (string.Equals(metodologia, "CATI", StringComparison.OrdinalIgnoreCase))
             {
-                valorEncuesta = _masters.GetPrecioEncuesta("CATI", penetracion, duracion) ?? 0;
+                valorEncuesta = _masters.GetPrecioEncuesta("CATI", penetracion, duracion, fechaLookup) ?? 0;
             }
             else if (string.Equals(metodologia, "AUTO", StringComparison.OrdinalIgnoreCase) || string.Equals(metodologia, "Online", StringComparison.OrdinalIgnoreCase))
             {
-                valorEncuesta = _masters.GetPrecioEncuesta("Online", penetracion, duracion) ?? 0;
+                valorEncuesta = _masters.GetPrecioEncuesta("Online", penetracion, duracion, fechaLookup) ?? 0;
             }
             else
             {
-                valorEncuesta = _masters.GetPrecioEncuesta(metodologia, penetracion, duracion) ?? 0;
+                valorEncuesta = _masters.GetPrecioEncuesta(metodologia, penetracion, duracion, fechaLookup) ?? 0;
             }
             
             // FORMULA 2: Siembra factor (1 o 2 segun checkbox)

@@ -1,0 +1,282 @@
+@{
+    ViewData["Title"] = $"Gestión - {ViewBag.NombreTabla}";
+    var registros = (List<Dictionary<string, object>>)ViewBag.Registros;
+    var nombreTabla = (string)ViewBag.NombreTabla;
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h1 class="h3 mb-0">@nombreTabla</h1>
+            <a href="@Url.Action("Index")" class="btn btn-sm btn-outline-secondary">← Volver</a>
+        </div>
+    </div>
+
+    <ul class="nav nav-tabs mb-3" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-todos" type="button">
+                Todos los registros
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-activos" type="button">
+                Solo vigentes
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <!-- TAB 1: Todos los registros -->
+        <div class="tab-pane fade show active" id="tab-todos" role="tabpanel">
+            <div class="table-responsive">
+                <table class="table table-sm table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Vigente desde</th>
+                            <th>Vigente hasta</th>
+                            <th>Estado</th>
+                            <th>Datos</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (registros != null && registros.Count > 0)
+                        {
+                            @foreach (var reg in registros)
+                            {
+                                var vigentDesde = reg.ContainsKey("vigente_desde") ? (DateTime?)reg["vigente_desde"] : null;
+                                var vigentHasta = reg.ContainsKey("vigente_hasta") ? (DateTime?)reg["vigente_hasta"] : null;
+                                var hoy = DateTime.Now.Date;
+                                var esActivo = vigentDesde.HasValue && vigentDesde.Value.Date <= hoy && (!vigentHasta.HasValue || vigentHasta.Value.Date > hoy);
+                                var estadoClass = esActivo ? "badge bg-success" : "badge bg-secondary";
+                                var estado = esActivo ? "Vigente" : "Inactivo";
+
+                                <tr class="@(esActivo ? "" : "text-muted")">
+                                    <td>@reg["Id"]</td>
+                                    <td>@vigentDesde?.ToString("yyyy-MM-dd")</td>
+                                    <td>@(vigentHasta?.ToString("yyyy-MM-dd") ?? "∞")</td>
+                                    <td><span class="@estadoClass">@estado</span></td>
+                                    <td>
+                                        <small class="text-monospace">
+                                            @string.Join(" | ", reg
+                                                .Where(kvp => kvp.Key != "Id" && kvp.Key != "vigente_desde" && kvp.Key != "vigente_hasta")
+                                                .Take(3)
+                                                .Select(kvp => $"{kvp.Key}:{kvp.Value}"))
+                                        </small>
+                                    </td>
+                                    <td>
+                                        @if (esActivo)
+                                        {
+                                            <button class="btn btn-sm btn-warning" onclick="abrirDesactivar(@reg["Id"])">
+                                                Desactivar
+                                            </button>
+                                        }
+                                        <button class="btn btn-sm btn-info" onclick="verVersiones('@nombreTabla', @reg["Id"])">
+                                            Versiones
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center text-muted py-4">
+                                    No hay registros
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 2: Solo vigentes -->
+        <div class="tab-pane fade" id="tab-activos" role="tabpanel">
+            <div id="registros-activos-container">
+                <div class="spinner-border spinner-border-sm" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div> Cargando registros vigentes...
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Desactivar registro -->
+<div class="modal fade" id="modalDesactivar" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Desactivar Registro</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formDesactivar">
+                    <input type="hidden" id="inputId" />
+                    <input type="hidden" id="inputTabla" value="@nombreTabla" />
+                    
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Fecha de vigencia (hasta)
+                            <i class="bi bi-question-circle-fill" data-bs-toggle="tooltip" title="A partir de esta fecha, el registro NO se usará en cotizaciones"></i>
+                        </label>
+                        <input type="date" id="inputFechaFin" class="form-control" required />
+                        <small class="text-muted">Debe ser una fecha futura</small>
+                    </div>
+                    
+                    <div class="alert alert-info small">
+                        Al desactivar, el registro dejarará de usarse automáticamente a partir de la fecha especificada.
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" onclick="confirmarDesactivar()">Desactivar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Ver versiones -->
+<div class="modal fade" id="modalVersiones" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Historial de Versiones</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="versionesContent">
+                <div class="spinner-border spinner-border-sm" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const nombreTabla = '@nombreTabla';
+    
+    async function cargarRegistrosActivos() {
+        try {
+            const response = await fetch(`/EQ/MaestrasAdmin/Activos?tabla=${nombreTabla}`);
+            const data = await response.json();
+            
+            if (data.success) {
+                const container = document.getElementById('registros-activos-container');
+                
+                if (data.registros.length === 0) {
+                    container.innerHTML = '<div class="alert alert-warning">No hay registros vigentes hoy</div>';
+                    return;
+                }
+                
+                let html = '<div class="table-responsive"><table class="table table-sm"><thead class="table-light"><tr>';
+                
+                // Headers
+                const primero = data.registros[0];
+                for (const key in primero) {
+                    if (key !== 'vigente_hasta' || primero[key] !== null) {
+                        html += `<th>${key}</th>`;
+                    }
+                }
+                html += '<th>Acciones</th></tr></thead><tbody>';
+                
+                // Rows
+                for (const reg of data.registros) {
+                    html += '<tr>';
+                    for (const key in reg) {
+                        html += `<td><small>${reg[key]}</small></td>`;
+                    }
+                    html += `<td><button class="btn btn-sm btn-info" onclick="verVersiones('${nombreTabla}', ${reg.Id})">Versiones</button></td>`;
+                    html += '</tr>';
+                }
+                
+                html += '</tbody></table></div>';
+                container.innerHTML = html;
+            }
+        } catch (e) {
+            document.getElementById('registros-activos-container').innerHTML = `<div class="alert alert-danger">${e.message}</div>`;
+        }
+    }
+    
+    function abrirDesactivar(id) {
+        document.getElementById('inputId').value = id;
+        document.getElementById('inputFechaFin').valueAsDate = new Date(new Date().setDate(new Date().getDate() + 1));
+        new bootstrap.Modal(document.getElementById('modalDesactivar')).show();
+    }
+    
+    async function confirmarDesactivar() {
+        const id = document.getElementById('inputId').value;
+        const tabla = document.getElementById('inputTabla').value;
+        const fechaFin = document.getElementById('inputFechaFin').value;
+        
+        if (!id || !tabla || !fechaFin) {
+            alert('Faltan datos');
+            return;
+        }
+        
+        try {
+            const response = await fetch('/EQ/MaestrasAdmin/Desactivar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tabla, id: parseInt(id), fechaFin })
+            });
+            
+            const data = await response.json();
+            if (data.success) {
+                alert('Registro desactivado correctamente');
+                bootstrap.Modal.getInstance(document.getElementById('modalDesactivar')).hide();
+                location.reload();
+            } else {
+                alert('Error: ' + data.message);
+            }
+        } catch (e) {
+            alert('Error: ' + e.message);
+        }
+    }
+    
+    async function verVersiones(tabla, id) {
+        try {
+            const response = await fetch(`/EQ/MaestrasAdmin/Versiones/${tabla}/${id}`);
+            const data = await response.json();
+            
+            if (data.success && data.versiones) {
+                // Render versiones
+                let html = '<div class="alert alert-info">Historial de cambios para este registro</div>';
+                html += '<div class="timeline">';
+                
+                // data.versiones es un array de versiones
+                for (const v of data.versiones) {
+                    const vigentDesde = new Date(v.vigente_desde).toLocaleDateString();
+                    const vigentHasta = v.vigente_hasta ? new Date(v.vigente_hasta).toLocaleDateString() : '(Actualmente vigente)';
+                    
+                    html += `
+                        <div class="mb-2 p-2 border-start border-info">
+                            <div class="small text-muted">
+                                ${vigentDesde} - ${vigentHasta}
+                            </div>
+                            <div class="small"><code>${JSON.stringify(v).substring(0, 100)}...</code></div>
+                        </div>
+                    `;
+                }
+                
+                html += '</div>';
+                document.getElementById('versionesContent').innerHTML = html;
+            }
+        } catch (e) {
+            document.getElementById('versionesContent').innerHTML = `<div class="alert alert-danger">${e.message}</div>`;
+        }
+        
+        new bootstrap.Modal(document.getElementById('modalVersiones')).show();
+    }
+    
+    // Cargar registros activos al cambiar tab
+    document.querySelector('[data-bs-target="#tab-activos"]').addEventListener('click', cargarRegistrosActivos);
+    
+    // Inicializar tooltips
+    document.addEventListener('DOMContentLoaded', () => {
+        const tooltips = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltips.map(el => new bootstrap.Tooltip(el));
+    });
+</script>
