@@ -136,6 +136,7 @@ Formato: campo (tipo sugerido) [default] — validacion / dependencia / origen.
 - `Codificacion`: parametros para calcular costo segun registros, numero de preguntas abiertas/abiertas multiples, dias y horas; incluye total dias/horas y valores (Val. Ipsos).
 - `MYSTERY`: costos unitarios y totales por visita y segmento, staff de campo y critica, desplazamientos, fotocopias, alquiler equipos, compra de dispositivos y seguimiento.
 - `Bitacora de ajustes`: referencias de cambios a mantener (ej. cotizar vasos Murano en bebidas, ajuste transporte ninos 15.000, transporte bebidas alcoholicas 28.000, sumar script de reclutamiento, refrigeracion, pilotos pendientes).
+- Nuevas tablas semilla en MatrixNext: `eq_productividad_ciudad` (encuestadores/productividad por ciudad), `eq_param_misc` (factor refrigeracion, costo nevera, divisor volumetrico), `eq_envio_param` (tipologias urbano/nacional) y `eq_cost_base_datos` (No requiere/Cliente/Comprar). Valores actuales son placeholders hasta confirmar en Excel.
 
 ## 5. Motor de calculo (`Costos Directos discriminados`)
 Referencias clave (columna D = costo total, E = valor con GM donde aplica):

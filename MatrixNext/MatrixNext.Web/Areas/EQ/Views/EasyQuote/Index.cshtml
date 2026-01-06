@@ -1,587 +1,872 @@
+﻿
 @model MatrixNext.Web.Areas.EQ.Models.EasyQuoteViewModel
+@using System.Text.Json
 @{
     ViewData["Title"] = "EasyQuote";
+    var initialJson = JsonSerializer.Serialize(Model ?? new MatrixNext.Web.Areas.EQ.Models.EasyQuoteViewModel(), new JsonSerializerOptions { PropertyNamingPolicy = null });
 }
 
 <div class="container-fluid">
-    <h1 class="mb-3">EasyQuote</h1>
-    <form id="eq-form">
-        @Html.AntiForgeryToken()
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <div>
+            <h1 class="h3 mb-0">EasyQuote (Área EQ)</h1>
+            <small class="text-muted">Grid editable estilo Excel con cálculo en backend; todo persiste vía TVP/SP.</small>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-outline-secondary" type="button" id="btn-calcular">Calcular</button>
+            <button class="btn btn-primary" type="button" id="btn-guardar">Guardar</button>
+        </div>
+    </div>
 
-        <ul class="nav nav-tabs mb-3" id="eq-tabs" role="tablist">
-            <li class="nav-item" role="presentation"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-datos" type="button" role="tab">Datos</button></li>
-            <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-cuestionario" type="button" role="tab">Cuestionario</button></li>
-            <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-muestra" type="button" role="tab">Muestra</button></li>
-            <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-mystery" type="button" role="tab">Mystery</button></li>
-            <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-staff" type="button" role="tab">Staff</button></li>
-            <li class="nav-item ms-auto" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-resumen" type="button" role="tab">Resumen</button></li>
-        </ul>
+    @Html.AntiForgeryToken()
 
-        <div class="tab-content">
-            <div class="tab-pane fade show active" id="tab-datos" role="tabpanel">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="card mb-3">
-                            <div class="card-header">Datos Generales</div>
-                            <div class="card-body">
-                                <div class="row g-2">
-                                    <div class="col-12">
-                                        <label class="form-label">Nombre</label>
-                                        <input class="form-control" name="Header.Nombre" value="@Model.Header.Nombre" required />
-                                    </div>
-                                    <div class="col-12">
-                                        <label class="form-label">Cliente</label>
-                                        <input class="form-control" name="Header.Cliente" value="@Model.Header.Cliente" required />
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Grupo Objetivo</label>
-                                        <input class="form-control" name="Header.GrupoObjetivo" value="@Model.Header.GrupoObjetivo" />
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label">Prob. Aprobacion</label>
-                                        <select class="form-select" name="Header.ProbAprobacion">
-                                            <option value="Alta" @(Model.Header.ProbAprobacion=="Alta"?"selected":"")>Alta</option>
-                                            <option value="Media" @(Model.Header.ProbAprobacion=="Media"?"selected":"")>Media</option>
-                                            <option value="Baja" @(Model.Header.ProbAprobacion=="Baja"?"selected":"")>Baja</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label">SL</label>
-                                        <input class="form-control" name="Header.SL" value="@Model.Header.SL" />
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Metodologia SL</label>
-                                        <input class="form-control" name="Header.MetodologiaSL" value="@Model.Header.MetodologiaSL" />
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Record Detail</label>
-                                        <input class="form-control" name="Header.RecordDetail" value="@Model.Header.RecordDetail" />
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Proveedor externo</label>
-                                        <input class="form-control" name="Header.ValorProveedorExterno" value="@Model.Header.ValorProveedorExterno" type="number" step="0.01" />
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Proveedor internacional</label>
-                                        <input class="form-control" name="Header.ValorProveedorInternacional" value="@Model.Header.ValorProveedorInternacional" type="number" step="0.01" />
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">GMU</label>
-                                        <input class="form-control" name="Header.ValorGMU" value="@Model.Header.ValorGMU" type="number" step="0.01" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="card mb-3">
-                            <div class="card-header">Metodologia de recoleccion</div>
-                            <div class="card-body">
-                                <div class="row g-2">
-                                    <div class="col-md-4">
-                                        <label class="form-label">Metodologia</label>
-                                        <select class="form-select" name="Methodology.MetodologiaRecoleccion">
-                                            <option value="F2F" @(Model.Methodology.MetodologiaRecoleccion=="F2F"?"selected":"")>F2F</option>
-                                            <option value="CATI" @(Model.Methodology.MetodologiaRecoleccion=="CATI"?"selected":"")>CATI</option>
-                                            <option value="ONLINE" @(Model.Methodology.MetodologiaRecoleccion=="ONLINE"?"selected":"")>Online</option>
-                                            <option value="AUTO_INNO" @(Model.Methodology.MetodologiaRecoleccion=="AUTO_INNO"?"selected":"")>Auto Inno</option>
-                                            <option value="MYSTERY" @(Model.Methodology.MetodologiaRecoleccion=="MYSTERY"?"selected":"")>Mystery</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="form-label">Incidencia / Penetracion</label>
-                                        <select class="form-select" name="Questionnaire.PenetracionCodigo">
-                                            <option value="MAS82" @(Model.Questionnaire.PenetracionCodigo=="MAS82"?"selected":"")>Mas 82%</option>
-                                            <option value="75_82" @(Model.Questionnaire.PenetracionCodigo=="75_82"?"selected":"")>75%-82%</option>
-                                            <option value="67_74" @(Model.Questionnaire.PenetracionCodigo=="67_74"?"selected":"")>67%-74%</option>
-                                            <option value="55_66" @(Model.Questionnaire.PenetracionCodigo=="55_66"?"selected":"")>55%-66%</option>
-                                            <option value="46_54" @(Model.Questionnaire.PenetracionCodigo=="46_54"?"selected":"")>46%-54%</option>
-                                            <option value="37_45" @(Model.Questionnaire.PenetracionCodigo=="37_45"?"selected":"")>37%-45%</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="form-label">Duracion (min)</label>
-                                        <input class="form-control" name="Questionnaire.DuracionMin" type="number" min="5" max="60" value="@Model.Questionnaire.DuracionMin" />
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="form-label">Procesamientos</label>
-                                        <input class="form-control" name="Questionnaire.NumProcesamientos" type="number" value="@Model.Questionnaire.NumProcesamientos" />
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="form-label">Sobre-muestra %</label>
-                                        <input class="form-control" name="Methodology.SobreMuestraPct" type="number" step="0.01" value="@Model.Methodology.SobreMuestraPct" />
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="form-label">Base de datos</label>
-                                        <select class="form-select" name="Methodology.BaseDatos">
-                                            <option value="No requiere" @(Model.Methodology.BaseDatos=="No requiere"?"selected":"")>No requiere</option>
-                                            <option value="Cliente" @(Model.Methodology.BaseDatos=="Cliente"?"selected":"")>Cliente</option>
-                                            <option value="Comprar" @(Model.Methodology.BaseDatos=="Comprar"?"selected":"")>Comprar</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="form-label">Peso producto (gr)</label>
-                                        <input class="form-control" name="Methodology.PesoProductoGr" value="@Model.Methodology.PesoProductoGr" type="number" />
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="form-label">Largo (cm)</label>
-                                        <input class="form-control" name="Methodology.LargoCm" type="number" />
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="form-label">Ancho (cm)</label>
-                                        <input class="form-control" name="Methodology.AnchoCm" type="number" />
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="form-label">Alto (cm)</label>
-                                        <input class="form-control" name="Methodology.AltoCm" type="number" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <div class="alert alert-info py-2">
+        <div class="d-flex flex-wrap gap-2 align-items-center">
+            <strong>Resumen rápido:</strong>
+            <span id="badge-aot" class="badge bg-primary">AOT: 0</span>
+            <span id="badge-op" class="badge bg-success">OP: 0</span>
+            <span id="badge-pct" class="badge bg-dark">%OP: 0%</span>
+            <span id="badge-ciudades" class="badge bg-secondary">Ciudades activas: 0</span>
+        </div>
+    </div>
+
+    <ul class="nav nav-tabs mb-3" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-datos" type="button" role="tab">Datos generales</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-cuestionario" type="button" role="tab">Cuestionario/Procesos</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-muestra" type="button" role="tab">Muestra y logística</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-mystery" type="button" role="tab">Mystery/Shopper</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-staff" type="button" role="tab">Staff SL</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-resumen" type="button" role="tab">Resumen</button>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane fade show active" id="tab-datos" role="tabpanel">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Nombre propuesta</label>
+                    <input class="form-control" id="Nombre" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Grupo objetivo</label>
+                    <input class="form-control" id="GrupoObjetivo" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Cliente</label>
+                    <input class="form-control" id="Cliente" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Fecha aprobación estimada</label>
+                    <input class="form-control" type="date" id="FechaAprobacionEstimada" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Fecha campo</label>
+                    <input class="form-control" type="date" id="FechaCampo" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Prob. aprobación</label>
+                    <select class="form-select" id="ProbAprobacion">
+                        <option>Alta</option>
+                        <option>Media</option>
+                        <option>Baja</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">SL</label>
+                    <input class="form-control" id="SL" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Metodología SL</label>
+                    <input class="form-control" id="MetodologiaSL" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Record detail</label>
+                    <input class="form-control" id="RecordDetail" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Categoría / Producto</label>
+                    <input class="form-control" id="CategoriaProducto" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Proveedor externo (campo)</label>
+                    <input class="form-control" type="number" id="ValorProveedorExterno" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Proveedor internacional</label>
+                    <input class="form-control" type="number" id="ValorProveedorInternacional" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">GMU</label>
+                    <input class="form-control" type="number" id="ValorGMU" />
                 </div>
             </div>
-<div class="tab-pane fade" id="tab-cuestionario" role="tabpanel">
-    <div class="card mb-3">
-        <div class="card-header">Procesos / flags</div>
-        <div class="card-body">
+
+            <hr class="my-4" />
+
             <div class="row g-3">
-                <div class="col-md-3 form-check">
-                    <input class="form-check-input" type="checkbox" name="Questionnaire.TopLine" @(Model.Questionnaire.TopLine ? "checked" : "") />
-                    <label class="form-check-label">TopLine</label>
+                <div class="col-md-3">
+                    <label class="form-label">Metodología recolección</label>
+                    <input class="form-control" id="MetodologiaRecoleccion" placeholder="F2F/CATI/ONLINE/MYSTERY" />
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label">Data Cleaning</label>
-                    <select class="form-select" name="Questionnaire.DataCleaning">
-                        <option value="Total" @(Model.Questionnaire.DataCleaning=="Total"?"selected":"")>Total</option>
-                        <option value="Parcial" @(Model.Questionnaire.DataCleaning=="Parcial"?"selected":"")>Parcial</option>
-                        <option value="No" @(Model.Questionnaire.DataCleaning=="No"?"selected":"")>No</option>
+                    <label class="form-label">Técnica 1</label>
+                    <input class="form-control" id="Tecnica1" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Técnica 2</label>
+                    <input class="form-control" id="Tecnica2" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Técnica 3</label>
+                    <input class="form-control" id="Tecnica3" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Base de datos</label>
+                    <select class="form-select" id="BaseDatos">
+                        <option value="">No requiere</option>
+                        <option>Cliente</option>
+                        <option>Comprar</option>
                     </select>
                 </div>
-                <div class="col-md-3 form-check">
-                    <input class="form-check-input" type="checkbox" name="Questionnaire.ASCIIFlag" @(Model.Questionnaire.ASCIIFlag ? "checked" : "") />
-                    <label class="form-check-label">ASCII</label>
+                <div class="col-md-3">
+                    <label class="form-label">Incidencia label</label>
+                    <input class="form-control" id="IncidenciaLabel" />
                 </div>
-                <div class="col-md-3 form-check">
-                    <input class="form-check-input" type="checkbox" name="Questionnaire.ScriptReclutamiento" @(Model.Questionnaire.ScriptReclutamiento ? "checked" : "") />
-                    <label class="form-check-label">Script reclutamiento</label>
+                <div class="col-md-2">
+                    <label class="form-label">Incidencia valor</label>
+                    <input class="form-control" type="number" step="0.01" id="IncidenciaValor" />
                 </div>
-                <div class="col-md-3 form-check">
-                    <input class="form-check-input" type="checkbox" name="Questionnaire.Scripting" @(Model.Questionnaire.Scripting ? "checked" : "") />
-                    <label class="form-check-label">Scripting</label>
+                <div class="col-md-2">
+                    <label class="form-label">Sobre-muestra %</label>
+                    <input class="form-control" type="number" step="0.01" id="SobreMuestraPct" />
+                </div>
+                <div class="col-md-2 d-flex align-items-end gap-2">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="EnvioCiudades" />
+                        <label class="form-check-label" for="EnvioCiudades">Envío a ciudades</label>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Peso producto (gr)</label>
+                    <input class="form-control" type="number" id="PesoProductoGr" />
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="tab-cuestionario" role="tabpanel">
+            <div class="row g-3">
+                <div class="col-md-2">
+                    <label class="form-label">Duración (min)</label>
+                    <input class="form-control" type="number" id="DuracionMin" />
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label">Tipo script</label>
-                    <select class="form-select" name="Questionnaire.ScriptingTipo">
-                        <option value="Nuevo" @(Model.Questionnaire.ScriptingTipo=="Nuevo"?"selected":"")>Nuevo</option>
-                        <option value="Duplicado" @(Model.Questionnaire.ScriptingTipo=="Duplicado"?"selected":"")>Duplicado</option>
-                        <option value="Reutilizacion" @(Model.Questionnaire.ScriptingTipo=="Reutilizacion"?"selected":"")>Reutilizacion</option>
+                    <label class="form-label">Penetración</label>
+                    <select class="form-select" id="PenetracionCodigo">
+                        <option value="MAS82">Mas 82%</option>
+                        <option value="75_82">75%-82%</option>
+                        <option value="67_74">67%-74%</option>
+                        <option value="55_66">55%-66%</option>
+                        <option value="46_54">46%-54%</option>
+                        <option value="37_45">37%-45%</option>
                     </select>
                 </div>
-                <div class="col-md-3 form-check">
-                    <input class="form-check-input" type="checkbox" name="Questionnaire.Procesamiento" @(Model.Questionnaire.Procesamiento ? "checked" : "") />
-                    <label class="form-check-label">Procesamiento</label>
+                <div class="col-md-2">
+                    <label class="form-label">Preguntas abiertas</label>
+                    <input class="form-control" type="number" id="PregAbiertas" />
                 </div>
-                <div class="col-md-3 form-check">
-                    <input class="form-check-input" type="checkbox" name="Questionnaire.ProcesoEstadistico" @(Model.Questionnaire.ProcesoEstadistico ? "checked" : "") />
-                    <label class="form-check-label">Proceso estadistico</label>
+                <div class="col-md-2">
+                    <label class="form-label">Abiertas múltiples</label>
+                    <input class="form-control" type="number" id="PregAbiertasMult" />
                 </div>
-                <div class="col-md-3 form-check">
-                    <input class="form-check-input" type="checkbox" name="Questionnaire.Codificacion" @(Model.Questionnaire.Codificacion ? "checked" : "") />
-                    <label class="form-check-label">Codificacion</label>
-                </div>
-                <div class="col-md-3 form-check">
-                    <input class="form-check-input" type="checkbox" name="Questionnaire.Refrigeracion" @(Model.Questionnaire.Refrigeracion ? "checked" : "") />
-                    <label class="form-check-label">Refrigeracion</label>
-                </div>
-                <div class="col-md-3 form-check">
-                    <input class="form-check-input" type="checkbox" name="Questionnaire.Embalaje" @(Model.Questionnaire.Embalaje ? "checked" : "") />
-                    <label class="form-check-label">Embalaje</label>
-                </div>
-                <div class="col-md-3 form-check">
-                    <input class="form-check-input" type="checkbox" name="Questionnaire.Siembra" @(Model.Questionnaire.Siembra ? "checked" : "") />
-                    <label class="form-check-label">Siembra</label>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Productos a testear</label>
-                    <input class="form-control" name="Questionnaire.ProductosTestear" type="number" value="@Model.Questionnaire.ProductosTestear" />
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Productos por resp.</label>
-                    <input class="form-control" name="Questionnaire.ProductosPorResp" type="number" value="@Model.Questionnaire.ProductosPorResp" />
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Patinadores / ciudad</label>
-                    <input class="form-control" name="Questionnaire.PatinadoresCiudad" type="number" value="@Model.Questionnaire.PatinadoresCiudad" />
+                <div class="col-md-2">
+                    <label class="form-label">Procesamientos</label>
+                    <input class="form-control" type="number" id="NumProcesamientos" />
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">Clase de prueba</label>
-                    <input class="form-control" name="Questionnaire.ClasePrueba" value="@Model.Questionnaire.ClasePrueba" />
+                    <input class="form-control" id="ClasePrueba" placeholder="Monódica / Secuencial / N/A" />
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">Tipo etiquetado/blind</label>
-                    <input class="form-control" name="Questionnaire.EtiquetadoTipo" value="@Model.Questionnaire.EtiquetadoTipo" />
+                    <input class="form-control" id="EtiquetadoTipo" placeholder="Blind/Ciego/Simple" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Productos a testear</label>
+                    <input class="form-control" type="number" id="ProductosTestear" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Productos por respondiente</label>
+                    <input class="form-control" type="number" id="ProductosPorResp" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Patinadores por ciudad</label>
+                    <input class="form-control" type="number" id="PatinadoresCiudad" />
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">Compra producto</label>
-                    <input class="form-control" name="Questionnaire.CompraProducto" type="number" step="0.01" value="@Model.Questionnaire.CompraProducto" />
+                    <input class="form-control" type="number" id="CompraProducto" />
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="tab-pane fade" id="tab-muestra" role="tabpanel">
-    <div class="card mb-3">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <span>Muestra por Ciudad / NSE</span>
-            <div class="d-flex align-items-center gap-3">
-                <span class="badge bg-secondary" id="eq-sample-status">Pendiente</span>
-                <div class="small" id="eq-dias-campo">Dias estimados: -</div>
-            </div>
-        </div>
-        <div class="card-body">
-            <table class="table table-sm table-bordered" id="eq-sample-grid">
-                <thead>
-                    <tr>
-                        <th>Ciudad</th><th>Activa</th><th>Total</th><th>NSE1</th><th>NSE2</th><th>NSE3</th><th>NSE4</th><th>NSE5</th><th>NSE6</th>
-                    </tr>
-                </thead>
-                <tbody>
-                @for (var i = 0; i < Model.SampleCities.Count; i++)
-                {
-                    var c = Model.SampleCities[i];
-                    <tr data-index="@i">
-                        <td><input class="form-control form-control-sm" name="SampleCities[@i].Ciudad" value="@c.Ciudad" /></td>
-                        <td class="text-center"><input type="checkbox" name="SampleCities[@i].Activa" @(c.Activa ? "checked" : "") /></td>
-                        <td><input class="form-control form-control-sm" name="SampleCities[@i].MuestraTotal" value="@c.MuestraTotal" /></td>
-                        <td><input class="form-control form-control-sm" name="SampleCities[@i].NSE1" value="@c.NSE1" /></td>
-                        <td><input class="form-control form-control-sm" name="SampleCities[@i].NSE2" value="@c.NSE2" /></td>
-                        <td><input class="form-control form-control-sm" name="SampleCities[@i].NSE3" value="@c.NSE3" /></td>
-                        <td><input class="form-control form-control-sm" name="SampleCities[@i].NSE4" value="@c.NSE4" /></td>
-                        <td><input class="form-control form-control-sm" name="SampleCities[@i].NSE5" value="@c.NSE5" /></td>
-                        <td><input class="form-control form-control-sm" name="SampleCities[@i].NSE6" value="@c.NSE6" /></td>
-                    </tr>
-                }
-                </tbody>
-                <tfoot>
-                    <tr class="table-light fw-bold">
-                        <td>Total</td><td></td>
-                        <td id="tot-muestra" class="text-end">0</td>
-                        <td id="tot-nse1" class="text-end">0</td>
-                        <td id="tot-nse2" class="text-end">0</td>
-                        <td id="tot-nse3" class="text-end">0</td>
-                        <td id="tot-nse4" class="text-end">0</td>
-                        <td id="tot-nse5" class="text-end">0</td>
-                        <td id="tot-nse6" class="text-end">0</td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-    </div>
-</div>
-<div class="tab-pane fade" id="tab-mystery" role="tabpanel">
-    <div class="card mb-3">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <span>Mystery / Shopper</span>
-            <button type="button" class="btn btn-sm btn-outline-primary" id="btn-add-mystery">Agregar fila</button>
-        </div>
-        <div class="card-body">
-            <table class="table table-sm table-bordered" id="eq-mystery-grid">
-                <thead>
-                    <tr>
-                        <th>Tipo Visita</th><th>Complejidad</th><th>Olas</th><th>Desplazamientos</th><th>Tanqueos</th><th>Alertas</th><th>Edicion</th><th>Alquiler</th><th>Dispositivos</th>
-                    </tr>
-                </thead>
-                <tbody>
-                @for (var i = 0; i < Model.MysteryVisits.Count; i++)
-                {
-                    var v = Model.MysteryVisits[i];
-                    <tr data-index="@i">
-                        <td><input class="form-control form-control-sm" name="MysteryVisits[@i].TipoVisita" value="@v.TipoVisita" /></td>
-                        <td><input class="form-control form-control-sm" name="MysteryVisits[@i].Complejidad" value="@v.Complejidad" /></td>
-                        <td><input class="form-control form-control-sm" name="MysteryVisits[@i].NumOlas" value="@v.NumOlas" /></td>
-                        <td><input class="form-control form-control-sm" name="MysteryVisits[@i].Desplazamientos" value="@v.Desplazamientos" /></td>
-                        <td><input class="form-control form-control-sm" name="MysteryVisits[@i].Tanqueos" value="@v.Tanques" /></td>
-                        <td><input class="form-control form-control-sm" name="MysteryVisits[@i].Alertas" value="@v.Alertas" /></td>
-                        <td><input class="form-control form-control-sm" name="MysteryVisits[@i].Edicion" value="@v.Edicion" /></td>
-                        <td><input class="form-control form-control-sm" name="MysteryVisits[@i].AlquilerEquipos" value="@v.AlquilerEquipos" /></td>
-                        <td><input class="form-control form-control-sm" name="MysteryVisits[@i].CompraDispositivos" value="@v.CompraDispositivos" /></td>
-                    </tr>
-                }
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-<div class="tab-pane fade" id="tab-staff" role="tabpanel">
-    <div class="row">
-        <div class="col-lg-8">
-            <div class="card mb-3">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <span>Staff SL</span>
-                    <button type="button" class="btn btn-sm btn-outline-primary" id="btn-add-staff">Agregar fila</button>
-                </div>
-                <div class="card-body">
-                    <table class="table table-sm table-bordered" id="eq-staff-grid">
-                        <thead>
-                            <tr>
-                                <th>Nivel</th><th>Horas min</th><th>Horas presup.</th><th>Tarifa</th><th>Valor</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        @for (var i = 0; i < Model.StaffSL.Count; i++)
-                        {
-                            var s = Model.StaffSL[i];
-                            <tr data-index="@i">
-                                <td><input class="form-control form-control-sm" name="StaffSL[@i].Nivel" value="@s.Nivel" /></td>
-                                <td><input class="form-control form-control-sm" name="StaffSL[@i].HorasMinimas" value="@s.HorasMinimas" readonly /></td>
-                                <td><input class="form-control form-control-sm" name="StaffSL[@i].HorasPresup" value="@s.HorasPresup" /></td>
-                                <td><input class="form-control form-control-sm" name="StaffSL[@i].Tarifa" value="@s.Tarifa" /></td>
-                                <td class="text-end">@s.Valor.ToString("N0")</td>
-                            </tr>
-                        }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="card mb-3">
-                <div class="card-header">Logistica</div>
-                <div class="card-body">
-                    <div class="mb-2 form-check">
-                        <input class="form-check-input" type="checkbox" name="Methodology.EnvioCiudades" @(Model.Methodology.EnvioCiudades ? "checked" : "") />
-                        <label class="form-check-label">Envio a ciudades</label>
+                <div class="col-md-3 d-flex align-items-end">
+                    <div class="form-check me-3">
+                        <input class="form-check-input" type="checkbox" id="TopLine" />
+                        <label class="form-check-label" for="TopLine">Top Line</label>
                     </div>
-                    <div class="mb-2">
-                        <label class="form-label">Incidencia</label>
-                        <input class="form-control" name="Methodology.IncidenciaLabel" value="@Model.Methodology.IncidenciaLabel" />
+                    <div class="form-check me-3">
+                        <input class="form-check-input" type="checkbox" id="ASCIIFlag" />
+                        <label class="form-check-label" for="ASCIIFlag">ASCII</label>
+                    </div>
+                    <div class="form-check me-3">
+                        <input class="form-check-input" type="checkbox" id="ScriptReclutamiento" />
+                        <label class="form-check-label" for="ScriptReclutamiento">Script reclutamiento</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="Siembra" />
+                        <label class="form-check-label" for="Siembra">Siembra</label>
+                    </div>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <div class="form-check me-3">
+                        <input class="form-check-input" type="checkbox" id="Scripting" />
+                        <label class="form-check-label" for="Scripting">Scripting</label>
+                    </div>
+                    <div class="form-check me-3">
+                        <input class="form-check-input" type="checkbox" id="Codificacion" />
+                        <label class="form-check-label" for="Codificacion">Codificación</label>
+                    </div>
+                    <div class="form-check me-3">
+                        <input class="form-check-input" type="checkbox" id="Procesamiento" />
+                        <label class="form-check-label" for="Procesamiento">Procesamiento</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="ProcesoEstadistico" />
+                        <label class="form-check-label" for="ProcesoEstadistico">Proc. estadístico</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Tipo de script</label>
+                    <select class="form-select" id="ScriptingTipo">
+                        <option>Nuevo</option>
+                        <option>Duplicado</option>
+                        <option>Reutilizacion</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Data Cleaning</label>
+                    <select class="form-select" id="DataCleaning">
+                        <option>Total</option>
+                        <option>Parcial</option>
+                        <option>No</option>
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <div class="form-check me-3">
+                        <input class="form-check-input" type="checkbox" id="Refrigeracion" />
+                        <label class="form-check-label" for="Refrigeracion">Refrigeración</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="Embalaje" />
+                        <label class="form-check-label" for="Embalaje">Embalaje</label>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+        <div class="tab-pane fade" id="tab-muestra" role="tabpanel">
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <label class="form-label">Penetración (label)</label>
+                    <input class="form-control" id="IncidenciaLabelAlias" placeholder="Solo informativo" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Muestra total (solo lectura)</label>
+                    <input class="form-control" id="TotalMuestra" disabled />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Sobre-muestra %</label>
+                    <input class="form-control" type="number" step="0.01" id="SobreMuestraPctAlias" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Peso producto (gr)</label>
+                    <input class="form-control" type="number" id="PesoProductoGrAlias" />
+                </div>
+            </div>
 
-<div class="tab-pane fade" id="tab-resumen" role="tabpanel">
-    <div class="card mb-3">
-        <div class="card-header">Resumen</div>
-        <div class="card-body" id="eq-summary">
-            <div class="text-muted">El resumen se actualizara al calcular.</div>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6 class="mb-0">Ciudades y NSE</h6>
+                <button class="btn btn-sm btn-outline-primary" type="button" id="btn-add-city">+ Ciudad</button>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-bordered table-sm align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Activa</th>
+                            <th>Ciudad</th>
+                            <th>Total</th>
+                            <th>NSE1</th>
+                            <th>NSE2</th>
+                            <th>NSE3</th>
+                            <th>NSE4</th>
+                            <th>NSE5</th>
+                            <th>NSE6</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sample-body"></tbody>
+                    <tfoot class="table-secondary">
+                        <tr>
+                            <th colspan="2">Totales activos</th>
+                            <th id="sample-total" class="text-end">0</th>
+                            <th id="sample-n1" class="text-end">0</th>
+                            <th id="sample-n2" class="text-end">0</th>
+                            <th id="sample-n3" class="text-end">0</th>
+                            <th id="sample-n4" class="text-end">0</th>
+                            <th id="sample-n5" class="text-end">0</th>
+                            <th id="sample-n6" class="text-end">0</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="tab-mystery" role="tabpanel">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6 class="mb-0">Visitas Mystery / Shopper</h6>
+                <button class="btn btn-sm btn-outline-primary" type="button" id="btn-add-mystery">+ Visita</button>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Tipo visita</th>
+                            <th>Complejidad</th>
+                            <th>Olas</th>
+                            <th>Desplazamientos</th>
+                            <th>Tanqueos</th>
+                            <th>Alertas</th>
+                            <th>Edición</th>
+                            <th>Alquiler equipos</th>
+                            <th>Compra disp.</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="mystery-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="tab-staff" role="tabpanel">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6 class="mb-0">Staff SL (L4-L7)</h6>
+                <button class="btn btn-sm btn-outline-primary" type="button" id="btn-add-staff">+ Fila</button>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Nivel</th>
+                            <th>Horas mín</th>
+                            <th>Horas presup.</th>
+                            <th>Tarifa</th>
+                            <th>Valor</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="staff-body"></tbody>
+                    <tfoot class="table-secondary">
+                        <tr>
+                            <th colspan="4">Total</th>
+                            <th id="staff-total" class="text-end">0</th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="tab-resumen" role="tabpanel">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-header">Costos por rubro</div>
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush small">
+                                <li class="list-group-item d-flex justify-content-between"><span>Campo + Mystery</span><span id="sum-campo">0</span></li>
+                                <li class="list-group-item d-flex justify-content-between"><span>Viáticos</span><span id="sum-viaticos">0</span></li>
+                                <li class="list-group-item d-flex justify-content-between"><span>Incentivos</span><span id="sum-incentivos">0</span></li>
+                                <li class="list-group-item d-flex justify-content-between"><span>Insumos</span><span id="sum-insumos">0</span></li>
+                                <li class="list-group-item d-flex justify-content-between"><span>Staff OPS</span><span id="sum-ops">0</span></li>
+                                <li class="list-group-item d-flex justify-content-between"><span>Staff SL</span><span id="sum-sl">0</span></li>
+                                <li class="list-group-item d-flex justify-content-between"><span>Compra producto</span><span id="sum-compra">0</span></li>
+                                <li class="list-group-item d-flex justify-content-between"><span>Tablets</span><span id="sum-tablets">0</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-header">Margen</div>
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush small">
+                                <li class="list-group-item d-flex justify-content-between"><span>Direct cost OPS</span><span id="sum-direct">0</span></li>
+                                <li class="list-group-item d-flex justify-content-between"><span>GM</span><span id="sum-gm">0</span></li>
+                                <li class="list-group-item d-flex justify-content-between"><span>PB + RMF</span><span id="sum-pb">0</span></li>
+                                <li class="list-group-item d-flex justify-content-between"><span>Prof Time</span><span id="sum-prof">0</span></li>
+                                <li class="list-group-item d-flex justify-content-between"><strong>OP</strong><strong id="sum-op">0</strong></li>
+                                <li class="list-group-item d-flex justify-content-between"><strong>AOT</strong><strong id="sum-aot">0</strong></li>
+                                <li class="list-group-item d-flex justify-content-between"><span>% OP</span><span id="sum-pct">0%</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-header">Acciones</div>
+                        <div class="card-body">
+                            <p class="small text-muted">Usa Calcular para ver el breakdown; Guardar persiste cabecera y detalle (ciudades, mystery, staff) via TVP.</p>
+                            <button class="btn btn-outline-secondary w-100 mb-2" type="button" id="btn-calcular-2">Calcular</button>
+                            <button class="btn btn-primary w-100" type="button" id="btn-guardar-2">Guardar</button>
+                            <div class="alert alert-secondary small mt-3 mb-0" id="status-box">Pendiente de cálculo.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-</div>
-
-<div class="d-flex gap-2 mb-5">
-    <button type="button" class="btn btn-secondary" id="btn-calcular">Calcular</button>
-    <button type="button" class="btn btn-primary" id="btn-guardar">Guardar</button>
-</div>
-</form>
 </div>
 @section Scripts {
 <script>
-    const form = document.getElementById('eq-form');
-    const summaryEl = document.getElementById('eq-summary');
-    const sampleStatusEl = document.getElementById('eq-sample-status');
-    const diasCampoEl = document.getElementById('eq-dias-campo');
-
-    const renderSummary = (s) => {
-        if (!s) { summaryEl.innerHTML = '<div class="text-muted">Sin datos.</div>'; return; }
-        summaryEl.innerHTML = `
-            <table class="table table-sm mb-0">
-                <tr><td>Costo Campo</td><td class="text-end">${(s.costoCampo ?? 0).toLocaleString()}</td></tr>
-                <tr><td>Incentivos</td><td class="text-end">${(s.incentivos ?? 0).toLocaleString()}</td></tr>
-                <tr><td>Insumos / Reclutamiento</td><td class="text-end">${(s.insumos ?? 0).toLocaleString()}</td></tr>
-                <tr><td>Staff OPS</td><td class="text-end">${(s.staffOps ?? 0).toLocaleString()}</td></tr>
-                <tr><td>Staff SL</td><td class="text-end">${(s.staffSL ?? 0).toLocaleString()}</td></tr>
-                <tr><td>Compra Producto</td><td class="text-end">${(s.compraProducto ?? 0).toLocaleString()}</td></tr>
-                <tr><td>Direct cost OPS</td><td class="text-end">${(s.directCostOps ?? 0).toLocaleString()}</td></tr>
-                <tr><td>GM (21.45%)</td><td class="text-end">${(s.gm ?? 0).toLocaleString()}</td></tr>
-                <tr><td>PB + RMF (4.3%)</td><td class="text-end">${(s.pB_RMF ?? 0).toLocaleString()}</td></tr>
-                <tr><td>Prof. Time</td><td class="text-end">${(s.profTime ?? 0).toLocaleString()}</td></tr>
-                <tr><td>AOT</td><td class="text-end">${(s.aot ?? 0).toLocaleString()}</td></tr>
-                <tr><td>OP</td><td class="text-end">${(s.op ?? 0).toLocaleString()}</td></tr>
-                <tr><td>%OP</td><td class="text-end">${((s.porcOP ?? 0)*100).toFixed(2)}%</td></tr>
-            </table>`;
+    const initialState = @Html.Raw(initialJson);
+    const state = JSON.parse(JSON.stringify(initialState));
+    const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+    const urls = {
+        calc: '@Url.Action("Calcular")',
+        save: '@Url.Action("Guardar")'
     };
 
-    const toJson = () => {
-        const data = new FormData(form);
-        const obj = {};
-        data.forEach((value, key) => {
-            const keys = key.split('.');
-            let ref = obj;
-            for (let i = 0; i < keys.length; i++) {
-                const k = keys[i].replace(/\[(\d+)\]/g, '');
-                const idxMatch = keys[i].match(/\[(\d+)\]/);
-                if (idxMatch) {
-                    const idx = parseInt(idxMatch[1]);
-                    if (!ref[k]) ref[k] = [];
-                    ref = ref[k];
-                    if (!ref[idx]) ref[idx] = {};
-                    ref = ref[idx];
-                } else {
-                    if (i === keys.length - 1) {
-                        ref[k] = value === 'on' ? true : value;
-                    } else {
-                        if (!ref[k]) ref[k] = {};
-                        ref = ref[k];
-                    }
-                }
-            }
-        });
-        document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-            const name = cb.name;
-            if (!name) return;
-            const keys = name.split('.');
-            let ref = obj;
-            for (let i = 0; i < keys.length; i++) {
-                const k = keys[i].replace(/\[(\d+)\]/g, '');
-                const idxMatch = keys[i].match(/\[(\d+)\]/);
-                if (idxMatch) {
-                    const idx = parseInt(idxMatch[1]);
-                    if (!ref[k]) ref[k] = [];
-                    ref = ref[k];
-                    if (!ref[idx]) ref[idx] = {};
-                    ref = ref[idx];
-                } else {
-                    if (i === keys.length - 1) {
-                        if (ref[k] === undefined) ref[k] = false;
-                    } else {
-                        if (!ref[k]) ref[k] = {};
-                        ref = ref[k];
-                    }
-                }
-            }
-        });
-        return obj;
+    const $ = (id) => document.getElementById(id);
+    const toNumber = (val) => {
+        const n = parseFloat(val);
+        return isNaN(n) ? 0 : n;
     };
+    const fmt = (val) => (val ?? 0).toLocaleString('es-CO', { maximumFractionDigits: 0 });
 
-    const recomputeTotals = () => {
-        const rows = document.querySelectorAll('#eq-sample-grid tbody tr');
-        let totals = {m:0,n1:0,n2:0,n3:0,n4:0,n5:0,n6:0};
-        let ok = true;
-        rows.forEach(r => {
-            const total = parseFloat(r.querySelector('input[name*="MuestraTotal"]').value || '0');
-            const nseVals = ['NSE1','NSE2','NSE3','NSE4','NSE5','NSE6'].map(k => parseFloat(r.querySelector(`input[name*="${k}"]`).value || '0'));
-            totals.m += total; totals.n1 += nseVals[0]; totals.n2 += nseVals[1]; totals.n3 += nseVals[2]; totals.n4 += nseVals[3]; totals.n5 += nseVals[4]; totals.n6 += nseVals[5];
-            if (Math.abs(total - nseVals.reduce((a,b)=>a+b,0)) > 0.01) ok = false;
-            r.classList.toggle('table-warning', Math.abs(total - nseVals.reduce((a,b)=>a+b,0)) > 0.01);
+    function loadPrimitives() {
+        const h = state.Header || {};
+        $('Nombre').value = h.Nombre || '';
+        $('GrupoObjetivo').value = h.GrupoObjetivo || '';
+        $('Cliente').value = h.Cliente || '';
+        $('FechaAprobacionEstimada').value = h.FechaAprobacionEstimada ? h.FechaAprobacionEstimada.substring(0, 10) : '';
+        $('FechaCampo').value = h.FechaCampo ? h.FechaCampo.substring(0, 10) : '';
+        $('ProbAprobacion').value = h.ProbAprobacion || 'Alta';
+        $('SL').value = h.SL || '';
+        $('MetodologiaSL').value = h.MetodologiaSL || '';
+        $('RecordDetail').value = h.RecordDetail || '';
+        $('CategoriaProducto').value = h.CategoriaProducto || '';
+        $('ValorProveedorExterno').value = h.ValorProveedorExterno || '';
+        $('ValorProveedorInternacional').value = h.ValorProveedorInternacional || '';
+        $('ValorGMU').value = h.ValorGMU || '';
+
+        const m = state.Methodology || {};
+        $('MetodologiaRecoleccion').value = m.MetodologiaRecoleccion || '';
+        $('Tecnica1').value = m.Tecnica1 || '';
+        $('Tecnica2').value = m.Tecnica2 || '';
+        $('Tecnica3').value = m.Tecnica3 || '';
+        $('BaseDatos').value = m.BaseDatos || '';
+        $('IncidenciaLabel').value = m.IncidenciaLabel || '';
+        $('IncidenciaValor').value = m.IncidenciaValor || '';
+        $('SobreMuestraPct').value = m.SobreMuestraPct || '';
+        $('EnvioCiudades').checked = !!m.EnvioCiudades;
+        $('PesoProductoGr').value = m.PesoProductoGr || '';
+        $('SobreMuestraPctAlias').value = m.SobreMuestraPct || '';
+        $('PesoProductoGrAlias').value = m.PesoProductoGr || '';
+        $('IncidenciaLabelAlias').value = m.IncidenciaLabel || '';
+
+        const q = state.Questionnaire || {};
+        $('DuracionMin').value = q.DuracionMin || '';
+        $('PenetracionCodigo').value = q.PenetracionCodigo || 'MAS82';
+        $('PregAbiertas').value = q.PregAbiertas || '';
+        $('PregAbiertasMult').value = q.PregAbiertasMult || '';
+        $('NumProcesamientos').value = q.NumProcesamientos || 1;
+        $('ClasePrueba').value = q.ClasePrueba || '';
+        $('EtiquetadoTipo').value = q.EtiquetadoTipo || '';
+        $('ProductosTestear').value = q.ProductosTestear || 1;
+        $('ProductosPorResp').value = q.ProductosPorResp || 1;
+        $('PatinadoresCiudad').value = q.PatinadoresCiudad || 0;
+        $('CompraProducto').value = q.CompraProducto || 0;
+        $('TopLine').checked = !!q.TopLine;
+        $('DataCleaning').value = q.DataCleaning || 'Total';
+        $('ASCIIFlag').checked = !!q.ASCIIFlag;
+        $('ScriptReclutamiento').checked = !!q.ScriptReclutamiento;
+        $('Scripting').checked = !!q.Scripting;
+        $('ScriptingTipo').value = q.ScriptingTipo || 'Nuevo';
+        $('Codificacion').checked = !!q.Codificacion;
+        $('Procesamiento').checked = !!q.Procesamiento;
+        $('ProcesoEstadistico').checked = !!q.ProcesoEstadistico;
+        $('Refrigeracion').checked = !!q.Refrigeracion;
+        $('Embalaje').checked = !!q.Embalaje;
+        $('Siembra').checked = !!q.Siembra;
+    }
+
+    function renderSample() {
+        state.SampleCities = state.SampleCities || [];
+        const tbody = $('sample-body');
+        tbody.innerHTML = '';
+        state.SampleCities.forEach((c, idx) => {
+            const tr = document.createElement('tr');
+            tr.dataset.index = idx;
+            tr.innerHTML = `
+                <td class="text-center"><input type="checkbox" data-field="Activa" ${c.Activa ? 'checked' : ''} /></td>
+                <td><input class="form-control form-control-sm" data-field="Ciudad" value="${c.Ciudad || ''}" /></td>
+                <td><input class="form-control form-control-sm text-end" type="number" data-field="MuestraTotal" value="${c.MuestraTotal || 0}" /></td>
+                <td><input class="form-control form-control-sm text-end" type="number" data-field="NSE1" value="${c.NSE1 || 0}" /></td>
+                <td><input class="form-control form-control-sm text-end" type="number" data-field="NSE2" value="${c.NSE2 || 0}" /></td>
+                <td><input class="form-control form-control-sm text-end" type="number" data-field="NSE3" value="${c.NSE3 || 0}" /></td>
+                <td><input class="form-control form-control-sm text-end" type="number" data-field="NSE4" value="${c.NSE4 || 0}" /></td>
+                <td><input class="form-control form-control-sm text-end" type="number" data-field="NSE5" value="${c.NSE5 || 0}" /></td>
+                <td><input class="form-control form-control-sm text-end" type="number" data-field="NSE6" value="${c.NSE6 || 0}" /></td>
+            `;
+            tbody.appendChild(tr);
         });
-        document.getElementById('tot-muestra').textContent = totals.m.toLocaleString();
-        document.getElementById('tot-nse1').textContent = totals.n1.toLocaleString();
-        document.getElementById('tot-nse2').textContent = totals.n2.toLocaleString();
-        document.getElementById('tot-nse3').textContent = totals.n3.toLocaleString();
-        document.getElementById('tot-nse4').textContent = totals.n4.toLocaleString();
-        document.getElementById('tot-nse5').textContent = totals.n5.toLocaleString();
-        document.getElementById('tot-nse6').textContent = totals.n6.toLocaleString();
-        sampleStatusEl.classList.remove('bg-secondary','bg-success','bg-danger');
-        sampleStatusEl.classList.add(ok ? 'bg-success' : 'bg-danger');
-        sampleStatusEl.textContent = ok ? `OK (Total ${totals.m.toLocaleString()})` : 'Revisar sumas NSE';
-        return {ok, totals};
-    };
+        updateSampleTotals();
+    }
 
-    const estimarDiasCampo = () => {
-        const encProd = {
-            'bogota': {enc:7, prod:4},
-            'b/quilla': {enc:6, prod:5},
-            'm/llin': {enc:7, prod:5},
-            'cali': {enc:7, prod:5},
-            'b/manga': {enc:7, prod:5},
-            'c/gena': {enc:7, prod:5},
-            'otras ciudades': {enc:6, prod:5}
-        };
-        const rows = document.querySelectorAll('#eq-sample-grid tbody tr');
-        let diasMax = 0;
-        rows.forEach(r => {
-            const ciudad = (r.querySelector('input[name*="Ciudad"]').value || '').toLowerCase();
-            const active = r.querySelector('input[type="checkbox"]').checked;
-            if (!active) return;
-            const tot = parseFloat(r.querySelector('input[name*="MuestraTotal"]').value || '0');
-            const cfg = encProd[ciudad] || {enc:7, prod:4};
-            const dias = cfg.enc*cfg.prod > 0 ? Math.ceil(tot / (cfg.enc*cfg.prod)) : 0;
-            if (dias > diasMax) diasMax = dias;
+    function updateSampleTotals() {
+        const active = (state.SampleCities || []).filter(c => c.Activa);
+        const sum = (field) => active.reduce((a, b) => a + toNumber(b[field] || 0), 0);
+        $('sample-total').textContent = fmt(sum('MuestraTotal'));
+        $('sample-n1').textContent = fmt(sum('NSE1'));
+        $('sample-n2').textContent = fmt(sum('NSE2'));
+        $('sample-n3').textContent = fmt(sum('NSE3'));
+        $('sample-n4').textContent = fmt(sum('NSE4'));
+        $('sample-n5').textContent = fmt(sum('NSE5'));
+        $('sample-n6').textContent = fmt(sum('NSE6'));
+        $('TotalMuestra').value = fmt(sum('MuestraTotal'));
+        $('badge-ciudades').textContent = `Ciudades activas: ${active.length}`;
+    }
+
+    function renderMystery() {
+        state.MysteryVisits = state.MysteryVisits || [];
+        const tbody = $('mystery-body');
+        tbody.innerHTML = '';
+        state.MysteryVisits.forEach((m, idx) => {
+            const tr = document.createElement('tr');
+            tr.dataset.index = idx;
+            tr.innerHTML = `
+                <td><input class="form-control form-control-sm" data-field="TipoVisita" value="${m.TipoVisita || ''}" /></td>
+                <td><input class="form-control form-control-sm" data-field="Complejidad" value="${m.Complejidad || ''}" /></td>
+                <td><input class="form-control form-control-sm text-end" type="number" data-field="NumOlas" value="${m.NumOlas || 1}" /></td>
+                <td><input class="form-control form-control-sm text-end" type="number" data-field="Desplazamientos" value="${m.Desplazamientos || 0}" /></td>
+                <td><input class="form-control form-control-sm text-end" type="number" data-field="Tanqueos" value="${m.Tanqueos || 0}" /></td>
+                <td><input class="form-control form-control-sm text-end" type="number" data-field="Alertas" value="${m.Alertas || 0}" /></td>
+                <td><input class="form-control form-control-sm text-end" type="number" data-field="Edicion" value="${m.Edicion || 0}" /></td>
+                <td><input class="form-control form-control-sm text-end" type="number" data-field="AlquilerEquipos" value="${m.AlquilerEquipos || 0}" /></td>
+                <td><input class="form-control form-control-sm text-end" type="number" data-field="CompraDispositivos" value="${m.CompraDispositivos || 0}" /></td>
+                <td class="text-center"><button class="btn btn-sm btn-link text-danger" data-action="del">?</button></td>
+            `;
+            tbody.appendChild(tr);
         });
-        diasCampoEl.textContent = `Dias estimados: ${diasMax || '-'}`;
-        return diasMax;
-    };
+    }
 
-    const postJson = async (url, payload) => {
+    function renderStaff() {
+        state.StaffSL = state.StaffSL || [];
+        const tbody = $('staff-body');
+        tbody.innerHTML = '';
+        let total = 0;
+        state.StaffSL.forEach((s, idx) => {
+            const valor = toNumber(s.HorasPresup) * toNumber(s.Tarifa);
+            total += valor;
+            const tr = document.createElement('tr');
+            tr.dataset.index = idx;
+            tr.innerHTML = `
+                <td><input class="form-control form-control-sm" data-field="Nivel" value="${s.Nivel || ''}" /></td>
+                <td><input class="form-control form-control-sm text-end" type="number" data-field="HorasMinimas" value="${s.HorasMinimas || 0}" /></td>
+                <td><input class="form-control form-control-sm text-end" type="number" data-field="HorasPresup" value="${s.HorasPresup || 0}" /></td>
+                <td><input class="form-control form-control-sm text-end" type="number" data-field="Tarifa" value="${s.Tarifa || 0}" /></td>
+                <td class="text-end fw-bold">${fmt(valor)}</td>
+                <td class="text-center"><button class="btn btn-sm btn-link text-danger" data-action="del">?</button></td>
+            `;
+            tbody.appendChild(tr);
+        });
+        $('staff-total').textContent = fmt(total);
+    }
+    function syncPrimitivesToState() {
+        const h = state.Header || {};
+        h.Nombre = $('Nombre').value || '';
+        h.GrupoObjetivo = $('GrupoObjetivo').value || '';
+        h.Cliente = $('Cliente').value || '';
+        h.FechaAprobacionEstimada = $('FechaAprobacionEstimada').value || null;
+        h.FechaCampo = $('FechaCampo').value || null;
+        h.ProbAprobacion = $('ProbAprobacion').value || 'Alta';
+        h.SL = $('SL').value || '';
+        h.MetodologiaSL = $('MetodologiaSL').value || '';
+        h.RecordDetail = $('RecordDetail').value || '';
+        h.CategoriaProducto = $('CategoriaProducto').value || '';
+        h.ValorProveedorExterno = toNumber($('ValorProveedorExterno').value);
+        h.ValorProveedorInternacional = toNumber($('ValorProveedorInternacional').value);
+        h.ValorGMU = toNumber($('ValorGMU').value);
+        state.Header = h;
+
+        const m = state.Methodology || {};
+        m.MetodologiaRecoleccion = $('MetodologiaRecoleccion').value || '';
+        m.Tecnica1 = $('Tecnica1').value || '';
+        m.Tecnica2 = $('Tecnica2').value || '';
+        m.Tecnica3 = $('Tecnica3').value || '';
+        m.BaseDatos = $('BaseDatos').value || '';
+        m.IncidenciaLabel = $('IncidenciaLabel').value || '';
+        m.IncidenciaValor = $('IncidenciaValor').value ? toNumber($('IncidenciaValor').value) : null;
+        m.SobreMuestraPct = toNumber($('SobreMuestraPct').value || $('SobreMuestraPctAlias').value);
+        m.EnvioCiudades = $('EnvioCiudades').checked;
+        m.PesoProductoGr = toNumber($('PesoProductoGr').value || $('PesoProductoGrAlias').value);
+        state.Methodology = m;
+
+        const q = state.Questionnaire || {};
+        q.DuracionMin = parseInt($('DuracionMin').value || '0');
+        q.PenetracionCodigo = $('PenetracionCodigo').value || 'MAS82';
+        q.PregAbiertas = parseInt($('PregAbiertas').value || '0');
+        q.PregAbiertasMult = parseInt($('PregAbiertasMult').value || '0');
+        q.NumProcesamientos = parseInt($('NumProcesamientos').value || '1');
+        q.ClasePrueba = $('ClasePrueba').value || '';
+        q.EtiquetadoTipo = $('EtiquetadoTipo').value || '';
+        q.ProductosTestear = parseInt($('ProductosTestear').value || '1');
+        q.ProductosPorResp = parseInt($('ProductosPorResp').value || '1');
+        q.PatinadoresCiudad = parseInt($('PatinadoresCiudad').value || '0');
+        q.CompraProducto = toNumber($('CompraProducto').value || 0);
+        q.TopLine = $('TopLine').checked;
+        q.DataCleaning = $('DataCleaning').value || 'Total';
+        q.ASCIIFlag = $('ASCIIFlag').checked;
+        q.ScriptReclutamiento = $('ScriptReclutamiento').checked;
+        q.Scripting = $('Scripting').checked;
+        q.ScriptingTipo = $('ScriptingTipo').value || 'Nuevo';
+        q.Codificacion = $('Codificacion').checked;
+        q.Procesamiento = $('Procesamiento').checked;
+        q.ProcesoEstadistico = $('ProcesoEstadistico').checked;
+        q.Refrigeracion = $('Refrigeracion').checked;
+        q.Embalaje = $('Embalaje').checked;
+        q.Siembra = $('Siembra').checked;
+        state.Questionnaire = q;
+    }
+
+    function syncTablesToState() {
+        const sampleRows = document.querySelectorAll('#sample-body tr');
+        state.SampleCities = Array.from(sampleRows).map(r => {
+            const get = (field) => {
+                const input = r.querySelector(`[data-field="${field}"]`);
+                if (!input) return null;
+                if (input.type === 'checkbox') return input.checked;
+                if (field === 'Ciudad') return input.value || '';
+                return toNumber(input.value);
+            };
+            return {
+                Ciudad: get('Ciudad'),
+                Activa: !!get('Activa'),
+                MuestraTotal: get('MuestraTotal'),
+                NSE1: get('NSE1'),
+                NSE2: get('NSE2'),
+                NSE3: get('NSE3'),
+                NSE4: get('NSE4'),
+                NSE5: get('NSE5'),
+                NSE6: get('NSE6')
+            };
+        });
+
+        const mysRows = document.querySelectorAll('#mystery-body tr');
+        state.MysteryVisits = Array.from(mysRows).map(r => {
+            const get = (field) => {
+                const input = r.querySelector(`[data-field="${field}"]`);
+                if (!input) return null;
+                if (input.type === 'checkbox') return input.checked;
+                if (['TipoVisita', 'Complejidad'].includes(field)) return input.value || '';
+                return toNumber(input.value);
+            };
+            return {
+                TipoVisita: get('TipoVisita'),
+                Complejidad: get('Complejidad'),
+                NumOlas: get('NumOlas'),
+                Desplazamientos: get('Desplazamientos'),
+                Tanqueos: get('Tanqueos'),
+                Alertas: get('Alertas'),
+                Edicion: get('Edicion'),
+                AlquilerEquipos: get('AlquilerEquipos'),
+                CompraDispositivos: get('CompraDispositivos')
+            };
+        });
+
+        const staffRows = document.querySelectorAll('#staff-body tr');
+        state.StaffSL = Array.from(staffRows).map(r => {
+            const get = (field) => {
+                const input = r.querySelector(`[data-field="${field}"]`);
+                if (!input) return null;
+                if (['Nivel'].includes(field)) return input.value || '';
+                return toNumber(input.value);
+            };
+            return {
+                Nivel: get('Nivel'),
+                HorasMinimas: get('HorasMinimas'),
+                HorasPresup: get('HorasPresup'),
+                Tarifa: get('Tarifa')
+            };
+        });
+    }
+
+    function renderSummary(summary) {
+        const s = summary || state.Summary || {};
+        $('sum-campo').textContent = fmt(s.CostoCampo);
+        $('sum-viaticos').textContent = fmt(s.Viaticos);
+        $('sum-incentivos').textContent = fmt(s.Incentivos);
+        $('sum-insumos').textContent = fmt(s.Insumos);
+        $('sum-ops').textContent = fmt(s.StaffOps);
+        $('sum-sl').textContent = fmt(s.StaffSL);
+        $('sum-compra').textContent = fmt(s.CompraProducto);
+        $('sum-tablets').textContent = fmt(s.Tablets);
+        $('sum-direct').textContent = fmt(s.DirectCostOps);
+        $('sum-gm').textContent = fmt(s.GM);
+        $('sum-pb').textContent = fmt(s.PB_RMF);
+        $('sum-prof').textContent = fmt(s.ProfTime);
+        $('sum-op').textContent = fmt(s.OP);
+        $('sum-aot').textContent = fmt(s.AOT);
+        $('sum-pct').textContent = `${((s.PorcOP || 0) * 100).toFixed(2)}%`;
+        $('badge-aot').textContent = `AOT: ${fmt(s.AOT)}`;
+        $('badge-op').textContent = `OP: ${fmt(s.OP)}`;
+        $('badge-pct').textContent = `%OP: ${((s.PorcOP || 0) * 100).toFixed(2)}%`;
+    }
+
+    function showStatus(msg, ok = true) {
+        const box = $('status-box');
+        if (!box) return;
+        box.textContent = msg;
+        box.classList.toggle('alert-success', ok);
+        box.classList.toggle('alert-danger', !ok);
+    }
+
+    async function callApi(url, payload) {
         const res = await fetch(url, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value },
+            headers: {
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': token
+            },
             body: JSON.stringify(payload)
         });
-        return res.json();
-    };
+        if (!res.ok) throw new Error('Error de red');
+        return await res.json();
+    }
 
-    const recalcAll = () => { const v = validateSample(); estimarDiasCampo(); return v; };
-
-    const validateSample = () => {
-        const {ok} = recomputeTotals();
-        return ok;
-    };
-
-    document.getElementById('btn-calcular').addEventListener('click', async () => {
-        recalcAll();
-        const payload = toJson();
-        const result = await postJson('@Url.Action("Calcular","EasyQuote", new { area="EQ"})', payload);
-        renderSummary(result);
-    });
-
-    document.getElementById('btn-guardar').addEventListener('click', async () => {
-        const ok = recalcAll();
-        if (!ok) {
-            alert('Corrige las sumas de NSE antes de guardar.');
-            return;
+    async function calcular() {
+        syncPrimitivesToState();
+        syncTablesToState();
+        try {
+            const result = await callApi(urls.calc, state);
+            state.Summary = result;
+            renderSummary(result);
+            showStatus('Cálculo actualizado.', true);
+        } catch (e) {
+            console.error(e);
+            showStatus('Error al calcular', false);
         }
-        const payload = toJson();
-        const result = await postJson('@Url.Action("Guardar","EasyQuote", new { area="EQ"})', payload);
-        if (result.success) {
-            alert('Guardado con exito');
-            renderSummary(result.summary);
-        } else {
-            alert('Error al guardar');
+    }
+
+    async function guardar() {
+        syncPrimitivesToState();
+        syncTablesToState();
+        try {
+            const result = await callApi(urls.save, state);
+            if (result && result.success) {
+                state.Id = result.id;
+                state.Summary = result.summary;
+                renderSummary(result.summary);
+                showStatus(`Guardado OK. ID: ${result.id}`, true);
+            } else {
+                showStatus(result?.message || 'Error al guardar', false);
+            }
+        } catch (e) {
+            console.error(e);
+            showStatus('Error al guardar', false);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        loadPrimitives();
+        renderSample();
+        renderMystery();
+        renderStaff();
+        renderSummary(state.Summary);
+    });
+
+    $('btn-add-city').addEventListener('click', () => {
+        state.SampleCities.push({ Ciudad: 'Nueva', Activa: true, MuestraTotal: 0, NSE1: 0, NSE2: 0, NSE3: 0, NSE4: 0, NSE5: 0, NSE6: 0 });
+        renderSample();
+    });
+
+    $('btn-add-mystery').addEventListener('click', () => {
+        state.MysteryVisits.push({ TipoVisita: 'TIPO VISITA 1', Complejidad: 'Básica', NumOlas: 1 });
+        renderMystery();
+    });
+
+    $('btn-add-staff').addEventListener('click', () => {
+        state.StaffSL.push({ Nivel: 'L6', HorasMinimas: 0, HorasPresup: 0, Tarifa: 0 });
+        renderStaff();
+    });
+
+    $('sample-body').addEventListener('input', (e) => {
+        const field = e.target.dataset.field;
+        if (!field) return;
+        const idx = parseInt(e.target.closest('tr').dataset.index);
+        const row = state.SampleCities[idx];
+        if (!row) return;
+        if (e.target.type === 'checkbox') row[field] = e.target.checked;
+        else if (field === 'Ciudad') row[field] = e.target.value;
+        else row[field] = toNumber(e.target.value);
+        updateSampleTotals();
+    });
+
+    $('mystery-body').addEventListener('input', (e) => {
+        const field = e.target.dataset.field;
+        if (!field) return;
+        const idx = parseInt(e.target.closest('tr').dataset.index);
+        const row = state.MysteryVisits[idx];
+        if (!row) return;
+        if (['TipoVisita', 'Complejidad'].includes(field)) row[field] = e.target.value;
+        else row[field] = toNumber(e.target.value);
+    });
+    $('mystery-body').addEventListener('click', (e) => {
+        if (e.target.dataset.action === 'del') {
+            const idx = parseInt(e.target.closest('tr').dataset.index);
+            state.MysteryVisits.splice(idx, 1);
+            renderMystery();
         }
     });
 
-    const addRow = (tableId, template) => {
-        const tbody = document.querySelector(`#${tableId} tbody`);
-        const idx = tbody.querySelectorAll('tr').length;
-        const html = template.replace(/__idx__/g, idx);
-        const tr = document.createElement('tr');
-        tr.innerHTML = html;
-        tbody.appendChild(tr);
-        if (tableId === 'eq-sample-grid') recalcAll();
-    };
-
-    document.getElementById('btn-add-mystery').addEventListener('click', () => {
-        addRow('eq-mystery-grid', `
-            <td><input class="form-control form-control-sm" name="MysteryVisits[__idx__].TipoVisita" /></td>
-            <td><input class="form-control form-control-sm" name="MysteryVisits[__idx__].Complejidad" /></td>
-            <td><input class="form-control form-control-sm" name="MysteryVisits[__idx__].NumOlas" value="1" /></td>
-            <td><input class="form-control form-control-sm" name="MysteryVisits[__idx__].Desplazamientos" /></td>
-            <td><input class="form-control form-control-sm" name="MysteryVisits[__idx__].Tanqueos" /></td>
-            <td><input class="form-control form-control-sm" name="MysteryVisits[__idx__].Alertas" /></td>
-            <td><input class="form-control form-control-sm" name="MysteryVisits[__idx__].Edicion" /></td>
-            <td><input class="form-control form-control-sm" name="MysteryVisits[__idx__].AlquilerEquipos" /></td>
-            <td><input class="form-control form-control-sm" name="MysteryVisits[__idx__].CompraDispositivos" /></td>
-        `);
+    $('staff-body').addEventListener('input', (e) => {
+        const field = e.target.dataset.field;
+        if (!field) return;
+        const idx = parseInt(e.target.closest('tr').dataset.index);
+        const row = state.StaffSL[idx];
+        if (!row) return;
+        if (field === 'Nivel') row[field] = e.target.value;
+        else row[field] = toNumber(e.target.value);
+        renderStaff();
+    });
+    $('staff-body').addEventListener('click', (e) => {
+        if (e.target.dataset.action === 'del') {
+            const idx = parseInt(e.target.closest('tr').dataset.index);
+            state.StaffSL.splice(idx, 1);
+            renderStaff();
+        }
     });
 
-    document.getElementById('btn-add-staff').addEventListener('click', () => {
-        addRow('eq-staff-grid', `
-            <td><input class="form-control form-control-sm" name="StaffSL[__idx__].Nivel" /></td>
-            <td><input class="form-control form-control-sm" name="StaffSL[__idx__].HorasMinimas" readonly /></td>
-            <td><input class="form-control form-control-sm" name="StaffSL[__idx__].HorasPresup" /></td>
-            <td><input class="form-control form-control-sm" name="StaffSL[__idx__].Tarifa" /></td>
-            <td class="text-end">0</td>
-        `);
-    });
-
-    recomputeTotals();
-    estimarDiasCampo();
+    const calcButtons = ['btn-calcular', 'btn-calcular-2'];
+    calcButtons.forEach(id => $(id).addEventListener('click', calcular));
+    const saveButtons = ['btn-guardar', 'btn-guardar-2'];
+    saveButtons.forEach(id => $(id)?.addEventListener('click', guardar));
 </script>
 }
+
