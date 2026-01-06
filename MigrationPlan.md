@@ -6,11 +6,58 @@
 - Mantener servicio estable durante la migracion (coexistencia controlada y despliegues por slices).
 
 ## Arquitectura destino
-- Solucion `MatrixNext` con proyectos:
-  - `MatrixNext.Web` (MVC .NET 8, estilo MVCMatrix, Razor Runtime Compilation para desarrollo).
-  - `MatrixNext.Data` (.NET 8 class library, EF Core + Dapper, DbContext + query services + repos/units si se requieren).
-  - (Opcional) `MatrixNext.Utilidades` si se necesitan helpers compartidos.
-- BD compartida inicialmente; se migran esquemas via EF Core migrations una vez estabilizado el modelo.
+
+### Estructura de Proyectos
+```
+MatrixNext/
+├── MatrixNext.Data/                          [Class Library .NET 8]
+│   ├── Modules/
+│   │   ├── US/                               [Usuarios module]
+│   │   │   ├── Usuarios/
+│   │   │   │   ├── Adapters/
+│   │   │   │   └── Services/
+│   │   │   └── ServiceCollectionExtensions.cs
+│   │   ├── CC/                               [CC FinzOpe module - EJEMPLO]
+│   │   │   ├── Adapters/
+│   │   │   ├── Services/
+│   │   │   ├── DTOs/
+│   │   │   └── ServiceCollectionExtensions.cs
+│   │   └── [TH, CU, etc...]
+│   ├── Services/                             [Shared services]
+│   ├── Entities/
+│   ├── Models/
+│   └── Helpers/
+├── MatrixNext.Web/                           [ASP.NET Core MVC .NET 8]
+│   ├── Program.cs                            [DI Configuration - IMPORTS all modules]
+│   ├── Controllers/
+│   ├── Areas/                                [Area-based structure]
+│   │   ├── CC/
+│   │   │   └── Controllers/
+│   │   ├── US/
+│   │   │   └── Controllers/
+│   │   └── [EQ, TH, etc...]
+│   ├── Views/
+│   ├── Middleware/
+│   └── Models/
+└── MatrixNext.sln
+```
+
+### Patrón de Módulos
+Cada módulo en `MatrixNext.Data/Modules/{ModuleCode}/`:
+- **Adapters/**: Dapper adapters para ejecutar SP (lectura desde WebMatrix)
+- **Services/**: Lógica de negocio que orquesta adapters
+- **DTOs/**: Data transfer objects para mapeo de resultados
+- **ServiceCollectionExtensions.cs**: Registra servicios DI del módulo
+  - Uso en Program.cs: `builder.Services.AddXXModule(builder.Configuration);`
+
+Cada módulo web en `MatrixNext.Web/Areas/{ModuleCode}/Controllers/`:
+- Controllers que inyectan servicios desde MatrixNext.Data
+- Siguen patrón `[Area("XX")] [Route("api/xx/...")]`
+
+### BD compartida
+- Inicialmente compartida entre WebMatrix y MatrixNext (lectura de datos)
+- Se migran esquemas via EF Core migrations una vez estabilizado el modelo
+- WebMatrix para lectura (via Dapper), MatrixNext para lecttura/escritura
 
 ## Fases y entregables
 1) **Arranque** ✅ COMPLETADO
@@ -128,6 +175,78 @@ WebMatrix/
 - Migrar aspx aisladas sin contexto del módulo
 - Dependencias rotas entre páginas del mismo módulo
 - Duplicación de servicios/repositorios
+
+## Patrón: Crear un Nuevo Módulo (Ejemplo: CC FinzOpe)
+
+### 1. En MatrixNext.Data/Modules/CC/:
+```csharp
+// DTOs/CcLiquidacionDto.cs - Mapa de resultados SP
+public class CcLiquidacionDto { /* properties */ }
+
+// Adapters/CcFinzOpeAdapter.cs - Ejecuta SP via Dapper
+public interface ICcFinzOpeAdapter
+{
+    Task<CcLiquidacionDto> ObtenerLiquidacion(int idPeriodo, DateTime inicio, DateTime fin);
+}
+public class CcFinzOpeAdapter : ICcFinzOpeAdapter { /* implementación */ }
+
+// Services/CcFinzOpeService.cs - Lógica de negocio
+public interface ICcFinzOpeService
+{
+    Task<CcLiquidacionDto> CalcularLiquidacionMensual(int idPeriodo, DateTime inicio, DateTime fin);
+}
+public class CcFinzOpeService : ICcFinzOpeService { /* implementación */ }
+
+// ServiceCollectionExtensions.cs - Registra servicios
+public static class ServiceCollectionExtensions
+{
+    public static IServiceCollection AddCCModule(this IServiceCollection services, IConfiguration config)
+    {
+        var webMatrixConnection = config.GetConnectionString("WebMatrix");
+        services.AddScoped(sp => new CcFinzOpeAdapter(webMatrixConnection));
+        services.AddScoped<ICcFinzOpeAdapter>(sp => sp.GetRequiredService<CcFinzOpeAdapter>());
+        services.AddScoped<ICcFinzOpeService, CcFinzOpeService>();
+        return services;
+    }
+}
+```
+
+### 2. En MatrixNext.Web/Areas/CC/Controllers/:
+```csharp
+[Area("CC")]
+[Route("api/cc/finzope")]
+public class CcFinzOpeController : ControllerBase
+{
+    private readonly ICcFinzOpeService _service;
+    
+    public CcFinzOpeController(ICcFinzOpeService service) => _service = service;
+    
+    [HttpGet("liquidacion")]
+    public async Task<IActionResult> ObtenerLiquidacion(int idPeriodo, DateTime inicio, DateTime fin)
+    {
+        var result = await _service.CalcularLiquidacionMensual(idPeriodo, inicio, fin);
+        return Ok(new { success = true, data = result });
+    }
+}
+```
+
+### 3. En MatrixNext.Web/Program.cs:
+```csharp
+using MatrixNext.Data.Modules.CC;  // ADD IMPORT
+
+// ...en serviceConfiguration...
+builder.Services.AddCCModule(builder.Configuration);  // ADD REGISTRATION
+```
+
+### 4. En appsettings.json:
+```json
+"ConnectionStrings": {
+    "MatrixDb": "Server=...;Database=MatrixNext;",
+    "WebMatrix": "Server=...;Database=WebMatrix;"  // Para Dapper lectura
+}
+```
+
+**Resultado:** Endpoints listos en `GET /api/cc/finzope/liquidacion`
 
 ## Checklist operativo (iterativo por módulo)
 - [ ] Seleccionar módulo WebForms (carpeta completa: ej `US_Usuarios/`, `PY_Proyectos/`)
