@@ -145,20 +145,84 @@
 ### Carpeta: [FI_CC/](FI_CC/)
 **Documentación especializada para módulos de Finanzas/Compras (FI) y FinzOpe (CC)**
 
-1. **[FI_CC/README.md](FI_CC/README.md)** - Índice de módulos FI y CC
-2. **[FI_CC/ANALISIS_CU_CUENTAS.md](FI_CC/ANALISIS_CU_CUENTAS.md)** - Análisis del módulo Cuentas
-3. **[FI_CC/ANALISIS_CU_PRESUPUESTO.md](FI_CC/ANALISIS_CU_PRESUPUESTO.md)** - Análisis del módulo Presupuestos
-4. **[FI_CC/REPORT_CU_CUENTAS_IMPLEMENTACION.md](FI_CC/REPORT_CU_CUENTAS_IMPLEMENTACION.md)** - Reporte de implementación Cuentas
-5. **[FI_CC/REPORT_CU_PRESUPUESTO.md](FI_CC/REPORT_CU_PRESUPUESTO.md)** - Reporte de implementación Presupuestos
+#### 🟢 Documentos Maestros de Migración FI (Planificación e Implementación)
 
-**Contenido**:
-- Análisis técnico detallado de módulos CU (Cuentas/Presupuestos)
-- Estructuras de datos y SP relacionados
-- Requerimientos funcionales y no funcionales
-- Checklists de migración pre-implementación
-- Matrices de cambios técnicos y riesgos
+1. **[FI_CC/README_MIGRACION.md](FI_CC/README_MIGRACION.md)** ⭐ LEER PRIMERO
+   - Índice general de migración FI
+   - Guía por roles (Dev, Tech Lead, QA, PM)
+   - Quick timeline y decisiones críticas
+   - Checklists pre-inicio
+
+2. **[FI_CC/CRONOGRAMA_VALIDACION.md](FI_CC/CRONOGRAMA_VALIDACION.md)**
+   - Timeline semanal completo (13 semanas)
+   - Go/No-Go checklists por sprint
+   - Métricas de seguimiento
+   - Matriz de riesgos y mitigaciones
+
+3. **[FI_CC/PLAN_SPRINT_PRE1_CC_FINZOPE.md](FI_CC/PLAN_SPRINT_PRE1_CC_FINZOPE.md)**
+   - Sprint Pre-1: CC_FinzOpe infraestructura (Semanas 1-2, 80h)
+   - 7 tareas detalladas con timeline
+   - Testing plan y deliverables
+
+4. **[FI_CC/PLAN_SPRINTS_1_6_FI.md](FI_CC/PLAN_SPRINTS_1_6_FI.md)**
+   - Sprints 1-6: Migración de 28 páginas FI (Semanas 3-13, 704h)
+   - Grupo 1: Control Presupuestos (Sprint 1)
+   - Grupo 2: Presupuestos Internos (Sprint 2)
+   - Grupo 3: Procesos Internos (Sprint 3)
+   - Grupo 4: Reportes (Sprint 4)
+   - Grupo 5: Producción ⚠️ CRÍTICO (Sprint 5)
+   - Grupo 6: Inventario (Sprint 6)
+
+5. **[FI_CC/PATRONES_ARQUITECTURA_FI.md](FI_CC/PATRONES_ARQUITECTURA_FI.md)**
+   - Estructura de carpetas y patrones
+   - Adapter → Service → Controller
+   - DI configuration
+   - Testing strategy
+   - Reutilizable para todos los sprints
+
+6. **[FI_CC/MIGRACION_FI_ADMINISTRATIVO.md](FI_CC/MIGRACION_FI_ADMINISTRATIVO.md)**
+   - Análisis profundo de FI_Administrativo (28 páginas)
+   - 6 grupos de funcionalidad
+   - Dependencias identificadas
+   - Justificación de Sprint Pre-1 (CC_FinzOpe)
+
+#### 📊 Documentos de Análisis CU (Cuentas y Presupuestos)
+
+7. **[FI_CC/ANALISIS_CU_CUENTAS.md](FI_CC/ANALISIS_CU_CUENTAS.md)** - Análisis del módulo Cuentas
+   - Estructura de datos de cuentas comerciales
+   - Funcionalidades principales
+   - Procedimientos almacenados
+   - Checklist pre-migración
+
+8. **[FI_CC/ANALISIS_CU_PRESUPUESTO.md](FI_CC/ANALISIS_CU_PRESUPUESTO.md)** - Análisis del módulo Presupuestos
+   - Gestión de alternativas presupuestales
+   - GridViews dinámicos (50+ campos)
+   - Relaciones maestro-detalle complejas
+   - Matriz de cambios técnicos y riesgos
+
+9. **[FI_CC/REPORT_CU_CUENTAS_IMPLEMENTACION.md](FI_CC/REPORT_CU_CUENTAS_IMPLEMENTACION.md)**
+   - Reporte de implementación del módulo Cuentas
+   - Estado actual de migración
+   - Archivos creados/modificados
+
+10. **[FI_CC/REPORT_CU_PRESUPUESTO.md](FI_CC/REPORT_CU_PRESUPUESTO.md)**
+    - Reporte de implementación del módulo Presupuestos
+    - Detalles técnicos de migración
+    - Pruebas realizadas y validaciones
 
 ---
+
+### ⚡ Quick Navigation
+
+**Para implementar ahora mismo**:
+- Leer: README_MIGRACION.md (5 min)
+- Leer: CRONOGRAMA_VALIDACION.md (30 min)
+- Leer: PLAN_SPRINT_PRE1_CC_FINZOPE.md (45 min)
+- Empezar: Sprint Pre-1 ✅
+
+**Para entender la arquitectura**:
+- Leer: PATRONES_ARQUITECTURA_FI.md (45 min)
+- Revisar: Ejemplos de código en PLAN_SPRINT_PRE1_CC_FINZOPE.md
 
 ## 🗂️ ESTRUCTURA RECOMENDADA DE LECTURA
 
