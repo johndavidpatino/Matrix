@@ -1,0 +1,274 @@
+@{
+    ViewData["Title"] = "Conteo de Trabajos";
+}
+
+<div class="container-fluid mt-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">
+                <i class="bi bi-clipboard-check"></i> Conteo de Trabajos
+            </h4>
+        </div>
+        <div class="card-body">
+            <!-- Filtros -->
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Trabajo</label>
+                    <select id="filtroTrabajo" class="form-select">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Fecha Inicio</label>
+                    <input type="date" id="filtroFechaInicio" class="form-control">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Fecha Fin</label>
+                    <input type="date" id="filtroFechaFin" class="form-control">
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button id="btnFiltrar" class="btn btn-primary w-100">
+                        <i class="bi bi-search"></i> Filtrar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Botones de acción -->
+            <div class="mb-3">
+                <button id="btnNuevo" class="btn btn-success">
+                    <i class="bi bi-plus-circle"></i> Nuevo Conteo
+                </button>
+            </div>
+
+            <!-- Tabla -->
+            <div class="table-responsive">
+                <table id="tablaConteos" class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Trabajo</th>
+                            <th>Actividad</th>
+                            <th>Cantidad</th>
+                            <th>Categoría</th>
+                            <th>Fecha Conteo</th>
+                            <th>Usuario</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Conteo -->
+<div class="modal fade" id="modalConteo" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">
+                    <i class="bi bi-clipboard-check"></i> <span id="modalTitulo">Nuevo Conteo</span>
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formConteo">
+                    <input type="hidden" id="idConteo">
+                    
+                    <div class="mb-3">
+                        <label for="idTrabajo" class="form-label">Trabajo <span class="text-danger">*</span></label>
+                        <select id="idTrabajo" class="form-select" required>
+                            <option value="">Seleccione...</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="idActividad" class="form-label">Actividad <span class="text-danger">*</span></label>
+                        <select id="idActividad" class="form-select" required disabled>
+                            <option value="">Seleccione un trabajo primero...</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="cantidad" class="form-label">Cantidad <span class="text-danger">*</span></label>
+                        <input type="number" id="cantidad" class="form-control" min="1" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="categoria" class="form-label">Categoría</label>
+                        <input type="text" id="categoria" class="form-control" maxlength="50">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="observaciones" class="form-label">Observaciones</label>
+                        <textarea id="observaciones" class="form-control" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle"></i> Cancelar
+                </button>
+                <button type="button" id="btnGuardar" class="btn btn-primary">
+                    <i class="bi bi-save"></i> Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            let tabla = null;
+            const modal = new bootstrap.Modal('#modalConteo');
+
+            // Inicializar DataTable
+            function inicializarTabla() {
+                tabla = $('#tablaConteos').DataTable({
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json'
+                    },
+                    columns: [
+                        { data: 'idConteo' },
+                        { data: 'nombreTrabajo' },
+                        { data: 'nombreActividad' },
+                        { data: 'cantidad', className: 'text-end' },
+                        { data: 'categoria' },
+                        {
+                            data: 'fechaConteo',
+                            render: (data) => data ? new Date(data).toLocaleDateString('es-CO') : ''
+                        },
+                        { data: 'usuarioRegistra' },
+                        {
+                            data: null,
+                            orderable: false,
+                            render: (data) => `
+                                <button class="btn btn-sm btn-danger btn-eliminar" data-id="${data.idConteo}">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            `
+                        }
+                    ]
+                });
+            }
+
+            // Cargar conteos
+            function cargarConteos() {
+                const idTrabajo = $('#filtroTrabajo').val() || null;
+                const fechaInicio = $('#filtroFechaInicio').val() || null;
+                const fechaFin = $('#filtroFechaFin').val() || null;
+
+                $.get('@Url.Action("ObtenerConteos", "ConteoTrabajos")', {
+                    idTrabajo, fechaInicio, fechaFin
+                }).done(function (response) {
+                    if (response.success) {
+                        tabla.clear().rows.add(response.data).draw();
+                    } else {
+                        Swal.fire('Error', response.message, 'error');
+                    }
+                });
+            }
+
+            // Cargar actividades al seleccionar trabajo
+            $('#idTrabajo').change(function () {
+                const idTrabajo = $(this).val();
+                const $actividad = $('#idActividad');
+
+                $actividad.prop('disabled', !idTrabajo).html('<option value="">Cargando...</option>');
+
+                if (idTrabajo) {
+                    $.get('@Url.Action("ObtenerActividadesPorTrabajo", "ConteoTrabajos")', { idTrabajo })
+                        .done(function (response) {
+                            if (response.success) {
+                                let options = '<option value="">Seleccione...</option>';
+                                response.data.forEach(a => {
+                                    options += `<option value="${a.idActividad}">${a.nombreActividad}</option>`;
+                                });
+                                $actividad.html(options);
+                            }
+                        });
+                }
+            });
+
+            // Nuevo conteo
+            $('#btnNuevo').click(function () {
+                $('#formConteo')[0].reset();
+                $('#idConteo').val('');
+                $('#modalTitulo').text('Nuevo Conteo');
+                $('#idActividad').prop('disabled', true).html('<option value="">Seleccione un trabajo primero...</option>');
+                modal.show();
+            });
+
+            // Guardar conteo
+            $('#btnGuardar').click(function () {
+                if (!$('#formConteo')[0].checkValidity()) {
+                    $('#formConteo')[0].reportValidity();
+                    return;
+                }
+
+                const request = {
+                    idConteo: parseInt($('#idConteo').val()) || 0,
+                    idTrabajo: parseInt($('#idTrabajo').val()),
+                    idActividad: parseInt($('#idActividad').val()),
+                    cantidad: parseInt($('#cantidad').val()),
+                    categoria: $('#categoria').val(),
+                    observaciones: $('#observaciones').val(),
+                    usuarioRegistra: '@User.Identity?.Name'
+                };
+
+                $.ajax({
+                    url: '@Url.Action("GuardarConteo", "ConteoTrabajos")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(request)
+                }).done(function (response) {
+                    if (response.success) {
+                        Swal.fire('Éxito', 'Conteo guardado correctamente', 'success');
+                        modal.hide();
+                        cargarConteos();
+                    } else {
+                        Swal.fire('Error', response.message, 'error');
+                    }
+                });
+            });
+
+            // Eliminar conteo
+            $(document).on('click', '.btn-eliminar', function () {
+                const id = $(this).data('id');
+
+                Swal.fire({
+                    title: '¿Está seguro?',
+                    text: 'Esta acción no se puede deshacer',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '@Url.Action("EliminarConteo", "ConteoTrabajos")',
+                            type: 'DELETE',
+                            data: { id }
+                        }).done(function (response) {
+                            if (response.success) {
+                                Swal.fire('Éxito', 'Conteo eliminado', 'success');
+                                cargarConteos();
+                            } else {
+                                Swal.fire('Error', response.message, 'error');
+                            }
+                        });
+                    }
+                });
+            });
+
+            // Eventos
+            $('#btnFiltrar').click(cargarConteos);
+
+            // Inicializar
+            inicializarTabla();
+            cargarConteos();
+        });
+    </script>
+}

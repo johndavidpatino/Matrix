@@ -1,0 +1,307 @@
+@{
+    ViewData["Title"] = "Consolidación de Producción";
+}
+
+<div class="container-fluid mt-4">
+    <!-- Tarjetas de Resumen -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card border-primary">
+                <div class="card-body text-center">
+                    <h6 class="text-muted">Total Registros</h6>
+                    <h3 id="totalRegistros" class="text-primary">0</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-warning">
+                <div class="card-body text-center">
+                    <h6 class="text-muted">Pendientes</h6>
+                    <h3 id="totalPendientes" class="text-warning">0</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-success">
+                <div class="card-body text-center">
+                    <h6 class="text-muted">Consolidados</h6>
+                    <h3 id="totalConsolidados" class="text-success">0</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-info">
+                <div class="card-body text-center">
+                    <h6 class="text-muted">% Consolidado</h6>
+                    <h3 id="porcentajeConsolidado" class="text-info">0%</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-success text-white">
+            <h4 class="mb-0">
+                <i class="bi bi-archive"></i> Consolidación de Producción
+            </h4>
+        </div>
+        <div class="card-body">
+            <!-- Filtros -->
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Periodo</label>
+                    <input type="number" id="filtroPeriodo" class="form-control" 
+                           min="202401" max="209912" step="1" 
+                           value="@DateTime.Now.ToString("yyyyMM")">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Trabajo</label>
+                    <select id="filtroTrabajo" class="form-select">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button id="btnFiltrar" class="btn btn-success w-100">
+                        <i class="bi bi-search"></i> Filtrar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tabla -->
+            <div class="table-responsive">
+                <table id="tablaProduccion" class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Trabajo</th>
+                            <th>Actividad</th>
+                            <th>Periodo</th>
+                            <th>Cantidad Producida</th>
+                            <th>Cantidad Consolidada</th>
+                            <th>Pendiente</th>
+                            <th>Estado</th>
+                            <th>Fecha Registro</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Consolidación -->
+<div class="modal fade" id="modalConsolidacion" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">
+                    <i class="bi bi-archive"></i> Consolidar Producción
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formConsolidacion">
+                    <input type="hidden" id="idProduccion">
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Trabajo</label>
+                        <input type="text" id="nombreTrabajo" class="form-control" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Actividad</label>
+                        <input type="text" id="nombreActividad" class="form-control" readonly>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Cantidad Producida</label>
+                            <input type="number" id="cantidadProducida" class="form-control" readonly>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Ya Consolidada</label>
+                            <input type="number" id="yaConsolidada" class="form-control" readonly>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="cantidadConsolidar" class="form-label">
+                            Cantidad a Consolidar <span class="text-danger">*</span>
+                        </label>
+                        <input type="number" id="cantidadConsolidar" class="form-control" min="1" required>
+                        <small class="text-muted">Máximo disponible: <span id="maxDisponible">0</span></small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="observaciones" class="form-label">Observaciones</label>
+                        <textarea id="observaciones" class="form-control" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle"></i> Cancelar
+                </button>
+                <button type="button" id="btnConsolidar" class="btn btn-success">
+                    <i class="bi bi-check-circle"></i> Consolidar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            let tabla = null;
+            let maxDisponible = 0;
+            const modal = new bootstrap.Modal('#modalConsolidacion');
+
+            // Inicializar DataTable
+            function inicializarTabla() {
+                tabla = $('#tablaProduccion').DataTable({
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json'
+                    },
+                    columns: [
+                        { data: 'idProduccion' },
+                        { data: 'nombreTrabajo' },
+                        { data: 'nombreActividad' },
+                        { data: 'periodo' },
+                        { data: 'cantidadProducida', className: 'text-end' },
+                        { data: 'cantidadConsolidada', className: 'text-end' },
+                        {
+                            data: null,
+                            className: 'text-end',
+                            render: (data) => {
+                                const pendiente = data.cantidadProducida - data.cantidadConsolidada;
+                                return `<span class="fw-bold ${pendiente > 0 ? 'text-danger' : ''}">${pendiente}</span>`;
+                            }
+                        },
+                        {
+                            data: 'estaConsolidado',
+                            render: (data) => data 
+                                ? '<span class="badge bg-success">Consolidado</span>'
+                                : '<span class="badge bg-warning">Pendiente</span>'
+                        },
+                        {
+                            data: 'fechaRegistro',
+                            render: (data) => data ? new Date(data).toLocaleDateString('es-CO') : ''
+                        },
+                        {
+                            data: null,
+                            orderable: false,
+                            render: (data) => {
+                                const pendiente = data.cantidadProducida - data.cantidadConsolidada;
+                                return pendiente > 0 
+                                    ? `<button class="btn btn-sm btn-success btn-consolidar" 
+                                              data-id="${data.idProduccion}"
+                                              data-trabajo="${data.nombreTrabajo}"
+                                              data-actividad="${data.nombreActividad}"
+                                              data-producida="${data.cantidadProducida}"
+                                              data-consolidada="${data.cantidadConsolidada}">
+                                          <i class="bi bi-check-circle"></i> Consolidar
+                                      </button>`
+                                    : '<span class="text-success">✓</span>';
+                            }
+                        }
+                    ]
+                });
+            }
+
+            // Cargar producción
+            function cargarProduccion() {
+                const periodo = parseInt($('#filtroPeriodo').val()) || null;
+                const idTrabajo = $('#filtroTrabajo').val() || null;
+
+                $.get('@Url.Action("ObtenerProduccionPendiente", "ConsolidacionProduccion")', {
+                    periodo, idTrabajo
+                }).done(function (response) {
+                    if (response.success) {
+                        tabla.clear().rows.add(response.data).draw();
+                        cargarResumen(periodo);
+                    } else {
+                        Swal.fire('Error', response.message, 'error');
+                    }
+                });
+            }
+
+            // Cargar resumen
+            function cargarResumen(periodo) {
+                $.get('@Url.Action("ObtenerResumen", "ConsolidacionProduccion")', { periodo })
+                    .done(function (response) {
+                        if (response.success && response.data) {
+                            $('#totalRegistros').text(response.data.totalRegistros);
+                            $('#totalPendientes').text(response.data.totalPendientes);
+                            $('#totalConsolidados').text(response.data.totalConsolidados);
+                            $('#porcentajeConsolidado').text(response.data.porcentajeConsolidado.toFixed(1) + '%');
+                        }
+                    });
+            }
+
+            // Abrir modal consolidación
+            $(document).on('click', '.btn-consolidar', function () {
+                const $btn = $(this);
+                const producida = parseFloat($btn.data('producida'));
+                const consolidada = parseFloat($btn.data('consolidada'));
+                maxDisponible = producida - consolidada;
+
+                $('#idProduccion').val($btn.data('id'));
+                $('#nombreTrabajo').val($btn.data('trabajo'));
+                $('#nombreActividad').val($btn.data('actividad'));
+                $('#cantidadProducida').val(producida);
+                $('#yaConsolidada').val(consolidada);
+                $('#maxDisponible').text(maxDisponible);
+                $('#cantidadConsolidar').attr('max', maxDisponible).val(maxDisponible);
+                $('#observaciones').val('');
+
+                modal.show();
+            });
+
+            // Consolidar
+            $('#btnConsolidar').click(function () {
+                if (!$('#formConsolidacion')[0].checkValidity()) {
+                    $('#formConsolidacion')[0].reportValidity();
+                    return;
+                }
+
+                const cantidad = parseFloat($('#cantidadConsolidar').val());
+                if (cantidad > maxDisponible) {
+                    Swal.fire('Error', `La cantidad no puede exceder ${maxDisponible}`, 'error');
+                    return;
+                }
+
+                const request = {
+                    idProduccion: parseInt($('#idProduccion').val()),
+                    cantidadConsolidada: cantidad,
+                    observaciones: $('#observaciones').val(),
+                    usuarioConsolida: '@User.Identity?.Name'
+                };
+
+                $.ajax({
+                    url: '@Url.Action("ConsolidarProduccion", "ConsolidacionProduccion")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(request)
+                }).done(function (response) {
+                    if (response.success) {
+                        Swal.fire('Éxito', 'Producción consolidada correctamente', 'success');
+                        modal.hide();
+                        cargarProduccion();
+                    } else {
+                        Swal.fire('Error', response.message, 'error');
+                    }
+                });
+            });
+
+            // Eventos
+            $('#btnFiltrar').click(cargarProduccion);
+
+            // Inicializar
+            inicializarTabla();
+            cargarProduccion();
+        });
+    </script>
+}

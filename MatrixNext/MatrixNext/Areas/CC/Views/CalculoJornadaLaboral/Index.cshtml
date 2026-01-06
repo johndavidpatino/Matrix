@@ -1,0 +1,346 @@
+@{
+    ViewData["Title"] = "Cálculo de Jornada Laboral";
+}
+
+<div class="container-fluid mt-4">
+    <!-- Tarjetas de Resumen -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card border-primary">
+                <div class="card-body text-center">
+                    <h6 class="text-muted">Total Jornadas</h6>
+                    <h3 id="totalJornadas" class="text-primary">0</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-success">
+                <div class="card-body text-center">
+                    <h6 class="text-muted">Total Horas</h6>
+                    <h3 id="totalHoras" class="text-success">0</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-info">
+                <div class="card-body text-center">
+                    <h6 class="text-muted">Total Devengado</h6>
+                    <h3 id="totalDevengado" class="text-info">$0</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-warning">
+                <div class="card-body text-center">
+                    <h6 class="text-muted">Promedio Horas</h6>
+                    <h3 id="promedioHoras" class="text-warning">0</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-dark text-white">
+            <h4 class="mb-0">
+                <i class="bi bi-clock-history"></i> Cálculo de Jornada Laboral
+            </h4>
+        </div>
+        <div class="card-body">
+            <!-- Filtros -->
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Periodo</label>
+                    <input type="number" id="filtroPeriodo" class="form-control" 
+                           min="202401" max="209912" step="1" 
+                           value="@DateTime.Now.ToString("yyyyMM")">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Empleado</label>
+                    <select id="filtroEmpleado" class="form-select">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button id="btnFiltrar" class="btn btn-dark w-100">
+                        <i class="bi bi-search"></i> Filtrar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Botones de acción -->
+            <div class="mb-3">
+                <button id="btnNuevo" class="btn btn-success">
+                    <i class="bi bi-plus-circle"></i> Nueva Jornada
+                </button>
+            </div>
+
+            <!-- Tabla -->
+            <div class="table-responsive">
+                <table id="tablaJornadas" class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Empleado</th>
+                            <th>Periodo</th>
+                            <th>Fecha Inicio</th>
+                            <th>Fecha Fin</th>
+                            <th>Horas Base</th>
+                            <th>Horas Ausencia</th>
+                            <th>Horas Extras</th>
+                            <th>Horas Trabajadas</th>
+                            <th>Total Devengado</th>
+                            <th>Fecha Cálculo</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Jornada -->
+<div class="modal fade" id="modalJornada" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title">
+                    <i class="bi bi-clock-history"></i> Nueva Jornada Laboral
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formJornada">
+                    <input type="hidden" id="idJornada">
+                    
+                    <div class="mb-3">
+                        <label for="idEmpleado" class="form-label">Empleado <span class="text-danger">*</span></label>
+                        <select id="idEmpleado" class="form-select" required>
+                            <option value="">Seleccione...</option>
+                        </select>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="periodo" class="form-label">Periodo <span class="text-danger">*</span></label>
+                            <input type="number" id="periodo" class="form-control" 
+                                   min="202401" max="209912" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="fechaInicio" class="form-label">Fecha Inicio <span class="text-danger">*</span></label>
+                            <input type="date" id="fechaInicio" class="form-control" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="fechaFin" class="form-label">Fecha Fin <span class="text-danger">*</span></label>
+                            <input type="date" id="fechaFin" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="horasBase" class="form-label">Horas Base <span class="text-danger">*</span></label>
+                            <input type="number" id="horasBase" class="form-control" min="0" step="0.5" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="horasExtras" class="form-label">Horas Extras</label>
+                            <input type="number" id="horasExtras" class="form-control" min="0" step="0.5" value="0">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="valorHora" class="form-label">Valor Hora</label>
+                            <input type="number" id="valorHora" class="form-control" min="0" step="100" value="0">
+                        </div>
+                    </div>
+
+                    <!-- Ausencias desde TH -->
+                    <div class="mb-3">
+                        <button type="button" id="btnCargarAusencias" class="btn btn-info btn-sm">
+                            <i class="bi bi-calendar-x"></i> Cargar Ausencias desde TH
+                        </button>
+                        <div id="ausencias" class="mt-2"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="observaciones" class="form-label">Observaciones</label>
+                        <textarea id="observaciones" class="form-control" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle"></i> Cancelar
+                </button>
+                <button type="button" id="btnCalcular" class="btn btn-dark">
+                    <i class="bi bi-calculator"></i> Calcular Jornada
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            let tabla = null;
+            let ausenciasCargadas = [];
+            const modal = new bootstrap.Modal('#modalJornada');
+
+            // Inicializar DataTable
+            function inicializarTabla() {
+                tabla = $('#tablaJornadas').DataTable({
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json'
+                    },
+                    columns: [
+                        { data: 'idJornada' },
+                        { data: 'nombreEmpleado' },
+                        { data: 'periodo' },
+                        {
+                            data: 'fechaInicio',
+                            render: (data) => data ? new Date(data).toLocaleDateString('es-CO') : ''
+                        },
+                        {
+                            data: 'fechaFin',
+                            render: (data) => data ? new Date(data).toLocaleDateString('es-CO') : ''
+                        },
+                        { data: 'horasBase', className: 'text-end' },
+                        { data: 'horasAusencia', className: 'text-end text-danger' },
+                        { data: 'horasExtras', className: 'text-end text-success' },
+                        {
+                            data: 'horasTrabajadas',
+                            className: 'text-end fw-bold',
+                            render: (data) => data.toFixed(2)
+                        },
+                        {
+                            data: 'totalDevengado',
+                            className: 'text-end',
+                            render: (data) => '$' + data.toLocaleString('es-CO', { minimumFractionDigits: 0 })
+                        },
+                        {
+                            data: 'fechaCalculo',
+                            render: (data) => data ? new Date(data).toLocaleDateString('es-CO') : ''
+                        }
+                    ]
+                });
+            }
+
+            // Cargar jornadas
+            function cargarJornadas() {
+                const periodo = parseInt($('#filtroPeriodo').val()) || null;
+                const idEmpleado = $('#filtroEmpleado').val() || null;
+
+                $.get('@Url.Action("ObtenerJornadas", "CalculoJornadaLaboral")', {
+                    periodo, idEmpleado
+                }).done(function (response) {
+                    if (response.success) {
+                        tabla.clear().rows.add(response.data).draw();
+                        cargarResumen(periodo);
+                    } else {
+                        Swal.fire('Error', response.message, 'error');
+                    }
+                });
+            }
+
+            // Cargar resumen
+            function cargarResumen(periodo) {
+                $.get('@Url.Action("ObtenerResumen", "CalculoJornadaLaboral")', { periodo })
+                    .done(function (response) {
+                        if (response.success && response.data) {
+                            $('#totalJornadas').text(response.data.totalJornadas);
+                            $('#totalHoras').text(response.data.totalHorasTrabajadas.toFixed(2));
+                            $('#totalDevengado').text('$' + response.data.totalDevengado.toLocaleString('es-CO'));
+                            $('#promedioHoras').text(response.data.promedioHorasPorEmpleado.toFixed(2));
+                        }
+                    });
+            }
+
+            // Nueva jornada
+            $('#btnNuevo').click(function () {
+                $('#formJornada')[0].reset();
+                $('#idJornada').val('');
+                $('#ausencias').html('');
+                ausenciasCargadas = [];
+                modal.show();
+            });
+
+            // Cargar ausencias desde TH
+            $('#btnCargarAusencias').click(function () {
+                const idEmpleado = $('#idEmpleado').val();
+                const fechaInicio = $('#fechaInicio').val();
+                const fechaFin = $('#fechaFin').val();
+
+                if (!idEmpleado || !fechaInicio || !fechaFin) {
+                    Swal.fire('Advertencia', 'Debe seleccionar empleado y fechas primero', 'warning');
+                    return;
+                }
+
+                $.get('@Url.Action("ObtenerAusencias", "CalculoJornadaLaboral")', {
+                    idEmpleado, fechaInicio, fechaFin
+                }).done(function (response) {
+                    if (response.success) {
+                        ausenciasCargadas = response.data;
+                        
+                        if (ausenciasCargadas.length === 0) {
+                            $('#ausencias').html('<div class="alert alert-info">No hay ausencias registradas en este periodo</div>');
+                        } else {
+                            let html = '<div class="alert alert-warning"><strong>Ausencias encontradas:</strong><ul class="mb-0">';
+                            let totalHoras = 0;
+                            
+                            ausenciasCargadas.forEach(a => {
+                                html += `<li>${a.tipoAusencia}: ${a.diasAusencia} días (${a.horasAusencia} horas)</li>`;
+                                totalHoras += a.horasAusencia;
+                            });
+                            
+                            html += `</ul><strong>Total horas ausencia: ${totalHoras.toFixed(2)}</strong></div>`;
+                            $('#ausencias').html(html);
+                        }
+                    } else {
+                        Swal.fire('Error', response.message, 'error');
+                    }
+                });
+            });
+
+            // Calcular jornada
+            $('#btnCalcular').click(function () {
+                if (!$('#formJornada')[0].checkValidity()) {
+                    $('#formJornada')[0].reportValidity();
+                    return;
+                }
+
+                const request = {
+                    idJornada: parseInt($('#idJornada').val()) || 0,
+                    idEmpleado: parseInt($('#idEmpleado').val()),
+                    periodo: parseInt($('#periodo').val()),
+                    fechaInicio: $('#fechaInicio').val(),
+                    fechaFin: $('#fechaFin').val(),
+                    horasBase: parseFloat($('#horasBase').val()),
+                    horasExtras: parseFloat($('#horasExtras').val()) || 0,
+                    valorHora: parseFloat($('#valorHora').val()) || 0,
+                    observaciones: $('#observaciones').val(),
+                    usuarioCalcula: '@User.Identity?.Name'
+                };
+
+                $.ajax({
+                    url: '@Url.Action("CalcularJornada", "CalculoJornadaLaboral")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(request)
+                }).done(function (response) {
+                    if (response.success) {
+                        Swal.fire('Éxito', 'Jornada calculada correctamente', 'success');
+                        modal.hide();
+                        cargarJornadas();
+                    } else {
+                        Swal.fire('Error', response.message, 'error');
+                    }
+                });
+            });
+
+            // Eventos
+            $('#btnFiltrar').click(cargarJornadas);
+
+            // Inicializar
+            inicializarTabla();
+            cargarJornadas();
+        });
+    </script>
+}

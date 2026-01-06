@@ -29,6 +29,45 @@ namespace MatrixNext.Data.Modules.CC.Services
         
         Task<byte[]> ExportarResumenProductividadExcelAsync(
             IEnumerable<ResumenProductividadDto> resumen);
+
+        // Conteo Trabajos (CRUD)
+        Task<IEnumerable<ConteoTrabajoDto>> ObtenerConteosAsync(
+            long? idTrabajo = null, DateTime? fechaInicio = null, DateTime? fechaFin = null);
+        
+        Task<IEnumerable<ActividadTrabajoDto>> ObtenerActividadesPorTrabajoAsync(long idTrabajo);
+        
+        Task<long> GuardarConteoAsync(GuardarConteoRequest request);
+        
+        Task EliminarConteoAsync(long idConteo);
+
+        // Requerimientos Equipo (CRUD)
+        Task<IEnumerable<RequerimientoEquipoDto>> ObtenerRequerimientosAsync(
+            long? idTrabajo = null, byte? estado = null);
+        
+        Task<IEnumerable<MuestraRequerimientoDto>> GenerarMuestraRequerimientosAsync(long idTrabajo);
+        
+        Task<long> GuardarRequerimientoAsync(GuardarRequerimientoRequest request);
+        
+        Task EliminarRequerimientoAsync(long idRequerimiento);
+
+        // Consolidación Producción
+        Task<IEnumerable<ProduccionDto>> ObtenerProduccionPendienteAsync(
+            int? periodo = null, long? idTrabajo = null);
+        
+        Task ConsolidarProduccionAsync(ConsolidarProduccionRequest request);
+        
+        Task<ResumenConsolidacionDto?> ObtenerResumenConsolidacionAsync(int periodo);
+
+        // Cálculo Jornada Laboral
+        Task<IEnumerable<JornadaLaboralDto>> ObtenerJornadasAsync(
+            int? periodo = null, long? idEmpleado = null);
+        
+        Task<IEnumerable<AusenciaEmpleadoDto>> ObtenerAusenciasEmpleadoAsync(
+            long idEmpleado, DateTime fechaInicio, DateTime fechaFin);
+        
+        Task<long> CalcularJornadaAsync(CalcularJornadaRequest request);
+        
+        Task<ResumenJornadasDto?> ObtenerResumenJornadasAsync(int periodo);
     }
 
     /// <summary>
@@ -212,6 +251,166 @@ namespace MatrixNext.Data.Modules.CC.Services
             using var stream = new MemoryStream();
             workbook.SaveAs(stream);
             return stream.ToArray();
+        }
+
+        #endregion
+
+        #region Conteo Trabajos (CRUD)
+
+        public async Task<IEnumerable<ConteoTrabajoDto>> ObtenerConteosAsync(
+            long? idTrabajo = null, DateTime? fechaInicio = null, DateTime? fechaFin = null)
+        {
+            var conteos = await _adapter.ObtenerConteosAsync(idTrabajo, fechaInicio, fechaFin);
+            return conteos;
+        }
+
+        public async Task<IEnumerable<ActividadTrabajoDto>> ObtenerActividadesPorTrabajoAsync(
+            long idTrabajo)
+        {
+            var actividades = await _adapter.ObtenerActividadesPorTrabajoAsync(idTrabajo);
+            return actividades;
+        }
+
+        public async Task<long> GuardarConteoAsync(GuardarConteoRequest request)
+        {
+            // Validaciones
+            if (request.Cantidad <= 0)
+                throw new ArgumentException("La cantidad debe ser mayor a cero");
+
+            if (request.IdTrabajo <= 0)
+                throw new ArgumentException("Trabajo es requerido");
+
+            if (request.IdActividad <= 0)
+                throw new ArgumentException("Actividad es requerida");
+
+            var id = await _adapter.GuardarConteoAsync(request);
+            _logger.LogInformation($"Conteo {id} guardado exitosamente");
+            return id;
+        }
+
+        public async Task EliminarConteoAsync(long idConteo)
+        {
+            await _adapter.EliminarConteoAsync(idConteo);
+            _logger.LogInformation($"Conteo {idConteo} eliminado");
+        }
+
+        #endregion
+
+        #region Requerimientos Equipo (CRUD)
+
+        public async Task<IEnumerable<RequerimientoEquipoDto>> ObtenerRequerimientosAsync(
+            long? idTrabajo = null, byte? estado = null)
+        {
+            var requerimientos = await _adapter.ObtenerRequerimientosAsync(idTrabajo, estado);
+            return requerimientos;
+        }
+
+        public async Task<IEnumerable<MuestraRequerimientoDto>> GenerarMuestraRequerimientosAsync(
+            long idTrabajo)
+        {
+            var muestra = await _adapter.GenerarMuestraRequerimientosAsync(idTrabajo);
+            return muestra;
+        }
+
+        public async Task<long> GuardarRequerimientoAsync(GuardarRequerimientoRequest request)
+        {
+            // Validaciones
+            if (request.CantidadRequerida <= 0)
+                throw new ArgumentException("La cantidad requerida debe ser mayor a cero");
+
+            if (string.IsNullOrWhiteSpace(request.TipoEquipo))
+                throw new ArgumentException("Tipo de equipo es requerido");
+
+            if (request.IdTrabajo <= 0)
+                throw new ArgumentException("Trabajo es requerido");
+
+            var id = await _adapter.GuardarRequerimientoAsync(request);
+            _logger.LogInformation($"Requerimiento {id} guardado exitosamente");
+            return id;
+        }
+
+        public async Task EliminarRequerimientoAsync(long idRequerimiento)
+        {
+            await _adapter.EliminarRequerimientoAsync(idRequerimiento);
+            _logger.LogInformation($"Requerimiento {idRequerimiento} eliminado");
+        }
+
+        #endregion
+
+        #region Consolidación Producción
+
+        public async Task<IEnumerable<ProduccionDto>> ObtenerProduccionPendienteAsync(
+            int? periodo = null, long? idTrabajo = null)
+        {
+            var produccion = await _adapter.ObtenerProduccionPendienteAsync(periodo, idTrabajo);
+            return produccion;
+        }
+
+        public async Task ConsolidarProduccionAsync(ConsolidarProduccionRequest request)
+        {
+            // Validaciones
+            if (request.CantidadConsolidada <= 0)
+                throw new ArgumentException("La cantidad consolidada debe ser mayor a cero");
+
+            if (string.IsNullOrWhiteSpace(request.UsuarioConsolida))
+                throw new ArgumentException("Usuario es requerido");
+
+            await _adapter.ConsolidarProduccionAsync(request);
+            _logger.LogInformation($"Producción {request.IdProduccion} consolidada por {request.UsuarioConsolida}");
+        }
+
+        public async Task<ResumenConsolidacionDto?> ObtenerResumenConsolidacionAsync(int periodo)
+        {
+            var resumen = await _adapter.ObtenerResumenConsolidacionAsync(periodo);
+            return resumen;
+        }
+
+        #endregion
+
+        #region Cálculo Jornada Laboral
+
+        public async Task<IEnumerable<JornadaLaboralDto>> ObtenerJornadasAsync(
+            int? periodo = null, long? idEmpleado = null)
+        {
+            var jornadas = await _adapter.ObtenerJornadasAsync(periodo, idEmpleado);
+            return jornadas;
+        }
+
+        public async Task<IEnumerable<AusenciaEmpleadoDto>> ObtenerAusenciasEmpleadoAsync(
+            long idEmpleado, DateTime fechaInicio, DateTime fechaFin)
+        {
+            // Integración con módulo TH_Ausencia
+            var ausencias = await _adapter.ObtenerAusenciasEmpleadoAsync(idEmpleado, fechaInicio, fechaFin);
+            _logger.LogInformation($"Obtenidas {ausencias.Count()} ausencias para empleado {idEmpleado}");
+            return ausencias;
+        }
+
+        public async Task<long> CalcularJornadaAsync(CalcularJornadaRequest request)
+        {
+            // Validaciones
+            if (request.HorasBase <= 0)
+                throw new ArgumentException("Horas base debe ser mayor a cero");
+
+            if (request.FechaInicio >= request.FechaFin)
+                throw new ArgumentException("Fecha fin debe ser posterior a fecha inicio");
+
+            if (string.IsNullOrWhiteSpace(request.UsuarioCalcula))
+                throw new ArgumentException("Usuario es requerido");
+
+            // Obtener ausencias del módulo TH
+            var ausencias = await ObtenerAusenciasEmpleadoAsync(
+                request.IdEmpleado, request.FechaInicio, request.FechaFin);
+
+            // El cálculo de horas de ausencias se hace en el SP
+            var id = await _adapter.CalcularJornadaAsync(request);
+            _logger.LogInformation($"Jornada {id} calculada para empleado {request.IdEmpleado}");
+            return id;
+        }
+
+        public async Task<ResumenJornadasDto?> ObtenerResumenJornadasAsync(int periodo)
+        {
+            var resumen = await _adapter.ObtenerResumenJornadasAsync(periodo);
+            return resumen;
         }
 
         #endregion
