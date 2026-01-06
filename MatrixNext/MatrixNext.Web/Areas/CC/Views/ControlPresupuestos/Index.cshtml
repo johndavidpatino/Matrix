@@ -1,0 +1,567 @@
+@{
+    ViewData["Title"] = "Control de Presupuestos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid mt-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1 class="h3 mb-0">
+                <i class="fas fa-chart-bar"></i> Control de Presupuestos
+            </h1>
+            <p class="text-muted">Gestión y seguimiento de presupuestos por trabajo</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <button class="btn btn-primary" id="btn-nuevo-presupuesto">
+                <i class="fas fa-plus"></i> Nuevo Presupuesto
+            </button>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Período</label>
+                    <input type="month" id="filtro-periodo" class="form-control">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Trabajo</label>
+                    <select id="filtro-trabajo" class="form-select">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Estado</label>
+                    <select id="filtro-estado" class="form-select">
+                        <option value="">Todos</option>
+                        <option value="1">Borrador</option>
+                        <option value="2">Aprobado</option>
+                        <option value="3">Cerrado</option>
+                    </select>
+                </div>
+                <div class="col-md-3" style="margin-top: 31px;">
+                    <button class="btn btn-info" id="btn-buscar">
+                        <i class="fas fa-search"></i> Buscar
+                    </button>
+                    <button class="btn btn-secondary" id="btn-limpiar">
+                        <i class="fas fa-sync"></i> Limpiar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs de Navegación -->
+    <ul class="nav nav-tabs mb-3" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="tab-presupuestos" data-bs-toggle="tab" 
+                    data-bs-target="#contenido-presupuestos" type="button" role="tab">
+                <i class="fas fa-list"></i> Presupuestos
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-verificacion" data-bs-toggle="tab" 
+                    data-bs-target="#contenido-verificacion" type="button" role="tab">
+                <i class="fas fa-check-double"></i> Verificación
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-nomina" data-bs-toggle="tab" 
+                    data-bs-target="#contenido-nomina" type="button" role="tab">
+                <i class="fas fa-file-invoice-dollar"></i> Nómina
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-asignacion" data-bs-toggle="tab" 
+                    data-bs-target="#contenido-asignacion" type="button" role="tab">
+                <i class="fas fa-tasks"></i> Asignación
+            </button>
+        </li>
+    </ul>
+
+    <!-- Contenido de Tabs -->
+    <div class="tab-content">
+        <!-- TAB 1: PRESUPUESTOS -->
+        <div class="tab-pane fade show active" id="contenido-presupuestos" role="tabpanel">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="grid-presupuestos">
+                            <thead class="table-light">
+                                <tr>
+                                    <th width="5%">ID</th>
+                                    <th width="10%">Período</th>
+                                    <th width="25%">Trabajo</th>
+                                    <th width="15%" class="text-end">Monto Presupuesto</th>
+                                    <th width="15%" class="text-end">Monto Realizado</th>
+                                    <th width="10%" class="text-end">Varianza</th>
+                                    <th width="10%">Estado</th>
+                                    <th width="10%">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody-presupuestos">
+                                <tr>
+                                    <td colspan="8" class="text-center text-muted py-5">
+                                        Cargando datos...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: VERIFICACIÓN -->
+        <div class="tab-pane fade" id="contenido-verificacion" role="tabpanel">
+            <div class="card">
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> 
+                        Comparación entre presupuesto estimado y valores realizados
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="grid-verificacion">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Período</th>
+                                    <th>Trabajo</th>
+                                    <th class="text-end">Presupuesto</th>
+                                    <th class="text-end">Realizado</th>
+                                    <th class="text-end">Varianza</th>
+                                    <th class="text-end">% Varianza</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody-verificacion">
+                                <tr>
+                                    <td colspan="7" class="text-center text-muted py-5">
+                                        Cargando datos...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: NÓMINA -->
+        <div class="tab-pane fade" id="contenido-nomina" role="tabpanel">
+            <div class="card">
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i> 
+                        Distribución de costos salariales por centro de costo
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="grid-nomina">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Empleado</th>
+                                    <th>Cédula</th>
+                                    <th class="text-end">Valor Liquidado</th>
+                                    <th>Centro Costo</th>
+                                    <th class="text-end">Porcentaje</th>
+                                    <th class="text-end">Valor Distribuido</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody-nomina">
+                                <tr>
+                                    <td colspan="7" class="text-center text-muted py-5">
+                                        Cargando datos...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: ASIGNACIÓN -->
+        <div class="tab-pane fade" id="contenido-asignacion" role="tabpanel">
+            <div class="card">
+                <div class="card-body">
+                    <div class="alert alert-success">
+                        <i class="fas fa-link"></i> 
+                        Asignación de presupuesto a actividades
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Seleccionar Presupuesto</label>
+                            <select id="select-presupuesto-asignacion" class="form-select">
+                                <option value="">Seleccionar...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="grid-asignacion">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Actividad</th>
+                                    <th class="text-end">Monto Asignado</th>
+                                    <th class="text-end">Monto Utilizado</th>
+                                    <th class="text-end">Saldo</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody-asignacion">
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted py-5">
+                                        Seleccione un presupuesto
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: Nuevo/Editar Presupuesto -->
+<div class="modal fade" id="modalPresupuesto" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="modal-titulo-presupuesto">Nuevo Presupuesto</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-presupuesto">
+                    <input type="hidden" id="inp-id-presupuesto">
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Período</label>
+                            <input type="month" id="inp-periodo" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Trabajo</label>
+                            <select id="inp-trabajo" class="form-select" required>
+                                <option value="">Seleccionar...</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Monto Presupuesto</label>
+                            <input type="number" id="inp-monto" class="form-control" 
+                                   step="0.01" min="0" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Estado</label>
+                            <select id="inp-estado" class="form-select">
+                                <option value="1">Borrador</option>
+                                <option value="2">Aprobado</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="detalles-container">
+                        <label class="form-label">Detalles</label>
+                        <div id="lista-detalles" class="mb-3">
+                            <!-- Detalles se agregan dinámicamente -->
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-primary" 
+                                id="btn-agregar-detalle">
+                            <i class="fas fa-plus"></i> Agregar Detalle
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Cancelar
+                </button>
+                <button type="button" class="btn btn-primary" id="btn-guardar-presupuesto">
+                    <i class="fas fa-save"></i> Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: Detalles de Presupuesto -->
+<div class="modal fade" id="modalDetalles" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title">Detalles de Presupuesto</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-sm" id="tabla-detalles-modal">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Actividad</th>
+                                <th class="text-end">Cantidad</th>
+                                <th class="text-end">Valor Unitario</th>
+                                <th class="text-end">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-detalles-modal"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast para notificaciones -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="toast-notificacion" class="toast" role="alert">
+        <div class="toast-header">
+            <strong class="me-auto">Notificación</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+        </div>
+        <div class="toast-body" id="toast-contenido"></div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables/js/dataTables.bootstrap5.min.js"></script>
+    
+    <script>
+        const API_URL = '/api/cc/controlpresupuestos';
+        let dataTablePresupuestos;
+
+        $(document).ready(function () {
+            inicializarUI();
+            cargarPresupuestos();
+        });
+
+        function inicializarUI() {
+            // DataTable para Presupuestos
+            dataTablePresupuestos = $('#grid-presupuestos').DataTable({
+                language: {
+                    url: '/lib/datatables/es.json'
+                },
+                pageLength: 10,
+                columnDefs: [
+                    { targets: [3, 4, 5], className: 'text-end' }
+                ]
+            });
+
+            // Event Listeners
+            $('#btn-nuevo-presupuesto').click(() => abrirModalPresupuesto());
+            $('#btn-buscar').click(() => cargarPresupuestos());
+            $('#btn-limpiar').click(() => limpiarFiltros());
+            $('#btn-guardar-presupuesto').click(() => guardarPresupuesto());
+            
+            // Tab events
+            $('#tab-verificacion').on('shown.bs.tab', cargarVerificacion);
+            $('#tab-nomina').on('shown.bs.tab', cargarNomina);
+            $('#tab-asignacion').on('shown.bs.tab', cargarAsignacion);
+        }
+
+        function cargarPresupuestos() {
+            const periodo = $('#filtro-periodo').val();
+            const trabajo = $('#filtro-trabajo').val();
+            const estado = $('#filtro-estado').val();
+
+            $.post('/CC/ControlPresupuestos/ObtenerPresupuestos', {
+                periodo: periodo,
+                idTrabajo: trabajo,
+                estado: estado
+            }, function (response) {
+                if (response.success) {
+                    dataTablePresupuestos.clear();
+                    
+                    response.data.forEach(p => {
+                        dataTablePresupuestos.row.add([
+                            p.idPresupuesto,
+                            p.periodo,
+                            p.nombreTrabajo,
+                            formatCurrency(p.montoPresupuesto),
+                            formatCurrency(p.montoRealizado),
+                            formatCurrency(p.varianza),
+                            p.estadoNombre,
+                            `<button class="btn btn-sm btn-info" onclick="verDetalles(${p.idPresupuesto})">
+                                <i class="fas fa-eye"></i>
+                             </button>
+                             <button class="btn btn-sm btn-warning" onclick="editarPresupuesto(${p.idPresupuesto})">
+                                <i class="fas fa-edit"></i>
+                             </button>
+                             <button class="btn btn-sm btn-danger" onclick="eliminarPresupuesto(${p.idPresupuesto})">
+                                <i class="fas fa-trash"></i>
+                             </button>`
+                        ]);
+                    });
+                    
+                    dataTablePresupuestos.draw();
+                    mostrarNotificacion('Presupuestos cargados correctamente', 'success');
+                } else {
+                    mostrarNotificacion(response.message || 'Error al cargar presupuestos', 'error');
+                }
+            });
+        }
+
+        function cargarVerificacion() {
+            const periodo = $('#filtro-periodo').val();
+            
+            $.get(`${API_URL}/verificacion/datos?periodo=${periodo}`, function (response) {
+                if (response.success) {
+                    const tbody = $('#tbody-verificacion');
+                    tbody.empty();
+                    
+                    response.data.forEach(v => {
+                        tbody.append(`
+                            <tr>
+                                <td>${v.periodo}</td>
+                                <td>${v.nombreTrabajo}</td>
+                                <td class="text-end">${formatCurrency(v.montoPresupuesto)}</td>
+                                <td class="text-end">${formatCurrency(v.montoRealizado)}</td>
+                                <td class="text-end">${formatCurrency(v.varianza)}</td>
+                                <td class="text-end">${v.porcentajeVarianza.toFixed(2)}%</td>
+                                <td>${v.estado}</td>
+                            </tr>
+                        `);
+                    });
+                }
+            });
+        }
+
+        function cargarNomina() {
+            const periodo = $('#filtro-periodo').val();
+            
+            $.get(`/CC/ControlPresupuestos/Nomina?periodo=${periodo}`, function (html) {
+                $('#contenido-nomina').html(html);
+            });
+        }
+
+        function cargarAsignacion() {
+            cargarPresupuestos();
+        }
+
+        function abrirModalPresupuesto() {
+            $('#form-presupuesto')[0].reset();
+            $('#modal-titulo-presupuesto').text('Nuevo Presupuesto');
+            $('#inp-id-presupuesto').val('');
+            new bootstrap.Modal(document.getElementById('modalPresupuesto')).show();
+        }
+
+        function guardarPresupuesto() {
+            const datos = {
+                idPresupuesto: $('#inp-id-presupuesto').val() || 0,
+                periodo: parseInt($('#inp-periodo').val()),
+                idTrabajo: parseInt($('#inp-trabajo').val()),
+                montoPresupuesto: parseFloat($('#inp-monto').val()),
+                estado: parseInt($('#inp-estado').val()),
+                detalles: []
+            };
+
+            if (!datos.periodo || !datos.idTrabajo || !datos.montoPresupuesto) {
+                mostrarNotificacion('Complete todos los campos requeridos', 'warning');
+                return;
+            }
+
+            $.ajax({
+                url: `${API_URL}/guardar`,
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(datos),
+                success: function (response) {
+                    if (response.success) {
+                        bootstrap.Modal.getInstance(document.getElementById('modalPresupuesto')).hide();
+                        mostrarNotificacion('Presupuesto guardado correctamente', 'success');
+                        cargarPresupuestos();
+                    } else {
+                        mostrarNotificacion(response.message || 'Error al guardar', 'error');
+                    }
+                },
+                error: function (xhr) {
+                    mostrarNotificacion('Error en la solicitud: ' + xhr.status, 'error');
+                }
+            });
+        }
+
+        function verDetalles(id) {
+            $.get(`${API_URL}/${id}/detalles`, function (response) {
+                if (response.success) {
+                    const tbody = $('#tbody-detalles-modal');
+                    tbody.empty();
+                    
+                    response.data.forEach(d => {
+                        tbody.append(`
+                            <tr>
+                                <td>${d.descripcionActividad}</td>
+                                <td class="text-end">${d.cantidad}</td>
+                                <td class="text-end">${formatCurrency(d.valorUnitario)}</td>
+                                <td class="text-end">${formatCurrency(d.subtotal)}</td>
+                            </tr>
+                        `);
+                    });
+                    
+                    new bootstrap.Modal(document.getElementById('modalDetalles')).show();
+                } else {
+                    mostrarNotificacion(response.message || 'Error al cargar detalles', 'error');
+                }
+            });
+        }
+
+        function editarPresupuesto(id) {
+            // Implementar edición
+            mostrarNotificacion('Funcionalidad en desarrollo', 'info');
+        }
+
+        function eliminarPresupuesto(id) {
+            if (!confirm('¿Está seguro de que desea eliminar este presupuesto?')) {
+                return;
+            }
+
+            $.ajax({
+                url: `${API_URL}/${id}`,
+                type: 'DELETE',
+                success: function (response) {
+                    if (response.success) {
+                        mostrarNotificacion('Presupuesto eliminado correctamente', 'success');
+                        cargarPresupuestos();
+                    } else {
+                        mostrarNotificacion(response.message || 'Error al eliminar', 'error');
+                    }
+                }
+            });
+        }
+
+        function limpiarFiltros() {
+            $('#filtro-periodo').val('');
+            $('#filtro-trabajo').val('');
+            $('#filtro-estado').val('');
+            cargarPresupuestos();
+        }
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('es-CO', {
+                style: 'currency',
+                currency: 'COP',
+                minimumFractionDigits: 0
+            }).format(value);
+        }
+
+        function mostrarNotificacion(mensaje, tipo = 'info') {
+            const toast = new bootstrap.Toast(document.getElementById('toast-notificacion'));
+            const toastBody = document.getElementById('toast-contenido');
+            
+            toastBody.textContent = mensaje;
+            toastBody.parentElement.className = `toast-header bg-${tipo} text-white`;
+            
+            toast.show();
+        }
+    </script>
+}

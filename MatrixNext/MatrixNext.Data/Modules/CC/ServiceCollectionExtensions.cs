@@ -21,9 +21,16 @@ namespace MatrixNext.Data.Modules.CC
             if (string.IsNullOrWhiteSpace(webMatrixConnection))
                 throw new InvalidOperationException("Connection string 'WebMatrix' or 'MatrixDb' is required for CC module");
 
+            // CC FinzOpe Module (Sprint Pre-1)
             services.AddScoped(sp => new CcFinzOpeAdapter(webMatrixConnection));
             services.AddScoped<ICcFinzOpeAdapter>(sp => sp.GetRequiredService<CcFinzOpeAdapter>());
             services.AddScoped<ICcFinzOpeService, CcFinzOpeService>();
+            
+            // CC Control Presupuestos Module (Sprint 1)
+            var dbConnection = new System.Data.SqlClient.SqlConnection(webMatrixConnection);
+            services.AddScoped<CcControlPresupuestosAdapter>(sp => 
+                new CcControlPresupuestosAdapter(dbConnection));
+            services.AddScoped<ICcControlPresupuestosService, CcControlPresupuestosService>();
             
             return services;
         }
