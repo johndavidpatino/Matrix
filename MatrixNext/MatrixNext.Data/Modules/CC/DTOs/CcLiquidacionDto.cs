@@ -28,18 +28,18 @@ namespace MatrixNext.Data.Modules.CC.DTOs
     public class CcProduccionDto
     {
         public int IdProduccion { get; set; }
-        public string Cedula { get; set; }
-        public string NombrePersona { get; set; }
+        public string? Cedula { get; set; }
+        public string? NombrePersona { get; set; }
         public DateTime Fecha { get; set; }
         public decimal Horas { get; set; }
         public decimal ValorProduccion { get; set; }
-        public string Descripcion { get; set; }
+        public string? Descripcion { get; set; }
     }
 
     public class CcBonificacionDto
     {
         public int IdBonificacion { get; set; }
-        public string Cedula { get; set; }
+        public string? Cedula { get; set; }
         public decimal PorcentajeBonificacion { get; set; }
         public decimal ValorProduccion { get; set; }
         
@@ -52,8 +52,8 @@ namespace MatrixNext.Data.Modules.CC.DTOs
     public class CcDescuentoDto
     {
         public int IdDescuento { get; set; }
-        public string Cedula { get; set; }
-        public string TipoDescuento { get; set; }
+        public string? Cedula { get; set; }
+        public string? TipoDescuento { get; set; }
         public decimal Valor { get; set; }
     }
 }

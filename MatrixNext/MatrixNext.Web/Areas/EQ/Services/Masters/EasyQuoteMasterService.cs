@@ -14,7 +14,7 @@ namespace MatrixNext.Web.Areas.EQ.Services.Masters
     public class EasyQuoteMasterService
     {
         private readonly string _connString;
-        private MasterCache _cache;
+        private MasterCache? _cache;
 
         public EasyQuoteMasterService(IConfiguration configuration)
         {
