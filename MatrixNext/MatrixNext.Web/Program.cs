@@ -1,6 +1,7 @@
 using MatrixNext.Data.Modules.TH;
 using MatrixNext.Data.Modules.CU;
 using MatrixNext.Data.Modules.US;
+using MatrixNext.Data.Modules.CC;
 using MatrixNext.Data.Services;
 using MatrixNext.Data.Services.Usuarios;
 using MatrixNext.Web.Middleware;
@@ -53,6 +54,8 @@ builder.Services.AddScoped<GrupoUnidadService>();
 builder.Services.AddTHModule(builder.Configuration);
 // Register CU_Cuentas module services
 builder.Services.AddCUModule(builder.Configuration);
+// Register CC FinzOpe module services
+builder.Services.AddCCModule(builder.Configuration);
 // EQ module services
 builder.Services.AddScoped<EasyQuoteService>();
 builder.Services.AddScoped<EasyQuoteAdminService>();
