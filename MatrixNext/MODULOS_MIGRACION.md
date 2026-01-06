@@ -63,21 +63,28 @@
 - **Contexto**: `OP_Entities` (CoreProject)
 - **Dependencias**: Altas (entrevistas, moderadores, sesiones)
 
-#### 6. **FI_AdministrativoFinanciero** (21 páginas)
-- **Carpeta**: `WebMatrix/FI_AdministrativoFinanciero/`
+#### 6. **FI_AdministrativoFinanciero + CC_FinzOpe** (28 págs FI + infraestructura CC)
+- **Carpeta**: `WebMatrix/FI_AdministrativoFinanciero/` + `CoreProject/CC_FinzOpe`
 - **Contexto**: `FI_Model` + `CC_FinzOpe` + `CAP` (CoreProject)
-- **Dependencias**: Altas (finanzas, producción, TH, CU, inventario)
+- **Dependencias**: ✅ CU_Cuentas (jobbooks), US_Usuarios, TH; 📋 CAP (costos)
 - **Volumen**: Muy grande
-- **Estado**: 🔄 En curso (análisis inicial)
+- **Estado**: 🔄 En curso (análisis COMPLETO + CC_FinzOpe INCLUIDO)
 - **Documento**: [MIGRACION_FI_ADMINISTRATIVO.md](MIGRACION_FI_ADMINISTRATIVO.md)
-- **Alcance actual**: Excluye creación/aprobación de compras, órdenes de compra/servicio y radicación/aprobación de facturas.
-- **Links origen (Default.aspx)**:
-  - Control presupuestos: ControlPresupuestos.aspx, ListadoEstudios.aspx, ListadoPropuestas.aspx, NominaDistribucionCostos.aspx
-  - Presupuestos internos: GenerarRequerimientos.aspx, PresupuestosInternosIndex.aspx, ListadoTrabajos.aspx, ConsultaLog.aspx
-  - Procesos internos: ConteoTrabajos.aspx, ReporteConteoTrabajos.aspx, ResumenesdeProduccion.aspx, Contratistas.aspx, Contratacion.aspx, PrestacionServicios-CT.aspx (excluye OrdenesdeServicio.aspx)
-  - Reportes: ReportePagos.aspx, ReporteActividadesProduccion.aspx, ReporteContabilizacionPST.aspx, ReporteLegalizaciones.aspx (excluye RecepcionCuentasdeCobro.aspx, ListadoCuentasRecibidas.aspx, ReporteOrdenesdeServicio.aspx)
-  - Producción: Produccion.aspx, EliminarCargueProduccion.aspx, GenerarBonificacion.aspx, ExportarProduccionIDs.aspx, EstadoJobBooks.aspx, ReportePSTSinProduccion.aspx, CargueDescuentosSS.aspx, LiquidarPlanillasActividades.aspx, LiquidarProductividadPST.aspx
-  - Inventario: RegistroArticulos.aspx
+- **Cambio CRÍTICO**: ✅ **CC_FinzOpe migra en Sprint Pre-1 como infraestructura (80h)**
+  - Razón: CC_FinzOpe no es módulo independiente; es data core que FI consume vía SP
+  - Sprint Pre-1 (80h): Migrar tablas, SP, DbContext wrapper
+  - Sprints 1-6 (704h): FI Grupos 1-6 sobre CC_FinzOpe ya migrado
+- **Alcance FI**: Excluye compras/OC/OS, radicación/aprobación de facturas
+- **Grupos FI definidos**:
+  - Grupo 1: Control Presupuestos (4) - 92h
+  - Grupo 2: Presupuestos Internos (4) - 68h
+  - Grupo 3: Procesos Internos (6) - 132h
+  - Grupo 4: Reportes (4) - 72h
+  - Grupo 5: Producción (9) - 232h
+  - Grupo 6: Inventario (1) - 16h
+- **Esfuerzo total**: 80 (CC Pre-1) + 612 (FI) + 92 (buffer) = **784 horas**
+- **Timeline**: 10 semanas (1 dev @ 80h) o 7-8 semanas (1.5-2 devs @ 50h)
+- **Recomendación**: Iniciar Sprint Pre-1 (CC_FinzOpe) inmediatamente → Sprint 1 (FI Grupo 1) en semana 3
 
 ---
 

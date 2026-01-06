@@ -46,19 +46,21 @@
 
 ## 🔜 EN COLA
 
-### EN CURSO: **FI_AdministrativoFinanciero** 🎯 META: 8-10 Semanas
+### EN CURSO: **FI_AdministrativoFinanciero + CC_FinzOpe** 🎯 META: 10 Semanas
 
 | Aspecto | Detalle |
 |---------|---------|
-| **Páginas** | ~21 (según Default.aspx) |
+| **Páginas** | 28 páginas FI (6 grupos) + CC_FinzOpe (infraestructura) |
 | **Alcance** | Excluye compras/OC/OS y radicación/aprobación facturas |
-| **Stored Procedures** | Alto uso de SP en FI_Model/CC_FinzOpe |
-| **Complejidad** | 🔴 Muy alta |
-| **Dependencias** | CU_Cuentas, CC_FinzOpe, TH, CAP, Inventario |
-| **Impacto Negocio** | 🔴 Crítico (finanzas y producción) |
-| **Plan Detallado** | ✅ MIGRACION_FI_ADMINISTRATIVO.md (en progreso) |
-| **Inicio Estimado** | Semana actual (análisis) |
-| **Horas Estimadas** | ~240 horas |
+| **Sprints** | Pre-1: CC_FinzOpe (80h) \| 1-6: FI Grupos (704h) |
+| **Complejidad** | 🔴 Muy alta (cálculos financieros, liquidaciones, auditoría) |
+| **Dependencias** | ✅ CU_Cuentas (jobbooks), US_Usuarios, TH; 📋 CAP (costos) |
+| **CC_FinzOpe** | 🔄 INCLUIDO (Sprint Pre-1 como infraestructura) |
+| **Impacto Negocio** | 🔴 Crítico (finanzas, producción, liquidación) |
+| **Plan Detallado** | ✅ MIGRACION_FI_ADMINISTRATIVO.md (completo con CC) |
+| **Análisis** | ✅ Completado (6 grupos, dependencias, sprint pre-1) |
+| **Horas Estimadas** | ~784 horas (CC: 80h + FI: 704h) |
+| **Timeline** | 10 semanas (1 dev @ 80h/sem) o 7-8 semanas (1.5-2 devs @ 50h/sem) |
 
 ### PRÓXIMO: **PY_Proyectos** 🎯 META: 5-6 Semanas
 
@@ -82,7 +84,7 @@
 
 | Posición | Módulo | Páginas | Complejidad | Semanas Est. | Estado |
 |----------|--------|---------|-------------|--------------|--------|
-| 3 | **FI_Administrativo** | 21 | 🔴 MUY ALTA | 8-10 | 🔄 En curso (análisis) |
+| 3 | **FI_Administrativo + CC_FinzOpe** | 28+infra | 🔴 MUY ALTA | 10.0 | 🔄 En curso (Sprint Pre-1 → FI Sprints) |
 | 4 | **OP_Cuantitativo** | ~15 | 🔴 Alta | 6-7 | 📋 Análisis |
 | 5 | **OP_Cualitativo** | ~12 | 🔴 Alta | 6-7 | 📋 Análisis |
 
@@ -224,20 +226,21 @@ Status:                🚨 En migración
 ## 📅 TIMELINE ESTIMADO
 
 ```
-Semana    Módulo                    Estado           Horas
-═════════════════════════════════════════════════════════════
-1-2       US_Usuarios               ✅ COMPLETADO    ~60
-3         TH_Ausencias              ✅ COMPLETADO    ~40
-4-8       CU_Cuentas                ✅ COMPLETADO    ~110
-9-16      FI_Administrativo         🔄 EN CURSO      ~240
-17-22     PY_Proyectos              🔜 PRÓXIMO       ~148
-23-29     OP_Cuantitativo           📋 EN COLA       ~180
-30-36     OP_Cualitativo            📋 EN COLA       ~160
-34+       Módulos Restantes (13+)   📋 BACKLOG       ~500+
+Semana    Módulo                          Estado           Horas
+═════════════════════════════════════════════════════════════════
+1-2       US_Usuarios                     ✅ COMPLETADO    ~60
+3         TH_Ausencias                    ✅ COMPLETADO    ~40
+4-8       CU_Cuentas                      ✅ COMPLETADO    ~110
+9-10      CC_FinzOpe (Pre-1 FI)          🔄 EN CURSO      ~80
+11-18     FI_Administrativo (6 sprints)  🔄 EN CURSO      ~704
+19-25     PY_Proyectos                    🔜 PRÓXIMO       ~148
+26-32     OP_Cuantitativo                 📋 EN COLA       ~180
+33-39     OP_Cualitativo                  📋 EN COLA       ~160
+40+       Módulos Restantes (13+)         📋 BACKLOG       ~500+
 
-TOTAL ESTIMADO:                                    ~1,300+ horas
-                                                   ~32+ semanas
-                                                   ~8 meses aprox.
+TOTAL ESTIMADO:                                            ~2,000+ horas
+                                                           ~40+ semanas
+                                                           ~10 meses aprox.
 ```
 
 ---
@@ -246,17 +249,19 @@ TOTAL ESTIMADO:                                    ~1,300+ horas
 
 ### Semana 1 (Inmediata)
 
-- [ ] Testing funcional de TH_Ausencias en staging
-- [ ] Documentar análisis de FI (Default.aspx) en MIGRACION_FI_ADMINISTRATIVO.md
-- [ ] Mapear SP y dependencias de Control Presupuestos (grupo 1)
-- [ ] Ajustar timeline y alcance FI con stakeholders
+- [x] ✅ Completar análisis de FI (6 grupos, 28 páginas)
+- [x] ✅ Documentar dependencias con CU_Presupuesto (mínima)
+- [x] ✅ INCLUIR CC_FinzOpe como Sprint Pre-1 (80h)
+- [x] ✅ Estimar esfuerzo total: 784h (CC: 80 + FI: 704)
+- [ ] Inventariar SP y tablas en CC_FinzOpe
+- [ ] Obtener aprobación stakeholder financiero para alcance/exclusiones
 
 ### Semana 2
 
-- [ ] Completar análisis grupos 2 y 3 de FI
-- [ ] Definir estructura base área FI en MatrixNext
-- [ ] Priorizar flujos críticos FI para primer sprint
-- [ ] Replanificar inicio PY_Proyectos tras FI kick-off
+- [ ] Kick-off Sprint Pre-1: CC_FinzOpe
+- [ ] Crear DbContext wrapper para CC_FinzOpe
+- [ ] Validar SP críticos (Produccion, Liquidacion, Reportes)
+- [ ] Definir estructura base área CC/ y FI/
 
 ---
 
