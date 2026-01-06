@@ -6,7 +6,7 @@
 
 La documentación está **lista para implementación inmediata**. Todos los sprints están planificados, las arquitecturas definidas, y los patrones establecidos.
 
-**ESTADO ACTUAL**: ✅ **Sprint Pre-1 COMPLETADO (Enero 6, 2026)**
+**ESTADO ACTUAL**: ✅ **Sprint Pre-1 COMPLETADO** | 🔄 **Sprint 1 EN CURSO (Enero 6, 2026)**
 
 ---
 
@@ -21,7 +21,15 @@ La documentación está **lista para implementación inmediata**. Todos los spri
 - API endpoints funcionales
 - Vista web interactiva (Bootstrap 5)
 
-**Próximo paso**: Sprint 1 (Control Presupuestos) - Listo para comenzar
+🔄 **Sprint 1 EN CURSO (Enero 6, 2026)**:
+- Módulo: CC_ControlPresupuestos
+- Duración estimada: 2 semanas (92 horas)
+- DTOs y Adapter: ✅ COMPLETADOS
+- Service y Controller: ✅ COMPLETADOS
+- Views iniciales: ✅ COMPLETADAS
+- Próximos: Vistas adicionales (Verificación, Nómina, Asignación)
+
+**Próximo paso**: Completar vistas del Sprint 1
 
 ### 1️⃣ Lee primero
 

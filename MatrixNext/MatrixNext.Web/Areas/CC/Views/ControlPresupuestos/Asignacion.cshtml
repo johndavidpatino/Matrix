@@ -1,0 +1,292 @@
+@model IEnumerable<MatrixNext.Data.Modules.CC.DTOs.ControlPresupuestos.AsignacionPresupuestoDto>
+@{
+    ViewData["Title"] = "Asignación de Presupuestos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-3">
+        <div class="col-md-8">
+            <h3>Asignación de Presupuestos a Actividades</h3>
+            <p class="text-muted">Asigne presupuesto a cada actividad del proyecto</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <button class="btn btn-sm btn-primary" id="btn-agregar-asignacion">
+                <i class="fas fa-plus"></i> Nueva Asignación
+            </button>
+            <button class="btn btn-sm btn-secondary" id="btn-exportar-asignacion">
+                <i class="fas fa-download"></i> Exportar
+            </button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <!-- Indicadores de disponibilidad -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="card border-primary">
+                        <div class="card-body">
+                            <h6 class="card-title">Total Disponible</h6>
+                            <h5 id="monto-disponible" class="text-primary">$ 0</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-warning">
+                        <div class="card-body">
+                            <h6 class="card-title">Total Asignado</h6>
+                            <h5 id="monto-asignado" class="text-warning">$ 0</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-success">
+                        <div class="card-body">
+                            <h6 class="card-title">Saldo Disponible</h6>
+                            <h5 id="saldo-disponible" class="text-success">$ 0</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Barra de progreso -->
+            <div class="mb-4">
+                <label>Porcentaje de Asignación</label>
+                <div class="progress" style="height: 25px;">
+                    <div id="progress-asignacion" class="progress-bar" role="progressbar" 
+                         style="width: 0%;">0%</div>
+                </div>
+            </div>
+
+            <!-- Tabla de Asignaciones -->
+            <div class="table-responsive">
+                <table class="table table-hover table-striped" id="grid-asignacion">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Actividad</th>
+                            <th class="text-end">Monto Asignado</th>
+                            <th class="text-end">Monto Utilizado</th>
+                            <th class="text-end">Saldo</th>
+                            <th class="text-end">% Utilización</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model ?? Enumerable.Empty<MatrixNext.Data.Modules.CC.DTOs.ControlPresupuestos.AsignacionPresupuestoDto>())
+                        {
+                            <tr data-id="@item.IdAsignacion">
+                                <td>@item.DescripcionActividad</td>
+                                <td class="text-end monto-asignado">@item.MontoAsignado.ToString("C0")</td>
+                                <td class="text-end monto-utilizado">@item.MontoUtilizado.ToString("C0")</td>
+                                <td class="text-end saldo">@item.SaldoDisponible.ToString("C0")</td>
+                                <td class="text-end">
+                                    @{
+                                        decimal porcentaje = item.MontoAsignado > 0 ? 
+                                            (item.MontoUtilizado / item.MontoAsignado * 100) : 0;
+                                    }
+                                    @porcentaje.ToString("0.0")%
+                                </td>
+                                <td>
+                                    @if (item.SaldoDisponible > 0)
+                                    {
+                                        <span class="badge bg-success">Disponible</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">Agotado</span>
+                                    }
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary editar-asignacion" 
+                                            data-id="@item.IdAsignacion">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger eliminar-asignacion" 
+                                            data-id="@item.IdAsignacion">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para nueva/editar asignación -->
+<div class="modal fade" id="modalAsignacion" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="modal-titulo-asignacion">Nueva Asignación</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-asignacion">
+                    <input type="hidden" id="inp-id-asignacion">
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Actividad</label>
+                        <select id="inp-actividad" class="form-select" required>
+                            <option value="">Seleccionar...</option>
+                        </select>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Monto Asignado</label>
+                            <input type="number" id="inp-monto-asignado" class="form-control" 
+                                   step="0.01" min="0" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Saldo Disponible</label>
+                            <input type="text" id="inp-saldo-disponible" class="form-control" 
+                                   readonly>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <small>
+                            <strong>Validación:</strong> No puede asignar más que el saldo disponible 
+                            del presupuesto total.
+                        </small>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="btn-guardar-asignacion">
+                    <i class="fas fa-save"></i> Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            actualizarIndicadores();
+            
+            $('#btn-agregar-asignacion').click(() => abrirModalAsignacion(0));
+            $('#btn-guardar-asignacion').click(guardarAsignacion);
+            $('#btn-exportar-asignacion').click(exportarAsignacion);
+            
+            $(document).on('click', '.editar-asignacion', function () {
+                const id = $(this).data('id');
+                abrirModalAsignacion(id);
+            });
+
+            $(document).on('click', '.eliminar-asignacion', function () {
+                if (!confirm('¿Está seguro de eliminar esta asignación?')) return;
+                const id = $(this).data('id');
+                eliminarAsignacion(id);
+            });
+        });
+
+        function actualizarIndicadores() {
+            let totalAsignado = 0;
+            let totalUtilizado = 0;
+            let totalSaldo = 0;
+
+            $('#grid-asignacion tbody tr').each(function () {
+                const asignado = parseFloat($(this).find('.monto-asignado').text().replace(/[^0-9.-]/g, ''));
+                const utilizado = parseFloat($(this).find('.monto-utilizado').text().replace(/[^0-9.-]/g, ''));
+                const saldo = parseFloat($(this).find('.saldo').text().replace(/[^0-9.-]/g, ''));
+
+                totalAsignado += asignado;
+                totalUtilizado += utilizado;
+                totalSaldo += saldo;
+            });
+
+            const disponible = totalAsignado; // Monto total presupuestado
+            const porcentaje = disponible > 0 ? (totalAsignado / disponible * 100) : 0;
+
+            $('#monto-disponible').text(formatCurrency(disponible));
+            $('#monto-asignado').text(formatCurrency(totalAsignado));
+            $('#saldo-disponible').text(formatCurrency(totalSaldo));
+            $('#progress-asignacion')
+                .css('width', porcentaje + '%')
+                .text(porcentaje.toFixed(1) + '%');
+        }
+
+        function abrirModalAsignacion(id) {
+            $('#form-asignacion')[0].reset();
+            
+            if (id === 0) {
+                $('#modal-titulo-asignacion').text('Nueva Asignación');
+                $('#inp-id-asignacion').val('');
+            } else {
+                $('#modal-titulo-asignacion').text('Editar Asignación');
+                $('#inp-id-asignacion').val(id);
+                
+                // Cargar datos existentes
+                const row = $(`[data-id="${id}"]`);
+                if (row.length) {
+                    const monto = parseFloat(row.find('.monto-asignado').text().replace(/[^0-9.-]/g, ''));
+                    $('#inp-monto-asignado').val(monto);
+                }
+            }
+
+            new bootstrap.Modal(document.getElementById('modalAsignacion')).show();
+        }
+
+        function guardarAsignacion() {
+            const datos = {
+                idAsignacion: $('#inp-id-asignacion').val() || 0,
+                idActividad: parseInt($('#inp-actividad').val()),
+                montoAsignado: parseFloat($('#inp-monto-asignado').val())
+            };
+
+            if (!datos.idActividad || !datos.montoAsignado) {
+                alert('Complete todos los campos');
+                return;
+            }
+
+            $.ajax({
+                url: '/api/cc/controlpresupuestos/asignacion/guardar',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(datos),
+                success: function (response) {
+                    if (response.success) {
+                        bootstrap.Modal.getInstance(document.getElementById('modalAsignacion')).hide();
+                        location.reload();
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                }
+            });
+        }
+
+        function eliminarAsignacion(id) {
+            $.ajax({
+                url: `/api/cc/controlpresupuestos/${id}`,
+                type: 'DELETE',
+                success: function (response) {
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                }
+            });
+        }
+
+        function exportarAsignacion() {
+            window.location.href = '/CC/ControlPresupuestos/ExportarAsignacion';
+        }
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('es-CO', {
+                style: 'currency',
+                currency: 'COP',
+                minimumFractionDigits: 0
+            }).format(value);
+        }
+    </script>
+}

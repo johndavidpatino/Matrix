@@ -1,0 +1,204 @@
+@model IEnumerable<MatrixNext.Data.Modules.CC.DTOs.ControlPresupuestos.NominaDistribucionDto>
+@{
+    ViewData["Title"] = "Nómina y Distribución de Costos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-3">
+        <div class="col-md-8">
+            <h3>Nómina y Distribución de Costos</h3>
+            <p class="text-muted">Distribución de costos salariales por centro de costo</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <button class="btn btn-sm btn-primary" id="btn-guardar-distribucion">
+                <i class="fas fa-save"></i> Guardar Cambios
+            </button>
+            <button class="btn btn-sm btn-secondary" id="btn-exportar-nomina">
+                <i class="fas fa-download"></i> Exportar
+            </button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped" id="grid-nomina">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Empleado</th>
+                            <th>Cédula</th>
+                            <th class="text-end">Valor Liquidado</th>
+                            <th>Centro Costo</th>
+                            <th class="text-end">Porcentaje</th>
+                            <th class="text-end">Valor Distribuido</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var nomina in Model ?? Enumerable.Empty<MatrixNext.Data.Modules.CC.DTOs.ControlPresupuestos.NominaDistribucionDto>())
+                        {
+                            @foreach (var dist in nomina.Distribuciones)
+                            {
+                                <tr>
+                                    <td>@nomina.NombreEmpleado</td>
+                                    <td>@nomina.Cedula</td>
+                                    <td class="text-end">@nomina.ValorLiquidado.ToString("C0")</td>
+                                    <td>@dist.NombreCentroCosto</td>
+                                    <td class="text-end">
+                                        <input type="number" class="form-control form-control-sm porcentaje-input" 
+                                               value="@dist.PorcentajeDistribucion" 
+                                               step="0.01" min="0" max="100"
+                                               data-id="@dist.IdDistribucion">
+                                    </td>
+                                    <td class="text-end valor-distribuido">
+                                        @(nomina.ValorLiquidado * (dist.PorcentajeDistribucion / 100))
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-danger eliminar-distribucion" 
+                                                data-id="@dist.IdDistribucion">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Resumen -->
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <h6 class="card-title">Total Liquidado</h6>
+                            <h5 id="total-liquidado">$ 0</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <h6 class="card-title">Total Distribuido</h6>
+                            <h5 id="total-distribuido">$ 0</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para agregar nueva distribución -->
+<div class="modal fade" id="modalAgregarDistribucion" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Agregar Distribución</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-distribucion">
+                    <div class="mb-3">
+                        <label class="form-label">Centro de Costo</label>
+                        <select id="inp-centro-costo" class="form-select" required>
+                            <option value="">Seleccionar...</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Porcentaje</label>
+                        <input type="number" id="inp-porcentaje" class="form-control" 
+                               step="0.01" min="0" max="100" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="btn-agregar-distribucion">Agregar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            actualizarTotales();
+            
+            $('.porcentaje-input').on('change', function () {
+                actualizarTotales();
+            });
+
+            $('#btn-guardar-distribucion').click(guardarDistribuciones);
+            $('#btn-exportar-nomina').click(exportarNomina);
+            $('.eliminar-distribucion').click(eliminarDistribucion);
+        });
+
+        function actualizarTotales() {
+            let totalLiquidado = 0;
+            let totalDistribuido = 0;
+
+            $('#grid-nomina tbody tr').each(function () {
+                const valorLiquidado = parseFloat($(this).find('td').eq(2).text().replace(/[^0-9.-]/g, ''));
+                const porcentaje = parseFloat($(this).find('.porcentaje-input').val() || 0);
+                const valorDistribuido = valorLiquidado * (porcentaje / 100);
+
+                totalLiquidado += valorLiquidado;
+                totalDistribuido += valorDistribuido;
+
+                // Actualizar valor distribuido mostrado
+                $(this).find('.valor-distribuido').text(formatCurrency(valorDistribuido));
+            });
+
+            $('#total-liquidado').text(formatCurrency(totalLiquidado));
+            $('#total-distribuido').text(formatCurrency(totalDistribuido));
+        }
+
+        function guardarDistribuciones() {
+            const distribuciones = [];
+
+            $('.porcentaje-input').each(function () {
+                distribuciones.push({
+                    idDistribucion: $(this).data('id'),
+                    porcentajeDistribucion: parseFloat($(this).val())
+                });
+            });
+
+            $.ajax({
+                url: '/api/cc/controlpresupuestos/distribucion/guardar',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(distribuciones),
+                success: function (response) {
+                    if (response.success) {
+                        alert('Distribuciones guardadas correctamente');
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                }
+            });
+        }
+
+        function eliminarDistribucion() {
+            if (!confirm('¿Está seguro de eliminar esta distribución?')) {
+                return;
+            }
+
+            $(this).closest('tr').remove();
+            actualizarTotales();
+        }
+
+        function exportarNomina() {
+            window.location.href = '/CC/ControlPresupuestos/ExportarNomina';
+        }
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('es-CO', {
+                style: 'currency',
+                currency: 'COP',
+                minimumFractionDigits: 0
+            }).format(value);
+        }
+    </script>
+}
