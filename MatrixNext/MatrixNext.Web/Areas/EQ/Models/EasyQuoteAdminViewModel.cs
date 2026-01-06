@@ -15,5 +15,9 @@ namespace MatrixNext.Web.Areas.EQ.Models
         public List<EasyQuoteMasterService.MysteryTarifaRow> Mystery { get; set; } = new();
         public List<EasyQuoteMasterService.CostUnitarioOpsRow> CostUnitarios { get; set; } = new();
         public List<EasyQuoteMasterService.RateEstadisticaRow> Estadistica { get; set; } = new();
+        public List<EasyQuoteMasterService.ParamMiscRow> ParamMisc { get; set; } = new();
+        public EasyQuoteMasterService.EnvioParamRow EnvioParam { get; set; } = new();
+        public List<EasyQuoteMasterService.ProductividadCiudadRow> Productividad { get; set; } = new();
+        public List<EasyQuoteMasterService.BaseDatosRow> BaseDatos { get; set; } = new();
     }
 }

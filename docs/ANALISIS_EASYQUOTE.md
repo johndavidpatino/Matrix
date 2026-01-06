@@ -1,4 +1,4 @@
-# ANALISIS EASYQUOTE - MIGRACION A MATRIXNET
+﻿# ANALISIS EASYQUOTE - MIGRACION A MATRIXNET
 
 **Documento tecnico**  
 **Version**: 1.0  
@@ -60,7 +60,7 @@
 - Base de datos requerida (`C19` con opciones No requiere/Comprar/Cliente).
 - Penetracion/incidencia (`C20`, con label y valor).
 - Duracion cuestionario en minutos (`C21`), numero de preguntas abiertas (`C22`), abiertas multiples (`C23`), otros (`C24`).
-- Top line (`C25` Si/No), Datacleaning (`C26` total/parcial), conversión/generacion ASCII (`C27`), script reclutamiento (`C28`), scripting (`C29` con tipo Nuevo/Duplicado/Reutilizacion), codificacion (`C30`), procesamiento (`C31`) y # procesamientos (`C32`), proceso estadistico (`C33` Si/No).
+- Top line (`C25` Si/No), Datacleaning (`C26` total/parcial), conversiÃ³n/generacion ASCII (`C27`), script reclutamiento (`C28`), scripting (`C29` con tipo Nuevo/Duplicado/Reutilizacion), codificacion (`C30`), procesamiento (`C31`) y # procesamientos (`C32`), proceso estadistico (`C33` Si/No).
 - Dias de set up (`C35`) y dias de campo (`C36`), numero de olas/rondas (`C43`), sobre-muestra (%) (`C46`).
 - Flags adicionales: Harmoni (`C37`), Graficacion (`C38`), Otros costos (`C39`), Viaticos campo (`C40`), Otros incentivos (`C41`), Reprografia (`C42`).
 
@@ -78,48 +78,48 @@
   - Total ajustado dividendo (1-26.84%) para gross interno.
 - Tabla resumen de costos (`C98:G106`): trae valores desde `Costos Directos discriminados` (campo+calidad+viaticos, TDD, incentivos, estadistica, staff OPS) y calcula AOT, GM, PB+RMF, OP y %OP.
 
-### 3.5 Diccionario de datos (campos de captura → API/UI sugerido)
-Formato: campo (tipo sugerido) [default] — validacion / dependencia / origen.
-- propuesta_nombre (string) — obligatorio.
-- grupo_objetivo (string) — obligatorio.
-- cliente (string) — obligatorio.
-- fecha_aprobacion_estimada (date) — opcional.
-- fecha_campo (date) — opcional.
-- prob_aprobacion (enum: Alta/Media/Baja, default Alta) — valida en `Parametros!207:210`.
-- sl (string corto) — obligatorio; map a `Horas.KEY` prefijo.
-- metodologia_sl (string) — obligatorio; parte de `Horas.KEY`.
-- record_detail (string) — obligatorio; parte de `Horas.KEY`.
-- categoria_producto (enum: Otro, Bebidas, etc.) — usado solo para notas de bitacora (vasos Murano en Bebidas).
-- valor_proveedor_externo (decimal) — para campo externo F2F; si >0 activa rubro `D70`.
-- valor_proveedor_internacional (decimal) — para campo internacional; si >0 activa `D69`.
-- metodologia_recoleccion (enum) — debe mapear a `Parametros!230:239`.
-- tecnica1_tipo / tecnica2_tipo / tecnica3_tipo (enum) — mismos codigos; tecnica1_flag bool indica seleccion.
-- base_datos (enum: No requiere/Comprar/Cliente) — valida contra `Parametros!204:205`.
-- penetracion_label (string) + penetracion_valor (decimal) — usar label para UI, valor para matrices.
-- duracion_minutos (int) — 5..60; mapea a matriz precios y horas de script/procesamiento.
-- preguntas_abiertas (int) — default 0; impacta codificacion (tabla `Codificacion`).
-- preguntas_abiertas_mult (int) — default 0; idem.
-- otros_procesos (string) — solo nota.
+### 3.5 Diccionario de datos (campos de captura †’ API/UI sugerido)
+Formato: campo (tipo sugerido) [default] €” validacion / dependencia / origen.
+- propuesta_nombre (string) €” obligatorio.
+- grupo_objetivo (string) €” obligatorio.
+- cliente (string) €” obligatorio.
+- fecha_aprobacion_estimada (date) €” opcional.
+- fecha_campo (date) €” opcional.
+- prob_aprobacion (enum: Alta/Media/Baja, default Alta) €” valida en `Parametros!207:210`.
+- sl (string corto) €” obligatorio; map a `Horas.KEY` prefijo.
+- metodologia_sl (string) €” obligatorio; parte de `Horas.KEY`.
+- record_detail (string) €” obligatorio; parte de `Horas.KEY`.
+- categoria_producto (enum: Otro, Bebidas, etc.) €” usado solo para notas de bitacora (vasos Murano en Bebidas).
+- valor_proveedor_externo (decimal) €” para campo externo F2F; si >0 activa rubro `D70`.
+- valor_proveedor_internacional (decimal) €” para campo internacional; si >0 activa `D69`.
+- metodologia_recoleccion (enum) €” debe mapear a `Parametros!230:239`.
+- tecnica1_tipo / tecnica2_tipo / tecnica3_tipo (enum) €” mismos codigos; tecnica1_flag bool indica seleccion.
+- base_datos (enum: No requiere/Comprar/Cliente) €” valida contra `Parametros!204:205`.
+- penetracion_label (string) + penetracion_valor (decimal) €” usar label para UI, valor para matrices.
+- duracion_minutos (int) €” 5..60; mapea a matriz precios y horas de script/procesamiento.
+- preguntas_abiertas (int) €” default 0; impacta codificacion (tabla `Codificacion`).
+- preguntas_abiertas_mult (int) €” default 0; idem.
+- otros_procesos (string) €” solo nota.
 - top_line (bool, default No).
-- datacleaning (enum: Total/Parcial/No) — default Total cuando flag Si.
-- ascii (bool) — conversión/generacion ASCII.
-- script_reclutamiento (bool) — activa `D123`.
-- scripting (bool) + tipo_script (enum: Nuevo/Duplicado/Reutilizacion) — activa `D122`, multiplicador `Parametros!180:182`.
+- datacleaning (enum: Total/Parcial/No) €” default Total cuando flag Si.
+- ascii (bool) €” conversiÃ³n/generacion ASCII.
+- script_reclutamiento (bool) €” activa `D123`.
+- scripting (bool) + tipo_script (enum: Nuevo/Duplicado/Reutilizacion) €” activa `D122`, multiplicador `Parametros!180:182`.
 - codificacion (bool).
 - procesamiento (bool).
 - num_procesamientos (int, default 1).
-- proceso_estadistico (bool) — Si activa `D121` usando `Entradas!D99`.
-- valor_gmu (decimal) — GMU adicional para internacional.
-- dias_setup (int, default 2) — `C35`.
+- proceso_estadistico (bool) €” Si activa `D121` usando `Entradas!D99`.
+- valor_gmu (decimal) €” GMU adicional para internacional.
+- dias_setup (int, default 2) €” `C35`.
 - dias_campo (int, default calculado `ROUNDUP(C58)`).
 - num_olas (int, default 1).
 - harmoni (bool), graficacion (bool), otros_costos (decimal opc), viaticos_campo (decimal opc), otros_incentivos (decimal opc), reprografia_paginas (int opc).
 - envio_ciudades (bool), peso_producto_gramos (decimal), sobre_muestra_pct (decimal).
-- ciudades[]: {nombre, activa bool, muestra_total, nse1..nse6} — validar suma NSE = muestra_total; suma ciudades = muestra_total global.
+- ciudades[]: {nombre, activa bool, muestra_total, nse1..nse6} €” validar suma NSE = muestra_total; suma ciudades = muestra_total global.
 - reclutamiento_tipo (enum/valor) e incentivos/obsequios por NSE (sobrescriben `Valores Insumos reclutamiento`).
 - estudio_ninos (bool), taxi_participantes (bool), clase_prueba (enum), refrigeracion (bool), compra_producto (decimal), etiquetado_tipo (enum Parametros!226:229), embalaje (bool), productos_testear (int), productos_por_resp (int), patinadores_por_ciudad (int), siembra (bool), apoyo_reclutamiento_sitio (enum Parametros!214:217).
 - mystery_visitas[]: {tipo_visita 1-3, complejidad, num_olas, desplazamientos, tanques, alertas, edicion, alquiler, compra_dispositivos}.
-- staff_sl[]: {nivel L4-L7, horas_presup} — horas minimas lookup en `Horas`.
+- staff_sl[]: {nivel L4-L7, horas_presup} €” horas minimas lookup en `Horas`.
 
 ## 4. Tablas y parametros de soporte
 - `Parametros`:
@@ -236,7 +236,7 @@ Referencias clave (columna D = costo total, E = valor con GM donde aplica):
   - Validar que los valores por NSE/ciudad se sumen correctamente y permiten cargar distribuciones sugeridas (MuestraTec1/MuestraTec2).
 - Motor de costos
   - Replicar matrices de precio por duracion/incidencia (F2F/CATI/Online/Auto) y multiplicadores de siembra, clase de prueba, etiquetado, refrigeracion, apoyo reclutamiento, GM OPS, PB+RMF, OP.
-  - Implementar formulas de campo/incentivos/logistica/locaciones/telefonía/siembra exactamente como `Costos Directos discriminados`.
+  - Implementar formulas de campo/incentivos/logistica/locaciones/telefoniÌa/siembra exactamente como `Costos Directos discriminados`.
   - Calcular staff OPS y estadistica (horas*tarifa) y staff SL (L4-L7) con gross 26.84%.
   - Generar resumen por rubro y totales (con y sin gross) y version en USD usando TRM.
 - Datos maestros
@@ -278,7 +278,7 @@ Referencias clave (columna D = costo total, E = valor con GM donde aplica):
 ### 9.1 Alineacion con DIRECTRICES_MIGRACION.md
 - Areas: crear area `EQ` para el cotizador con controller `EasyQuoteController` y vistas en `Areas/EQ/EasyQuote`.
 - UI: usar modales para capturas secundarias (ej. editar fila de ciudad, agregar visita mystery) y grids reutilizando `_Grid`, `_Modal`, `_DatePicker`, `_Toast`.
-- Menú/sidebar: agregar entrada “EasyQuote” en `_Sidebar.cshtml` bajo Proyectos/Cotizador.
+- MenÃº/sidebar: agregar entrada €œEasyQuote€ en `_Sidebar.cshtml` bajo Proyectos/Cotizador.
 - Async/await y [Authorize] en controller; validar permisos para admin de parametros en un controller separado (`EasyQuoteAdminController`).
 - EF para inserts/updates simples (semillas de masters y persistencia de cotizacion); no hay SP legacy conocidos, pero validar en CoreProject antes de crear logica nueva. Si existen SP de IQuote, mapearlos via adapter.
 - Documentar cambios en `MODULOS_MIGRACION.md` y generar `MIGRACION_EASYQUOTE_COMPLETADA.md` al cierre.
@@ -292,7 +292,7 @@ Referencias clave (columna D = costo total, E = valor con GM donde aplica):
   4) Bebidas alcoholicas flag en taxi participantes: activar transporte bebidas (D83=28.000) y ajuste de valor.
   5) Estudios con ninos: transporte ninos D82=15.000 * muestra; refrigeracion Si activa locaciones E105:E109.
   6) Script duplicado: tipo_script=Duplicado (x4 horas) y num_procesamientos>1.
-  7) Proveedor externo e internacional: D70/D69 >0 y GMU aplicado; validar conversión USD.
+  7) Proveedor externo e internacional: D70/D69 >0 y GMU aplicado; validar conversiÃ³n USD.
   8) Codificacion Si con preguntas_abiertas>0: validar lookup `Codificacion!` y D94.
 - Reconciliacion: generar CSV de breakdown por rubro y comparar contra export de Excel (usar mismo set de inputs) con tolerancia 0 en moneda local y 2 decimales en USD.
 
@@ -302,7 +302,8 @@ Referencias clave (columna D = costo total, E = valor con GM donde aplica):
 - Dependencia en TRM manual (`H130`): definir fuente automatica o control de version.
 - Validar reglas de redondeo (dias campo y unitarios) frente a requerimientos financieros.
 - Asegurar control de versiones de tablas maestras (version/fecha) para reproducibilidad.
-- UX: replicar facilidad de Excel con tabla editable por celdas para ciudades/NSE y visitas mystery; considerar edición inline en grid con totales recalculados on-change y modales solo para detalles. Proveer página separada de administración de parámetros (tarifas, matrices, insumos) con filtros, edición inline y carga masiva (CSV) respetando directrices de area/autorization.
+- UX: replicar facilidad de Excel con tabla editable por celdas para ciudades/NSE y visitas mystery; considerar ediciÃ³n inline en grid con totales recalculados on-change y modales solo para detalles. Proveer pÃ¡gina separada de administraciÃ³n de parÃ¡metros (tarifas, matrices, insumos) con filtros, ediciÃ³n inline y carga masiva (CSV) respetando directrices de area/autorization.
 ---
 
 Ruta propuesta del documento: `docs/ANALISIS_EASYQUOTE.md`.
+

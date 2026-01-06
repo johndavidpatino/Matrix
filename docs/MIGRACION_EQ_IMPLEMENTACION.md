@@ -28,9 +28,10 @@
 - [x] Modelos y adapter Dapper/TVP.
 - [x] Calculadora inicial real (campo, mystery, incentivos/reclutamiento, scripting/proc/DC/estadistica, staff SL/OPS, locaciones/envios/base de datos/viaticos/codificacion, GM/PB/OP).
 - [x] UI EasyQuote con tabs/grids JS (datos, cuestionario, muestra, mystery, staff, resumen) con calcular/guardar y add-row inline.
-- [x] Admin: vista Parametros + upsert para precios, valor hora OPS, insumos, envios (roles Admin/SuperAdmin). Parametrizado misc/envio (divisor volumetrico, tipologias), productividad por ciudad y base de datos.
-- [ ] Refinar formulas exactas vs Excel: dias setup+campo, tipologia/envios volumetrico con dimensiones, base de datos real, viaticos con productividad diferenciada, factor refrigeracion exacto, codificacion por preguntas/regs.
-- [ ] Admin: CRUD completo para locaciones, mystery, codificacion, cost unitarios; import CSV.
+- [x] Admin: vista Parametros + upsert para precios, valor hora OPS, insumos, envios, locaciones, codificacion, mystery, costos unitarios, misc/envio param (divisor/tipologias), productividad por ciudad y base de datos.
+- [x] Admin: import masiva CSV para precios base y valor hora OPS con versionado (eq_param_misc PRECIOS_VERSION/VALORHORA_VERSION) desde la vista de parametros.
+- [ ] Afinar formulas exactas vs Excel: dias setup+campo, tipologia/envios volumetrico con dimensiones, base de datos real, viaticos con productividad diferenciada, factor refrigeracion exacto, codificacion por preguntas/regs.
+- [ ] Admin: versionado formal (vigencias) y, si aplica, carga CSV para el resto de tablas maestras.
 - [ ] Tests minimos: baseline 400 Bogota F2F 20 min y variantes CATI/ONLINE/Mystery.
 - [ ] Documentar mapping campo a campo y supuestos.
 

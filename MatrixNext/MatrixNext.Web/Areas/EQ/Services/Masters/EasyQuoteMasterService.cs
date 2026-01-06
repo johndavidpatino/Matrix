@@ -65,6 +65,8 @@ namespace MatrixNext.Web.Areas.EQ.Services.Masters
         public ParamMiscRow GetMisc(string clave) => Cache.ParamMisc.FirstOrDefault(p => string.Equals(p.Clave, clave, StringComparison.OrdinalIgnoreCase));
         public EnvioParamRow GetEnvioParam() => Cache.EnvioParam;
         public decimal? GetBaseDatos(string tipo) => Cache.BaseDatos.FirstOrDefault(b => string.Equals(b.Tipo, tipo, StringComparison.OrdinalIgnoreCase))?.Valor;
+        public List<ParamMiscRow> AllMisc() => Cache.ParamMisc;
+        public List<BaseDatosRow> AllBaseDatos() => Cache.BaseDatos;
 
         public decimal? GetPrecioEncuesta(string metodologia, string penetracion, int duracionMin)
         {
@@ -144,8 +146,8 @@ namespace MatrixNext.Web.Areas.EQ.Services.Masters
 
         public class PrecioRow
         {
-            public string MetodologiaCodigo { get; set; }
-            public string PenetracionCodigo { get; set; }
+            public string MetodologiaCodigo { get; set; } = string.Empty;
+            public string PenetracionCodigo { get; set; } = string.Empty;
             public int DuracionMin { get; set; }
             public decimal ValorTotal { get; set; }
         }
@@ -161,21 +163,21 @@ namespace MatrixNext.Web.Areas.EQ.Services.Masters
 
         public class ValorHoraRow
         {
-            public string Nivel { get; set; }
-            public string Variante { get; set; }
+            public string Nivel { get; set; } = string.Empty;
+            public string Variante { get; set; } = string.Empty;
             public decimal ValorHora { get; set; }
         }
 
         public class CostInsumoRow
         {
-            public string NSE { get; set; }
-            public string Tipo { get; set; }
+            public string NSE { get; set; } = string.Empty;
+            public string Tipo { get; set; } = string.Empty;
             public decimal ValorUnitario { get; set; }
         }
 
         public class LocacionRow
         {
-            public string Ciudad { get; set; }
+            public string Ciudad { get; set; } = string.Empty;
             public decimal TarifaBase { get; set; }
             public decimal TarifaConGross { get; set; }
             public decimal DiasBase { get; set; }
@@ -183,7 +185,7 @@ namespace MatrixNext.Web.Areas.EQ.Services.Masters
 
         public class EnvioTarifaRow
         {
-            public string Tipologia { get; set; }
+            public string Tipologia { get; set; } = string.Empty;
             public decimal KiloInicial { get; set; }
             public decimal KiloAdicional { get; set; }
             public decimal SeguroPct { get; set; }
@@ -194,26 +196,26 @@ namespace MatrixNext.Web.Areas.EQ.Services.Masters
         {
             public int Id { get; set; }
             public decimal DivisorVolumetrico { get; set; }
-            public string TipologiaUrbano { get; set; }
-            public string TipologiaNacional { get; set; }
+            public string TipologiaUrbano { get; set; } = string.Empty;
+            public string TipologiaNacional { get; set; } = string.Empty;
         }
 
         public class ParamMiscRow
         {
-            public string Clave { get; set; }
+            public string Clave { get; set; } = string.Empty;
             public decimal? ValorDecimal { get; set; }
-            public string ValorTexto { get; set; }
+            public string ValorTexto { get; set; } = string.Empty;
         }
 
         public class BaseDatosRow
         {
-            public string Tipo { get; set; }
+            public string Tipo { get; set; } = string.Empty;
             public decimal Valor { get; set; }
         }
 
         public class CodificacionRow
         {
-            public string Escenario { get; set; }
+            public string Escenario { get; set; } = string.Empty;
             public int Registros { get; set; }
             public int PregAbiertas { get; set; }
             public int PregAbiertasMult { get; set; }
@@ -224,15 +226,15 @@ namespace MatrixNext.Web.Areas.EQ.Services.Masters
 
         public class MysteryTarifaRow
         {
-            public string TipoVisita { get; set; }
-            public string Complejidad { get; set; }
+            public string TipoVisita { get; set; } = string.Empty;
+            public string Complejidad { get; set; } = string.Empty;
             public decimal VrUnitario { get; set; }
             public int OlasDefault { get; set; }
         }
 
         public class ProductividadCiudadRow
         {
-            public string Ciudad { get; set; }
+            public string Ciudad { get; set; } = string.Empty;
             public decimal Encuestadores { get; set; }
             public decimal Productividad { get; set; }
         }
@@ -240,16 +242,16 @@ namespace MatrixNext.Web.Areas.EQ.Services.Masters
         public class CostUnitarioOpsRow
         {
             public int CodMatrix { get; set; }
-            public string Actividad { get; set; }
+            public string Actividad { get; set; } = string.Empty;
             public decimal Tarifa { get; set; }
-            public string Unidad { get; set; }
+            public string Unidad { get; set; } = string.Empty;
             public decimal? Horas { get; set; }
         }
 
         public class RateEstadisticaRow
         {
-            public string Categoria { get; set; }
-            public string Servicio { get; set; }
+            public string Categoria { get; set; } = string.Empty;
+            public string Servicio { get; set; } = string.Empty;
             public decimal HorasEstimadas { get; set; }
             public decimal PrecioReferencia { get; set; }
             public decimal FactorEscala { get; set; }

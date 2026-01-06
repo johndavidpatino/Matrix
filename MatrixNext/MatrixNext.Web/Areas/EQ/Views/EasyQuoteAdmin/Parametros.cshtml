@@ -1,11 +1,11 @@
-@model MatrixNext.Web.Areas.EQ.Models.EasyQuoteAdminViewModel
+ï»¿@model MatrixNext.Web.Areas.EQ.Models.EasyQuoteAdminViewModel
 @{
     ViewData["Title"] = "Admin EasyQuote";
 }
 
 <div class="container-fluid">
-    <h1 class="mb-3">Administración EasyQuote</h1>
-    <p class="text-muted">Editar parámetros base. Cambios se escriben directo en tablas maestras.</p>
+    <h1 class="mb-3">Administracion EasyQuote</h1>
+    <p class="text-muted">Editar parametros base. Cambios se escriben directo en tablas maestras.</p>
     @Html.AntiForgeryToken()
 
     <ul class="nav nav-tabs mb-3" role="tablist">
@@ -15,18 +15,19 @@
         <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-insumos" type="button">Insumos</button></li>
         <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-locaciones" type="button">Locaciones</button></li>
         <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-envios" type="button">Envios</button></li>
-        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-codif" type="button">Codificación</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-codif" type="button">Codificacion</button></li>
         <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-mystery" type="button">Mystery</button></li>
         <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-costunit" type="button">Costos Unitarios</button></li>
-        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-estad" type="button">Tarifario Estadística</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-config" type="button">Config misc/envio</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-estad" type="button">Tarifario Estadistica</button></li>
     </ul>
 
     <div class="tab-content">
         <div class="tab-pane fade show active" id="tab-precios">
             <div class="alert alert-secondary p-2 mb-2">
                 <div class="row g-2 align-items-end">
-                    <div class="col-md-2"><label class="form-label">Metodología</label><input class="form-control form-control-sm" id="pre-met" /></div>
-                    <div class="col-md-2"><label class="form-label">Penetración</label><input class="form-control form-control-sm" id="pre-pen" /></div>
+                    <div class="col-md-2"><label class="form-label">Metodologia</label><input class="form-control form-control-sm" id="pre-met" /></div>
+                    <div class="col-md-2"><label class="form-label">Penetracion</label><input class="form-control form-control-sm" id="pre-pen" /></div>
                     <div class="col-md-2"><label class="form-label">Min</label><input class="form-control form-control-sm" id="pre-min" type="number" /></div>
                     <div class="col-md-2"><label class="form-label">Valor Total</label><input class="form-control form-control-sm" id="pre-val" type="number" /></div>
                     <div class="col-md-2"><button class="btn btn-sm btn-primary w-100" id="btn-precio">Guardar</button></div>
@@ -34,7 +35,7 @@
             </div>
             <div class="table-responsive">
                 <table class="table table-sm table-bordered align-middle">
-                    <thead><tr><th>Metodología</th><th>Penetración</th><th>Min</th><th>Valor Total</th></tr></thead>
+                    <thead><tr><th>Metodologia</th><th>Penetracion</th><th>Min</th><th>Valor Total</th></tr></thead>
                     <tbody>
                     @foreach (var p in Model.Precios.OrderBy(x=>x.MetodologiaCodigo).ThenBy(x=>x.PenetracionCodigo).ThenBy(x=>x.DuracionMin))
                     {
@@ -49,7 +50,7 @@
         <div class="tab-pane fade" id="tab-horas">
             <div class="table-responsive">
                 <table class="table table-sm table-bordered align-middle">
-                    <thead><tr><th>Minutos</th><th>Script</th><th>Procesamiento</th><th>Harmoni</th><th>Graficación</th></tr></thead>
+                    <thead><tr><th>Minutos</th><th>Script</th><th>Procesamiento</th><th>Harmoni</th><th>Graficacion</th></tr></thead>
                     <tbody>
                     @foreach (var h in Model.Horas.OrderBy(x=>x.DuracionMin))
                     {
@@ -66,6 +67,13 @@
                     <div class="col-md-3"><label class="form-label">Variante</label><input class="form-control form-control-sm" id="vh-var" /></div>
                     <div class="col-md-3"><label class="form-label">Valor Hora</label><input class="form-control form-control-sm" id="vh-valor" type="number" /></div>
                     <div class="col-md-2"><button class="btn btn-sm btn-primary w-100" id="btn-vh">Guardar</button></div>
+                </div>
+            </div>
+            <div class="alert alert-warning p-2 mb-2">
+                <div class="row g-2 align-items-end">
+                    <div class="col-md-4"><label class="form-label">Importar Valor Hora CSV (Nivel,Variante,ValorHora)</label><input class="form-control form-control-sm" type="file" id="vh-file" accept=".csv" /></div>
+                    <div class="col-md-3"><label class="form-label">Version</label><input class="form-control form-control-sm" id="vh-ver" placeholder="ej. 2026-01" /></div>
+                    <div class="col-md-3"><button class="btn btn-sm btn-outline-primary w-100" id="btn-vh-import">Importar CSV</button></div>
                 </div>
             </div>
             <table class="table table-sm table-bordered"><thead><tr><th>Nivel</th><th>Variante</th><th>Valor Hora</th></tr></thead><tbody>
@@ -86,14 +94,23 @@
             </tbody></table>
         </div>
         <div class="tab-pane fade" id="tab-locaciones">
-            <table class="table table-sm table-bordered"><thead><tr><th>Ciudad</th><th>Tarifa Base</th><th>Tarifa Gross</th><th>Días Base</th></tr></thead><tbody>
+            <div class="alert alert-secondary p-2 mb-2">
+                <div class="row g-2 align-items-end">
+                    <div class="col-md-3"><label class="form-label">Ciudad</label><input class="form-control form-control-sm" id="loc-ciudad" /></div>
+                    <div class="col-md-3"><label class="form-label">Tarifa Base</label><input class="form-control form-control-sm" id="loc-base" type="number" /></div>
+                    <div class="col-md-3"><label class="form-label">Tarifa Gross</label><input class="form-control form-control-sm" id="loc-gross" type="number" /></div>
+                    <div class="col-md-2"><label class="form-label">Dias Base</label><input class="form-control form-control-sm" id="loc-dias" type="number" step="0.01" /></div>
+                    <div class="col-md-1"><button class="btn btn-sm btn-primary w-100" id="btn-loc">Guardar</button></div>
+                </div>
+            </div>
+            <table class="table table-sm table-bordered"><thead><tr><th>Ciudad</th><th>Tarifa Base</th><th>Tarifa Gross</th><th>Dias Base</th></tr></thead><tbody>
             @foreach (var l in Model.Locaciones) { <tr><td>@l.Ciudad</td><td class="text-end">@l.TarifaBase.ToString("N0")</td><td class="text-end">@l.TarifaConGross.ToString("N0")</td><td>@l.DiasBase</td></tr>; }
             </tbody></table>
         </div>
         <div class="tab-pane fade" id="tab-envios">
             <div class="alert alert-secondary p-2 mb-2">
                 <div class="row g-2 align-items-end">
-                    <div class="col-md-2"><label class="form-label">Tipología</label><input class="form-control form-control-sm" id="en-tip" /></div>
+                    <div class="col-md-2"><label class="form-label">Tipologia</label><input class="form-control form-control-sm" id="en-tip" /></div>
                     <div class="col-md-2"><label class="form-label">Kilo inicial</label><input class="form-control form-control-sm" id="en-kini" type="number" /></div>
                     <div class="col-md-2"><label class="form-label">Kilo adicional</label><input class="form-control form-control-sm" id="en-kadd" type="number" /></div>
                     <div class="col-md-2"><label class="form-label">Seguro %</label><input class="form-control form-control-sm" id="en-seg" type="number" step="0.0001" /></div>
@@ -101,30 +118,120 @@
                     <div class="col-md-2"><button class="btn btn-sm btn-primary w-100" id="btn-envio">Guardar</button></div>
                 </div>
             </div>
-            <table class="table table-sm table-bordered"><thead><tr><th>Tipología</th><th>Kilo Inicial</th><th>Kilo Adicional</th><th>Seguro %</th><th>Valor decl. mínimo</th></tr></thead><tbody>
+            <table class="table table-sm table-bordered"><thead><tr><th>Tipologia</th><th>Kilo Inicial</th><th>Kilo Adicional</th><th>Seguro %</th><th>Valor decl. minimo</th></tr></thead><tbody>
             @foreach (var e in Model.Envios) { <tr><td>@e.Tipologia</td><td class="text-end">@e.KiloInicial.ToString("N0")</td><td class="text-end">@e.KiloAdicional.ToString("N0")</td><td>@e.SeguroPct</td><td class="text-end">@e.ValorDeclaradoMin.ToString("N0")</td></tr>; }
             </tbody></table>
         </div>
         <div class="tab-pane fade" id="tab-codif">
-            <table class="table table-sm table-bordered"><thead><tr><th>Escenario</th><th>Registros</th><th>P.Abiertas</th><th>P.Abiertas Mult</th><th>Días</th><th>Horas</th><th>Valor Ipsos</th></tr></thead><tbody>
+            <div class="alert alert-secondary p-2 mb-2">
+                <div class="row g-2 align-items-end">
+                    <div class="col-md-3"><label class="form-label">Escenario</label><input class="form-control form-control-sm" id="cod-esc" /></div>
+                    <div class="col-md-1"><label class="form-label">Registros</label><input class="form-control form-control-sm" id="cod-reg" type="number" /></div>
+                    <div class="col-md-1"><label class="form-label">P. Abiertas</label><input class="form-control form-control-sm" id="cod-pa" type="number" /></div>
+                    <div class="col-md-1"><label class="form-label">P. Mult</label><input class="form-control form-control-sm" id="cod-pm" type="number" /></div>
+                    <div class="col-md-1"><label class="form-label">Dias</label><input class="form-control form-control-sm" id="cod-dias" type="number" step="0.01" /></div>
+                    <div class="col-md-1"><label class="form-label">Horas</label><input class="form-control form-control-sm" id="cod-horas" type="number" step="0.01" /></div>
+                    <div class="col-md-2"><label class="form-label">Valor Ipsos</label><input class="form-control form-control-sm" id="cod-valor" type="number" /></div>
+                    <div class="col-md-2"><button class="btn btn-sm btn-primary w-100" id="btn-codif">Guardar</button></div>
+                </div>
+            </div>
+            <table class="table table-sm table-bordered"><thead><tr><th>Escenario</th><th>Registros</th><th>P.Abiertas</th><th>P.Abiertas Mult</th><th>Dias</th><th>Horas</th><th>Valor Ipsos</th></tr></thead><tbody>
             @foreach (var c in Model.Codificacion) { <tr><td>@c.Escenario</td><td>@c.Registros</td><td>@c.PregAbiertas</td><td>@c.PregAbiertasMult</td><td>@c.Dias</td><td>@c.Horas</td><td class="text-end">@c.ValorIpsos.ToString("N0")</td></tr>; }
             </tbody></table>
         </div>
         <div class="tab-pane fade" id="tab-mystery">
+            <div class="alert alert-secondary p-2 mb-2">
+                <div class="row g-2 align-items-end">
+                    <div class="col-md-3"><label class="form-label">Tipo Visita</label><input class="form-control form-control-sm" id="my-tipo" /></div>
+                    <div class="col-md-3"><label class="form-label">Complejidad</label><input class="form-control form-control-sm" id="my-comp" /></div>
+                    <div class="col-md-2"><label class="form-label">Vr Unitario</label><input class="form-control form-control-sm" id="my-vr" type="number" /></div>
+                    <div class="col-md-2"><label class="form-label">Olas default</label><input class="form-control form-control-sm" id="my-olas" type="number" /></div>
+                    <div class="col-md-2"><button class="btn btn-sm btn-primary w-100" id="btn-mystery">Guardar</button></div>
+                </div>
+            </div>
             <table class="table table-sm table-bordered"><thead><tr><th>Tipo Visita</th><th>Complejidad</th><th>Vr Unitario</th><th>Olas default</th></tr></thead><tbody>
             @foreach (var m in Model.Mystery) { <tr><td>@m.TipoVisita</td><td>@m.Complejidad</td><td class="text-end">@m.VrUnitario.ToString("N0")</td><td>@m.OlasDefault</td></tr>; }
             </tbody></table>
         </div>
         <div class="tab-pane fade" id="tab-costunit">
             <div class="table-responsive">
+                <div class="alert alert-secondary p-2 mb-2">
+                    <div class="row g-2 align-items-end">
+                        <div class="col-md-2"><label class="form-label">CodMatrix</label><input class="form-control form-control-sm" id="cu-cod" type="number" /></div>
+                        <div class="col-md-4"><label class="form-label">Actividad</label><input class="form-control form-control-sm" id="cu-act" /></div>
+                        <div class="col-md-2"><label class="form-label">Tarifa</label><input class="form-control form-control-sm" id="cu-tar" type="number" /></div>
+                        <div class="col-md-2"><label class="form-label">Unidad</label><input class="form-control form-control-sm" id="cu-uni" /></div>
+                        <div class="col-md-1"><label class="form-label">Horas</label><input class="form-control form-control-sm" id="cu-hor" type="number" step="0.01" /></div>
+                        <div class="col-md-1"><button class="btn btn-sm btn-primary w-100" id="btn-costunit">Guardar</button></div>
+                    </div>
+                </div>
                 <table class="table table-sm table-bordered"><thead><tr><th>CodMatrix</th><th>Actividad</th><th>Tarifa</th><th>Unidad</th><th>Horas</th></tr></thead><tbody>
                 @foreach (var c in Model.CostUnitarios.OrderBy(x=>x.CodMatrix)) { <tr><td>@c.CodMatrix</td><td>@c.Actividad</td><td class="text-end">@c.Tarifa.ToString("N0")</td><td>@c.Unidad</td><td>@c.Horas</td></tr>; }
                 </tbody></table>
             </div>
         </div>
+        <div class="tab-pane fade" id="tab-config">
+            <div class="alert alert-secondary p-2 mb-3">
+                <h6 class="fw-bold mb-2">Parametros de envio (tipologias y divisor volumetrico)</h6>
+                <div class="row g-2 align-items-end">
+                    <div class="col-md-3"><label class="form-label">Divisor volumetrico</label><input class="form-control form-control-sm" id="cfg-divisor" type="number" /></div>
+                    <div class="col-md-3"><label class="form-label">Tipologia urbano</label><input class="form-control form-control-sm" id="cfg-urbano" /></div>
+                    <div class="col-md-3"><label class="form-label">Tipologia nacional</label><input class="form-control form-control-sm" id="cfg-nacional" /></div>
+                    <div class="col-md-3"><button class="btn btn-sm btn-primary w-100" id="btn-envparam">Guardar envio param</button></div>
+                </div>
+            </div>
+
+            <div class="alert alert-secondary p-2 mb-3">
+                <h6 class="fw-bold mb-2">Parametros misc (clave/valor)</h6>
+                <div class="row g-2 align-items-end">
+                    <div class="col-md-3"><label class="form-label">Clave</label><input class="form-control form-control-sm" id="misc-clave" /></div>
+                    <div class="col-md-3"><label class="form-label">Valor decimal</label><input class="form-control form-control-sm" id="misc-dec" type="number" step="0.0001" /></div>
+                    <div class="col-md-3"><label class="form-label">Valor texto</label><input class="form-control form-control-sm" id="misc-txt" /></div>
+                    <div class="col-md-3"><button class="btn btn-sm btn-primary w-100" id="btn-misc">Guardar misc</button></div>
+                </div>
+                <table class="table table-sm table-bordered mt-2"><thead><tr><th>Clave</th><th>Valor decimal</th><th>Valor texto</th></tr></thead><tbody>
+                @foreach (var m in Model.ParamMisc) { <tr><td>@m.Clave</td><td>@m.ValorDecimal</td><td>@m.ValorTexto</td></tr>; }
+                </tbody></table>
+            </div>
+
+            <div class="alert alert-secondary p-2 mb-3">
+                <h6 class="fw-bold mb-2">Productividad por ciudad</h6>
+                <div class="row g-2 align-items-end">
+                    <div class="col-md-3"><label class="form-label">Ciudad</label><input class="form-control form-control-sm" id="prod-ciudad" /></div>
+                    <div class="col-md-3"><label class="form-label">Encuestadores</label><input class="form-control form-control-sm" id="prod-enc" type="number" step="0.01" /></div>
+                    <div class="col-md-3"><label class="form-label">Productividad</label><input class="form-control form-control-sm" id="prod-prod" type="number" step="0.01" /></div>
+                    <div class="col-md-3"><button class="btn btn-sm btn-primary w-100" id="btn-prod">Guardar productividad</button></div>
+                </div>
+                <table class="table table-sm table-bordered mt-2"><thead><tr><th>Ciudad</th><th>Encuestadores</th><th>Productividad</th></tr></thead><tbody>
+                @foreach (var p in Model.Productividad) { <tr><td>@p.Ciudad</td><td>@p.Encuestadores</td><td>@p.Productividad</td></tr>; }
+                </tbody></table>
+            </div>
+
+            <div class="alert alert-secondary p-2">
+                <h6 class="fw-bold mb-2">Costo base de datos</h6>
+                <div class="row g-2 align-items-end">
+                    <div class="col-md-4"><label class="form-label">Tipo</label><input class="form-control form-control-sm" id="bd-tipo" placeholder="No requiere / Cliente / Comprar" /></div>
+                    <div class="col-md-4"><label class="form-label">Valor</label><input class="form-control form-control-sm" id="bd-valor" type="number" /></div>
+                    <div class="col-md-3"><button class="btn btn-sm btn-primary w-100" id="btn-bd">Guardar base datos</button></div>
+                </div>
+                <table class="table table-sm table-bordered mt-2"><thead><tr><th>Tipo</th><th>Valor</th></tr></thead><tbody>
+                @foreach (var b in Model.BaseDatos) { <tr><td>@b.Tipo</td><td class="text-end">@b.Valor.ToString("N0")</td></tr>; }
+                </tbody></table>
+            </div>
+
+            <div class="alert alert-warning p-2 mt-3">
+                <h6 class="fw-bold mb-2">Importar Precios Base CSV (Metodologia,Penetracion,Min,ValorTotal)</h6>
+                <div class="row g-2 align-items-end">
+                    <div class="col-md-4"><input class="form-control form-control-sm" type="file" id="pre-file" accept=".csv" /></div>
+                    <div class="col-md-3"><input class="form-control form-control-sm" id="pre-ver" placeholder="ej. 2026-01" /></div>
+                    <div class="col-md-3"><button class="btn btn-sm btn-outline-primary w-100" id="btn-pre-import">Importar CSV</button></div>
+                </div>
+                <small class="text-muted">Sobrescribe eq_param_precio y guarda la version en misc (PRECIOS_VERSION).</small>
+            </div>
+        </div>
         <div class="tab-pane fade" id="tab-estad">
             <div class="table-responsive">
-                <table class="table table-sm table-bordered"><thead><tr><th>Categoría</th><th>Servicio</th><th>Horas</th><th>Precio Ref</th><th>Factor Escala</th></tr></thead><tbody>
+                <table class="table table-sm table-bordered"><thead><tr><th>Categoria</th><th>Servicio</th><th>Horas</th><th>Precio Ref</th><th>Factor Escala</th></tr></thead><tbody>
                 @foreach (var r in Model.Estadistica) { <tr><td>@r.Categoria</td><td>@r.Servicio</td><td>@r.HorasEstimadas</td><td class="text-end">@r.PrecioReferencia.ToString("N0")</td><td>@r.FactorEscala</td></tr>; }
                 </tbody></table>
             </div>
@@ -154,5 +261,42 @@
     $('btn-envio').addEventListener('click', ()=>{
         post('@Url.Action("UpsertEnvio")', {Tipologia:$('en-tip').value,KiloInicial:+$('en-kini').value,KiloAdicional:+$('en-kadd').value,SeguroPct:+$('en-seg').value,ValorDeclaradoMin:+$('en-vmin').value}, ()=>location.reload());
     });
+    $('btn-loc').addEventListener('click', ()=>{
+        post('@Url.Action("UpsertLocacion")', {Ciudad:$('loc-ciudad').value,TarifaBase:+$('loc-base').value,TarifaConGross:+$('loc-gross').value,DiasBase:+$('loc-dias').value}, ()=>location.reload());
+    });
+    $('btn-codif').addEventListener('click', ()=>{
+        post('@Url.Action("UpsertCodificacion")', {Escenario:$('cod-esc').value,Registros:+$('cod-reg').value,PregAbiertas:+$('cod-pa').value,PregAbiertasMult:+$('cod-pm').value,Dias:+$('cod-dias').value,Horas:+$('cod-horas').value,ValorIpsos:+$('cod-valor').value}, ()=>location.reload());
+    });
+    $('btn-mystery').addEventListener('click', ()=>{
+        post('@Url.Action("UpsertMystery")', {TipoVisita:$('my-tipo').value,Complejidad:$('my-comp').value,VrUnitario:+$('my-vr').value,OlasDefault:+$('my-olas').value}, ()=>location.reload());
+    });
+    $('btn-costunit').addEventListener('click', ()=>{
+        post('@Url.Action("UpsertCostUnitario")', {CodMatrix:+$('cu-cod').value,Actividad:$('cu-act').value,Tarifa:+$('cu-tar').value,Unidad:$('cu-uni').value,Horas:+$('cu-hor').value}, ()=>location.reload());
+    });
+    $('btn-envparam').addEventListener('click', ()=>{
+        post('@Url.Action("UpsertEnvioParam")', {DivisorVolumetrico:+$('cfg-divisor').value,TipologiaUrbano:$('cfg-urbano').value,TipologiaNacional:$('cfg-nacional').value}, ()=>location.reload());
+    });
+    $('btn-misc').addEventListener('click', ()=>{
+        post('@Url.Action("UpsertMisc")', {Clave:$('misc-clave').value,ValorDecimal:+$('misc-dec').value,ValorTexto:$('misc-txt').value}, ()=>location.reload());
+    });
+    $('btn-prod').addEventListener('click', ()=>{
+        post('@Url.Action("UpsertProductividad")', {Ciudad:$('prod-ciudad').value,Encuestadores:+$('prod-enc').value,Productividad:+$('prod-prod').value}, ()=>location.reload());
+    });
+    $('btn-bd').addEventListener('click', ()=>{
+        post('@Url.Action("UpsertBaseDatos")', {Tipo:$('bd-tipo').value,Valor:+$('bd-valor').value}, ()=>location.reload());
+    });
+
+    async function postFile(url, fileInputId, extra) {
+        const f = $(fileInputId).files[0];
+        if (!f) { alert('Selecciona un archivo CSV'); return; }
+        const formData = new FormData();
+        formData.append('file', f);
+        if (extra.version) formData.append('version', extra.version);
+        const res = await fetch(url, { method:'POST', headers:{'RequestVerificationToken':token}, body: formData });
+        const r = await res.json();
+        if (r.success) location.reload(); else alert(r.message || 'Error importando CSV');
+    }
+    $('btn-pre-import').addEventListener('click', ()=>postFile('@Url.Action("ImportPreciosCsv")','pre-file',{version:$('pre-ver').value}));
+    $('btn-vh-import').addEventListener('click', ()=>postFile('@Url.Action("ImportValorHoraCsv")','vh-file',{version:$('vh-ver').value}));
 </script>
 }
