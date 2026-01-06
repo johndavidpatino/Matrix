@@ -1,0 +1,86 @@
+@{
+    ViewData["Title"] = "Estado JobBooks";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid mt-4">
+    <h1><i class="fas fa-book mr-2"></i>Estado de JobBooks</h1>
+    
+    <div class="row mb-4 mt-3">
+        <div class="col-md-4">
+            <div class="card metric-card" style="border-left: 4px solid #4472C4;">
+                <div class="card-body text-center">
+                    <h6>JobBooks</h6>
+                    <h3 id="m1" class="text-primary">0</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card metric-card" style="border-left: 4px solid #70AD47;">
+                <div class="card-body text-center">
+                    <h6>Monto Total</h6>
+                    <h3 id="m2" class="text-success">$0</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card metric-card" style="border-left: 4px solid #FFC000;">
+                <div class="card-body text-center">
+                    <h6>Abiertos</h6>
+                    <h3 id="m3" class="text-warning">0</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-light">
+            <h5><i class="fas fa-filter mr-2"></i>Filtros</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6"><label>Trabajo</label><input type="number" id="t" class="form-control"></div>
+                <div class="col-md-6"><label>Estado</label><select id="e" class="form-control"><option value="">Todos</option><option value="1">Abierto</option><option value="2">Cerrado</option></select></div>
+            </div>
+            <button id="b" class="btn btn-primary mt-3" style="margin-right:5px;">Buscar</button>
+            <button id="x" class="btn btn-success mt-3">Exportar</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <table id="tbl" class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>ID</th><th>Trabajo</th><th>JobBook</th><th>Estado</th>
+                        <th>Apertura</th><th>Cierre</th><th>Monto</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            const t = $('#tbl').DataTable({
+                language:{url:'//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'},pageLength:10,
+                columns:[{data:'idJobBook'},{data:'codigoTrabajo'},{data:'numeroJobBook'},{data:'estadoActualNombre'},
+                {data:'fechaApertura',render:(d)=>new Date(d).toLocaleDateString('es-CO')},
+                {data:'fechaCierre',render:(d)=>d?new Date(d).toLocaleDateString('es-CO'):'--'},
+                {data:'montoTotal',render:$.fn.dataTable.render.number(',','.',2,'$')}]
+            });
+
+            $('#b').click(()=>{
+                $.ajax({type:'POST',url:'@Url.Action("ObtenerJobBooks","EstadoJobBooks")',
+                contentType:'application/json',
+                data:JSON.stringify({idTrabajo:$('#t').val()?parseInt($('#t').val()):null,estadoActual:$('#e').val()?parseInt($('#e').val()):null}),
+                success:r=>{if(r.success){t.clear().rows.add(r.data).draw();$('#m1').text(r.data.length);$('#m2').text('$'+r.data.reduce((s,x)=>s+(x.montoTotal||0),0).toLocaleString('es-CO',{minimumFractionDigits:2}));$('#m3').text(r.data.filter(x=>x.estadoActual==1).length);}}});
+            });
+
+            $('#x').click(()=>{const p=new URLSearchParams();if($('#t').val())p.append('idTrabajo',$('#t').val());if($('#e').val())p.append('estadoActual',$('#e').val());window.location='@Url.Action("Exportar","EstadoJobBooks")?' + p;});
+        });
+    </script>
+}

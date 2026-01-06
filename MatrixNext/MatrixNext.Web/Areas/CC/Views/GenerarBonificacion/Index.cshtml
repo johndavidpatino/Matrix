@@ -1,0 +1,167 @@
+@{
+    ViewData["Title"] = "Generar Bonificación";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid mt-4">
+    <h1><i class="fas fa-gift mr-2"></i>Generar Bonificación</h1>
+    
+    <div class="row mb-4 mt-3">
+        <div class="col-md-3">
+            <div class="card metric-card" style="border-left: 4px solid #4472C4;">
+                <div class="card-body text-center">
+                    <h6 class="card-title mb-2">Total Bonificaciones</h6>
+                    <h3 id="metric-bonos" class="text-primary">0</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card metric-card" style="border-left: 4px solid #70AD47;">
+                <div class="card-body text-center">
+                    <h6 class="card-title mb-2">Valor Total</h6>
+                    <h3 id="metric-valor" class="text-success">$0</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card metric-card" style="border-left: 4px solid #FFC000;">
+                <div class="card-body text-center">
+                    <h6 class="card-title mb-2">Promedio</h6>
+                    <h3 id="metric-promedio" class="text-warning">$0</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card metric-card" style="border-left: 4px solid #FF5050;">
+                <div class="card-body text-center">
+                    <h6 class="card-title mb-2">% Meta Prom.</h6>
+                    <h3 id="metric-meta" class="text-danger">0%</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-light">
+            <h5 class="mb-0"><i class="fas fa-filter mr-2"></i>Filtros</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <label>Período</label>
+                    <input type="month" id="filtro-periodo" class="form-control">
+                </div>
+                <div class="col-md-3">
+                    <label>Trabajo</label>
+                    <input type="number" id="filtro-trabajo" class="form-control" placeholder="ID">
+                </div>
+                <div class="col-md-3">
+                    <label>Empleado</label>
+                    <input type="number" id="filtro-empleado" class="form-control" placeholder="ID">
+                </div>
+                <div class="col-md-3">
+                    <label>Estado</label>
+                    <select id="filtro-estado" class="form-control">
+                        <option value="">Todos</option>
+                        <option value="1">Generada</option>
+                        <option value="2">Aprobada</option>
+                    </select>
+                </div>
+            </div>
+            <button id="btn-buscar" class="btn btn-primary mt-3" style="margin-right: 5px;">
+                <i class="fas fa-search mr-1"></i>Buscar
+            </button>
+            <button id="btn-exportar" class="btn btn-success mt-3">
+                <i class="fas fa-download mr-1"></i>Exportar
+            </button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <table id="grid-bonificaciones" class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Período</th>
+                        <th>Empleado</th>
+                        <th>Trabajo</th>
+                        <th>Salario Base</th>
+                        <th>Producción</th>
+                        <th>% Meta</th>
+                        <th>Bono Calc.</th>
+                        <th>Bono Final</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            const table = $('#grid-bonificaciones').DataTable({
+                language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json' },
+                pageLength: 10,
+                columns: [
+                    { data: 'idBonificacion' },
+                    { data: 'periodo' },
+                    { data: 'nombreEmpleado' },
+                    { data: 'nombreTrabajo' },
+                    { data: 'salarioBase', render: $.fn.dataTable.render.number(',', '.', 2, '$') },
+                    { data: 'produccionTotal', render: $.fn.dataTable.render.number(',', '.', 2, '$') },
+                    { data: 'percentajeMetaBonificacion', render: $.fn.dataTable.render.number(',', '.', 2, '', '%') },
+                    { data: 'bonoCalculado', render: $.fn.dataTable.render.number(',', '.', 2, '$') },
+                    { data: 'bonoFinal', render: $.fn.dataTable.render.number(',', '.', 2, '$') },
+                    { data: 'fechaGeneracion', render: (d) => new Date(d).toLocaleDateString('es-CO') }
+                ]
+            });
+
+            $('#btn-buscar').click(function() {
+                const filtros = {
+                    periodo: $('#filtro-periodo').val() ? parseInt($('#filtro-periodo').val().replace('-', '')) : null,
+                    idTrabajo: $('#filtro-trabajo').val() ? parseInt($('#filtro-trabajo').val()) : null,
+                    idEmpleado: $('#filtro-empleado').val() ? parseInt($('#filtro-empleado').val()) : null,
+                    estado: $('#filtro-estado').val() ? parseInt($('#filtro-estado').val()) : null
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("ObtenerBonificaciones", "GenerarBonificacion")',
+                    contentType: 'application/json',
+                    data: JSON.stringify(filtros),
+                    success: function(result) {
+                        if (result.success) {
+                            table.clear().rows.add(result.data).draw();
+                            actualizar(result.data);
+                        }
+                    }
+                });
+            });
+
+            $('#btn-exportar').click(function() {
+                const p = new URLSearchParams();
+                if ($('#filtro-periodo').val()) p.append('periodo', parseInt($('#filtro-periodo').val().replace('-', '')));
+                if ($('#filtro-trabajo').val()) p.append('idTrabajo', $('#filtro-trabajo').val());
+                if ($('#filtro-empleado').val()) p.append('idEmpleado', $('#filtro-empleado').val());
+                if ($('#filtro-estado').val()) p.append('estado', $('#filtro-estado').val());
+                window.location = '@Url.Action("Exportar", "GenerarBonificacion")?' + p;
+            });
+
+            function actualizar(datos) {
+                const cant = datos.length;
+                const total = datos.reduce((s, x) => s + (x.bonoFinal || 0), 0);
+                const meta = datos.length > 0 ? datos.reduce((s, x) => s + (x.percentajeMetaBonificacion || 0), 0) / datos.length : 0;
+                $('#metric-bonos').text(cant);
+                $('#metric-valor').text('$' + total.toLocaleString('es-CO', {minimumFractionDigits: 2, maximumFractionDigits: 2}));
+                $('#metric-promedio').text('$' + (cant > 0 ? (total / cant) : 0).toLocaleString('es-CO', {minimumFractionDigits: 2, maximumFractionDigits: 2}));
+                $('#metric-meta').text(meta.toFixed(2) + '%');
+            }
+        });
+    </script>
+}

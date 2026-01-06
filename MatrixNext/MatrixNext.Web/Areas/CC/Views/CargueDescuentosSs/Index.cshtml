@@ -1,0 +1,148 @@
+@{
+    ViewData["Title"] = "Cargue Descuentos SS";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid mt-4">
+    <h1><i class="fas fa-money-bill-wave mr-2"></i>Cargue Descuentos Seguridad Social</h1>
+    
+    <div class="row mb-4 mt-3">
+        <div class="col-md-4">
+            <div class="card metric-card" style="border-left: 4px solid #4472C4;">
+                <div class="card-body text-center">
+                    <h6>Descuentos Cargados</h6>
+                    <h3 id="metric-descuentos" class="text-primary">0</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card metric-card" style="border-left: 4px solid #70AD47;">
+                <div class="card-body text-center">
+                    <h6>Valor Total</h6>
+                    <h3 id="metric-valor" class="text-success">$0</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card metric-card" style="border-left: 4px solid #FFC000;">
+                <div class="card-body text-center">
+                    <h6>% Promedio</h6>
+                    <h3 id="metric-prom" class="text-warning">0%</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-light">
+            <h5><i class="fas fa-filter mr-2"></i>Filtros</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <label>Período</label>
+                    <input type="month" id="filtro-periodo" class="form-control">
+                </div>
+                <div class="col-md-3">
+                    <label>Empleado</label>
+                    <input type="number" id="filtro-empleado" class="form-control">
+                </div>
+                <div class="col-md-3">
+                    <label>Tipo Descuento</label>
+                    <select id="filtro-tipo" class="form-control">
+                        <option value="">Todos</option>
+                        <option>AFP</option>
+                        <option>EPS</option>
+                        <option>ARL</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label>Estado</label>
+                    <select id="filtro-estado" class="form-control">
+                        <option value="">Todos</option>
+                        <option value="1">Cargado</option>
+                        <option value="2">Procesado</option>
+                    </select>
+                </div>
+            </div>
+            <button id="btn-buscar" class="btn btn-primary mt-3" style="margin-right: 5px;">Buscar</button>
+            <button id="btn-exportar" class="btn btn-success mt-3">Exportar</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <table id="grid-descuentos" class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Período</th>
+                        <th>Empleado</th>
+                        <th>Tipo</th>
+                        <th>Valor</th>
+                        <th>%</th>
+                        <th>Fecha</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            const table = $('#grid-descuentos').DataTable({
+                language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json' },
+                pageLength: 10,
+                columns: [
+                    { data: 'idDescuento' },
+                    { data: 'periodo' },
+                    { data: 'nombreEmpleado' },
+                    { data: 'tipoDescuento' },
+                    { data: 'valorDescuento', render: $.fn.dataTable.render.number(',', '.', 2, '$') },
+                    { data: 'percentajeDescuento', render: $.fn.dataTable.render.number(',', '.', 2, '', '%') },
+                    { data: 'fechaCarga', render: (d) => new Date(d).toLocaleDateString('es-CO') },
+                    { data: 'estado' }
+                ]
+            });
+
+            $('#btn-buscar').click(function() {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("ObtenerDescuentos", "CargueDescuentosSs")',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        periodo: $('#filtro-periodo').val() ? parseInt($('#filtro-periodo').val().replace('-', '')) : null,
+                        idEmpleado: $('#filtro-empleado').val() ? parseInt($('#filtro-empleado').val()) : null,
+                        tipoDescuento: $('#filtro-tipo').val() || null,
+                        estado: $('#filtro-estado').val() ? parseInt($('#filtro-estado').val()) : null
+                    }),
+                    success: function(r) {
+                        if (r.success) {
+                            table.clear().rows.add(r.data).draw();
+                            const tot = r.data.reduce((s,x) => s + (x.valorDescuento || 0), 0);
+                            const prom = r.data.length > 0 ? r.data.reduce((s,x) => s + (x.percentajeDescuento || 0), 0) / r.data.length : 0;
+                            $('#metric-descuentos').text(r.data.length);
+                            $('#metric-valor').text('$' + tot.toLocaleString('es-CO', {minimumFractionDigits: 2}));
+                            $('#metric-prom').text(prom.toFixed(2) + '%');
+                        }
+                    }
+                });
+            });
+
+            $('#btn-exportar').click(function() {
+                const p = new URLSearchParams();
+                if ($('#filtro-periodo').val()) p.append('periodo', parseInt($('#filtro-periodo').val().replace('-', '')));
+                if ($('#filtro-empleado').val()) p.append('idEmpleado', $('#filtro-empleado').val());
+                if ($('#filtro-tipo').val()) p.append('tipoDescuento', $('#filtro-tipo').val());
+                if ($('#filtro-estado').val()) p.append('estado', $('#filtro-estado').val());
+                window.location = '@Url.Action("Exportar", "CargueDescuentosSs")?' + p;
+            });
+        });
+    </script>
+}

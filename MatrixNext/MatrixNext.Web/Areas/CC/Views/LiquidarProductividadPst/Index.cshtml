@@ -1,0 +1,141 @@
+@{
+    ViewData["Title"] = "Liquidar Productividad PST";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid mt-4">
+    <h1><i class="fas fa-chart-line mr-2"></i>Liquidación de Productividad PST</h1>
+    
+    <div class="row mb-4 mt-3">
+        <div class="col-md-3">
+            <div class="card metric-card" style="border-left: 4px solid #4472C4;">
+                <div class="card-body text-center">
+                    <h6>Liquidaciones PST</h6>
+                    <h3 id="m-liq" class="text-primary">0</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card metric-card" style="border-left: 4px solid #70AD47;">
+                <div class="card-body text-center">
+                    <h6>Valor Total</h6>
+                    <h3 id="m-valor" class="text-success">$0</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card metric-card" style="border-left: 4px solid #FFC000;">
+                <div class="card-body text-center">
+                    <h6>Producción Total</h6>
+                    <h3 id="m-prod" class="text-warning">$0</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card metric-card" style="border-left: 4px solid #FF5050;">
+                <div class="card-body text-center">
+                    <h6>% Prom. Liquidación</h6>
+                    <h3 id="m-pct" class="text-danger">0%</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-light">
+            <h5><i class="fas fa-filter mr-2"></i>Filtros</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <label>Período</label>
+                    <input type="month" id="fp" class="form-control">
+                </div>
+                <div class="col-md-3">
+                    <label>Trabajo</label>
+                    <input type="number" id="ft" class="form-control">
+                </div>
+                <div class="col-md-3">
+                    <label>Empleado</label>
+                    <input type="number" id="fe" class="form-control">
+                </div>
+                <div class="col-md-3">
+                    <label>Estado</label>
+                    <select id="fs" class="form-control">
+                        <option value="">Todos</option>
+                        <option value="1">Liquidada</option>
+                    </select>
+                </div>
+            </div>
+            <button id="bs" class="btn btn-primary mt-3">Buscar</button>
+            <button id="be" class="btn btn-success mt-3" style="margin-left: 5px;">Exportar</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <table id="tbl" class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>ID</th><th>Período</th><th>Trabajo</th><th>Empleado</th><th>PST</th>
+                        <th>Producción</th><th>%</th><th>Liquidado</th><th>Fecha</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            const t = $('#tbl').DataTable({
+                language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json' },
+                pageLength: 10,
+                columns: [
+                    {data:'idLiquidacionPST'},{data:'periodo'},{data:'codigoTrabajo'},
+                    {data:'nombreEmpleado'},{data:'valorPST',render:$.fn.dataTable.render.number(',','.',2,'$')},
+                    {data:'produccionGenerada',render:$.fn.dataTable.render.number(',','.',2,'$')},
+                    {data:'percentajeLiquidacion',render:$.fn.dataTable.render.number(',','.',2,'','%')},
+                    {data:'valorLiquidado',render:$.fn.dataTable.render.number(',','.',2,'$')},
+                    {data:'fechaLiquidacion',render:(d)=>new Date(d).toLocaleDateString('es-CO')}
+                ]
+            });
+
+            $('#bs').click(function() {
+                $.ajax({
+                    type:'POST',url:'@Url.Action("ObtenerLiquidaciones","LiquidarProductividadPst")',
+                    contentType:'application/json',
+                    data:JSON.stringify({
+                        periodo:$('#fp').val()?parseInt($('#fp').val().replace('-','')):null,
+                        idTrabajo:$('#ft').val()?parseInt($('#ft').val()):null,
+                        idEmpleado:$('#fe').val()?parseInt($('#fe').val()):null,
+                        estado:$('#fs').val()?parseInt($('#fs').val()):null
+                    }),
+                    success:function(r){
+                        if(r.success){
+                            t.clear().rows.add(r.data).draw();
+                            const v=r.data.reduce((s,x)=>s+(x.valorLiquidado||0),0);
+                            const p=r.data.reduce((s,x)=>s+(x.produccionGenerada||0),0);
+                            const pct=r.data.length>0?r.data.reduce((s,x)=>s+(x.percentajeLiquidacion||0),0)/r.data.length:0;
+                            $('#m-liq').text(r.data.length);
+                            $('#m-valor').text('$'+v.toLocaleString('es-CO',{minimumFractionDigits:2}));
+                            $('#m-prod').text('$'+p.toLocaleString('es-CO',{minimumFractionDigits:2}));
+                            $('#m-pct').text(pct.toFixed(2)+'%');
+                        }
+                    }
+                });
+            });
+
+            $('#be').click(function() {
+                const p = new URLSearchParams();
+                if($('#fp').val())p.append('periodo',parseInt($('#fp').val().replace('-','')));
+                if($('#ft').val())p.append('idTrabajo',$('#ft').val());
+                if($('#fe').val())p.append('idEmpleado',$('#fe').val());
+                if($('#fs').val())p.append('estado',$('#fs').val());
+                window.location='@Url.Action("Exportar","LiquidarProductividadPst")?' + p;
+            });
+        });
+    </script>
+}

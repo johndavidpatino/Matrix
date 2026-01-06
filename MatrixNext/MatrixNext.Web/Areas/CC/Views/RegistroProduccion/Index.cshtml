@@ -1,0 +1,237 @@
+@{
+    ViewData["Title"] = "Registro de Producción";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <h1 class="page-title">
+                <i class="fas fa-cubes mr-2"></i>Registro de Producción
+            </h1>
+        </div>
+    </div>
+
+    <!-- Métricas -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card metric-card" style="border-left: 4px solid #4472C4;">
+                <div class="card-body text-center">
+                    <h6 class="card-title mb-2">Total Registros</h6>
+                    <h3 id="metric-registros" class="text-primary">0</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card metric-card" style="border-left: 4px solid #70AD47;">
+                <div class="card-body text-center">
+                    <h6 class="card-title mb-2">Costo Total</h6>
+                    <h3 id="metric-costo-total" class="text-success">$0</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card metric-card" style="border-left: 4px solid #FFC000;">
+                <div class="card-body text-center">
+                    <h6 class="card-title mb-2">Costo Promedio</h6>
+                    <h3 id="metric-costo-promedio" class="text-warning">$0</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card metric-card" style="border-left: 4px solid #FF5050;">
+                <div class="card-body text-center">
+                    <h6 class="card-title mb-2">Última Fecha</h6>
+                    <h3 id="metric-ultima-fecha" class="text-danger" style="font-size: 16px;">--</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="card mb-4">
+        <div class="card-header bg-light">
+            <h5 class="mb-0">
+                <i class="fas fa-filter mr-2"></i>Filtros
+                <button class="btn btn-sm btn-secondary float-right" id="btn-limpiar-filtros">
+                    <i class="fas fa-times mr-1"></i>Limpiar
+                </button>
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-2">
+                    <label for="filtro-periodo">Período</label>
+                    <input type="month" id="filtro-periodo" class="form-control">
+                </div>
+                <div class="col-md-2">
+                    <label for="filtro-trabajo">Trabajo</label>
+                    <input type="number" id="filtro-trabajo" class="form-control" placeholder="ID">
+                </div>
+                <div class="col-md-2">
+                    <label for="filtro-empleado">Empleado</label>
+                    <input type="number" id="filtro-empleado" class="form-control" placeholder="ID">
+                </div>
+                <div class="col-md-2">
+                    <label for="filtro-actividad">Actividad</label>
+                    <input type="number" id="filtro-actividad" class="form-control" placeholder="ID">
+                </div>
+                <div class="col-md-2">
+                    <label for="filtro-fecha-inicio">Desde</label>
+                    <input type="date" id="filtro-fecha-inicio" class="form-control">
+                </div>
+                <div class="col-md-2">
+                    <label for="filtro-fecha-fin">Hasta</label>
+                    <input type="date" id="filtro-fecha-fin" class="form-control">
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <button id="btn-buscar" class="btn btn-primary">
+                        <i class="fas fa-search mr-1"></i>Buscar
+                    </button>
+                    <button id="btn-exportar" class="btn btn-success" style="margin-left: 5px;">
+                        <i class="fas fa-download mr-1"></i>Exportar Excel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grid -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Registros</h5>
+        </div>
+        <div class="card-body">
+            <table id="grid-registros" class="table table-striped table-hover" style="width: 100%;">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Período</th>
+                        <th>Trabajo</th>
+                        <th>Actividad</th>
+                        <th>Empleado</th>
+                        <th>Cantidad</th>
+                        <th>Costo Unitario</th>
+                        <th>Costo Total</th>
+                        <th>Fecha</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json"></script>
+    
+    <script>
+        $(document).ready(function() {
+            const gridTable = $('#grid-registros').DataTable({
+                language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json' },
+                pageLength: 10,
+                processing: true,
+                serverSide: false,
+                columns: [
+                    { data: 'idProduccion' },
+                    { data: 'periodo' },
+                    { data: 'codigoTrabajo' },
+                    { data: 'codigoActividad' },
+                    { data: 'nombreEmpleado' },
+                    { data: 'cantidad', render: $.fn.dataTable.render.number(',', '.', 0, '', '%') },
+                    { data: 'costoUnitario', render: $.fn.dataTable.render.number(',', '.', 2, '$') },
+                    { data: 'costoTotal', render: $.fn.dataTable.render.number(',', '.', 2, '$') },
+                    { data: 'fechaProduccion', render: (data) => new Date(data).toLocaleDateString('es-CO') },
+                    { data: 'estado' }
+                ]
+            });
+
+            // Buscar
+            $('#btn-buscar').click(function() {
+                const filtros = {
+                    periodo: $('#filtro-periodo').val() ? parseInt($('#filtro-periodo').val().replace('-', '')) : null,
+                    idTrabajo: $('#filtro-trabajo').val() ? parseInt($('#filtro-trabajo').val()) : null,
+                    idEmpleado: $('#filtro-empleado').val() ? parseInt($('#filtro-empleado').val()) : null,
+                    idActividad: $('#filtro-actividad').val() ? parseInt($('#filtro-actividad').val()) : null,
+                    fechaInicio: $('#filtro-fecha-inicio').val() || null,
+                    fechaFin: $('#filtro-fecha-fin').val() || null,
+                    estado: null
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("ObtenerRegistros", "RegistroProduccion")',
+                    contentType: 'application/json',
+                    data: JSON.stringify(filtros),
+                    success: function(result) {
+                        if (result.success) {
+                            gridTable.clear().rows.add(result.data).draw();
+                            actualizarMetricas(result.data);
+                        } else {
+                            alert('Error: ' + result.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        alert('Error al obtener datos: ' + xhr.statusText);
+                    }
+                });
+            });
+
+            // Limpiar filtros
+            $('#btn-limpiar-filtros').click(function() {
+                $('#filtro-periodo').val('');
+                $('#filtro-trabajo').val('');
+                $('#filtro-empleado').val('');
+                $('#filtro-actividad').val('');
+                $('#filtro-fecha-inicio').val('');
+                $('#filtro-fecha-fin').val('');
+                gridTable.clear().draw();
+                limpiarMetricas();
+            });
+
+            // Exportar
+            $('#btn-exportar').click(function() {
+                const periodo = $('#filtro-periodo').val();
+                const trabajo = $('#filtro-trabajo').val();
+                const empleado = $('#filtro-empleado').val();
+                const actividad = $('#filtro-actividad').val();
+                const fechaInicio = $('#filtro-fecha-inicio').val();
+                const fechaFin = $('#filtro-fecha-fin').val();
+
+                const params = {};
+                if (periodo) params['periodo'] = parseInt(periodo.replace('-', ''));
+                if (trabajo) params['idTrabajo'] = parseInt(trabajo);
+                if (empleado) params['idEmpleado'] = parseInt(empleado);
+                if (actividad) params['idActividad'] = parseInt(actividad);
+                if (fechaInicio) params['fechaInicio'] = fechaInicio;
+                if (fechaFin) params['fechaFin'] = fechaFin;
+
+                const query = $.param(params);
+                window.location = '@Url.Action("Exportar", "RegistroProduccion")?' + query;
+            });
+
+            function actualizarMetricas(datos) {
+                const cantidad = datos.length;
+                const costoTotal = datos.reduce((sum, item) => sum + (item.costoTotal || 0), 0);
+                const costoPromedio = cantidad > 0 ? costoTotal / cantidad : 0;
+                const ultimaFecha = cantidad > 0 ? datos[cantidad - 1].fechaProduccion : null;
+
+                $('#metric-registros').text(cantidad);
+                $('#metric-costo-total').text('$' + costoTotal.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                $('#metric-costo-promedio').text('$' + costoPromedio.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                $('#metric-ultima-fecha').text(ultimaFecha ? new Date(ultimaFecha).toLocaleDateString('es-CO') : '--');
+            }
+
+            function limpiarMetricas() {
+                $('#metric-registros').text('0');
+                $('#metric-costo-total').text('$0');
+                $('#metric-costo-promedio').text('$0');
+                $('#metric-ultima-fecha').text('--');
+            }
+        });
+    </script>
+}

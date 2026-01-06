@@ -1,0 +1,88 @@
+@{
+    ViewData["Title"] = "Asignación Costos PST";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid mt-4">
+    <h1><i class="fas fa-project-diagram mr-2"></i>Asignación de Costos PST</h1>
+    
+    <div class="row mb-4 mt-3">
+        <div class="col-md-4">
+            <div class="card metric-card" style="border-left: 4px solid #4472C4;">
+                <div class="card-body text-center">
+                    <h6>Asignaciones</h6>
+                    <h3 id="m1" class="text-primary">0</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card metric-card" style="border-left: 4px solid #70AD47;">
+                <div class="card-body text-center">
+                    <h6>Costo Base Total</h6>
+                    <h3 id="m2" class="text-success">$0</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card metric-card" style="border-left: 4px solid #FFC000;">
+                <div class="card-body text-center">
+                    <h6>Costo Asignado</h6>
+                    <h3 id="m3" class="text-warning">$0</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-light">
+            <h5><i class="fas fa-filter mr-2"></i>Filtros</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3"><label>Período</label><input type="month" id="p" class="form-control"></div>
+                <div class="col-md-3"><label>Trabajo</label><input type="number" id="t" class="form-control"></div>
+                <div class="col-md-3"><label>Concepto</label><input type="number" id="c" class="form-control"></div>
+                <div class="col-md-3"><label>Estado</label><select id="s" class="form-control"><option value="">Todos</option><option value="1">Asignado</option></select></div>
+            </div>
+            <button id="b" class="btn btn-primary mt-3" style="margin-right:5px;">Buscar</button>
+            <button id="e" class="btn btn-success mt-3">Exportar</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <table id="tbl" class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>ID</th><th>Período</th><th>Trabajo</th><th>Concepto</th>
+                        <th>Base</th><th>Asignado</th><th>Fecha</th><th>Estado</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            const t = $('#tbl').DataTable({
+                language:{url:'//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'},pageLength:10,
+                columns:[{data:'idAsignacion'},{data:'periodo'},{data:'codigoTrabajo'},
+                {data:'nombreConcepto'},{data:'costoBase',render:$.fn.dataTable.render.number(',','.',2,'$')},
+                {data:'costoAsignado',render:$.fn.dataTable.render.number(',','.',2,'$')},
+                {data:'fechaAsignacion',render:(d)=>new Date(d).toLocaleDateString('es-CO')},{data:'estado'}]
+            });
+
+            $('#b').click(()=>{
+                $.ajax({type:'POST',url:'@Url.Action("ObtenerAsignaciones","AsignacionCostosPst")',
+                contentType:'application/json',
+                data:JSON.stringify({periodo:$('#p').val()?parseInt($('#p').val().replace('-','')):null,idTrabajo:$('#t').val()?parseInt($('#t').val()):null,idConcepto:$('#c').val()?parseInt($('#c').val()):null,estado:$('#s').val()?parseInt($('#s').val()):null}),
+                success:r=>{if(r.success){t.clear().rows.add(r.data).draw();$('#m1').text(r.data.length);$('#m2').text('$'+r.data.reduce((s,x)=>s+(x.costoBase||0),0).toLocaleString('es-CO',{minimumFractionDigits:2}));$('#m3').text('$'+r.data.reduce((s,x)=>s+(x.costoAsignado||0),0).toLocaleString('es-CO',{minimumFractionDigits:2}));}}});
+            });
+
+            $('#e').click(()=>{const p=new URLSearchParams();if($('#p').val())p.append('periodo',parseInt($('#p').val().replace('-','')));if($('#t').val())p.append('idTrabajo',$('#t').val());if($('#c').val())p.append('idConcepto',$('#c').val());if($('#s').val())p.append('estado',$('#s').val());window.location='@Url.Action("Exportar","AsignacionCostosPst")?' + p;});
+        });
+    </script>
+}

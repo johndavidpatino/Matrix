@@ -1,0 +1,214 @@
+@{
+    ViewData["Title"] = "Liquidación de Planillas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <h1 class="page-title">
+                <i class="fas fa-file-invoice-dollar mr-2"></i>Liquidación de Planillas de Actividades
+            </h1>
+        </div>
+    </div>
+
+    <!-- Métricas -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card metric-card" style="border-left: 4px solid #4472C4;">
+                <div class="card-body text-center">
+                    <h6 class="card-title mb-2">Liquidaciones</h6>
+                    <h3 id="metric-liquidaciones" class="text-primary">0</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card metric-card" style="border-left: 4px solid #70AD47;">
+                <div class="card-body text-center">
+                    <h6 class="card-title mb-2">Valor Total</h6>
+                    <h3 id="metric-valor-total" class="text-success">$0</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card metric-card" style="border-left: 4px solid #FFC000;">
+                <div class="card-body text-center">
+                    <h6 class="card-title mb-2">Bonos Total</h6>
+                    <h3 id="metric-bonos-total" class="text-warning">$0</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card metric-card" style="border-left: 4px solid #FF5050;">
+                <div class="card-body text-center">
+                    <h6 class="card-title mb-2">Descuentos SS</h6>
+                    <h3 id="metric-descuentos-total" class="text-danger">$0</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="card mb-4">
+        <div class="card-header bg-light">
+            <h5 class="mb-0">
+                <i class="fas fa-filter mr-2"></i>Filtros
+                <button class="btn btn-sm btn-secondary float-right" id="btn-limpiar-filtros">
+                    <i class="fas fa-times mr-1"></i>Limpiar
+                </button>
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="filtro-periodo">Período</label>
+                    <input type="month" id="filtro-periodo" class="form-control">
+                </div>
+                <div class="col-md-3">
+                    <label for="filtro-trabajo">Trabajo</label>
+                    <input type="number" id="filtro-trabajo" class="form-control" placeholder="ID">
+                </div>
+                <div class="col-md-3">
+                    <label for="filtro-empleado">Empleado</label>
+                    <input type="number" id="filtro-empleado" class="form-control" placeholder="ID">
+                </div>
+                <div class="col-md-3">
+                    <label for="filtro-estado">Estado</label>
+                    <select id="filtro-estado" class="form-control">
+                        <option value="">Todos</option>
+                        <option value="1">Procesada</option>
+                        <option value="2">Pagada</option>
+                        <option value="3">Anulada</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <button id="btn-buscar" class="btn btn-primary">
+                        <i class="fas fa-search mr-1"></i>Buscar
+                    </button>
+                    <button id="btn-exportar" class="btn btn-success" style="margin-left: 5px;">
+                        <i class="fas fa-download mr-1"></i>Exportar Excel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grid -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Liquidaciones</h5>
+        </div>
+        <div class="card-body">
+            <table id="grid-liquidaciones" class="table table-striped table-hover" style="width: 100%;">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Período</th>
+                        <th>Trabajo</th>
+                        <th>Empleado</th>
+                        <th>Salario Base</th>
+                        <th>Producción</th>
+                        <th>Bono</th>
+                        <th>Descuentos</th>
+                        <th>Neto</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            const gridTable = $('#grid-liquidaciones').DataTable({
+                language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json' },
+                pageLength: 10,
+                columns: [
+                    { data: 'idLiquidacion' },
+                    { data: 'periodo' },
+                    { data: 'codigoTrabajo' },
+                    { data: 'nombreEmpleado' },
+                    { data: 'salarioBase', render: $.fn.dataTable.render.number(',', '.', 2, '$') },
+                    { data: 'produccionGenerada', render: $.fn.dataTable.render.number(',', '.', 2, '$') },
+                    { data: 'bonoProduccion', render: $.fn.dataTable.render.number(',', '.', 2, '$') },
+                    { data: 'descuentosSS', render: $.fn.dataTable.render.number(',', '.', 2, '$') },
+                    { data: 'valorNeto', render: $.fn.dataTable.render.number(',', '.', 2, '$') },
+                    { data: 'fechaLiquidacion', render: (data) => new Date(data).toLocaleDateString('es-CO') }
+                ]
+            });
+
+            $('#btn-buscar').click(function() {
+                const filtros = {
+                    periodo: $('#filtro-periodo').val() ? parseInt($('#filtro-periodo').val().replace('-', '')) : null,
+                    idTrabajo: $('#filtro-trabajo').val() ? parseInt($('#filtro-trabajo').val()) : null,
+                    idEmpleado: $('#filtro-empleado').val() ? parseInt($('#filtro-empleado').val()) : null,
+                    estado: $('#filtro-estado').val() ? parseInt($('#filtro-estado').val()) : null
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("ObtenerLiquidaciones", "LiquidarPlanillasActividades")',
+                    contentType: 'application/json',
+                    data: JSON.stringify(filtros),
+                    success: function(result) {
+                        if (result.success) {
+                            gridTable.clear().rows.add(result.data).draw();
+                            actualizarMetricas(result.data);
+                        }
+                    }
+                });
+            });
+
+            $('#btn-limpiar-filtros').click(function() {
+                $('#filtro-periodo').val('');
+                $('#filtro-trabajo').val('');
+                $('#filtro-empleado').val('');
+                $('#filtro-estado').val('');
+                gridTable.clear().draw();
+                limpiarMetricas();
+            });
+
+            $('#btn-exportar').click(function() {
+                const periodo = $('#filtro-periodo').val();
+                const trabajo = $('#filtro-trabajo').val();
+                const empleado = $('#filtro-empleado').val();
+                const estado = $('#filtro-estado').val();
+
+                const params = {};
+                if (periodo) params['periodo'] = parseInt(periodo.replace('-', ''));
+                if (trabajo) params['idTrabajo'] = parseInt(trabajo);
+                if (empleado) params['idEmpleado'] = parseInt(empleado);
+                if (estado) params['estado'] = parseInt(estado);
+
+                const query = $.param(params);
+                window.location = '@Url.Action("Exportar", "LiquidarPlanillasActividades")?' + query;
+            });
+
+            function actualizarMetricas(datos) {
+                const cantidad = datos.length;
+                const valorTotal = datos.reduce((sum, item) => sum + (item.valorNeto || 0), 0);
+                const bonosTotal = datos.reduce((sum, item) => sum + (item.bonoProduccion || 0), 0);
+                const descuentosTotal = datos.reduce((sum, item) => sum + (item.descuentosSS || 0), 0);
+
+                $('#metric-liquidaciones').text(cantidad);
+                $('#metric-valor-total').text('$' + valorTotal.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                $('#metric-bonos-total').text('$' + bonosTotal.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                $('#metric-descuentos-total').text('$' + descuentosTotal.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+            }
+
+            function limpiarMetricas() {
+                $('#metric-liquidaciones').text('0');
+                $('#metric-valor-total').text('$0');
+                $('#metric-bonos-total').text('$0');
+                $('#metric-descuentos-total').text('$0');
+            }
+        });
+    </script>
+}
