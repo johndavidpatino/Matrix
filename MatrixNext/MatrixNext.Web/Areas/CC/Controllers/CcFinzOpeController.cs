@@ -4,9 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace MatrixNext.Web.Areas.CC.Controllers
 {
     [Area("CC")]
-    [Route("api/cc/finzope")]
-    [ApiController]
-    public class CcFinzOpeController : ControllerBase
+    public class CcFinzOpeController : Controller
     {
         private readonly ICcFinzOpeService _service;
         private readonly ILogger<CcFinzOpeController> _logger;
@@ -18,10 +16,26 @@ namespace MatrixNext.Web.Areas.CC.Controllers
         }
 
         /// <summary>
+        /// Vista web de FinzOpe
+        /// GET /cc/ccfinzope
+        /// </summary>
+        [HttpGet("")]
+        [HttpGet("index")]
+        public IActionResult Index()
+        {
+            _logger.LogInformation("Accediendo a vista de FinzOpe");
+            return View();
+        }
+
+        // ============================================
+        // API ENDPOINTS (REST)
+        // ============================================
+
+        /// <summary>
         /// Calcular liquidación mensual de un período
         /// GET /api/cc/finzope/liquidacion?idPeriodo=202501&fechaInicio=2025-01-01&fechaFin=2025-01-31
         /// </summary>
-        [HttpGet("liquidacion")]
+        [HttpGet("/api/cc/finzope/liquidacion")]
         public async Task<IActionResult> ObtenerLiquidacion(
             [FromQuery] int idPeriodo,
             [FromQuery] DateTime fechaInicio,
@@ -46,7 +60,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
         /// Obtener bonificaciones de un período
         /// GET /api/cc/finzope/bonificaciones?idPeriodo=202501
         /// </summary>
-        [HttpGet("bonificaciones")]
+        [HttpGet("/api/cc/finzope/bonificaciones")]
         public async Task<IActionResult> ObtenerBonificaciones([FromQuery] int idPeriodo)
         {
             try
@@ -68,7 +82,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
         /// Obtener total de producción en un rango de fechas
         /// GET /api/cc/finzope/produccion/total?fechaInicio=2025-01-01&fechaFin=2025-01-31
         /// </summary>
-        [HttpGet("produccion/total")]
+        [HttpGet("/api/cc/finzope/produccion/total")]
         public async Task<IActionResult> ObtenerProduccionTotal(
             [FromQuery] DateTime fechaInicio,
             [FromQuery] DateTime fechaFin,
@@ -92,7 +106,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
         /// <summary>
         /// Health check del servicio
         /// </summary>
-        [HttpGet("health")]
+        [HttpGet("/api/cc/finzope/health")]
         public IActionResult Health()
         {
             return Ok(new { status = "healthy", timestamp = DateTime.UtcNow });

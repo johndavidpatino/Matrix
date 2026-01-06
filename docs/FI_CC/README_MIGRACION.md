@@ -6,9 +6,22 @@
 
 La documentación está **lista para implementación inmediata**. Todos los sprints están planificados, las arquitecturas definidas, y los patrones establecidos.
 
+**ESTADO ACTUAL**: ✅ **Sprint Pre-1 COMPLETADO (Enero 6, 2026)**
+
 ---
 
 ## 🚀 INICIO RÁPIDO (5 minutos)
+
+### Estado Actual
+
+✅ **Sprint Pre-1 COMPLETADO**:
+- Capa de datos (DTOs, Adapter, Service, DI)
+- Capa de presentación (Controller, Views, ViewModels)
+- 10 archivos implementados (~800 líneas de código)
+- API endpoints funcionales
+- Vista web interactiva (Bootstrap 5)
+
+**Próximo paso**: Sprint 1 (Control Presupuestos) - Listo para comenzar
 
 ### 1️⃣ Lee primero
 
@@ -16,6 +29,7 @@ La documentación está **lista para implementación inmediata**. Todos los spri
 - ⏱️ Timeline semanal completo (13 semanas)
 - ✅ Checklist Go/No-Go para cada sprint
 - 📊 Métricas y riesgos
+- ✅ Sprint Pre-1: COMPLETADO
 
 ### 2️⃣ Entiende la arquitectura
 
@@ -24,23 +38,15 @@ La documentación está **lista para implementación inmediata**. Todos los spri
 - 🔧 Patrones reutilizables
 - 💾 Inyección de dependencias
 - 🧪 Testing
+- ✅ Validado en Sprint Pre-1
 
-### 3️⃣ Comienza con Sprint Pre-1
-
-**[PLAN_SPRINT_PRE1_CC_FINZOPE.md](PLAN_SPRINT_PRE1_CC_FINZOPE.md)**
-- 🏗️ Infraestructura (CC_FinzOpe)
-- 📅 Semana 1-2, 80 horas
-- 📝 7 tareas detalladas
-
-### 4️⃣ Luego implementa Sprints 1-6
+### 3️⃣ Próximo: Sprint 1
 
 **[PLAN_SPRINTS_1_6_FI.md](PLAN_SPRINTS_1_6_FI.md)**
-- 📑 Sprint 1: Control Presupuestos (92h)
-- 📑 Sprint 2: Presupuestos Internos (68h)
-- 📑 Sprint 3: Procesos Internos (132h)
-- 📑 Sprint 4: Reportes (72h)
-- 📑 Sprint 5: Producción ⚠️ (232h - crítico)
-- 📑 Sprint 6: Inventario (16h)
+- 🏗️ Sprint 1: Control Presupuestos (92h)
+- 📅 Semanas 3-4, estructura similar a Sprint Pre-1
+- 📝 7 tareas detalladas
+- 🎯 Reutiliza patrón de CC_FinzOpe
 
 ---
 

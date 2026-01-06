@@ -1,0 +1,328 @@
+@{
+    ViewData["Title"] = "CC FinzOpe - Liquidación y Bonificaciones";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1 class="h3 mb-0">
+                <i class="bi bi-calculator"></i> FinzOpe - Liquidación y Bonificaciones
+            </h1>
+            <p class="text-muted mt-2">Gestión de liquidaciones, bonificaciones y producción de proyectos</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <button class="btn btn-primary" id="btnRefresh">
+                <i class="bi bi-arrow-clockwise"></i> Actualizar
+            </button>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <ul class="nav nav-tabs mb-4" id="ccTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="liquidacion-tab" data-bs-toggle="tab" data-bs-target="#liquidacion" 
+                    type="button" role="tab" aria-controls="liquidacion" aria-selected="true">
+                <i class="bi bi-file-earmark-text"></i> Liquidación Mensual
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="bonificaciones-tab" data-bs-toggle="tab" data-bs-target="#bonificaciones" 
+                    type="button" role="tab" aria-controls="bonificaciones" aria-selected="false">
+                <i class="bi bi-cash-coin"></i> Bonificaciones
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="produccion-tab" data-bs-toggle="tab" data-bs-target="#produccion" 
+                    type="button" role="tab" aria-controls="produccion" aria-selected="false">
+                <i class="bi bi-bar-chart"></i> Producción
+            </button>
+        </li>
+    </ul>
+
+    <!-- Tab Content -->
+    <div class="tab-content" id="ccTabContent">
+        
+        <!-- TAB 1: Liquidación Mensual -->
+        <div class="tab-pane fade show active" id="liquidacion" role="tabpanel" aria-labelledby="liquidacion-tab">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0"><i class="bi bi-calculator"></i> Calcular Liquidación Mensual</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label for="idPeriodo" class="form-label">Período</label>
+                            <input type="number" class="form-control" id="idPeriodo" placeholder="202501" value="202501">
+                            <small class="text-muted">Formato: YYYYMM</small>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="fechaInicio" class="form-label">Fecha Inicio</label>
+                            <input type="date" class="form-control" id="fechaInicio">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="fechaFin" class="form-label">Fecha Fin</label>
+                            <input type="date" class="form-control" id="fechaFin">
+                        </div>
+                        <div class="col-md-3 d-flex align-items-end">
+                            <button class="btn btn-success w-100" id="btnCalcularLiquidacion">
+                                <i class="bi bi-play-fill"></i> Calcular
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resultado Liquidación -->
+            <div id="liquidacionResult" class="mt-4"></div>
+        </div>
+
+        <!-- TAB 2: Bonificaciones -->
+        <div class="tab-pane fade" id="bonificaciones" role="tabpanel" aria-labelledby="bonificaciones-tab">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0"><i class="bi bi-cash-coin"></i> Consultar Bonificaciones</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label for="idPeriodoBon" class="form-label">Período</label>
+                            <input type="number" class="form-control" id="idPeriodoBon" placeholder="202501" value="202501">
+                        </div>
+                        <div class="col-md-3 d-flex align-items-end">
+                            <button class="btn btn-success w-100" id="btnObtenerBonificaciones">
+                                <i class="bi bi-search"></i> Consultar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resultado Bonificaciones -->
+            <div id="bonificacionesResult" class="mt-4"></div>
+        </div>
+
+        <!-- TAB 3: Producción -->
+        <div class="tab-pane fade" id="produccion" role="tabpanel" aria-labelledby="produccion-tab">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0"><i class="bi bi-bar-chart"></i> Total de Producción</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label for="fechaInicioProd" class="form-label">Fecha Inicio</label>
+                            <input type="date" class="form-control" id="fechaInicioProd">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="fechaFinProd" class="form-label">Fecha Fin</label>
+                            <input type="date" class="form-control" id="fechaFinProd">
+                        </div>
+                        <div class="col-md-3 d-flex align-items-end">
+                            <button class="btn btn-success w-100" id="btnObtenerProduccion">
+                                <i class="bi bi-search"></i> Calcular
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resultado Producción -->
+            <div id="produccionResult" class="mt-4"></div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Toast Notification -->
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 11">
+    <div id="notificationToast" class="toast" role="alert">
+        <div class="toast-header">
+            <strong class="me-auto" id="toastTitle">Notificación</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+        </div>
+        <div class="toast-body" id="toastMessage"></div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const apiBaseUrl = '/api/cc/finzope';
+
+        // Utilidad para mostrar notificaciones
+        function showNotification(title, message, type = 'info') {
+            const toast = document.getElementById('notificationToast');
+            document.getElementById('toastTitle').textContent = title;
+            document.getElementById('toastMessage').textContent = message;
+            
+            const toastEl = bootstrap.Toast.getOrCreateInstance(toast);
+            toastEl.show();
+        }
+
+        // Utilidad para formatear dinero
+        function formatMoney(value) {
+            return new Intl.NumberFormat('es-CO', {
+                style: 'currency',
+                currency: 'COP',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(value);
+        }
+
+        // LIQUIDACIÓN MENSUAL
+        document.getElementById('btnCalcularLiquidacion').addEventListener('click', async function() {
+            const idPeriodo = document.getElementById('idPeriodo').value;
+            const fechaInicio = document.getElementById('fechaInicio').value;
+            const fechaFin = document.getElementById('fechaFin').value;
+
+            if (!idPeriodo || !fechaInicio || !fechaFin) {
+                showNotification('Validación', 'Por favor complete todos los campos', 'warning');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${apiBaseUrl}/liquidacion?idPeriodo=${idPeriodo}&fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    const result = data.data;
+                    const html = `
+                        <div class="alert alert-success" role="alert">
+                            <h5><i class="bi bi-check-circle"></i> Liquidación Calculada</h5>
+                            <table class="table table-sm mt-3">
+                                <tr>
+                                    <td><strong>Período:</strong></td>
+                                    <td>${result.idPeriodo}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Fecha Inicio:</strong></td>
+                                    <td>${new Date(result.fechaInicio).toLocaleDateString('es-CO')}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Fecha Fin:</strong></td>
+                                    <td>${new Date(result.fechaFin).toLocaleDateString('es-CO')}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Total Liquidación:</strong></td>
+                                    <td class="text-success fw-bold">${formatMoney(result.totalLiquidacion)}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    `;
+                    document.getElementById('liquidacionResult').innerHTML = html;
+                    showNotification('Éxito', 'Liquidación calculada correctamente', 'success');
+                } else {
+                    showNotification('Error', data.error || 'Error al calcular liquidación', 'danger');
+                }
+            } catch (error) {
+                showNotification('Error', 'Error de conexión: ' + error.message, 'danger');
+            }
+        });
+
+        // BONIFICACIONES
+        document.getElementById('btnObtenerBonificaciones').addEventListener('click', async function() {
+            const idPeriodo = document.getElementById('idPeriodoBon').value;
+
+            if (!idPeriodo) {
+                showNotification('Validación', 'Por favor ingrese el período', 'warning');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${apiBaseUrl}/bonificaciones?idPeriodo=${idPeriodo}`);
+                const data = await response.json();
+
+                if (data.success && data.data.length > 0) {
+                    let html = `
+                        <div class="alert alert-info" role="alert">
+                            <h5><i class="bi bi-info-circle"></i> Bonificaciones del Período ${idPeriodo}</h5>
+                            <table class="table table-striped table-sm mt-3">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Cédula</th>
+                                        <th>Monto</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                    `;
+                    
+                    data.data.forEach(bon => {
+                        html += `
+                            <tr>
+                                <td>${bon.cedula}</td>
+                                <td>${formatMoney(bon.monto)}</td>
+                            </tr>
+                        `;
+                    });
+
+                    html += `
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                    
+                    document.getElementById('bonificacionesResult').innerHTML = html;
+                    showNotification('Éxito', `${data.data.length} bonificaciones encontradas`, 'success');
+                } else {
+                    document.getElementById('bonificacionesResult').innerHTML = '<div class="alert alert-warning">No hay bonificaciones para este período</div>';
+                    showNotification('Información', 'Sin bonificaciones', 'info');
+                }
+            } catch (error) {
+                showNotification('Error', 'Error de conexión: ' + error.message, 'danger');
+            }
+        });
+
+        // PRODUCCIÓN
+        document.getElementById('btnObtenerProduccion').addEventListener('click', async function() {
+            const fechaInicio = document.getElementById('fechaInicioProd').value;
+            const fechaFin = document.getElementById('fechaFinProd').value;
+
+            if (!fechaInicio || !fechaFin) {
+                showNotification('Validación', 'Por favor complete las fechas', 'warning');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${apiBaseUrl}/produccion/total?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    const html = `
+                        <div class="alert alert-success" role="alert">
+                            <h5><i class="bi bi-bar-chart"></i> Total de Producción</h5>
+                            <div class="display-4 text-success mt-3">${formatMoney(data.data)}</div>
+                            <p class="text-muted mt-2">Período: ${new Date(fechaInicio).toLocaleDateString('es-CO')} a ${new Date(fechaFin).toLocaleDateString('es-CO')}</p>
+                        </div>
+                    `;
+                    document.getElementById('produccionResult').innerHTML = html;
+                    showNotification('Éxito', 'Total de producción calculado', 'success');
+                } else {
+                    showNotification('Error', data.error || 'Error al calcular producción', 'danger');
+                }
+            } catch (error) {
+                showNotification('Error', 'Error de conexión: ' + error.message, 'danger');
+            }
+        });
+
+        // Refresh general
+        document.getElementById('btnRefresh').addEventListener('click', function() {
+            location.reload();
+        });
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            // Establecer fechas por defecto (hoy y hace 30 días)
+            const today = new Date();
+            const thirtyDaysAgo = new Date(today.getTime() - (30 * 24 * 60 * 60 * 1000));
+
+            document.getElementById('fechaInicio').valueAsDate = thirtyDaysAgo;
+            document.getElementById('fechaFin').valueAsDate = today;
+
+            document.getElementById('fechaInicioProd').valueAsDate = thirtyDaysAgo;
+            document.getElementById('fechaFinProd').valueAsDate = today;
+        });
+    </script>
+}
