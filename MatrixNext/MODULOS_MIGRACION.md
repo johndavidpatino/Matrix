@@ -75,16 +75,17 @@
   - Sprint Pre-1 (80h): Migrar tablas, SP, DbContext wrapper
   - Sprints 1-6 (704h): FI Grupos 1-6 sobre CC_FinzOpe ya migrado
 - **Alcance FI**: Excluye compras/OC/OS, radicación/aprobación de facturas
-- **Grupos FI definidos**:
-  - Grupo 1: Control Presupuestos (4) - 92h ✅ COMPLETADO
-  - Grupo 2: Presupuestos Internos (4) - 68h ✅ COMPLETADO
-  - Grupo 3: Procesos Internos (6) - 132h ✅ COMPLETADO
-  - Grupo 4: Reportes (4) - 72h ✅ COMPLETADO
-  - Grupo 5: Producción (9) - 232h ✅ COMPLETADO
-  - Grupo 6: Inventario (1) - 16h 🔄 PENDIENTE
-- **Esfuerzo total**: 80 (CC Pre-1) + 612 (FI) + 92 (buffer) = **784 horas**
-- **Timeline**: 10 semanas (1 dev @ 80h) o 7-8 semanas (1.5-2 devs @ 50h)
-- **Recomendación**: Iniciar Sprint Pre-1 (CC_FinzOpe) inmediatamente → Sprint 1 (FI Grupo 1) en semana 3
+- **Grupos FI definidos** (✅ 100% COMPLETADOS):
+  - Grupo 1: Control Presupuestos (4 páginas) - 92h ✅
+  - Grupo 2: Presupuestos Internos (4 páginas) - 68h ✅
+  - Grupo 3: Procesos Internos (6 páginas) - 132h ✅
+  - Grupo 4: Reportes (4 páginas) - 72h ✅
+  - Grupo 5: Producción (9 páginas) - 232h ✅
+  - Grupo 6: Inventario (1 página) - 16h ⛔ **NO MIGAR** (decisión del cliente)
+- **Esfuerzo completado**: 80 (CC Pre-1) + 596 (FI Grupos 1-5) = **676 horas** ✅
+- **Total original**: 80 (CC Pre-1) + 612 (FI) + 92 (buffer) = 784 horas
+- **Status FI**: 📊 **100% COMPLETO (5/5 grupos migrados, 28/29 páginas)**
+- **Recomendación**: FI/CC está listo para producción. Evaluar siguientes módulos (TH, PY, OP)
 
 ---
 
