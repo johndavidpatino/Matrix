@@ -8,6 +8,7 @@ namespace MatrixNext.Web.Areas.EQ.Models
         public EQHeader Header { get; set; } = new();
         public EQQuestionnaire Questionnaire { get; set; } = new();
         public EQMethodology Methodology { get; set; } = new();
+        public EQLogistica Logistica { get; set; } = new();
         public List<EQSampleCity> SampleCities { get; set; } = new();
         public List<EQMysteryVisit> MysteryVisits { get; set; } = new();
         public List<EQStaffSL> StaffSL { get; set; } = new();
@@ -56,6 +57,9 @@ namespace MatrixNext.Web.Areas.EQ.Models
         public int ProductosPorResp { get; set; } = 1;
         public int PatinadoresCiudad { get; set; } = 0;
         public bool Siembra { get; set; }
+        public bool Harmoni { get; set; }
+        public bool Graficacion { get; set; }
+        public decimal OtrosCostos { get; set; }
     }
 
     public class EQMethodology
@@ -125,5 +129,21 @@ namespace MatrixNext.Web.Areas.EQ.Models
         public decimal OP { get; set; }
         public decimal AOT { get; set; }
         public decimal PorcOP { get; set; }
+    }
+
+    public class EQLogistica
+    {
+        public int DiasSetup { get; set; } = 2;
+        public int DiasCampo { get; set; }
+        public int NumOlas { get; set; } = 1;
+        public string ApoyoReclutamientoTipo { get; set; } = string.Empty;
+        public bool TaxiParticipantes { get; set; }
+        public bool EstudioNinos { get; set; }
+        public int ReprografiaPaginas { get; set; }
+        public decimal? ViaticasCampoOverride { get; set; }
+        public decimal OtrosIncentivos { get; set; }
+        public decimal? DimensionLargoCm { get; set; }
+        public decimal? DimensionAnchoCm { get; set; }
+        public decimal? DimensionAltoCm { get; set; }
     }
 }

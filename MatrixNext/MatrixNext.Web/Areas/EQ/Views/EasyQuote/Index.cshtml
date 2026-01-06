@@ -279,6 +279,21 @@
                         <label class="form-check-label" for="Embalaje">Embalaje</label>
                     </div>
                 </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <div class="form-check me-3">
+                        <input class="form-check-input" type="checkbox" id="Harmoni" />
+                        <label class="form-check-label" for="Harmoni">Harmoni</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="Graficacion" />
+                        <label class="form-check-label" for="Graficacion">Graficación</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Otros costos</label>
+                    <input class="form-control" type="number" step="0.01" id="OtrosCostos" />
+                </div>
+                </div>
             </div>
         </div>
         <div class="tab-pane fade" id="tab-muestra" role="tabpanel">
@@ -334,6 +349,65 @@
                         </tr>
                     </tfoot>
                 </table>
+            </div>
+
+            <h6 class="mt-4 mb-2">Logística operativa</h6>
+            <div class="row g-3">
+                <div class="col-md-2">
+                    <label class="form-label">Días setup</label>
+                    <input class="form-control" type="number" id="DiasSetup" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Días campo</label>
+                    <input class="form-control" type="number" id="DiasCampo" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Número de olas</label>
+                    <input class="form-control" type="number" id="NumOlas" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Apoyo reclutamiento</label>
+                    <select class="form-select" id="ApoyoReclutamientoTipo">
+                        <option value="">Sin apoyo</option>
+                        <option value="Telefonica">Telefónica</option>
+                        <option value="Presencial">Presencial</option>
+                        <option value="Mixta">Mixta</option>
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <div class="form-check me-3">
+                        <input class="form-check-input" type="checkbox" id="TaxiParticipantes" />
+                        <label class="form-check-label" for="TaxiParticipantes">Taxi participantes</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="EstudioNinos" />
+                        <label class="form-check-label" for="EstudioNinos">Estudio niños</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Reprografía (páginas)</label>
+                    <input class="form-control" type="number" id="ReprografiaPaginas" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Viáticos campo (override)</label>
+                    <input class="form-control" type="number" step="0.01" id="ViaticasCampoOverride" placeholder="Opcional" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Otros incentivos</label>
+                    <input class="form-control" type="number" step="0.01" id="OtrosIncentivos" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Dimensiones (cm) - Largo</label>
+                    <input class="form-control" type="number" step="0.1" id="DimensionLargoCm" placeholder="Para envío volumétrico" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Ancho (cm)</label>
+                    <input class="form-control" type="number" step="0.1" id="DimensionAnchoCm" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Alto (cm)</label>
+                    <input class="form-control" type="number" step="0.1" id="DimensionAltoCm" />
+                </div>
             </div>
         </div>
 

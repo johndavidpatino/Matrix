@@ -42,7 +42,9 @@ namespace MatrixNext.Web.Areas.EQ.Services.Masters
                     ProductividadCiudad = conn.Query<ProductividadCiudadRow>("SELECT Ciudad, Encuestadores, Productividad FROM eq_productividad_ciudad").ToList(),
                     ParamMisc = conn.Query<ParamMiscRow>("SELECT Clave, ValorDecimal, ValorTexto FROM eq_param_misc").ToList(),
                     EnvioParam = conn.QueryFirstOrDefault<EnvioParamRow>("SELECT TOP 1 * FROM eq_envio_param"),
-                    BaseDatos = conn.Query<BaseDatosRow>("SELECT Tipo, Valor FROM eq_cost_base_datos").ToList()
+                    BaseDatos = conn.Query<BaseDatosRow>("SELECT Tipo, Valor FROM eq_cost_base_datos").ToList(),
+                    Factores = conn.Query<FactorRow>("SELECT Tipo, Codigo, Descripcion, Factor, Orden, Activo FROM eq_param_factores WHERE Activo = 1").ToList(),
+                    RateHoras = conn.Query<RateHoraRow>("SELECT [Key], SL, RecordDetail, MetodologiaSL, HorasL3, HorasL4, HorasL5, HorasL6, HorasL7 FROM eq_rate_horas").ToList()
                 };
                 return _cache;
             }
@@ -62,11 +64,37 @@ namespace MatrixNext.Web.Areas.EQ.Services.Masters
         public List<CostUnitarioOpsRow> AllCostUnitarios() => Cache.CostUnitarioOps;
         public List<RateEstadisticaRow> AllEstadistica() => Cache.RateEstadistica;
         public List<ProductividadCiudadRow> AllProductividad() => Cache.ProductividadCiudad;
+        public List<FactorRow> AllFactores() => Cache.Factores;
+        public List<RateHoraRow> AllRateHoras() => Cache.RateHoras;
         public ParamMiscRow GetMisc(string clave) => Cache.ParamMisc.FirstOrDefault(p => string.Equals(p.Clave, clave, StringComparison.OrdinalIgnoreCase));
         public EnvioParamRow GetEnvioParam() => Cache.EnvioParam;
         public decimal? GetBaseDatos(string tipo) => Cache.BaseDatos.FirstOrDefault(b => string.Equals(b.Tipo, tipo, StringComparison.OrdinalIgnoreCase))?.Valor;
         public List<ParamMiscRow> AllMisc() => Cache.ParamMisc;
         public List<BaseDatosRow> AllBaseDatos() => Cache.BaseDatos;
+        
+        public decimal? GetFactorCodigo(string tipo, string codigo)
+        {
+            return Cache.Factores.FirstOrDefault(f => 
+                string.Equals(f.Tipo, tipo, StringComparison.OrdinalIgnoreCase) && 
+                string.Equals(f.Codigo, codigo, StringComparison.OrdinalIgnoreCase))?.Factor;
+        }
+        
+        public decimal? GetHorasMinimas(string sl, string recordDetail, string metodologiaSL, string nivel)
+        {
+            var key = $"{sl}|{recordDetail}|{metodologiaSL}";
+            var row = Cache.RateHoras.FirstOrDefault(r => string.Equals(r.Key, key, StringComparison.OrdinalIgnoreCase));
+            if (row == null) return null;
+            
+            return nivel?.ToUpperInvariant() switch
+            {
+                "L3" => row.HorasL3,
+                "L4" => row.HorasL4,
+                "L5" => row.HorasL5,
+                "L6" => row.HorasL6,
+                "L7" => row.HorasL7,
+                _ => null
+            };
+        }
 
         public decimal? GetPrecioEncuesta(string metodologia, string penetracion, int duracionMin)
         {
@@ -142,6 +170,8 @@ namespace MatrixNext.Web.Areas.EQ.Services.Masters
             public List<ParamMiscRow> ParamMisc { get; set; } = new();
             public EnvioParamRow EnvioParam { get; set; }
             public List<BaseDatosRow> BaseDatos { get; set; } = new();
+            public List<FactorRow> Factores { get; set; } = new();
+            public List<RateHoraRow> RateHoras { get; set; } = new();
         }
 
         public class PrecioRow
@@ -255,6 +285,31 @@ namespace MatrixNext.Web.Areas.EQ.Services.Masters
             public decimal HorasEstimadas { get; set; }
             public decimal PrecioReferencia { get; set; }
             public decimal FactorEscala { get; set; }
+        }
+
+        public class FactorRow
+        {
+            public int Id { get; set; }
+            public string Tipo { get; set; } = string.Empty;
+            public string Codigo { get; set; } = string.Empty;
+            public string Descripcion { get; set; } = string.Empty;
+            public decimal Factor { get; set; }
+            public int Orden { get; set; }
+            public bool Activo { get; set; }
+        }
+
+        public class RateHoraRow
+        {
+            public int Id { get; set; }
+            public string Key { get; set; } = string.Empty;
+            public string SL { get; set; } = string.Empty;
+            public string RecordDetail { get; set; } = string.Empty;
+            public string MetodologiaSL { get; set; } = string.Empty;
+            public decimal HorasL3 { get; set; }
+            public decimal HorasL4 { get; set; }
+            public decimal HorasL5 { get; set; }
+            public decimal HorasL6 { get; set; }
+            public decimal HorasL7 { get; set; }
         }
     }
 }

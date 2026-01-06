@@ -1,0 +1,38 @@
+;;;;V1;NA;;V2;NA;;;V3;;;;V4;;;;V5;;;;10/05/2024;;;;;;;;;;;;;;;;;
+;;;;9/07/2020;;;10/08/2020;;;;24/02/2021;;;;28/04/2021;;;;10/05/2024;;;;Duracion;;Script;Ajus Prod;Calidad Nv 2;;;DP;;;TL;Vr;;Archivo;Vr;;Identi INNO Estudios de 1 o 2 dias;
+;Codif Pruebas Prod;Codif Normal;;Registros; 976 ;;Registros; 480 ;;;Registros; 480 ;;;Registros; 40 ;;;Registros/Muestra; 400 ;;;0-15;;18;5;5;28;;1 DC;18;;18;CD TB;;9;Proc;;60/40 Nestle;
+Muestra;1000;3500;;Abiertas;6;;Abiertas;2;;;Abiertas;2;;;Abiertas;5;;;Abiertas;0;;;16-30;;27;9;5;41;;1 TB PR;18;;;;;;;;;
+Cant Preg Abiertas;2;2;;; 5.856 ;;; 960 ;;;; 960 ;;;; 200 ;;;; - ;;;31-45;;36;9;7;52;;;;;Trans;;;Unif;;;Conteo;9
+Igual Cant Registros;2000;7000;;Abiertas Mult;6;;Abiertas Mult;2;;;Abiertas Mult 20%;20%;;;Abiertas Mult 20%;20%;;;Abiertas Mult 20%;20%;;;46-60;;45;9;9;63;;;;;9;DC;;9;DC;;Observaciones;18
+Codif Reg;300;400;;; 5.856 ;;; 960 ;;;; 96 ;;;; 8 ;;;; 80 ;;;61-75;;54;9;11;74;;;;;;;;;;;;
+Dias;6,666666667;17,5;;; 11.712 ;;Otros 20%;20%;;;Abiertas Mult;2;;;Abiertas Mult;10;;;Abiertas Mult;0;;;76-90;;63;9;13;85;;;;;;;;;;;;
+1 dia adic  Aproba y Ajustes;1;1;;Otros 20%;20%;;; 96 ;;;; 192 ;;;; 80 ;;;; - ;;;91-105;;72;9;15;96;;;;;;;;;;;;
+Ajustes;7,666666667;18,5;;; 2.342 ;;Otros cuales;0;;;Otros 20%;20%;;;Otros 20%;20%;;;Otros 20%;20%;;;106-120;;81;9;17;107;;;;;;;;;;;;
+Horas;9;9;;REGISTROS; 14.054 ;;; - ;;;; 96 ;;;; 8 ;;;; 80 ;;;;;;;;;;;;;;;;;;;;
+Total;69;166,5;;Reg Codif;500;;REGISTROS; 1.920 ;;;Otros cuales;0;;;Otros cuales;30;;;Otros cuales;0;;;Reutiliz;;9;3;2;14;;;;;;;;;;;;
+Valor Ipsos; $ 16.606 ; $ 16.606 ;;Dias;28;;Reg Codif;400;;;; - ;;;; 240 ;;;; - ;;;Duplicac;;3;3;3;9;;;;;;;;;;;;
+; $ 1.145.814 ; $ 2.764.899 ;;Aprobac+Ajust;1;;Dias;4,8;;;REGISTROS; 1.152 ;;;Contol de calidad;5%;;;Contol de calidad;5%;;;;;;;;;;;;;;;;;;;;
+;;;;Total Dias;29;;Aprobac+Ajust;1;;;Reg Codif;500;;;; 2 ;;;; - ;;;;;;;;;;;;;;;;;;;;
+;;;;Horas;9;;Total Dias;5,8;7;;Dias;2,3;;;REGISTROS a CODIF; 522 ;;;REGISTROS a CODIF; - ;;;;;;;;;;;;;;;;;;;;
+;;;;Total Horas;262,0;;;;9;;Aprobac+Ajust;1;;;Reg Codif;500;;;Reg Codif;800;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;63;;Total Dias;3,3;3,5;;Dias;1,0;;;Dias;0,0;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;9;;Aprobac+Ajust;1;;;Aprobac+Ajust;0,0;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;31,5;;Total Dias;2,0;3,5;;Total Dias;0,0;0,0;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;9;;;;9;Horas por día trabajadas;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;31,5;;;;0;Número de Horas a trabajar para el proyecto;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;Variacion Script;;;DP;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;Calidad de instrumentos;;;Dimensions 18;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;caracteristicas estandar;;;No IIS trnsform;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;Participacion cliente en pilotos y cambios posteriores por este tema / Consulta;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;cambios se re cotiza frente a ejecucion;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;Ajustes post entrenamiento;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;Imágenes formato / ojo con rotaciones / y caracteristicas que aplican para su visualizacion;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;Rubro adicional para asesoria a SL de parte del equipo;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;Ifiel vs Cati;Por ahora por aparte;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;Ifiel vs On line;Por ahora por aparte;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;Cati Vs online ;se puede utilizar / 18 horas;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;on line vs Cati;se puede utilizar / 18 horas;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

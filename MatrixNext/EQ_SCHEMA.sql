@@ -217,6 +217,83 @@ BEGIN
     );
 END;
 
+-- Matriz CATI (duracion vs penetracion para CATI)
+IF OBJECT_ID('dbo.eq_param_cati','U') IS NULL
+BEGIN
+    CREATE TABLE dbo.eq_param_cati (
+        Id INT IDENTITY(1,1) PRIMARY KEY,
+        DuracionMin INT NOT NULL,
+        PenetracionCodigo VARCHAR(20) NOT NULL,
+        ValorPerfil DECIMAL(18,2) NOT NULL,
+        ValorCoordinacion DECIMAL(18,2) NOT NULL,
+        ValorTotal DECIMAL(18,2) NOT NULL,
+        Version INT DEFAULT 1,
+        VigenteDesde DATE NULL,
+        VigenteHasta DATE NULL,
+        CONSTRAINT UQ_CATI_Duracion_Penetracion UNIQUE (DuracionMin, PenetracionCodigo, Version)
+    );
+END;
+
+-- Matriz Online/Auto (duracion vs penetracion para Online)
+IF OBJECT_ID('dbo.eq_param_online','U') IS NULL
+BEGIN
+    CREATE TABLE dbo.eq_param_online (
+        Id INT IDENTITY(1,1) PRIMARY KEY,
+        DuracionMin INT NOT NULL,
+        PenetracionCodigo VARCHAR(20) NOT NULL,
+        ValorPerfil DECIMAL(18,2) NOT NULL,
+        ValorCoordinacion DECIMAL(18,2) NOT NULL,
+        ValorTotal DECIMAL(18,2) NOT NULL,
+        Version INT DEFAULT 1,
+        VigenteDesde DATE NULL,
+        VigenteHasta DATE NULL,
+        CONSTRAINT UQ_ONLINE_Duracion_Penetracion UNIQUE (DuracionMin, PenetracionCodigo, Version)
+    );
+END;
+
+-- Factores (script tipo, clase prueba, apoyo, etiquetado, prob aprobacion)
+IF OBJECT_ID('dbo.eq_param_factores','U') IS NULL
+BEGIN
+    CREATE TABLE dbo.eq_param_factores (
+        Id INT IDENTITY(1,1) PRIMARY KEY,
+        Tipo VARCHAR(50) NOT NULL, -- 'SCRIPT_TIPO', 'CLASE_PRUEBA', 'APOYO_RECLUTAMIENTO', 'ETIQUETADO', 'PROB_APROBACION'
+        Codigo VARCHAR(50) NOT NULL,
+        Descripcion VARCHAR(200) NOT NULL,
+        Factor DECIMAL(10,4) NOT NULL DEFAULT 1.0,
+        Orden INT NOT NULL,
+        Activo BIT DEFAULT 1,
+        CONSTRAINT UQ_Factores_Tipo_Codigo UNIQUE (Tipo, Codigo)
+    );
+END;
+
+-- Tabla Horas SL (horas minimas por SL + RecordDetail + MetodologiaSL)
+IF OBJECT_ID('dbo.eq_rate_horas','U') IS NULL
+BEGIN
+    CREATE TABLE dbo.eq_rate_horas (
+        Id INT IDENTITY(1,1) PRIMARY KEY,
+        SL VARCHAR(50) NOT NULL,
+        RecordDetail VARCHAR(100) NOT NULL,
+        MetodologiaSL VARCHAR(100) NOT NULL,
+        HorasL3 DECIMAL(10,2) DEFAULT 0,
+        HorasL4 DECIMAL(10,2) DEFAULT 0,
+        HorasL5 DECIMAL(10,2) DEFAULT 0,
+        HorasL6 DECIMAL(10,2) DEFAULT 0,
+        HorasL7 DECIMAL(10,2) DEFAULT 0,
+        LoadedRateL3 DECIMAL(18,2) DEFAULT 0,
+        LoadedRateL4 DECIMAL(18,2) DEFAULT 0,
+        LoadedRateL5 DECIMAL(18,2) DEFAULT 0,
+        LoadedRateL6 DECIMAL(18,2) DEFAULT 0,
+        LoadedRateL7 DECIMAL(18,2) DEFAULT 0,
+        BillingRateL3 DECIMAL(18,2) DEFAULT 0,
+        BillingRateL4 DECIMAL(18,2) DEFAULT 0,
+        BillingRateL5 DECIMAL(18,2) DEFAULT 0,
+        BillingRateL6 DECIMAL(18,2) DEFAULT 0,
+        BillingRateL7 DECIMAL(18,2) DEFAULT 0,
+        [Key] AS (SL + '|' + RecordDetail + '|' + MetodologiaSL) PERSISTED,
+        CONSTRAINT UQ_Horas_Key UNIQUE (SL, RecordDetail, MetodologiaSL)
+    );
+END;
+
 ------------------------------------------------------------
 -- TABLAS DE OPERACIÓN
 ------------------------------------------------------------
@@ -270,6 +347,9 @@ BEGIN
         ProductosPorResp INT NOT NULL,
         PatinadoresCiudad INT NOT NULL,
         Siembra BIT NOT NULL,
+        Harmoni BIT DEFAULT 0,
+        Graficacion BIT DEFAULT 0,
+        OtrosCostos DECIMAL(18,2) DEFAULT 0,
         FOREIGN KEY (QuoteId) REFERENCES dbo.eq_quote_header(Id)
     );
 END;
@@ -342,6 +422,28 @@ BEGIN
     );
 END;
 
+-- Logística operativa del proyecto
+IF OBJECT_ID('dbo.eq_logistica','U') IS NULL
+BEGIN
+    CREATE TABLE dbo.eq_logistica (
+        Id BIGINT IDENTITY(1,1) PRIMARY KEY,
+        QuoteId BIGINT NOT NULL,
+        DiasSetup INT DEFAULT 0,
+        DiasCampo INT DEFAULT 0,
+        NumOlas INT DEFAULT 1,
+        ApoyoReclutamientoTipo VARCHAR(50) NULL,
+        TaxiParticipantes BIT DEFAULT 0,
+        EstudioNinos BIT DEFAULT 0,
+        ReprografiaPaginas INT DEFAULT 0,
+        ViaticasCampoOverride DECIMAL(18,2) NULL,
+        OtrosIncentivos DECIMAL(18,2) NULL DEFAULT 0,
+        DimensionLargoCm DECIMAL(10,2) NULL,
+        DimensionAnchoCm DECIMAL(10,2) NULL,
+        DimensionAltoCm DECIMAL(10,2) NULL,
+        FOREIGN KEY (QuoteId) REFERENCES dbo.eq_quote_header(Id)
+    );
+END;
+
 ------------------------------------------------------------
 -- TIPOS DE TABLA PARA TVP
 ------------------------------------------------------------
@@ -403,7 +505,10 @@ IF TYPE_ID(N'dbo.EQ_QuestionnaireType') IS NULL
         ProductosTestear INT,
         ProductosPorResp INT,
         PatinadoresCiudad INT,
-        Siembra BIT
+        Siembra BIT,
+        Harmoni BIT,
+        Graficacion BIT,
+        OtrosCostos DECIMAL(18,2)
     );
 
 IF TYPE_ID(N'dbo.EQ_MethodologyType') IS NULL
@@ -418,6 +523,22 @@ IF TYPE_ID(N'dbo.EQ_MethodologyType') IS NULL
         SobreMuestraPct DECIMAL(10,4),
         EnvioCiudades BIT,
         PesoProductoGr DECIMAL(18,2)
+    );
+
+IF TYPE_ID(N'dbo.EQ_LogisticaType') IS NULL
+    CREATE TYPE dbo.EQ_LogisticaType AS TABLE (
+        DiasSetup INT,
+        DiasCampo INT,
+        NumOlas INT,
+        ApoyoReclutamientoTipo VARCHAR(50),
+        TaxiParticipantes BIT,
+        EstudioNinos BIT,
+        ReprografiaPaginas INT,
+        ViaticasCampoOverride DECIMAL(18,2),
+        OtrosIncentivos DECIMAL(18,2),
+        DimensionLargoCm DECIMAL(10,2),
+        DimensionAnchoCm DECIMAL(10,2),
+        DimensionAltoCm DECIMAL(10,2)
     );
 
 ------------------------------------------------------------
@@ -447,7 +568,8 @@ CREATE PROCEDURE dbo.EQ_Quote_Save
     @Methodology dbo.EQ_MethodologyType READONLY,     -- se espera una fila
     @SampleCities dbo.EQ_SampleCityType READONLY,
     @Mystery dbo.EQ_MysteryVisitType READONLY,
-    @StaffSL dbo.EQ_StaffSLType READONLY
+    @StaffSL dbo.EQ_StaffSLType READONLY,
+    @Logistica dbo.EQ_LogisticaType READONLY          -- se espera una fila
 )
 AS
 BEGIN
@@ -491,11 +613,13 @@ BEGIN
         (QuoteId, DuracionMin, PenetracionCodigo, PregAbiertas, PregAbiertasMult, TopLine, DataCleaning,
          ASCIIFlag, ScriptReclutamiento, Scripting, ScriptingTipo, Codificacion, Procesamiento,
          NumProcesamientos, ProcesoEstadistico, ClasePrueba, Refrigeracion, CompraProducto,
-         EtiquetadoTipo, Embalaje, ProductosTestear, ProductosPorResp, PatinadoresCiudad, Siembra)
+         EtiquetadoTipo, Embalaje, ProductosTestear, ProductosPorResp, PatinadoresCiudad, Siembra,
+         Harmoni, Graficacion, OtrosCostos)
         SELECT @Id, DuracionMin, PenetracionCodigo, PregAbiertas, PregAbiertasMult, TopLine, DataCleaning,
                ASCIIFlag, ScriptReclutamiento, Scripting, ScriptingTipo, Codificacion, Procesamiento,
                NumProcesamientos, ProcesoEstadistico, ClasePrueba, Refrigeracion, CompraProducto,
-               EtiquetadoTipo, Embalaje, ProductosTestear, ProductosPorResp, PatinadoresCiudad, Siembra
+               EtiquetadoTipo, Embalaje, ProductosTestear, ProductosPorResp, PatinadoresCiudad, Siembra,
+               Harmoni, Graficacion, OtrosCostos
         FROM @Questionnaire;
 
         -- metodologia (uno a uno)
@@ -530,6 +654,15 @@ BEGIN
                Tarifa,
                HorasPresup * Tarifa
         FROM @StaffSL;
+
+        -- logistica (uno a uno)
+        DELETE FROM dbo.eq_logistica WHERE QuoteId = @Id;
+        INSERT dbo.eq_logistica
+        (QuoteId, DiasSetup, DiasCampo, NumOlas, ApoyoReclutamientoTipo, TaxiParticipantes, EstudioNinos,
+         ReprografiaPaginas, ViaticasCampoOverride, OtrosIncentivos, DimensionLargoCm, DimensionAnchoCm, DimensionAltoCm)
+        SELECT @Id, DiasSetup, DiasCampo, NumOlas, ApoyoReclutamientoTipo, TaxiParticipantes, EstudioNinos,
+               ReprografiaPaginas, ViaticasCampoOverride, OtrosIncentivos, DimensionLargoCm, DimensionAnchoCm, DimensionAltoCm
+        FROM @Logistica;
     END TRY
     BEGIN CATCH
         DECLARE @Err NVARCHAR(4000) = ERROR_MESSAGE();
