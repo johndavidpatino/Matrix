@@ -1,0 +1,456 @@
+@{
+    ViewData["Title"] = "Presupuestos Internos";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="fw-bold text-primary">
+                <i class="bi bi-file-earmark-spreadsheet"></i> Presupuestos Internos
+            </h2>
+            <p class="text-muted">Gestión y aprobación de presupuestos internos por empresa y división</p>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <i class="bi bi-funnel"></i> Filtros de Búsqueda
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label for="filtroPeriodo" class="form-label">Período</label>
+                    <input type="number" class="form-control" id="filtroPeriodo" placeholder="2025" />
+                </div>
+                <div class="col-md-3">
+                    <label for="filtroEmpresa" class="form-label">Empresa</label>
+                    <input type="text" class="form-control" id="filtroEmpresa" placeholder="Código empresa" />
+                </div>
+                <div class="col-md-3">
+                    <label for="filtroEstado" class="form-label">Estado</label>
+                    <select class="form-select" id="filtroEstado">
+                        <option value="">Todos</option>
+                        <option value="1">Activo</option>
+                        <option value="2">Aprobado</option>
+                        <option value="3">Rechazado</option>
+                        <option value="0">Inactivo</option>
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button type="button" class="btn btn-primary me-2" id="btnBuscar">
+                        <i class="bi bi-search"></i> Buscar
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" id="btnLimpiar">
+                        <i class="bi bi-x-circle"></i> Limpiar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botones de Acción -->
+    <div class="mb-3">
+        <button type="button" class="btn btn-success" id="btnNuevo">
+            <i class="bi bi-plus-circle"></i> Nuevo Presupuesto
+        </button>
+        <button type="button" class="btn btn-outline-primary" id="btnExportar">
+            <i class="bi bi-file-excel"></i> Exportar a Excel
+        </button>
+    </div>
+
+    <!-- Grid de Presupuestos -->
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="tablePresupuestos" class="table table-hover table-striped w-100">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Período</th>
+                            <th>Empresa</th>
+                            <th>División</th>
+                            <th>Monto Total</th>
+                            <th>Monto Ejecutado</th>
+                            <th>Saldo</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Nuevo/Editar Presupuesto -->
+<div class="modal fade" id="modalPresupuesto" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="modalPresupuestoTitle">Nuevo Presupuesto Interno</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formPresupuesto">
+                    <input type="hidden" id="idPresupuesto" />
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="periodo" class="form-label required">Período</label>
+                            <input type="number" class="form-control" id="periodo" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="codigoEmpresa" class="form-label required">Empresa</label>
+                            <input type="text" class="form-control" id="codigoEmpresa" required />
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="codigoDivision" class="form-label">División</label>
+                            <input type="text" class="form-control" id="codigoDivision" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="montoTotal" class="form-label required">Monto Total</label>
+                            <input type="number" class="form-control" id="montoTotal" step="0.01" required />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="observaciones" class="form-label">Observaciones</label>
+                        <textarea class="form-control" id="observaciones" rows="3"></textarea>
+                    </div>
+
+                    <hr />
+                    <h6 class="fw-bold">Detalles (Líneas Presupuestales)</h6>
+                    <div id="detallesContainer">
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle"></i> Los detalles se gestionan desde la vista de Detalles
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="btnGuardar">
+                    <i class="bi bi-save"></i> Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Aprobación -->
+<div class="modal fade" id="modalAprobar" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">Aprobar Presupuesto</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro que desea aprobar este presupuesto?</p>
+                <input type="hidden" id="idAprobarPresupuesto" />
+                <div class="mb-3">
+                    <label for="usuarioAprobacion" class="form-label required">Usuario</label>
+                    <input type="text" class="form-control" id="usuarioAprobacion" required />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" id="btnConfirmarAprobar">
+                    <i class="bi bi-check-circle"></i> Aprobar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            let table;
+
+            // Inicializar DataTable
+            function initDataTable() {
+                if ($.fn.DataTable.isDataTable('#tablePresupuestos')) {
+                    $('#tablePresupuestos').DataTable().destroy();
+                }
+
+                table = $('#tablePresupuestos').DataTable({
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+                    },
+                    data: [],
+                    columns: [
+                        { data: 'idPresupuesto' },
+                        { data: 'periodo' },
+                        { data: 'codigoEmpresa' },
+                        { data: 'codigoDivision', defaultContent: '-' },
+                        {
+                            data: 'montoTotal',
+                            render: function (data) {
+                                return '$' + parseFloat(data).toLocaleString('es-CO', { minimumFractionDigits: 2 });
+                            }
+                        },
+                        {
+                            data: 'montoEjecutado',
+                            render: function (data) {
+                                return '$' + parseFloat(data || 0).toLocaleString('es-CO', { minimumFractionDigits: 2 });
+                            }
+                        },
+                        {
+                            data: 'saldoDisponible',
+                            render: function (data) {
+                                const saldo = parseFloat(data || 0);
+                                const color = saldo < 0 ? 'text-danger' : 'text-success';
+                                return `<span class="${color} fw-bold">$${saldo.toLocaleString('es-CO', { minimumFractionDigits: 2 })}</span>`;
+                            }
+                        },
+                        {
+                            data: 'estado',
+                            render: function (data) {
+                                const badges = {
+                                    0: '<span class="badge bg-secondary">Inactivo</span>',
+                                    1: '<span class="badge bg-primary">Activo</span>',
+                                    2: '<span class="badge bg-success">Aprobado</span>',
+                                    3: '<span class="badge bg-danger">Rechazado</span>'
+                                };
+                                return badges[data] || '<span class="badge bg-secondary">Desconocido</span>';
+                            }
+                        },
+                        {
+                            data: null,
+                            orderable: false,
+                            render: function (data, type, row) {
+                                return `
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button class="btn btn-outline-primary btn-editar" title="Editar" data-id="${row.idPresupuesto}">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-outline-info btn-detalles" title="Detalles" data-id="${row.idPresupuesto}">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                        <button class="btn btn-outline-secondary btn-historico" title="Histórico" data-id="${row.idPresupuesto}">
+                                            <i class="bi bi-clock-history"></i>
+                                        </button>
+                                        <button class="btn btn-outline-success btn-aprobar" title="Aprobar" data-id="${row.idPresupuesto}" ${row.estado === 2 ? 'disabled' : ''}>
+                                            <i class="bi bi-check-circle"></i>
+                                        </button>
+                                        <button class="btn btn-outline-danger btn-eliminar" title="Eliminar" data-id="${row.idPresupuesto}">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                `;
+                            }
+                        }
+                    ],
+                    order: [[0, 'desc']],
+                    pageLength: 25,
+                    responsive: true
+                });
+            }
+
+            // Cargar datos
+            function cargarPresupuestos() {
+                const filtros = {
+                    periodo: $('#filtroPeriodo').val() || null,
+                    codigoEmpresa: $('#filtroEmpresa').val() || null,
+                    estado: $('#filtroEstado').val() || null
+                };
+
+                $.post('@Url.Action("ObtenerPresupuestos")', filtros)
+                    .done(function (response) {
+                        if (response.success) {
+                            table.clear().rows.add(response.data).draw();
+                        } else {
+                            toastr.error(response.message || 'Error cargando presupuestos');
+                        }
+                    })
+                    .fail(function () {
+                        toastr.error('Error de comunicación con el servidor');
+                    });
+            }
+
+            // Botón Buscar
+            $('#btnBuscar').click(function () {
+                cargarPresupuestos();
+            });
+
+            // Botón Limpiar
+            $('#btnLimpiar').click(function () {
+                $('#filtroPeriodo, #filtroEmpresa, #filtroEstado').val('');
+                cargarPresupuestos();
+            });
+
+            // Botón Nuevo
+            $('#btnNuevo').click(function () {
+                $('#formPresupuesto')[0].reset();
+                $('#idPresupuesto').val('0');
+                $('#modalPresupuestoTitle').text('Nuevo Presupuesto Interno');
+                $('#modalPresupuesto').modal('show');
+            });
+
+            // Botón Guardar
+            $('#btnGuardar').click(function () {
+                if (!$('#formPresupuesto')[0].checkValidity()) {
+                    $('#formPresupuesto')[0].reportValidity();
+                    return;
+                }
+
+                const modelo = {
+                    idPresupuesto: parseInt($('#idPresupuesto').val()) || 0,
+                    periodo: parseInt($('#periodo').val()),
+                    codigoEmpresa: $('#codigoEmpresa').val(),
+                    codigoDivision: $('#codigoDivision').val() || null,
+                    montoTotal: parseFloat($('#montoTotal').val()),
+                    observaciones: $('#observaciones').val() || null,
+                    detalles: []
+                };
+
+                $.ajax({
+                    url: '/api/cc/presupuestosinternos/guardar',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(modelo)
+                })
+                    .done(function (response) {
+                        if (response.success) {
+                            toastr.success('Presupuesto guardado exitosamente');
+                            $('#modalPresupuesto').modal('hide');
+                            cargarPresupuestos();
+                        } else {
+                            toastr.error(response.message || 'Error guardando presupuesto');
+                        }
+                    })
+                    .fail(function () {
+                        toastr.error('Error de comunicación');
+                    });
+            });
+
+            // Botón Editar
+            $(document).on('click', '.btn-editar', function () {
+                const id = $(this).data('id');
+                
+                $.get(`/api/cc/presupuestosinternos/${id}`)
+                    .done(function (response) {
+                        if (response.success && response.data) {
+                            const p = response.data;
+                            $('#idPresupuesto').val(p.idPresupuesto);
+                            $('#periodo').val(p.periodo);
+                            $('#codigoEmpresa').val(p.codigoEmpresa);
+                            $('#codigoDivision').val(p.codigoDivision);
+                            $('#montoTotal').val(p.montoTotal);
+                            $('#observaciones').val(p.observaciones);
+                            $('#modalPresupuestoTitle').text('Editar Presupuesto Interno');
+                            $('#modalPresupuesto').modal('show');
+                        } else {
+                            toastr.error('Error cargando datos del presupuesto');
+                        }
+                    })
+                    .fail(function () {
+                        toastr.error('Error de comunicación');
+                    });
+            });
+
+            // Botón Detalles
+            $(document).on('click', '.btn-detalles', function () {
+                const id = $(this).data('id');
+                window.location.href = `@Url.Action("Detalles")/${id}`;
+            });
+
+            // Botón Histórico
+            $(document).on('click', '.btn-historico', function () {
+                const id = $(this).data('id');
+                window.location.href = `@Url.Action("Historico")/${id}`;
+            });
+
+            // Botón Aprobar
+            $(document).on('click', '.btn-aprobar', function () {
+                const id = $(this).data('id');
+                $('#idAprobarPresupuesto').val(id);
+                $('#usuarioAprobacion').val('');
+                $('#modalAprobar').modal('show');
+            });
+
+            // Confirmar Aprobación
+            $('#btnConfirmarAprobar').click(function () {
+                const id = $('#idAprobarPresupuesto').val();
+                const usuario = $('#usuarioAprobacion').val();
+
+                if (!usuario) {
+                    toastr.warning('Debe ingresar el usuario');
+                    return;
+                }
+
+                $.ajax({
+                    url: `/api/cc/presupuestosinternos/${id}/aprobar`,
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(usuario)
+                })
+                    .done(function (response) {
+                        if (response.success) {
+                            toastr.success('Presupuesto aprobado exitosamente');
+                            $('#modalAprobar').modal('hide');
+                            cargarPresupuestos();
+                        } else {
+                            toastr.error(response.message || 'Error aprobando presupuesto');
+                        }
+                    })
+                    .fail(function () {
+                        toastr.error('Error de comunicación');
+                    });
+            });
+
+            // Botón Eliminar
+            $(document).on('click', '.btn-eliminar', function () {
+                const id = $(this).data('id');
+                
+                if (confirm('¿Está seguro que desea eliminar este presupuesto?')) {
+                    $.ajax({
+                        url: `/api/cc/presupuestosinternos/${id}`,
+                        type: 'DELETE'
+                    })
+                        .done(function (response) {
+                            if (response.success) {
+                                toastr.success('Presupuesto eliminado');
+                                cargarPresupuestos();
+                            } else {
+                                toastr.error(response.message || 'Error eliminando presupuesto');
+                            }
+                        })
+                        .fail(function () {
+                            toastr.error('Error de comunicación');
+                        });
+                }
+            });
+
+            // Exportar a Excel
+            $('#btnExportar').click(function () {
+                const periodo = $('#filtroPeriodo').val() || '';
+                const empresa = $('#filtroEmpresa').val() || '';
+                const estado = $('#filtroEstado').val() || '';
+                
+                window.location.href = `@Url.Action("Exportar")?periodo=${periodo}&codigoEmpresa=${empresa}&estado=${estado}`;
+            });
+
+            // Cargar inicial
+            initDataTable();
+            cargarPresupuestos();
+        });
+    </script>
+
+    <style>
+        .required::after {
+            content: " *";
+            color: red;
+        }
+
+        .table th {
+            white-space: nowrap;
+        }
+    </style>
+}

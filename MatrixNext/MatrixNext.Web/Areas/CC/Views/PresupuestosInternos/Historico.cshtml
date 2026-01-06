@@ -1,0 +1,174 @@
+@model IEnumerable<MatrixNext.Data.Modules.CC.DTOs.PresupuestosInternos.HistoricoPresupuestoInternoDto>
+
+@{
+    ViewData["Title"] = "Histórico de Cambios";
+    var idPresupuesto = ViewBag.IdPresupuesto;
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="fw-bold text-primary">
+                <i class="bi bi-clock-history"></i> Histórico de Cambios
+            </h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index")">Presupuestos Internos</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("Detalles", new { id = idPresupuesto })">Detalles #@idPresupuesto</a></li>
+                    <li class="breadcrumb-item active">Histórico</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Timeline de Cambios -->
+    <div class="card shadow">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0"><i class="bi bi-list-task"></i> Registro de Auditoría</h5>
+        </div>
+        <div class="card-body">
+            @if (Model != null && Model.Any())
+            {
+                <div class="timeline">
+                    @foreach (var item in Model.OrderByDescending(h => h.FechaModificacion))
+                    {
+                        <div class="timeline-item mb-4">
+                            <div class="row">
+                                <div class="col-md-2 text-end">
+                                    <div class="timeline-date">
+                                        <strong>@item.FechaModificacion?.ToString("dd/MM/yyyy")</strong><br />
+                                        <small class="text-muted">@item.FechaModificacion?.ToString("HH:mm:ss")</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 text-center">
+                                    <div class="timeline-marker">
+                                        @{
+                                            var iconoAccion = item.Accion?.ToLower() switch
+                                            {
+                                                "insertar" or "crear" => "bi-plus-circle text-success",
+                                                "actualizar" or "modificar" => "bi-pencil text-primary",
+                                                "eliminar" or "borrar" => "bi-trash text-danger",
+                                                "aprobar" => "bi-check-circle text-success",
+                                                _ => "bi-circle text-secondary"
+                                            };
+                                        }
+                                        <i class="bi @iconoAccion fs-3"></i>
+                                    </div>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h6 class="card-title fw-bold">
+                                                @item.Accion
+                                                @if (!string.IsNullOrEmpty(item.Usuario))
+                                                {
+                                                    <span class="badge bg-secondary ms-2">@item.Usuario</span>
+                                                }
+                                            </h6>
+                                            @if (!string.IsNullOrEmpty(item.ValorAnterior) || !string.IsNullOrEmpty(item.ValorNuevo))
+                                            {
+                                                <div class="row mt-2">
+                                                    @if (!string.IsNullOrEmpty(item.ValorAnterior))
+                                                    {
+                                                        <div class="col-md-6">
+                                                            <strong>Valor Anterior:</strong>
+                                                            <pre class="bg-light p-2 rounded"><code>@item.ValorAnterior</code></pre>
+                                                        </div>
+                                                    }
+                                                    @if (!string.IsNullOrEmpty(item.ValorNuevo))
+                                                    {
+                                                        <div class="col-md-6">
+                                                            <strong>Valor Nuevo:</strong>
+                                                            <pre class="bg-success bg-opacity-10 p-2 rounded"><code>@item.ValorNuevo</code></pre>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            }
+                                            @if (!string.IsNullOrEmpty(item.Observaciones))
+                                            {
+                                                <div class="mt-2">
+                                                    <strong>Observaciones:</strong>
+                                                    <p class="text-muted mb-0">@item.Observaciones</p>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info text-center">
+                    <i class="bi bi-info-circle fs-3"></i>
+                    <p class="mt-2">No hay registros de auditoría para este presupuesto</p>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Botones de Navegación -->
+    <div class="mt-4">
+        <a href="@Url.Action("Detalles", new { id = idPresupuesto })" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Volver a Detalles
+        </a>
+        <a href="@Url.Action("Index")" class="btn btn-outline-primary">
+            <i class="bi bi-house"></i> Ir a Listado
+        </a>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Timeline animations
+            $('.timeline-item').each(function (index) {
+                $(this).delay(100 * index).animate({ opacity: 1 }, 300);
+            });
+        });
+    </script>
+
+    <style>
+        .timeline {
+            position: relative;
+        }
+
+        .timeline-item {
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 16.66%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #0d6efd 0%, #6c757d 100%);
+        }
+
+        .timeline-marker {
+            position: relative;
+            z-index: 2;
+            background: white;
+            padding: 10px 0;
+        }
+
+        .timeline-date {
+            padding-top: 15px;
+        }
+
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.875rem;
+        }
+
+        code {
+            color: inherit;
+        }
+    </style>
+}

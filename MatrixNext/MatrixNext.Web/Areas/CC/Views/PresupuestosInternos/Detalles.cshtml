@@ -1,0 +1,333 @@
+@model MatrixNext.Data.Modules.CC.DTOs.PresupuestosInternos.PresupuestoInternoDto
+
+@{
+    ViewData["Title"] = $"Detalles Presupuesto #{Model?.IdPresupuesto}";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="fw-bold text-primary">
+                <i class="bi bi-file-text"></i> Detalles del Presupuesto Interno
+            </h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index")">Presupuestos Internos</a></li>
+                    <li class="breadcrumb-item active">Detalles #@Model?.IdPresupuesto</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Encabezado del Presupuesto -->
+    <div class="card mb-4 shadow">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="bi bi-info-circle"></i> Información General</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <strong>ID Presupuesto:</strong>
+                    <p class="text-muted">@Model?.IdPresupuesto</p>
+                </div>
+                <div class="col-md-3">
+                    <strong>Período:</strong>
+                    <p class="text-muted">@Model?.Periodo</p>
+                </div>
+                <div class="col-md-3">
+                    <strong>Empresa:</strong>
+                    <p class="text-muted">@Model?.CodigoEmpresa</p>
+                </div>
+                <div class="col-md-3">
+                    <strong>División:</strong>
+                    <p class="text-muted">@(Model?.CodigoDivision ?? "-")</p>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-3">
+                    <strong>Monto Total:</strong>
+                    <p class="text-success fw-bold">@Model?.MontoTotal.ToString("C2")</p>
+                </div>
+                <div class="col-md-3">
+                    <strong>Monto Ejecutado:</strong>
+                    <p class="text-info fw-bold">@Model?.MontoEjecutado.ToString("C2")</p>
+                </div>
+                <div class="col-md-3">
+                    <strong>Saldo Disponible:</strong>
+                    <p class="@(Model?.SaldoDisponible < 0 ? "text-danger" : "text-success") fw-bold">
+                        @Model?.SaldoDisponible.ToString("C2")
+                    </p>
+                </div>
+                <div class="col-md-3">
+                    <strong>Estado:</strong>
+                    @{
+                        var estadoBadge = Model?.Estado switch
+                        {
+                            0 => "<span class='badge bg-secondary'>Inactivo</span>",
+                            1 => "<span class='badge bg-primary'>Activo</span>",
+                            2 => "<span class='badge bg-success'>Aprobado</span>",
+                            3 => "<span class='badge bg-danger'>Rechazado</span>",
+                            _ => "<span class='badge bg-secondary'>Desconocido</span>"
+                        };
+                    }
+                    <p>@Html.Raw(estadoBadge)</p>
+                </div>
+            </div>
+            @if (!string.IsNullOrEmpty(Model?.Observaciones))
+            {
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <strong>Observaciones:</strong>
+                        <p class="text-muted">@Model.Observaciones</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Líneas Presupuestales (Detalles) -->
+    <div class="card shadow">
+        <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="bi bi-list-ul"></i> Líneas Presupuestales</h5>
+            <button type="button" class="btn btn-sm btn-light" id="btnNuevaLinea">
+                <i class="bi bi-plus-circle"></i> Nueva Línea
+            </button>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="tableDetalles" class="table table-hover table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Centro de Costo</th>
+                            <th>Descripción</th>
+                            <th>Monto Asignado</th>
+                            <th>Monto Ejecutado</th>
+                            <th>Saldo</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="detallesBody">
+                        <!-- Cargado vía AJAX -->
+                    </tbody>
+                    <tfoot>
+                        <tr class="table-secondary fw-bold">
+                            <td colspan="3" class="text-end">TOTAL:</td>
+                            <td id="totalAsignado">$0.00</td>
+                            <td id="totalEjecutado">$0.00</td>
+                            <td id="totalSaldo">$0.00</td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botones de Acción -->
+    <div class="mt-4">
+        <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Volver
+        </a>
+        <a href="@Url.Action("Historico", new { id = Model?.IdPresupuesto })" class="btn btn-outline-info">
+            <i class="bi bi-clock-history"></i> Ver Histórico
+        </a>
+    </div>
+</div>
+
+<!-- Modal Nueva/Editar Línea -->
+<div class="modal fade" id="modalLinea" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-secondary text-white">
+                <h5 class="modal-title" id="modalLineaTitle">Nueva Línea Presupuestal</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formLinea">
+                    <input type="hidden" id="idDetalle" />
+                    <input type="hidden" id="idPresupuesto" value="@Model?.IdPresupuesto" />
+                    
+                    <div class="mb-3">
+                        <label for="codigoCentroCosto" class="form-label required">Centro de Costo</label>
+                        <input type="text" class="form-control" id="codigoCentroCosto" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="montoAsignado" class="form-label required">Monto Asignado</label>
+                        <input type="number" class="form-control" id="montoAsignado" step="0.01" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="descripcionLinea" class="form-label">Descripción</label>
+                        <textarea class="form-control" id="descripcionLinea" rows="2"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="btnGuardarLinea">
+                    <i class="bi bi-save"></i> Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            const idPresupuesto = @Model?.IdPresupuesto;
+
+            // Cargar detalles
+            function cargarDetalles() {
+                $.get(`/api/cc/presupuestosinternos/${idPresupuesto}`)
+                    .done(function (response) {
+                        if (response.success && response.data && response.data.detalles) {
+                            renderizarDetalles(response.data.detalles);
+                        } else {
+                            toastr.error('Error cargando detalles');
+                        }
+                    })
+                    .fail(function () {
+                        toastr.error('Error de comunicación');
+                    });
+            }
+
+            // Renderizar detalles en la tabla
+            function renderizarDetalles(detalles) {
+                let html = '';
+                let totalAsignado = 0;
+                let totalEjecutado = 0;
+                let totalSaldo = 0;
+
+                detalles.forEach(function (d) {
+                    const saldo = d.saldoLinea || 0;
+                    const colorSaldo = saldo < 0 ? 'text-danger' : 'text-success';
+                    
+                    totalAsignado += d.montoAsignado || 0;
+                    totalEjecutado += d.montoEjecutado || 0;
+                    totalSaldo += saldo;
+
+                    html += `
+                        <tr>
+                            <td>${d.idDetalle}</td>
+                            <td>${d.centroCosto || '-'}</td>
+                            <td>${d.descripcionLinea || '-'}</td>
+                            <td>$${(d.montoAsignado || 0).toLocaleString('es-CO', { minimumFractionDigits: 2 })}</td>
+                            <td>$${(d.montoEjecutado || 0).toLocaleString('es-CO', { minimumFractionDigits: 2 })}</td>
+                            <td class="${colorSaldo} fw-bold">$${saldo.toLocaleString('es-CO', { minimumFractionDigits: 2 })}</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary btn-editar-linea" data-id="${d.idDetalle}" data-centro="${d.centroCosto || ''}" data-monto="${d.montoAsignado}" data-desc="${d.descripcionLinea || ''}">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger btn-eliminar-linea" data-id="${d.idDetalle}">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                $('#detallesBody').html(html || '<tr><td colspan="7" class="text-center text-muted">No hay líneas presupuestales</td></tr>');
+                
+                // Actualizar totales
+                $('#totalAsignado').text('$' + totalAsignado.toLocaleString('es-CO', { minimumFractionDigits: 2 }));
+                $('#totalEjecutado').text('$' + totalEjecutado.toLocaleString('es-CO', { minimumFractionDigits: 2 }));
+                const colorTotal = totalSaldo < 0 ? 'text-danger' : 'text-success';
+                $('#totalSaldo').html(`<span class="${colorTotal}">$${totalSaldo.toLocaleString('es-CO', { minimumFractionDigits: 2 })}</span>`);
+            }
+
+            // Nueva Línea
+            $('#btnNuevaLinea').click(function () {
+                $('#formLinea')[0].reset();
+                $('#idDetalle').val('0');
+                $('#modalLineaTitle').text('Nueva Línea Presupuestal');
+                $('#modalLinea').modal('show');
+            });
+
+            // Guardar Línea
+            $('#btnGuardarLinea').click(function () {
+                if (!$('#formLinea')[0].checkValidity()) {
+                    $('#formLinea')[0].reportValidity();
+                    return;
+                }
+
+                const detalle = {
+                    idDetalle: parseInt($('#idDetalle').val()) || 0,
+                    idPresupuestoInterno: idPresupuesto,
+                    centroCosto: $('#codigoCentroCosto').val(),
+                    montoAsignado: parseFloat($('#montoAsignado').val()),
+                    descripcionLinea: $('#descripcionLinea').val() || null
+                };
+
+                $.ajax({
+                    url: '/api/cc/presupuestosinternos/detalle/guardar',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(detalle)
+                })
+                    .done(function (response) {
+                        if (response.success) {
+                            toastr.success('Línea guardada exitosamente');
+                            $('#modalLinea').modal('hide');
+                            cargarDetalles();
+                        } else {
+                            toastr.error(response.message || 'Error guardando línea');
+                        }
+                    })
+                    .fail(function () {
+                        toastr.error('Error de comunicación con el servidor');
+                    });
+            });
+
+            // Editar Línea
+            $(document).on('click', '.btn-editar-linea', function () {
+                const id = $(this).data('id');
+                const centro = $(this).data('centro');
+                const monto = $(this).data('monto');
+                const desc = $(this).data('desc');
+
+                $('#idDetalle').val(id);
+                $('#codigoCentroCosto').val(centro);
+                $('#montoAsignado').val(monto);
+                $('#descripcionLinea').val(desc);
+                $('#modalLineaTitle').text('Editar Línea Presupuestal');
+                $('#modalLinea').modal('show');
+            });
+
+            // Eliminar Línea
+            $(document).on('click', '.btn-eliminar-linea', function () {
+                const id = $(this).data('id');
+                
+                if (confirm('¿Está seguro que desea eliminar esta línea?')) {
+                    $.ajax({
+                        url: `/api/cc/presupuestosinternos/detalle/${id}`,
+                        type: 'DELETE'
+                    })
+                        .done(function (response) {
+                            if (response.success) {
+                                toastr.success('Línea eliminada exitosamente');
+                                cargarDetalles();
+                            } else {
+                                toastr.error(response.message || 'Error eliminando línea');
+                            }
+                        })
+                        .fail(function () {
+                            toastr.error('Error de comunicación con el servidor');
+                        });
+                }
+            });
+
+            // Cargar inicial
+            cargarDetalles();
+        });
+    </script>
+
+    <style>
+        .required::after {
+            content: " *";
+            color: red;
+        }
+    </style>
+}

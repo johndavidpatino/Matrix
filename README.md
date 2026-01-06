@@ -5,13 +5,15 @@
 
 ## 🚀 Migración WebMatrix → MatrixNext
 
-**Estado actual**: 3/25 módulos completados (12%)
+**Estado actual**: 5/25 módulos completados (20%)
 
 ### Módulos Migrados ✅
 
 - **US_Usuarios**: Gestión de usuarios, roles, permisos
 - **TH_Ausencias**: Solicitudes de ausencias, aprobaciones, incapacidades
 - **CU_Cuentas**: JobBooks, Brief, Propuestas, Estudios, Presupuestos completos
+- **CC_ControlPresupuestos** (Sprint 1): Control de presupuestos, verificación, nómina, asignación + Excel export
+- **CC_PresupuestosInternos** (Sprint 2): Presupuestos internos por empresa/división, detalles, histórico, aprobación + Excel export
 
 ### Documentación de Migración
 

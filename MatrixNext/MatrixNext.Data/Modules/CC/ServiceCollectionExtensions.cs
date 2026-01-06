@@ -32,6 +32,11 @@ namespace MatrixNext.Data.Modules.CC
                 new CcControlPresupuestosAdapter(dbConnection));
             services.AddScoped<ICcControlPresupuestosService, CcControlPresupuestosService>();
             
+            // CC Presupuestos Internos Module (Sprint 2)
+            services.AddScoped<CcPresupuestosInternosAdapter>(sp => 
+                new CcPresupuestosInternosAdapter(dbConnection));
+            services.AddScoped<ICcPresupuestosInternosService, CcPresupuestosInternosService>();
+            
             return services;
         }
     }
