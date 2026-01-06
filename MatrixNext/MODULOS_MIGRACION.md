@@ -68,7 +68,7 @@
 - **Contexto**: `FI_Model` + `CC_FinzOpe` + `CAP` (CoreProject)
 - **Dependencias**: ✅ CU_Cuentas (jobbooks), US_Usuarios, TH; 📋 CAP (costos)
 - **Volumen**: Muy grande
-- **Estado**: 🔄 En curso (análisis COMPLETO + CC_FinzOpe INCLUIDO)
+- **Estado**: 🔄 En curso (CC_FinzOpe completado; FI Grupo 1-3 migrados: Control Presupuestos, Presupuestos Internos, Procesos Internos; análisis COMPLETO)
 - **Documento**: [MIGRACION_FI_ADMINISTRATIVO.md](MIGRACION_FI_ADMINISTRATIVO.md)
 - **Cambio CRÍTICO**: ✅ **CC_FinzOpe migra en Sprint Pre-1 como infraestructura (80h)**
   - Razón: CC_FinzOpe no es módulo independiente; es data core que FI consume vía SP

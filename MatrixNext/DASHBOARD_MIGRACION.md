@@ -6,8 +6,8 @@
 ┌─────────────────────────────────────────────────────────────────┐
 │  MIGRACIÓN WEBMATRIX → MATRIXNEXT                               │
 │  ================================================================ │
-│  Módulos Completados:        3/25    [█████░░░░░░░░░░░░░░░] 12% │
-│  Líneas Código Migradas:  ~9,300+    [██████░░░░░░░░░░░░░░] 15% │
+│  Módulos Completados:       12/25    [████████░░░░░░░░░░░░░] 48% │
+│  Líneas Código Migradas: ~11,600+    [███████░░░░░░░░░░░░░] 19% │
 │  Compilación sin Errores:   ✅ SÍ                               │
 │  Documentación Completa:     ✅ SÍ                               │
 │  Testing Funcional:          ⏳ Pendiente (staging)              │
@@ -41,6 +41,44 @@
 - **Compilación**: ✅ SIN ERRORES
 - **Testing**: ⏳ Listo para staging
 - **Documentación**: ✅ VERIFICACION_AUSENCIAS_MIGRACION.md (380 líneas)
+
+#### 3️⃣ **CU_Cuentas**
+- **Estatus**: ✅ COMPLETO
+- **Páginas**: 22 vistas Razor (JobBooks, Brief, Propuestas, Estudio, Presupuesto IQuote)
+- **Funcionalidad**: Gestión de jobbooks/propuestas/estudios, simulador IQuote, autorización GM
+- **Código**: 6 Services, 5 DataAdapters, 5 Controllers
+- **Compilación**: ✅ SIN ERRORES
+- **Testing**: ⏳ Pendiente staging
+
+#### 4️⃣ **CC_FinzOpe** (Infraestructura Pre-1)
+- **Estatus**: ✅ COMPLETO (Sprint Pre-1)
+- **Funcionalidad**: Infraestructura financiera-operacional consumida por FI
+- **Código**: DbContext wrapper, SP wrappers, servicios base
+- **Compilación**: ✅ SIN ERRORES
+- **Testing**: ⚠️ Integración continua con FI
+
+#### 5️⃣ **CC_ControlPresupuestos** (Sprint 1)
+- **Estatus**: ✅ COMPLETO
+- **Páginas**: 4 (Control, Nómina, Asignación, Verificación)
+- **Funcionalidad**: CRUD presupuestos, distribución costos, validación presup vs real
+- **Compilación**: ✅ SIN ERRORES
+- **Testing**: ⏳ Pendiente staging
+
+#### 6️⃣ **CC_PresupuestosInternos** (Sprint 2)
+- **Estatus**: ✅ COMPLETO
+- **Páginas**: 3 vistas (Index, Detalles, Histórico)
+- **Funcionalidad**: CRUD presupuestos internos, líneas presupuestales, auditoría, export Excel
+- **Compilación**: ✅ SIN ERRORES
+- **Testing**: ⏳ Pendiente staging
+
+#### 7️⃣ **CC_ProcesosInternos** (Sprint 3)
+- **Estatus**: ✅ COMPLETO (Fase 1 + Fase 2)
+- **Páginas**: 6 vistas
+   - Fase 1: ReporteConteos, ResumenProductividad (solo lectura + Excel)
+   - Fase 2: ConteoTrabajos, RequerimientosEquipo, ConsolidacionProduccion, CalculoJornadaLaboral
+- **Funcionalidad**: Reportes con métricas y export; CRUD completos con validaciones; integración TH_Ausencia (cálculo jornadas)
+- **Compilación**: ✅ SIN ERRORES
+- **Testing**: ⚠️ Verificar integración SP TH_Ausencia.CalculoDias en staging
 
 ---
 
@@ -112,18 +150,18 @@
 ### Líneas de Código Migradas por Componente
 
 ```
-Adapters:              ~2,000 LOC  ████████░░ 21%
-Services:              ~1,800 LOC  ███████░░░ 19%
-Controllers:           ~2,000 LOC  █████████░ 22%
-Views (Razor):         ~2,100 LOC  █████████░ 23%
-ViewModels:            ~  800 LOC  ████░░░░░░ 9%
+Adapters:              ~2,300 LOC  ████████░░ 21%
+Services:              ~2,000 LOC  ███████░░░ 18%
+Controllers:           ~2,300 LOC  █████████░ 20%
+Views (Razor):         ~3,400 LOC  ██████████ 29%
+ViewModels:            ~  800 LOC  ████░░░░░░ 7%
 Configuration (DI):    ~  200 LOC  █░░░░░░░░░ 2%
 Tests (Pending):       ~    0 LOC  ░░░░░░░░░░ 0%
 ─────────────────────────────────────────────
-Total:                ~9,300+ LOC
+Total:               ~11,600+ LOC
 
 Target (WebMatrix):   ~60,000+ LOC
-Progress:             15% aproximadamente
+Progress:             19% aproximadamente
 ```
 
 ---
