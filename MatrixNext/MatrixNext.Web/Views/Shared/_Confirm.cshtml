@@ -1,0 +1,50 @@
+@{
+    var titulo = ViewBag.Titulo ?? "Confirmación";
+    var mensaje = ViewBag.Mensaje ?? "¿Está seguro que desea continuar?";
+    var accion = ViewBag.Accion ?? "Confirmar";
+    var btnClass = ViewBag.BtnClass ?? "btn-danger";
+}
+
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmModalLabel">@titulo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>@Html.Raw(mensaje)</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn @btnClass" id="confirmBtn">@accion</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function mostrarConfirmacion(titulo, mensaje, callback, accion = "Confirmar", btnClass = "btn-danger") {
+    // Actualizar contenido del modal
+    $("#confirmModalLabel").text(titulo);
+    $("#confirmModal .modal-body p").html(mensaje);
+    $("#confirmBtn").text(accion).attr("class", "btn " + btnClass);
+
+    // Desvincula handler anterior
+    $("#confirmBtn").off("click");
+
+    // Asigna nuevo handler
+    $("#confirmBtn").on("click", function() {
+        callback();
+        // Cerrar modal
+        var modal = bootstrap.Modal.getInstance(document.getElementById("confirmModal"));
+        if (modal) {
+            modal.hide();
+        }
+    });
+
+    // Mostrar modal
+    var modal = new bootstrap.Modal(document.getElementById("confirmModal"));
+    modal.show();
+}
+</script>

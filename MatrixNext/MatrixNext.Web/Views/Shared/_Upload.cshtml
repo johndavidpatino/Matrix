@@ -1,0 +1,136 @@
+@{
+    ViewBag.Title = "Subir Archivo";
+}
+
+<div class="upload-section">
+    <form method="post" enctype="multipart/form-data" id="uploadForm" asp-action="SubirArchivo">
+        <div class="form-group mb-3">
+            <label for="file" class="form-label">Selecciona archivo:</label>
+            <input type="file" id="file" name="file" class="form-control" 
+                   accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.txt,.jpg,.png" required />
+            <small class="form-text text-muted d-block mt-2">
+                Archivos permitidos: PDF, Word, Excel, CSV, TXT, JPG, PNG (máx 20 MB)
+            </small>
+        </div>
+
+        <div class="progress" id="uploadProgress" style="display:none; margin: 10px 0;">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                 role="progressbar" style="width: 0%" id="progressBar"></div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="submitBtn">
+            <i class="bi bi-cloud-upload"></i> Subir Archivo
+        </button>
+        <button type="reset" class="btn btn-secondary">Limpiar</button>
+    </form>
+
+    <div id="uploadResults" class="mt-3"></div>
+
+    <!-- Lista de archivos actuales -->
+    <div id="archivosActuales" class="mt-4">
+        <h6>Archivos cargados:</h6>
+        <div id="archivosList" class="list-group">
+            <p class="text-muted">Cargando archivos...</p>
+        </div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function() {
+    // Cargar lista de archivos
+    cargarArchivos();
+
+    // Envío de formulario
+    $("#uploadForm").on("submit", function(e) {
+        e.preventDefault();
+
+        var file = $("#file")[0].files[0];
+        if (!file) {
+            alert("Por favor selecciona un archivo");
+            return;
+        }
+
+        var formData = new FormData();
+        formData.append("file", file);
+
+        $("#uploadProgress").show();
+        $("#submitBtn").prop("disabled", true);
+
+        $.ajax({
+            url: "@Url.Action("SubirArchivo")",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            xhr: function() {
+                var xhr = $.ajaxSettings.xhr();
+                xhr.upload.addEventListener("progress", function(e) {
+                    if (e.lengthComputable) {
+                        var percentComplete = (e.loaded / e.total) * 100;
+                        $("#progressBar").css("width", percentComplete + "%");
+                    }
+                });
+                return xhr;
+            },
+            success: function(data) {
+                $("#uploadResults").html(`
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="bi bi-check-circle"></i> 
+                        Archivo subido: <strong>${data.nombreArchivo}</strong>
+                        <a href="${data.rutaRelativa}" target="_blank" class="ms-2">Descargar</a>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                `);
+                $("#uploadForm")[0].reset();
+                cargarArchivos();
+            },
+            error: function(err) {
+                var mensaje = "Error al subir archivo";
+                if (err.responseJSON && err.responseJSON.message) {
+                    mensaje = err.responseJSON.message;
+                }
+                $("#uploadResults").html(`
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="bi bi-exclamation-circle"></i> ${mensaje}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                `);
+            },
+            complete: function() {
+                $("#uploadProgress").hide();
+                $("#progressBar").css("width", "0%");
+                $("#submitBtn").prop("disabled", false);
+            }
+        });
+    });
+
+    function cargarArchivos() {
+        // TODO: Llamar a endpoint que lista archivos de la entidad actual
+        // Por ahora es placeholder
+    }
+});
+</script>
+
+<style>
+    .upload-section {
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+
+    .list-group-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .btn-delete-file {
+        color: #dc3545;
+        cursor: pointer;
+    }
+
+    .btn-delete-file:hover {
+        color: #c82333;
+    }
+</style>
