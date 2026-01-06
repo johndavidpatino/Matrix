@@ -8,6 +8,9 @@ using MatrixNext.Web.Middleware;
 using MatrixNext.Web.Areas.EQ.Services;
 using MatrixNext.Web.Areas.EQ.Services.Internal;
 using MatrixNext.Web.Areas.EQ.Services.Masters;
+using MatrixNext.Web.Infrastructure.Data;
+using MatrixNext.Web.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,11 +47,25 @@ builder.Services.AddHealthChecks()
 // Register data services
 var connectionString = builder.Configuration.GetConnectionString("MatrixDb");
 builder.Services.AddScoped(sp => new LogService(connectionString!));
-// US module (Usuarios)
+
+// ===== SPRINT 0: SHARED SERVICES (Infraestructura) =====
+// Ref: PLAN_IMPLEMENTACION_SPRINTS.md § T0.2-T0.6
+builder.Services.AddScoped<IUploadService, UploadService>();
+builder.Services.AddScoped<IGridService, GridService>();
+builder.Services.AddScoped<IPYPermisosService, PYPermisosService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IAuditoriaService, AuditoriaService>();
+builder.Services.AddScoped<GrafoAciclicoService>();
+
+// DbContext principal (PY, CORE, OP)
+builder.Services.AddDbContext<MatrixDbContext>(options =>
+    options.UseSqlServer(connectionString));
+
+// ===== US module (Usuarios) =====
 builder.Services.AddUSModule(builder.Configuration);
 // Usuarios auxiliary services for US area controllers
 builder.Services.AddScoped<RolService>();
-builder.Services.AddScoped<PermisosService>();
+builder.Services.AddScoped<MatrixNext.Data.Services.Usuarios.PermisosService>();
 builder.Services.AddScoped<GrupoUnidadService>();
 // Register TH module services (Ausencias slice)
 builder.Services.AddTHModule(builder.Configuration);
