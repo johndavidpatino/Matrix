@@ -49,6 +49,9 @@
                     <button class="btn btn-secondary" id="btn-limpiar">
                         <i class="fas fa-sync"></i> Limpiar
                     </button>
+                    <button class="btn btn-success" id="btn-exportar">
+                        <i class="fas fa-file-excel"></i> Exportar
+                    </button>
                 </div>
             </div>
         </div>
@@ -362,6 +365,7 @@
             $('#btn-nuevo-presupuesto').click(() => abrirModalPresupuesto());
             $('#btn-buscar').click(() => cargarPresupuestos());
             $('#btn-limpiar').click(() => limpiarFiltros());
+            $('#btn-exportar').click(() => exportarPresupuestos());
             $('#btn-guardar-presupuesto').click(() => guardarPresupuesto());
             
             // Tab events
@@ -544,6 +548,20 @@
             $('#filtro-trabajo').val('');
             $('#filtro-estado').val('');
             cargarPresupuestos();
+        }
+
+        function exportarPresupuestos() {
+            const periodo = $('#filtro-periodo').val();
+            const trabajo = $('#filtro-trabajo').val();
+            const estado = $('#filtro-estado').val();
+
+            let url = '/CC/ControlPresupuestos/Exportar?';
+            if (periodo) url += `periodo=${periodo}&`;
+            if (trabajo) url += `idTrabajo=${trabajo}&`;
+            if (estado) url += `estado=${estado}&`;
+
+            mostrarNotificacion('Generando archivo Excel...', 'info');
+            window.location.href = url;
         }
 
         function formatCurrency(value) {

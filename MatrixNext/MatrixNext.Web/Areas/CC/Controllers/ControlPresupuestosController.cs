@@ -263,5 +263,32 @@ namespace MatrixNext.Web.Areas.CC.Controllers
                 return Json(new { success = false, message = ex.Message });
             }
         }
+
+        /// <summary>
+        /// GET: /CC/ControlPresupuestos/Exportar - Exportar presupuestos a Excel
+        /// </summary>
+        [HttpGet]
+        public async Task<IActionResult> Exportar(int? periodo = null, long? idTrabajo = null, byte? estado = null)
+        {
+            try
+            {
+                _logger.LogInformation($"Exportar presupuestos - Período: {periodo}");
+
+                var presupuestos = await _service.ObtenerPresupuestosAsync(periodo, idTrabajo, estado);
+                var excelBytes = await _service.ExportarPresupuestosExcelAsync(presupuestos);
+
+                var fileName = $"Presupuestos_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx";
+                
+                return File(
+                    excelBytes,
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    fileName);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error exportando presupuestos");
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
