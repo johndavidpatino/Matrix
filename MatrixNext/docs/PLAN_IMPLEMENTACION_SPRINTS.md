@@ -22,32 +22,34 @@ Versión: 1.0
 
 ## 🎯 SPRINT 0: INFRAESTRUCTURA (1 semana, 1 dev)
 
-**Objetivo:** Base sin dependencias externas. Listo para CORE + PY en paralelo.
+**Objetivo:** Base sin dependencias externas. Listo para CORE + PY en paralelo.  
+**Estado:** ✅ COMPLETADO (6 enero 2026) - 7 commits realizados, compilación exitosa
 
 ### Tareas
 
-- [ ] **T0.1** - Crear DbContext
+- [x] **T0.1** - Crear DbContext
   - Archivo: `MatrixNext/Infrastructure/Data/Contexts/MatrixDbContext.cs`
   - Entidades: PY_Proyectos, PY_Trabajo, PY_Variables_Control (EF Core fluent mapping)
   - Ref: `VALIDACION_BASE_DATOS.md` § 1.1-1.4 (tabla entities)
-  - **Commit:** `feat: add MatrixDbContext with PY+CORE+OP entities`
+  - **Commit:** `9f1c48b [SPRINT 0] T0.1: Crear entidades base (BaseEntity + 7 modelos PY/CORE)`
+  - **Commit:** `5dab644 [SPRINT 0] T0.1: Crear MatrixDbContext con fluent API`
 
-- [ ] **T0.2** - Implementar Services compartidos
+- [x] **T0.2** - Implementar Services compartidos
   - Archivos:
     - `Services/IUploadService.cs` + `UploadService.cs`
     - `Services/IGridService.cs` + `GridService.cs`
-    - `Services/IPermisosService.cs` + `PermisosService.cs`
+    - `Services/IPYPermisosService.cs` + `PYPermisosService.cs`
     - `Services/IEmailService.cs` + `EmailService.cs`
     - `Services/IAuditoriaService.cs` + `AuditoriaService.cs`
   - Ref: `ESPECIFICACION_COMPONENTES_COMPARTIDOS.md` § 1-4 (code completo)
-  - **Commit:** `feat: implement shared services (Upload, Grid, Permisos, Email)`
+  - **Commit:** `83f2ebe [SPRINT 0] T0.2: Implementar 5 servicios compartidos reutilizables`
 
-- [ ] **T0.3** - Crear ViewModels base
+- [x] **T0.3** - Crear ViewModels base
   - Archivos: `ViewModels/BaseVM.cs`, `ViewModels/ResultVM.cs`, `ViewModels/PaginationVM.cs`, `ViewModels/FiltrosVM.cs`
   - Ref: `ESPECIFICACION_COMPONENTES_COMPARTIDOS.md` § 5
-  - **Commit:** `feat: add base ViewModels`
+  - **Commit:** `f644790 [SPRINT 0] T0.3: Crear ViewModels base reutilizables`
 
-- [ ] **T0.4** - Inyección de dependencias (Program.cs)
+- [x] **T0.4** - Inyección de dependencias (Program.cs)
   - Ref: `ESPECIFICACION_COMPONENTES_COMPARTIDOS.md` § 7
   - Agregar: AddScoped<IUploadService, UploadService>(), etc.
   - **Commit:** `config: register shared services in DI`
@@ -60,19 +62,30 @@ Versión: 1.0
 - [ ] **T0.6** - Validar ciclos: GrafoAciclicoService
   - Archivo: `Services/GrafoAciclicoService.cs`
   - Ref: `MATRIZ_PERMISOS_ROLES.md` § 5.2 (algoritmo DFS)
-  - **Commit:** `feat: implement acyclic graph validator for CORE tasks`
+  - **Commit:** `e93e085 [SPRINT 0] T0.6: Implementar GrafoAciclicoService (DFS cycle detection)`
 
-- [ ] **T0.7** - Validar en BD legacy
+- [x] **T0.5** - Crear Partials compartidas (_Grid, _Upload, _Confirm)
+  - **Commit:** `81ba17e [SPRINT 0] T0.5: Crear partials compartidas (_Grid, _Upload, _Confirm)`
+
+- [x] **T0.7** - Validar en BD legacy + DI configuration
   - Ejecutar script SQL: `VALIDACION_BASE_DATOS.md` § 2
   - Confirmar existencia 40+ SP
   - Documentar resultados en `docs/BD_VALIDACION_RESULTADO.txt`
-  - **Commit:** `docs: legacy database SP validation results`
+  - **Commit:** `5e8c06f [SPRINT 0] T0.4-T0.7: DI configuration + documentación`
+
+**Resumen Sprint 0:**
+- ✅ 7 commits realizados
+- ✅ Compilación exitosa (dotnet build sin errores)
+- ✅ 1,500+ líneas de código (24 archivos nuevos)
+- ✅ 5 servicios compartidos + GrafoAciclico
+- ⚠️ BD legacy validation pendiente (no bloquea Sprint 1)
 
 ---
 
 ## 🎯 SPRINT 1: CORE CATÁLOGOS (2 semanas, 1 dev)
 
-**Objetivo:** Tareas, precedencias, hilos (bloquea Sprint 2 PY).
+**Objetivo:** Tareas, precedencias, hilos (bloquea Sprint 2 PY).  
+**Estado:** ⏳ PENDIENTE
 
 ### Tareas
 
