@@ -37,6 +37,11 @@ namespace MatrixNext.Data.Modules.CC
                 new CcPresupuestosInternosAdapter(dbConnection));
             services.AddScoped<ICcPresupuestosInternosService, CcPresupuestosInternosService>();
             
+            // CC Procesos Internos Module (Sprint 3 - Fase 1)
+            services.AddScoped<CcProcesosInternosAdapter>(sp => 
+                new CcProcesosInternosAdapter(dbConnection));
+            services.AddScoped<ICcProcesosInternosService, CcProcesosInternosService>();
+            
             return services;
         }
     }

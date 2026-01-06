@@ -5,7 +5,7 @@
 
 ## 🚀 Migración WebMatrix → MatrixNext
 
-**Estado actual**: 5/25 módulos completados (20%)
+**Estado actual**: 7/25 módulos completados (28%)
 
 ### Módulos Migrados ✅
 
@@ -14,6 +14,8 @@
 - **CU_Cuentas**: JobBooks, Brief, Propuestas, Estudios, Presupuestos completos
 - **CC_ControlPresupuestos** (Sprint 1): Control de presupuestos, verificación, nómina, asignación + Excel export
 - **CC_PresupuestosInternos** (Sprint 2): Presupuestos internos por empresa/división, detalles, histórico, aprobación + Excel export
+- **CC_ReporteConteos** (Sprint 3 Fase 1): Reporte de conteos de trabajos con filtros y export Excel
+- **CC_ResumenProductividad** (Sprint 3 Fase 1): Análisis de productividad con métricas y export Excel
 
 ### Documentación de Migración
 

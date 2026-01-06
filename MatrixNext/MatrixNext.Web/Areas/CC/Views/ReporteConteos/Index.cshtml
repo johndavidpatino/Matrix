@@ -1,0 +1,245 @@
+@{
+    ViewData["Title"] = "Reporte de Conteos de Trabajos";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="fw-bold text-primary">
+                <i class="bi bi-graph-up"></i> Reporte de Conteos de Trabajos
+            </h2>
+            <p class="text-muted">Consulta de conteos registrados por trabajo y actividad</p>
+        </div>
+    </div>
+
+    <!-- Cards de Totales -->
+    <div class="row mb-4" id="cardsContainer">
+        <div class="col-md-3">
+            <div class="card shadow-sm bg-primary text-white">
+                <div class="card-body">
+                    <h6 class="card-title">Total Conteos</h6>
+                    <h3 class="mb-0" id="totalConteos">0</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm bg-success text-white">
+                <div class="card-body">
+                    <h6 class="card-title">Total Unidades</h6>
+                    <h3 class="mb-0" id="totalUnidades">0</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm bg-info text-white">
+                <div class="card-body">
+                    <h6 class="card-title">Trabajos Activos</h6>
+                    <h3 class="mb-0" id="trabajosActivos">0</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm bg-warning text-dark">
+                <div class="card-body">
+                    <h6 class="card-title">Actividades</h6>
+                    <h3 class="mb-0" id="totalActividades">0</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <i class="bi bi-funnel"></i> Filtros de Búsqueda
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label for="filtroFechaInicio" class="form-label">Fecha Inicio</label>
+                    <input type="date" class="form-control" id="filtroFechaInicio" />
+                </div>
+                <div class="col-md-3">
+                    <label for="filtroFechaFin" class="form-label">Fecha Fin</label>
+                    <input type="date" class="form-control" id="filtroFechaFin" />
+                </div>
+                <div class="col-md-2">
+                    <label for="filtroCategoria" class="form-label">Categoría</label>
+                    <input type="text" class="form-control" id="filtroCategoria" placeholder="Ej: Encuestas" />
+                </div>
+                <div class="col-md-2">
+                    <label for="filtroEstado" class="form-label">Estado</label>
+                    <select class="form-select" id="filtroEstado">
+                        <option value="">Todos</option>
+                        <option value="1">Activo</option>
+                        <option value="2">Consolidado</option>
+                        <option value="0">Inactivo</option>
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="button" class="btn btn-primary me-2" id="btnBuscar">
+                        <i class="bi bi-search"></i> Buscar
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" id="btnLimpiar">
+                        <i class="bi bi-x-circle"></i> Limpiar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón Exportar -->
+    <div class="mb-3">
+        <button type="button" class="btn btn-success" id="btnExportar">
+            <i class="bi bi-file-excel"></i> Exportar a Excel
+        </button>
+    </div>
+
+    <!-- Grid de Conteos -->
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="tableConteos" class="table table-hover table-striped w-100">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Código Trabajo</th>
+                            <th>Nombre Trabajo</th>
+                            <th>Código Actividad</th>
+                            <th>Actividad</th>
+                            <th>Categoría</th>
+                            <th>Cantidad</th>
+                            <th>Fecha</th>
+                            <th>Usuario</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            let table;
+
+            // Inicializar DataTable
+            function initDataTable() {
+                if ($.fn.DataTable.isDataTable('#tableConteos')) {
+                    $('#tableConteos').DataTable().destroy();
+                }
+
+                table = $('#tableConteos').DataTable({
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+                    },
+                    data: [],
+                    columns: [
+                        { data: 'idConteo' },
+                        { data: 'codigoTrabajo' },
+                        { data: 'nombreTrabajo' },
+                        { data: 'codigoActividad' },
+                        { data: 'nombreActividad' },
+                        { data: 'categoria', defaultContent: '-' },
+                        {
+                            data: 'cantidad',
+                            render: function (data) {
+                                return parseFloat(data).toLocaleString('es-CO');
+                            }
+                        },
+                        {
+                            data: 'fechaConteo',
+                            render: function (data) {
+                                return new Date(data).toLocaleDateString('es-CO');
+                            }
+                        },
+                        { data: 'usuarioRegistro', defaultContent: '-' },
+                        {
+                            data: 'estado',
+                            render: function (data) {
+                                const badges = {
+                                    0: '<span class="badge bg-secondary">Inactivo</span>',
+                                    1: '<span class="badge bg-primary">Activo</span>',
+                                    2: '<span class="badge bg-success">Consolidado</span>'
+                                };
+                                return badges[data] || '<span class="badge bg-secondary">Desconocido</span>';
+                            }
+                        }
+                    ],
+                    order: [[7, 'desc']],
+                    pageLength: 25,
+                    responsive: true
+                });
+            }
+
+            // Cargar datos
+            function cargarConteos() {
+                const filtros = {
+                    fechaInicio: $('#filtroFechaInicio').val() || null,
+                    fechaFin: $('#filtroFechaFin').val() || null,
+                    categoria: $('#filtroCategoria').val() || null,
+                    estado: $('#filtroEstado').val() ? parseInt($('#filtroEstado').val()) : null
+                };
+
+                $.ajax({
+                    url: '@Url.Action("ObtenerReporte")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(filtros)
+                })
+                    .done(function (response) {
+                        if (response.success) {
+                            table.clear().rows.add(response.data).draw();
+                            actualizarTotales(response.data);
+                        } else {
+                            toastr.error(response.message || 'Error cargando conteos');
+                        }
+                    })
+                    .fail(function () {
+                        toastr.error('Error de comunicación con el servidor');
+                    });
+            }
+
+            // Actualizar cards de totales
+            function actualizarTotales(data) {
+                const totalConteos = data.length;
+                const totalUnidades = data.reduce((sum, item) => sum + item.cantidad, 0);
+                const trabajosUnicos = new Set(data.map(item => item.idTrabajo)).size;
+                const actividadesUnicas = new Set(data.map(item => item.idActividad)).size;
+
+                $('#totalConteos').text(totalConteos.toLocaleString('es-CO'));
+                $('#totalUnidades').text(totalUnidades.toLocaleString('es-CO'));
+                $('#trabajosActivos').text(trabajosUnicos);
+                $('#totalActividades').text(actividadesUnicas);
+            }
+
+            // Botón Buscar
+            $('#btnBuscar').click(function () {
+                cargarConteos();
+            });
+
+            // Botón Limpiar
+            $('#btnLimpiar').click(function () {
+                $('#filtroFechaInicio, #filtroFechaFin, #filtroCategoria, #filtroEstado').val('');
+                cargarConteos();
+            });
+
+            // Exportar a Excel
+            $('#btnExportar').click(function () {
+                const fechaInicio = $('#filtroFechaInicio').val() || '';
+                const fechaFin = $('#filtroFechaFin').val() || '';
+                const categoria = $('#filtroCategoria').val() || '';
+                const estado = $('#filtroEstado').val() || '';
+                
+                window.location.href = `@Url.Action("Exportar")?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&categoria=${categoria}&estado=${estado}`;
+            });
+
+            // Cargar inicial
+            initDataTable();
+            cargarConteos();
+        });
+    </script>
+}
