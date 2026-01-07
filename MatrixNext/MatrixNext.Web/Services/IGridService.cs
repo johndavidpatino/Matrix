@@ -1,3 +1,5 @@
+using MatrixNext.Web.ViewModels;
+
 namespace MatrixNext.Web.Services
 {
     /// <summary>
@@ -16,18 +18,5 @@ namespace MatrixNext.Web.Services
             string sortBy = "Id",
             bool sortDescending = false
         ) where T : class;
-    }
-
-    public class PaginationResultVM<T> where T : class
-    {
-        public List<T> Items { get; set; } = new();
-        public int PageNumber { get; set; } = 1;
-        public int PageSize { get; set; } = 10;
-        public int TotalRecords { get; set; }
-        public int TotalPages { get; set; }
-        public string SortBy { get; set; } = "Id";
-        public bool SortDescending { get; set; }
-        public bool HasPreviousPage => PageNumber > 1;
-        public bool HasNextPage => PageNumber < TotalPages;
     }
 }

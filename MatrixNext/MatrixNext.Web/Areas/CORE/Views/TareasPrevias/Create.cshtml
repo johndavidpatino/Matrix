@@ -1,0 +1,21 @@
+@model MatrixNext.Web.Models.CORE.TareaPrevía
+
+<h2>Crear relación de Tarea Previa</h2>
+
+<form asp-action="Create" method="post">
+    <div class="mb-3">
+        <label class="form-label">IdTarea</label>
+        <input asp-for="IdTarea" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">IdTareaPreviaRequerida</label>
+        <input asp-for="IdTareaPreviaRequerida" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Orden</label>
+        <input asp-for="Orden" class="form-control" />
+    </div>
+    <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a href="@Url.Action("Index")" class="btn btn-secondary">Volver</a>
+</form>

@@ -1,0 +1,24 @@
+@model MatrixNext.Web.Models.CORE.WorkFlow
+
+<h2>Crear WorkFlow</h2>
+
+<form asp-action="Create" method="post">
+    <div class="mb-3">
+        <label class="form-label">IdTrabajo</label>
+        <input asp-for="IdTrabajo" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">IdTarea</label>
+        <input asp-for="IdTarea" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Estado</label>
+        <input asp-for="Estado" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Prioridad</label>
+        <input asp-for="Prioridad" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a href="@Url.Action("Index")" class="btn btn-secondary">Volver</a>
+</form>
