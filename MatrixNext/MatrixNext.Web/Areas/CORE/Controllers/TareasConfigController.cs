@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MatrixNext.Web.Infrastructure.Data;
+using System.Security.Claims;
 using MatrixNext.Web.Models.CORE;
 using MatrixNext.Web.ViewModels;
 using MatrixNext.Web.Services;
@@ -28,6 +29,12 @@ namespace MatrixNext.Web.Areas.CORE.Controllers
             _db = db;
             _grid = grid;
             _auditoria = auditoria;
+        }
+
+        private long ObtenerUsuarioActualId()
+        {
+            var userIdClaim = HttpContext.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return long.TryParse(userIdClaim, out var id) ? id : 0L;
         }
 
         /// <summary>
@@ -112,8 +119,7 @@ namespace MatrixNext.Web.Areas.CORE.Controllers
                 }
 
                 model.FechaCreacion = DateTime.Now;
-                // TODO: UsuarioCreacion debe ser el ID del usuario actual (long)
-                // model.UsuarioCreacion = User.GetUserId();
+                model.UsuarioCreacion = ObtenerUsuarioActualId();
 
                 _db.Tareas.Add(model);
                 await _db.SaveChangesAsync();
@@ -197,8 +203,7 @@ namespace MatrixNext.Web.Areas.CORE.Controllers
                 tarea.Visible = model.Visible;
                 tarea.Orden = model.Orden;
                 tarea.FechaModificacion = DateTime.Now;
-                // TODO: UsuarioModificacion debe ser el ID del usuario actual (long)
-                // tarea.UsuarioModificacion = User.GetUserId();
+                tarea.UsuarioModificacion = ObtenerUsuarioActualId();
 
                 await _db.SaveChangesAsync();
 
