@@ -1,0 +1,99 @@
+@{
+    ViewData["Title"] = "Indicadores de Cumplimiento";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <h2 class="mb-4"><i class="fas fa-chart-line me-2"></i>Indicadores de Cumplimiento</h2>
+
+    <div class="row mb-4" id="cardsIndicadores">
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">% Cumplimiento</h5>
+                    <h2 id="cumplimiento" class="text-primary">-</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">% Atrasadas</h5>
+                    <h2 id="atrasadas" class="text-danger">-</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Completadas</h5>
+                    <h2 id="completadas" class="text-success">-</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Días Promedio</h5>
+                    <h2 id="diasPromedio" class="text-info">-</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">Por Tipo de Hilo</h6>
+                </div>
+                <div class="card-body">
+                    <table class="table table-sm" id="tblIndicadores">
+                        <thead>
+                            <tr>
+                                <th>Tipo Hilo</th>
+                                <th>% Cumplimiento</th>
+                                <th>Atrasadas</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            cargarIndicadores();
+        });
+
+        async function cargarIndicadores() {
+            try {
+                const response = await fetch('/api/core/indicadores/resumen');
+                const result = await response.json();
+                if (result.isSuccess && result.data) {
+                    const d = result.data;
+                    $('#cumplimiento').text(d.porcentajeCumplimiento + '%');
+                    $('#atrasadas').text(d.porcentajeAtrasadas + '%');
+                    $('#completadas').text(d.totalTareasCompletadas);
+                    $('#diasPromedio').text(d.promedioDiasCompletacion.toFixed(1));
+                }
+
+                const hilo = await fetch('/api/core/indicadores/por-tipo-hilo');
+                const hiloResult = await hilo.json();
+                if (hiloResult.isSuccess && hiloResult.data) {
+                    let html = '';
+                    hiloResult.data.forEach(h => {
+                        html += `<tr><td>${h.nombreTipoHilo}</td><td>${h.porcentajeCumplimiento}%</td><td>${h.tareasAtrasadas}</td></tr>`;
+                    });
+                    $('#tblIndicadores tbody').html(html);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    </script>
+}

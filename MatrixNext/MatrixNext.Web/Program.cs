@@ -113,6 +113,7 @@ builder.Services.AddScoped<EasyQuoteAdapter>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 // CORE Dashboard services
 builder.Services.AddScoped<IWorkFlowDashboardService, WorkFlowDashboardService>();
+builder.Services.AddScoped<IIndicadoresCumplimientoService, IndicadoresCumplimientoService>();
 builder.Services.AddScoped<QuoteCalculator>();
 builder.Services.AddScoped<EasyQuoteMasterService>();
 
