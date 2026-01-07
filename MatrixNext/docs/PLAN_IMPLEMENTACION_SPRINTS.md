@@ -433,18 +433,61 @@ Versión: 1.0
 
 ## 🎯 SPRINT 5: ASIGNACIONES & REASIGNACIONES (2 semanas, 1 dev)
 
-**Objetivo:** Gerentes asignar trabajos a coordinadores.
+**Objetivo:** Gerentes asignar proyectos a gerentes de proyectos.  
+**Estado:** ✅ COMPLETADO (7 enero 2026) - 2 commits realizados, compilación exitosa
 
-### Tareas (Resumen)
+### Tareas
 
-- [ ] **T5.1-5.3** - Controller: AsignacionProyectosController
-  - Acciones: Index (trabajos sin asignar), Asignar(), Reasignar()
-  - Ref: `VALIDACION_EVIDENCIAS_PY_CORE.md` § 1 (AsignacionProyectos.aspx)
+- [x] **T5.1** - Entity: AsignacionProyecto
+  - Archivo: `Models/PY/AsignacionProyecto.cs`
+  - Propiedades: IdProyecto, IdGerenteProyecto, TipoAsignacion (Inicial/Reasignación)
+  - Auditoría: IdGerentePrevio, NombreGerentePrevio, FechaAsignacion, Observaciones
+  - **Commit:** `b0d039e [SPRINT 5] T5.1-T5.6: Asignaciones Proyectos (Entity + Service + Controller + 7 endpoints)`
 
-- [ ] **T5.4-5.6** - Service: AsignacionesProyectosService
-  - Validar que usuario es gerente o admin
+- [x] **T5.2-T5.3** - Service: AsignacionesProyectosService + Interface
+  - Archivos: `Services/PY/IAsignacionesProyectosService.cs`, `AsignacionesProyectosService.cs`
+  - Métodos: ObtenerProyectosXAsignarAsync(), ObtenerProyectosXReasignarAsync(), AsignarGerenteAsync(), ReasignarGerenteAsync()
+  - Métodos adicionales: ObtenerGerentesDisponiblesAsync(), ObtenerHistorialAsync(), ValidarPermisosAsync()
+  - DI Registration: Program.cs - AddScoped
+  - **Commit:** `b0d039e [SPRINT 5] T5.1-T5.6: Asignaciones Proyectos (Entity + Service + Controller + 7 endpoints)`
 
-- [ ] **T5.7-5.9** - Views: AsignacionProyectos, Reasignaciones
+- [x] **T5.4-T5.6** - Controller: AsignacionesProyectosController (API)
+  - Archivo: `Areas/PY/Controllers/AsignacionesProyectosController.cs`
+  - Endpoints (7 total):
+    - GET /api/py/asignacionesproyectos/obtener-para-asignar?idUnidad={id}
+    - GET /api/py/asignacionesproyectos/obtener-para-reasignar?idUnidad={id}&filtroNombre={nombre}
+    - GET /api/py/asignacionesproyectos/obtener-gerentes?idUnidad={id}
+    - POST /api/py/asignacionesproyectos/asignar (body: {idProyecto, idGerenteProyecto, observaciones})
+    - POST /api/py/asignacionesproyectos/reasignar (body: {idProyecto, idGerenteNuevo, observaciones})
+    - GET /api/py/asignacionesproyectos/historial/{idProyecto}
+    - GET /api/py/asignacionesproyectos/validar-permisos
+  - Autorización: [Authorize(Roles="Administrador,Gerente")]
+  - **Commit:** `b0d039e [SPRINT 5] T5.1-T5.6: Asignaciones Proyectos (Entity + Service + Controller + 7 endpoints)`
+
+- [x] **T5.7-T5.9** - Views: AsignacionesProyectos
+  - Archivo: `Areas/PY/Views/AsignacionesProyectos/Index.cshtml` (702 líneas)
+  - UX Features:
+    - **Tabs**: Asignación Inicial vs Reasignación (navegación fluida)
+    - **Filtros**: Dropdown Unidad + Búsqueda por nombre/JobBook
+    - **Grids Responsive**: Bootstrap 5 tables con badges de estado
+    - **Modal Asignar/Reasignar**: Formulario con validación, contador de caracteres
+    - **Modal Historial**: Timeline visual de asignaciones con fechas
+    - **Loading States**: Spinners durante carga de datos
+    - **Empty States**: Mensajes informativos cuando no hay datos
+    - **Toast Notifications**: Feedback inmediato de acciones
+    - **Tooltips**: Ayuda contextual en botones
+  - JavaScript: Fetch API, Bootstrap 5 modals/tabs, event delegation
+  - Estilos: Timeline CSS custom, hover effects, responsive design
+  - **Commit:** `f4c0432 [SPRINT 5] T5.7-T5.9: Views AsignacionesProyectos (UX moderna con tabs, modals y timeline)`
+
+**Resumen Sprint 5:**
+- ✅ 2 commits realizados (b0d039e, f4c0432)
+- ✅ Compilación exitosa (dotnet build sin errores)
+- ✅ 1,628+ líneas de código insertadas (7 archivos nuevos)
+- ✅ 1 entidad + 1 service + 1 controller + 1 vista
+- ✅ 7 endpoints API REST documentados
+- ✅ UX moderna con tabs, modals, timeline y feedback visual
+- ✅ Módulo completo de asignación de gerentes operacional
 
 ---
 

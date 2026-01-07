@@ -32,10 +32,7 @@
                         <i class="bi bi-building me-1"></i>Unidad
                     </label>
                     <select id="ddlUnidad" class="form-select">
-                        <option value="">Seleccione una unidad...</option>
-                        <option value="1">Unidad Comercial 1</option>
-                        <option value="2">Unidad Comercial 2</option>
-                        <option value="3">Unidad Operativa</option>
+                        <option value="">Cargando unidades...</option>
                     </select>
                 </div>
                 <div class="col-md-6">
@@ -276,6 +273,9 @@
 
     // ===== INICIALIZACIÓN =====
     $(document).ready(function() {
+        // Cargar unidades al iniciar
+        cargarUnidades();
+        
         // Event listeners
         $('#ddlUnidad').on('change', onUnidadChange);
         $('#btnConfirmarAsignacion').on('click', confirmarAsignacion);
@@ -330,6 +330,28 @@
     }
 
     // ===== CARGA DE DATOS =====
+    async function cargarUnidades() {
+        try {
+            const response = await fetch('/api/py/unidades');
+            const result = await response.json();
+
+            if (result.success && result.data) {
+                let html = '<option value="">Seleccione una unidad...</option>';
+                result.data.forEach(u => {
+                    html += `<option value="${u.id}">${u.nombre}</option>`;
+                });
+                $('#ddlUnidad').html(html);
+            } else {
+                $('#ddlUnidad').html('<option value="">Error al cargar unidades</option>');
+                showToast('Error', result.message || 'No se pudieron cargar las unidades', 'error');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            $('#ddlUnidad').html('<option value="">Error al cargar unidades</option>');
+            showToast('Error', 'Error al cargar unidades: ' + error.message, 'error');
+        }
+    }
+
     async function cargarProyectosAsignacion() {
         $('#loadingAsignacion').removeClass('d-none');
         $('#alertNoUnidadAsignacion').addClass('d-none');
