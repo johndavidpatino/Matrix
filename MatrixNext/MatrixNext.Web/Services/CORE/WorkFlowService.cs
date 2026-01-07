@@ -11,6 +11,7 @@ namespace MatrixNext.Web.Services.CORE
     /// </summary>
     public interface IWorkFlowService
     {
+        Task<ResultVM<bool>> CrearHiloInicialAsync(long idTrabajo, long idProyecto);
         Task<ResultVM<WorkFlow>> CrearAsync(WorkFlow entity);
         Task<ResultVM<WorkFlow>> ActualizarAsync(WorkFlow entity);
         Task<ResultVM<bool>> EliminarAsync(long id);
@@ -32,6 +33,27 @@ namespace MatrixNext.Web.Services.CORE
             _db = db;
             _adapter = adapter;
             _auditoria = auditoria;
+        }
+
+        public async Task<ResultVM<bool>> CrearHiloInicialAsync(long idTrabajo, long idProyecto)
+        {
+            try
+            {
+                var ok = await _adapter.CrearHiloCrearTareasAsync(idTrabajo, idProyecto);
+                if (!ok)
+                {
+                    return ResultVM<bool>.Fail("No se generaron tareas CORE para el trabajo");
+                }
+
+                // Best-effort: el log no bloquea la respuesta principal
+                _ = _adapter.RegistrarLogCreacionAsync(idTrabajo);
+
+                return ResultVM<bool>.Ok(true, "Tareas CORE generadas para el trabajo");
+            }
+            catch (Exception ex)
+            {
+                return ResultVM<bool>.Fail($"Error al crear tareas CORE: {ex.Message}");
+            }
         }
 
         public async Task<ResultVM<WorkFlow>> CrearAsync(WorkFlow entity)

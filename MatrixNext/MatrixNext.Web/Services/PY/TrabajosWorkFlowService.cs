@@ -32,10 +32,13 @@ namespace MatrixNext.Web.Services.PY
                 return ResultVM<Trabajo>.Fail(result.Message, result.Errors);
             }
 
-            // 2. Integración CORE: placeholder para hilo de creación de tareas
-            // TODO: Llamar a SP/servicio CORE que genere WorkFlow inicial según configuración
-            // Por ahora, solo retornamos el trabajo creado
-            return ResultVM<Trabajo>.Ok(result.Data, "Trabajo creado y pendiente de crear tareas CORE");
+            // 2. Integración CORE: crear hilo y tareas iniciales
+            var wfResult = await _workFlowService.CrearHiloInicialAsync(result.Data.Id, result.Data.IdProyecto);
+            var message = wfResult.IsSuccess
+                ? "Trabajo creado y tareas CORE generadas"
+                : $"Trabajo creado. Tareas CORE no generadas: {wfResult.Message}";
+
+            return ResultVM<Trabajo>.Ok(result.Data, message);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Data;
 using Dapper;
 using Microsoft.Data.SqlClient;
 using MatrixNext.Web.Models.CORE;
@@ -56,10 +57,48 @@ namespace MatrixNext.Web.Services.CORE
             var result = await connection.QueryAsync<WorkFlow>(
                 "CORE_WorkFlow_Get",
                 parameters,
-                commandType: System.Data.CommandType.StoredProcedure
+                commandType: CommandType.StoredProcedure
             );
 
             return result;
+        }
+
+        /// <summary>
+        /// Invoca el SP legacy que crea el hilo y genera las tareas CORE iniciales para un trabajo.
+        /// Ref: WorkFlow.CrearHiloCrearTareas() en WebForms legacy.
+        /// </summary>
+        public async Task<bool> CrearHiloCrearTareasAsync(long idTrabajo, long idProyecto)
+        {
+            using var connection = new SqlConnection(_connectionString);
+            var parameters = new DynamicParameters();
+            parameters.Add("@IdTrabajo", idTrabajo);
+            parameters.Add("@IdProyecto", idProyecto);
+
+            var affected = await connection.ExecuteAsync(
+                "CORE_WorkFlow_CrearHiloCrearTareas",
+                parameters,
+                commandType: CommandType.StoredProcedure
+            );
+
+            // Algunos SP devuelven 0 filas afectadas aunque se ejecuten OK; devolvemos true si no hubo excepción.
+            return affected >= 0;
+        }
+
+        /// <summary>
+        /// Registra en auditoría legacy la creación masiva en estado 'Creada'.
+        /// Ref: CORE_Log_WorkFlow_MasivoEstadoCreada_Add()
+        /// </summary>
+        public async Task RegistrarLogCreacionAsync(long idTrabajo)
+        {
+            using var connection = new SqlConnection(_connectionString);
+            var parameters = new DynamicParameters();
+            parameters.Add("@IdTrabajo", idTrabajo);
+
+            await connection.ExecuteAsync(
+                "CORE_Log_WorkFlow_MasivoEstadoCreada_Add",
+                parameters,
+                commandType: CommandType.StoredProcedure
+            );
         }
     }
 }

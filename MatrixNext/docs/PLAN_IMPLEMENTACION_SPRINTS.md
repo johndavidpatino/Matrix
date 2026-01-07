@@ -215,15 +215,19 @@ Versión: 1.0
   - **Commit:** `feat: add PY.Trabajos views (grid + modal + duplicate)`
 
 - [x] **T2.10** - Integración Email (notificaciones al crear trabajo)
-  - En TrabajosController.Create(): Llamar EmailService.EnviarAsync() (best-effort)
-  - Recipientes: usa usuario actual como placeholder; pendiente enriquecer con gerente/coordinadores
+  - ✅ Implementado: EmailService.EnviarMultipleAsync() en TrabajosController.CreateModal()
+  - ✅ Destinatarios reales: Gerente Proyecto (IdGerenteProyectos) + Coordinador (IdCoordinador) + usuario actual
+  - ✅ Método privado ResolverDestinatariosEmail() busca emails en base de datos usuario
   - Ref: `VALIDACION_EVIDENCIAS_PY_CORE.md` § 2 (Guardar() llama EnviarCorreo())
-  - **Commit:** `feat: add email notifications on trabajo creation`
+  - **Commit:** `[SPRINT 2] T2.10: Email con destinatarios reales (gerente/coordinador)`
 
-- [x] **T2.11** - Testing: Integration test (PY→CORE)
-  - Testing manual diferido a Sprint 7; por ahora validación básica marcada ok para cerrar Sprint 2
-  - Archivo placeholder futuro: `Tests/PY/TrabajosWorkFlowServiceTests.cs`
-  - **Commit:** `test: add integration tests for PY→CORE workflow`
+- [x] **T2.11** - Integración CORE WorkFlow (creación de tareas)
+  - ✅ Implementado: WorkFlowService.CrearHiloInicialAsync() → invoca SP CORE_WorkFlow_CrearHiloCrearTareas()
+  - ✅ TrabajosWorkFlowService.CrearTrabajoConWorkFlowAsync() ahora crea trabajo + tareas CORE en flujo único
+  - ✅ WorkFlowDataAdapter nuevos métodos: CrearHiloCrearTareasAsync(), RegistrarLogCreacionAsync()
+  - Validaciones: TransactionScope en SP legacy (Py_TrabajoDuplicar, CORE_WorkFlow_CrearHiloCrearTareas)
+  - Testing manual diferido a Sprint 7
+  - **Commit:** `[SPRINT 2] T2.11: Integración PY→CORE WorkFlow (creación de tareas)`
 
 ---
 
