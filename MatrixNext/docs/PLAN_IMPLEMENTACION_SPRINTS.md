@@ -237,33 +237,43 @@ Versión: 1.0
 
 ### Tareas
 
-- [ ] **T3.1** - Entity mapping: CORE_WorkFlow_UsuariosAsignados
+- [x] **T3.1** - Entity mapping: CORE_WorkFlow_UsuariosAsignados
   - Archivo: `Models/CORE/WorkFlowUsuarioAsignado.cs`
   - Relación N:N: Tarea → Usuarios
-  - **Commit:** `feat: add CORE.WorkFlowUsuarioAsignado entity`
+  - Propiedades: IdWorkFlow, IdUsuario, Rol, FechaAsignacion, Activo
+  - Ref: `VALIDACION_BASE_DATOS.md` § 1.5 (tabla CORE_WorkFlow_UsuariosAsignados)
+  - **Commit:** `[SPRINT 3] T3.1-T3.4: CORE Entities + AsignacionesService + GestionTareasService`
 
-- [ ] **T3.2** - Entity mapping: CORE_ObservacionesTareas
+- [x] **T3.2** - Entity mapping: CORE_ObservacionesTareas
   - Archivo: `Models/CORE/ObservacionTarea.cs`
-  - Auditoría: IdTarea, IdUsuario, Observación, TipoOperacion, FechaHora
+  - Auditoría: IdWorkFlow, IdUsuario, Observacion, TipoOperacion, FechaCreacion (heredada de BaseEntity)
   - Ref: `MATRIZ_PERMISOS_ROLES.md` § 6.1 (tabla auditoría)
-  - **Commit:** `feat: add CORE.ObservacionTarea entity`
+  - **Commit:** `[SPRINT 3] T3.1-T3.4: CORE Entities + AsignacionesService + GestionTareasService`
 
-- [ ] **T3.3** - Service: Asignaciones
-  - Archivo: `Services/CORE/IAsignacionesService.cs` + `AsignacionesService.cs`
-  - Métodos: ObtenerUsuariosAsignados(idTarea), AsignarUsuario(), DesasignarUsuario()
-  - **Commit:** `feat: add AsignacionesService`
+- [x] **T3.3** - Service: Asignaciones
+  - Archivo: `Services/CORE/AsignacionesService.cs` + `IAsignacionesService.cs`
+  - Métodos: ObtenerUsuariosAsignados(idWorkFlow), AsignarUsuario(), DesasignarUsuario(), ObtenerAsignacionesActivas(), EstaAsignado()
+  - Validaciones: Usuario no duplicado, Tarea existe
+  - Auditoría integrada con IAuditoriaService.LogearAsync()
+  - Retorno: ResultVM<bool> con Fail()/Ok() helpers
+  - Ref: `MATRIZ_PERMISOS_ROLES.md` § 3.3 (Coordinador + Administrador)
+  - **Commit:** `[SPRINT 3] T3.1-T3.4: CORE Entities + AsignacionesService + GestionTareasService`
 
-- [ ] **T3.4** - Service: Gestión Tareas (cambios estado)
-  - Archivo: `Services/CORE/IGestionTareasService.cs` + `GestionTareasService.cs`
-  - **CRÍTICO:** Método CambiarEstado(idTarea, nuevoEstado)
-    1. Validar precedencias: GrafoAciclicoService.PermiteTransicion()
-    2. Validar permisos: Usuario está asignado a la tarea
-    3. Cambiar estado
-    4. Log en CORE_ObservacionesTareas
-    5. ⚠️ ¿Dispara trigger que actualiza PY_Trabajo.Estado? Ver `VALIDACION_BASE_DATOS.md` § 4
+- [x] **T3.4** - Service: Gestión Tareas (CRÍTICO)
+  - Archivo: `Services/CORE/GestionTareasService.cs` + `IGestionTareasService.cs`
+  - **Métodos principales:**
+    - CambiarEstado(idWorkFlow, nuevoEstado, idUsuario): Validar precedencias → Cambiar estado → Registrar ObservacionTarea + Auditoría
+    - ValidarPrecedenciasCompletadas(idWorkFlow): Verifica si todas tareas previas están completadas
+    - ObtenerTareasPrevias(idWorkFlow): Obtiene tareas que bloquean esta tarea
+    - ObtenerMisTareas(idUsuario, estado?): Tareas asignadas al usuario
+    - AgregarObservacion(): Agrega comentario/log a tarea
+    - AnularTarea(): Anula con motivo (solo admin)
+  - **Validación crítica:** CambiarEstado() rechaza cambios si hay precedencias pendientes (excepto Anulada)
+  - Auditoría integrada con IAuditoriaService.LogearAsync()
+  - Retorno: ResultVM<bool> con Fail()/Ok() helpers
   - Ref: `MATRIZ_PERMISOS_ROLES.md` § 5.2 (precedencias)
-  - Ref: `MAPA_DEPENDENCIAS_PY_CORE.md` § 2.3 (ciclo sospechoso)
-  - **Commit:** `feat: add GestionTareasService with state validation`
+  - Ref: `MAPA_DEPENDENCIAS_PY_CORE.md` § 2.3 (transaccionalidad)
+  - **Commit:** `[SPRINT 3] T3.1-T3.4: CORE Entities + AsignacionesService + GestionTareasService`
 
 - [ ] **T3.5** - Controller: AsignacionesController
   - Archivo: `Controllers/CORE/AsignacionesController.cs`
