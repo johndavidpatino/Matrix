@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MatrixNext.Web.Infrastructure.Data;
 using MatrixNext.Web.Models.CORE;
 using MatrixNext.Web.Services;
+using MatrixNext.Web.Services.CORE;
 using MatrixNext.Web.ViewModels;
 
 namespace MatrixNext.Web.Areas.CORE.Controllers
@@ -13,11 +14,16 @@ namespace MatrixNext.Web.Areas.CORE.Controllers
     {
         private readonly MatrixDbContext _db;
         private readonly IGridService _grid;
+        private readonly IWorkFlowService _service;
 
-        public WorkFlowController(MatrixDbContext db, IGridService grid)
+        public WorkFlowController(
+            MatrixDbContext db, 
+            IGridService grid,
+            IWorkFlowService service)
         {
             _db = db;
             _grid = grid;
+            _service = service;
         }
 
         [HttpGet]
@@ -59,17 +65,24 @@ namespace MatrixNext.Web.Areas.CORE.Controllers
                 return View(model);
             }
 
-            _db.WorkFlows.Add(model);
-            await _db.SaveChangesAsync();
+            var resultado = await _service.CrearAsync(model);
+            if (!resultado.IsSuccess)
+            {
+                ModelState.AddModelError(string.Empty, resultado.Message);
+                if (Request.Headers.ContainsKey("X-Requested-With"))
+                    return PartialView("_CreateEdit", model);
+                return View(model);
+            }
+
             if (Request.Headers.ContainsKey("X-Requested-With"))
-                return Json(new { success = true, message = "WorkFlow creado" });
+                return Json(new { success = true, message = resultado.Message });
             return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(long id)
         {
-            var entity = await _db.WorkFlows.FindAsync(id);
+            var entity = await _service.ObtenerPorIdAsync(id);
             if (entity == null) return NotFound();
             return View(entity);
         }
@@ -77,7 +90,7 @@ namespace MatrixNext.Web.Areas.CORE.Controllers
         [HttpGet]
         public async Task<IActionResult> EditModal(long id)
         {
-            var entity = await _db.WorkFlows.FindAsync(id);
+            var entity = await _service.ObtenerPorIdAsync(id);
             if (entity == null) return NotFound();
             return PartialView("_CreateEdit", entity);
         }
@@ -94,10 +107,17 @@ namespace MatrixNext.Web.Areas.CORE.Controllers
                 return View(model);
             }
 
-            _db.WorkFlows.Update(model);
-            await _db.SaveChangesAsync();
+            var resultado = await _service.ActualizarAsync(model);
+            if (!resultado.IsSuccess)
+            {
+                ModelState.AddModelError(string.Empty, resultado.Message);
+                if (Request.Headers.ContainsKey("X-Requested-With"))
+                    return PartialView("_CreateEdit", model);
+                return View(model);
+            }
+
             if (Request.Headers.ContainsKey("X-Requested-With"))
-                return Json(new { success = true, message = "WorkFlow actualizado" });
+                return Json(new { success = true, message = resultado.Message });
             return RedirectToAction(nameof(Index));
         }
     }

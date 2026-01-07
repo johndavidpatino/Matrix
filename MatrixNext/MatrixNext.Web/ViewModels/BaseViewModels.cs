@@ -57,6 +57,27 @@ namespace MatrixNext.Web.ViewModels
     }
 
     /// <summary>
+    /// Respuesta estándar genérica para servicios de dominio
+    /// </summary>
+    public class ResultVM<T>
+    {
+        public bool IsSuccess { get; set; }
+        public string Message { get; set; } = string.Empty;
+        public T? Data { get; set; }
+        public List<string> Errors { get; set; } = new();
+
+        public static ResultVM<T> Ok(T data, string message = "Operación exitosa")
+        {
+            return new ResultVM<T> { IsSuccess = true, Message = message, Data = data };
+        }
+
+        public static ResultVM<T> Fail(string message, List<string>? errors = null)
+        {
+            return new ResultVM<T> { IsSuccess = false, Message = message, Errors = errors ?? new() };
+        }
+    }
+
+    /// <summary>
     /// Error en respuesta
     /// </summary>
     public class ErrorVM

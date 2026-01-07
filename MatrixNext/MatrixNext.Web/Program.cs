@@ -57,6 +57,13 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IAuditoriaService, AuditoriaService>();
 builder.Services.AddScoped<GrafoAciclicoService>();
 
+// ===== SPRINT 1: CORE Services & Adapters =====
+// Ref: PLAN_IMPLEMENTACION_SPRINTS.md § T1 (CORE Catálogos)
+builder.Services.AddScoped<MatrixNext.Web.Services.CORE.WorkFlowDataAdapter>();
+builder.Services.AddScoped<MatrixNext.Web.Services.CORE.TareasPreviasDataAdapter>();
+builder.Services.AddScoped<MatrixNext.Web.Services.CORE.IWorkFlowService, MatrixNext.Web.Services.CORE.WorkFlowService>();
+builder.Services.AddScoped<MatrixNext.Web.Services.CORE.ITareasPreviasService, MatrixNext.Web.Services.CORE.TareasPreviasService>();
+
 // DbContext principal (PY, CORE, OP)
 builder.Services.AddDbContext<MatrixDbContext>(options =>
     options.UseSqlServer(connectionString));

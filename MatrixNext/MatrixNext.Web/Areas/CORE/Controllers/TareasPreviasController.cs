@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MatrixNext.Web.Infrastructure.Data;
 using MatrixNext.Web.Models.CORE;
 using MatrixNext.Web.Services;
+using MatrixNext.Web.Services.CORE;
 
 namespace MatrixNext.Web.Areas.CORE.Controllers
 {
@@ -11,12 +12,14 @@ namespace MatrixNext.Web.Areas.CORE.Controllers
     public class TareasPreviasController : Controller
     {
         private readonly MatrixDbContext _db;
-        private readonly GrafoAciclicoService _grafo;
+        private readonly ITareasPreviasService _service;
 
-        public TareasPreviasController(MatrixDbContext db, GrafoAciclicoService grafo)
+        public TareasPreviasController(
+            MatrixDbContext db, 
+            ITareasPreviasService service)
         {
             _db = db;
-            _grafo = grafo;
+            _service = service;
         }
 
         [HttpGet]
@@ -62,34 +65,17 @@ namespace MatrixNext.Web.Areas.CORE.Controllers
                 return View(model);
             }
 
-            // Validar grafo acíclico simulando inserción
-            var actuales = await _db.TareasPrevias.AsNoTracking().ToListAsync();
-            actuales.Add(new TareaPrevía
+            var resultado = await _service.CrearAsync(model);
+            if (!resultado.IsSuccess)
             {
-                IdTarea = model.IdTarea,
-                IdTareaPreviaRequerida = model.IdTareaPreviaRequerida,
-                Orden = model.Orden
-            });
-
-            // Grafo: aristas TareaPreviaRequerida -> Tarea
-            var esAciclico = _grafo.ValidarNoCiclos(
-                actuales,
-                getId: x => x.IdTarea,
-                getIdPrevia: x => x.IdTareaPreviaRequerida
-            );
-
-            if (!esAciclico)
-            {
-                ModelState.AddModelError(string.Empty, "La relación crea un ciclo de dependencias.");
+                ModelState.AddModelError(string.Empty, resultado.Message);
                 if (Request.Headers.ContainsKey("X-Requested-With"))
                     return PartialView("_Create", model);
                 return View(model);
             }
 
-            _db.TareasPrevias.Add(model);
-            await _db.SaveChangesAsync();
             if (Request.Headers.ContainsKey("X-Requested-With"))
-                return Json(new { success = true, message = "Relación creada" });
+                return Json(new { success = true, message = resultado.Message });
             return RedirectToAction(nameof(Index));
         }
     }
