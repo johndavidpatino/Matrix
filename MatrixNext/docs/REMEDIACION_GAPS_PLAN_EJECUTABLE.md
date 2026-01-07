@@ -6,6 +6,23 @@
 
 ---
 
+## ✅ Ajustes y Alineación (enero 2026)
+
+Durante la ejecución y revisión del código real se detectaron divergencias con el plan original. Se incorporan los siguientes ajustes para mantener el plan alineado con la implementación efectiva del repositorio:
+
+- Seguridad (PYPermisosService): el sistema usa tablas/consultas legacy. Decisión pendiente: 1) mapear por EF las tablas `UsuariosPermisos/UsuariosRoles/Roles` y mantener el servicio sobre EF, o 2) mantener consultas legacy (Dapper/SQL) y documentar los mapeos. Recomendado: mantener el enfoque legacy por consistencia con otros lookups.
+- Uploads: el plan proponía persistencia en BD con `ArchivoDTO`/ID; la implementación vigente es filesystem por carpeta `uploads/{moduleId}/{entityId}` con endpoints por ruta. Se formaliza el enfoque filesystem y se pospone la variante BD como mejora futura.
+- Indicadores: el campo `WorkFlow.FechaCompletacion` no existe; se usa `FechaModificacion` como proxy para el promedio de días de completación en `IndicadoresCumplimientoService`.
+- Metodologías (Trabajos): el plan sugería EF; la implementación usa servicio de catálogo legacy (Dapper) con SP-fallback y `ViewBag` en controlador. Se mantiene este enfoque.
+- Brief auto-propuesta: requisito previo explícito: relajar validación en `PropuestaService` para permitir `EstadoId=1` sin `FechaInicioCampo` (ya aplicado).
+- WorkFlowDataAdapter (SP): se valida la existencia de los SP por nombre fijo migrado desde CoreProject (sin overrides por configuración) usando `sys.objects`. Esto asegura que la migración esté correcta y evita nombres divergentes por ambiente.
+- Higiene de build/solución: se crea una solución dedicada a MatrixNext (solo `MatrixNext.Data` y `MatrixNext.Web`) para eliminar referencias rotas a proyectos externos y permitir builds consistentes.
+- Warnings de nulabilidad: se añade tarea P3 para reducir CS8618/CS8625 visibles en modelos/servicios PY.
+- Testing mínimo: se añade tarea para smoke tests de flujos Brief→Propuesta, Trabajos con Metodologías, Uploads y endpoints de Indicadores.
+- Configuración: auditar que existan las cadenas `MatrixDb` y la conexión legacy utilizada por los lookups (p.ej. `LegacyDatabase`), y documentar el uso de secrets/variables por entorno.
+
+---
+
 ## 🔴 FASE 1: CRÍTICOS (P0) - BLOQUEAN TODO
 
 ### T1.1: Implementar PYPermisosService - SEGURIDAD
@@ -637,10 +654,9 @@ if (esNuevo)
 
 **Archivo:** `MatrixNext.Web\Services\CORE\WorkFlowDataAdapter.cs` (línea 56)
 
-**Acción:**
-1. Ejecutar en BD: `SELECT OBJECT_ID('CORE_WorkFlow_ObtenerPorTrabajo', 'P')`
-2. Confirmar nombre exacto
-3. Remover comentario TODO si es correcto
+**Acción (actualizado):**
+1. Validación de existencia del SP en código (`sys.objects`) con los nombres estándar migrados desde CoreProject: `CORE_WorkFlow_GetXTrabajoXTarea`, `CORE_WorkFlow_Get`, `CORE_WorkFlow_CrearHiloCrearTareas`, `CORE_Log_WorkFlow_MasivoEstadoCreada_Add`.
+2. No se usarán overrides por configuración; si la validación falla, revisar la migración o los nombres de SP en BD.
 
 **Esfuerzo:** 15 minutos
 
@@ -663,6 +679,40 @@ if (esNuevo)
 **Total:** 14.75 horas (≈2 días de desarrollo focus)
 
 ---
+
+## ➕ Nuevas tareas incorporadas (alineación)
+
+| Tarea | P | Archivo/Área | Tipo | H | Notas |
+|------|---|---------------|------|---|-------|
+| NX1 | 🟠 | Build/Solución | Crear solución `MatrixNext.sln` con `MatrixNext.Data` y `MatrixNext.Web` | 0.5 | Elimina proyectos faltantes del build global |
+| NX2 | 🟠 | Subida de archivos | Consolidar enfoque filesystem (listar/descargar/eliminar por ruta) y actualizar `_Upload` | 1 | BD como mejora futura |
+| NX3 | 🟡 | Indicadores | Usar `FechaModificacion` como proxy de completación | 0.25 | Campo `FechaCompletacion` no existe |
+| NX4 | 🟡 | Metodologías | Mantener lookup legacy via Dapper + `ViewBag` | 0.5 | Confirmar conexión legacy en config |
+| NX5 | 🟡 | Brief/Propuesta | Validación relajada para `EstadoId=1` sin fecha | 0.25 | Ya aplicado |
+| NX6 | 🟢 | Configuración | Asegurar `ConnectionStrings:LegacyDatabase` está presente | 0.25 | Requerido por catálogos legacy |
+| NX7 | 🟢 | Nulabilidad | Reducir CS8618/CS8625 en modelos/servicios PY | 2 | Mantenimiento |
+| NX8 | 🟠 | Smoke tests | Flujos Brief→Propuesta, Trabajos, Uploads, Indicadores | 1 | Validación funcional |
+
+---
+
+## 🧩 Solución dedicada MatrixNext
+
+Para aislar `MatrixNext` de referencias faltantes en la solución global, se crea una solución enfocada solo en los proyectos activos:
+
+1. `MatrixNext.Data`
+2. `MatrixNext.Web`
+
+Uso recomendado (PowerShell):
+
+```powershell
+cd .\MatrixNext
+dotnet new sln -n MatrixNext
+dotnet sln .\MatrixNext.sln add .\MatrixNext.Data\MatrixNext.Data.csproj
+dotnet sln .\MatrixNext.sln add .\MatrixNext.Web\MatrixNext.Web.csproj
+dotnet build .\MatrixNext.sln -c Debug
+```
+
+Esta solución permite compilar y ejecutar la web sin depender de proyectos legacy ausentes.
 
 ## 🚀 PRÓXIMOS PASOS
 

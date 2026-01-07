@@ -80,6 +80,16 @@
 - **Compilación**: ✅ SIN ERRORES
 - **Testing**: ⚠️ Verificar integración SP TH_Ausencia.CalculoDias en staging
 
+#### 8️⃣ **Componente Compartido: Uploads**
+- **Estatus**: ✅ COMPLETO (2026-01-07)
+- **Funcionalidad**: Subir/Listar/Descargar/Eliminar archivos vía API (`/api/upload/upload|list|download|delete`) y parcial UI compartido.
+- **Cambios clave**:
+   - Parcial [Views/Shared/_Upload.cshtml](MatrixNext/MatrixNext.Web/Views/Shared/_Upload.cshtml): alineado con `ResultVM<T>` (`isSuccess`, `data`), progreso, notificaciones, y recarga de lista.
+   - API [Controllers/UploadController.cs](MatrixNext/MatrixNext.Web/Controllers/UploadController.cs): contratos unificados, binding por query para `moduleId/entityId` y `rutaRelativa`.
+   - Servicio [Services/UploadService.cs](MatrixNext/MatrixNext.Web/Services/UploadService.cs): almacenamiento filesystem por módulo/entidad, validación de tamaño/extensión, descarga con MIME, eliminación y logging.
+   - ViewModels/contratos en [Services/IUploadService.cs](MatrixNext/MatrixNext.Web/Services/IUploadService.cs): `UploadResultVM`, `ArchivoVM`.
+- **Notas**: Cliente omite validaciones de smoke ahora; compilación sin errores. Queda opcional verificar UI en pantallas que incluyan `#moduleId`/`#entityId`.
+
 ---
 
 ## 🔜 EN COLA

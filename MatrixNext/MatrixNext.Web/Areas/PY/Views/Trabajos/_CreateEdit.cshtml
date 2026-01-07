@@ -19,8 +19,20 @@
     </div>
     <div class="row g-2 mb-3">
         <div class="col-md-6">
-            <label class="form-label">Id Metodología</label>
-            <input asp-for="IdMetodologia" class="form-control" />
+            <label class="form-label">Metodología</label>
+            <select asp-for="IdMetodologia" class="form-select">
+                <option value="">-- Seleccione metodología --</option>
+                @{
+                    var metodologias = ViewBag.Metodologias as System.Collections.Generic.List<MatrixNext.Web.ViewModels.MetodologiaVM>;
+                    if (metodologias != null)
+                    {
+                        foreach (var m in metodologias)
+                        {
+                            <option value="@m.Id" selected="@(m.Id == Model.IdMetodologia)">@m.Nombre</option>
+                        }
+                    }
+                }
+            </select>
         </div>
         <div class="col-md-6">
             <label class="form-label">Id Tipo Proyecto</label>

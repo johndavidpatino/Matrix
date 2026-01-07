@@ -25,6 +25,7 @@
     </form>
 
     <div id="uploadResults" class="mt-3"></div>
+    <div id="uploadMessages" class="mt-2"></div>
 
     <!-- Lista de archivos actuales -->
     <div id="archivosActuales" class="mt-4">
@@ -50,6 +51,14 @@ $(document).ready(function() {
             return;
         }
 
+        const moduleId = $('#moduleId').val();
+        const entityId = $('#entityId').val();
+
+        if (!moduleId || !entityId) {
+            alert("Faltan parámetros moduleId o entityId");
+            return;
+        }
+
         var formData = new FormData();
         formData.append("file", file);
 
@@ -57,7 +66,7 @@ $(document).ready(function() {
         $("#submitBtn").prop("disabled", true);
 
         $.ajax({
-            url: "@Url.Action("SubirArchivo")",
+            url: `/api/upload/upload?moduleId=${encodeURIComponent(moduleId)}&entityId=${encodeURIComponent(entityId)}`,
             type: "POST",
             data: formData,
             processData: false,
@@ -72,17 +81,23 @@ $(document).ready(function() {
                 });
                 return xhr;
             },
-            success: function(data) {
-                $("#uploadResults").html(`
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <i class="bi bi-check-circle"></i> 
-                        Archivo subido: <strong>${data.nombreArchivo}</strong>
-                        <a href="${data.rutaRelativa}" target="_blank" class="ms-2">Descargar</a>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                `);
-                $("#uploadForm")[0].reset();
-                cargarArchivos();
+            success: function(result) {
+                if (result && result.isSuccess && result.data) {
+                    const d = result.data;
+                    $("#uploadResults").html(`
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="bi bi-check-circle"></i> 
+                            Archivo subido: <strong>${d.nombreArchivo}</strong>
+                            <a href="/api/upload/download?rutaRelativa=${encodeURIComponent(d.rutaRelativa)}" target="_blank" class="ms-2">Descargar</a>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    `);
+                    $("#uploadForm")[0].reset();
+                    cargarArchivos();
+                } else {
+                    const msg = (result && result.message) ? result.message : 'Error al subir archivo';
+                    mostrarNotificacion(msg, 'error');
+                }
             },
             error: function(err) {
                 var mensaje = "Error al subir archivo";
@@ -122,7 +137,7 @@ $(document).ready(function() {
                 entityId: entityId 
             },
             success: function(result) {
-                if (result.success && result.data) {
+                if (result.isSuccess && result.data) {
                     mostrarListaArchivos(result.data);
                 } else {
                     $('#archivosList').html('<p class="text-muted">No hay archivos subidos</p>');
@@ -180,15 +195,13 @@ $(document).ready(function() {
             return;
         }
         
+        const url = `/api/upload/delete?rutaRelativa=${rutaEncodificada}&razon=${encodeURIComponent('Eliminado por usuario')}`;
+
         $.ajax({
-            url: '/api/upload/delete',
+            url: url,
             method: 'DELETE',
-            data: { 
-                rutaRelativa: rutaEncodificada,
-                razon: 'Eliminado por usuario'
-            },
             success: function(result) {
-                if (result.success) {
+                if (result.isSuccess) {
                     mostrarNotificacion('Archivo eliminado correctamente', 'success');
                     cargarArchivos(); // Recargar lista
                 } else {

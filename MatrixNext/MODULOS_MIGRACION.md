@@ -4,6 +4,14 @@
 
 ---
 
+## Actualización (2026-01-07)
+
+- ✅ Cierre componente compartido: Uploads
+  - Alcance: Subida, listado, descarga y eliminación de archivos con almacenamiento en filesystem por módulo/entidad.
+  - UI: Parcial compartido `Views/Shared/_Upload.cshtml` alineado con API y `ResultVM<T>`.
+  - API/Servicios: `UploadController` + `UploadService` + contratos (`UploadResultVM`, `ArchivoVM`).
+  - Notas: Cliente aprueba cierre sin ejecutar smoke tests adicionales en esta fase.
+
 ## Módulos Identificados y Clasificados por Prioridad
 
 ### 🔴 CRÍTICA (Implementar primero)

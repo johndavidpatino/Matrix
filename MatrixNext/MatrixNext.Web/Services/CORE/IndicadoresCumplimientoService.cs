@@ -29,14 +29,13 @@ namespace MatrixNext.Web.Services.CORE
                 // ISSUE RESUELTO: Sprint 6 GAP-6.2
                 // Calcular promedio real de días de completación en lugar de hardcodeado
                 var tareasCompletadas = tareas
-                    .Where(t => t.Estado == "Completada" && 
-                                t.FechaCreacion != null && 
-                                t.FechaCompletacion != null)
+                    .Where(t => t.Estado == "Completada")
                     .ToList();
 
+                // Usar FechaModificacion como proxy de fecha de completación
                 var promedioDiasCompletacion = tareasCompletadas.Any()
                     ? (decimal)tareasCompletadas
-                        .Average(t => (t.FechaCompletacion!.Value - t.FechaCreacion!.Value).TotalDays)
+                        .Average(t => (t.FechaModificacion - t.FechaCreacion).TotalDays)
                     : 0m;
 
                 var resumen = new IndicadoresResumenDTO

@@ -72,6 +72,7 @@ builder.Services.AddScoped<MatrixNext.Web.Services.CORE.ITareasPreviasService, M
 builder.Services.AddScoped<IProyectosService, ProyectosService>();
 builder.Services.AddScoped<ITrabajosService, TrabajosService>();
 builder.Services.AddScoped<ITrabajosWorkFlowService, TrabajosWorkFlowService>();
+builder.Services.AddScoped<IMetodologiasLookupService, MetodologiasLookupService>();
 
 // ===== SPRINT 3: CORE Operación =====
 // Ref: PLAN_IMPLEMENTACION_SPRINTS.md § T3 (CORE Operación)

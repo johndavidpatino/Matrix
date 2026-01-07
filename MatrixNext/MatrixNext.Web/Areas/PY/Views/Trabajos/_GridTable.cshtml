@@ -14,13 +14,14 @@
     <tbody>
     @if (Model.Items.Any())
     {
+        var metMap = ViewBag.MetodologiasMap as System.Collections.Generic.Dictionary<int, string>;
         foreach (var item in Model.Items)
         {
             <tr>
                 <td>@item.IdProyecto</td>
                 <td>@item.JobBook</td>
                 <td>@item.Nombre</td>
-                <td>@item.IdMetodologia</td>
+                <td>@(metMap != null && metMap.ContainsKey(item.IdMetodologia) ? metMap[item.IdMetodologia] : item.IdMetodologia.ToString())</td>
                 <td>@item.Estado</td>
                 <td class="text-end">
                     <button class="btn btn-sm btn-outline-primary" data-url="@Url.Action("EditModal", new { id = item.Id })" data-ajax-modal>Editar</button>

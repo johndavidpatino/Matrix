@@ -230,8 +230,8 @@ namespace MatrixNext.Data.Services.CU
                     break;
             }
 
-            // Fecha de inicio campo requerida para estados distintos a perdida
-            if (model.EstadoId != 4)
+            // Fecha de inicio de campo requerida solo para Enviada (2) y Vendida (3)
+            if (model.EstadoId == 2 || model.EstadoId == 3)
             {
                 if (model.FechaInicioCampo == null) return "Digite la fecha de inicio de campo";
                 if (model.FechaInicioCampo <= DateTime.Now.Date) return "La fecha de inicio de campo debe ser mayor a la fecha actual";

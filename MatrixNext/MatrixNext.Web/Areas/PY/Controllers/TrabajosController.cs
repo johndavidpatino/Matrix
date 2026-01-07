@@ -20,16 +20,18 @@ namespace MatrixNext.Web.Areas.PY.Controllers
         private readonly MatrixDbContext _db;
         private readonly ITrabajosService _service;
         private readonly ITrabajosWorkFlowService _workflow;
+        private readonly IMetodologiasLookupService _metodologias;
         private readonly IEmailService _email;
         private readonly UsuarioService _usuarios;
 
-        public TrabajosController(MatrixDbContext db, ITrabajosService service, ITrabajosWorkFlowService workflow, IEmailService email, UsuarioService usuarios)
+        public TrabajosController(MatrixDbContext db, ITrabajosService service, ITrabajosWorkFlowService workflow, IEmailService email, UsuarioService usuarios, IMetodologiasLookupService metodologias)
         {
             _db = db;
             _service = service;
             _workflow = workflow;
             _email = email;
             _usuarios = usuarios;
+            _metodologias = metodologias;
         }
 
         [HttpGet]
@@ -43,11 +45,13 @@ namespace MatrixNext.Web.Areas.PY.Controllers
         public async Task<IActionResult> Grid(FiltrosVM filtros, long? idProyecto = null)
         {
             var result = await _service.ListarAsync(filtros, idProyecto);
+            // Mapa para mostrar nombre de metodología en grid
+            ViewBag.MetodologiasMap = await _metodologias.ObtenerMapaMetodologiasAsync();
             return PartialView("_GridTable", result);
         }
 
         [HttpGet]
-        public IActionResult CreateModal(long? idProyecto = null)
+        public async Task<IActionResult> CreateModal(long? idProyecto = null)
         {
             var model = new Trabajo
             {
@@ -55,6 +59,8 @@ namespace MatrixNext.Web.Areas.PY.Controllers
                 Estado = 1,
                 Activo = true
             };
+            // Lista para dropdown de metodologías
+            ViewBag.Metodologias = await _metodologias.ObtenerMetodologiasAsync();
             return PartialView("_CreateEdit", model);
         }
 
@@ -93,6 +99,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers
         {
             var entity = await _service.ObtenerPorIdAsync(id);
             if (entity == null) return NotFound();
+            ViewBag.Metodologias = await _metodologias.ObtenerMetodologiasAsync();
             return PartialView("_CreateEdit", entity);
         }
 

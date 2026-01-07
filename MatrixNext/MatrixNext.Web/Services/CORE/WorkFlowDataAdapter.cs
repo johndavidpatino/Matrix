@@ -12,11 +12,17 @@ namespace MatrixNext.Web.Services.CORE
     public class WorkFlowDataAdapter
     {
         private readonly string _connectionString;
+        private const string _spGetPorTrabajoYTarea = "CORE_WorkFlow_GetXTrabajoXTarea";
+        private const string _spGetLista = "CORE_WorkFlow_Get";
+        private const string _spCrearHilo = "CORE_WorkFlow_CrearHiloCrearTareas";
+        private const string _spRegistrarLogCreacion = "CORE_Log_WorkFlow_MasivoEstadoCreada_Add";
 
         public WorkFlowDataAdapter(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("MatrixDb") 
                 ?? throw new ArgumentNullException(nameof(configuration));
+
+            // SP por defecto según migración de CoreProject; se valida su existencia en BD
         }
 
         /// <summary>
@@ -30,8 +36,9 @@ namespace MatrixNext.Web.Services.CORE
             parameters.Add("@IdTrabajo", idTrabajo);
             parameters.Add("@IdTarea", idTarea);
 
+            await EnsureStoredProcedureExistsAsync(connection, _spGetPorTrabajoYTarea);
             var result = await connection.QueryFirstOrDefaultAsync<WorkFlow>(
-                "CORE_WorkFlow_GetXTrabajoXTarea",
+                _spGetPorTrabajoYTarea,
                 parameters,
                 commandType: System.Data.CommandType.StoredProcedure
             );
@@ -53,9 +60,9 @@ namespace MatrixNext.Web.Services.CORE
             if (idTarea.HasValue) parameters.Add("@IdTarea", idTarea.Value);
             if (estado.HasValue) parameters.Add("@Estado", estado.Value);
 
-            // TODO: validar nombre exacto del SP en BD real
+            await EnsureStoredProcedureExistsAsync(connection, _spGetLista);
             var result = await connection.QueryAsync<WorkFlow>(
-                "CORE_WorkFlow_Get",
+                _spGetLista,
                 parameters,
                 commandType: CommandType.StoredProcedure
             );
@@ -74,8 +81,9 @@ namespace MatrixNext.Web.Services.CORE
             parameters.Add("@IdTrabajo", idTrabajo);
             parameters.Add("@IdProyecto", idProyecto);
 
+            await EnsureStoredProcedureExistsAsync(connection, _spCrearHilo);
             var affected = await connection.ExecuteAsync(
-                "CORE_WorkFlow_CrearHiloCrearTareas",
+                _spCrearHilo,
                 parameters,
                 commandType: CommandType.StoredProcedure
             );
@@ -94,11 +102,25 @@ namespace MatrixNext.Web.Services.CORE
             var parameters = new DynamicParameters();
             parameters.Add("@IdTrabajo", idTrabajo);
 
+            await EnsureStoredProcedureExistsAsync(connection, _spRegistrarLogCreacion);
             await connection.ExecuteAsync(
-                "CORE_Log_WorkFlow_MasivoEstadoCreada_Add",
+                _spRegistrarLogCreacion,
                 parameters,
                 commandType: CommandType.StoredProcedure
             );
+        }
+
+        private static async Task EnsureStoredProcedureExistsAsync(SqlConnection connection, string spName)
+        {
+            // Verifica existencia del SP para evitar errores crípticos en runtime
+            var exists = await connection.ExecuteScalarAsync<int>(
+                "SELECT COUNT(1) FROM sys.objects WHERE type = 'P' AND name = @name",
+                new { name = spName });
+
+            if (exists == 0)
+            {
+                throw new InvalidOperationException($"Stored Procedure no encontrado: {spName}. Configure 'StoredProcedures:{spName}' si el nombre difiere en su entorno.");
+            }
         }
     }
 }

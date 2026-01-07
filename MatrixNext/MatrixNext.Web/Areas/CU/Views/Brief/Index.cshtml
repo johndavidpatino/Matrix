@@ -174,6 +174,34 @@
             const btnViable = document.getElementById('btnViable');
             const btnNoViable = document.getElementById('btnNoViable');
 
+            function ensureToastContainer() {
+                let container = document.querySelector('.toast-container');
+                if (!container) {
+                    container = document.createElement('div');
+                    container.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+                    document.body.appendChild(container);
+                }
+                return container;
+            }
+
+            function showToast(title, message, type = 'info') {
+                const container = ensureToastContainer();
+                const bg = type === 'success' ? 'bg-success' : type === 'error' || type === 'danger' ? 'bg-danger' : type === 'warning' ? 'bg-warning' : 'bg-primary';
+                const toast = document.createElement('div');
+                toast.className = 'toast align-items-center border-0 text-bg-light';
+                toast.setAttribute('role', 'alert');
+                toast.setAttribute('aria-live', 'assertive');
+                toast.setAttribute('aria-atomic', 'true');
+                toast.innerHTML = `
+                    <div class="toast-header ${bg} text-white">
+                        <strong class="me-auto">${title || 'Aviso'}</strong>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">${message || ''}</div>`;
+                container.appendChild(toast);
+                new bootstrap.Toast(toast, { delay: 3500 }).show();
+            }
+
             form.addEventListener('submit', function (e) {
                 e.preventDefault();
                 const formData = new FormData(form);
@@ -183,14 +211,16 @@
                 })
                     .then(r => r.json())
                     .then(res => {
-                        alert(res.message);
+                        showToast(res.success ? 'Éxito' : 'Error', res.message, res.success ? 'success' : 'danger');
                         if (res.success) {
-                            window.location.href = '@Url.Action("Index","Propuestas", new { area = "CU" })';
+                            setTimeout(() => {
+                                window.location.href = '@Url.Action("Index","Propuestas", new { area = "CU" })';
+                            }, 800);
                         }
                     })
                     .catch(err => {
                         console.error(err);
-                        alert('No fue posible guardar el brief');
+                        showToast('Error', 'No fue posible guardar el brief', 'danger');
                     });
             });
 
@@ -207,7 +237,7 @@
                 })
                     .then(r => r.json())
                     .then(res => {
-                        alert(res.message);
+                        showToast(res.success ? 'Éxito' : 'Error', res.message, res.success ? 'success' : 'danger');
                         if (res.success) {
                             window.location.reload();
                         }

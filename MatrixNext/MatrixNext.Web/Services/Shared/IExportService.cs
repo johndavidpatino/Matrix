@@ -21,7 +21,7 @@ namespace MatrixNext.Web.Services.Shared
             List<T> data,
             string nombreArchivo,
             string nombreHoja = "Datos",
-            string tituloReporte = null) where T : class;
+            string? tituloReporte = null) where T : class;
 
         /// <summary>
         /// Exporta datos con configuración personalizada de columnas.
@@ -38,7 +38,7 @@ namespace MatrixNext.Web.Services.Shared
             string nombreArchivo,
             Dictionary<string, string> configuracionColumnas,
             string nombreHoja = "Datos",
-            string tituloReporte = null) where T : class;
+            string? tituloReporte = null) where T : class;
 
         /// <summary>
         /// Exporta múltiples hojas en un solo archivo Excel.

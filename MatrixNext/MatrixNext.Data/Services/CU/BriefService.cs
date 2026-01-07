@@ -148,6 +148,8 @@ namespace MatrixNext.Data.Services.CU
                     else
                     {
                         _logger.LogInformation($"Brief {id} creado con propuesta {idPropuesta} auto-generada");
+                        // Enriquecer el mensaje de exito para el frontend
+                        return (true, $"Brief guardado correctamente. Propuesta #{idPropuesta} auto-creada.", id);
                     }
                 }
 

@@ -84,7 +84,7 @@ namespace MatrixNext.Web.Controllers
                     "Listados {CantidadArchivos} archivos para {ModuleId}/{EntityId}",
                     archivos.Count, moduleId, entityId);
 
-                return Ok(ResultVM<List<UploadService.ArchivoVM>>.Ok(
+                return Ok(ResultVM<List<ArchivoVM>>.Ok(
                     archivos,
                     $"Encontrados {archivos.Count} archivo(s)"));
             }

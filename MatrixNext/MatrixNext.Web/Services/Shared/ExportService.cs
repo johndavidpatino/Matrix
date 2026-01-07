@@ -25,7 +25,7 @@ namespace MatrixNext.Web.Services.Shared
             List<T> data,
             string nombreArchivo,
             string nombreHoja = "Datos",
-            string tituloReporte = null) where T : class
+            string? tituloReporte = null) where T : class
         {
             return await Task.Run(() =>
             {
@@ -142,7 +142,7 @@ namespace MatrixNext.Web.Services.Shared
             string nombreArchivo,
             Dictionary<string, string> configuracionColumnas,
             string nombreHoja = "Datos",
-            string tituloReporte = null) where T : class
+            string? tituloReporte = null) where T : class
         {
             return await Task.Run(() =>
             {
