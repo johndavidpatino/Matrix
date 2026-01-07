@@ -15,8 +15,8 @@ namespace MatrixNext.Web.Models.CORE
         public int Orden { get; set; } = 1; // Orden de ejecución si hay múltiples
         
         // Relaciones
-        public virtual WorkFlow Tarea { get; set; }
+        public virtual WorkFlow? Tarea { get; set; }
         
-        public virtual WorkFlow TareaPreviaRequerida { get; set; }
+        public virtual WorkFlow? TareaPreviaRequerida { get; set; }
     }
 }

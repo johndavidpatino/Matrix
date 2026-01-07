@@ -53,7 +53,7 @@ namespace MatrixNext.Web.Services.PY
                 query = query.Where(t => t.Estado == filtros.Estado);
             }
 
-            return await _grid.PaginarAsync(query, filtros.PageNumber, filtros.PageSize, filtros.SortBy, filtros.SortDescending);
+            return await _grid.PaginarAsync(query, filtros.PageNumber, filtros.PageSize, filtros.SortBy ?? "Id", filtros.SortDescending);
         }
 
         public async Task<Trabajo?> ObtenerPorIdAsync(long id)

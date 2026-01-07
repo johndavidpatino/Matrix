@@ -15,6 +15,6 @@ namespace MatrixNext.Web.Models.PY
         public int TipoDato { get; set; } // 1=Texto, 2=Número, 3=Fecha
         
         // Relaciones
-        public virtual Trabajo Trabajo { get; set; }
+        public virtual Trabajo? Trabajo { get; set; }
     }
 }

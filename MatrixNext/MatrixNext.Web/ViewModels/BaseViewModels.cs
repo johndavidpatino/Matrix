@@ -82,8 +82,8 @@ namespace MatrixNext.Web.ViewModels
     /// </summary>
     public class ErrorVM
     {
-        public string Campo { get; set; }
-        public string Mensaje { get; set; }
+        public string? Campo { get; set; }
+        public string? Mensaje { get; set; }
     }
 
     /// <summary>
@@ -91,13 +91,13 @@ namespace MatrixNext.Web.ViewModels
     /// </summary>
     public class FiltrosVM
     {
-        public string Busqueda { get; set; }
+        public string? Busqueda { get; set; }
         public DateTime? FechaDesde { get; set; }
         public DateTime? FechaHasta { get; set; }
         public int Estado { get; set; } = -1; // -1 = todos
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
-        public string SortBy { get; set; } = "FechaCreacion";
+        public string? SortBy { get; set; } = "FechaCreacion";
         public bool SortDescending { get; set; } = true;
     }
 }

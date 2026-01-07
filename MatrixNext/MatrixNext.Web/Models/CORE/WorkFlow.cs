@@ -13,13 +13,13 @@ namespace MatrixNext.Web.Models.CORE
         
         public int IdTipoHilo { get; set; }
         
-        public string Estado { get; set; } = "Creada"; // Creada, EnProgreso, Completada, Anulada
+        public string? Estado { get; set; } = "Creada"; // Creada, EnProgreso, Completada, Anulada
         
         public int Prioridad { get; set; } = 1; // 1=Normal, 2=Alta, 3=Baja
         
         public DateTime? FechaVencimiento { get; set; }
         
-        public string Observaciones { get; set; }
+        public string? Observaciones { get; set; }
         
         // Relaciones
         public virtual ICollection<WorkFlowUsuarioAsignado> UsuariosAsignados { get; set; } = new List<WorkFlowUsuarioAsignado>();

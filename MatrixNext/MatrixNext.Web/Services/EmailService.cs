@@ -24,22 +24,22 @@ namespace MatrixNext.Web.Services
             {
                 using (var cliente = new SmtpClient())
                 {
-                    var smtpHost = _config["Email:SmtpHost"];
+                    var smtpHost = _config["Email:SmtpHost"] ?? string.Empty;
                     var smtpPort = int.Parse(_config["Email:SmtpPort"] ?? "587");
                     var enableSsl = bool.Parse(_config["Email:EnableSsl"] ?? "true");
                     var username = _config["Email:Username"];
                     var password = _config["Email:Password"];
-                    var senderEmail = _config["Email:SenderEmail"];
+                    var senderEmail = _config["Email:SenderEmail"] ?? string.Empty;
                     var senderName = _config["Email:SenderName"] ?? "Matrix";
 
-                    cliente.Host = smtpHost;
+                    cliente.Host = smtpHost ?? string.Empty;
                     cliente.Port = smtpPort;
                     cliente.EnableSsl = enableSsl;
                     cliente.Credentials = new NetworkCredential(username, password);
 
                     var mensaje = new MailMessage()
                     {
-                        From = new MailAddress(senderEmail, senderName),
+                        From = new MailAddress(senderEmail ?? string.Empty, senderName),
                         Subject = asunto,
                         Body = cuerpo,
                         IsBodyHtml = esHtml
@@ -82,22 +82,22 @@ namespace MatrixNext.Web.Services
             {
                 using (var cliente = new SmtpClient())
                 {
-                    var smtpHost = _config["Email:SmtpHost"];
+                    var smtpHost = _config["Email:SmtpHost"] ?? string.Empty;
                     var smtpPort = int.Parse(_config["Email:SmtpPort"] ?? "587");
                     var enableSsl = bool.Parse(_config["Email:EnableSsl"] ?? "true");
                     var username = _config["Email:Username"];
                     var password = _config["Email:Password"];
-                    var senderEmail = _config["Email:SenderEmail"];
+                    var senderEmail = _config["Email:SenderEmail"] ?? string.Empty;
                     var senderName = _config["Email:SenderName"] ?? "Matrix";
 
-                    cliente.Host = smtpHost;
+                    cliente.Host = smtpHost ?? string.Empty;
                     cliente.Port = smtpPort;
                     cliente.EnableSsl = enableSsl;
                     cliente.Credentials = new NetworkCredential(username, password);
 
                     var mensaje = new MailMessage()
                     {
-                        From = new MailAddress(senderEmail, senderName),
+                        From = new MailAddress(senderEmail ?? string.Empty, senderName),
                         Subject = asunto,
                         Body = cuerpo,
                         IsBodyHtml = true

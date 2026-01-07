@@ -83,7 +83,8 @@ namespace MatrixNext.Web.Services
 
             if (grafo.ContainsKey(nodo))
             {
-                foreach (var vecino in grafo[nodo])
+                var vecinos = grafo[nodo];
+                foreach (var vecino in vecinos)
                 {
                     if (!visitados.Contains(vecino))
                     {
@@ -158,7 +159,7 @@ namespace MatrixNext.Web.Services
 
                 var previas = precedencias
                     .Where(p => p.IdTarea == id && p.IdTareaPreviaRequerida.HasValue)
-                    .Select(p => p.IdTareaPreviaRequerida.Value)
+                    .Select(p => p.IdTareaPreviaRequerida!.Value)
                     .ToList();
 
                 foreach (var previa in previas)

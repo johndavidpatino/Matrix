@@ -11,11 +11,11 @@ namespace MatrixNext.Web.Models.CORE
         
         public long IdUsuario { get; set; }
         
-        public string Rol { get; set; } // "Responsable", "Observador", etc.
+        public string? Rol { get; set; } // "Responsable", "Observador", etc.
         
         public DateTime? FechaAsignacion { get; set; } = DateTime.UtcNow;
         
         // Relaciones
-        public virtual WorkFlow WorkFlow { get; set; }
+        public virtual WorkFlow? WorkFlow { get; set; }
     }
 }

@@ -28,7 +28,7 @@ namespace MatrixNext.Web.Models.PY
         public DateTime? FechaCierre { get; set; }
         
         // Relaciones
-        public virtual Proyecto Proyecto { get; set; }
+        public virtual Proyecto? Proyecto { get; set; }
         
         public virtual ICollection<VariableControl> VariablesControl { get; set; } = new List<VariableControl>();
     }

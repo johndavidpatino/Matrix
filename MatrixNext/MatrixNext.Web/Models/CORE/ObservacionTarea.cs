@@ -12,11 +12,11 @@ namespace MatrixNext.Web.Models.CORE
         
         public long IdUsuario { get; set; }
         
-        public string Observacion { get; set; }
+        public string? Observacion { get; set; }
         
-        public string TipoOperacion { get; set; } // "CambioEstado", "Anulacion", "ComentarioGeneral"
+        public string? TipoOperacion { get; set; } // "CambioEstado", "Anulacion", "ComentarioGeneral"
         
         // Relaciones
-        public virtual WorkFlow WorkFlow { get; set; }
+        public virtual WorkFlow? WorkFlow { get; set; }
     }
 }

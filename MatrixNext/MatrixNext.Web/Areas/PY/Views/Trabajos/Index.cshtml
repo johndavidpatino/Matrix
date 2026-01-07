@@ -42,7 +42,7 @@
     </form>
 
     <div id="gridContainer" data-grid-url="@Url.Action("Grid")">
-        @Html.Partial("_GridTable", new MatrixNext.Web.ViewModels.PaginationResultVM<MatrixNext.Web.Models.PY.Trabajo>())
+        <partial name="_GridTable" model="new MatrixNext.Web.ViewModels.PaginationResultVM<MatrixNext.Web.Models.PY.Trabajo>()" />
     </div>
 </div>
 

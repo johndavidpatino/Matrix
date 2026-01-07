@@ -51,9 +51,9 @@ namespace MatrixNext.Web.Infrastructure.Data
                 entity.Property(e => e.FechaModificacion).HasDefaultValueSql("GETUTCDATE()");
 
                 // Índices
-                entity.HasIndex(e => e.IdGerenteProyectos).HasName("IX_Proyecto_IdGerenteProyectos");
-                entity.HasIndex(e => e.IdUnidad).HasName("IX_Proyecto_IdUnidad");
-                entity.HasIndex(e => e.Activo).HasName("IX_Proyecto_Activo");
+                entity.HasIndex(e => e.IdGerenteProyectos).HasDatabaseName("IX_Proyecto_IdGerenteProyectos");
+                entity.HasIndex(e => e.IdUnidad).HasDatabaseName("IX_Proyecto_IdUnidad");
+                entity.HasIndex(e => e.Activo).HasDatabaseName("IX_Proyecto_Activo");
 
                 // Relaciones
                 entity.HasMany(e => e.Trabajos)
@@ -81,9 +81,9 @@ namespace MatrixNext.Web.Infrastructure.Data
                 entity.Property(e => e.FechaModificacion).HasDefaultValueSql("GETUTCDATE()");
 
                 // Índices (ref: VALIDACION_BASE_DATOS.md § 5)
-                entity.HasIndex(e => e.IdProyecto).HasName("IX_Trabajo_IdProyecto");
-                entity.HasIndex(e => e.Estado).HasName("IX_Trabajo_Estado");
-                entity.HasIndex(e => e.Activo).HasName("IX_Trabajo_Activo");
+                entity.HasIndex(e => e.IdProyecto).HasDatabaseName("IX_Trabajo_IdProyecto");
+                entity.HasIndex(e => e.Estado).HasDatabaseName("IX_Trabajo_Estado");
+                entity.HasIndex(e => e.Activo).HasDatabaseName("IX_Trabajo_Activo");
 
                 // Relaciones
                 entity.HasMany(e => e.VariablesControl)
@@ -141,8 +141,8 @@ namespace MatrixNext.Web.Infrastructure.Data
                 entity.Property(e => e.FechaCreacion).HasDefaultValueSql("GETUTCDATE()");
 
                 // Índices (ref: VALIDACION_BASE_DATOS.md § 5)
-                entity.HasIndex(e => e.IdTrabajo).HasName("IX_WorkFlow_IdTrabajo");
-                entity.HasIndex(e => e.Estado).HasName("IX_WorkFlow_Estado");
+                entity.HasIndex(e => e.IdTrabajo).HasDatabaseName("IX_WorkFlow_IdTrabajo");
+                entity.HasIndex(e => e.Estado).HasDatabaseName("IX_WorkFlow_Estado");
 
                 // Relaciones
                 entity.HasMany(e => e.UsuariosAsignados)
@@ -170,7 +170,7 @@ namespace MatrixNext.Web.Infrastructure.Data
 
                 // Índice para búsquedas de precedencias
                 entity.HasIndex(e => e.IdTareaPreviaRequerida)
-                    .HasName("IX_TareaPrevía_IdTareaPreviaRequerida");
+                    .HasDatabaseName("IX_TareaPrevía_IdTareaPreviaRequerida");
 
                 // Relación: Una tarea previa requiere otra
                 entity.HasOne(e => e.TareaPreviaRequerida)
@@ -192,7 +192,7 @@ namespace MatrixNext.Web.Infrastructure.Data
 
                 // Índice para búsquedas por usuario
                 entity.HasIndex(e => e.IdUsuario)
-                    .HasName("IX_WorkFlowUsuarioAsignado_IdUsuario");
+                    .HasDatabaseName("IX_WorkFlowUsuarioAsignado_IdUsuario");
             });
 
             // ===== CONFIGURACIÓN CORE: OBSERVACIONES TAREAS =====
@@ -210,7 +210,7 @@ namespace MatrixNext.Web.Infrastructure.Data
 
                 // Índice para auditoría
                 entity.HasIndex(e => new { e.IdWorkFlow, e.FechaCreacion })
-                    .HasName("IX_ObservacionTarea_WorkFlowFecha");
+                    .HasDatabaseName("IX_ObservacionTarea_WorkFlowFecha");
             });
         }
     }

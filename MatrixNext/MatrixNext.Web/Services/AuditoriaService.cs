@@ -15,7 +15,11 @@ namespace MatrixNext.Web.Services
             _auditLogPath = Path.Combine(env.ContentRootPath, "logs", "audit.log");
             
             // Crear directorio de logs si no existe
-            Directory.CreateDirectory(Path.GetDirectoryName(_auditLogPath));
+            var logDir = Path.GetDirectoryName(_auditLogPath);
+            if (!string.IsNullOrEmpty(logDir))
+            {
+                Directory.CreateDirectory(logDir);
+            }
         }
 
         public async Task LogearAsync(AuditoriaVM auditoria)

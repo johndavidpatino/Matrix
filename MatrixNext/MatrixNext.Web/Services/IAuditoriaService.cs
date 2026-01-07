@@ -11,11 +11,11 @@ namespace MatrixNext.Web.Services
 
     public class AuditoriaVM
     {
-        public string Entidad { get; set; }
+        public string? Entidad { get; set; }
         public long? EntidadId { get; set; }
-        public string Accion { get; set; } // "Create", "Update", "Delete", "Upload", "Download"
-        public string Detalles { get; set; }
-        public string RutaArchivo { get; set; }
+        public string? Accion { get; set; } // "Create", "Update", "Delete", "Upload", "Download"
+        public string? Detalles { get; set; }
+        public string? RutaArchivo { get; set; }
         public long? IdUsuario { get; set; }
         public DateTime Timestamp { get; set; } = DateTime.UtcNow;
     }
