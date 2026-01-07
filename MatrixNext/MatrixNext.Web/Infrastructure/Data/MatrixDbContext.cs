@@ -20,6 +20,7 @@ namespace MatrixNext.Web.Infrastructure.Data
         public DbSet<Proyecto> Proyectos { get; set; }
         public DbSet<Trabajo> Trabajos { get; set; }
         public DbSet<VariableControl> VariablesControl { get; set; }
+        public DbSet<AsignacionProyecto> AsignacionesProyectos { get; set; }
 
         // ===== PY: TRABAJOS CUALITATIVOS (SPRINT 4) =====
         public DbSet<TrabajosCuali> TrabajosCuali { get; set; }

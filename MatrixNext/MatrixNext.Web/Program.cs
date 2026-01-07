@@ -84,6 +84,10 @@ builder.Services.AddScoped<ISesionesCualiService, SesionesCualiService>();
 builder.Services.AddScoped<IMuestrasCualiService, MuestrasCualiService>();
 builder.Services.AddScoped<IEntrevistadorasCualiService, EntrevistadorasCualiService>();
 
+// ===== SPRINT 5: PY Asignaciones =====
+// Ref: PLAN_IMPLEMENTACION_SPRINTS.md § T5 (Asignaciones & Reasignaciones)
+builder.Services.AddScoped<IAsignacionesProyectosService, AsignacionesProyectosService>();
+
 // DbContext principal (PY, CORE, OP)
 builder.Services.AddDbContext<MatrixDbContext>(options =>
     options.UseSqlServer(connectionString));
