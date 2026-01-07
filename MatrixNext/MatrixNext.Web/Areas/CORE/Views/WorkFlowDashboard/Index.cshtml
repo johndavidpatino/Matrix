@@ -61,6 +61,9 @@
                     <button type="button" class="btn btn-outline-secondary" id="btnLimpiarFiltros">
                         <i class="fas fa-times me-1"></i>Limpiar
                     </button>
+                    <button type="button" class="btn btn-success" id="btnExportExcel">
+                        <i class="fas fa-file-excel"></i>
+                    </button>
                 </div>
             </div>
         </div>
@@ -276,6 +279,44 @@
             });
             $('#btnRefresh').click(() => cargarDatos());
             $('#txtBusqueda').on('keyup', debounce(() => cargarDetalleTareas(), 500));
+
+            // Exportar a Excel
+            $('#btnExportExcel').click(async function () {
+                const btn = $(this);
+                const originalHtml = btn.html();
+
+                try {
+                    btn.prop('disabled', true);
+                    btn.html('<i class="fas fa-spinner fa-spin"></i>');
+
+                    const params = new URLSearchParams({
+                        ...(estado && { estado }),
+                        ...(prioridad && { prioridad }),
+                        ...(busqueda && { busqueda })
+                    });
+
+                    const response = await fetch(`/api/core/workflow-dashboard/export-excel?${params.toString()}`);
+
+                    if (!response.ok) throw new Error('Error al generar Excel');
+
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = url;
+                    a.download = `Dashboard_Tareas_${new Date().toISOString().slice(0, 10)}.xlsx`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                } catch (error) {
+                    console.error('Error al exportar Excel:', error);
+                    alert('Error al generar el archivo Excel');
+                } finally {
+                    btn.prop('disabled', false);
+                    btn.html(originalHtml);
+                }
+            });
         });
 
         async function cargarDatos() {

@@ -55,6 +55,9 @@
                     <button type="button" class="btn btn-outline-secondary" id="btnLimpiarFiltros">
                         <i class="fas fa-times me-1"></i>Limpiar
                     </button>
+                    <button type="button" class="btn btn-success" id="btnExportExcel">
+                        <i class="fas fa-file-excel me-1"></i>Exportar a Excel
+                    </button>
                 </div>
             </div>
         </div>
@@ -487,6 +490,49 @@
                 timeout = setTimeout(() => func.apply(this, args), wait);
             };
         }
+
+        // Exportar a Excel
+        document.getElementById('btnExportExcel').addEventListener('click', async function () {
+            const btnExport = this;
+            const originalText = btnExport.innerHTML;
+
+            try {
+                btnExport.disabled = true;
+                btnExport.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Generando Excel...';
+
+                const params = new URLSearchParams({
+                    ...(currentFilters.idUnidad && { idUnidad: currentFilters.idUnidad }),
+                    ...(currentFilters.idGerente && { idGerente: currentFilters.idGerente }),
+                    ...(currentFilters.estado && { estado: currentFilters.estado }),
+                    ...(currentFilters.busqueda && { busqueda: currentFilters.busqueda })
+                });
+
+                const response = await fetch(`/api/py/dashboard/export-excel?${params.toString()}`);
+
+                if (!response.ok) {
+                    throw new Error('Error al generar el archivo Excel');
+                }
+
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = `Dashboard_Trabajos_${new Date().toISOString().slice(0, 10)}.xlsx`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+
+                alert('Archivo Excel generado exitosamente');
+            } catch (error) {
+                console.error('Error al exportar Excel:', error);
+                mostrarError('Error al generar el archivo Excel');
+            } finally {
+                btnExport.disabled = false;
+                btnExport.innerHTML = originalText;
+            }
+        });
 
         function mostrarError(mensaje) {
             // Simplificado: toast notification

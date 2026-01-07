@@ -1,4 +1,5 @@
 using MatrixNext.Web.Services.CORE;
+using MatrixNext.Web.Services.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,13 +11,16 @@ namespace MatrixNext.Web.Areas.CORE.Controllers
     public class WorkFlowDashboardController : Controller
     {
         private readonly IWorkFlowDashboardService _workFlowDashboardService;
+        private readonly IExportService _exportService;
         private readonly ILogger<WorkFlowDashboardController> _logger;
 
         public WorkFlowDashboardController(
             IWorkFlowDashboardService workFlowDashboardService,
+            IExportService exportService,
             ILogger<WorkFlowDashboardController> logger)
         {
             _workFlowDashboardService = workFlowDashboardService;
+            _exportService = exportService;
             _logger = logger;
         }
 
@@ -97,6 +101,62 @@ namespace MatrixNext.Web.Areas.CORE.Controllers
         {
             var resultado = await _workFlowDashboardService.ObtenerTareasPorUsuarioAsync();
             return Ok(resultado);
+        }
+
+        /// <summary>
+        /// GET /api/core/workflow-dashboard/export-excel?estado=1&prioridad=Alta
+        /// Exporta el detalle de tareas a Excel
+        /// </summary>
+        [HttpGet("export-excel")]
+        public async Task<IActionResult> ExportarExcel(
+            [FromQuery] int? estado = null,
+            [FromQuery] string? prioridad = null,
+            [FromQuery] long? idUsuario = null,
+            [FromQuery] string? busqueda = null)
+        {
+            try
+            {
+                // Obtener todos los datos sin paginación
+                var resultado = await _workFlowDashboardService.ObtenerDetalleTareasAsync(
+                    estado, prioridad, null, busqueda, 1, 10000);
+
+                if (!resultado.IsSuccess || resultado.Data == null || !resultado.Data.Any())
+                {
+                    return BadRequest(new { mensaje = "No hay datos para exportar" });
+                }
+
+                // Configurar columnas personalizadas
+                var configuracionColumnas = new Dictionary<string, string>
+                {
+                    { "IdWorkFlow", "ID Tarea" },
+                    { "Titulo", "Título" },
+                    { "Descripcion", "Descripción" },
+                    { "Estado", "Estado" },
+                    { "Prioridad", "Prioridad" },
+                    { "FechaCreacion", "Fecha Creación" },
+                    { "FechaVencimiento", "Fecha Vencimiento" },
+                    { "DiasRestantes", "Días Restantes" },
+                    { "NombreUsuarioAsignado", "Usuario Asignado" },
+                    { "Observaciones", "Observaciones" }
+                };
+
+                var excelBytes = await _exportService.ExportarExcelPersonalizadoAsync(
+                    resultado.Data.ToList(),
+                    "Dashboard_Tareas",
+                    configuracionColumnas,
+                    "Tareas WorkFlow",
+                    $"Reporte de Tareas WorkFlow - {DateTime.Now:dd/MM/yyyy HH:mm}");
+
+                return File(
+                    excelBytes,
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    $"Dashboard_Tareas_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al exportar dashboard WorkFlow a Excel");
+                return StatusCode(500, new { mensaje = "Error al generar el archivo Excel" });
+            }
         }
 
         /// <summary>
