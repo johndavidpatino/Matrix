@@ -76,6 +76,14 @@ builder.Services.AddScoped<ITrabajosWorkFlowService, TrabajosWorkFlowService>();
 builder.Services.AddScoped<MatrixNext.Web.Services.CORE.IAsignacionesService, MatrixNext.Web.Services.CORE.AsignacionesService>();
 builder.Services.AddScoped<MatrixNext.Web.Services.CORE.IGestionTareasService, MatrixNext.Web.Services.CORE.GestionTareasService>();
 
+// ===== SPRINT 4: PY Cualitativos =====
+// Ref: PLAN_IMPLEMENTACION_SPRINTS.md § T4 (Trabajos Cualitativos)
+builder.Services.AddScoped<ITrabajosCualiService, TrabajosCualiService>();
+builder.Services.AddScoped<ISegmentosCualiService, SegmentosCualiService>();
+builder.Services.AddScoped<ISesionesCualiService, SesionesCualiService>();
+builder.Services.AddScoped<IMuestrasCualiService, MuestrasCualiService>();
+builder.Services.AddScoped<IEntrevistadorasCualiService, EntrevistadorasCualiService>();
+
 // DbContext principal (PY, CORE, OP)
 builder.Services.AddDbContext<MatrixDbContext>(options =>
     options.UseSqlServer(connectionString));
