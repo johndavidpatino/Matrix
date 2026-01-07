@@ -1,0 +1,142 @@
+@model MatrixNext.Web.Models.PY.SesionesCuali
+
+<form id="formSesionCuali" asp-action="Crear" method="post">
+    @Html.AntiForgeryToken()
+    <input asp-for="Id" type="hidden" />
+    <input asp-for="IdTrabajoCuali" type="hidden" />
+    <input asp-for="IdSegmento" type="hidden" />
+    
+    <div class="row g-3">
+        <div class="col-md-8">
+            <label class="form-label">Nombre de la Sesión <span class="text-danger">*</span></label>
+            <input asp-for="Nombre" class="form-control" required />
+            <span asp-validation-for="Nombre" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Tipo <span class="text-danger">*</span></label>
+            <select asp-for="Tipo" class="form-select" required>
+                <option value="">Seleccione...</option>
+                <option value="Focus Group">Focus Group</option>
+                <option value="Entrevista">Entrevista a Profundidad</option>
+                <option value="Observación">Observación</option>
+                <option value="Etnografía">Etnografía</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-3">
+        <div class="col-md-4">
+            <label class="form-label">Fecha Programada <span class="text-danger">*</span></label>
+            <input asp-for="FechaProgramada" type="date" class="form-control" required />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Hora Inicio <span class="text-danger">*</span></label>
+            <input asp-for="HoraInicio" type="time" class="form-control" required />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Hora Fin <span class="text-danger">*</span></label>
+            <input asp-for="HoraFin" type="time" class="form-control" required />
+        </div>
+    </div>
+
+    <div class="row g-3 mb-3">
+        <div class="col-md-6">
+            <label class="form-label">Ubicación <span class="text-danger">*</span></label>
+            <input asp-for="Ubicacion" class="form-control" placeholder="Dirección, sala, ciudad..." required />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Moderador/Entrevistador</label>
+            <input asp-for="Moderador" class="form-control" />
+        </div>
+    </div>
+
+    <div class="row g-3 mb-3">
+        <div class="col-md-6">
+            <label class="form-label">Participantes Planeados</label>
+            <input asp-for="NumeroParticipantesPlaneado" type="number" class="form-control" min="1" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Participantes Reales</label>
+            <input asp-for="NumeroParticipantesReal" type="number" class="form-control" min="0" />
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Fecha Ejecución</label>
+        <input asp-for="FechaEjecucion" type="date" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Observaciones</label>
+        <textarea asp-for="Observaciones" class="form-control" rows="2"></textarea>
+    </div>
+
+    <div class="row g-3 mb-3">
+        <div class="col-md-6">
+            <label class="form-label">URL Grabación</label>
+            <input asp-for="UrlGrabacion" type="url" class="form-control" placeholder="https://..." />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Estado</label>
+            <select asp-for="Estado" class="form-select">
+                <option value="Programada">Programada</option>
+                <option value="En Curso">En Curso</option>
+                <option value="Finalizada">Finalizada</option>
+                <option value="Cancelada">Cancelada</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Notas Adicionales</label>
+        <textarea asp-for="Notas" class="form-control" rows="2"></textarea>
+    </div>
+
+    <div class="form-check form-switch mb-3">
+        <input asp-for="Activo" class="form-check-input" />
+        <label class="form-check-label">Activa</label>
+    </div>
+
+    <div class="d-flex justify-content-end gap-2">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-save"></i> Guardar
+        </button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function() {
+        $('#formSesionCuali').on('submit', function(e) {
+            e.preventDefault();
+            
+            // Validar que hora fin sea mayor que hora inicio
+            const horaInicio = $('#HoraInicio').val();
+            const horaFin = $('#HoraFin').val();
+            if (horaInicio && horaFin && horaFin <= horaInicio) {
+                alert('La hora de fin debe ser posterior a la hora de inicio');
+                return;
+            }
+            
+            const formData = $(this).serialize();
+            const url = '@Url.Action("Crear")';
+            
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    if (response.exitoso) {
+                        alert(response.mensaje);
+                        window.location.reload();
+                    } else {
+                        alert(response.mensaje);
+                    }
+                },
+                error: function() {
+                    alert('Error al guardar la sesión');
+                }
+            });
+        });
+    });
+</script>

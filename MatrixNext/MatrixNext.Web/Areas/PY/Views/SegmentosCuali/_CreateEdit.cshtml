@@ -1,0 +1,90 @@
+@model MatrixNext.Web.Models.PY.SegmentosCuali
+
+<form id="formSegmentoCuali" asp-action="Crear" method="post">
+    @Html.AntiForgeryToken()
+    <input asp-for="Id" type="hidden" />
+    <input asp-for="IdTrabajoCuali" type="hidden" />
+    
+    <div class="row g-3">
+        <div class="col-md-8">
+            <label class="form-label">Nombre del Segmento <span class="text-danger">*</span></label>
+            <input asp-for="Nombre" class="form-control" required />
+            <span asp-validation-for="Nombre" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Número Participantes <span class="text-danger">*</span></label>
+            <input asp-for="NumeroParticipantes" type="number" class="form-control" min="1" required />
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Descripción</label>
+        <textarea asp-for="Descripcion" class="form-control" rows="2"></textarea>
+    </div>
+
+    <div class="row g-3 mb-3">
+        <div class="col-md-6">
+            <label class="form-label">Cuota Mínima</label>
+            <input asp-for="CuotaMinima" type="number" class="form-control" min="0" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Cuota Máxima</label>
+            <input asp-for="CuotaMaxima" type="number" class="form-control" min="0" />
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Criterios de Inclusión</label>
+        <textarea asp-for="CriteriosInclusion" class="form-control" rows="3" placeholder="Características que deben tener los participantes..."></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Criterios de Exclusión</label>
+        <textarea asp-for="CriteriosExclusion" class="form-control" rows="3" placeholder="Características que NO deben tener los participantes..."></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Notas</label>
+        <textarea asp-for="Notas" class="form-control" rows="2"></textarea>
+    </div>
+
+    <div class="form-check form-switch mb-3">
+        <input asp-for="Activo" class="form-check-input" />
+        <label class="form-check-label">Activo</label>
+    </div>
+
+    <div class="d-flex justify-content-end gap-2">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-save"></i> Guardar
+        </button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function() {
+        $('#formSegmentoCuali').on('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = $(this).serialize();
+            const url = '@Url.Action("Crear")';
+            
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    if (response.exitoso) {
+                        alert(response.mensaje);
+                        window.location.reload();
+                    } else {
+                        alert(response.mensaje);
+                    }
+                },
+                error: function() {
+                    alert('Error al guardar el segmento');
+                }
+            });
+        });
+    });
+</script>

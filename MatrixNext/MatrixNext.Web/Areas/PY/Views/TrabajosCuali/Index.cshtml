@@ -1,0 +1,179 @@
+@model MatrixNext.Web.ViewModels.FiltrosVM
+@{
+    ViewData["Title"] = "Trabajos Cualitativos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var idProyecto = ViewBag.IdProyecto as long?;
+}
+
+<div class="container-fluid py-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="mb-0">Trabajos Cualitativos</h2>
+            <small class="text-muted">Gestión de trabajos cualitativos (PY_TrabajosCuali)</small>
+        </div>
+        <button class="btn btn-primary" data-url="@Url.Action("Crear")" data-ajax-modal>
+            <i class="bi bi-plus-lg"></i> Nuevo Trabajo Cualitativo
+        </button>
+    </div>
+
+    <form id="filtrosForm" class="row g-2 mb-3" data-grid-target="#gridContainer" data-grid-url="@Url.Action("ObtenerPorProyecto", new { idProyecto })">
+        <input type="hidden" name="idProyecto" value="@idProyecto" />
+        <div class="col-md-4">
+            <input asp-for="Busqueda" class="form-control" placeholder="Buscar por nombre o JobBook" />
+        </div>
+        <div class="col-md-2">
+            <select asp-for="Estado" class="form-select">
+                <option value="">Todos</option>
+                <option value="Nuevo">Nuevo</option>
+                <option value="En Proceso">En Proceso</option>
+                <option value="Finalizado">Finalizado</option>
+                <option value="Anulado">Anulado</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select asp-for="PageSize" class="form-select">
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+            </select>
+        </div>
+        <div class="col-md-4 d-flex align-items-center">
+            <button type="submit" class="btn btn-outline-secondary me-2">Filtrar</button>
+            <button type="button" class="btn btn-outline-light border" id="btnLimpiar">Limpiar</button>
+        </div>
+    </form>
+
+    <div id="gridContainer" data-grid-url="@Url.Action("ObtenerPorProyecto", new { idProyecto })">
+        <partial name="_GridTable" />
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="~/Views/Shared/_ValidationScriptsPartial.cshtml" />
+    <script>
+        (function() {
+            const form = document.getElementById('filtrosForm');
+            const grid = document.getElementById('gridContainer');
+            const btnLimpiar = document.getElementById('btnLimpiar');
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                refreshGrid();
+            });
+
+            btnLimpiar.addEventListener('click', () => {
+                form.reset();
+                refreshGrid();
+            });
+
+            function refreshGrid(page) {
+                const url = grid.dataset.gridUrl;
+                const formData = new FormData(form);
+                if (page) formData.set('PageNumber', page);
+                
+                fetch(url, { 
+                    method: 'GET',
+                    headers: { 'Accept': 'application/json' }
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.exitoso) {
+                        renderGrid(data.datos);
+                    } else {
+                        alert(data.mensaje);
+                    }
+                });
+            }
+
+            function renderGrid(trabajos) {
+                if (!trabajos || trabajos.length === 0) {
+                    grid.innerHTML = '<p class="text-center text-muted">No hay trabajos cualitativos</p>';
+                    return;
+                }
+                
+                let html = `<table class="table table-striped align-middle">
+                    <thead>
+                        <tr>
+                            <th>JobBook</th>
+                            <th>Nombre</th>
+                            <th>Tipo Estudio</th>
+                            <th>Estado</th>
+                            <th>Coordinador</th>
+                            <th class="text-end">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+                
+                trabajos.forEach(t => {
+                    html += `<tr>
+                        <td>${t.jobBook || ''}</td>
+                        <td>${t.nombre}</td>
+                        <td>${t.tipoEstudio}</td>
+                        <td><span class="badge bg-${getEstadoBadge(t.estado)}">${t.estado}</span></td>
+                        <td>${t.idCoordinador || '-'}</td>
+                        <td class="text-end">
+                            <button class="btn btn-sm btn-outline-primary" onclick="editarTrabajo(${t.id})">Editar</button>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="duplicarTrabajo(${t.id})">Duplicar</button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="eliminarTrabajo(${t.id})">Eliminar</button>
+                            <a href="@Url.Action("Index", "SegmentosCuali")?idTrabajo=${t.id}" class="btn btn-sm btn-outline-info">Segmentos</a>
+                        </td>
+                    </tr>`;
+                });
+                
+                html += `</tbody></table>`;
+                grid.innerHTML = html;
+            }
+
+            function getEstadoBadge(estado) {
+                switch(estado) {
+                    case 'Nuevo': return 'primary';
+                    case 'En Proceso': return 'warning';
+                    case 'Finalizado': return 'success';
+                    case 'Anulado': return 'danger';
+                    default: return 'secondary';
+                }
+            }
+
+            window.editarTrabajo = function(id) {
+                fetch(`@Url.Action("ObtenerPorId")?id=${id}`)
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.exitoso) {
+                            // Mostrar modal de edición (implementar modal)
+                            console.log('Editar trabajo:', data.datos);
+                        }
+                    });
+            };
+
+            window.duplicarTrabajo = function(id) {
+                const nuevoNombre = prompt('Ingrese el nombre del nuevo trabajo:');
+                if (!nuevoNombre) return;
+                
+                fetch(`@Url.Action("Duplicar")?id=${id}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nuevoNombre })
+                })
+                .then(r => r.json())
+                .then(data => {
+                    alert(data.mensaje);
+                    if (data.exitoso) refreshGrid();
+                });
+            };
+
+            window.eliminarTrabajo = function(id) {
+                if (!confirm('¿Está seguro de eliminar este trabajo cualitativo?')) return;
+                
+                fetch(`@Url.Action("Eliminar")?id=${id}`, { method: 'DELETE' })
+                    .then(r => r.json())
+                    .then(data => {
+                        alert(data.mensaje);
+                        if (data.exitoso) refreshGrid();
+                    });
+            };
+
+            // Cargar datos iniciales
+            refreshGrid();
+        })();
+    </script>
+}

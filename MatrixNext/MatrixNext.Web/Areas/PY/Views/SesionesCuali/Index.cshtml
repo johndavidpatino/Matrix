@@ -1,0 +1,162 @@
+@model MatrixNext.Web.ViewModels.FiltrosVM
+@{
+    ViewData["Title"] = "Sesiones Cualitativos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var idTrabajo = ViewBag.IdTrabajoCuali as long?;
+    var idSegmento = ViewBag.IdSegmento as long?;
+}
+
+<div class="container-fluid py-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="mb-0">Sesiones Cualitativos</h2>
+            <small class="text-muted">Programación y seguimiento de sesiones cualitativas</small>
+        </div>
+        <div>
+            <a href="@Url.Action("Index", "SegmentosCuali", new { idTrabajo })" class="btn btn-outline-secondary me-2">
+                <i class="bi bi-arrow-left"></i> Volver a Segmentos
+            </a>
+            <button class="btn btn-primary" data-url="@Url.Action("Crear")" data-ajax-modal>
+                <i class="bi bi-plus-lg"></i> Nueva Sesión
+            </button>
+        </div>
+    </div>
+
+    <form id="filtrosForm" class="row g-2 mb-3">
+        <input type="hidden" name="idTrabajoCuali" value="@idTrabajo" />
+        <input type="hidden" name="idSegmento" value="@idSegmento" />
+        <div class="col-md-4">
+            <input asp-for="Busqueda" class="form-control" placeholder="Buscar por nombre..." />
+        </div>
+        <div class="col-md-2">
+            <select asp-for="Estado" class="form-select">
+                <option value="">Todos</option>
+                <option value="Programada">Programada</option>
+                <option value="En Curso">En Curso</option>
+                <option value="Finalizada">Finalizada</option>
+                <option value="Cancelada">Cancelada</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select asp-for="PageSize" class="form-select">
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+            </select>
+        </div>
+        <div class="col-md-4 d-flex align-items-center">
+            <button type="submit" class="btn btn-outline-secondary me-2">Filtrar</button>
+            <button type="button" class="btn btn-outline-light border" id="btnLimpiar">Limpiar</button>
+        </div>
+    </form>
+
+    <div id="gridContainer">
+        <partial name="_GridTable" />
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="~/Views/Shared/_ValidationScriptsPartial.cshtml" />
+    <script>
+        (function() {
+            const idTrabajo = @(idTrabajo ?? 0);
+            const idSegmento = @(idSegmento ?? 0);
+            
+            function cargarSesiones() {
+                let url = `@Url.Action("ObtenerPorTrabajo")?idTrabajoCuali=${idTrabajo}`;
+                if (idSegmento > 0) {
+                    url = `@Url.Action("ObtenerPorSegmento")?idSegmento=${idSegmento}`;
+                }
+                
+                fetch(url)
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.exitoso) {
+                            renderGrid(data.datos);
+                        } else {
+                            alert(data.mensaje);
+                        }
+                    });
+            }
+
+            function renderGrid(sesiones) {
+                const container = document.getElementById('gridContainer');
+                
+                if (!sesiones || sesiones.length === 0) {
+                    container.innerHTML = '<p class="text-center text-muted">No hay sesiones programadas</p>';
+                    return;
+                }
+                
+                let html = `<table class="table table-striped align-middle">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Tipo</th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Ubicación</th>
+                            <th>Moderador</th>
+                            <th>Estado</th>
+                            <th class="text-end">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+                
+                sesiones.forEach(s => {
+                    const fecha = new Date(s.fecha).toLocaleDateString('es-CO');
+                    const badgeClass = getEstadoBadge(s.estado);
+                    
+                    html += `<tr>
+                        <td>${s.nombre}</td>
+                        <td>${s.tipo}</td>
+                        <td>${fecha}</td>
+                        <td>${s.horaInicio} - ${s.horaFin}</td>
+                        <td>${s.ubicacion}</td>
+                        <td>${s.moderador || '-'}</td>
+                        <td><span class="badge ${badgeClass}">${s.estado}</span></td>
+                        <td class="text-end">
+                            <button class="btn btn-sm btn-outline-primary" onclick="editarSesion(${s.id})">Editar</button>
+                            <button class="btn btn-sm btn-outline-info" onclick="registrarAsistencia(${s.id})">Asistencia</button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="eliminarSesion(${s.id})">Eliminar</button>
+                        </td>
+                    </tr>`;
+                });
+                
+                html += `</tbody></table>`;
+                container.innerHTML = html;
+            }
+
+            function getEstadoBadge(estado) {
+                switch(estado) {
+                    case 'Programada': return 'bg-primary';
+                    case 'En Curso': return 'bg-warning text-dark';
+                    case 'Finalizada': return 'bg-success';
+                    case 'Cancelada': return 'bg-danger';
+                    default: return 'bg-secondary';
+                }
+            }
+
+            window.editarSesion = function(id) {
+                console.log('Editar sesión:', id);
+            };
+
+            window.registrarAsistencia = function(id) {
+                // Abrir modal de registro de asistencia
+                console.log('Registrar asistencia sesión:', id);
+            };
+
+            window.eliminarSesion = function(id) {
+                if (!confirm('¿Está seguro de eliminar esta sesión?')) return;
+                
+                fetch(`@Url.Action("Eliminar")?id=${id}`, { method: 'DELETE' })
+                    .then(r => r.json())
+                    .then(data => {
+                        alert(data.mensaje);
+                        if (data.exitoso) cargarSesiones();
+                    });
+            };
+
+            cargarSesiones();
+        })();
+    </script>
+}

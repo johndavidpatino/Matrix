@@ -1,0 +1,143 @@
+@model MatrixNext.Web.ViewModels.FiltrosVM
+@{
+    ViewData["Title"] = "Segmentos Cualitativos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var idTrabajo = ViewBag.IdTrabajoCuali as long?;
+}
+
+<div class="container-fluid py-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="mb-0">Segmentos Cualitativos</h2>
+            <small class="text-muted">Gestión de segmentos para trabajo cualitativo</small>
+        </div>
+        <div>
+            <a href="@Url.Action("Index", "TrabajosCuali")" class="btn btn-outline-secondary me-2">
+                <i class="bi bi-arrow-left"></i> Volver a Trabajos
+            </a>
+            <button class="btn btn-primary" data-url="@Url.Action("Crear")" data-ajax-modal>
+                <i class="bi bi-plus-lg"></i> Nuevo Segmento
+            </button>
+        </div>
+    </div>
+
+    <form id="filtrosForm" class="row g-2 mb-3">
+        <input type="hidden" name="idTrabajoCuali" value="@idTrabajo" />
+        <div class="col-md-6">
+            <input asp-for="Busqueda" class="form-control" placeholder="Buscar por nombre..." />
+        </div>
+        <div class="col-md-2">
+            <select asp-for="PageSize" class="form-select">
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+            </select>
+        </div>
+        <div class="col-md-4 d-flex align-items-center">
+            <button type="submit" class="btn btn-outline-secondary me-2">Filtrar</button>
+            <button type="button" class="btn btn-outline-light border" id="btnLimpiar">Limpiar</button>
+        </div>
+    </form>
+
+    <div id="gridContainer">
+        <partial name="_GridTable" />
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="~/Views/Shared/_ValidationScriptsPartial.cshtml" />
+    <script>
+        (function() {
+            const idTrabajo = @(idTrabajo ?? 0);
+            
+            function cargarSegmentos() {
+                fetch(`@Url.Action("ObtenerPorTrabajo")?idTrabajoCuali=${idTrabajo}`)
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.exitoso) {
+                            renderGrid(data.datos);
+                            cargarTotalParticipantes();
+                        } else {
+                            alert(data.mensaje);
+                        }
+                    });
+            }
+
+            function cargarTotalParticipantes() {
+                fetch(`@Url.Action("ObtenerTotalParticipantes")?idTrabajoCuali=${idTrabajo}`)
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.exitoso) {
+                            console.log('Total participantes:', data.datos);
+                        }
+                    });
+            }
+
+            function renderGrid(segmentos) {
+                const container = document.getElementById('gridContainer');
+                
+                if (!segmentos || segmentos.length === 0) {
+                    container.innerHTML = '<p class="text-center text-muted">No hay segmentos definidos</p>';
+                    return;
+                }
+                
+                let html = `<table class="table table-striped align-middle">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th>Cuota</th>
+                            <th>Edad Min-Max</th>
+                            <th>Género</th>
+                            <th class="text-end">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+                
+                segmentos.forEach(s => {
+                    html += `<tr>
+                        <td>${s.nombre}</td>
+                        <td>${s.descripcion || '-'}</td>
+                        <td>${s.cuota}</td>
+                        <td>${s.edadMinima}-${s.edadMaxima}</td>
+                        <td>${s.genero || 'Todos'}</td>
+                        <td class="text-end">
+                            <button class="btn btn-sm btn-outline-primary" onclick="editarSegmento(${s.id})">Editar</button>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="duplicarSegmento(${s.id})">Duplicar</button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="eliminarSegmento(${s.id})">Eliminar</button>
+                        </td>
+                    </tr>`;
+                });
+                
+                html += `</tbody></table>`;
+                container.innerHTML = html;
+            }
+
+            window.editarSegmento = function(id) {
+                console.log('Editar segmento:', id);
+            };
+
+            window.duplicarSegmento = function(id) {
+                fetch(`@Url.Action("Duplicar")?id=${id}`, { method: 'POST' })
+                    .then(r => r.json())
+                    .then(data => {
+                        alert(data.mensaje);
+                        if (data.exitoso) cargarSegmentos();
+                    });
+            };
+
+            window.eliminarSegmento = function(id) {
+                if (!confirm('¿Está seguro de eliminar este segmento?')) return;
+                
+                fetch(`@Url.Action("Eliminar")?id=${id}`, { method: 'DELETE' })
+                    .then(r => r.json())
+                    .then(data => {
+                        alert(data.mensaje);
+                        if (data.exitoso) cargarSegmentos();
+                    });
+            };
+
+            cargarSegmentos();
+        })();
+    </script>
+}

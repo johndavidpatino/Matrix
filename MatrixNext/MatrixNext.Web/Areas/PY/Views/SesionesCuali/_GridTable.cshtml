@@ -1,0 +1,56 @@
+@model IEnumerable<MatrixNext.Web.Models.PY.SesionesCuali>
+
+<table class="table table-striped align-middle">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Tipo</th>
+            <th>Fecha</th>
+            <th>Horario</th>
+            <th>Ubicación</th>
+            <th>Moderador</th>
+            <th>Participantes</th>
+            <th>Estado</th>
+            <th class="text-end">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+    @if (Model != null && Model.Any())
+    {
+        foreach (var item in Model)
+        {
+            var badgeClass = item.Estado switch
+            {
+                "Programada" => "bg-primary",
+                "En Curso" => "bg-warning text-dark",
+                "Finalizada" => "bg-success",
+                "Cancelada" => "bg-danger",
+                _ => "bg-secondary"
+            };
+            
+            <tr>
+                <td>@item.Nombre</td>
+                <td>@item.Tipo</td>
+                <td>@item.FechaProgramada.ToShortDateString()</td>
+                <td>@item.HoraInicio - @item.HoraFin</td>
+                <td>@item.Ubicacion</td>
+                <td>@(item.Moderador ?? "-")</td>
+                <td>
+                    @(item.NumeroParticipantesReal ?? 0) / @(item.NumeroParticipantesPlaneado ?? 0)
+                </td>
+                <td><span class="badge @badgeClass">@item.Estado</span></td>
+                <td class="text-end">
+                    <button class="btn btn-sm btn-outline-primary" data-url="@Url.Action("ObtenerPorId", new { id = item.Id })" data-ajax-modal>Editar</button>
+                    <button class="btn btn-sm btn-outline-info" data-url="@Url.Action("RegistrarAsistencia", new { id = item.Id })" data-ajax-modal>Asistencia</button>
+                    <button class="btn btn-sm btn-outline-secondary" data-url="@Url.Action("CambiarEstado", new { id = item.Id })" data-ajax-modal>Estado</button>
+                    <button class="btn btn-sm btn-outline-danger" data-delete data-url="@Url.Action("Eliminar", new { id = item.Id })">Eliminar</button>
+                </td>
+            </tr>
+        }
+    }
+    else
+    {
+        <tr><td colspan="9" class="text-center text-muted">Sin sesiones programadas</td></tr>
+    }
+    </tbody>
+</table>
