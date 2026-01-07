@@ -491,16 +491,126 @@ Versión: 1.0
 
 ---
 
-## 🎯 SPRINT 6: REPORTES (2 semanas, 1 dev)
+## 🎯 SPRINT 6: REPORTES & DASHBOARDS (2 semanas, 1 dev)
 
-**Objetivo:** Dashboards, tráfico, auditoría.
+**Objetivo:** Dashboards operacionales, reportes de tráfico y auditoría.  
+**Estado:** 🚧 EN PROGRESO (7 enero 2026) - 3/6 tareas completadas
 
-### Tareas (Resumen)
+### Reportes Priorizados (Basado en análisis legacy RP_Reportes/)
 
-- [ ] **T6.1** - Reportes PY: Proyectos por gerente, Trabajos por estado
-- [ ] **T6.2** - Reportes CORE: Tráfico tareas, Historial cambios estado
-- [ ] **T6.3** - Reportes OP: Muestras, Estimaciones
-- [ ] **T6.4** - Auditoría: Quién cambió qué, cuándo (log viewer)
+#### Categoría 1: Dashboards Operacionales (Alta Prioridad)
+- **TrabajosPorGerencia.aspx** → Dashboard PY trabajos
+- **TraficoGeneralOperaciones.aspx** → Dashboard CORE tráfico tareas
+- **IndicadoresCumplimientoTareas.aspx** → Dashboard CORE indicadores
+
+#### Categoría 2: Reportes Analíticos (Media Prioridad)
+- **PlaneacionOperaciones.aspx** → Planeación general
+- **ReportesCumplimientoTareas.aspx** → Cumplimiento por gerente
+
+#### Categoría 3: Auditoría (Baja Prioridad - Sprint 7)
+- Log de cambios de estado (tabla de auditoría)
+- Historial de modificaciones
+
+### Tareas
+
+- [x] **T6.1** - Dashboard PY: Trabajos por Gerente/Estado
+  - Controller: `Areas/PY/Controllers/DashboardController.cs`
+  - Service: `Services/PY/DashboardService.cs` + `IDashboardService.cs`
+  - Métodos implementados:
+    - ObtenerResumenGeneralAsync() - Totales por unidad
+    - ObtenerTrabajosPorGerenteAsync() - Agrupado por gerente
+    - ObtenerTrabajosPorEstadoAsync() - Distribución por estado
+    - ObtenerDetalleTrabajosAsync() - Grid paginado con filtros
+  - View: `Areas/PY/Views/Dashboard/Index.cshtml` (520 líneas)
+  - Features implementadas:
+    - ✅ 4 Cards KPI (proyectos, trabajos activos, total, atrasados)
+    - ✅ Gráfico Chart.js doughnut (trabajos por estado)
+    - ✅ Gráfico Chart.js bar stacked (trabajos por gerente)
+    - ✅ Filtros: Unidad, Gerente, Rango fechas
+    - ✅ Grid detalle paginado (20 items/página)
+    - ✅ Search bar con debounce
+    - ⚠️ Export Excel pendiente (diferido a T6.4)
+  - Ref: `TrabajosPorGerencia.aspx` legacy
+  - **Commit:** `38a9b14 [SPRINT 6] T6.1: Dashboard PY - Proyectos y Trabajos (Service + Controller + View + Chart.js)`
+
+- [x] **T6.2** - Dashboard CORE: Tráfico de Tareas
+  - Controller: `Areas/CORE/Controllers/WorkFlowDashboardController.cs`
+  - Service: `Services/CORE/WorkFlowDashboardService.cs` + `IWorkFlowDashboardService.cs`
+  - Métodos implementados:
+    - ObtenerResumenGeneralAsync() - KPIs generales (activas, atrasadas, próximas a vencer)
+    - ObtenerTareasPorEstadoAsync() - Agrupado por estado con % atraso
+    - ObtenerTareasPorPrioridadAsync() - Alta/Normal/Baja con atrasos
+    - ObtenerTareasProximasAVencerAsync() - Alarma 3 días
+    - ObtenerDetalleTareasAsync() - Grid paginado con filtros
+    - ObtenerTareasPorUsuarioAsync() - Carga de trabajo por usuario
+  - View: `Areas/CORE/Views/WorkFlowDashboard/Index.cshtml` (580 líneas)
+  - Features implementadas:
+    - ✅ 4 Cards KPI (total tareas, activas, atrasadas, próximas a vencer)
+    - ✅ Gráfico Chart.js doughnut (tareas por estado)
+    - ✅ Gráfico Chart.js bar (tareas por prioridad con atrasos)
+    - ✅ Tabla crítica: Tareas próximas a vencer (highlight urgentes)
+    - ✅ Filtros: Tipo hilo, Estado, Prioridad
+    - ✅ Grid detalle paginado con badges de estado
+    - ⚠️ Modal reasignar tarea pendiente (diferido)
+  - Ref: `TraficoGeneralOperaciones.aspx`, `IndicadoresCumplimientoTareas.aspx` legacy
+  - **Commit:** `aa6055e [SPRINT 6] T6.2: Dashboard CORE - Tráfico de Tareas/WorkFlow (Service + Controller + View + Charts)`
+
+- [x] **T6.3** - Dashboard CORE: Indicadores de Cumplimiento
+  - Controller: `Areas/CORE/Controllers/IndicadoresController.cs`
+  - Service: `Services/CORE/IndicadoresCumplimientoService.cs` + `IIndicadoresCumplimientoService.cs`
+  - Métodos implementados:
+    - ObtenerResumenIndicadoresAsync() - KPIs generales (% cumplimiento, % atrasadas, promedio días)
+    - ObtenerIndicadoresPorGerenteAsync() - Cumplimiento por gerente
+    - ObtenerIndicadoresPorTipoHiloAsync() - Cumplimiento por tipo de hilo
+  - View: `Areas/CORE/Views/Indicadores/Index.cshtml`
+  - Features implementadas:
+    - ✅ 5 Cards KPI (% cumplimiento, % atrasadas, completadas, atrasadas, promedio días)
+    - ✅ Tabla indicadores por tipo hilo (ordenado por % cumplimiento)
+    - ✅ API REST endpoints (3 endpoints)
+    - ⚠️ Gráficos de tendencia pendientes (requiere datos históricos)
+    - ⚠️ Top 10 tareas críticas diferido
+  - Ref: `IndicadoresCumplimientoTareas.aspx`, `ReportesCumplimientoTareas.aspx` legacy
+  - **Commit:** `468d8e0 [SPRINT 6] T6.3: Indicadores CORE - Cumplimiento de Tareas (Service + Controller + View)`
+
+- [ ] **T6.4** - Shared: ExportService (Excel/PDF)
+  - Service: `Services/Shared/ExportService.cs`
+  - Dependencies: EPPlus (Excel), iText7 o DinkToPdf (PDF)
+  - Métodos:
+    - `ExportarExcelAsync<T>(List<T> data, string nombreArchivo)`
+    - `ExportarPdfAsync(byte[] htmlContent, string nombreArchivo)`
+  - Usar en: Dashboards T6.1-T6.3
+  - **Commit:** `feat: add ExportService (Excel + PDF export)`
+
+- [ ] **T6.5** - Shared: ChartDataService (preparación datos gráficos)
+  - Service: `Services/Shared/ChartDataService.cs`
+  - Métodos:
+    - `PrepararDatosBarras(Dictionary<string, int> datos)`
+    - `PrepararDatosLinea(Dictionary<DateTime, decimal> datos)`
+    - `PrepararDatosPie(Dictionary<string, int> datos)`
+  - Output: JSON compatible con Chart.js
+  - **Commit:** `feat: add ChartDataService (Chart.js data formatting)`
+
+- [ ] **T6.6** - Testing: Validar performance reportes
+  - Test: Consultas con 10k+ registros (debe < 3 segundos)
+  - Test: Exportar Excel 5k+ filas (debe < 5 segundos)
+  - Test: Gráficos renderizan correctamente con datos vacíos
+  - **Commit:** `test: add dashboard performance tests`
+
+**Resumen Sprint 6:**
+- ✅ 3 commits realizados (38a9b14, aa6055e, 468d8e0)
+- ✅ Compilación exitosa (dotnet build sin errores)
+- ✅ ~2,800 LOC insertadas (12 archivos nuevos)
+- ✅ 3 servicios + 3 controllers + 3 vistas implementados
+- ✅ 13 API endpoints operacionales (REST JSON)
+- ✅ Chart.js integrado con datos dinámicos en 3 dashboards
+- ⏳ **Pendiente:** ExportService (T6.4), ChartDataService (T6.5), Performance Tests (T6.6)
+- 📊 **Progreso:** 50% completado (3/6 tareas)
+
+**Notas importantes:**
+- Dashboards operacionales listos para demo con datos reales
+- Export Excel diferido a T6.4 (funcionalidad de botones preparada)
+- Chart.js ya configurado, T6.5 solo formateará datos si se requiere optimización
+- Servicios usan EF Core + LINQ (sin SP legacy por ahora)
 
 ---
 
@@ -523,11 +633,13 @@ Versión: 1.0
 | --- | --- | --- | --- | --- | --- |
 | **0** | 1 sem | 1 | DbContext, Services, Partials, GrafoAciclico | ✅ Base para todos | 7 |
 | **1** | 2 sem | 1 | CORE catálogos (Tareas, Precedencias) | ✅ COMPLETADO | 6 |
-| **2** | 3 sem | 1 | PY maestros (Proyectos, Trabajos) + WorkFlow | ✅ Bloquea Sprint 3 | 11 |
-| **3** | 2 sem | 1 | CORE operación (Asignaciones, Estado, Auditoría) | — | 9 |
-| **4** | 3 sem | 1 | Cualitativos (PY + OP) | — | 18 |
-| **5** | 2 sem | 1 | Asignaciones/Reasignaciones | — | 9 |
-| **6** | 2 sem | 1 | Reportes (PY, CORE, OP, Auditoría) | — | 4 |
+| **2** | 3 sem | 1 | PY maestros (Proyectos, Trabajos) + WorkFlow | ✅ COMPLETADO | 11 |
+| **3** | 2 sem | 1 | CORE operación (Asignaciones, Estado, Auditoría) | ✅ COMPLETADO | 9 |
+| **4** | 3 sem | 1 | Cualitativos (PY + OP) | ✅ COMPLETADO | 4 |
+| **5** | 2 sem | 1 | Asignaciones/Reasignaciones | ✅ COMPLETADO | 3 |
+| **6** | 2 sem | 1 | Reportes & Dashboards (PY, CORE) | 🚧 EN PROGRESO (50%) | 3 |
+| **7** | 3+ sem | 1 | Testing E2E, Performance, Deploy | — | 0 |
+| **TOTAL** | **18-20 sem** | **1** | **Migración completa** | — | **43/76 commits** |
 | **7** | 3+ sem | 1 | Testing E2E, Performance, Deploy | — | 10 |
 | **TOTAL** | **18-20 sem** | **1** | **Migración completa** | — | **76 commits** |
 
