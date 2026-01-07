@@ -1,0 +1,304 @@
+@* Modal para cambiar estado de tarea con validación de precedencias *@
+
+<div class="modal fade" id="modalCambiarEstado" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <!-- Header -->
+            <div class="modal-header bg-primary text-white">
+                <div>
+                    <h5 class="modal-title mb-0">
+                        <i class="bi bi-arrow-repeat"></i> Cambiar estado de la tarea
+                    </h5>
+                    <small class="text-white-50">Verificando dependencias...</small>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" id="btnCerrarModal"></button>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body">
+                <input type="hidden" id="modalIdWorkFlow" />
+                <input type="hidden" id="modalIdTarea" />
+
+                <!-- Información actual -->
+                <div class="alert alert-info mb-4" role="alert">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="mb-1"><strong>ID Tarea:</strong> <span id="infoIdTarea">-</span></p>
+                            <p class="mb-0"><strong>Estado actual:</strong> <span id="infoEstadoActual" class="badge">-</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-1"><strong>Descripción:</strong> <span id="infoDescripcion">-</span></p>
+                            <p class="mb-0"><strong>Asignado a:</strong> <span id="infoAsignadoA">-</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alerta de precedencias pendientes -->
+                <div id="alertaPrecedencias" class="alert alert-warning d-none" role="alert">
+                    <div class="d-flex mb-2">
+                        <div>
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            <strong>⚠️ PRECEDENCIAS PENDIENTES</strong>
+                        </div>
+                    </div>
+                    <p class="mb-2">No puedes avanzar esta tarea porque las siguientes dependen de ti:</p>
+                    <ul id="listaPrecedencias" class="mb-2">
+                        <!-- Se llena dinámicamente -->
+                    </ul>
+                    <small class="text-muted">
+                        <i class="bi bi-info-circle"></i> 
+                        Completa o anula las tareas anteriores para proceder.
+                    </small>
+                </div>
+
+                <!-- Alert de validación exitosa -->
+                <div id="alertaValidacionOk" class="alert alert-success d-none" role="alert">
+                    <i class="bi bi-check-circle"></i>
+                    <strong>✓ Validación correcta</strong> - Esta tarea está lista para el siguiente estado
+                </div>
+
+                <!-- Selección de nuevo estado -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold">
+                        <i class="bi bi-flag"></i> Nuevo estado
+                    </label>
+                    <div class="btn-group w-100" role="group">
+                        <input type="radio" class="btn-check" name="nuevoEstado" id="estadoEnProgreso" value="EnProgreso">
+                        <label class="btn btn-outline-info" for="estadoEnProgreso">
+                            <i class="bi bi-hourglass-split"></i> En Progreso
+                        </label>
+
+                        <input type="radio" class="btn-check" name="nuevoEstado" id="estadoCompletada" value="Completada">
+                        <label class="btn btn-outline-success" for="estadoCompletada">
+                            <i class="bi bi-check-lg"></i> Completada
+                        </label>
+
+                        <input type="radio" class="btn-check" name="nuevoEstado" id="estadoAnulada" value="Anulada">
+                        <label class="btn btn-outline-danger" for="estadoAnulada">
+                            <i class="bi bi-x-lg"></i> Anulada
+                        </label>
+                    </div>
+                    <small class="d-block mt-2 text-muted">
+                        <i class="bi bi-info-circle"></i>
+                        Selecciona el estado al que deseas cambiar la tarea
+                    </small>
+                </div>
+
+                <!-- Sección de motivo (solo para Anulada) -->
+                <div id="seccionMotivo" class="mb-4 d-none">
+                    <label class="form-label fw-bold">
+                        <i class="bi bi-exclamation-circle"></i> Motivo de anulación *
+                    </label>
+                    <select id="motivoAnulacion" class="form-select">
+                        <option value="">-- Selecciona un motivo --</option>
+                        <option value="no-requerida">No es requerida</option>
+                        <option value="cambio-requerimientos">Cambio en requerimientos</option>
+                        <option value="error-asignacion">Error en asignación</option>
+                        <option value="otros">Otros</option>
+                    </select>
+                </div>
+
+                <!-- Observación -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold">
+                        <i class="bi bi-chat-left"></i> Observación / Comentario
+                    </label>
+                    <textarea id="modalObservacion" class="form-control" rows="3" 
+                        placeholder="Agreg un comentario sobre este cambio (máximo 500 caracteres)..."
+                        maxlength="500"></textarea>
+                    <small class="d-block mt-2 text-muted">
+                        <span id="charCount">0</span>/500 caracteres
+                    </small>
+                </div>
+
+                <!-- Spinner de carga -->
+                <div id="spinnerValidacion" class="text-center py-4 d-none">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Validando...</span>
+                    </div>
+                    <p class="mt-2 text-muted">Validando precedencias...</p>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer bg-light">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelarCambio">
+                    <i class="bi bi-x-circle"></i> Cancelar
+                </button>
+                <button type="button" class="btn btn-primary" id="btnConfirmarCambio" disabled>
+                    <i class="bi bi-check-circle"></i> Confirmar cambio
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Controlar modal de cambiar estado
+(function() {
+    const modal = document.getElementById('modalCambiarEstado');
+    const inputIdWorkFlow = document.getElementById('modalIdWorkFlow');
+    const inputIdTarea = document.getElementById('modalIdTarea');
+    const btnConfirmar = document.getElementById('btnConfirmarCambio');
+    const textareaObservacion = document.getElementById('modalObservacion');
+    const charCount = document.getElementById('charCount');
+    const seccionMotivo = document.getElementById('seccionMotivo');
+    const radiosEstado = document.querySelectorAll('input[name="nuevoEstado"]');
+
+    // Contador de caracteres
+    textareaObservacion.addEventListener('input', function() {
+        charCount.textContent = this.value.length;
+    });
+
+    // Mostrar/ocultar motivo según estado
+    radiosEstado.forEach(radio => {
+        radio.addEventListener('change', function() {
+            seccionMotivo.classList.toggle('d-none', this.value !== 'Anulada');
+            validarFormulario();
+        });
+    });
+
+    // Validar formulario
+    function validarFormulario() {
+        const estadoSeleccionado = document.querySelector('input[name="nuevoEstado"]:checked');
+        const mostraAlerta = document.getElementById('alertaPrecedencias');
+        const mostrarMotivo = seccionMotivo.classList.contains('d-none') === false;
+        const motivoCompleto = mostrarMotivo ? document.getElementById('motivoAnulacion').value !== '' : true;
+
+        const esValido = estadoSeleccionado && !mostraAlerta.classList.contains('d-none') === false && motivoCompleto;
+        btnConfirmar.disabled = !esValido;
+    }
+
+    // Cuando se abre el modal
+    if (modal) {
+        modal.addEventListener('show.bs.modal', async function() {
+            const idWorkFlow = inputIdWorkFlow.value;
+            if (idWorkFlow) {
+                await validarPrecedenciasModal(idWorkFlow);
+                resetearFormulario();
+            }
+        });
+    }
+
+    // Confirmar cambio
+    btnConfirmar.addEventListener('click', async function() {
+        const idWorkFlow = inputIdWorkFlow.value;
+        const estadoSeleccionado = document.querySelector('input[name="nuevoEstado"]:checked')?.value;
+        const observacion = textareaObservacion.value;
+        const idUsuario = @User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? 0;
+
+        if (!estadoSeleccionado) {
+            alert('Debes seleccionar un estado');
+            return;
+        }
+
+        btnConfirmar.disabled = true;
+        btnConfirmar.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Procesando...';
+
+        try {
+            const response = await fetch(
+                `/api/core/gestiontareas/cambiar-estado?idWorkFlow=${idWorkFlow}&nuevoEstado=${estadoSeleccionado}&idUsuario=${idUsuario}&observacion=${encodeURIComponent(observacion)}`,
+                { method: 'POST' }
+            );
+            const data = await response.json();
+
+            if (data.exitoso) {
+                mostrarNotificacionExito(data.mensaje);
+                bootstrap.Modal.getInstance(modal).hide();
+                // Recargar tareas
+                window.location.reload();
+            } else {
+                mostrarNotificacionError(data.mensaje);
+            }
+        } catch (error) {
+            mostrarNotificacionError('Error al procesar el cambio');
+        } finally {
+            btnConfirmar.disabled = false;
+            btnConfirmar.innerHTML = '<i class="bi bi-check-circle"></i> Confirmar cambio';
+        }
+    });
+
+    // Resetear formulario
+    function resetearFormulario() {
+        document.querySelectorAll('input[name="nuevoEstado"]').forEach(r => r.checked = false);
+        textareaObservacion.value = '';
+        charCount.textContent = '0';
+        seccionMotivo.classList.add('d-none');
+        btnConfirmar.disabled = true;
+    }
+
+    // Validar precedencias
+    async function validarPrecedenciasModal(idWorkFlow) {
+        document.getElementById('spinnerValidacion').classList.remove('d-none');
+        
+        try {
+            const response = await fetch(`/api/core/gestiontareas/tareas-previas/${idWorkFlow}`);
+            const data = await response.json();
+
+            const alertaPrecedencias = document.getElementById('alertaPrecedencias');
+            const listaPrecedencias = document.getElementById('listaPrecedencias');
+            const alertaValidacionOk = document.getElementById('alertaValidacionOk');
+
+            if (data.datos && data.datos.tareasPendientes > 0) {
+                alertaPrecedencias.classList.remove('d-none');
+                alertaValidacionOk.classList.add('d-none');
+                listaPrecedencias.innerHTML = (data.datos.tareas || []).map(t => 
+                    `<li class="mb-1">
+                        <strong>#${t.id}</strong> - ${t.descripcion} 
+                        <span class="badge ${getEstadoBadgeClass(t.estado)}">${t.estado}</span>
+                    </li>`
+                ).join('');
+            } else {
+                alertaPrecedencias.classList.add('d-none');
+                alertaValidacionOk.classList.remove('d-none');
+            }
+        } catch (error) {
+            console.error('Error validando precedencias:', error);
+        } finally {
+            document.getElementById('spinnerValidacion').classList.add('d-none');
+        }
+    }
+
+    function getEstadoBadgeClass(estado) {
+        const clases = {
+            'Creada': 'bg-secondary',
+            'EnProgreso': 'bg-info',
+            'Completada': 'bg-success',
+            'Anulada': 'bg-danger'
+        };
+        return clases[estado] || 'bg-light';
+    }
+
+    function mostrarNotificacionExito(mensaje) {
+        const toast = document.createElement('div');
+        toast.className = 'toast position-fixed bottom-0 end-0 m-3';
+        toast.setAttribute('role', 'alert');
+        toast.innerHTML = `
+            <div class="toast-header bg-success text-white">
+                <i class="bi bi-check-circle me-2"></i>
+                <strong>Éxito</strong>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body">${mensaje}</div>
+        `;
+        document.body.appendChild(toast);
+        new bootstrap.Toast(toast).show();
+    }
+
+    function mostrarNotificacionError(mensaje) {
+        const toast = document.createElement('div');
+        toast.className = 'toast position-fixed bottom-0 end-0 m-3';
+        toast.setAttribute('role', 'alert');
+        toast.innerHTML = `
+            <div class="toast-header bg-danger text-white">
+                <i class="bi bi-exclamation-circle me-2"></i>
+                <strong>Error</strong>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body">${mensaje}</div>
+        `;
+        document.body.appendChild(toast);
+        new bootstrap.Toast(toast).show();
+    }
+})();
+</script>

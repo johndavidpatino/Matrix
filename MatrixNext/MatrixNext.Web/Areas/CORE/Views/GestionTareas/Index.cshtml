@@ -1,0 +1,436 @@
+@{
+    ViewData["Title"] = "Mis Trabajos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1>Mis Trabajos</h1>
+            <p class="text-muted">Tareas asignadas que requieren tu atención</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <button class="btn btn-primary" id="btnRefresh" title="Actualizar lista">
+                <i class="bi bi-arrow-clockwise"></i> Actualizar
+            </button>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Filtrar por estado</label>
+                    <select id="filterEstado" class="form-select">
+                        <option value="">-- Todos los estados --</option>
+                        <option value="Creada">Creada</option>
+                        <option value="EnProgreso">En Progreso</option>
+                        <option value="Completada">Completada</option>
+                        <option value="Anulada">Anulada</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Filtrar por prioridad</label>
+                    <select id="filterPrioridad" class="form-select">
+                        <option value="">-- Todas --</option>
+                        <option value="1">Normal</option>
+                        <option value="2">Alta</option>
+                        <option value="3">Baja</option>
+                    </select>
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <button class="btn btn-outline-secondary w-100" id="btnLimpiarFiltros">
+                        <i class="bi bi-x-circle"></i> Limpiar filtros
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grid de tareas -->
+    <div class="card">
+        <div class="card-header bg-light">
+            <h5 class="mb-0">
+                <i class="bi bi-list-check"></i> Tareas pendientes
+                <span id="totalTareas" class="badge bg-info ms-2">0</span>
+            </h5>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0" id="gridTareas">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width: 10%;">ID</th>
+                        <th style="width: 30%;">Nombre Trabajo</th>
+                        <th style="width: 15%;">Estado</th>
+                        <th style="width: 10%;">Prioridad</th>
+                        <th style="width: 15%;">Vencimiento</th>
+                        <th style="width: 20%;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="bodyTareas">
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-4">
+                            <i class="bi bi-hourglass-split"></i> Cargando tareas...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Cambiar estado -->
+<div class="modal fade" id="modalCambiarEstado" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-gear"></i> Cambiar estado de la tarea
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="modalIdWorkFlow" />
+                
+                <div class="mb-3">
+                    <label class="form-label">Nuevo estado</label>
+                    <select id="modalNuevoEstado" class="form-select" required>
+                        <option value="">-- Selecciona estado --</option>
+                        <option value="EnProgreso">En Progreso</option>
+                        <option value="Completada">Completada</option>
+                        <option value="Anulada">Anulada</option>
+                    </select>
+                </div>
+
+                <div id="alertaPrecedencias" class="alert alert-warning d-none" role="alert">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    <strong>Precedencias pendientes:</strong>
+                    <ul id="listaPrecedencias" class="mb-0 mt-2"></ul>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Observación (opcional)</label>
+                    <textarea id="modalObservacion" class="form-control" rows="3" 
+                        placeholder="Agrega un comentario sobre este cambio..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="btnConfirmarCambio">
+                    <i class="bi bi-check-circle"></i> Confirmar cambio
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Agregar comentario -->
+<div class="modal fade" id="modalComentario" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-chat-left"></i> Agregar comentario
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="comentarioIdWorkFlow" />
+                <div class="mb-3">
+                    <label class="form-label">Comentario</label>
+                    <textarea id="comentarioTexto" class="form-control" rows="4" 
+                        placeholder="Escribe tu comentario..." required></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="btnEnviarComentario">
+                    <i class="bi bi-send"></i> Enviar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Variables globales
+        const idUsuarioActual = @User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? 0;
+        let mistTareas = [];
+
+        // Cargar tareas al iniciar
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarTareas();
+            
+            // Event listeners
+            document.getElementById('btnRefresh').addEventListener('click', cargarTareas);
+            document.getElementById('btnLimpiarFiltros').addEventListener('click', limpiarFiltros);
+            document.getElementById('filterEstado').addEventListener('change', filtrarTareas);
+            document.getElementById('filterPrioridad').addEventListener('change', filtrarTareas);
+            document.getElementById('btnConfirmarCambio').addEventListener('click', confirmarCambioEstado);
+            document.getElementById('btnEnviarComentario').addEventListener('click', enviarComentario);
+        });
+
+        // Cargar tareas desde API
+        async function cargarTareas() {
+            try {
+                const response = await fetch(`/api/core/gestiontareas/mis-tareas/${idUsuarioActual}`);
+                const data = await response.json();
+
+                if (data.exitoso) {
+                    mistTareas = data.datos;
+                    document.getElementById('totalTareas').textContent = mistTareas.length;
+                    renderizarTareas(mistTareas);
+                } else {
+                    mostrarError(data.mensaje);
+                }
+            } catch (error) {
+                console.error('Error al cargar tareas:', error);
+                mostrarError('Error al cargar las tareas');
+            }
+        }
+
+        // Renderizar tareas en la tabla
+        function renderizarTareas(tareas) {
+            const tbody = document.getElementById('bodyTareas');
+            
+            if (tareas.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-4">
+                            <i class="bi bi-check-all"></i> No hay tareas pendientes
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = tareas.map(tarea => `
+                <tr>
+                    <td><strong>#${tarea.id}</strong></td>
+                    <td>
+                        <div class="fw-bold">${tarea.idTrabajo || 'Sin trabajo'}</div>
+                        <small class="text-muted">Tarea ${tarea.idTarea}</small>
+                    </td>
+                    <td>
+                        <span class="badge ${getEstadoBadge(tarea.estado)}">
+                            ${tarea.estado || 'N/A'}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge ${getPrioridadBadge(tarea.prioridad)}">
+                            ${getPrioridadTexto(tarea.prioridad)}
+                        </span>
+                    </td>
+                    <td>
+                        ${formatearFecha(tarea.fechaVencimiento) || '-'}
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" onclick="abrirModalCambiarEstado(${tarea.id})" 
+                            title="Cambiar estado">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-info" onclick="abrirModalComentario(${tarea.id})"
+                            title="Agregar comentario">
+                            <i class="bi bi-chat"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Abrir modal para cambiar estado
+        async function abrirModalCambiarEstado(idWorkFlow) {
+            document.getElementById('modalIdWorkFlow').value = idWorkFlow;
+            document.getElementById('modalNuevoEstado').value = '';
+            document.getElementById('modalObservacion').value = '';
+            
+            // Validar precedencias
+            await validarPrecedencias(idWorkFlow);
+            
+            const modal = new bootstrap.Modal(document.getElementById('modalCambiarEstado'));
+            modal.show();
+        }
+
+        // Validar precedencias antes de cambiar estado
+        async function validarPrecedencias(idWorkFlow) {
+            try {
+                const response = await fetch(`/api/core/gestiontareas/tareas-previas/${idWorkFlow}`);
+                const data = await response.json();
+
+                const alertaPrecedencias = document.getElementById('alertaPrecedencias');
+                const listaPrecedencias = document.getElementById('listaPrecedencias');
+
+                if (data.datos.tareasPendientes > 0) {
+                    alertaPrecedencias.classList.remove('d-none');
+                    listaPrecedencias.innerHTML = data.datos.tareas.map(t => 
+                        `<li>Tarea #${t.id} - Estado: ${t.estado}</li>`
+                    ).join('');
+                } else {
+                    alertaPrecedencias.classList.add('d-none');
+                }
+            } catch (error) {
+                console.error('Error al validar precedencias:', error);
+            }
+        }
+
+        // Confirmar cambio de estado
+        async function confirmarCambioEstado() {
+            const idWorkFlow = document.getElementById('modalIdWorkFlow').value;
+            const nuevoEstado = document.getElementById('modalNuevoEstado').value;
+            const observacion = document.getElementById('modalObservacion').value;
+
+            if (!nuevoEstado) {
+                mostrarError('Debes seleccionar un nuevo estado');
+                return;
+            }
+
+            try {
+                const response = await fetch(
+                    `/api/core/gestiontareas/cambiar-estado?idWorkFlow=${idWorkFlow}&nuevoEstado=${nuevoEstado}&idUsuario=${idUsuarioActual}&observacion=${encodeURIComponent(observacion)}`,
+                    { method: 'POST' }
+                );
+                const data = await response.json();
+
+                if (data.exitoso) {
+                    mostrarExito(data.mensaje);
+                    bootstrap.Modal.getInstance(document.getElementById('modalCambiarEstado')).hide();
+                    cargarTareas();
+                } else {
+                    mostrarError(data.mensaje);
+                }
+            } catch (error) {
+                console.error('Error al cambiar estado:', error);
+                mostrarError('Error al cambiar el estado');
+            }
+        }
+
+        // Abrir modal para agregar comentario
+        function abrirModalComentario(idWorkFlow) {
+            document.getElementById('comentarioIdWorkFlow').value = idWorkFlow;
+            document.getElementById('comentarioTexto').value = '';
+            const modal = new bootstrap.Modal(document.getElementById('modalComentario'));
+            modal.show();
+        }
+
+        // Enviar comentario
+        async function enviarComentario() {
+            const idWorkFlow = document.getElementById('comentarioIdWorkFlow').value;
+            const comentario = document.getElementById('comentarioTexto').value;
+
+            if (!comentario.trim()) {
+                mostrarError('El comentario no puede estar vacío');
+                return;
+            }
+
+            try {
+                const response = await fetch(
+                    `/api/core/gestiontareas/agregar-observacion?idWorkFlow=${idWorkFlow}&idUsuario=${idUsuarioActual}`,
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(comentario)
+                    }
+                );
+                const data = await response.json();
+
+                if (data.exitoso) {
+                    mostrarExito('Comentario agregado correctamente');
+                    bootstrap.Modal.getInstance(document.getElementById('modalComentario')).hide();
+                } else {
+                    mostrarError(data.mensaje);
+                }
+            } catch (error) {
+                console.error('Error al agregar comentario:', error);
+                mostrarError('Error al agregar el comentario');
+            }
+        }
+
+        // Filtrar tareas
+        function filtrarTareas() {
+            const estado = document.getElementById('filterEstado').value;
+            const prioridad = document.getElementById('filterPrioridad').value;
+
+            let filtradas = mistTareas;
+
+            if (estado) {
+                filtradas = filtradas.filter(t => t.estado === estado);
+            }
+            if (prioridad) {
+                filtradas = filtradas.filter(t => t.prioridad.toString() === prioridad);
+            }
+
+            renderizarTareas(filtradas);
+        }
+
+        // Limpiar filtros
+        function limpiarFiltros() {
+            document.getElementById('filterEstado').value = '';
+            document.getElementById('filterPrioridad').value = '';
+            renderizarTareas(mistTareas);
+        }
+
+        // Funciones helper
+        function getEstadoBadge(estado) {
+            const badges = {
+                'Creada': 'bg-secondary',
+                'EnProgreso': 'bg-info',
+                'Completada': 'bg-success',
+                'Anulada': 'bg-danger'
+            };
+            return badges[estado] || 'bg-light';
+        }
+
+        function getPrioridadBadge(prioridad) {
+            const badges = {
+                1: 'bg-success',
+                2: 'bg-warning',
+                3: 'bg-secondary'
+            };
+            return badges[prioridad] || 'bg-light';
+        }
+
+        function getPrioridadTexto(prioridad) {
+            const textos = { 1: 'Normal', 2: 'Alta', 3: 'Baja' };
+            return textos[prioridad] || 'N/A';
+        }
+
+        function formatearFecha(fecha) {
+            if (!fecha) return null;
+            return new Date(fecha).toLocaleDateString('es-CO');
+        }
+
+        function mostrarExito(mensaje) {
+            const toast = document.createElement('div');
+            toast.className = 'toast position-fixed bottom-0 end-0 m-3';
+            toast.setAttribute('role', 'alert');
+            toast.innerHTML = `
+                <div class="toast-header bg-success text-white">
+                    <i class="bi bi-check-circle me-2"></i>
+                    <strong class="me-auto">Éxito</strong>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+                </div>
+                <div class="toast-body">${mensaje}</div>
+            `;
+            document.body.appendChild(toast);
+            new bootstrap.Toast(toast).show();
+        }
+
+        function mostrarError(mensaje) {
+            const toast = document.createElement('div');
+            toast.className = 'toast position-fixed bottom-0 end-0 m-3';
+            toast.setAttribute('role', 'alert');
+            toast.innerHTML = `
+                <div class="toast-header bg-danger text-white">
+                    <i class="bi bi-exclamation-circle me-2"></i>
+                    <strong class="me-auto">Error</strong>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+                </div>
+                <div class="toast-body">${mensaje}</div>
+            `;
+            document.body.appendChild(toast);
+            new bootstrap.Toast(toast).show();
+        }
+    </script>
+}
