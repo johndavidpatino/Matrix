@@ -70,11 +70,21 @@ namespace MatrixNext.Web.Areas.PY.Controllers
             }
 
             // Notificación email (best-effort, no bloqueo)
-            _ = _email.EnviarAsync(
-                destinatario: Request.HttpContext.User.Identity?.Name ?? string.Empty,
-                asunto: $"Trabajo creado: {model.Nombre}",
-                cuerpo: $"Se ha creado el trabajo '{model.Nombre}' en el proyecto {model.IdProyecto}."
-            );
+            // TODO: reemplazar por correos reales de gerente/coordinadores (pendiente directorio usuarios)
+            var destinatarios = new List<string>();
+            if (!string.IsNullOrWhiteSpace(Request.HttpContext.User.Identity?.Name))
+            {
+                destinatarios.Add(Request.HttpContext.User.Identity!.Name!);
+            }
+
+            if (destinatarios.Count > 0)
+            {
+                _ = _email.EnviarMultipleAsync(
+                    destinatarios,
+                    asunto: $"Trabajo creado: {model.Nombre ?? ""}",
+                    cuerpo: $"Se ha creado el trabajo '{model.Nombre}' en el proyecto {model.IdProyecto}."
+                );
+            }
 
             return Json(new { success = true, message = result.Message });
         }
