@@ -104,10 +104,122 @@ $(document).ready(function() {
         });
     });
 
+    // ISSUE RESUELTO: Sprint 6 GAP-6.4 - Listado de archivos implementado
     function cargarArchivos() {
-        // TODO: Llamar a endpoint que lista archivos de la entidad actual
-        // Por ahora es placeholder
+        const moduleId = $('#moduleId').val();
+        const entityId = $('#entityId').val();
+        
+        if (!moduleId || !entityId) {
+            console.warn('moduleId o entityId no definidos');
+            return;
+        }
+        
+        $.ajax({
+            url: '/api/upload/list',
+            method: 'GET',
+            data: { 
+                moduleId: moduleId, 
+                entityId: entityId 
+            },
+            success: function(result) {
+                if (result.success && result.data) {
+                    mostrarListaArchivos(result.data);
+                } else {
+                    $('#archivosList').html('<p class="text-muted">No hay archivos subidos</p>');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error cargando archivos:', error);
+                $('#archivosList').html('<p class="text-danger">Error al cargar archivos</p>');
+            }
+        });
     }
+
+    function mostrarListaArchivos(archivos) {
+        const $lista = $('#archivosList');
+        $lista.empty();
+        
+        if (!archivos || archivos.length === 0) {
+            $lista.html('<p class="text-muted">No hay archivos subidos</p>');
+            return;
+        }
+        
+        const listaHTML = archivos.map(archivo => {
+            const fechaFormato = new Date(archivo.fechaCreacion).toLocaleDateString('es-CO');
+            const horaFormato = new Date(archivo.fechaCreacion).toLocaleTimeString('es-CO');
+            const rutaEncodificada = encodeURIComponent(archivo.rutaRelativa);
+            
+            return `
+                <div class="archivo-item mb-2 p-3 border rounded d-flex justify-content-between align-items-center">
+                    <div class="flex-grow-1">
+                        <div class="fw-bold">${archivo.nombreArchivo}</div>
+                        <small class="text-muted">
+                            ${fechaFormato} ${horaFormato} - ${archivo.tamañoKB.toFixed(2)} KB
+                        </small>
+                    </div>
+                    <div class="btn-group ms-3" role="group">
+                        <a href="/api/upload/download?rutaRelativa=${rutaEncodificada}" 
+                           class="btn btn-sm btn-primary" title="Descargar">
+                            <i class="fas fa-download"></i> Descargar
+                        </a>
+                        <button type="button" 
+                                onclick="eliminarArchivo('${rutaEncodificada}')" 
+                                class="btn btn-sm btn-danger" title="Eliminar">
+                            <i class="fas fa-trash"></i> Eliminar
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+        
+        $lista.html(listaHTML);
+    }
+
+    function eliminarArchivo(rutaEncodificada) {
+        if (!confirm('¿Está seguro de que desea eliminar este archivo?')) {
+            return;
+        }
+        
+        $.ajax({
+            url: '/api/upload/delete',
+            method: 'DELETE',
+            data: { 
+                rutaRelativa: rutaEncodificada,
+                razon: 'Eliminado por usuario'
+            },
+            success: function(result) {
+                if (result.success) {
+                    mostrarNotificacion('Archivo eliminado correctamente', 'success');
+                    cargarArchivos(); // Recargar lista
+                } else {
+                    mostrarNotificacion('Error al eliminar archivo: ' + result.message, 'error');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error eliminando archivo:', error);
+                mostrarNotificacion('Error al eliminar archivo', 'error');
+            }
+        });
+    }
+
+    function mostrarNotificacion(mensaje, tipo = 'info') {
+        const alertDiv = $(`
+            <div class="alert alert-${tipo === 'error' ? 'danger' : tipo} alert-dismissible fade show" role="alert">
+                ${mensaje}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        `);
+        
+        $('#uploadMessages').prepend(alertDiv);
+        
+        // Auto-descartar después de 5 segundos
+        setTimeout(() => alertDiv.alert('close'), 5000);
+    }
+
+    // Cargar archivos al iniciar página
+    $(document).ready(function() {
+        cargarArchivos();
+    });
 });
 </script>
 
