@@ -54,6 +54,7 @@
 - Reutilizar componente de carga de archivos para adjuntos.
 
 ## Checklist de paridad
+- [ ] CRUD en modales con AJAX/JSON + toasts + refresh parcial (sin navegación completa).
 - [ ] Cada vista WebForms tiene Razor equivalente con acciones y validaciones migradas.
 - [ ] Catálogos (tipos de hilo/tarea/estado) cargan con nombres intactos.
 - [ ] Precedencias y asignaciones se guardan y consultan vía SP originales.
@@ -64,6 +65,12 @@
 - [ ] Roles/permisos aplicados y verificados.
 - [ ] Logging y manejo de errores homogéneo.
 - [ ] Documentación y dashboard actualizados tras cada fase.
+
+### Lineamientos UX (CORE)
+- Modales AJAX para todas las altas/ediciones y confirmaciones.
+- POST responde JSON en éxito; errores devuelven parcial con validaciones.
+- Notificaciones con `toast` no bloqueantes; sin recargar la página.
+- Refresco parcial de grillas/contadores usando `data-grid-url`.
 
 ## Pruebas mínimas
 - Acceso autorizado a cada vista.

@@ -325,6 +325,36 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 ```
 
+### REGLA 5.1: UX AJAX-First (Modales + JSON + Toast + Refresh Parcial)
+
+**Descripción**: Todas las interacciones de creación/edición/confirmación deben priorizar una experiencia sin navegación completa usando modales, formularios parciales, respuestas JSON y notificaciones tipo toast.
+
+**Aplicación**:
+- GET modal: devolver PartialView cuando `X-Requested-With = XMLHttpRequest`.
+- POST modal: en éxito responder JSON `{ success, message }`; en error de validación devolver el parcial con los mensajes.
+- Toast: usar contenedor compartido para confirmar acciones y errores no bloqueantes.
+- Refresh parcial: recargar únicamente el contenedor con `data-grid-url` del listado afectado.
+- Fallback: sin AJAX, renderizar vistas completas (progresive enhancement) manteniendo la funcionalidad.
+- Estándar cliente: reutilizar `Views/Shared/_AjaxModal.cshtml`, `Views/Shared/_ToastContainer.cshtml` y `wwwroot/js/ajax-modal.js`.
+
+**Patrón de Controller (POST)**:
+```csharp
+[HttpPost]
+public IActionResult Create(EditVm vm)
+{
+    if (!ModelState.IsValid)
+        return Request.Headers.ContainsKey("X-Requested-With") 
+            ? PartialView("_Form", vm) 
+            : View(vm);
+
+    // Guardar...
+
+    return Request.Headers.ContainsKey("X-Requested-With")
+        ? Json(new { success = true, message = "Guardado" })
+        : RedirectToAction("Index");
+}
+```
+
 ---
 
 ### REGLA 6: Agregar Acciones Existentes, No Crear Nuevas

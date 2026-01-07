@@ -241,6 +241,7 @@ Notas: Modales como parciales reutilizables; ViewModels incluyen catálogos y re
 | **Máquina estados** | Service validation + EF/SP | No introducir lib state machine. | Documentar transiciones. |
 | **Logging** | ILogger<T> .NET + CORE_ObservacionesTareas | Native logging + persistencia. | Volumen logs; cleaning. |
 | **Modularidad** | Areas (PY/) + Core | Equipos independientes. | Routing complexity; docs. |
+| **UX** | AJAX-first (modales + JSON + toast + refresh parcial) | Experiencia fluida, sin navegación completa | Complejidad JS y manejo de estados |
 
 ## 1️⃣1️⃣ Estimación Preliminar
 
