@@ -1,0 +1,556 @@
+@{
+    ViewData["Title"] = "Dashboard Tráfico de Tareas (WorkFlow)";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2 class="mb-0">
+                    <i class="fas fa-tasks me-2"></i>Dashboard Tráfico de Tareas (WorkFlow)
+                </h2>
+                <div class="d-flex gap-2">
+                    <button type="button" class="btn btn-outline-secondary" id="btnExportExcel">
+                        <i class="fas fa-file-excel me-1"></i>Exportar Excel
+                    </button>
+                    <button type="button" class="btn btn-outline-primary" id="btnRefresh">
+                        <i class="fas fa-sync-alt me-1"></i>Actualizar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label for="ddlTipoHiloFilter" class="form-label">Tipo Hilo</label>
+                    <select id="ddlTipoHiloFilter" class="form-select">
+                        <option value="">Todos los tipos</option>
+                        <option value="1">Hilo 1</option>
+                        <option value="2">Hilo 2</option>
+                        <option value="3">Hilo 3</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="ddlEstadoFilter" class="form-label">Estado</label>
+                    <select id="ddlEstadoFilter" class="form-select">
+                        <option value="">Todos los estados</option>
+                        <option value="Creada">Creada</option>
+                        <option value="EnProgreso">En Progreso</option>
+                        <option value="Completada">Completada</option>
+                        <option value="Anulada">Anulada</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="ddlPrioridadFilter" class="form-label">Prioridad</label>
+                    <select id="ddlPrioridadFilter" class="form-select">
+                        <option value="">Todas las prioridades</option>
+                        <option value="2">Alta</option>
+                        <option value="1">Normal</option>
+                        <option value="3">Baja</option>
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex align-items-end gap-2">
+                    <button type="button" class="btn btn-primary flex-grow-1" id="btnAplicarFiltros">
+                        <i class="fas fa-filter me-1"></i>Aplicar Filtros
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" id="btnLimpiarFiltros">
+                        <i class="fas fa-times me-1"></i>Limpiar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alerta de Tareas Próximas a Vencer -->
+    <div id="alertasVencimiento"></div>
+
+    <!-- Cards de Resumen -->
+    <div class="row mb-4" id="cardsResumen">
+        <div class="col-xl-3 col-md-6 mb-3">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Total Tareas
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="totalTareas">-</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-tasks fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-3">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Tareas Activas
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="tareasActivas">-</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-spinner fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-3">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                Tareas Atrasadas
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="tareasAtrasadas">-</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-exclamation-triangle fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-3">
+            <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                Próximas a Vencer
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="tareasProximasVencer">-</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar-times fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráficos -->
+    <div class="row mb-4">
+        <div class="col-xl-6 mb-3">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="fas fa-chart-pie me-2"></i>Tareas por Estado
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <canvas id="chartTareasPorEstado" style="max-height: 300px;"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-6 mb-3">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="fas fa-chart-bar me-2"></i>Tareas por Prioridad
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <canvas id="chartTareasPorPrioridad" style="max-height: 300px;"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tareas Próximas a Vencer (Tabla Crítica) -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 bg-danger text-white">
+            <h6 class="m-0 font-weight-bold">
+                <i class="fas fa-exclamation-circle me-2"></i>Tareas Próximas a Vencer (Críticas)
+            </h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-sm" id="tblTareasUrgentes">
+                    <thead class="table-danger">
+                        <tr>
+                            <th>ID Tarea</th>
+                            <th>Trabajo</th>
+                            <th>Estado</th>
+                            <th>Prioridad</th>
+                            <th>Fecha Vencimiento</th>
+                            <th>Días Hasta Vencer</th>
+                            <th>Usuarios Asignados</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyTareasUrgentes">
+                        <tr>
+                            <td colspan="7" class="text-center text-muted py-4">
+                                <i class="fas fa-spinner fa-spin me-2"></i>Cargando datos...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla de Detalle General -->
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-table me-2"></i>Detalle de Tareas
+                </h6>
+                <input type="text" id="txtBusqueda" class="form-control w-25" 
+                       placeholder="Buscar por ID Trabajo..." />
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-sm" id="tblTareas">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID Tarea</th>
+                            <th>Trabajo</th>
+                            <th>Estado</th>
+                            <th>Prioridad</th>
+                            <th>Fecha Vencimiento</th>
+                            <th>Atraso</th>
+                            <th>Usuarios</th>
+                            <th>Observaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyTareas">
+                        <tr>
+                            <td colspan="8" class="text-center text-muted py-4">
+                                <i class="fas fa-spinner fa-spin me-2"></i>Cargando datos...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Paginación -->
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <div id="paginationInfo" class="text-muted">-</div>
+                <nav>
+                    <ul class="pagination mb-0" id="pagination"></ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <script>
+        let chartEstado = null;
+        let chartPrioridad = null;
+        let currentPage = 1;
+        const pageSize = 20;
+
+        $(document).ready(function () {
+            cargarDatos();
+
+            // Event handlers
+            $('#btnAplicarFiltros').click(() => cargarDatos());
+            $('#btnLimpiarFiltros').click(() => {
+                $('#ddlTipoHiloFilter').val('');
+                $('#ddlEstadoFilter').val('');
+                $('#ddlPrioridadFilter').val('');
+                cargarDatos();
+            });
+            $('#btnRefresh').click(() => cargarDatos());
+            $('#txtBusqueda').on('keyup', debounce(() => cargarDetalleTareas(), 500));
+        });
+
+        async function cargarDatos() {
+            await Promise.all([
+                cargarResumenGeneral(),
+                cargarTareasPorEstado(),
+                cargarTareasPorPrioridad(),
+                cargarTareasProximasAvencer(),
+                cargarDetalleTareas()
+            ]);
+        }
+
+        async function cargarResumenGeneral() {
+            try {
+                const response = await fetch('/api/core/workflow-dashboard/resumen-general');
+                const result = await response.json();
+
+                if (result.isSuccess && result.data) {
+                    const data = result.data;
+                    $('#totalTareas').text(data.totalTareas);
+                    $('#tareasActivas').text(data.tareasActivas);
+                    $('#tareasAtrasadas').text(data.tareasAtrasadas);
+                    $('#tareasProximasVencer').text(data.tareasProximasAvencer);
+                }
+            } catch (error) {
+                console.error('Error al cargar resumen:', error);
+            }
+        }
+
+        async function cargarTareasPorEstado() {
+            try {
+                const params = obtenerParametrosFiltro();
+                const url = `/api/core/workflow-dashboard/tareas-por-estado${params}`;
+                const response = await fetch(url);
+                const result = await response.json();
+
+                if (result.isSuccess && result.data) {
+                    const data = result.data;
+                    const labels = data.map(d => d.estado);
+                    const valores = data.map(d => d.cantidadTareas);
+                    const porcentajes = data.map(d => d.porcentajeTotal);
+
+                    if (chartEstado) chartEstado.destroy();
+
+                    const ctx = document.getElementById('chartTareasPorEstado').getContext('2d');
+                    chartEstado = new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                data: valores,
+                                backgroundColor: [
+                                    '#4e73df', '#1cc88a', '#f6c23e', '#e74a3b'
+                                ],
+                                hoverOffset: 4
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: { position: 'bottom' },
+                                tooltip: {
+                                    callbacks: {
+                                        label: (context) => {
+                                            const index = context.dataIndex;
+                                            return `${context.label}: ${context.parsed} (${porcentajes[index]}%)`;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error al cargar tareas por estado:', error);
+            }
+        }
+
+        async function cargarTareasPorPrioridad() {
+            try {
+                const params = obtenerParametrosFiltro();
+                const url = `/api/core/workflow-dashboard/tareas-por-prioridad${params}`;
+                const response = await fetch(url);
+                const result = await response.json();
+
+                if (result.isSuccess && result.data) {
+                    const data = result.data.sort((a, b) => b.prioridad - a.prioridad);
+                    const labels = data.map(d => d.nombrePrioridad);
+                    const valores = data.map(d => d.cantidadTareas);
+                    const atrasadas = data.map(d => d.tareasAtrasadas);
+
+                    if (chartPrioridad) chartPrioridad.destroy();
+
+                    const ctx = document.getElementById('chartTareasPorPrioridad').getContext('2d');
+                    chartPrioridad = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [
+                                {
+                                    label: 'Total',
+                                    data: valores,
+                                    backgroundColor: '#4e73df'
+                                },
+                                {
+                                    label: 'Atrasadas',
+                                    data: atrasadas,
+                                    backgroundColor: '#e74a3b'
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: { y: { beginAtZero: true } },
+                            plugins: { legend: { position: 'bottom' } }
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error al cargar tareas por prioridad:', error);
+            }
+        }
+
+        async function cargarTareasProximasAvencer() {
+            try {
+                const response = await fetch('/api/core/workflow-dashboard/tareas-proximas-avencer?diasAlerta=3');
+                const result = await response.json();
+
+                if (result.isSuccess && result.data) {
+                    const data = result.data;
+                    let html = '';
+
+                    if (data.length === 0) {
+                        html = `<tr><td colspan="7" class="text-center text-muted py-4">
+                            <i class="fas fa-check-circle me-2"></i>No hay tareas próximas a vencer
+                        </td></tr>`;
+                    } else {
+                        data.forEach(t => {
+                            const badgePrioridad = t.prioridad === 2
+                                ? '<span class="badge bg-danger">ALTA</span>'
+                                : '<span class="badge bg-warning">NORMAL</span>';
+
+                            html += `
+                                <tr class="${t.urgenteCritica ? 'table-danger' : ''}">
+                                    <td><strong>${t.id}</strong></td>
+                                    <td>${t.idTrabajo || '-'}</td>
+                                    <td><span class="badge bg-info">${t.estado}</span></td>
+                                    <td>${badgePrioridad}</td>
+                                    <td>${formatearFecha(t.fechaVencimiento)}</td>
+                                    <td><strong class="text-danger">${t.diasHastaVencer || '?'} días</strong></td>
+                                    <td><span class="badge bg-secondary">${t.usuariosAsignados}</span></td>
+                                </tr>
+                            `;
+                        });
+                    }
+
+                    $('#tbodyTareasUrgentes').html(html);
+                }
+            } catch (error) {
+                console.error('Error al cargar tareas próximas a vencer:', error);
+            }
+        }
+
+        async function cargarDetalleTareas(page = 1) {
+            try {
+                const params = obtenerParametrosFiltro();
+                const busqueda = $('#txtBusqueda').val();
+                const url = `/api/core/workflow-dashboard/detalle-tareas${params}&page=${page}&pageSize=${pageSize}${busqueda ? `&busqueda=${encodeURIComponent(busqueda)}` : ''}`;
+                const response = await fetch(url);
+                const result = await response.json();
+
+                if (result.isSuccess && result.data) {
+                    const data = result.data;
+                    let html = '';
+
+                    if (data.length === 0) {
+                        html = `<tr><td colspan="8" class="text-center text-muted py-4">
+                            <i class="fas fa-inbox me-2"></i>No se encontraron tareas
+                        </td></tr>`;
+                    } else {
+                        data.forEach(t => {
+                            const badgeEstado = obtenerBadgeEstado(t.estado);
+                            const badgePrioridad = obtenerBadgePrioridad(t.prioridad);
+                            const badgeAtraso = t.atrasada
+                                ? `<span class="badge bg-danger">${t.diasAtraso} días</span>`
+                                : '<span class="badge bg-success">Al día</span>';
+
+                            html += `
+                                <tr>
+                                    <td><strong>${t.id}</strong></td>
+                                    <td>${t.idTrabajo || '-'}</td>
+                                    <td>${badgeEstado}</td>
+                                    <td>${badgePrioridad}</td>
+                                    <td>${formatearFecha(t.fechaVencimiento)}</td>
+                                    <td>${badgeAtraso}</td>
+                                    <td><span class="badge bg-secondary">${t.usuariosAsignados}</span></td>
+                                    <td><small>${t.observaciones || '-'}</small></td>
+                                </tr>
+                            `;
+                        });
+                    }
+
+                    $('#tbodyTareas').html(html);
+                    $('#paginationInfo').text(result.message);
+                    currentPage = page;
+                }
+            } catch (error) {
+                console.error('Error al cargar detalle tareas:', error);
+            }
+        }
+
+        function obtenerParametrosFiltro() {
+            const params = new URLSearchParams();
+            const idTipoHilo = $('#ddlTipoHiloFilter').val();
+            const estado = $('#ddlEstadoFilter').val();
+            const prioridad = $('#ddlPrioridadFilter').val();
+
+            if (idTipoHilo) params.append('idTipoHilo', idTipoHilo);
+            if (estado) params.append('estado', estado);
+            if (prioridad) params.append('prioridad', prioridad);
+
+            return params.toString() ? `?${params.toString()}` : '';
+        }
+
+        function obtenerBadgeEstado(estado) {
+            const badges = {
+                'Creada': '<span class="badge bg-secondary">Creada</span>',
+                'EnProgreso': '<span class="badge bg-info">En Progreso</span>',
+                'Completada': '<span class="badge bg-success">Completada</span>',
+                'Anulada': '<span class="badge bg-danger">Anulada</span>'
+            };
+            return badges[estado] || '<span class="badge bg-secondary">Desconocido</span>';
+        }
+
+        function obtenerBadgePrioridad(prioridad) {
+            const badges = {
+                1: '<span class="badge bg-success">Normal</span>',
+                2: '<span class="badge bg-danger">Alta</span>',
+                3: '<span class="badge bg-info">Baja</span>'
+            };
+            return badges[prioridad] || '<span class="badge bg-secondary">-</span>';
+        }
+
+        function formatearFecha(fecha) {
+            if (!fecha) return '-';
+            const date = new Date(fecha);
+            return date.toLocaleDateString('es-CO', { year: 'numeric', month: '2-digit', day: '2-digit' });
+        }
+
+        function debounce(func, wait) {
+            let timeout;
+            return function (...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
+    </script>
+
+    <style>
+        .border-left-primary {
+            border-left: 0.25rem solid #4e73df !important;
+        }
+        .border-left-success {
+            border-left: 0.25rem solid #1cc88a !important;
+        }
+        .border-left-danger {
+            border-left: 0.25rem solid #e74a3b !important;
+        }
+        .border-left-warning {
+            border-left: 0.25rem solid #f6c23e !important;
+        }
+        .text-xs {
+            font-size: .7rem;
+        }
+    </style>
+}

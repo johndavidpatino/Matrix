@@ -11,6 +11,7 @@ using MatrixNext.Web.Areas.EQ.Services.Masters;
 using MatrixNext.Web.Infrastructure.Data;
 using MatrixNext.Web.Services;
 using MatrixNext.Web.Services.PY;
+using MatrixNext.Web.Services.CORE;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -110,6 +111,8 @@ builder.Services.AddScoped<EasyQuoteAdminService>();
 builder.Services.AddScoped<EasyQuoteAdapter>();
 // PY Dashboard services
 builder.Services.AddScoped<IDashboardService, DashboardService>();
+// CORE Dashboard services
+builder.Services.AddScoped<IWorkFlowDashboardService, WorkFlowDashboardService>();
 builder.Services.AddScoped<QuoteCalculator>();
 builder.Services.AddScoped<EasyQuoteMasterService>();
 
