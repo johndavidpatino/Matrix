@@ -108,6 +108,8 @@ builder.Services.AddCCModule(builder.Configuration);
 builder.Services.AddScoped<EasyQuoteService>();
 builder.Services.AddScoped<EasyQuoteAdminService>();
 builder.Services.AddScoped<EasyQuoteAdapter>();
+// PY Dashboard services
+builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<QuoteCalculator>();
 builder.Services.AddScoped<EasyQuoteMasterService>();
 

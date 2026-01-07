@@ -1,0 +1,514 @@
+@{
+    ViewData["Title"] = "Dashboard Proyectos y Trabajos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2 class="mb-0">
+                    <i class="fas fa-chart-line me-2"></i>Dashboard Proyectos y Trabajos
+                </h2>
+                <div class="d-flex gap-2">
+                    <button type="button" class="btn btn-outline-secondary" id="btnExportExcel">
+                        <i class="fas fa-file-excel me-1"></i>Exportar Excel
+                    </button>
+                    <button type="button" class="btn btn-outline-primary" id="btnRefresh">
+                        <i class="fas fa-sync-alt me-1"></i>Actualizar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label for="ddlUnidadFilter" class="form-label">Unidad</label>
+                    <select id="ddlUnidadFilter" class="form-select">
+                        <option value="">Todas las unidades</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="ddlGerenteFilter" class="form-label">Gerente</label>
+                    <select id="ddlGerenteFilter" class="form-select">
+                        <option value="">Todos los gerentes</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="txtFechaInicio" class="form-label">Fecha Inicio</label>
+                    <input type="date" id="txtFechaInicio" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                    <label for="txtFechaFin" class="form-label">Fecha Fin</label>
+                    <input type="date" id="txtFechaFin" class="form-control" />
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12">
+                    <button type="button" class="btn btn-primary" id="btnAplicarFiltros">
+                        <i class="fas fa-filter me-1"></i>Aplicar Filtros
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" id="btnLimpiarFiltros">
+                        <i class="fas fa-times me-1"></i>Limpiar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cards de Resumen -->
+    <div class="row mb-4" id="cardsResumen">
+        <div class="col-xl-3 col-md-6 mb-3">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Total Proyectos
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="totalProyectos">-</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-folder fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-3">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Trabajos Activos
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="trabajosActivos">-</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-tasks fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-3">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                Total Trabajos
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="totalTrabajos">-</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-3">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                Trabajos Atrasados
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="trabajosAtrasados">-</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-exclamation-triangle fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráficos -->
+    <div class="row mb-4">
+        <div class="col-xl-6 mb-3">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="fas fa-chart-pie me-2"></i>Trabajos por Estado
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <canvas id="chartTrabajosPorEstado" style="max-height: 300px;"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-6 mb-3">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="fas fa-chart-bar me-2"></i>Trabajos por Gerente
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <canvas id="chartTrabajosPorGerente" style="max-height: 300px;"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla de Detalle -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-table me-2"></i>Detalle de Trabajos
+                </h6>
+                <input type="text" id="txtBusqueda" class="form-control w-25" 
+                       placeholder="Buscar JobBook, Nombre..." />
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-sm" id="tblTrabajos">
+                    <thead class="table-light">
+                        <tr>
+                            <th>JobBook</th>
+                            <th>Nombre Trabajo</th>
+                            <th>Proyecto</th>
+                            <th>Gerente</th>
+                            <th>Unidad</th>
+                            <th>Estado</th>
+                            <th>Fecha Creación</th>
+                            <th>Fecha Fin Campo</th>
+                            <th>Atraso</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyTrabajos">
+                        <tr>
+                            <td colspan="9" class="text-center text-muted py-4">
+                                <i class="fas fa-spinner fa-spin me-2"></i>Cargando datos...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Paginación -->
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <div id="paginationInfo" class="text-muted">-</div>
+                <nav>
+                    <ul class="pagination mb-0" id="pagination"></ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <script>
+        let chartEstado = null;
+        let chartGerentes = null;
+        let currentPage = 1;
+        const pageSize = 20;
+
+        $(document).ready(function () {
+            cargarUnidades();
+            cargarDatos();
+
+            // Event handlers
+            $('#btnAplicarFiltros').click(() => cargarDatos());
+            $('#btnLimpiarFiltros').click(() => {
+                $('#ddlUnidadFilter').val('');
+                $('#ddlGerenteFilter').val('');
+                $('#txtFechaInicio').val('');
+                $('#txtFechaFin').val('');
+                cargarDatos();
+            });
+            $('#btnRefresh').click(() => cargarDatos());
+            $('#txtBusqueda').on('keyup', debounce(() => cargarDetalleTrabaj(), 500));
+            $('#ddlUnidadFilter').change(() => cargarGerentesPorUnidad());
+        });
+
+        async function cargarUnidades() {
+            try {
+                const response = await fetch('/api/py/unidades');
+                const result = await response.json();
+                if (result.success && result.data) {
+                    let html = '<option value="">Todas las unidades</option>';
+                    result.data.forEach(u => {
+                        html += `<option value="${u.id}">${u.nombre}</option>`;
+                    });
+                    $('#ddlUnidadFilter').html(html);
+                }
+            } catch (error) {
+                console.error('Error al cargar unidades:', error);
+            }
+        }
+
+        async function cargarGerentesPorUnidad() {
+            // Simplificado: en producción cargar gerentes filtrados por unidad
+            $('#ddlGerenteFilter').html('<option value="">Todos los gerentes</option>');
+        }
+
+        async function cargarDatos() {
+            await Promise.all([
+                cargarResumenGeneral(),
+                cargarTrabajosPorEstado(),
+                cargarTrabajosPorGerente(),
+                cargarDetalleTrabajos()
+            ]);
+        }
+
+        async function cargarResumenGeneral() {
+            try {
+                const idUnidad = $('#ddlUnidadFilter').val();
+                const url = `/api/py/dashboard/resumen-general${idUnidad ? `?idUnidad=${idUnidad}` : ''}`;
+                const response = await fetch(url);
+                const result = await response.json();
+
+                if (result.success && result.data) {
+                    const data = result.data;
+                    $('#totalProyectos').text(data.totalProyectos);
+                    $('#trabajosActivos').text(data.trabajosActivos);
+                    $('#totalTrabajos').text(data.totalTrabajos);
+                    $('#trabajosAtrasados').text(data.trabajosAtrasados);
+                }
+            } catch (error) {
+                console.error('Error al cargar resumen:', error);
+                mostrarError('Error al cargar resumen general');
+            }
+        }
+
+        async function cargarTrabajosPorEstado() {
+            try {
+                const params = obtenerParametrosFiltro();
+                const url = `/api/py/dashboard/trabajos-por-estado${params}`;
+                const response = await fetch(url);
+                const result = await response.json();
+
+                if (result.success && result.data) {
+                    const data = result.data;
+                    const labels = data.map(d => d.nombreEstado);
+                    const valores = data.map(d => d.cantidadTrabajos);
+                    const porcentajes = data.map(d => d.porcentajeTotal);
+
+                    if (chartEstado) chartEstado.destroy();
+
+                    const ctx = document.getElementById('chartTrabajosPorEstado').getContext('2d');
+                    chartEstado = new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                data: valores,
+                                backgroundColor: [
+                                    '#4e73df', '#1cc88a', '#36b9cc',
+                                    '#f6c23e', '#e74a3b', '#858796'
+                                ],
+                                hoverOffset: 4
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom'
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function (context) {
+                                            const index = context.dataIndex;
+                                            return `${context.label}: ${context.parsed} (${porcentajes[index]}%)`;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error al cargar trabajos por estado:', error);
+            }
+        }
+
+        async function cargarTrabajosPorGerente() {
+            try {
+                const params = obtenerParametrosFiltro();
+                const url = `/api/py/dashboard/trabajos-por-gerente${params}`;
+                const response = await fetch(url);
+                const result = await response.json();
+
+                if (result.success && result.data) {
+                    const data = result.data.slice(0, 10); // Top 10 gerentes
+                    const labels = data.map(d => d.nombreGerente);
+                    const valores = data.map(d => d.totalTrabajos);
+                    const activos = data.map(d => d.trabajosActivos);
+                    const completados = data.map(d => d.trabajosCompletados);
+
+                    if (chartGerentes) chartGerentes.destroy();
+
+                    const ctx = document.getElementById('chartTrabajosPorGerente').getContext('2d');
+                    chartGerentes = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [
+                                {
+                                    label: 'Activos',
+                                    data: activos,
+                                    backgroundColor: '#1cc88a'
+                                },
+                                {
+                                    label: 'Completados',
+                                    data: completados,
+                                    backgroundColor: '#4e73df'
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                x: { stacked: true },
+                                y: { stacked: true, beginAtZero: true }
+                            },
+                            plugins: {
+                                legend: {
+                                    position: 'bottom'
+                                }
+                            }
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error al cargar trabajos por gerente:', error);
+            }
+        }
+
+        async function cargarDetalleTrabajos(page = 1) {
+            try {
+                const params = obtenerParametrosFiltro();
+                const busqueda = $('#txtBusqueda').val();
+                const url = `/api/py/dashboard/detalle-trabajos${params}&page=${page}&pageSize=${pageSize}${busqueda ? `&busqueda=${encodeURIComponent(busqueda)}` : ''}`;
+                const response = await fetch(url);
+                const result = await response.json();
+
+                if (result.success && result.data) {
+                    const data = result.data;
+                    let html = '';
+
+                    if (data.length === 0) {
+                        html = `<tr><td colspan="9" class="text-center text-muted py-4">
+                            <i class="fas fa-inbox me-2"></i>No se encontraron trabajos
+                        </td></tr>`;
+                    } else {
+                        data.forEach(t => {
+                            const badgeEstado = obtenerBadgeEstado(t.estado);
+                            const badgeAtraso = t.atrasado
+                                ? `<span class="badge bg-danger">${t.diasAtraso} días</span>`
+                                : '<span class="badge bg-success">Al día</span>';
+
+                            html += `
+                                <tr>
+                                    <td><strong>${t.jobBook || '-'}</strong></td>
+                                    <td>${t.nombre || '-'}</td>
+                                    <td>${t.nombreProyecto || '-'}</td>
+                                    <td>${t.nombreGerente || '-'}</td>
+                                    <td>${t.nombreUnidad || '-'}</td>
+                                    <td>${badgeEstado}</td>
+                                    <td>${formatearFecha(t.fechaCreacion)}</td>
+                                    <td>${formatearFecha(t.fechaFinalizacionCampo)}</td>
+                                    <td>${badgeAtraso}</td>
+                                </tr>
+                            `;
+                        });
+                    }
+
+                    $('#tbodyTrabajos').html(html);
+                    $('#paginationInfo').text(result.message);
+                    currentPage = page;
+                }
+            } catch (error) {
+                console.error('Error al cargar detalle trabajos:', error);
+                $('#tbodyTrabajos').html(`<tr><td colspan="9" class="text-center text-danger py-4">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Error al cargar datos
+                </td></tr>`);
+            }
+        }
+
+        function obtenerParametrosFiltro() {
+            const params = new URLSearchParams();
+            const idUnidad = $('#ddlUnidadFilter').val();
+            const idGerente = $('#ddlGerenteFilter').val();
+            const fechaInicio = $('#txtFechaInicio').val();
+            const fechaFin = $('#txtFechaFin').val();
+
+            if (idUnidad) params.append('idUnidad', idUnidad);
+            if (idGerente) params.append('idGerente', idGerente);
+            if (fechaInicio) params.append('fechaInicio', fechaInicio);
+            if (fechaFin) params.append('fechaFin', fechaFin);
+
+            return params.toString() ? `?${params.toString()}` : '';
+        }
+
+        function obtenerBadgeEstado(estado) {
+            const badges = {
+                0: '<span class="badge bg-secondary">Cerrado</span>',
+                1: '<span class="badge bg-success">Activo</span>',
+                2: '<span class="badge bg-warning">Suspendido</span>',
+                3: '<span class="badge bg-info">En Proceso</span>',
+                4: '<span class="badge bg-primary">Completado</span>'
+            };
+            return badges[estado] || '<span class="badge bg-secondary">Desconocido</span>';
+        }
+
+        function formatearFecha(fecha) {
+            if (!fecha) return '-';
+            const date = new Date(fecha);
+            return date.toLocaleDateString('es-CO', { year: 'numeric', month: '2-digit', day: '2-digit' });
+        }
+
+        function debounce(func, wait) {
+            let timeout;
+            return function (...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
+
+        function mostrarError(mensaje) {
+            // Simplificado: toast notification
+            alert(mensaje);
+        }
+    </script>
+
+    <style>
+        .border-left-primary {
+            border-left: 0.25rem solid #4e73df !important;
+        }
+        .border-left-success {
+            border-left: 0.25rem solid #1cc88a !important;
+        }
+        .border-left-info {
+            border-left: 0.25rem solid #36b9cc !important;
+        }
+        .border-left-warning {
+            border-left: 0.25rem solid #f6c23e !important;
+        }
+        .text-xs {
+            font-size: .7rem;
+        }
+    </style>
+}
