@@ -275,28 +275,79 @@ Versión: 1.0
   - Ref: `MAPA_DEPENDENCIAS_PY_CORE.md` § 2.3 (transaccionalidad)
   - **Commit:** `[SPRINT 3] T3.1-T3.4: CORE Entities + AsignacionesService + GestionTareasService`
 
-- [ ] **T3.5** - Controller: AsignacionesController
+- [x] **T3.5** - Controller: AsignacionesController
   - Archivo: `Controllers/CORE/AsignacionesController.cs`
   - [Authorize(Roles="Coordinador,Administrador")]
-  - Acciones: ObtenerUsuariosAsignados(), AsignarUsuario(), DesasignarUsuario()
-  - **Commit:** `feat: add AsignacionesController`
+  - Acciones API (5 endpoints): ObtenerUsuariosAsignados(), AsignarUsuario(), DesasignarUsuario(), ObtenerAsignacionesActivas(), EstaAsignado()
+  - Retorno: Respuesta JSON estándar {exitoso, datos, mensaje}
+  - Validaciones: Usuario no duplicado, Tarea existe, Autorización
+  - Integración: IAsignacionesService inyectado, ILogger<T>
+  - **Commit:** `[SPRINT 3] T3.5-T3.6: AsignacionesController + GestionTareasController (API)`
 
-- [ ] **T3.6** - Controller: GestionTareasController (CRÍTICO)
+- [x] **T3.6** - Controller: GestionTareasController (CRÍTICO)
   - Archivo: `Controllers/CORE/GestionTareasController.cs`
   - Ref: `MATRIZ_PERMISOS_ROLES.md` § 4.4
-  - Acciones: MisTrabajos(), CambiarEstado(), AgregarObservacion(), Anular()
+  - Acciones API (6 endpoints): MisTrabajos(), CambiarEstado(), AgregarObservacion(), AnularTarea(), ObtenerTareasPrevias(), ValidarPrecedencias()
   - **En CambiarEstado():**
     - Validar precedencias (T3.4)
     - Validar permisos (usuario asignado)
     - Actualizar estado + audit log
-  - **En Anular():** Solo Administrador, requerido motivo
-  - **Commit:** `feat: add GestionTareasController`
+    - Retorno: {exitoso, datos:bool, mensaje}
+  - **En AnularTarea():** Solo Administrador, requerido motivo
+  - Retorno: Respuesta JSON estándar {exitoso, datos, mensaje}
+  - Validaciones: Tarea existe, Usuario asignado, Precedencias completas
+  - Integración: IGestionTareasService inyectado, ILogger<T>
+  - **Commit:** `[SPRINT 3] T3.5-T3.6: AsignacionesController + GestionTareasController (API)`
 
-- [ ] **T3.7** - Views: Mis Trabajos
-  - Archivo: `Views/CORE/MisTrabajos/Index.cshtml`
-  - Listar tareas WHERE IdUsuario = User.Id AND Estado != Completado
-  - Reusar: `_Grid.cshtml`
-  - **Commit:** `feat: add CORE.MisTrabajos view`
+- [x] **T3.7** - Views: Mis Trabajos
+  - Archivo: `Views/CORE/GestionTareas/Index.cshtml`
+  - Funcionalidad: Lista de tareas asignadas con filtros (estado, prioridad)
+  - Componentes: Grid con columnas (ID, Nombre, Estado, Prioridad, Vencimiento, Acciones)
+  - Botones: Cambiar estado, Agregar comentario, Actualizar lista
+  - JavaScript: AJAX calls a GestionTareasController endpoints (MisTrabajos, ObtenerTareasPrevias)
+  - Estado visual: Badge coloreados por estado + prioridad
+  - Funcionalidad Modal: Abre modal de cambio de estado al hacer clic en botón
+  - **Commit:** `[SPRINT 3] T3.7-T3.9: Views (Mis Trabajos + Modal) + Unit Tests (Precedencias)`
+
+- [x] **T3.8** - Views: Modal Cambiar Estado
+  - Archivo: `Views/Shared/_ModalCambiarEstado.cshtml`
+  - Funcionalidad: Modal para cambiar estado con validación de precedencias
+  - Componentes:
+    - Información actual: ID, estado actual, descripción, asignado a
+    - Alerta de precedencias: Muestra tareas bloqueantes (si existen)
+    - Radio buttons: Seleccionar nuevo estado (EnProgreso, Completada, Anulada)
+    - Campo motivo: Solo se muestra si selecciona "Anulada" (obligatorio)
+    - Observación: Campo opcional para comentarios (máx 500 caracteres)
+    - Spinner validación: Mientras se validan precedencias
+  - JavaScript: Event listeners para AJAX, validaciones, counter de caracteres
+  - AJAX: POST a /api/core/gestiontareas/cambiar-estado con validación previa
+  - Toast notifications: Éxito/Error con Bootstrap Toast
+  - **Commit:** `[SPRINT 3] T3.7-T3.9: Views (Mis Trabajos + Modal) + Unit Tests (Precedencias)`
+
+- [x] **T3.9** - Unit Tests: Validación de Precedencias (CRÍTICO)
+  - Archivo: `Tests/CORE/Services/GestionTareasServiceTests.cs`
+  - Suite Xunit (11 test cases):
+    - ✅ CambiarEstado_ConPrecedenciasCompletadas_DebePermitirCambio()
+    - ✅ CambiarEstado_ConTareaPrecesorAnulada_DebePermitirCambio()
+    - ✅ CambiarEstado_ConPrecedenciaPendiente_DebeRechazarCambio()
+    - ✅ CambiarEstado_ConMultiplesPrecedenciasPendientes_DebeListarTodas()
+    - ✅ AnularTarea_SiempreDebePermitirse_InclusoConPrecedenciasPendientes()
+    - ✅ ValidarPrecedenciasCompletadas_ConTareaInexistente_DebeRetornarFalso()
+    - ✅ ValidarPrecedenciasCompletadas_ConTareaSinPrecedencias_DebeRetornarVerdadero()
+    - ✅ CambiarEstado_ConErrorEnBD_DebeRetornarError()
+    - ✅ CambiarEstado_ConEstadoInvalido_DebeRechazar()
+    - ✅ CambiarEstado_DebeRegistrarAuditoriaConDetallesCompletos()
+    - ✅ ObtenerTareasPrevias_ConMultiplesPendientes_DebeListarTodas()
+  - Mock: DbContext (WorkFlows, TareaPrecedencias, ObservacionesTareas), IAuditoriaService
+  - Coverage: Precedencias válidas/inválidas, excepciones, auditoría, anulación
+  - Validaciones verificadas:
+    - Precedencias completadas permiten cambio
+    - Tareas anuladas cuentan como precedencias satisfechas
+    - Precedencias pendientes rechazan cambio con mensaje descriptivo
+    - Anulación siempre permitida (sin validar precedencias)
+    - Error handling con captura de excepciones
+    - Auditoría registrada solo si cambio exitoso
+  - **Commit:** `[SPRINT 3] T3.7-T3.9: Views (Mis Trabajos + Modal) + Unit Tests (Precedencias)`
 
 - [ ] **T3.8** - Views: Cambiar Estado (modal con validaciones)
   - Archivo: `Views/CORE/Tareas/_CambiarEstado.cshtml` (partial modal)
