@@ -1,0 +1,702 @@
+@{
+    ViewData["Title"] = "Asignaciones de Gerentes de Proyectos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="mb-1">
+                        <i class="bi bi-person-badge me-2"></i>Asignaciones de Gerentes
+                    </h2>
+                    <p class="text-muted mb-0">Gestione la asignación de gerentes de proyectos a proyectos de su unidad</p>
+                </div>
+                <div>
+                    <button class="btn btn-outline-primary" onclick="location.reload()">
+                        <i class="bi bi-arrow-clockwise me-2"></i>Actualizar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtros Globales -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <div class="row align-items-end">
+                <div class="col-md-4">
+                    <label for="ddlUnidad" class="form-label fw-semibold">
+                        <i class="bi bi-building me-1"></i>Unidad
+                    </label>
+                    <select id="ddlUnidad" class="form-select">
+                        <option value="">Seleccione una unidad...</option>
+                        <option value="1">Unidad Comercial 1</option>
+                        <option value="2">Unidad Comercial 2</option>
+                        <option value="3">Unidad Operativa</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="txtBusqueda" class="form-label fw-semibold">
+                        <i class="bi bi-search me-1"></i>Búsqueda
+                    </label>
+                    <input type="text" id="txtBusqueda" class="form-control" placeholder="Buscar por nombre de proyecto o JobBook...">
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-primary w-100" onclick="aplicarFiltros()">
+                        <i class="bi bi-funnel-fill me-2"></i>Filtrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs de Navegación -->
+    <ul class="nav nav-tabs mb-3" id="asignacionesTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="asignacion-tab" data-bs-toggle="tab" 
+                    data-bs-target="#asignacion-panel" type="button" role="tab">
+                <i class="bi bi-person-plus-fill me-2"></i>
+                Asignación Inicial
+                <span class="badge bg-primary ms-2" id="badgeAsignacion">0</span>
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="reasignacion-tab" data-bs-toggle="tab" 
+                    data-bs-target="#reasignacion-panel" type="button" role="tab">
+                <i class="bi bi-arrow-left-right me-2"></i>
+                Reasignación
+                <span class="badge bg-info ms-2" id="badgeReasignacion">0</span>
+            </button>
+        </li>
+    </ul>
+
+    <!-- Contenido de Tabs -->
+    <div class="tab-content" id="asignacionesTabContent">
+        
+        <!-- Panel de Asignación Inicial -->
+        <div class="tab-pane fade show active" id="asignacion-panel" role="tabpanel">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary bg-gradient text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-folder-plus me-2"></i>Proyectos Sin Gerente Asignado
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <!-- Loading Spinner -->
+                    <div id="loadingAsignacion" class="text-center py-5 d-none">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                        <p class="mt-3 text-muted">Cargando proyectos...</p>
+                    </div>
+
+                    <!-- Alert cuando no hay unidad seleccionada -->
+                    <div id="alertNoUnidadAsignacion" class="alert alert-warning d-flex align-items-center">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        Seleccione una unidad para ver los proyectos disponibles
+                    </div>
+
+                    <!-- Tabla de proyectos -->
+                    <div id="gridAsignacion" class="table-responsive d-none">
+                        <table class="table table-hover table-striped align-middle">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th style="width: 100px;">JobBook</th>
+                                    <th>Nombre del Proyecto</th>
+                                    <th style="width: 120px;" class="text-center">Estado</th>
+                                    <th style="width: 150px;" class="text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyAsignacion">
+                                <!-- Dinámicamente poblado -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div id="emptyAsignacion" class="text-center py-5 d-none">
+                        <i class="bi bi-inbox text-muted" style="font-size: 4rem;"></i>
+                        <h5 class="mt-3 text-muted">No hay proyectos sin asignar</h5>
+                        <p class="text-muted">Todos los proyectos de esta unidad tienen gerente asignado</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel de Reasignación -->
+        <div class="tab-pane fade" id="reasignacion-panel" role="tabpanel">
+            <div class="card shadow-sm">
+                <div class="card-header bg-info bg-gradient text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-people-fill me-2"></i>Proyectos Con Gerente Asignado
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <!-- Loading Spinner -->
+                    <div id="loadingReasignacion" class="text-center py-5 d-none">
+                        <div class="spinner-border text-info" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                        <p class="mt-3 text-muted">Cargando proyectos...</p>
+                    </div>
+
+                    <!-- Alert cuando no hay unidad seleccionada -->
+                    <div id="alertNoUnidadReasignacion" class="alert alert-warning d-flex align-items-center">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        Seleccione una unidad para ver los proyectos disponibles
+                    </div>
+
+                    <!-- Tabla de proyectos -->
+                    <div id="gridReasignacion" class="table-responsive d-none">
+                        <table class="table table-hover table-striped align-middle">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th style="width: 100px;">JobBook</th>
+                                    <th>Nombre del Proyecto</th>
+                                    <th style="width: 200px;">Gerente Actual</th>
+                                    <th style="width: 120px;" class="text-center">Estado</th>
+                                    <th style="width: 180px;" class="text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyReasignacion">
+                                <!-- Dinámicamente poblado -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div id="emptyReasignacion" class="text-center py-5 d-none">
+                        <i class="bi bi-inbox text-muted" style="font-size: 4rem;"></i>
+                        <h5 class="mt-3 text-muted">No hay proyectos con gerente asignado</h5>
+                        <p class="text-muted">Esta unidad no tiene proyectos con gerentes asignados</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Asignación/Reasignación -->
+<div class="modal fade" id="modalAsignar" tabindex="-1" aria-labelledby="modalAsignarLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary bg-gradient text-white">
+                <h5 class="modal-title" id="modalAsignarLabel">
+                    <i class="bi bi-person-fill-add me-2"></i>
+                    <span id="modalTitulo">Asignar Gerente de Proyecto</span>
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="hdnIdProyecto">
+                <input type="hidden" id="hdnTipoOperacion">
+
+                <!-- Información del Proyecto -->
+                <div class="alert alert-light border">
+                    <h6 class="mb-2"><i class="bi bi-folder me-2"></i>Proyecto:</h6>
+                    <p class="mb-1"><strong>JobBook:</strong> <span id="spanJobBook"></span></p>
+                    <p class="mb-0"><strong>Nombre:</strong> <span id="spanNombreProyecto"></span></p>
+                </div>
+
+                <!-- Información del Gerente Actual (solo reasignación) -->
+                <div id="divGerenteActual" class="alert alert-info d-none">
+                    <h6 class="mb-2"><i class="bi bi-person-badge me-2"></i>Gerente Actual:</h6>
+                    <p class="mb-0" id="spanGerenteActual"></p>
+                </div>
+
+                <!-- Selección de Gerente -->
+                <div class="mb-3">
+                    <label for="ddlGerente" class="form-label fw-semibold required">
+                        <i class="bi bi-person-check me-1"></i>
+                        <span id="labelGerente">Seleccionar Gerente</span>
+                    </label>
+                    <select id="ddlGerente" class="form-select" required>
+                        <option value="">Cargando gerentes...</option>
+                    </select>
+                    <div class="form-text">Seleccione el gerente que se asignará al proyecto</div>
+                </div>
+
+                <!-- Observaciones -->
+                <div class="mb-3">
+                    <label for="txtObservaciones" class="form-label fw-semibold">
+                        <i class="bi bi-chat-left-text me-1"></i>Observaciones
+                    </label>
+                    <textarea id="txtObservaciones" class="form-control" rows="3" 
+                              placeholder="Ingrese observaciones sobre esta asignación (opcional)..." 
+                              maxlength="500"></textarea>
+                    <div class="form-text">
+                        <span id="charCount">0</span>/500 caracteres
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle me-2"></i>Cancelar
+                </button>
+                <button type="button" class="btn btn-primary" id="btnConfirmarAsignacion">
+                    <i class="bi bi-check-circle me-2"></i>
+                    <span id="btnTexto">Asignar Gerente</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Historial -->
+<div class="modal fade" id="modalHistorial" tabindex="-1" aria-labelledby="modalHistorialLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header bg-secondary bg-gradient text-white">
+                <h5 class="modal-title" id="modalHistorialLabel">
+                    <i class="bi bi-clock-history me-2"></i>Historial de Asignaciones
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="historialContent">
+                    <!-- Dinámicamente poblado -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    let unidadSeleccionada = null;
+    let proyectosAsignacion = [];
+    let proyectosReasignacion = [];
+    let gerentesDisponibles = [];
+
+    // ===== INICIALIZACIÓN =====
+    $(document).ready(function() {
+        // Event listeners
+        $('#ddlUnidad').on('change', onUnidadChange);
+        $('#btnConfirmarAsignacion').on('click', confirmarAsignacion);
+        $('#txtObservaciones').on('input', updateCharCount);
+        
+        // Tab change events
+        $('#asignacion-tab').on('shown.bs.tab', function() {
+            if (unidadSeleccionada) cargarProyectosAsignacion();
+        });
+        $('#reasignacion-tab').on('shown.bs.tab', function() {
+            if (unidadSeleccionada) cargarProyectosReasignacion();
+        });
+
+        // Bootstrap tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+
+    // ===== GESTIÓN DE FILTROS =====
+    function onUnidadChange() {
+        unidadSeleccionada = $('#ddlUnidad').val();
+        if (!unidadSeleccionada) {
+            mostrarAlertNoUnidad();
+            return;
+        }
+        aplicarFiltros();
+    }
+
+    function aplicarFiltros() {
+        if (!unidadSeleccionada) {
+            showToast('Advertencia', 'Debe seleccionar una unidad', 'warning');
+            return;
+        }
+
+        const tabActivo = $('#asignacionesTabs .nav-link.active').attr('id');
+        if (tabActivo === 'asignacion-tab') {
+            cargarProyectosAsignacion();
+        } else {
+            cargarProyectosReasignacion();
+        }
+    }
+
+    function mostrarAlertNoUnidad() {
+        $('#alertNoUnidadAsignacion').removeClass('d-none');
+        $('#alertNoUnidadReasignacion').removeClass('d-none');
+        $('#gridAsignacion').addClass('d-none');
+        $('#gridReasignacion').addClass('d-none');
+        $('#emptyAsignacion').addClass('d-none');
+        $('#emptyReasignacion').addClass('d-none');
+    }
+
+    // ===== CARGA DE DATOS =====
+    async function cargarProyectosAsignacion() {
+        $('#loadingAsignacion').removeClass('d-none');
+        $('#alertNoUnidadAsignacion').addClass('d-none');
+        $('#gridAsignacion').addClass('d-none');
+        $('#emptyAsignacion').addClass('d-none');
+
+        try {
+            const response = await fetch(`/api/py/asignacionesproyectos/obtener-para-asignar?idUnidad=${unidadSeleccionada}`);
+            const result = await response.json();
+
+            if (result.isSuccess) {
+                proyectosAsignacion = result.data;
+                renderGridAsignacion();
+                $('#badgeAsignacion').text(proyectosAsignacion.length);
+            } else {
+                showToast('Error', result.message, 'error');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            showToast('Error', 'Error al cargar proyectos: ' + error.message, 'error');
+        } finally {
+            $('#loadingAsignacion').addClass('d-none');
+        }
+    }
+
+    async function cargarProyectosReasignacion() {
+        $('#loadingReasignacion').removeClass('d-none');
+        $('#alertNoUnidadReasignacion').addClass('d-none');
+        $('#gridReasignacion').addClass('d-none');
+        $('#emptyReasignacion').addClass('d-none');
+
+        const filtroNombre = $('#txtBusqueda').val() || '';
+
+        try {
+            const response = await fetch(`/api/py/asignacionesproyectos/obtener-para-reasignar?idUnidad=${unidadSeleccionada}&filtroNombre=${encodeURIComponent(filtroNombre)}`);
+            const result = await response.json();
+
+            if (result.isSuccess) {
+                proyectosReasignacion = result.data;
+                renderGridReasignacion();
+                $('#badgeReasignacion').text(proyectosReasignacion.length);
+            } else {
+                showToast('Error', result.message, 'error');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            showToast('Error', 'Error al cargar proyectos: ' + error.message, 'error');
+        } finally {
+            $('#loadingReasignacion').addClass('d-none');
+        }
+    }
+
+    async function cargarGerentes() {
+        if (!unidadSeleccionada) return;
+
+        $('#ddlGerente').html('<option value="">Cargando...</option>');
+
+        try {
+            const response = await fetch(`/api/py/asignacionesproyectos/obtener-gerentes?idUnidad=${unidadSeleccionada}`);
+            const result = await response.json();
+
+            if (result.isSuccess) {
+                gerentesDisponibles = result.data;
+                let html = '<option value="">Seleccione un gerente...</option>';
+                gerentesDisponibles.forEach(g => {
+                    html += `<option value="${g.id}">${g.nombre}</option>`;
+                });
+                $('#ddlGerente').html(html);
+            } else {
+                $('#ddlGerente').html('<option value="">Error al cargar gerentes</option>');
+                showToast('Error', result.message, 'error');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            $('#ddlGerente').html('<option value="">Error al cargar gerentes</option>');
+        }
+    }
+
+    // ===== RENDERIZADO DE GRIDS =====
+    function renderGridAsignacion() {
+        if (proyectosAsignacion.length === 0) {
+            $('#emptyAsignacion').removeClass('d-none');
+            return;
+        }
+
+        let html = '';
+        proyectosAsignacion.forEach(p => {
+            html += `
+                <tr>
+                    <td><span class="badge bg-secondary">${p.jobBook || 'N/A'}</span></td>
+                    <td>${p.nombre}</td>
+                    <td class="text-center">${getEstadoBadge(p.estado)}</td>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-primary" onclick="abrirModalAsignar(${p.id}, '${escapeHtml(p.nombre)}', '${p.jobBook || 'N/A'}', false)" 
+                                data-bs-toggle="tooltip" title="Asignar gerente">
+                            <i class="bi bi-person-plus-fill"></i> Asignar
+                        </button>
+                    </td>
+                </tr>
+            `;
+        });
+
+        $('#tbodyAsignacion').html(html);
+        $('#gridAsignacion').removeClass('d-none');
+    }
+
+    function renderGridReasignacion() {
+        if (proyectosReasignacion.length === 0) {
+            $('#emptyReasignacion').removeClass('d-none');
+            return;
+        }
+
+        let html = '';
+        proyectosReasignacion.forEach(p => {
+            html += `
+                <tr>
+                    <td><span class="badge bg-secondary">${p.jobBook || 'N/A'}</span></td>
+                    <td>${p.nombre}</td>
+                    <td>${p.nombreGerente || 'Usuario ' + p.gerenteProyectosActual}</td>
+                    <td class="text-center">${getEstadoBadge(p.estado)}</td>
+                    <td class="text-center">
+                        <div class="btn-group btn-group-sm" role="group">
+                            <button class="btn btn-info" onclick="abrirModalAsignar(${p.id}, '${escapeHtml(p.nombre)}', '${p.jobBook || 'N/A'}', true, ${p.gerenteProyectosActual}, '${escapeHtml(p.nombreGerente || 'Usuario ' + p.gerenteProyectosActual)}')"
+                                    data-bs-toggle="tooltip" title="Reasignar gerente">
+                                <i class="bi bi-arrow-left-right"></i> Reasignar
+                            </button>
+                            <button class="btn btn-secondary" onclick="verHistorial(${p.id})"
+                                    data-bs-toggle="tooltip" title="Ver historial">
+                                <i class="bi bi-clock-history"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        });
+
+        $('#tbodyReasignacion').html(html);
+        $('#gridReasignacion').removeClass('d-none');
+    }
+
+    // ===== MODALES =====
+    async function abrirModalAsignar(idProyecto, nombreProyecto, jobBook, esReasignacion, idGerenteActual = null, nombreGerenteActual = null) {
+        $('#hdnIdProyecto').val(idProyecto);
+        $('#hdnTipoOperacion').val(esReasignacion ? 'reasignar' : 'asignar');
+        $('#spanJobBook').text(jobBook);
+        $('#spanNombreProyecto').text(nombreProyecto);
+        $('#txtObservaciones').val('');
+        updateCharCount();
+
+        if (esReasignacion) {
+            $('#modalTitulo').html('<i class="bi bi-arrow-left-right me-2"></i>Reasignar Gerente de Proyecto');
+            $('#labelGerente').text('Nuevo Gerente');
+            $('#btnTexto').text('Reasignar Gerente');
+            $('#divGerenteActual').removeClass('d-none');
+            $('#spanGerenteActual').text(nombreGerenteActual);
+            $('.modal-header').removeClass('bg-primary').addClass('bg-info');
+        } else {
+            $('#modalTitulo').html('<i class="bi bi-person-fill-add me-2"></i>Asignar Gerente de Proyecto');
+            $('#labelGerente').text('Seleccionar Gerente');
+            $('#btnTexto').text('Asignar Gerente');
+            $('#divGerenteActual').addClass('d-none');
+            $('.modal-header').removeClass('bg-info').addClass('bg-primary');
+        }
+
+        await cargarGerentes();
+        new bootstrap.Modal('#modalAsignar').show();
+    }
+
+    async function confirmarAsignacion() {
+        const idProyecto = $('#hdnIdProyecto').val();
+        const tipoOperacion = $('#hdnTipoOperacion').val();
+        const idGerente = $('#ddlGerente').val();
+        const observaciones = $('#txtObservaciones').val();
+
+        // Validación
+        if (!idGerente) {
+            showToast('Advertencia', 'Debe seleccionar un gerente', 'warning');
+            return;
+        }
+
+        // Deshabilitar botón
+        $('#btnConfirmarAsignacion').prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2"></span>Procesando...');
+
+        try {
+            const url = tipoOperacion === 'reasignar' 
+                ? '/api/py/asignacionesproyectos/reasignar'
+                : '/api/py/asignacionesproyectos/asignar';
+
+            const body = tipoOperacion === 'reasignar'
+                ? { idProyecto: parseInt(idProyecto), idGerenteNuevo: parseInt(idGerente), observaciones }
+                : { idProyecto: parseInt(idProyecto), idGerenteProyecto: parseInt(idGerente), observaciones };
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+
+            const result = await response.json();
+
+            if (result.isSuccess) {
+                showToast('Éxito', tipoOperacion === 'reasignar' ? 'Gerente reasignado exitosamente' : 'Gerente asignado exitosamente', 'success');
+                bootstrap.Modal.getInstance('#modalAsignar').hide();
+                
+                // Recargar datos
+                if (tipoOperacion === 'reasignar') {
+                    cargarProyectosReasignacion();
+                } else {
+                    cargarProyectosAsignacion();
+                }
+            } else {
+                showToast('Error', result.message, 'error');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            showToast('Error', 'Error al procesar la asignación: ' + error.message, 'error');
+        } finally {
+            $('#btnConfirmarAsignacion').prop('disabled', false).html(`<i class="bi bi-check-circle me-2"></i>${tipoOperacion === 'reasignar' ? 'Reasignar Gerente' : 'Asignar Gerente'}`);
+        }
+    }
+
+    async function verHistorial(idProyecto) {
+        $('#historialContent').html('<div class="text-center py-4"><div class="spinner-border text-primary"></div><p class="mt-3">Cargando historial...</p></div>');
+        new bootstrap.Modal('#modalHistorial').show();
+
+        try {
+            const response = await fetch(`/api/py/asignacionesproyectos/historial/${idProyecto}`);
+            const result = await response.json();
+
+            if (result.isSuccess && result.data.length > 0) {
+                let html = '<div class="timeline">';
+                result.data.forEach((h, index) => {
+                    const fecha = new Date(h.fechaAsignacion).toLocaleString('es-CO');
+                    const esPrimero = index === 0;
+                    html += `
+                        <div class="timeline-item ${esPrimero ? 'timeline-item-active' : ''}">
+                            <div class="timeline-marker ${h.tipoAsignacion === 'Inicial' ? 'bg-primary' : 'bg-info'}"></div>
+                            <div class="timeline-content">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <h6 class="mb-1">${h.tipoAsignacion}</h6>
+                                    <small class="text-muted">${fecha}</small>
+                                </div>
+                                <p class="mb-1"><strong>Gerente:</strong> ${h.nombreGerenteProyecto}</p>
+                                ${h.nombreGerentePrevio ? `<p class="mb-1 text-muted"><small>Gerente anterior: ${h.nombreGerentePrevio}</small></p>` : ''}
+                                ${h.observaciones ? `<p class="mb-0"><em>${h.observaciones}</em></p>` : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+                $('#historialContent').html(html);
+            } else {
+                $('#historialContent').html('<div class="alert alert-info"><i class="bi bi-info-circle me-2"></i>No hay historial de asignaciones para este proyecto</div>');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            $('#historialContent').html('<div class="alert alert-danger"><i class="bi bi-exclamation-triangle me-2"></i>Error al cargar el historial</div>');
+        }
+    }
+
+    // ===== UTILIDADES =====
+    function getEstadoBadge(estado) {
+        const badges = {
+            1: '<span class="badge bg-success">Nuevo</span>',
+            2: '<span class="badge bg-warning text-dark">En Progreso</span>',
+            3: '<span class="badge bg-secondary">Cerrado</span>'
+        };
+        return badges[estado] || '<span class="badge bg-light text-dark">Desconocido</span>';
+    }
+
+    function updateCharCount() {
+        const length = $('#txtObservaciones').val().length;
+        $('#charCount').text(length);
+    }
+
+    function escapeHtml(text) {
+        if (!text) return '';
+        return text.replace(/'/g, "\\'").replace(/"/g, '\\"');
+    }
+
+    function showToast(title, message, type = 'info') {
+        const iconMap = {
+            success: 'bi-check-circle-fill text-success',
+            error: 'bi-x-circle-fill text-danger',
+            warning: 'bi-exclamation-triangle-fill text-warning',
+            info: 'bi-info-circle-fill text-info'
+        };
+
+        const toastHtml = `
+            <div class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <i class="bi ${iconMap[type]} me-2"></i>
+                        <strong>${title}:</strong> ${message}
+                    </div>
+                    <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        `;
+
+        const toastContainer = $('.toast-container');
+        if (toastContainer.length === 0) {
+            $('body').append('<div class="toast-container position-fixed bottom-0 end-0 p-3"></div>');
+        }
+
+        $('.toast-container').append(toastHtml);
+        const toastElement = $('.toast-container .toast').last()[0];
+        const toast = new bootstrap.Toast(toastElement, { delay: 4000 });
+        toast.show();
+
+        $(toastElement).on('hidden.bs.toast', function() {
+            $(this).remove();
+        });
+    }
+</script>
+
+<style>
+    .required::after {
+        content: " *";
+        color: red;
+    }
+
+    .timeline {
+        position: relative;
+        padding-left: 30px;
+    }
+
+    .timeline-item {
+        position: relative;
+        padding-bottom: 20px;
+        border-left: 2px solid #dee2e6;
+    }
+
+    .timeline-item:last-child {
+        border-left: none;
+    }
+
+    .timeline-marker {
+        position: absolute;
+        left: -6px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        border: 2px solid #fff;
+    }
+
+    .timeline-item-active .timeline-marker {
+        width: 16px;
+        height: 16px;
+        left: -8px;
+        box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.25);
+    }
+
+    .timeline-content {
+        margin-left: 20px;
+        padding: 10px;
+        background-color: #f8f9fa;
+        border-radius: 4px;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(13, 110, 253, 0.075);
+        cursor: pointer;
+    }
+
+    .btn-group-sm > .btn {
+        padding: 0.25rem 0.5rem;
+    }
+</style>
+}
