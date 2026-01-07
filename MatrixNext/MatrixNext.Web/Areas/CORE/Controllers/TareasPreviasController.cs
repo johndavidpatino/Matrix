@@ -30,6 +30,16 @@ namespace MatrixNext.Web.Areas.CORE.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Grid()
+        {
+            var list = await _db.TareasPrevias
+                .AsNoTracking()
+                .OrderByDescending(x => x.Id)
+                .ToListAsync();
+            return PartialView("_GridTable", list);
+        }
+
+        [HttpGet]
         public IActionResult Create()
         {
             return View(new TareaPrevía());

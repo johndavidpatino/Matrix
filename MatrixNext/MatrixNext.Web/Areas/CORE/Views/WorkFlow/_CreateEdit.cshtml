@@ -5,11 +5,31 @@
     <div class="row g-3">
         <div class="col-sm-6">
             <label class="form-label">IdTrabajo</label>
-            <input asp-for="IdTrabajo" class="form-control" />
+            <select asp-for="IdTrabajo" class="form-select lookup-trabajo" data-lookup-url="@Url.Action("Lookup", "Trabajos", new { area = "PY" })">
+                @if (Model.IdTrabajo != 0)
+                {
+                    <option value="@Model.IdTrabajo" selected>Trabajo #@Model.IdTrabajo</option>
+                }
+                else
+                {
+                    <option value="">-- Seleccionar --</option>
+                }
+            </select>
+            <small class="text-muted">Buscar por JobBook o nombre</small>
         </div>
         <div class="col-sm-6">
             <label class="form-label">IdTarea</label>
-            <input asp-for="IdTarea" class="form-control" />
+            <select asp-for="IdTarea" class="form-select lookup-tarea" data-lookup-url="@Url.Action("Lookup", "Tareas", new { area = "CORE" })">
+                @if (Model.IdTarea != 0)
+                {
+                    <option value="@Model.IdTarea" selected>Tarea #@Model.IdTarea</option>
+                }
+                else
+                {
+                    <option value="">-- Seleccionar --</option>
+                }
+            </select>
+            <small class="text-muted">Buscar por ID o nombre</small>
         </div>
         <div class="col-sm-6">
             <label class="form-label">Estado</label>

@@ -4,11 +4,31 @@
     <div class="row g-3">
         <div class="col-sm-6">
             <label class="form-label">IdTarea</label>
-            <input asp-for="IdTarea" class="form-control" />
+            <select asp-for="IdTarea" class="form-select lookup-tarea" data-lookup-url="@Url.Action("Lookup", "Tareas", new { area = "CORE" })">
+                @if (Model.IdTarea != 0)
+                {
+                    <option value="@Model.IdTarea" selected>Tarea #@Model.IdTarea</option>
+                }
+                else
+                {
+                    <option value="">-- Seleccionar --</option>
+                }
+            </select>
+            <small class="text-muted">Tarea que depende de otra</small>
         </div>
         <div class="col-sm-6">
             <label class="form-label">IdTareaPreviaRequerida</label>
-            <input asp-for="IdTareaPreviaRequerida" class="form-control" />
+            <select asp-for="IdTareaPreviaRequerida" class="form-select lookup-tarea" data-lookup-url="@Url.Action("Lookup", "Tareas", new { area = "CORE" })">
+                @if (Model.IdTareaPreviaRequerida != 0)
+                {
+                    <option value="@Model.IdTareaPreviaRequerida" selected>Tarea #@Model.IdTareaPreviaRequerida</option>
+                }
+                else
+                {
+                    <option value="">-- Seleccionar --</option>
+                }
+            </select>
+            <small class="text-muted">Tarea previa requerida</small>
         </div>
         <div class="col-sm-6">
             <label class="form-label">Orden</label>

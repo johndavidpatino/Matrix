@@ -9,24 +9,6 @@
     <a class="btn btn-secondary" href="@Url.Action("Index","WorkFlow")">WorkFlow</a>
 </p>
 
-<table class="table table-striped table-sm">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>IdTarea</th>
-            <th>IdTareaPreviaRequerida</th>
-            <th>Orden</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.Id</td>
-                <td>@item.IdTarea</td>
-                <td>@item.IdTareaPreviaRequerida</td>
-                <td>@item.Orden</td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div id="tp-grid-container" data-grid-url="@Url.Action("Grid")">
+    @await Html.PartialAsync("_GridTable", Model)
+</div>
