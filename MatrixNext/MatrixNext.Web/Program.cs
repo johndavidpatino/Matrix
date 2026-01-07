@@ -71,6 +71,11 @@ builder.Services.AddScoped<IProyectosService, ProyectosService>();
 builder.Services.AddScoped<ITrabajosService, TrabajosService>();
 builder.Services.AddScoped<ITrabajosWorkFlowService, TrabajosWorkFlowService>();
 
+// ===== SPRINT 3: CORE Operación =====
+// Ref: PLAN_IMPLEMENTACION_SPRINTS.md § T3 (CORE Operación)
+builder.Services.AddScoped<MatrixNext.Web.Services.CORE.IAsignacionesService, MatrixNext.Web.Services.CORE.AsignacionesService>();
+builder.Services.AddScoped<MatrixNext.Web.Services.CORE.IGestionTareasService, MatrixNext.Web.Services.CORE.GestionTareasService>();
+
 // DbContext principal (PY, CORE, OP)
 builder.Services.AddDbContext<MatrixDbContext>(options =>
     options.UseSqlServer(connectionString));
