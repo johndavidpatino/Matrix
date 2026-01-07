@@ -9,15 +9,15 @@ namespace MatrixNext.Web.Models.PY
     {
         public long IdProyecto { get; set; }
         
-        public string Nombre { get; set; }
+        public string? Nombre { get; set; }
         
-        public string Descripcion { get; set; }
+        public string? Descripcion { get; set; }
         
         public int IdMetodologia { get; set; }
         
         public int IdTipoProyecto { get; set; }
         
-        public string JobBook { get; set; }
+        public string? JobBook { get; set; }
         
         public int Estado { get; set; } = 1; // 1=Nuevo, 2=Enviado, 3=Cerrado, 11=Anulado
         

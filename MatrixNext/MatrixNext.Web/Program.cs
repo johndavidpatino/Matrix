@@ -10,6 +10,7 @@ using MatrixNext.Web.Areas.EQ.Services.Internal;
 using MatrixNext.Web.Areas.EQ.Services.Masters;
 using MatrixNext.Web.Infrastructure.Data;
 using MatrixNext.Web.Services;
+using MatrixNext.Web.Services.PY;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -63,6 +64,12 @@ builder.Services.AddScoped<MatrixNext.Web.Services.CORE.WorkFlowDataAdapter>();
 builder.Services.AddScoped<MatrixNext.Web.Services.CORE.TareasPreviasDataAdapter>();
 builder.Services.AddScoped<MatrixNext.Web.Services.CORE.IWorkFlowService, MatrixNext.Web.Services.CORE.WorkFlowService>();
 builder.Services.AddScoped<MatrixNext.Web.Services.CORE.ITareasPreviasService, MatrixNext.Web.Services.CORE.TareasPreviasService>();
+
+// ===== SPRINT 2: PY Maestros =====
+// Ref: PLAN_IMPLEMENTACION_SPRINTS.md § T2 (PY Maestros)
+builder.Services.AddScoped<IProyectosService, ProyectosService>();
+builder.Services.AddScoped<ITrabajosService, TrabajosService>();
+builder.Services.AddScoped<ITrabajosWorkFlowService, TrabajosWorkFlowService>();
 
 // DbContext principal (PY, CORE, OP)
 builder.Services.AddDbContext<MatrixDbContext>(options =>

@@ -8,9 +8,9 @@ namespace MatrixNext.Web.Models.PY
     {
         public long IdTrabajo { get; set; }
         
-        public string Nombre { get; set; }
+        public string? Nombre { get; set; }
         
-        public string Valor { get; set; }
+        public string? Valor { get; set; }
         
         public int TipoDato { get; set; } // 1=Texto, 2=Número, 3=Fecha
         

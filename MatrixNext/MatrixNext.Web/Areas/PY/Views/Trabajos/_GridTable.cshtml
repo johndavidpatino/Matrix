@@ -1,0 +1,54 @@
+@model MatrixNext.Web.ViewModels.PaginationResultVM<MatrixNext.Web.Models.PY.Trabajo>
+
+<table class="table table-striped align-middle">
+    <thead>
+        <tr>
+            <th>Proyecto</th>
+            <th>JobBook</th>
+            <th>Nombre</th>
+            <th>Metodología</th>
+            <th>Estado</th>
+            <th class="text-end">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+    @if (Model.Items.Any())
+    {
+        foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>@item.IdProyecto</td>
+                <td>@item.JobBook</td>
+                <td>@item.Nombre</td>
+                <td>@item.IdMetodologia</td>
+                <td>@item.Estado</td>
+                <td class="text-end">
+                    <button class="btn btn-sm btn-outline-primary" data-url="@Url.Action("EditModal", new { id = item.Id })" data-ajax-modal>Editar</button>
+                    <button class="btn btn-sm btn-outline-secondary" data-url="@Url.Action("DuplicateModal", new { id = item.Id })" data-ajax-modal>Duplicar</button>
+                    <button class="btn btn-sm btn-outline-danger" data-delete data-url="@Url.Action("Delete", new { id = item.Id })">Eliminar</button>
+                </td>
+            </tr>
+        }
+    }
+    else
+    {
+        <tr><td colspan="6" class="text-center text-muted">Sin registros</td></tr>
+    }
+    </tbody>
+</table>
+
+@if (Model.TotalPages > 1)
+{
+    <nav class="d-flex justify-content-between align-items-center">
+        <div class="small text-muted">@Model.TotalCount registros</div>
+        <ul class="pagination mb-0">
+            <li class="page-item @(Model.HasPreviousPage ? string.Empty : "disabled")">
+                <button class="page-link" data-page="@(Model.PageNumber - 1)">Anterior</button>
+            </li>
+            <li class="page-item disabled"><span class="page-link">@Model.PageNumber / @Model.TotalPages</span></li>
+            <li class="page-item @(Model.HasNextPage ? string.Empty : "disabled")">
+                <button class="page-link" data-page="@(Model.PageNumber + 1)">Siguiente</button>
+            </li>
+        </ul>
+    </nav>
+}

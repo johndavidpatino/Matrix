@@ -7,9 +7,9 @@ namespace MatrixNext.Web.Models.PY
     /// </summary>
     public class Proyecto : BaseEntity
     {
-        public string Nombre { get; set; }
+        public string? Nombre { get; set; }
         
-        public string Descripcion { get; set; }
+        public string? Descripcion { get; set; }
         
         public long IdGerenteProyectos { get; set; }
         
@@ -17,7 +17,7 @@ namespace MatrixNext.Web.Models.PY
         
         public int Estado { get; set; } = 1; // 1=Nuevo, 2=EnProgreso, 3=Cerrado
         
-        public string JobBook { get; set; }
+        public string? JobBook { get; set; }
         
         // Relaciones
         public virtual ICollection<Trabajo> Trabajos { get; set; } = new List<Trabajo>();

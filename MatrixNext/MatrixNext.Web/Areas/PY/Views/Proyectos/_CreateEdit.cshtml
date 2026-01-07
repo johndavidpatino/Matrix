@@ -1,0 +1,54 @@
+@model MatrixNext.Web.Models.PY.Proyecto
+
+<form asp-action="CreateModal" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="onModalSuccess" data-ajax-failure="onModalFailure">
+    @Html.AntiForgeryToken()
+    <div class="mb-3">
+        <label class="form-label">Nombre</label>
+        <input asp-for="Nombre" class="form-control" />
+        <span asp-validation-for="Nombre" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">JobBook</label>
+        <input asp-for="JobBook" class="form-control" />
+        <span asp-validation-for="JobBook" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Descripción</label>
+        <textarea asp-for="Descripcion" class="form-control" rows="3"></textarea>
+    </div>
+    <div class="row g-2 mb-3">
+        <div class="col-md-6">
+            <label class="form-label">Gerente Proyectos (Id)</label>
+            <input asp-for="IdGerenteProyectos" class="form-control" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Unidad (Id)</label>
+            <input asp-for="IdUnidad" class="form-control" />
+        </div>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Estado</label>
+        <select asp-for="Estado" class="form-select">
+            <option value="1">Activo</option>
+            <option value="0">Inactivo</option>
+        </select>
+    </div>
+    <div class="form-check form-switch mb-3">
+        <input asp-for="Activo" class="form-check-input" />
+        <label class="form-check-label" for="Activo">Activo</label>
+    </div>
+    <div class="d-flex justify-content-end">
+        <button type="submit" class="btn btn-primary">Guardar</button>
+    </div>
+</form>
+
+<script>
+    function onModalSuccess(response) {
+        if (response && response.success) {
+            window.location.reload();
+        }
+    }
+    function onModalFailure() {
+        alert('No se pudo guardar el proyecto');
+    }
+</script>

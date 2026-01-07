@@ -1,0 +1,100 @@
+@model MatrixNext.Web.ViewModels.FiltrosVM
+@{
+    ViewData["Title"] = "Trabajos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var idProyecto = ViewBag.IdProyecto as long?;
+}
+
+<div class="container-fluid py-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="mb-0">Trabajos</h2>
+            <small class="text-muted">Gestión de trabajos (PY_Trabajo)</small>
+        </div>
+        <button class="btn btn-primary" data-url="@Url.Action("CreateModal", new { idProyecto })" data-ajax-modal>
+            <i class="bi bi-plus-lg"></i> Nuevo Trabajo
+        </button>
+    </div>
+
+    <form id="filtrosForm" class="row g-2 mb-3" data-grid-target="#gridContainer" data-grid-url="@Url.Action("Grid")">
+        <input type="hidden" name="idProyecto" value="@idProyecto" />
+        <div class="col-md-4">
+            <input asp-for="Busqueda" class="form-control" placeholder="Buscar por nombre o JobBook" />
+        </div>
+        <div class="col-md-2">
+            <select asp-for="Estado" class="form-select">
+                <option value="-1">Todos</option>
+                <option value="1">Activo</option>
+                <option value="0">Inactivo</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select asp-for="PageSize" class="form-select">
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+            </select>
+        </div>
+        <div class="col-md-4 d-flex align-items-center">
+            <button type="submit" class="btn btn-outline-secondary me-2">Filtrar</button>
+            <button type="button" class="btn btn-outline-light border" id="btnLimpiar">Limpiar</button>
+        </div>
+    </form>
+
+    <div id="gridContainer" data-grid-url="@Url.Action("Grid")">
+        @Html.Partial("_GridTable", new MatrixNext.Web.ViewModels.PaginationResultVM<MatrixNext.Web.Models.PY.Trabajo>())
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="~/Views/Shared/_ValidationScriptsPartial.cshtml" />
+    <script>
+        (function() {
+            const form = document.getElementById('filtrosForm');
+            const grid = document.getElementById('gridContainer');
+            const btnLimpiar = document.getElementById('btnLimpiar');
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                refreshGrid();
+            });
+
+            btnLimpiar.addEventListener('click', () => {
+                form.reset();
+                refreshGrid();
+            });
+
+            function refreshGrid(page) {
+                const url = grid.dataset.gridUrl;
+                const formData = new FormData(form);
+                if (page) formData.set('PageNumber', page);
+                fetch(url, { method: 'POST', body: formData })
+                    .then(r => r.text())
+                    .then(html => { grid.innerHTML = html; attachPager(); attachActions(); });
+            }
+
+            function attachPager() {
+                grid.querySelectorAll('[data-page]').forEach(btn => {
+                    btn.addEventListener('click', () => refreshGrid(btn.dataset.page));
+                });
+            }
+
+            function attachActions() {
+                grid.querySelectorAll('[data-delete]').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        if (!confirm('¿Eliminar el trabajo?')) return;
+                        fetch(btn.dataset.url, {
+                            method: 'POST',
+                            headers: { 'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value }
+                        })
+                        .then(r => r.json())
+                        .then(data => { if (data.success) location.reload(); else alert(data.message); });
+                    });
+                });
+            }
+
+            attachPager();
+            attachActions();
+        })();
+    </script>
+}
