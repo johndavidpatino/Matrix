@@ -98,6 +98,11 @@
             <partial name="~/Views/Shared/layouts/_modal.cshtml" />
             <!-- End::main-modal -->          
 
+            <!-- App AJAX Modal -->
+            <partial name="~/Views/Shared/_AjaxModal.cshtml" />
+            <!-- Toast Container -->
+            <partial name="~/Views/Shared/_ToastContainer.cshtml" />
+
 		</div>
 		<!-- End Page -->
 
@@ -143,6 +148,8 @@
 
         <!-- Custom JS -->
         <script src="@Url.Content("~/assets/js/custom.js")"></script>
+        <!-- AJAX Modal Helpers -->
+        <script src="@Url.Content("~/js/ajax-modal.js")"></script>
             
     </body>
 

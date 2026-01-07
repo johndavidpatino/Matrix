@@ -29,19 +29,40 @@ namespace MatrixNext.Web.Areas.CORE.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Grid(int page = 1, int size = 10, string sortBy = "Id", bool desc = true)
+        {
+            var query = _db.WorkFlows.AsNoTracking();
+            var result = await _grid.PaginarAsync(query, page, size, sortBy, desc);
+            return PartialView("_GridTable", result);
+        }
+
+        [HttpGet]
         public IActionResult Create()
         {
             return View(new WorkFlow());
+        }
+
+        [HttpGet]
+        public IActionResult CreateModal()
+        {
+            return PartialView("_CreateEdit", new WorkFlow());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(WorkFlow model)
         {
-            if (!ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid)
+            {
+                if (Request.Headers.ContainsKey("X-Requested-With"))
+                    return PartialView("_CreateEdit", model);
+                return View(model);
+            }
 
             _db.WorkFlows.Add(model);
             await _db.SaveChangesAsync();
+            if (Request.Headers.ContainsKey("X-Requested-With"))
+                return Json(new { success = true, message = "WorkFlow creado" });
             return RedirectToAction(nameof(Index));
         }
 
@@ -53,15 +74,30 @@ namespace MatrixNext.Web.Areas.CORE.Controllers
             return View(entity);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> EditModal(long id)
+        {
+            var entity = await _db.WorkFlows.FindAsync(id);
+            if (entity == null) return NotFound();
+            return PartialView("_CreateEdit", entity);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(long id, WorkFlow model)
         {
             if (id != model.Id) return BadRequest();
-            if (!ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid)
+            {
+                if (Request.Headers.ContainsKey("X-Requested-With"))
+                    return PartialView("_CreateEdit", model);
+                return View(model);
+            }
 
             _db.WorkFlows.Update(model);
             await _db.SaveChangesAsync();
+            if (Request.Headers.ContainsKey("X-Requested-With"))
+                return Json(new { success = true, message = "WorkFlow actualizado" });
             return RedirectToAction(nameof(Index));
         }
     }

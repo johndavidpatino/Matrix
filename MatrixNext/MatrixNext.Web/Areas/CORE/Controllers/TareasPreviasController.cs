@@ -35,11 +35,22 @@ namespace MatrixNext.Web.Areas.CORE.Controllers
             return View(new TareaPrevía());
         }
 
+        [HttpGet]
+        public IActionResult CreateModal()
+        {
+            return PartialView("_Create", new TareaPrevía());
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(TareaPrevía model)
         {
-            if (!ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid)
+            {
+                if (Request.Headers.ContainsKey("X-Requested-With"))
+                    return PartialView("_Create", model);
+                return View(model);
+            }
 
             // Validar grafo acíclico simulando inserción
             var actuales = await _db.TareasPrevias.AsNoTracking().ToListAsync();
@@ -60,11 +71,15 @@ namespace MatrixNext.Web.Areas.CORE.Controllers
             if (!esAciclico)
             {
                 ModelState.AddModelError(string.Empty, "La relación crea un ciclo de dependencias.");
+                if (Request.Headers.ContainsKey("X-Requested-With"))
+                    return PartialView("_Create", model);
                 return View(model);
             }
 
             _db.TareasPrevias.Add(model);
             await _db.SaveChangesAsync();
+            if (Request.Headers.ContainsKey("X-Requested-With"))
+                return Json(new { success = true, message = "Relación creada" });
             return RedirectToAction(nameof(Index));
         }
     }

@@ -1,0 +1,28 @@
+@model MatrixNext.Web.Models.CORE.WorkFlow
+
+<form asp-action="@(Model.Id == 0 ? "Create" : "Edit")" method="post" data-ajax="true">
+    @if (Model.Id != 0) { <input type="hidden" asp-for="Id" /> }
+    <div class="row g-3">
+        <div class="col-sm-6">
+            <label class="form-label">IdTrabajo</label>
+            <input asp-for="IdTrabajo" class="form-control" />
+        </div>
+        <div class="col-sm-6">
+            <label class="form-label">IdTarea</label>
+            <input asp-for="IdTarea" class="form-control" />
+        </div>
+        <div class="col-sm-6">
+            <label class="form-label">Estado</label>
+            <input asp-for="Estado" class="form-control" />
+        </div>
+        <div class="col-sm-6">
+            <label class="form-label">Prioridad</label>
+            <input asp-for="Prioridad" class="form-control" />
+        </div>
+        <div class="col-12 text-danger" asp-validation-summary="ModelOnly"></div>
+    </div>
+    <div class="mt-3 d-flex gap-2">
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+    </div>
+</form>
