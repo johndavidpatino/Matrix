@@ -1,0 +1,60 @@
+@model PaginationResultVM<Tarea>
+@{
+    ViewData["Title"] = "Configuración de Tareas";
+}
+
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col">
+            <h2>@ViewData["Title"]</h2>
+            <p class="text-muted">Catálogo de tipos de tareas disponibles para asignar en WorkFlows</p>
+        </div>
+        <div class="col-auto">
+            <button type="button" 
+                    class="btn btn-primary" 
+                    data-ajax-modal-url="@Url.Action("CreateModal", "TareasConfig", new { area = "CORE" })"
+                    data-ajax-modal-title="Nueva Tarea">
+                <i class="bi bi-plus-lg"></i> Nueva Tarea
+            </button>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="card mb-3">
+        <div class="card-body">
+            <form method="get" asp-action="Index">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Búsqueda</label>
+                        <input type="text" name="busqueda" class="form-control" placeholder="Nombre de tarea..." value="@Context.Request.Query["busqueda"]" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Estado</label>
+                        <select name="visible" class="form-select">
+                            <option value="">Todas</option>
+                            <option value="true" selected="@(Context.Request.Query["visible"] == "true")">Visibles</option>
+                            <option value="false" selected="@(Context.Request.Query["visible"] == "false")">Ocultas</option>
+                        </select>
+                    </div>
+                    <div class="col-md-auto align-self-end">
+                        <button type="submit" class="btn btn-secondary">
+                            <i class="bi bi-search"></i> Filtrar
+                        </button>
+                        <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-lg"></i> Limpiar
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Grid con refresh parcial -->
+    <div id="grid-container" data-grid-url="@Url.Action("Grid", "TareasConfig", new { area = "CORE" })">
+        @await Html.PartialAsync("_GridTable", Model)
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/ajax-modal.js"></script>
+}

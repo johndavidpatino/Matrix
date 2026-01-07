@@ -22,6 +22,7 @@ namespace MatrixNext.Web.Infrastructure.Data
         public DbSet<VariableControl> VariablesControl { get; set; }
 
         // ===== CORE: WORKFLOW Y TAREAS =====
+        public DbSet<Tarea> Tareas { get; set; }
         public DbSet<WorkFlow> WorkFlows { get; set; }
         public DbSet<TareaPrevía> TareasPrevias { get; set; }
         public DbSet<WorkFlowUsuarioAsignado> WorkFlowUsuariosAsignados { get; set; }
@@ -104,6 +105,24 @@ namespace MatrixNext.Web.Infrastructure.Data
                     .HasMaxLength(1000);
 
                 entity.Property(e => e.FechaCreacion).HasDefaultValueSql("GETUTCDATE()");
+            });
+
+            // ===== CONFIGURACIÓN CORE: TAREAS (CATÁLOGO) =====
+            modelBuilder.Entity<Tarea>(entity =>
+            {
+                entity.ToTable("CORE_Tareas");
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Nombre)
+                    .IsRequired()
+                    .HasMaxLength(500);
+
+                entity.Property(e => e.FechaCreacion).HasDefaultValueSql("GETUTCDATE()");
+                entity.Property(e => e.FechaModificacion).HasDefaultValueSql("GETUTCDATE()");
+
+                // Índices
+                entity.HasIndex(e => e.Nombre);
+                entity.HasIndex(e => e.Visible);
             });
 
             // ===== CONFIGURACIÓN CORE: WORKFLOW =====

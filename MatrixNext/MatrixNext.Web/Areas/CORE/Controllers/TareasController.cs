@@ -24,30 +24,36 @@ namespace MatrixNext.Web.Areas.CORE.Controllers
         }
 
         /// <summary>
-        /// Lookup para autocompletar tareas (IdTarea)
+        /// Lookup para autocompletar tareas desde el catálogo CORE_Tareas
         /// </summary>
         [HttpGet]
         public async Task<IActionResult> Lookup(string q = "", int limit = 20)
         {
-            // Placeholder: cuando exista tabla CORE_Tareas, consultar aquí
-            // Por ahora devolver mock basado en WorkFlow.IdTarea (valores únicos)
-            var query = _db.WorkFlows
+            var query = _db.Tareas
                 .AsNoTracking()
-                .Select(w => w.IdTarea)
-                .Distinct();
+                .Where(t => t.Visible == true);
 
-            if (!string.IsNullOrWhiteSpace(q) && long.TryParse(q, out var idTarea))
+            if (!string.IsNullOrWhiteSpace(q))
             {
-                query = query.Where(id => id == idTarea);
+                // Buscar por ID o por nombre
+                if (long.TryParse(q, out var id))
+                {
+                    query = query.Where(t => t.Id == id || t.Nombre.Contains(q));
+                }
+                else
+                {
+                    query = query.Where(t => t.Nombre.Contains(q));
+                }
             }
 
             var items = await query
-                .OrderBy(id => id)
+                .OrderBy(t => t.Orden)
+                .ThenBy(t => t.Nombre)
                 .Take(limit)
-                .Select(id => new
+                .Select(t => new
                 {
-                    id = id,
-                    text = $"Tarea #{id}" // TODO: nombre real desde CORE_Tareas
+                    id = t.Id,
+                    text = t.Nombre
                 })
                 .ToListAsync();
 
@@ -55,13 +61,23 @@ namespace MatrixNext.Web.Areas.CORE.Controllers
         }
 
         /// <summary>
-        /// Obtener tarea por ID (placeholder hasta tener catálogo real)
+        /// Obtener tarea por ID desde catálogo CORE_Tareas
         /// </summary>
         [HttpGet("{id}")]
-        public IActionResult GetById(long id)
+        public async Task<IActionResult> GetById(long id)
         {
-            // TODO: consultar CORE_Tareas cuando exista
-            return Json(new { id = id, text = $"Tarea #{id}" });
+            var tarea = await _db.Tareas
+                .AsNoTracking()
+                .Where(t => t.Id == id)
+                .Select(t => new { id = t.Id, text = t.Nombre })
+                .FirstOrDefaultAsync();
+
+            if (tarea == null)
+            {
+                return NotFound();
+            }
+
+            return Json(tarea);
         }
     }
 }
