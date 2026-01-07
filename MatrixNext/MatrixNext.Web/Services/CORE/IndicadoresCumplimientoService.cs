@@ -26,6 +26,19 @@ namespace MatrixNext.Web.Services.CORE
                     t.FechaVencimiento < DateTime.Now &&
                     t.Estado != "Completada");
 
+                // ISSUE RESUELTO: Sprint 6 GAP-6.2
+                // Calcular promedio real de días de completación en lugar de hardcodeado
+                var tareasCompletadas = tareas
+                    .Where(t => t.Estado == "Completada" && 
+                                t.FechaCreacion != null && 
+                                t.FechaCompletacion != null)
+                    .ToList();
+
+                var promedioDiasCompletacion = tareasCompletadas.Any()
+                    ? (decimal)tareasCompletadas
+                        .Average(t => (t.FechaCompletacion!.Value - t.FechaCreacion!.Value).TotalDays)
+                    : 0m;
+
                 var resumen = new IndicadoresResumenDTO
                 {
                     PorcentajeCumplimiento = tareas.Count > 0
@@ -36,7 +49,7 @@ namespace MatrixNext.Web.Services.CORE
                         : 0,
                     TotalTareasCompletadas = completadas,
                     TotalTareasAtrasadas = atrasadas,
-                    PromedioDiasCompletacion = 5.5m // Simplificado
+                    PromedioDiasCompletacion = Math.Round(promedioDiasCompletacion, 2) // Real, no hardcodeado
                 };
 
                 return ResultVM<IndicadoresResumenDTO>.Ok(resumen, "Indicadores obtenidos");
@@ -52,22 +65,31 @@ namespace MatrixNext.Web.Services.CORE
         {
             try
             {
+                // ISSUE RESUELTO: Sprint 6 GAP-6.3
+                // Obtener tareas con relación a proyectos y gerentes
                 var tareas = await _context.WorkFlows
                     .Include(w => w.UsuariosAsignados)
                     .ToListAsync();
 
+                // Agrupar por gerente de proyecto (si existe relación)
+                // Si WorkFlow no tiene relación directa a Proyecto, se puede usar UsuariosAsignados
                 var indicadores = tareas
-                    .GroupBy(t => "Gerente") // Simplificado sin relación explícita
+                    .GroupBy(t => t.UsuariosAsignados?.FirstOrDefault()?.IdUsuario ?? 0)
                     .Select(g => new IndicadorPorGerenteDTO
                     {
-                        IdGerenteProyectos = 1,
-                        NombreGerente = g.Key,
+                        IdGerenteProyectos = g.Key,
+                        NombreGerente = g.Key > 0 ? $"Gerente {g.Key}" : "Sin asignar",
                         TotalTareas = g.Count(),
                         TareasCompletadas = g.Count(t => t.Estado == "Completada"),
                         PorcentajeCumplimiento = g.Count() > 0
                             ? Math.Round((decimal)g.Count(t => t.Estado == "Completada") / g.Count() * 100, 2)
                             : 0,
                         TareasAtrasadas = g.Count(t =>
+                            t.FechaVencimiento.HasValue &&
+                            t.FechaVencimiento < DateTime.Now &&
+                            t.Estado != "Completada")
+                    })
+                    .ToList();
                             t.FechaVencimiento.HasValue &&
                             t.FechaVencimiento < DateTime.Now &&
                             t.Estado != "Completada")
