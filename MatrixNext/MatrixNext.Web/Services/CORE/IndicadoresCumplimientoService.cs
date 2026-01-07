@@ -90,11 +90,6 @@ namespace MatrixNext.Web.Services.CORE
                             t.Estado != "Completada")
                     })
                     .ToList();
-                            t.FechaVencimiento.HasValue &&
-                            t.FechaVencimiento < DateTime.Now &&
-                            t.Estado != "Completada")
-                    })
-                    .ToList();
 
                 return ResultVM<List<IndicadorPorGerenteDTO>>.Ok(indicadores, "Indicadores por gerente");
             }

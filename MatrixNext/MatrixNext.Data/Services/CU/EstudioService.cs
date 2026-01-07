@@ -48,7 +48,6 @@ namespace MatrixNext.Data.Services.CU
                 {
                     vm.Estudio = MapEntidad(entidad);
                     
-                    // TODO-P0-02: Cargar presupuestos asignados si es edición
                     try
                     {
                         var presupuestosAsignados = _presupuestoAdapter.ObtenerPresupuestosAsignadosXEstudio(idEstudio.Value);
@@ -69,7 +68,6 @@ namespace MatrixNext.Data.Services.CU
                 vm.Estudio.TiempoRetencionAnnos = 1;
                 vm.Estudio.FechaInicio = DateTime.Now.Date;
                 
-                // TODO-P0-02: Obtener presupuestos aprobados de la propuesta
                 try
                 {
                     vm.PresupuestosAprobados = _presupuestoAdapter.ObtenerPresupuestosAprobados(idPropuesta.Value);
@@ -115,7 +113,6 @@ namespace MatrixNext.Data.Services.CU
 
                 var id = _adapter.Guardar(entidad);
                 
-                // TODO-P0-02: Asignar presupuestos aprobados al estudio
                 if (model.PresupuestosSeleccionados != null && model.PresupuestosSeleccionados.Any())
                 {
                     try

@@ -64,8 +64,21 @@ namespace MatrixNext.Data.Services.CU
                 if (tecCodigo == 300)
                 {
                     // Online: alta productividad (autoadministrado)
-                    // Depende de muestra disponible en panel
-                    return 1000; // Placeholder - depende de panel
+                    // Aproximación: productividad base ajustada por duración e incidencia
+                    // Base a 10 minutos: 600 completes/día (ajustable por negocio)
+                    var base10Min = 600.0;
+                    var minutos = Math.Max(5, tiempoEncuesta);
+                    var factorDuracion = 10.0 / Math.Max(10.0, minutos); // Más corta → más productividad
+                    var factorIncidencia = (incidencia ?? 100) / 100.0;   // Incidencia reduce completes
+
+                    var productividad = base10Min * factorDuracion * factorIncidencia;
+
+                    if (totalPreguntas > 40)
+                        productividad *= 0.9; // Cuestionarios largos reducen el completion rate
+
+                    // Piso técnico para evitar 0 y techo razonable
+                    productividad = Math.Max(50, Math.Min(2000, productividad));
+                    return Math.Round(productividad, 2);
                 }
 
                 return 10; // Default conservador
