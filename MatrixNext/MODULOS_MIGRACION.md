@@ -61,10 +61,19 @@
 - **Dependencias**: Medias (referencia Usuarios, Metodologías)
 - **Volumen**: Grande pero bien estructurado
 
-#### 4. **OP_Cuantitativo** (múltiples)
+#### 4. **OP_Cuantitativo** (31 páginas)
 - **Carpeta**: `WebMatrix/OP_Cuantitativo/`
 - **Contexto**: `OP_Cuanti_Model` (CoreProject)
+- **Páginas**: 31 páginas analizadas (excluye: Borrar.aspx, TraficoEncuestas.aspx)
 - **Dependencias**: Altas (métodos, cálculos, variables)
+- **Status**: ✅ ANÁLISIS COMPLETO
+- **Documento**: [ANALISIS_OP_CUANTITATIVO.md](MatrixNext/docs/ANALISIS_OP_CUANTITATIVO.md) (v1.1)
+- **Estimación**: 330-435h (1:1) o 260-350h (optimizado)
+- **Timeline**: 11-15 semanas (1:1) o 9-12 semanas (optimizado)
+- **Riesgos identificados**: 14 (Session hardcoded, OleDb incompatibilidad, GridView complejidad)
+- **Optimizaciones propuestas**: 7 consolidaciones (31→18 vistas, -42% código, 0% funcionalidad perdida)
+- **Backlog**: 10 épicas definidas con t-shirt sizing
+- **Próximo paso**: Decisión stakeholder sobre enfoque (1:1 vs optimizado vs híbrido)
 
 #### 5. **OP_Cualitativo** (múltiples)
 - **Carpeta**: `WebMatrix/OP_Cualitativo/`
@@ -368,6 +377,7 @@ mkdir Adapters
 | [DIRECTRICES_MIGRACION.md](DIRECTRICES_MIGRACION.md) | 15 reglas obligatorias para todas las migraciones | **LEER ANTES DE CUALQUIER MÓDULO** |
 | [VERIFICACION_AUSENCIAS_MIGRACION.md](VERIFICACION_AUSENCIAS_MIGRACION.md) | Caso de estudio: verificación completa de TH_Ausencias | Referencia de calidad |
 | [PLAN_MIGRACION_PY_PROYECTOS.md](PLAN_MIGRACION_PY_PROYECTOS.md) | Plan detallado para próximo módulo | Plantilla para futuros módulos |
+| [ANALISIS_OP_CUANTITATIVO.md](MatrixNext/docs/ANALISIS_OP_CUANTITATIVO.md) | Análisis completo de OP_Cuantitativo con optimizaciones | Referencia para módulos grandes |
 | [DASHBOARD_MIGRACION.md](DASHBOARD_MIGRACION.md) | Estado, métricas, timeline de todo el esfuerzo | Actualizar semanalmente |
 | [RESUMEN_MIGRACION_AUSENCIAS.md](RESUMEN_MIGRACION_AUSENCIAS.md) | Resumen ejecutivo de TH_Ausencias | Stakeholders/Gerencia |
 

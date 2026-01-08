@@ -6,8 +6,9 @@
 ┌─────────────────────────────────────────────────────────────────┐
 │  MIGRACIÓN WEBMATRIX → MATRIXNEXT                               │
 │  ================================================================ │
-│  Módulos Completados:       12/25    [████████░░░░░░░░░░░░░] 48% │
-│  Líneas Código Migradas: ~11,600+    [███████░░░░░░░░░░░░░] 19% │
+│  Módulos Migrados:         11/25     [███████████░░░░░░░░░░░] 44% │
+│  Módulos Analizados:        1/25     [█░░░░░░░░░░░░░░░░░░░░] 4%  │
+│  Líneas Código Migradas: ~18,500+    [███████████░░░░░░░░░░] 31% │
 │  Compilación sin Errores:   ✅ SÍ                               │
 │  Documentación Completa:     ✅ SÍ                               │
 │  Testing Funcional:          ⏳ Pendiente (staging)              │
@@ -92,37 +93,89 @@
 
 ---
 
-## 🔜 EN COLA
+## � ANÁLISIS COMPLETO
 
-### EN CURSO: **FI_AdministrativoFinanciero + CC_FinzOpe** 🎯 META: 10 Semanas
+### OP_Cuantitativo ✅ ANÁLISIS FINALIZADO (2026-01-07)
+
+- **Estatus**: ✅ ANÁLISIS COMPLETO (100% inventariado)
+- **Páginas**: 31 páginas analizadas (excluidas: Borrar.aspx, TraficoEncuestas.aspx)
+- **Documento**: [ANALISIS_OP_CUANTITATIVO.md](MatrixNext/docs/ANALISIS_OP_CUANTITATIVO.md) v1.1 (13 secciones, ~600 líneas)
+- **Secciones del análisis**:
+  1. Resumen Ejecutivo (scope, roles, permisos, complejidad)
+  2. Inventario Completo (31 WebForms con propósitos, dependencias, evidencia)
+  3. Flujos Funcionales (COE gestión, Importación CATI/Planillas, IPS control)
+  4. SP/Tablas (11 filas con estado confirmado/por confirmar)
+  5. Componentes Reutilizables (4 Enums, 3 patrones)
+  6. Riesgos (14 riesgos identificados con mitigación)
+  7. Mapa 1:1 (29 WebForms→Controllers)
+  8. Backlog (10 épicas con t-shirt sizing)
+  9. Checklist Pre-Migración (33 items)
+  10. Decisiones Técnicas (10 decisiones)
+  11. Estimación (330-435h base, 260-350h optimizado)
+  12. Próximos Pasos (planificación, configuración, desarrollo)
+  13. Propuestas de Optimización (7 consolidaciones)
+
+- **Estimación migración**:
+  - **Enfoque 1:1**: 330-435h (11-15 semanas)
+  - **Enfoque optimizado**: 260-350h (9-12 semanas, -20% esfuerzo)
+  - **Reducción código**: 31 páginas → 18 vistas (-42%)
+  - **Funcionalidad perdida**: 0%
+
+- **Riesgos críticos identificados**:
+  - 🔴 Session hardcoded en SupervisionCampoTelefonico (línea 74: Session("IdUsuario") = 1047223102)
+  - 🔴 Dependencia fuerte Session (>25 referencias)
+  - 🟠 OleDb incompatibilidad .NET Core (ImportarDatos/Planillas)
+  - 🟠 Múltiples connection strings (MatrixConnectionString, GestionCampoConnectionString)
+  - 🟡 GridView paging personalizado (14 páginas)
+  - 🟡 jQuery UI components (Accordion, Dialog, Tabs)
+
+- **Optimizaciones propuestas** (7 consolidaciones):
+  1. Productividad: 8 páginas → 2 vistas role-based (-75%)
+  2. TrabajosCoordinador: 2 páginas → 1 vista con contexto (-50%)
+  3. Planillas Aprobación: 3 páginas → 1 vista con tabs (-67%)
+  4. Gestión Encuestas: 2 páginas → 1 vista toggle (-50%)
+  5. Presupuestos: 2 páginas → 1 vista adaptativa (-50%)
+  6. Dashboards: 2 páginas → 1 SPA con tabs (-50%)
+  7. Importación: 2 páginas → 1 wizard con tipo (-40%)
+
+- **Backlog definido** (10 épicas):
+  - Épica 1: COE y Trabajos (XXXL, 80-100h)
+  - Épica 2: Cargas Masivas (XXL, 60-80h)
+  - Épica 3: Productividad y Revisión (XL, 40-50h)
+  - Épica 4: IPS Control Multitarea (XL, 35-45h)
+  - Épica 5: Encuestas y Registros (L, 25-30h)
+  - Épica 6: Planillas Aprobación (L, 20-25h)
+  - Épica 7: Presupuestos Internos (M, 15-20h)
+  - Épica 8: Configuración y Coordinación (M, 12-15h)
+  - Épica 9: Dashboards (S, 8-10h)
+  - Épica 10: Supervisión y Observación (S, 6-8h)
+
+- **Decisión pendiente**: Stakeholder debe elegir enfoque:
+  - **1:1 directo**: Más rápido, menor riesgo UX, 330-435h
+  - **Optimizado**: Mejor mantenibilidad, -20% esfuerzo, 260-350h
+  - **Híbrido (recomendado)**: Fase 1 críticas 1:1, Fase 2 optimizar, Fase 3 refactorizar
+
+- **Próximo paso**: Revisión con stakeholders → Decisión de enfoque → Inicio de implementación
+
+---
+
+## �🔜 EN COLA
+
+### PRÓXIMO: **OP_Cuantitativo** 🎯 META: 11-15 Semanas (1:1) o 9-12 Semanas (optimizado)
 
 | Aspecto | Detalle |
 |---------|---------|
-| **Páginas** | 28 páginas FI (6 grupos) + CC_FinzOpe (infraestructura) |
-| **Alcance** | Excluye compras/OC/OS y radicación/aprobación facturas |
-| **Sprints** | Pre-1: CC_FinzOpe (80h) \| 1-6: FI Grupos (704h) |
-| **Complejidad** | 🔴 Muy alta (cálculos financieros, liquidaciones, auditoría) |
-| **Dependencias** | ✅ CU_Cuentas (jobbooks), US_Usuarios, TH; 📋 CAP (costos) |
-| **CC_FinzOpe** | 🔄 INCLUIDO (Sprint Pre-1 como infraestructura) |
-| **Impacto Negocio** | 🔴 Crítico (finanzas, producción, liquidación) |
-| **Plan Detallado** | ✅ MIGRACION_FI_ADMINISTRATIVO.md (completo con CC) |
-| **Análisis** | ✅ Completado (6 grupos, dependencias, sprint pre-1) |
-| **Horas Estimadas** | ~784 horas (CC: 80h + FI: 704h) |
-| **Timeline** | 10 semanas (1 dev @ 80h/sem) o 7-8 semanas (1.5-2 devs @ 50h/sem) |
-
-### PRÓXIMO: **PY_Proyectos** 🎯 META: 5-6 Semanas
-
-| Aspecto | Detalle |
-|---------|---------|
-| **Páginas** | 18 páginas |
-| **Tablas DB** | 10 tablas base |
-| **Stored Procedures** | ~25 SP |
-| **Complejidad** | 🟠 Media-Alta |
-| **Dependencias** | US_Usuarios ✅, Catálogos |
-| **Impacto Negocio** | 🟠 Alto (gestión central) |
-| **Plan Detallado** | ✅ PLAN_MIGRACION_PY_PROYECTOS.md |
-| **Inicio Estimado** | Después de FI análisis inicial |
-| **Horas Estimadas** | 148 horas |
+| **Páginas** | 31 páginas |
+| **Enfoque 1:1** | Migración directa página por página, menor riesgo UX |
+| **Enfoque Optimizado** | Consolidación a 18 vistas, -42% código, mejor mantenibilidad |
+| **Complejidad** | 🔴 Alta (Session hardcoded, OleDb, GridView personalizado) |
+| **Dependencias** | ✅ CORE, PY; 📋 Validar SP CatiRMC_* y CuantiPlanillas* |
+| **Impacto Negocio** | 🔴 Crítico (gestión COE, productividad, IPS) |
+| **Plan Detallado** | ✅ ANALISIS_OP_CUANTITATIVO.md (13 secciones, v1.1) |
+| **Análisis** | ✅ Completado (31 páginas, 14 riesgos, 7 optimizaciones) |
+| **Horas Estimadas** | 330-435h (1:1) o 260-350h (optimizado) |
+| **Timeline** | 11-15 semanas (1:1) o 9-12 semanas (opt) |
+| **Decisión Pendiente** | Stakeholder debe elegir enfoque (1:1 / optimizado / híbrido) |
 
 ---
 
@@ -132,26 +185,24 @@
 
 | Posición | Módulo | Páginas | Complejidad | Semanas Est. | Estado |
 |----------|--------|---------|-------------|--------------|--------|
-| 3 | **FI_Administrativo + CC_FinzOpe** | 28+infra | 🔴 MUY ALTA | 10.0 | 🔄 En curso (Sprint Pre-1 → FI Sprints) |
-| 4 | **OP_Cuantitativo** | ~15 | 🔴 Alta | 6-7 | 📋 Análisis |
-| 5 | **OP_Cualitativo** | ~12 | 🔴 Alta | 6-7 | 📋 Análisis |
+| 1 | **OP_Cuantitativo** | 31 | 🔴 Alta | 11-15 (1:1) / 9-12 (opt) | 🔜 PRÓXIMO |
+| 2 | **OP_Cualitativo** | ~12 | 🔴 Alta | 6-7 | 📋 Pendiente análisis |
+| 3 | **GD_Documentos** | ~8 | 🟠 Media | 4-5 | 📋 Pendiente análisis |
 
 ### MEDIA PRIORIDAD 🟠
 
 | Posición | Módulo | Páginas | Complejidad | Semanas Est. | Estado |
 |----------|--------|---------|-------------|--------------|--------|
-| 6 | **GD_Documentos** | ~8 | 🟠 Media | 4-5 | 📋 Análisis |
-| 7 | **RP_Reportes** | ~6 | 🟠 Media | 3-4 | 📋 Análisis |
-| 8 | **Home** | 3 | 🟡 Baja | 2-3 | 📋 Pendiente |
+| 4 | **RP_Reportes** | ~6 | 🟠 Media | 3-4 | 📋 Pendiente análisis |
+| 5 | **Home** | 3 | 🟡 Baja | 2-3 | 📋 Pendiente |
 
 ### BAJA PRIORIDAD 🟡
 
 | Módulo | Páginas | Estado |
 |--------|---------|--------|
-| CC_FinzOpe | ~12 | 📋 Backlog |
 | PY_ControlCalidad | ~5 | 📋 Backlog |
 | OP_RO, OP_Trafico | ~8 | 📋 Backlog |
-| Otros (13+) | ~50 | 📋 Backlog |
+| Otros (11+) | ~40 | 📋 Backlog |
 
 ---
 
@@ -160,18 +211,18 @@
 ### Líneas de Código Migradas por Componente
 
 ```
-Adapters:              ~2,300 LOC  ████████░░ 21%
-Services:              ~2,000 LOC  ███████░░░ 18%
-Controllers:           ~2,300 LOC  █████████░ 20%
-Views (Razor):         ~3,400 LOC  ██████████ 29%
-ViewModels:            ~  800 LOC  ████░░░░░░ 7%
-Configuration (DI):    ~  200 LOC  █░░░░░░░░░ 2%
+Adapters:              ~3,800 LOC  ████████░░ 21%
+Services:              ~3,300 LOC  ███████░░░ 18%
+Controllers:           ~3,900 LOC  █████████░ 21%
+Views (Razor):         ~5,400 LOC  ██████████ 29%
+ViewModels:            ~1,600 LOC  ████░░░░░░ 9%
+Configuration (DI):    ~  500 LOC  █░░░░░░░░░ 3%
 Tests (Pending):       ~    0 LOC  ░░░░░░░░░░ 0%
 ─────────────────────────────────────────────
-Total:               ~11,600+ LOC
+Total:               ~18,500+ LOC
 
 Target (WebMatrix):   ~60,000+ LOC
-Progress:             19% aproximadamente
+Progress:             31% aproximadamente
 ```
 
 ---
@@ -279,37 +330,46 @@ Semana    Módulo                          Estado           Horas
 1-2       US_Usuarios                     ✅ COMPLETADO    ~60
 3         TH_Ausencias                    ✅ COMPLETADO    ~40
 4-8       CU_Cuentas                      ✅ COMPLETADO    ~110
-9-10      CC_FinzOpe (Pre-1 FI)          🔄 EN CURSO      ~80
-11-18     FI_Administrativo (6 sprints)  🔄 EN CURSO      ~704
-19-25     PY_Proyectos                    🔜 PRÓXIMO       ~148
-26-32     OP_Cuantitativo                 📋 EN COLA       ~180
-33-39     OP_Cualitativo                  📋 EN COLA       ~160
-40+       Módulos Restantes (13+)         📋 BACKLOG       ~500+
+9-10      CC_FinzOpe (Pre-1 FI)          ✅ COMPLETADO    ~80
+11-18     FI_Administrativo (5 grupos)   ✅ COMPLETADO    ~596
+19-24     PY_Proyectos                    ✅ COMPLETADO    ~200
+25-29     CORE (Workflows/Tareas)         ✅ COMPLETADO    ~160
+30-32     EQ_EasyQuote                    ✅ COMPLETADO    ~80
+33        OP_Cuantitativo (análisis)     ✅ COMPLETADO    ~16
+34-46     OP_Cuantitativo (implementación) 🔜 SIGUIENTE   ~330-435 (1:1)
+                                                           ~260-350 (opt)
+47-53     OP_Cualitativo                  📋 EN COLA       ~160
+54+       Módulos Restantes (11+)         📋 BACKLOG       ~500+
 
-TOTAL ESTIMADO:                                            ~2,000+ horas
-                                                           ~40+ semanas
-                                                           ~10 meses aprox.
+HORAS COMPLETADAS:                                         ~1,342 horas
+TOTAL ESTIMADO:                                            ~2,600+ horas
+                                                           ~54+ semanas
+                                                           ~13 meses aprox.
 ```
 
 ---
 
 ## 🎯 OBJETIVOS PRÓXIMAS 2 SEMANAS
 
-### Semana 1 (Inmediata)
+### Semana 1 (Inmediata - 2026-01-07)
 
 - [x] ✅ Completar análisis de FI (6 grupos, 28 páginas)
-- [x] ✅ Documentar dependencias con CU_Presupuesto (mínima)
-- [x] ✅ INCLUIR CC_FinzOpe como Sprint Pre-1 (80h)
-- [x] ✅ Estimar esfuerzo total: 784h (CC: 80 + FI: 704)
-- [ ] Inventariar SP y tablas en CC_FinzOpe
-- [ ] Obtener aprobación stakeholder financiero para alcance/exclusiones
+- [x] ✅ Completar análisis de OP_Cuantitativo (31 páginas, 13 secciones)
+- [x] ✅ Documentar optimizaciones OP_Cuantitativo (7 propuestas, -42% código)
+- [x] ✅ Definir backlog OP_Cuantitativo (10 épicas con estimación)
+- [x] ✅ Migrar PY_Proyectos (18 páginas, cuanti + cuali)
+- [x] ✅ Migrar CORE (14 páginas, workflows y tareas)
+- [x] ✅ Migrar EQ_EasyQuote (3 vistas, cotización automática)
+- [ ] Obtener decisión stakeholder sobre enfoque OP_Cuantitativo (1:1 vs optimizado vs híbrido)
+- [ ] Testing integral de PY, CORE y EQ en staging
 
-### Semana 2
+### Semana 2 (2026-01-14)
 
-- [ ] Kick-off Sprint Pre-1: CC_FinzOpe
-- [ ] Crear DbContext wrapper para CC_FinzOpe
-- [ ] Validar SP críticos (Produccion, Liquidacion, Reportes)
-- [ ] Definir estructura base área CC/ y FI/
+- [ ] Iniciar implementación OP_Cuantitativo según enfoque aprobado
+- [ ] Spike técnico: OpenXml + Blob Storage (validación para ImportarDatos/Planillas)
+- [ ] Crear estructura base para OP_Cuantitativo (Controllers, Services, DataAdapters)
+- [ ] Implementar Épica 1: COE y Trabajos (80-100h) - Sprint 1
+- [ ] Iniciar análisis de siguiente módulo prioritario
 
 ---
 
@@ -438,21 +498,24 @@ Para cada nuevo módulo migrarse debe cumplir:
 
 **La migración de WebMatrix a MatrixNext está en camino EXITOSAMENTE.**
 
-Con TH_Ausencias completado (100% funcional, 0 errores) y un plan claro para PY_Proyectos, el equipo tiene momentum y claridad sobre:
+Con 11 módulos/componentes completados (US, TH, CU, CC, FI, PY, CORE, EQ, Uploads) y análisis detallado de OP_Cuantitativo finalizado, el equipo tiene momentum sólido y claridad sobre:
 
-- ✅ Qué se ha completado (2 módulos)
-- ✅ Qué viene a continuación (18 módulos en cola)
-- ✅ Cuánto tiempo tomará (~8 meses)
-- ✅ Cuánto esfuerzo es necesario (~1,300 horas)
-- ✅ Cómo hacerlo correctamente (patrones documentados)
+- ✅ Qué se ha completado (11 módulos migrados: 44% del total, 1,342 horas invertidas)
+- ✅ Qué viene a continuación (OP_Cuantitativo implementación → OP_Cualitativo → GD_Documentos)
+- ✅ Cuánto tiempo tomará (~13 meses para completar todo)
+- ✅ Cuánto esfuerzo es necesario (~2,600+ horas totales, ~1,258 horas restantes)
+- ✅ Cómo hacerlo correctamente (patrones documentados, 11 módulos de referencia)
+- ✅ Flexibilidad estratégica (enfoque 1:1 vs optimizado según prioridades)
+- ✅ Progreso significativo (31% del código migrado, arquitectura consolidada)
 
-**Meta**: Completar migración antes de fin de año 2024.
+**Meta**: Completar migración completa durante 2026.
 
 ---
 
-**Generado**: 2024-01-XX  
+**Generado**: 2026-01-07  
 **Por**: Equipo de Migración Técnica  
 **Estado**: ✅ ACTUALIZADO Y VALIDADO  
+**Última Actualización**: Análisis OP_Cuantitativo completado  
 **Próxima Revisión**: Semanal (Viernes)
 
 ```

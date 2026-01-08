@@ -24,6 +24,7 @@
 10. [Decisiones Técnicas Clave](#🔟-decisiones-técnicas-clave)
 11. [Estimación Preliminar](#1️⃣1️⃣-estimación-preliminar)
 12. [Próximos Pasos](#1️⃣2️⃣-próximos-pasos)
+13. [Propuestas de Optimización](#1️⃣3️⃣-propuestas-de-optimización-sin-romper-1:1)
 
 ---
 
@@ -438,8 +439,179 @@ Dim finCorteFecha = New DateTime(Now.Year, Now.Month, 15)
 
 ---
 
+## 1️⃣3️⃣ PROPUESTAS DE OPTIMIZACIÓN (SIN ROMPER 1:1)
+
+**Principio**: Consolidar páginas con flujos similares en vistas compartidas con navegación dinámica, manteniendo 100% de funcionalidades pero reduciendo código duplicado y mejorando UX.
+
+### Optimización 1: Consolidación de Productividad por Rol (8 → 2 vistas)
+
+**Estado actual**: 8 páginas WebForms
+- ProductividadRevisadaPMO.aspx
+- ProductividadRevisadaMYSCall.aspx
+- ProductividadRevisadaCoordinador.aspx
+- ProductividadRevisadaCampo.aspx
+- RevisionProductividadPMO.aspx
+- RevisionProductividadCoordinador.aspx
+- RevisionProductividadCampo.aspx
+- RevisionProductividadMYSCall.aspx
+
+**Propuesta optimizada**: 2 vistas Razor compartidas
+- `ProductividadRevisada/Index.cshtml` - Visualización (consolida 4 páginas "ProductividadRevisada*")
+  - Parámetro `rol` determina filtros y permisos (PMO=100, MYS=157, Coordinador=135, Campo=156)
+  - Misma lógica de corte 16-15 reutilizada
+  - Grid con columnas dinámicas según rol
+- `RevisionProductividad/Index.cshtml` - Edición/Aprobación (consolida 4 páginas "RevisionProductividad*")
+  - Validaciones máximos según rol
+  - Rechazo de planillas
+  - Navegación rol-específica
+
+**Beneficio**: -75% código duplicado, UX consistente, mantenimiento centralizado
+
+---
+
+### Optimización 2: Flujo Unificado de Trabajos Coordinador (2 → 1 vista)
+
+**Estado actual**: 2 páginas WebForms
+- TrabajosCoordinador.aspx (Coordinador genérico)
+- TrabajosCallCenter.aspx (Coordinador CallCenter)
+
+**Propuesta optimizada**: 1 vista con parámetro de contexto
+- `TrabajosCoordinador/Index.cshtml`
+  - Parámetro `contexto` = "General" | "CallCenter"
+  - Asignación de personal (común)
+  - Navegación a Avance/Capacitaciones/Estimaciones (común)
+  - Secciones específicas CallCenter (asignar/retirar encuestadores) solo si contexto=CallCenter
+
+**Beneficio**: -50% código duplicado, funcionalidad CallCenter como extensión
+
+---
+
+### Optimización 3: Flujo de Aprobación de Planillas (3 → 1 vista con tabs)
+
+**Estado actual**: 3 páginas WebForms
+- PlanillasCargadas.aspx (listar y rechazar pendientes)
+- RevisionPlanillas.aspx (aprobar/rechazar COE)
+- PlanillasRevisadas.aspx (listar aprobadas, rechazo posterior)
+
+**Propuesta optimizada**: 1 vista con tabs de estado
+- `PlanillasAprobacion/Index.cshtml`
+  - Tab 1: "Cargadas" (pendientes) - equivale a PlanillasCargadas
+  - Tab 2: "En Revisión COE" - equivale a RevisionPlanillas
+  - Tab 3: "Aprobadas" - equivale a PlanillasRevisadas
+  - Acciones contextuales según tab (rechazar pendientes, aprobar COE, rechazo posterior)
+  - Mismo Dapper service `OP_CuantiDapper` para todos los estados
+
+**Beneficio**: -67% código, flujo visible en una sola página, mejor UX de estados
+
+---
+
+### Optimización 4: Gestión de Encuestas (2 → 1 vista con toggle)
+
+**Estado actual**: 2 páginas WebForms
+- ActivacionEncuestas.aspx (reactiva encuestas anuladas)
+- AnulacionEncuestas.aspx (anula encuestas activas)
+
+**Propuesta optimizada**: 1 vista bidireccional
+- `GestionEncuestas/Index.cshtml`
+  - Grid unificado con estado actual de encuestas
+  - Toggle "Activar/Anular" según estado
+  - Validaciones según acción (si existe registro previo para activar, si existe encuesta para anular)
+  - Mismo service `IAnulacionEncuestasService` con métodos Activar/Anular
+
+**Beneficio**: -50% código, UX más intuitiva (no necesita navegar entre páginas)
+
+---
+
+### Optimización 5: Solicitudes de Presupuesto Interno (2 → 1 vista adaptativa)
+
+**Estado actual**: 2 páginas WebForms
+- SolicitudPresupuestoInterno.aspx (formulario completo con flags)
+- SolicitudPresupuestosInternos.aspx (formulario simplificado con observación)
+
+**Propuesta optimizada**: 1 vista con modo simple/completo
+- `PresupuestoInterno/Solicitud.cshtml`
+  - Parámetro `modo` = "Completo" | "Simplificado"
+  - Modo Completo: muestra flags (jornadas, agendamiento, encuestas, reclutamiento)
+  - Modo Simplificado: solo observación
+  - Validación de duplicados común
+  - Email de notificación común
+
+**Beneficio**: -50% código, formulario adaptativo
+
+---
+
+### Optimización 6: Dashboards Home (2 → 1 SPA con tabs de rol)
+
+**Estado actual**: 2 páginas WebForms
+- HomeRecoleccion.aspx (dashboard con permiso 54)
+- HomeGestion.aspx (dashboard vacío)
+
+**Propuesta optimizada**: 1 SPA dashboard
+- `Home/Index.cshtml` (o componente Angular/Vue)
+  - Tab "Recolección" (permiso 54) - widgets de trabajos, estimaciones, tráfico
+  - Tab "Gestión" - widgets administrativos (si se requiere funcionalidad)
+  - Navegación contextual según permisos del usuario
+
+**Beneficio**: Experiencia moderna, eliminación de página vacía
+
+---
+
+### Optimización 7: Importación de Datos (2 → 1 wizard con steps)
+
+**Estado actual**: 2 páginas WebForms
+- ImportarDatos.aspx (CATI RMC con 6 pasos)
+- ImportarPlanillas.aspx (Planillas productividad)
+
+**Propuesta optimizada**: 1 wizard con tipo de carga
+- `ImportacionMasiva/Index.cshtml`
+  - Paso 1: Seleccionar tipo (CATI RMC | Planillas)
+  - Paso 2: Upload archivo
+  - Paso 3: Validaciones (específicas según tipo)
+  - Paso 4: Resumen de validación
+  - Paso 5: Confirmación e inserción
+  - Services especializados: `ICatiRMCService` vs `IPlanillasService`
+
+**Beneficio**: -40% código UI, wizard reutilizable, validaciones centralizadas
+
+---
+
+## Resumen de Optimizaciones Propuestas
+
+| Grupo | WebForms Actuales | Propuesta Optimizada | Reducción | Funcionalidad Perdida |
+|---|---|---|---|---|
+| Productividad | 8 páginas | 2 vistas role-based | -75% | ❌ Ninguna |
+| Trabajos Coordinador | 2 páginas | 1 vista con contexto | -50% | ❌ Ninguna |
+| Planillas Aprobación | 3 páginas | 1 vista con tabs | -67% | ❌ Ninguna |
+| Gestión Encuestas | 2 páginas | 1 vista toggle | -50% | ❌ Ninguna |
+| Presupuestos Internos | 2 páginas | 1 vista adaptativa | -50% | ❌ Ninguna |
+| Dashboards | 2 páginas | 1 SPA con tabs | -50% | ❌ Ninguna |
+| Importación | 2 páginas | 1 wizard con tipo | -40% | ❌ Ninguna |
+| **TOTAL** | **31 páginas** | **18 vistas** | **-42%** | **0%** |
+
+### Impacto en Estimación
+
+**Estimación original** (31 páginas 1:1): 330-435h  
+**Estimación con optimizaciones** (18 vistas consolidadas): **260-350h** (~-20%)
+
+**Ganancia adicional**:
+- Menor superficie de testing (18 vs 31 vistas)
+- Código más mantenible (DRY aplicado)
+- UX mejorada (menos navegación entre páginas)
+- Menor deuda técnica futura
+
+### Recomendación de Implementación
+
+**Enfoque híbrido sugerido**:
+1. **Fase 1 - Sprint 1-6**: Implementar mapeo 1:1 directo para épicas críticas (Trabajos, Cargas, IPS)
+2. **Fase 2 - Sprint 7-9**: Implementar optimizaciones para épicas de menor riesgo (Productividad, Planillas, Encuestas)
+3. **Fase 3 - Sprint 10**: Refactoring final y consolidación de dashboards
+
+**Decisión por stakeholders**: El equipo debe decidir si prioriza velocidad (1:1 directo, 330-435h) o calidad/mantenibilidad (optimizado, 260-350h pero requiere más diseño UX).
+
+---
+
 **DOCUMENTO FINALIZADO**  
-**Versión**: 1.0  
-**Próxima revisión**: Post-spike técnico (OpenXml + Blob Storage validation)  
+**Versión**: 1.1  
+**Próxima revisión**: Post-spike técnico (OpenXml + Blob Storage validation) + Review de optimizaciones con UX  
 **Responsable**: Equipo MatrixNext  
 **Fecha de actualización**: 2026-01-07
