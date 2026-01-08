@@ -616,6 +616,7 @@ Dim finCorteFecha = New DateTime(Now.Year, Now.Month, 15)
 - Cada flujo y dependencia se documentara aqui y en el nuevo registro; si se necesitan confirmaciones o decisiones se solicita el retorno en espanol, tal como lo pidio el equipo.
 - Se habilito una vista `/OP/Avances` en MatrixNext.Web que muestra el mismo checklist con enlaces a los documentos de analisis y directrices, ayudando a compartir avances con stakeholders sin salir del portal.
 - Se añadió un portal `/OP/Trafico` que consume `OP_TraficoEncuestasCiudad` y permite visualizar envíos por ciudad para cada trabajo documentado.
+- La fase 2 ahora se define por sprints explícitos (ver `docs/OP/OP_CUANTITATIVO_AVANCE.md:| Fase 2 - Sprints recomendados`) que cubren portal COE, tráfico, cargas masivas, planillas/productividad/IPS y utilidades como presupuestos y supervisión.
 - Se habilitó el portal COE `/OP/Portal` para listar trabajos activos, filtrar por estado y navegar a los flujos definidos en el backlog sin abandonar MatrixNext.Web.
 
 **DOCUMENTO FINALIZADO**  

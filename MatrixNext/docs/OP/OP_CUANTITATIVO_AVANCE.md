@@ -21,7 +21,7 @@ Mantener un listado unico de todos los avances del modulo OP_Cuantitativo, apunt
 - Reglas base confirmadas en DIRECTRICES_MIGRACION.md (nombres de SP, reutilizacion de CoreProject y uso de EF para inserciones simples).
 - Inventario inicial de WebForms y dependencias (trabajos, trafico, planillas, IPS, productividad, presupuestos, encuestas, dashboard, supervisiones).
 
-## Fase 1 - Configuracion base (en curso)
+## Fase 1 - Configuracion base (completado)
 - Crear infraestructura shared en MatrixNext (controladores, servicios, middlewares de autorizacion y notificaciones).
 - Configurar appsettings.json con *MatrixConnectionString*, *GestionCampoConnectionString*, rutas de archivos y limites de carga/size.
 - Asegurar que la capa de datos de CoreProject (OP_Cuanti, OP_Cuanti2, OP_CuantiDapper, Revisiones IPS, TrabajoOPCuanti, PlaneacionProduccion, RegistroProduccion) esta lista para ser consumida por MatrixNext.
@@ -45,6 +45,22 @@ Mantener un listado unico de todos los avances del modulo OP_Cuantitativo, apunt
 | Produccion y registro | RegistroProduccionOP.aspx | RegistroProduccion, EAreas, EReproceso, EActividad | Pendiente | Exponer servicios de actividades, subactividades, reprocesos. |
 | Supervision campo telefonico | SupervisionCampoTelefonico.aspx | SupervisionCampoTelefonico (CoreProject) | Pendiente | Corregir id hardcoded y migrar checklist/campos. |
 | iField configuration | iFieldConfiguration.aspx | DALDAP.iFieldSettings | Pendiente | Validar integracion LDAP y sincronizacion de variables. |
+
+## Fase 2 - Sprints recomendados
+La fase 2 la dividimos en sprints consecutivos para no perder de vista cada flujo y garantizar la cobertura total (100%) del módulo.
+
+| Sprint | Duración | Flujos centrales | Objetivo | Criterio de cierre |
+|---|---|---|---|---|
+| 1 | 1 semana | Portal COE y navegación general | Reproducir la grilla de Trabajos.aspx (permiso 100) con enlaces interflujo y sincronización de sesión | Vista funcional con grid, navegación a `/OP/Trafico` y `/OP/Avances`, pruebas de permisos 100 |
+| 2 | 1 semana | Tráfico y Activaciones | Afinar `/OP/Trafico`, agregar accesos a Activation/Anulacion y preparar la base para ClosedXML | KPIs de ciudades, botones de acción, y servicios listos para exportar y validar envíos |
+| 3 | 2 semanas | Cargas masivas (ImportarDatos + ImportarPlanillas) | Wizard unificado con validaciones y bulk copy reutilizando `CatiRMC_*` y `OP_CuantiPlanillas` | Flujo de carga con resumen, archivos en blob configurable y registros en `RespuestasCatiRMCtmp`/`OP_CuantiPlanillas` |
+| 4 | 2 semanas | Planillas/Planillas Revisadas/Productividad/IPS | Consolida tab sets y grids para planillas, productividad y control IPS, con Dapper, notificaciones y validations comunes | Tabs listos, IPS editable y alertas con ClosedXML, correos listos y POV para coordinador/PMO/MyS/Call |
+| 5 | 1 semana | Presupuestos internos + utilidades (RegistroProduccion, iField, Supervisión) | Migrar formularios de presupuestos, registro de producción e iField, corregir supervisión con permiso dinámico | Formularios funcionales, SPs invocados, ID hardcoded reemplazado y dependencias de CoreProject enlazadas |
+
+Cada sprint se documentará aquí y en `ANALISIS_OP_CUANTITATIVO.md` para reflejar bloqueos, decisiones y avances. Los criterios se revisarán en las reuniones de seguimiento y el backlog se actualizará si cambian las prioridades o aparecen dependencias nuevas.
+
+## Sprint actual
+- Sprint 1 (Portal COE) en curso: la grilla ya lista permite filtrar por JobBook/Estado y enlazar a `/OP/Trafico` y `/OP/Avances`; se sigue afinando la validación de permisos 100 y las acciones contextuales para navegación a los demás flujos.
 
 > Este es el checklist base; cada entrada se actualizara con notas y tiempos una vez arranquemos la implementacion de la vista/servicio correspondiente. Se debe asegurar que las dependencias de CoreProject (stored procedures y contexts) se consumen sin cambiar nombres, siguiendo la Regla Core 1 de las directrices.
 

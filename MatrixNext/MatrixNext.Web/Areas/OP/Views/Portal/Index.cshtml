@@ -116,6 +116,7 @@
                         <th>Metodología</th>
                         <th>Estado</th>
                         <th>Última actualización</th>
+                        <th class="text-center">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -130,13 +131,17 @@
                                 <td>@snapshot.MetodologiasMap.GetValueOrDefault(item.IdMetodologia, item.IdMetodologia.ToString())</td>
                                 <td>@estados.GetValueOrDefault(item.Estado, item.Estado.ToString())</td>
                                 <td>@item.FechaModificacion.ToString("g")</td>
+                                <td class="text-center">
+                                    <a class="btn btn-outline-secondary btn-sm" href="/OP/Trafico?trabajoId=@item.Id">Tráfico</a>
+                                    <a class="btn btn-outline-primary btn-sm" href="/OP/Avances">Avances</a>
+                                </td>
                             </tr>
                         }
                     }
                     else
                     {
                         <tr>
-                            <td colspan="6" class="text-center text-muted">No hay trabajos que coincidan con el filtro.</td>
+                            <td colspan="7" class="text-center text-muted">No hay trabajos que coincidan con el filtro.</td>
                         </tr>
                     }
                 </tbody>
