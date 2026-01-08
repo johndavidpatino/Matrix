@@ -145,6 +145,7 @@ builder.Services.AddScoped<IOpFichaService, OpFichaService>();
 builder.Services.AddScoped<IOpEstimacionService, OpEstimacionService>();
 builder.Services.AddScoped<IOpMuestraService, OpMuestraService>();
 builder.Services.AddScoped<IOpFestivosService, OpFestivosService>();
+builder.Services.AddScoped<IOpGestionDocumentalService, OpGestionDocumentalService>();
 
 var app = builder.Build();
 

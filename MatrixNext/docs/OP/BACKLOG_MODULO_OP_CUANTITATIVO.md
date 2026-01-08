@@ -21,10 +21,10 @@
 |--------|--------|-------------|-----------------|--------------|
 | **Sprint 0** | ✅ Completado | 100% | 16h | 6h |
 | **Sprint 1** | ✅ Completado | 100% | 144h | 54h |
-| **Sprint 2** | 🟡 En Progreso | 36% | 144h | 14h |
+| **Sprint 2** | 🟡 En Progreso | 50% | 144h | 18h |
 | **Sprint 3** | ⏸️ Pendiente | 0% | 96h | 0h |
 | **Sprint 4** | ⏸️ Pendiente | 0% | 144h | 0h |
-| **TOTAL** | | **43%** | **544h** | **74h** |
+| **TOTAL** | | **47%** | **544h** | **78h** |
 **Fecha Fin**: 9 de enero de 2026
 
 ### Tareas
@@ -267,11 +267,11 @@ Tareas completadas:
 | **S2-004** | **Envío de Email a Coordinador** | 🟡 P2 | ⏸️ Pendiente | 4h | 0h | - | Desde MuestraTrabajos |
 | S2-004.1 | Plantilla de email de actualización de muestra | 🟡 P2 | ⏸️ Pendiente | 2h | 0h | - | HTML template |
 | S2-004.2 | Integrar `IEmailService.SendEmailAsync` | 🟡 P2 | ⏸️ Pendiente | 2h | 0h | - | En OpMuestraService |
-| **S2-005** | **Servicio de Gestión Documental** | 🔴 P0 | ⏸️ Pendiente | 20h | 0h | - | GAP-OP-08 |
-| S2-005.1 | Crear `IOpGestionDocumentalService` + `OpGestionDocumentalService` | 🔴 P0 | ⏸️ Pendiente | 8h | 0h | - | GD.GD_Procedimientos SP |
-| S2-005.2 | Método `ValidarDocumentosEscaneados(trabajoId)` | 🔴 P0 | ⏸️ Pendiente | 4h | 0h | - | Consulta rutas UNC |
-| S2-005.3 | Método `ObtenerDocumentosFaltantes(trabajoId)` | 🔴 P0 | ⏸️ Pendiente | 4h | 0h | - | Lista de documentos |
-| S2-005.4 | Método `ValidarRutasUNC(rutas)` | 🔴 P0 | ⏸️ Pendiente | 4h | 0h | - | System.IO.Directory.Exists |
+| **S2-005** | **Servicio de Gestión Documental** | 🔴 P0 | ✅ Completado | 20h | 4h | - | GAP-OP-08 |
+| S2-005.1 | Crear `IOpGestionDocumentalService` + `OpGestionDocumentalService` | 🔴 P0 | ✅ Completado | 8h | 2h | - | GD.GD_Procedimientos SP |
+| S2-005.2 | Método `ValidarDocumentosEscaneados(trabajoId)` | 🔴 P0 | ✅ Completado | 4h | 1h | - | Consulta rutas UNC |
+| S2-005.3 | Método `ObtenerDocumentosFaltantes(trabajoId)` | 🔴 P0 | ✅ Completado | 4h | 0.5h | - | Lista de documentos |
+| S2-005.4 | Método `ValidarRutasUNC(rutas)` | 🔴 P0 | ✅ Completado | 4h | 0.5h | - | System.IO.Directory.Exists |
 | **S2-006** | **Implementar Cierre de Trabajo en TrabajosController** | 🔴 P0 | ⏸️ Pendiente | 20h | 0h | - | GAP-OP-08 |
 | S2-006.1 | Modal de confirmación de cierre | 🔴 P0 | ⏸️ Pendiente | 4h | 0h | - | Bootstrap Modal |
 | S2-006.2 | Validación de estado del trabajo | 🔴 P0 | ⏸️ Pendiente | 2h | 0h | - | Solo trabajos activos |
@@ -297,8 +297,7 @@ Tareas completadas:
 ### Entregables Sprint 2
 
 - [x] 2 controladores nuevos (EstimacionProduccion, MuestraTrabajos)
-- [x] 3 servicios nuevos (OpEstimacion, OpMuestra, OpFestivos)
-- [ ] 1 servicio pendiente (OpGestionDocumental)
+- [x] 4 servicios nuevos (OpEstimacion, OpMuestra, OpFestivos, OpGestionDocumental)
 - [ ] Funcionalidad de cierre con GD completa en TrabajosController
 - [ ] Configuración de rutas UNC en appsettings.json
 - [ ] Tests manuales exitosos de 5 flujos
@@ -307,8 +306,8 @@ Tareas completadas:
 ### Registro de Avances Sprint 2
 
 **Fecha**: 8 de enero de 2026  
-**Horas Reales**: 14h (vs 144h estimadas)  
-**Estado**: 🟡 **36% COMPLETADO**
+**Horas Reales**: 18h (vs 144h estimadas)  
+**Estado**: 🟡 **50% COMPLETADO**
 
 **Tareas Completadas**:
 1. ✅ S2-001: EstimacionProduccionController completo
@@ -333,23 +332,34 @@ Tareas completadas:
    - LimpiarCache: Limpieza manual del caché
    - Integrado en OpCargaService para validación TipoActividad 22/23
    - Caché en memoria para reducir consultas repetidas
-4. ✅ Compilación exitosa: 0 errores, 3 warnings
-5. ✅ Registrados servicios en Program.cs
+4. ✅ S2-005: Servicio de Gestión Documental completo
+   - IOpGestionDocumentalService + OpGestionDocumentalService (4 métodos)
+   - ValidarDocumentosEscaneadosAsync: Verifica documentos en GD_EscanerDocumentos
+   - ObtenerDocumentosFaltantesAsync: Lista detallada con ViewModels
+   - ValidarRutasUNCAsync: Diagnóstico de accesibilidad de rutas
+   - SincronizarDocumentosEscaneadosAsync: Sincroniza con SPs GD + CI
+   - Utiliza SPs: GD_EscanerDocumentos_Get, CI_DocumentosCierre_Get, GD_EscanerDocumentos_Add/Edit/Del
+5. ✅ Compilación exitosa: 0 errores, 3 warnings
+6. ✅ Registrados 4 servicios en Program.cs
 
 **Stored Procedures Integrados**:
 - OP_PlaneaccionProduccionManual: Genera planeación automática
 - OP_Planeacion_ActivarEstimacion: Activa estimación
 - OP_AjusteProduccionAutoCiudad: Ajusta planeación de muestra
+- GD_EscanerDocumentos_Get: Obtiene documentos escaneados
+- CI_DocumentosCierre_Get: Obtiene documentos requeridos para cierre
+- GD_EscanerDocumentos_Add/Edit/Del: CRUD de documentos escaneados
 
 **Gaps Resueltos Parcialmente**:
 - ✅ GAP-OP-03 (50%): Estimación y Muestra implementados
 - ✅ GAP-OP-15 (100%): Gestión de Festivos para Planillas
+- 🟡 GAP-OP-08 (50%): Servicio GD implementado, falta integración en TrabajosController
 - 🟡 GAP-OP-19 (75%): Auto-planeación con festivos implementada
 
 **Pendientes para Continuar Sprint 2**:
-- ⏸️ S2-005: Servicio de gestión documental
-- ⏸️ S2-006: Cierre de trabajo con validación GD
-- ⏸️ S2-008: Testing manual (omitido hasta final de migración)
+- ⏸️ S2-006: Cierre de trabajo con validación GD en TrabajosController (20h)
+- ⏸️ S2-007: Configuración de rutas UNC en appsettings.json (4h)
+- ⏸️ S2-008: Testing manual (16h) - Omitido hasta final de migración
 
 ---
 
