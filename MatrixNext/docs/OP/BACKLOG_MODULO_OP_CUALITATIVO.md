@@ -17,25 +17,32 @@
 
 ---
 
-## 2️⃣ Tareas e hitos
+## 2️⃣ Tareas e hitos (detalle)
 
-| ID | Descripción | Prioridad | Estado | Referencia | Estimación |
-|----|-------------|-----------|--------|------------|------------|
-| OP-C01 | `TrabajosController` + `TrabajoCualitativoService` + vistas Index/partials (grid, filtros, botones hacia fichas y muestra). | P0 | Pendiente | `ANALISIS_OP_CUALITATIVO.md` secciones 2‑4 | 14h |
-| OP-C02 | `CampoController` y `CampoCualitativoService` con exportación ICS/Excel y navegación a `GD_Documentos`. | P0 | Pendiente | `CampoCualitativo.aspx.vb` (export, btnDocumentos) | 10h |
-| OP-F01 | `FiltrosController.Configurar` + `FiltroConfigVm` + `CampoCualitativoAdapter` para nuevos filtros dinámicos (preguntas, tipofiltro). | P0 | Pendiente | `DisenarFiltros.aspx.vb` (guardar filtros). | 8h |
-| OP-F02 | `FiltrosController.Aprobar` / `FiltrosController.AprobarAsistencia` + SP `REP_OP_Respuestas_Filtro` + lógica de logs `OP_LogRespuestas_Filtro`. | P0 | Pendiente | `AprobacionesFiltros.aspx.vb`, `AprobacionesFiltrosAsitencia.aspx.vb`. | 10h |
-| OP-F03 | `FichasController` para entrevista, sesión y observación + `FichaParametrosVm` y `IEmailService` (envíos). | P0 | Pendiente | `FichaEntrevista.aspx.vb`, `FichaSesion.aspx.vb`, `FichaObservacion.aspx.vb`. | 16h |
-| OP-P01 | `ProgramacionController` con cronograma, estados, `ProgramacionCampoVm` y exportaciones (ClosedXML). | P1 | Pendiente | `ProgramacionCampo.aspx.vb` (ClosedXML, estados enumerados). | 12h |
-| OP-I01 | `IpsController` con grid editable, notificaciones y `SqlDataSource` a `OP_IPS_Procesos`. | P1 | Pendiente | `IPSCuali.aspx.vb`. | 10h |
-| OP-L01 | `PlanillasController` (API + JS) reutilizando `/Scripts/js/Pages/OP_Cualitativo/AdministracionRegistroPlanillas`. | P1 | Pendiente | `AdministracionRegistroPlanillas.aspx` y su JS. | 12h |
-| OP-T01 | Testing/documentación fina (backlog/checklist) y actualización del dashboard. | P2 | Pendiente | Secciones 8‑12 del análisis. | 6h |
+| ID | Descripción | Prioridad | Estado | Referencia | Estimación | Criterios de aceptación |
+|----|-------------|-----------|--------|------------|------------|-----------------------|
+| OP-C01 | `TrabajosController` + `TrabajoCualitativoService` + vistas Index/partials (grid, filtros, botones hacia fichas y muestra). | P0 | Pendiente | `ANALISIS_OP_CUALITATIVO.md` secciones 2‑4 | 14h | CRUD de trabajos, grid con filtros y botones funcionales; navegación a fichas/muestra; permisos validados. |
+| OP-C02 | `CampoController` y `CampoCualitativoService` con exportación ICS/Excel y navegación a `GD_Documentos`. | P0 | Pendiente | `CampoCualitativo.aspx.vb` (export, btnDocumentos) | 10h | Guardar/editar sesiones, exportar XLS/ICS y abrir `GD_Documentos` con parámetros (`trabajoId`). |
+| OP-F01 | `FiltrosController.Configurar` + `FiltroConfigVm` + `CampoCualitativoAdapter` para filtros dinámicos (preguntas, tipofiltro). | P0 | Pendiente | `DisenarFiltros.aspx.vb` (guardar filtros y preguntas). | 8h | Creación/edición de filtros (reclutamiento/asistencia), persistencia de preguntas y validaciones de fecha y tipo replicando WebForms. |
+| OP-F02 | `FiltrosController.Aprobar` / `FiltrosController.AprobarAsistencia` + SP `REP_OP_Respuestas_Filtro` + logs `OP_LogRespuestas_Filtro`. | P0 | Pendiente | `AprobacionesFiltros.aspx.vb`, `AprobacionesFiltrosAsitencia.aspx.vb`. | 10h | Grilla con estados, botones aprobar/rechazar, export Excel y log de decisiones (estructura JSON). |
+| OP-F03 | `FichasController` (Entrevista, Sesión, Observación) + `FichaParametrosVm` + `IEmailService`. | P0 | Pendiente | `FichaEntrevista.aspx.vb`, `FichaSesion.aspx.vb`, `FichaObservacion.aspx.vb`. | 16h | Validaciones de incentivos/presupuestos/recursos, guardado de ayudas/reclutamiento y disparo de correo `EnviarCorreo` según parámetros legacy. |
+| OP-P01 | `ProgramacionController` + `ProgramacionCampoVm` con gestión de estados y exportaciones. | P1 | Pendiente | `ProgramacionCampo.aspx.vb` (ClosedXML + estados enumerados). | 12h | Programar citas, exportar Excel, control de estados (Creado/Cancelado), integración con `WorkFlow`. |
+| OP-I01 | `IpsController` con grid editable, notificaciones y `SqlDataSource` de `OP_IPS_Procesos`. | P1 | Pendiente | `IPSCuali.aspx.vb`. | 10h | Grid con acciones Notificar/Rechazar, export Excel y filtros por rol/método, SP `OP_IPS_Procesos`. |
+| OP-L01 | `PlanillasController` (API + JS) reutilizando `AdministracionRegistroPlanillas`. | P1 | Pendiente | `AdministracionRegistroPlanillas.aspx` y JS `AdministracionRegistroPlanillas.js`. | 12h | Endpoints para buscar/filtrar/exportar planillas, integración de paginador y modal, validaciones y export XLS. |
+| OP-T01 | Testing/documentación fina (checklist/backlog) y actualización del dashboard. | P2 | Pendiente | Secciones 8‑12 del análisis. | 6h | Checklist completo, referencias oficiales y actualización de `DASHBOARD_MIGRACION` al estado actual del módulo. |
 
 ---
 
 ## 3️⃣ Sprint planning provisional
 
+- Configurar `Areas/OP` y registrar servicios en `Program.cs` (`TrabajoCualitativoService`, `CampoCualitativoService`, `FiltrosService`).  
+- Implementar `TrabajosController` y `CampoController` con datos mock y rutas; validar SP `REP_OP_Respuestas_Filtro`.  
+- Generar vistas básicas (grid de COE, accordion de workflows, botón a `GD_Documentos`).  
 **Sprint 1 (Semana 1)**  
+- Configuración inicial: crear carpeta `Areas/OP`, registrar servicios/adapters en `Program.cs`, asegurar autorizaciones `[Authorize(Policy = "PermisoCOE")]`.  
+- Implementar `TrabajosController.Index`: lista paginada, filtros (por unidad, estado), modal de configuración, enlaces a fichas y `CampoController`.  
+- `CampoController.Index`: reproducir grid y accordion (captura de sesiones) con exportaciones ICS/Excel y botones a `GD_Documentos`.  
+- Validar SPs `REP_OP_Respuestas_Filtro` en entorno dev y documentar parámetros en backlog (regla 1).  
 - Configurar `Areas/OP` y registrar servicios en `Program.cs` (`TrabajoCualitativoService`, `CampoCualitativoService`, `FiltrosService`).  
 - Implementar `TrabajosController` y `CampoController` con datos mock y rutas; validar SP `REP_OP_Respuestas_Filtro`.  
 - Generar vistas básicas (grid de COE, accordion de workflows, botón a `GD_Documentos`).  

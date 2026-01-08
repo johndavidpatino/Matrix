@@ -23,6 +23,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 builder.Services.AddHttpClient();
 
+// Add in-memory caching for catalogs (S4-006.3 performance optimization)
+builder.Services.AddMemoryCache();
+
 // Configure session and authentication
 builder.Services.AddSession(options =>
 {
@@ -133,6 +136,7 @@ builder.Services.AddScoped<IExportService, ExportService>();
 builder.Services.AddScoped<QuoteCalculator>();
 builder.Services.AddScoped<EasyQuoteMasterService>();
 // OP módulo
+builder.Services.AddScoped<IOpCatalogCacheService, OpCatalogCacheService>(); // S4-006.3 Catalog caching
 builder.Services.AddScoped<IOpAvancesService, OpAvancesService>();
 builder.Services.AddScoped<IOpPortalService, OpPortalService>();
 builder.Services.AddScoped<IOpTraficoDataAdapter, OpTraficoDataAdapter>();
