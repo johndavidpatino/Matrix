@@ -474,7 +474,85 @@ Tareas completadas:
 
 ### Registro de Avances Sprint 3
 
-_(Pendiente inicio)_
+**Fecha**: 8 de enero de 2026  
+**Horas Reales (hasta ahora)**: 6h (arquitectura base)  
+**Estado**: 🟡 **EN PROGRESO - 10% COMPLETADO (Arquitectura)**
+
+**Tareas Completadas**:
+1. ✅ S3-001: Servicio Compartido de Revisión Productividad (6h)
+   - IOpRevisionProductividadService + OpRevisionProductividadService
+   - 4 métodos con placeholders listos para SPs:
+     * ObtenerPlanillasPorRolAsync: Obtiene planillas según rol del usuario
+     * AprobarPlanillaAsync: Aprobación con monto autorizado
+     * RechazarPlanillaAsync: Rechazo con observaciones
+     * ValidarMontosPlanillaAsync: Validación de máximos presupuestarios
+   - PlanillaProductividadDto con 11 propiedades + estado calculado
+   - Registrado en Program.cs como servicio scoped
+   - Logging de operaciones críticas
+
+2. ✅ S3-002 a S3-005: 4 Controladores de Revisión Multirrol (0h - Arquitectura)
+   - RevisionProductividadPMOController (Permiso 100)
+     * Index: GET con grid de planillas
+     * Aprobar/Rechazar: POST con validaciones
+     * Detalles: API para modal de confirmación
+   - RevisionProductividadCoordinadorController (Permiso 135)
+     * Mismo patrón que PMO
+     * TODO: Filtro por zona del coordinador
+   - RevisionProductividadCampoController (Permiso 156)
+     * Mismo patrón que PMO
+     * TODO: Filtro por ciudades asignadas
+   - RevisionProductividadMYSCallController (Permiso 157)
+     * Mismo patrón que PMO
+     * TODO: Filtro por actividades CATI/CAWI
+
+3. ✅ S3-006: Servicio de Registro de Producción (0h - Arquitectura)
+   - IOpRegistroProduccionService + OpRegistroProduccionService
+   - 6 métodos con placeholders:
+     * ObtenerUnidadesAsync: Catálogo de unidades
+     * ObtenerActividadesAsync: Cascada (Unidad → Actividad)
+     * ObtenerSubactividadesAsync: Cascada (Actividad → Subactividad)
+     * BuscarJobBooksAsync: Búsqueda JBE/JBI/CC
+     * RegistrarActividadAsync: Persistencia de registro
+     * ValidarRegistroAsync: Validaciones pre-guardado
+   - RegistroProduccionOPController con:
+     * Index: Formulario con cascading dropdowns
+     * ObtenerActividades/Subactividades: APIs AJAX
+     * BuscarJobBooks: Búsqueda modal
+     * Guardar: POST con validaciones
+     * MisRegistros: Resumen de registros del usuario
+   - Registrado en Program.cs como servicio scoped
+
+4. ✅ DTOs Completados:
+   - PlanillaProductividadDto: Estado, montos, diferencia, validación
+   - RegistroProduccionDto: 16 propiedades para actividades
+   - CatalogoItemDto: Genérico para cascadas
+   - JobBookDto: Búsqueda con DisplayText
+
+5. ✅ Compilación: 0 Errores, 20 Warnings (nullable strings pre-existentes)
+6. ✅ Git Commit: "feat(OP): Sprint 3 - Revisión de Productividad Multirrol y Registro"
+
+**Arquitectura Completada**:
+- ✅ Interfaces y servicios base
+- ✅ Controladores con métodos stub
+- ✅ DTOs con propiedades completas
+- ✅ Validaciones básicas implementadas
+- ✅ XML documentation en interfaces
+- ✅ DI container registrado
+- ✅ Permisos documentados por rol
+
+**Próximos Pasos Inmediatos**:
+1. Conectar SPs a ObtenerPlanillasPorRolAsync (OP_CuantiDapper_Get)
+2. Implementar AprobarPlanilla y RechazarPlanilla con SPs
+3. Crear vistas Index.cshtml para cada controlador de revisión
+4. Implementar vistas de Registro de Producción con jQuery cascades
+5. Testing end-to-end de flujos multirrol
+
+**Métricas Sprint 3**:
+- Horas de arquitectura: 6h
+- Horas de implementación pendiente: 90h
+- Completitud estimada: 6.25%
+
+---
 
 ---
 
