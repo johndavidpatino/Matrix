@@ -2,6 +2,7 @@ using System.Data;
 using System.IO;
 using Dapper;
 using MatrixNext.Web.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace MatrixNext.Web.Services.OP;
