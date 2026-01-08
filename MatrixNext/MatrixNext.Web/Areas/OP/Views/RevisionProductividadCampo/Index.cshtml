@@ -1,0 +1,193 @@
+@model List<PlanillaProductividadDto>
+
+@{
+    ViewData["Title"] = "Revisión de Planillas de Productividad - Supervisor de Campo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="h3 mb-0">
+                <i class="fas fa-tasks"></i> Revisión de Planillas de Productividad
+            </h1>
+            <small class="text-muted">Rol: Supervisor de Campo - Supervisión de Ciudad</small>
+        </div>
+    </div>
+
+    <!-- Selección de Trabajo -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row align-items-end">
+                <div class="col-md-8">
+                    <label for="selectTrabajo" class="form-label">Seleccione un Trabajo de su Ciudad:</label>
+                    <select id="selectTrabajo" class="form-control form-control-lg" required>
+                        <option value="">-- Seleccionar trabajo --</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <button type="button" class="btn btn-primary btn-lg w-100" id="btnCargar" disabled>
+                        <i class="fas fa-search"></i> Cargar Planillas
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla de Planillas -->
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">
+                <i class="fas fa-table"></i> Planillas en Revisión
+                <span id="planillaCount" class="badge badge-light float-right">0</span>
+            </h5>
+        </div>
+        <div class="card-body p-0">
+            <div id="planillasContainer">
+                <p class="text-muted p-3 text-center">Seleccione un trabajo para ver las planillas</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modales (Idénticos a versiones anteriores) -->
+
+<!-- Modal: Aprobar Planilla -->
+<div class="modal fade" id="modalAprobar" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title"><i class="fas fa-check-circle"></i> Aprobar Planilla</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info" role="alert">
+                    <strong>Planilla ID:</strong> <span id="approveDetail_PlanillaId"></span><br>
+                    <strong>Concepto:</strong> <span id="approveDetail_Concepto"></span>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="form-label">Monto Previo:</label>
+                        <input type="text" id="approveDetail_MontoPrevio" class="form-control" readonly />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Monto Actual:</label>
+                        <input type="text" id="approveDetail_MontoTotal" class="form-control" readonly />
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <label class="form-label"><strong>Monto a Autorizar:</strong></label>
+                        <input type="number" id="approveMontoAutorizado" class="form-control form-control-lg" placeholder="Ingrese el monto" step="0.01" required />
+                        <small class="text-danger d-none" id="approveError"></small>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" id="btnConfirmAprobar">
+                    <i class="fas fa-check"></i> Aprobar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Rechazar Planilla -->
+<div class="modal fade" id="modalRechazar" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title"><i class="fas fa-times-circle"></i> Rechazar Planilla</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning" role="alert">
+                    <strong>Planilla ID:</strong> <span id="rejectDetail_PlanillaId"></span>
+                </div>
+                <label class="form-label"><strong>Motivo:</strong></label>
+                <textarea id="rejectObservacion" class="form-control" rows="5" required></textarea>
+                <small class="text-danger d-none" id="rejectError"></small>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="btnConfirmRechazar">
+                    <i class="fas fa-times"></i> Rechazar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let currentTrabajo = null, currentData = { planillaId: null, montoTotal: 0, montoPrevio: 0 };
+
+        $(document).ready(() => { loadTrabajos(); });
+        function loadTrabajos() { $('#selectTrabajo, #btnCargar').prop('disabled', false); }
+        $('#btnCargar').click(function () {
+            const id = $('#selectTrabajo').val();
+            if (id) loadPlanillas(id);
+            else toastr.warning('Seleccione trabajo');
+        });
+
+        function loadPlanillas(trabajoId) {
+            currentTrabajo = trabajoId;
+            $('#planillasContainer').html('<div class="text-center p-4"><div class="spinner-border"></div></div>');
+            $.ajax({
+                url: '@Url.Action("Index", "RevisionProductividadCampo")',
+                data: { trabajoId }, success: function (p) { renderPlanillas(p); $('#planillaCount').text(p.length); },
+                error: () => toastr.error('Error')
+            });
+        }
+
+        function renderPlanillas(planillas) {
+            if (!planillas.length) { $('#planillasContainer').html('<p class="text-muted p-3">No hay planillas</p>'); return; }
+            let html = '<div class="table-responsive"><table class="table table-hover"><thead><tr><th>ID</th><th>Concepto</th><th>Cantidad</th><th>Valor</th><th>Monto Previo</th><th>Monto Actual</th><th>Diferencia</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>';
+            planillas.forEach(p => {
+                html += `<tr><td>${p.planillaId}</td><td>${p.concepto}</td><td>${p.cantidad}</td><td>$${p.valorUnitario}</td><td>$${p.montoPrevio}</td><td>$${p.montoTotal}</td><td class="${p.diferencia>0?'text-danger':'text-success'}">$${p.diferencia}</td><td><span class="badge bg-warning">${p.estado==1?'Pendiente':'Otro'}</span></td><td><button class="btn btn-sm btn-success" onclick="openModalAprobar(${p.planillaId},'${p.concepto}',${p.montoTotal},${p.montoPrevio})"><i class="fas fa-check"></i></button><button class="btn btn-sm btn-danger" onclick="openModalRechazar(${p.planillaId})"><i class="fas fa-times"></i></button></td></tr>`;
+            });
+            html += '</tbody></table></div>';
+            $('#planillasContainer').html(html);
+        }
+
+        function openModalAprobar(id, concepto, monto, previo) {
+            currentData = { planillaId: id, montoTotal: monto, montoPrevio: previo };
+            $('#approveDetail_PlanillaId, #approveMontoAutorizado').val(id);
+            $('#approveDetail_Concepto').text(concepto);
+            new bootstrap.Modal(document.getElementById('modalAprobar')).show();
+        }
+
+        $('#btnConfirmAprobar').click(() => {
+            const monto = parseFloat($('#approveMontoAutorizado').val());
+            $.ajax({
+                url: '@Url.Action("Aprobar", "RevisionProductividadCampo")',
+                type: 'POST', contentType: 'application/json',
+                data: JSON.stringify({ planillaId: currentData.planillaId, montoAutorizado: monto }),
+                success: () => { toastr.success('Aprobada'); bootstrap.Modal.getInstance(document.getElementById('modalAprobar')).hide(); loadPlanillas(currentTrabajo); }
+            });
+        });
+
+        function openModalRechazar(id) {
+            currentData.planillaId = id;
+            $('#rejectDetail_PlanillaId').text(id);
+            new bootstrap.Modal(document.getElementById('modalRechazar')).show();
+        }
+
+        $('#btnConfirmRechazar').click(() => {
+            const obs = $('#rejectObservacion').val();
+            $.ajax({
+                url: '@Url.Action("Rechazar", "RevisionProductividadCampo")',
+                type: 'POST', contentType: 'application/json',
+                data: JSON.stringify({ planillaId: currentData.planillaId, observacion: obs }),
+                success: () => { toastr.success('Rechazada'); bootstrap.Modal.getInstance(document.getElementById('modalRechazar')).hide(); loadPlanillas(currentTrabajo); }
+            });
+        });
+    </script>
+    <style>
+        .table-responsive { max-height: 600px; overflow-y: auto; }
+        .table th { position: sticky; top: 0; background: #f8f9fa; }
+    </style>
+}

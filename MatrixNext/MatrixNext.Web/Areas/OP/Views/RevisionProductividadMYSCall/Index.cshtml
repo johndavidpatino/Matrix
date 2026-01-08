@@ -1,0 +1,263 @@
+@model List<PlanillaProductividadDto>
+
+@{
+    ViewData["Title"] = "Revisión de Planillas de Productividad - MyS/Call";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="h3 mb-0">
+                <i class="fas fa-phone"></i> Revisión de Planillas - MyS/CATI-CAWI
+            </h1>
+            <small class="text-muted">Rol: Responsable MyS/Call - Supervisión de CATI/CAWI</small>
+        </div>
+    </div>
+
+    <!-- Selección de Trabajo -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row align-items-end">
+                <div class="col-md-8">
+                    <label for="selectTrabajo" class="form-label">Seleccione Trabajo CATI/CAWI:</label>
+                    <select id="selectTrabajo" class="form-control form-control-lg" required>
+                        <option value="">-- Seleccionar trabajo --</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <button type="button" class="btn btn-primary btn-lg w-100" id="btnCargar" disabled>
+                        <i class="fas fa-search"></i> Cargar Planillas
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla de Planillas -->
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">
+                <i class="fas fa-table"></i> Planillas CATI/CAWI en Revisión
+                <span id="planillaCount" class="badge badge-light float-right">0</span>
+            </h5>
+        </div>
+        <div class="card-body p-0">
+            <div id="planillasContainer">
+                <p class="text-muted p-3 text-center">Seleccione un trabajo para ver las planillas</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modales -->
+
+<!-- Modal: Aprobar Planilla -->
+<div class="modal fade" id="modalAprobar" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title"><i class="fas fa-check-circle"></i> Aprobar Planilla</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info" role="alert">
+                    <strong>Planilla ID:</strong> <span id="approveDetail_PlanillaId"></span><br>
+                    <strong>Concepto:</strong> <span id="approveDetail_Concepto"></span><br>
+                    <strong>Tipo Actividad:</strong> <span id="approveDetail_TipoActividad"></span>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="form-label">Monto Previo:</label>
+                        <input type="text" id="approveDetail_MontoPrevio" class="form-control" readonly />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Monto Actual:</label>
+                        <input type="text" id="approveDetail_MontoTotal" class="form-control" readonly />
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <label class="form-label"><strong>Monto a Autorizar:</strong></label>
+                        <input type="number" id="approveMontoAutorizado" class="form-control form-control-lg" placeholder="Ingrese el monto" step="0.01" required />
+                        <small class="text-danger d-none" id="approveError"></small>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" id="btnConfirmAprobar">
+                    <i class="fas fa-check"></i> Aprobar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Rechazar Planilla -->
+<div class="modal fade" id="modalRechazar" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title"><i class="fas fa-times-circle"></i> Rechazar Planilla</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning" role="alert">
+                    <strong>Planilla ID:</strong> <span id="rejectDetail_PlanillaId"></span><br>
+                    <strong>Concepto:</strong> <span id="rejectDetail_Concepto"></span>
+                </div>
+                <label class="form-label"><strong>Motivo del Rechazo:</strong></label>
+                <textarea id="rejectObservacion" class="form-control" rows="5" required></textarea>
+                <small class="text-danger d-none" id="rejectError"></small>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="btnConfirmRechazar">
+                    <i class="fas fa-times"></i> Rechazar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let currentTrabajo = null, currentData = { planillaId: null, montoTotal: 0, montoPrevio: 0, tipoActividad: null };
+
+        $(document).ready(() => { loadTrabajos(); });
+
+        function loadTrabajos() {
+            $('#selectTrabajo, #btnCargar').prop('disabled', false);
+        }
+
+        $('#btnCargar').click(function () {
+            const id = $('#selectTrabajo').val();
+            if (id) loadPlanillas(id);
+            else toastr.warning('Seleccione trabajo');
+        });
+
+        function loadPlanillas(trabajoId) {
+            currentTrabajo = trabajoId;
+            $('#planillasContainer').html('<div class="text-center p-4"><div class="spinner-border"></div></div>');
+            $.ajax({
+                url: '@Url.Action("Index", "RevisionProductividadMYSCall")',
+                data: { trabajoId },
+                success: function (planillas) {
+                    renderPlanillas(planillas);
+                    $('#planillaCount').text(planillas.length);
+                },
+                error: () => toastr.error('Error cargando planillas')
+            });
+        }
+
+        function renderPlanillas(planillas) {
+            if (!planillas.length) {
+                $('#planillasContainer').html('<p class="text-muted p-3 text-center">No hay planillas CATI/CAWI</p>');
+                return;
+            }
+
+            let html = '<div class="table-responsive"><table class="table table-hover"><thead><tr><th>ID</th><th>Concepto</th><th>Tipo</th><th>Cantidad</th><th>Valor</th><th>Monto Previo</th><th>Monto Actual</th><th>Diferencia</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>';
+
+            planillas.forEach(p => {
+                const tipoLabel = getTipoActividadLabel(p.tipoActividad);
+                html += `<tr class="tipo-${p.tipoActividad}"><td>${p.planillaId}</td><td>${p.concepto}</td>`;
+                html += `<td><span class="badge bg-info">${tipoLabel}</span></td>`;
+                html += `<td class="text-end">${p.cantidad}</td><td class="text-end">$${parseFloat(p.valorUnitario).toLocaleString('es-CO', { minimumFractionDigits: 2 })}</td>`;
+                html += `<td class="text-end">$${parseFloat(p.montoPrevio).toLocaleString('es-CO', { minimumFractionDigits: 2 })}</td>`;
+                html += `<td class="text-end"><strong>$${parseFloat(p.montoTotal).toLocaleString('es-CO', { minimumFractionDigits: 2 })}</strong></td>`;
+                html += `<td class="text-end ${p.diferencia > 0 ? 'text-danger' : 'text-success'}">$${parseFloat(p.diferencia).toLocaleString('es-CO', { minimumFractionDigits: 2 })}</td>`;
+                html += `<td><span class="badge bg-warning">Pendiente</span></td>`;
+                html += `<td><button class="btn btn-sm btn-success" onclick='openModalAprobar(${p.planillaId}, "${p.concepto}", ${p.montoTotal}, ${p.montoPrevio}, ${p.tipoActividad})' title="Aprobar"><i class="fas fa-check"></i></button>`;
+                html += `<button class="btn btn-sm btn-danger" onclick="openModalRechazar(${p.planillaId}, '${p.concepto}')" title="Rechazar"><i class="fas fa-times"></i></button></td></tr>`;
+            });
+
+            html += '</tbody></table></div>';
+            $('#planillasContainer').html(html);
+        }
+
+        function getTipoActividadLabel(tipo) {
+            const labels = { 21: 'CATI', 22: 'CAWI', 23: 'Mixto' };
+            return labels[tipo] || 'Otro';
+        }
+
+        function openModalAprobar(id, concepto, monto, previo, tipoActividad) {
+            currentData = { planillaId: id, montoTotal: monto, montoPrevio: previo, tipoActividad };
+            $('#approveDetail_PlanillaId').text(id);
+            $('#approveDetail_Concepto').text(concepto);
+            $('#approveDetail_TipoActividad').text(getTipoActividadLabel(tipoActividad));
+            $('#approveDetail_MontoPrevio').val('$' + parseFloat(previo).toLocaleString('es-CO', { minimumFractionDigits: 2 }));
+            $('#approveDetail_MontoTotal').val('$' + parseFloat(monto).toLocaleString('es-CO', { minimumFractionDigits: 2 }));
+            $('#approveMontoAutorizado').val(monto);
+            new bootstrap.Modal(document.getElementById('modalAprobar')).show();
+        }
+
+        $('#btnConfirmAprobar').click(() => {
+            const monto = parseFloat($('#approveMontoAutorizado').val());
+            if (isNaN(monto) || monto < 0) {
+                $('#approveError').removeClass('d-none').text('Monto inválido');
+                return;
+            }
+
+            $.ajax({
+                url: '@Url.Action("Aprobar", "RevisionProductividadMYSCall")',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ planillaId: currentData.planillaId, montoAutorizado: monto }),
+                success: function (response) {
+                    if (response.success) {
+                        toastr.success('Planilla aprobada exitosamente');
+                        bootstrap.Modal.getInstance(document.getElementById('modalAprobar')).hide();
+                        loadPlanillas(currentTrabajo);
+                    } else {
+                        toastr.error(response.message);
+                    }
+                },
+                error: () => toastr.error('Error al aprobar')
+            });
+        });
+
+        function openModalRechazar(id, concepto) {
+            currentData.planillaId = id;
+            $('#rejectDetail_PlanillaId').text(id);
+            $('#rejectDetail_Concepto').text(concepto);
+            $('#rejectObservacion').val('');
+            new bootstrap.Modal(document.getElementById('modalRechazar')).show();
+        }
+
+        $('#btnConfirmRechazar').click(() => {
+            const obs = $('#rejectObservacion').val().trim();
+            if (!obs) {
+                $('#rejectError').removeClass('d-none');
+                return;
+            }
+
+            $.ajax({
+                url: '@Url.Action("Rechazar", "RevisionProductividadMYSCall")',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ planillaId: currentData.planillaId, observacion: obs }),
+                success: function (response) {
+                    if (response.success) {
+                        toastr.success('Planilla rechazada exitosamente');
+                        bootstrap.Modal.getInstance(document.getElementById('modalRechazar')).hide();
+                        loadPlanillas(currentTrabajo);
+                    } else {
+                        toastr.error(response.message);
+                    }
+                },
+                error: () => toastr.error('Error al rechazar')
+            });
+        });
+    </script>
+
+    <style>
+        .table-responsive { max-height: 600px; overflow-y: auto; }
+        .table th { position: sticky; top: 0; background-color: #f8f9fa; z-index: 1; }
+        .btn-sm { padding: 0.25rem 0.5rem; font-size: 0.75rem; }
+        .tipo-21 { background-color: rgba(23, 162, 184, 0.1); }
+        .tipo-22 { background-color: rgba(102, 51, 153, 0.1); }
+    </style>
+}

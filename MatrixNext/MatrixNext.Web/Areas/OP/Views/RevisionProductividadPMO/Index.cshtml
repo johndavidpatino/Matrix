@@ -1,0 +1,394 @@
+@model List<PlanillaProductividadDto>
+
+@{
+    ViewData["Title"] = "Revisión de Planillas de Productividad - PMO";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="h3 mb-0">
+                <i class="fas fa-tasks"></i> Revisión de Planillas de Productividad
+            </h1>
+            <small class="text-muted">Rol: PMO - Revisión de Presupuestos</small>
+        </div>
+    </div>
+
+    <!-- Selección de Trabajo -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row align-items-end">
+                <div class="col-md-8">
+                    <label for="selectTrabajo" class="form-label">Seleccione un Trabajo:</label>
+                    <select id="selectTrabajo" class="form-control form-control-lg" required>
+                        <option value="">-- Seleccionar trabajo --</option>
+                        <!-- Options will be populated from JavaScript -->
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <button type="button" class="btn btn-primary btn-lg w-100" id="btnCargar" disabled>
+                        <i class="fas fa-search"></i> Cargar Planillas
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla de Planillas -->
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">
+                <i class="fas fa-table"></i> Planillas en Revisión
+                <span id="planillaCount" class="badge badge-light float-right">0</span>
+            </h5>
+        </div>
+        <div class="card-body p-0">
+            <div id="planillasContainer">
+                <p class="text-muted p-3 text-center">Seleccione un trabajo para ver las planillas</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modales -->
+
+<!-- Modal: Aprobar Planilla -->
+<div class="modal fade" id="modalAprobar" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-check-circle"></i> Aprobar Planilla
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info" role="alert">
+                    <strong>Planilla ID:</strong> <span id="approveDetail_PlanillaId"></span><br>
+                    <strong>Trabajo:</strong> <span id="approveDetail_Trabajo"></span><br>
+                    <strong>Concepto:</strong> <span id="approveDetail_Concepto"></span>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="form-label">Monto Previo:</label>
+                        <input type="text" id="approveDetail_MontoPrevio" class="form-control" readonly />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Monto Actual:</label>
+                        <input type="text" id="approveDetail_MontoTotal" class="form-control" readonly />
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <label class="form-label"><strong>Monto a Autorizar:</strong></label>
+                        <input type="number" id="approveMontoAutorizado" class="form-control form-control-lg" 
+                               placeholder="Ingrese el monto autorizado" step="0.01" required />
+                        <small class="text-danger d-none" id="approveError"></small>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <label class="form-label">Observaciones (opcional):</label>
+                        <textarea id="approveObservaciones" class="form-control" rows="3" 
+                                  placeholder="Ingrese observaciones adicionales"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" id="btnConfirmAprobar">
+                    <i class="fas fa-check"></i> Aprobar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Rechazar Planilla -->
+<div class="modal fade" id="modalRechazar" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-times-circle"></i> Rechazar Planilla
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning" role="alert">
+                    <strong>Planilla ID:</strong> <span id="rejectDetail_PlanillaId"></span><br>
+                    <strong>Concepto:</strong> <span id="rejectDetail_Concepto"></span>
+                </div>
+
+                <label class="form-label"><strong>Motivo del Rechazo:</strong></label>
+                <textarea id="rejectObservacion" class="form-control" rows="5" 
+                          placeholder="Indique el motivo del rechazo" required></textarea>
+                <small class="text-danger d-none" id="rejectError"></small>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="btnConfirmRechazar">
+                    <i class="fas fa-times"></i> Rechazar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let currentTrabajo = null;
+        let currentData = {
+            planillaId: null,
+            montoTotal: 0,
+            montoPrevio: 0
+        };
+
+        // Load trabajos on page load
+        $(document).ready(function () {
+            loadTrabajos();
+        });
+
+        function loadTrabajos() {
+            // TODO: Fetch trabajos from server
+            // Placeholder: This would be populated from ObtenerTrabajosAsync
+            $('#selectTrabajo').prop('disabled', false);
+            $('#btnCargar').prop('disabled', false);
+        }
+
+        // Cargar planillas cuando cambia el trabajo
+        $('#btnCargar').click(function () {
+            const trabajoId = $('#selectTrabajo').val();
+            if (!trabajoId) {
+                toastr.warning('Debe seleccionar un trabajo');
+                return;
+            }
+
+            loadPlanillas(trabajoId);
+        });
+
+        function loadPlanillas(trabajoId) {
+            currentTrabajo = trabajoId;
+            $('#planillasContainer').html('<div class="text-center p-4"><div class="spinner-border" role="status"></div></div>');
+
+            $.ajax({
+                url: '@Url.Action("Index", "RevisionProductividadPMO")',
+                type: 'GET',
+                data: { trabajoId: trabajoId },
+                dataType: 'json',
+                success: function (planillas) {
+                    renderPlanillas(planillas);
+                    $('#planillaCount').text(planillas.length);
+                },
+                error: function (xhr) {
+                    toastr.error('Error cargando planillas');
+                    console.error(xhr);
+                }
+            });
+        }
+
+        function renderPlanillas(planillas) {
+            if (planillas.length === 0) {
+                $('#planillasContainer').html('<p class="text-muted p-3 text-center">No hay planillas para revisar</p>');
+                return;
+            }
+
+            let html = `
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Concepto</th>
+                                <th>Cantidad</th>
+                                <th>Valor Unitario</th>
+                                <th>Monto Previo</th>
+                                <th>Monto Actual</th>
+                                <th>Diferencia</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            planillas.forEach(p => {
+                const estadoClass = getEstadoClass(p.estado);
+                const estadoText = getEstadoText(p.estado);
+                
+                html += `
+                    <tr>
+                        <td><strong>${p.planillaId}</strong></td>
+                        <td>${p.concepto}</td>
+                        <td class="text-end">${p.cantidad}</td>
+                        <td class="text-end">$${parseFloat(p.valorUnitario).toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                        <td class="text-end">$${parseFloat(p.montoPrevio).toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                        <td class="text-end"><strong>$${parseFloat(p.montoTotal).toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></td>
+                        <td class="text-end ${p.diferencia > 0 ? 'text-danger' : 'text-success'}">
+                            ${p.diferencia > 0 ? '+' : ''}$${parseFloat(p.diferencia).toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        </td>
+                        <td><span class="badge ${estadoClass}">${estadoText}</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-success" onclick="openModalAprobar(${p.planillaId}, '${p.concepto}', ${p.montoTotal}, ${p.montoPrevio})">
+                                <i class="fas fa-check"></i> Aprobar
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="openModalRechazar(${p.planillaId}, '${p.concepto}')">
+                                <i class="fas fa-times"></i> Rechazar
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            $('#planillasContainer').html(html);
+        }
+
+        function getEstadoClass(estado) {
+            const clases = {
+                1: 'bg-warning text-dark',
+                2: 'bg-success',
+                3: 'bg-danger',
+                4: 'bg-info'
+            };
+            return clases[estado] || 'bg-secondary';
+        }
+
+        function getEstadoText(estado) {
+            const textos = {
+                1: 'Pendiente',
+                2: 'Aprobada',
+                3: 'Rechazada',
+                4: 'En Revisión'
+            };
+            return textos[estado] || 'Desconocido';
+        }
+
+        // Aprobar
+        function openModalAprobar(planillaId, concepto, montoTotal, montoPrevio) {
+            currentData = { planillaId, montoTotal, montoPrevio };
+            
+            $('#approveDetail_PlanillaId').text(planillaId);
+            $('#approveDetail_Concepto').text(concepto);
+            $('#approveDetail_MontoPrevio').val('$' + parseFloat(montoPrevio).toLocaleString('es-CO', { minimumFractionDigits: 2 }));
+            $('#approveDetail_MontoTotal').val('$' + parseFloat(montoTotal).toLocaleString('es-CO', { minimumFractionDigits: 2 }));
+            $('#approveMontoAutorizado').val(montoTotal);
+            $('#approveError').addClass('d-none').text('');
+
+            new bootstrap.Modal(document.getElementById('modalAprobar')).show();
+        }
+
+        $('#btnConfirmAprobar').click(function () {
+            const montoAutorizado = parseFloat($('#approveMontoAutorizado').val());
+            
+            if (isNaN(montoAutorizado) || montoAutorizado < 0) {
+                $('#approveError').removeClass('d-none').text('Debe ingresar un monto válido');
+                return;
+            }
+
+            const planillaId = currentData.planillaId;
+
+            $.ajax({
+                url: '@Url.Action("Aprobar", "RevisionProductividadPMO")',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    planillaId: planillaId,
+                    montoAutorizado: montoAutorizado,
+                    observaciones: $('#approveObservaciones').val()
+                }),
+                success: function (response) {
+                    if (response.success) {
+                        toastr.success('Planilla aprobada exitosamente');
+                        bootstrap.Modal.getInstance(document.getElementById('modalAprobar')).hide();
+                        loadPlanillas(currentTrabajo);
+                    } else {
+                        toastr.error(response.message || 'Error al aprobar planilla');
+                    }
+                },
+                error: function (xhr) {
+                    toastr.error('Error al procesar la aprobación');
+                    console.error(xhr);
+                }
+            });
+        });
+
+        // Rechazar
+        function openModalRechazar(planillaId, concepto) {
+            currentData.planillaId = planillaId;
+            
+            $('#rejectDetail_PlanillaId').text(planillaId);
+            $('#rejectDetail_Concepto').text(concepto);
+            $('#rejectObservacion').val('');
+            $('#rejectError').addClass('d-none').text('');
+
+            new bootstrap.Modal(document.getElementById('modalRechazar')).show();
+        }
+
+        $('#btnConfirmRechazar').click(function () {
+            const observacion = $('#rejectObservacion').val().trim();
+            
+            if (!observacion) {
+                $('#rejectError').removeClass('d-none').text('Debe indicar el motivo del rechazo');
+                return;
+            }
+
+            const planillaId = currentData.planillaId;
+
+            $.ajax({
+                url: '@Url.Action("Rechazar", "RevisionProductividadPMO")',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    planillaId: planillaId,
+                    observacion: observacion
+                }),
+                success: function (response) {
+                    if (response.success) {
+                        toastr.success('Planilla rechazada exitosamente');
+                        bootstrap.Modal.getInstance(document.getElementById('modalRechazar')).hide();
+                        loadPlanillas(currentTrabajo);
+                    } else {
+                        toastr.error(response.message || 'Error al rechazar planilla');
+                    }
+                },
+                error: function (xhr) {
+                    toastr.error('Error al procesar el rechazo');
+                    console.error(xhr);
+                }
+            });
+        });
+    </script>
+
+    <style>
+        .table-responsive {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .table th {
+            position: sticky;
+            top: 0;
+            background-color: #f8f9fa;
+            z-index: 1;
+        }
+
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        .badge {
+            font-size: 0.8rem;
+        }
+    </style>
+}
