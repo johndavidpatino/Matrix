@@ -620,7 +620,7 @@ Dim finCorteFecha = New DateTime(Now.Year, Now.Month, 15)
 - La fase 2 ahora se define por sprints explícitos (ver `docs/OP/OP_CUANTITATIVO_AVANCE.md:| Fase 2 - Sprints recomendados`) que cubren portal COE, tráfico, cargas masivas, planillas/productividad/IPS y utilidades como presupuestos y supervisión.
 - Se habilitó el portal COE `/OP/Portal` para listar trabajos activos, filtrar por estado y navegar a los flujos definidos en el backlog sin abandonar MatrixNext.Web.
 - Sprint 3 (Cargas masivas) completado: el wizard `/OP/ImportacionMasiva` valida headers (`TipoActividad`, cortes/festivos), ejecuta los SP `CatiRMC_*` (borrar, validar, reportes y carga final) y realiza el bulk copy hacia `OP_CuantiPlanillas`, deja un backup en `uploads/op/cargas` y muestra los reportes (`ResumenValidas`, `ResumenNoValidas`, `ResumenDuplicadas`, `ResumenInconsistencias`) para dar seguimiento inmediato y cerrar el sprint 3.
-- Sprint 4 (Planillas/Productividad/IPS) en progreso: se creó `docs/OP/SPRINT4_PLAN.md` con las tareas de tabulaciones, grids role-based y IPS editable y se lanzó la vista `/OP/PlanillasAprobacion` que muestra tabs, métricas de productividad y resumen IPS como base para los flujos restantes.
+- Sprint 4 (Planillas/Productividad/IPS) en progreso: se creó `docs/OP/SPRINT4_PLAN.md` con las tareas de tabulaciones, grids role-based y IPS editable y se lanzó la vista `/OP/PlanillasAprobacion`, que ahora consume `OP_CuantiPlanillas_GET` y consulta `OP_IPS_Revision` para alimentar tabs, tabla y paneles laterales antes de entrar en las aprobaciones definitivas.
 
 **DOCUMENTO FINALIZADO**  
 **Versión**: 1.1  
