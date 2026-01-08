@@ -89,8 +89,12 @@
                     <input asp-for="Form.Archivo" class="form-control" type="file" accept=".xls,.xlsx" />
                     <span asp-validation-for="Form.Archivo" class="text-danger"></span>
                 </div>
-                <button type="submit" class="btn btn-primary">Validar archivo</button>
-                <span class="text-muted ms-3">El archivo se mantiene en un backup auditado.</span>
+                <button type="submit" class="btn btn-primary" name="action" value="validar">Validar archivo</button>
+                <button type="submit" class="btn btn-success ms-2" name="action" value="procesar">Procesar carga</button>
+                <span class="text-muted d-block mt-2">
+                    El archivo se mantiene en un backup auditado y puedes ejecutar la carga real una vez validado.
+                    Usa "Procesar carga" para ejecutar los SP `CatiRMC_*`/bulk en CoreProject.
+                </span>
                 @if (!ViewData.ModelState.IsValid)
                 {
                     <div class="mt-2 text-danger">
@@ -104,7 +108,12 @@
     @if (Model.Result is not null)
     {
         <div class="alert @(Model.Result.EsValido ? "alert-success" : "alert-danger")">
-            <strong>@(Model.Result.EsValido ? "Validado" : "Error"):</strong> @Model.Result.Mensaje
+            <strong>@(Model.Result.EsValido ? "Resultado" : "Error"):</strong>
+            <span>@Model.Result.Mensaje</span>
+            @if (Model.Result.CargaEjecutada)
+            {
+                <div class="small text-muted mt-1">La carga fue procesada contra CoreProject.</div>
+            }
         </div>
     }
 </section>

@@ -53,7 +53,7 @@ La fase 2 la dividimos en sprints consecutivos para no perder de vista cada fluj
 |---|---|---|---|---|
 | 1 | 1 semana | Portal COE y navegación general | Reproducir la grilla de Trabajos.aspx (permiso 100) con enlaces interflujo y sincronización de sesión | Vista funcional con grid, navegación a `/OP/Trafico` y `/OP/Avances`, pruebas de permisos 100 |
 | 2 | 1 semana | Tráfico y Activaciones | Afinar `/OP/Trafico`, agregar accesos a Activation/Anulacion y preparar la base para ClosedXML | KPIs de ciudades, botones de acción, y servicios listos para exportar y validar envíos |
-| 3 | 2 semanas | Cargas masivas (CATI + planillas) | Wizard unificado `/OP/ImportacionMasiva`, `OpCargaService` y validación de headers/TipoActividad/corte | Validaciones de Excel pasan y se guarda copia de auditoría; próximos pasos: bulk copy y ejecución de SP en CoreProject |
+| 3 | 2 semanas | Cargas masivas (CATI + planillas) | Wizard `/OP/ImportacionMasiva` con validación y ejecución (`OpCargaService`); ahora ejecuta los SP `CatiRMC_*` y el bulk copy a `OP_CuantiPlanillas` | Validaciones y ejecución DB completadas, con reportes (`ResumenValidas/NoValidas/Duplicadas/Inconsistencias`) y copia de auditoría en uploads/op/cargas |
 | 4 | 2 semanas | Planillas/Planillas Revisadas/Productividad/IPS | Consolida tab sets y grids para planillas, productividad y control IPS, con Dapper, notificaciones y validations comunes | Tabs listos, IPS editable y alertas con ClosedXML, correos listos y POV para coordinador/PMO/MyS/Call |
 | 5 | 1 semana | Presupuestos internos + utilidades (RegistroProduccion, iField, Supervisión) | Migrar formularios de presupuestos, registro de producción e iField, corregir supervisión con permiso dinámico | Formularios funcionales, SPs invocados, ID hardcoded reemplazado y dependencias de CoreProject enlazadas |
 
@@ -62,7 +62,7 @@ Cada sprint se documentará aquí y en `ANALISIS_OP_CUANTITATIVO.md` para reflej
 ## Sprint actual
 - Sprint 1 (Portal COE) completado: la grilla filtra por JobBook/Estado, muestra el estado del permiso 100, enlaza a `/OP/Trafico`, `/OP/Avances` y `/OP/Encuestas`, y exhibe el badge del permiso 100; las acciones contextuales están listas.
 - Sprint 2 (Tráfico + Activaciones) completado: `/OP/Trafico` mantiene KPIs y agregamos `/OP/Encuestas`, una vista con formularios que ejecutan `OP_GestionCampo_ActivarEncuesta` y `OP_GestionCampo_AnularEncuesta` con formularios anti-forgery y mensajes de resultado, cerrando el sprint 2 con data real sobre activaciones/anulaciones.
-- Sprint 3 (Cargas masivas) en progreso: el nuevo wizard `/OP/ImportacionMasiva` activa `OpCargaService`, valida los encabezados legacy y los valores de `TipoActividad`/`Cantidad` y verifica el corte 16-15 con `_Festivos`; se conserva una copia de backup para auditoría y se documenta la siguiente etapa (bulk copy + SPs `CatiRMC_*` y `OP_CuantiPlanillas`). 
+- Sprint 3 (Cargas masivas) en progreso: el wizard `/OP/ImportacionMasiva` activa `OpCargaService`, que ahora ejecuta los SP `CatiRMC_*` (borrar, validar, reportes, insertar) y realiza el bulk copy sobre `OP_CuantiPlanillas`; los resultados se muestran en la vista junto con la copia de auditoría en uploads/op/cargas.
 
 > Este es el checklist base; cada entrada se actualizara con notas y tiempos una vez arranquemos la implementacion de la vista/servicio correspondiente. Se debe asegurar que las dependencias de CoreProject (stored procedures y contexts) se consumen sin cambiar nombres, siguiendo la Regla Core 1 de las directrices.
 

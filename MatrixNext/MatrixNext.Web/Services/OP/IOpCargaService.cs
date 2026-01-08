@@ -4,7 +4,12 @@ namespace MatrixNext.Web.Services.OP;
 
 public interface IOpCargaService
 {
-    Task<OpCargaResult> ProcesarArchivoAsync(IFormFile archivo, OpCargaTipo tipo, CancellationToken cancellationToken = default);
+    Task<OpCargaResult> ProcesarArchivoAsync(
+        IFormFile archivo,
+        OpCargaTipo tipo,
+        bool ejecutarCarga = false,
+        long usuarioId = 0,
+        CancellationToken cancellationToken = default);
 }
 
 public enum OpCargaTipo
@@ -13,4 +18,4 @@ public enum OpCargaTipo
     Planillas
 }
 
-public sealed record OpCargaResult(bool EsValido, string Mensaje);
+public sealed record OpCargaResult(bool EsValido, string Mensaje, bool CargaEjecutada = false);

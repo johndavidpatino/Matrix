@@ -63,6 +63,8 @@ public class OpCargaService : IOpCargaService
     public async Task<OpCargaResult> ProcesarArchivoAsync(
         IFormFile archivo,
         OpCargaTipo tipo,
+        bool ejecutarCarga = false,
+        long usuarioId = 0,
         CancellationToken cancellationToken = default)
     {
         if (archivo is null || archivo.Length == 0)
@@ -114,9 +116,23 @@ public class OpCargaService : IOpCargaService
 
         var copia = await SaveBackupAsync(archivo, cancellationToken);
         var filas = worksheet.Rows.Count;
-        return new OpCargaResult(
-            true,
-            $"Archivo validado con {filas} fila(s). Copia de auditoría: {Path.GetFileName(copia)}.");
+        var mensajeBase = $"Archivo validado con {filas} fila(s). Copia de auditoría: {Path.GetFileName(copia)}.";
+
+        if (!ejecutarCarga)
+        {
+            return new OpCargaResult(true, mensajeBase, false);
+        }
+
+        try
+        {
+            var cargaMensaje = await EjecutarCargaAsync(worksheet, tipo, usuarioId, cancellationToken);
+            return new OpCargaResult(true, $"{mensajeBase} {cargaMensaje}", true);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error ejecutando carga OP_Cuantitativo");
+            return new OpCargaResult(false, $"La validación fue exitosa, pero la carga falló: {ex.Message}");
+        }
     }
 
     private static bool ValidateHeaders(DataTable table, IReadOnlyList<string> required, out List<string> missing)
@@ -313,6 +329,174 @@ public class OpCargaService : IOpCargaService
         }
 
         return DateTime.TryParse(value.ToString(), CultureInfo.InvariantCulture, DateTimeStyles.None, out result);
+    }
+
+    private async Task<string> EjecutarCargaAsync(
+        DataTable worksheet,
+        OpCargaTipo tipo,
+        long usuarioId,
+        CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(_connectionString))
+        {
+            throw new InvalidOperationException("La cadena MatrixDb no está configurada.");
+        }
+
+        await using var connection = new SqlConnection(_connectionString);
+        await connection.OpenAsync(cancellationToken);
+
+        if (tipo == OpCargaTipo.CatiRMC)
+        {
+            await EjecutarSpAsync(connection, "CatiRMC_BorrarDatosRespuestasCatiRMCtmp", cancellationToken);
+
+            await BulkCopyAsync(
+                worksheet,
+                "RespuestasCatiRMCtmp",
+                connection,
+                cancellationToken,
+                new Dictionary<string, string>
+                {
+                    ["TrabajoId"] = "E_Id",
+                    ["Res_Numero"] = "Res_Numero",
+                    ["Per_NumIdentificacionEncu"] = "Per_NumIdentificacionEncu",
+                    ["Per_NumIdentificacionSup"] = "Per_NumIdentificacionSup",
+                    ["Res_IDM"] = "Res_IDM",
+                    ["Res_Ciudad"] = "Res_Ciudad",
+                    ["Res_Fecha"] = "Res_Fecha",
+                    ["TipoSupervision"] = "TipoSupervision",
+                    ["TipoActividad"] = "idTablet"
+                });
+
+            await EjecutarSpAsync(connection, "CatiRMC_ValidarDatosRespuestasCatiRMCtmp", cancellationToken);
+
+            var validas = await EjecutarReporteAsync(connection, "CatiRMC_ReportarResumenValidasNuevas", cancellationToken);
+            var noValidas = await EjecutarReporteAsync(connection, "CatiRMC_ReportarResumenNoValidasNuevas", cancellationToken);
+            var duplicadas = await EjecutarReporteAsync(connection, "CatiRMC_ReportarResumenDuplicadas", cancellationToken);
+            var inconsistencias = await EjecutarReporteAsync(connection, "CatiRMC_ReportarInconsistencias", cancellationToken);
+
+            await EjecutarSpParametroAsync(connection, "CatiRMC_InsertarDatosEnRespuestas", "@Usuario_Id", usuarioId, cancellationToken);
+
+            return $"Carga CATI ejecutada (válidas: {validas}, no válidas: {noValidas}, duplicadas: {duplicadas}, inconsistencias: {inconsistencias}).";
+        }
+
+        ConfigurePlanillaColumns(worksheet, usuarioId);
+
+        try
+        {
+            await BulkCopyAsync(worksheet, "OP_CuantiPlanillas", connection, cancellationToken);
+            return "Planillas cargadas en OP_CuantiPlanillas; revisa duplicados en el tablero de planillas.";
+        }
+        catch (SqlException ex) when (ex.Message.Contains("IX_OP_CuantiPlanillas_Unique_Trabajo_Per_ResFecha"))
+        {
+            throw new InvalidOperationException("Ya existen registros para el mismo trabajo/fecha del corte; revisa las planillas pendientes.", ex);
+        }
+    }
+
+    private static void ConfigurePlanillaColumns(DataTable table, long usuarioId)
+    {
+        if (!table.Columns.Contains("SubidoPor"))
+        {
+            table.Columns.Add("SubidoPor", typeof(long));
+        }
+
+        if (!table.Columns.Contains("FechaCarga"))
+        {
+            table.Columns.Add("FechaCarga", typeof(DateTime));
+        }
+
+        if (!table.Columns.Contains("Revisado"))
+        {
+            table.Columns.Add("Revisado", typeof(bool));
+        }
+
+        if (!table.Columns.Contains("RevisadoPor"))
+        {
+            table.Columns.Add("RevisadoPor", typeof(long));
+        }
+
+        if (!table.Columns.Contains("FechaRevision"))
+        {
+            table.Columns.Add("FechaRevision", typeof(DateTime));
+        }
+
+        var fechaCarga = DateTime.UtcNow;
+        foreach (DataRow row in table.Rows)
+        {
+            row["SubidoPor"] = usuarioId > 0 ? usuarioId : DBNull.Value;
+            row["FechaCarga"] = fechaCarga;
+            row["Revisado"] = false;
+            row["RevisadoPor"] = usuarioId > 0 ? usuarioId : DBNull.Value;
+            row["FechaRevision"] = DBNull.Value;
+        }
+    }
+
+    private static async Task BulkCopyAsync(
+        DataTable table,
+        string destinationTable,
+        SqlConnection connection,
+        CancellationToken cancellationToken,
+        IReadOnlyDictionary<string, string>? columnMappings = null)
+    {
+        using var bulkcopy = new SqlBulkCopy(connection)
+        {
+            DestinationTableName = destinationTable,
+            BulkCopyTimeout = 0
+        };
+
+        var mappings = columnMappings ?? table.Columns.Cast<DataColumn>().ToDictionary(c => c.ColumnName, c => c.ColumnName);
+
+        foreach (var mapping in mappings)
+        {
+            bulkcopy.ColumnMappings.Add(mapping.Key, mapping.Value);
+        }
+
+        await bulkcopy.WriteToServerAsync(table, cancellationToken);
+    }
+
+    private static async Task EjecutarSpAsync(SqlConnection connection, string storedProcedure, CancellationToken cancellationToken)
+    {
+        await using var command = new SqlCommand(storedProcedure, connection)
+        {
+            CommandType = CommandType.StoredProcedure
+        };
+
+        await command.ExecuteNonQueryAsync(cancellationToken);
+    }
+
+    private static async Task EjecutarSpParametroAsync(
+        SqlConnection connection,
+        string storedProcedure,
+        string parametro,
+        object value,
+        CancellationToken cancellationToken)
+    {
+        await using var command = new SqlCommand(storedProcedure, connection)
+        {
+            CommandType = CommandType.StoredProcedure
+        };
+
+        command.Parameters.AddWithValue(parametro, value);
+        await command.ExecuteNonQueryAsync(cancellationToken);
+    }
+
+    private static async Task<int> EjecutarReporteAsync(
+        SqlConnection connection,
+        string storedProcedure,
+        CancellationToken cancellationToken)
+    {
+        await using var command = new SqlCommand(storedProcedure, connection)
+        {
+            CommandType = CommandType.StoredProcedure
+        };
+
+        await using var reader = await command.ExecuteReaderAsync(cancellationToken);
+        var total = 0;
+        while (await reader.ReadAsync(cancellationToken))
+        {
+            total++;
+        }
+
+        return total;
     }
 
     private async Task<string> SaveBackupAsync(IFormFile archivo, CancellationToken cancellationToken)

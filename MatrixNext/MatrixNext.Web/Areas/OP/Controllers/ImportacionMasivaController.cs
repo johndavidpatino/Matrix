@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using MatrixNext.Web.Services.OP;
 using MatrixNext.Web.ViewModels.OP;
 using Microsoft.AspNetCore.Authorization;
@@ -38,7 +39,12 @@ public class ImportacionMasivaController : Controller
             return View(model);
         }
 
-        var result = await _cargaService.ProcesarArchivoAsync(form.Archivo, form.Tipo);
+        var action = Request.Form["action"].ToString();
+        var ejecutarCarga = string.Equals(action, "procesar", StringComparison.OrdinalIgnoreCase);
+        var userIdClaim = User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var usuarioId = long.TryParse(userIdClaim, out var parsed) ? parsed : 0L;
+
+        var result = await _cargaService.ProcesarArchivoAsync(form.Archivo, form.Tipo, ejecutarCarga, usuarioId);
         model.Result = result;
 
         if (!result.EsValido)
