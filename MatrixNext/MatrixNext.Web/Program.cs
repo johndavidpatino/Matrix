@@ -67,6 +67,11 @@ builder.Services.AddHostedService<EmailQueueBackgroundService>(); // Background 
 builder.Services.AddScoped<IAuditoriaService, AuditoriaService>();
 builder.Services.AddScoped<GrafoAciclicoService>();
 
+// ===== SPRINT 4: EXPORT AUDIT SERVICES =====
+// Ref: S4-004 (Tracking de Exportes Excel)
+builder.Services.AddScoped<IOpExportesAuditoriaService, OpExportesAuditoriaService>();
+builder.Services.AddHostedService<ExportAuditoriaCleanupBackgroundService>(); // Cleanup runs every hour
+
 // ===== SPRINT 1: CORE Services & Adapters =====
 // Ref: PLAN_IMPLEMENTACION_SPRINTS.md § T1 (CORE Catálogos)
 builder.Services.AddScoped<MatrixNext.Web.Services.CORE.WorkFlowDataAdapter>();

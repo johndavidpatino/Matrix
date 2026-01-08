@@ -15,12 +15,18 @@ public class OpIpsService : IOpIpsService
     private readonly MatrixDbContext _dbContext;
     private readonly ILogger<OpIpsService> _logger;
     private readonly IWebHostEnvironment _environment;
+    private readonly IOpExportesAuditoriaService _exportAuditoriaService;
 
-    public OpIpsService(MatrixDbContext dbContext, ILogger<OpIpsService> logger, IWebHostEnvironment environment)
+    public OpIpsService(
+        MatrixDbContext dbContext,
+        ILogger<OpIpsService> logger,
+        IWebHostEnvironment environment,
+        IOpExportesAuditoriaService exportAuditoriaService)
     {
         _dbContext = dbContext;
         _logger = logger;
         _environment = environment;
+        _exportAuditoriaService = exportAuditoriaService;
     }
 
     public async Task<IpsRevisionViewModel> ObtenerRevisionesAsync(long? trabajoId, CancellationToken cancellationToken = default)
@@ -90,43 +96,73 @@ public class OpIpsService : IOpIpsService
 
     public async Task<IpsExportResult> ExportarRevisionesAsync(long? trabajoId, CancellationToken cancellationToken = default)
     {
-        await using var connection = _dbContext.Database.GetDbConnection();
-        if (connection.State != ConnectionState.Open)
+        try
         {
-            await connection.OpenAsync(cancellationToken);
+            await using var connection = _dbContext.Database.GetDbConnection();
+            if (connection.State != ConnectionState.Open)
+            {
+                await connection.OpenAsync(cancellationToken);
+            }
+
+            var revisiones = (await connection.QueryAsync<IpsRevisionDto>(
+                "OP_IPS_Revision_Get",
+                new { ID = (long?)null, TrabajoID = trabajoId },
+                commandType: CommandType.StoredProcedure)).ToList();
+
+            using var workbook = new XLWorkbook();
+            var worksheet = workbook.Worksheets.Add("IPS");
+            var table = worksheet.Cell(1, 1).InsertTable(revisiones.Select(r => new
+            {
+                r.TrabajoId,
+                r.JobBook,
+                r.Pregunta,
+                r.Observacion,
+                r.DescripcionObservacion,
+                r.Estado,
+                r.Instrumento,
+                FechaHoraObservacion = r.FechaHoraObservacion?.ToString("s")
+            }));
+
+            worksheet.Columns().AdjustToContents();
+            var filesRoot = Path.Combine(_environment.WebRootPath, "Files");
+            Directory.CreateDirectory(filesRoot);
+
+            var fileName = $"ips-export-{DateTime.UtcNow:yyyyMMddHHmmss}.xlsx";
+            var filePath = Path.Combine(filesRoot, fileName);
+            workbook.SaveAs(filePath);
+
+            var relativePath = Path.GetRelativePath(_environment.WebRootPath, filePath).Replace(Path.DirectorySeparatorChar, '/');
+            var publicPath = $"/{relativePath}";
+            
+            // Log export to audit table
+            var tamanoBytes = new FileInfo(filePath).Length;
+            await _exportAuditoriaService.RegistrarExportacionAsync(
+                trabajoId ?? 0,
+                "IPS",
+                usuario: null, // TODO: Get current user ID from claims/session
+                filePath,
+                fileName,
+                tamanoBytes);
+
+            _logger.LogInformation("IPS export saved to {File}", filePath);
+            return new IpsExportResult(filePath, publicPath);
         }
-
-        var revisiones = (await connection.QueryAsync<IpsRevisionDto>(
-            "OP_IPS_Revision_Get",
-            new { ID = (long?)null, TrabajoID = trabajoId },
-            commandType: CommandType.StoredProcedure)).ToList();
-
-        using var workbook = new XLWorkbook();
-        var worksheet = workbook.Worksheets.Add("IPS");
-        var table = worksheet.Cell(1, 1).InsertTable(revisiones.Select(r => new
+        catch (Exception ex)
         {
-            r.TrabajoId,
-            r.JobBook,
-            r.Pregunta,
-            r.Observacion,
-            r.DescripcionObservacion,
-            r.Estado,
-            r.Instrumento,
-            FechaHoraObservacion = r.FechaHoraObservacion?.ToString("s")
-        }));
+            _logger.LogError(ex, "Error exporting IPS revisiones for trabajo {TrabajoId}", trabajoId);
+            
+            // Log error to audit table
+            if (trabajoId.HasValue)
+            {
+                await _exportAuditoriaService.RegistrarErrorExportacionAsync(
+                    trabajoId.Value,
+                    "IPS",
+                    usuario: null,
+                    ex.Message);
+            }
 
-        worksheet.Columns().AdjustToContents();
-        var filesRoot = Path.Combine(_environment.WebRootPath, "Files");
-        Directory.CreateDirectory(filesRoot);
-
-        var fileName = $"ips-export-{DateTime.UtcNow:yyyyMMddHHmmss}.xlsx";
-        var filePath = Path.Combine(filesRoot, fileName);
-        workbook.SaveAs(filePath);
-
-        var relativePath = Path.GetRelativePath(_environment.WebRootPath, filePath).Replace(Path.DirectorySeparatorChar, '/');
-        var publicPath = $"/{relativePath}";
-        _logger.LogInformation("IPS export saved to {File}", filePath);
-        return new IpsExportResult(filePath, publicPath);
+            throw;
+        }
     }
 
     private sealed class IpsRevisionDto
