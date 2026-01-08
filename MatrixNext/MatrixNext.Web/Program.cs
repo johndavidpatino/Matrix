@@ -61,6 +61,9 @@ builder.Services.AddScoped<IUploadService, UploadService>();
 builder.Services.AddScoped<IGridService, GridService>();
 builder.Services.AddScoped<IPYPermisosService, PYPermisosService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddSingleton<EmailQueueService>(); // Singleton for queue state management
+builder.Services.AddScoped<IEmailQueueService>(sp => sp.GetRequiredService<EmailQueueService>()); // Scoped wrapper
+builder.Services.AddHostedService<EmailQueueBackgroundService>(); // Background processing
 builder.Services.AddScoped<IAuditoriaService, AuditoriaService>();
 builder.Services.AddScoped<GrafoAciclicoService>();
 
