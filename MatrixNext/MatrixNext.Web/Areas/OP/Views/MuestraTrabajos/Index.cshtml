@@ -1,0 +1,265 @@
+@model List<MatrixNext.Web.Models.OP.MuestraCiudadListItemVM>
+@{
+    ViewData["Title"] = "Muestra de Trabajos";
+    var trabajoId = ViewBag.TrabajoId;
+    var trabajoNombre = ViewBag.TrabajoNombre;
+    var totalMuestra = ViewBag.TotalMuestra;
+}
+
+<div class="container-fluid mt-4">
+    <!-- Header -->
+    <div class="row mb-3">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Portal OP</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="Trabajos" asp-action="Index">Trabajos</a></li>
+                    <li class="breadcrumb-item active">Muestra</li>
+                </ol>
+            </nav>
+            <h2>Muestra de Trabajos</h2>
+            <p class="text-muted">
+                <strong>Trabajo:</strong> @trabajoNombre | <strong>ID:</strong> @trabajoId
+            </p>
+        </div>
+    </div>
+
+    <!-- Botones de acción -->
+    <div class="row mb-3">
+        <div class="col-12">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarMuestra">
+                <i class="bi bi-plus-circle"></i> Agregar Ciudad
+            </button>
+            <a asp-controller="Trabajos" asp-action="Index" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Volver a Trabajos
+            </a>
+        </div>
+    </div>
+
+    <!-- Grid de Muestra -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Muestra por Ciudad</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.Any())
+                    {
+                        <table class="table table-hover table-striped" id="tblMuestra">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Departamento</th>
+                                    <th>Ciudad</th>
+                                    <th>Cantidad</th>
+                                    <th>Fecha Inicio</th>
+                                    <th>Fecha Fin</th>
+                                    <th>Coordinador</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var muestra in Model)
+                                {
+                                    <tr>
+                                        <td>@muestra.Departamento</td>
+                                        <td>@muestra.Ciudad</td>
+                                        <td>@muestra.Cantidad</td>
+                                        <td>@(muestra.FechaInicio?.ToString("dd/MM/yyyy") ?? "-")</td>
+                                        <td>@(muestra.FechaFin?.ToString("dd/MM/yyyy") ?? "-")</td>
+                                        <td>@(muestra.CoordinadorNombre ?? "-")</td>
+                                        <td>
+                                            <button type="button" class="btn btn-sm btn-warning btn-editar-fechas"
+                                                    data-id="@muestra.Id"
+                                                    data-ciudad="@muestra.Ciudad">
+                                                <i class="bi bi-calendar"></i> Fechas
+                                            </button>
+                                            <form asp-action="Eliminar" method="post" style="display:inline;" onsubmit="return confirm('¿Eliminar muestra de @muestra.Ciudad?');">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@muestra.Id" />
+                                                <input type="hidden" name="trabajoId" value="@trabajoId" />
+                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot class="table-info">
+                                <tr>
+                                    <td colspan="2"><strong>TOTAL MUESTRA</strong></td>
+                                    <td><strong>@totalMuestra</strong></td>
+                                    <td colspan="4"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    }
+                    else
+                    {
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle"></i> No hay muestra configurada. Agregue ciudades para comenzar.
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Agregar Muestra -->
+<div class="modal fade" id="modalAgregarMuestra" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-action="Agregar" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="TrabajoId" value="@trabajoId" />
+
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">Agregar Ciudad a Muestra</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="CiudadId" class="form-label">Ciudad <span class="text-danger">*</span></label>
+                        <select name="CiudadId" id="CiudadId" class="form-select" required>
+                            <option value="">-- Seleccione Ciudad --</option>
+                            <option value="11001">Bogotá</option>
+                            <option value="5001">Medellín</option>
+                            <option value="76001">Cali</option>
+                            <option value="8001">Barranquilla</option>
+                            <option value="68001">Bucaramanga</option>
+                            <option value="13001">Cartagena</option>
+                            <option value="17001">Manizales</option>
+                            <option value="66001">Pereira</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Cantidad" class="form-label">Cantidad <span class="text-danger">*</span></label>
+                        <input type="number" name="Cantidad" id="Cantidad" class="form-control" 
+                               min="1" max="999999" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Agregar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Actualizar Fechas con Auto-Planeación -->
+<div class="modal fade" id="modalActualizarFechas" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form asp-action="ActualizarFechas" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="IdMuestra" id="fechasIdMuestra" />
+                <input type="hidden" name="trabajoId" value="@trabajoId" />
+
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title">Actualizar Fechas y Auto-Planeación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted">Ciudad: <strong id="fechasCiudadNombre"></strong></p>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="FechaInicio" class="form-label">Fecha Inicio <span class="text-danger">*</span></label>
+                            <input type="date" name="FechaInicio" id="FechaInicio" class="form-control" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="FechaFin" class="form-label">Fecha Fin <span class="text-danger">*</span></label>
+                            <input type="date" name="FechaFin" id="FechaFin" class="form-control" required />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Días de Trabajo</label>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="Lunes" id="chkLunes" checked />
+                                    <label class="form-check-label" for="chkLunes">Lunes</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="Martes" id="chkMartes" checked />
+                                    <label class="form-check-label" for="chkMartes">Martes</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="Miercoles" id="chkMiercoles" checked />
+                                    <label class="form-check-label" for="chkMiercoles">Miércoles</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="Jueves" id="chkJueves" checked />
+                                    <label class="form-check-label" for="chkJueves">Jueves</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="Viernes" id="chkViernes" checked />
+                                    <label class="form-check-label" for="chkViernes">Viernes</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="Sabado" id="chkSabado" />
+                                    <label class="form-check-label" for="chkSabado">Sábado</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="Domingo" id="chkDomingo" />
+                                    <label class="form-check-label" for="chkDomingo">Domingo</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="ExcluirFestivos" id="chkExcluirFestivos" checked />
+                            <label class="form-check-label" for="chkExcluirFestivos">
+                                Excluir días festivos de la planeación automática
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i> La auto-planeación distribuirá la producción según los días seleccionados.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-warning">Actualizar Fechas y Planeación</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Editar fechas
+            $('.btn-editar-fechas').on('click', function () {
+                const id = $(this).data('id');
+                const ciudad = $(this).data('ciudad');
+
+                $('#fechasIdMuestra').val(id);
+                $('#fechasCiudadNombre').text(ciudad);
+
+                $('#modalActualizarFechas').modal('show');
+            });
+        });
+    </script>
+}

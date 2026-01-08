@@ -1,0 +1,154 @@
+@model MatrixNext.Web.Models.OP.EstimacionDetalleVM
+
+<div class="row mb-3">
+    <div class="col-md-6">
+        <p><strong>Ciudad:</strong> @Model.CiudadNombre</p>
+        <p><strong>Fecha Estimación:</strong> @Model.FechaEstimacion?.ToString("dd/MM/yyyy HH:mm")</p>
+    </div>
+    <div class="col-md-6">
+        <p><strong>Estado:</strong>
+            @if (Model.Activa)
+            {
+                <span class="badge bg-success">Activa</span>
+            }
+            else
+            {
+                <span class="badge bg-secondary">Inactiva</span>
+            }
+        </p>
+        <p><strong>Observaciones:</strong> @(Model.Observaciones ?? "-")</p>
+    </div>
+</div>
+
+@if (Model.PlaneacionDias.Any())
+{
+    <div class="table-responsive">
+        <table class="table table-sm table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Fecha</th>
+                    <th>Día</th>
+                    <th>Cantidad Estimada</th>
+                    @if (!Model.Bloqueada)
+                    {
+                        <th>Acciones</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var dia in Model.PlaneacionDias)
+                {
+                    <tr data-id="@dia.Id">
+                        <td>@dia.Fecha.ToString("dd/MM/yyyy")</td>
+                        <td>@dia.Fecha.ToString("dddd", new System.Globalization.CultureInfo("es-ES"))</td>
+                        <td>
+                            @if (!Model.Bloqueada)
+                            {
+                                <input type="number" class="form-control form-control-sm input-cantidad"
+                                       data-id="@dia.Id"
+                                       value="@dia.Cantidad"
+                                       min="0" max="9999" />
+                            }
+                            else
+                            {
+                                @dia.Cantidad
+                            }
+                        </td>
+                        @if (!Model.Bloqueada)
+                        {
+                            <td>
+                                <button type="button" class="btn btn-sm btn-primary btn-guardar-cantidad"
+                                        data-id="@dia.Id">
+                                    <i class="bi bi-save"></i> Guardar
+                                </button>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr class="table-info">
+                    <td colspan="2"><strong>TOTAL</strong></td>
+                    <td><strong id="totalEstimado">@Model.PlaneacionDias.Sum(d => d.Cantidad)</strong></td>
+                    @if (!Model.Bloqueada)
+                    {
+                        <td></td>
+                    }
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    @if (!Model.Bloqueada)
+    {
+        <div class="mt-3">
+            <button type="button" class="btn btn-success" id="btnGuardarTodo">
+                <i class="bi bi-save"></i> Guardar Todas las Cantidades
+            </button>
+        </div>
+    }
+}
+else
+{
+    <div class="alert alert-warning">
+        <i class="bi bi-exclamation-triangle"></i> No hay planeación generada para esta estimación.
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+        // Actualizar total al cambiar cantidades
+        $('.input-cantidad').on('input', function () {
+            let total = 0;
+            $('.input-cantidad').each(function () {
+                total += parseInt($(this).val()) || 0;
+            });
+            $('#totalEstimado').text(total);
+        });
+
+        // Guardar cantidad individual
+        $('.btn-guardar-cantidad').on('click', function () {
+            const planeacionId = $(this).data('id');
+            const cantidad = $('.input-cantidad[data-id="' + planeacionId + '"]').val();
+
+            const actualizaciones = [{
+                Id: planeacionId,
+                Cantidad: parseInt(cantidad)
+            }];
+
+            guardarCantidades(actualizaciones);
+        });
+
+        // Guardar todas las cantidades
+        $('#btnGuardarTodo').on('click', function () {
+            const actualizaciones = [];
+            $('.input-cantidad').each(function () {
+                actualizaciones.push({
+                    Id: parseInt($(this).data('id')),
+                    Cantidad: parseInt($(this).val())
+                });
+            });
+
+            guardarCantidades(actualizaciones);
+        });
+
+        function guardarCantidades(actualizaciones) {
+            $.ajax({
+                url: '@Url.Action("ActualizarCantidades", "EstimacionProduccion")',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(actualizaciones),
+                success: function (result) {
+                    if (result.success) {
+                        toastr.success(result.message);
+                    } else {
+                        toastr.error('Error al guardar');
+                    }
+                },
+                error: function () {
+                    toastr.error('Error al guardar las cantidades');
+                }
+            });
+        }
+    });
+</script>

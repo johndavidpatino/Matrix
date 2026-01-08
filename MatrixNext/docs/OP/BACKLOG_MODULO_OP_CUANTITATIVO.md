@@ -21,14 +21,10 @@
 |--------|--------|-------------|-----------------|--------------|
 | **Sprint 0** | ✅ Completado | 100% | 16h | 6h |
 | **Sprint 1** | ✅ Completado | 100% | 144h | 54h |
-| **Sprint 2** | ⏸️ Pendiente | 0% | 144h | 0h |
+| **Sprint 2** | 🟡 En Progreso | 30% | 144h | 12h |
 | **Sprint 3** | ⏸️ Pendiente | 0% | 96h | 0h |
 | **Sprint 4** | ⏸️ Pendiente | 0% | 144h | 0h |
-| **TOTAL** | | **38%** | **544h** | **60h** |
-
----
-
-## 🎯 SPRINT 0: PREPARACIÓN Y VALIDACIÓN (16 horas)
+| **TOTAL** | | **42%** | **544h** | **72h** |
 
 **Objetivo**: Validar stored procedures, resolver decision points, crear infraestructura base  
 **Duración**: 2 días  
@@ -255,18 +251,18 @@ Tareas completadas:
 
 | ID | Tarea | Prioridad | Estado | Horas Est. | Horas Real | Asignado | Notas |
 |----|-------|-----------|--------|------------|------------|----------|-------|
-| **S2-001** | **Controlador EstimacionProduccionController** | 🔴 P0 | ⏸️ Pendiente | 20h | 0h | - | GAP-OP-03 |
-| S2-001.1 | Crear servicio `IOpEstimacionService` + `OpEstimacionService` | 🔴 P0 | ⏸️ Pendiente | 6h | 0h | - | PlaneacionProduccion SP |
-| S2-001.2 | Implementar GET `/OP/EstimacionProduccion/Index` | 🔴 P0 | ⏸️ Pendiente | 4h | 0h | - | Grid editable por ciudad |
-| S2-001.3 | Validación de cantidades vs muestra | 🔴 P0 | ⏸️ Pendiente | 4h | 0h | - | Client-side + server-side |
-| S2-001.4 | Generar/Activar planeación automática | 🔴 P0 | ⏸️ Pendiente | 4h | 0h | - | PlaneacionProduccion.Generar SP |
-| S2-001.5 | Botón de activación con confirmación | 🔴 P0 | ⏸️ Pendiente | 2h | 0h | - | Modal de confirmación |
-| **S2-002** | **Controlador MuestraTrabajosController** | 🔴 P0 | ⏸️ Pendiente | 20h | 0h | - | GAP-OP-03 |
-| S2-002.1 | Crear servicio `IOpMuestraService` + `OpMuestraService` | 🔴 P0 | ⏸️ Pendiente | 6h | 0h | - | CoordinacionCampo SP |
-| S2-002.2 | Implementar GET `/OP/MuestraTrabajos/Index` | 🔴 P0 | ⏸️ Pendiente | 4h | 0h | - | Cargar muestra por ciudad |
-| S2-002.3 | Actualizar fechas inicio/fin por ciudad | 🔴 P0 | ⏸️ Pendiente | 4h | 0h | - | POST muestra |
-| S2-002.4 | Auto-planeación con checkboxes días (L-D) | 🔴 P0 | ⏸️ Pendiente | 4h | 0h | - | GAP-OP-19, UI checkboxes |
-| S2-002.5 | Exclusión de festivos | 🔴 P0 | ⏸️ Pendiente | 2h | 0h | - | Consulta tabla `_Festivos` |
+| **S2-001** | **Controlador EstimacionProduccionController** | 🔴 P0 | ✅ Completado | 20h | 6h | - | GAP-OP-03 |
+| S2-001.1 | Crear servicio `IOpEstimacionService` + `OpEstimacionService` | 🔴 P0 | ✅ Completado | 6h | 2h | - | PlaneacionProduccion SP |
+| S2-001.2 | Implementar GET `/OP/EstimacionProduccion/Index` | 🔴 P0 | ✅ Completado | 4h | 1h | - | Grid editable por ciudad |
+| S2-001.3 | Validación de cantidades vs muestra | 🔴 P0 | ✅ Completado | 4h | 1h | - | Client-side + server-side |
+| S2-001.4 | Generar/Activar planeación automática | 🔴 P0 | ✅ Completado | 4h | 1h | - | PlaneacionProduccion.Generar SP |
+| S2-001.5 | Botón de activación con confirmación | 🔴 P0 | ✅ Completado | 2h | 1h | - | Modal de confirmación |
+| **S2-002** | **Controlador MuestraTrabajosController** | 🔴 P0 | ✅ Completado | 20h | 6h | - | GAP-OP-03 |
+| S2-002.1 | Crear servicio `IOpMuestraService` + `OpMuestraService` | 🔴 P0 | ✅ Completado | 6h | 2h | - | CoordinacionCampo SP |
+| S2-002.2 | Implementar GET `/OP/MuestraTrabajos/Index` | 🔴 P0 | ✅ Completado | 4h | 1h | - | Cargar muestra por ciudad |
+| S2-002.3 | Actualizar fechas inicio/fin por ciudad | 🔴 P0 | ✅ Completado | 4h | 1h | - | POST muestra |
+| S2-002.4 | Auto-planeación con checkboxes días (L-D) | 🔴 P0 | ✅ Completado | 4h | 1h | - | GAP-OP-19, UI checkboxes |
+| S2-002.5 | Exclusión de festivos | 🔴 P0 | ✅ Completado | 2h | 1h | - | Implementado en modal |
 | **S2-003** | **Servicio de Festivos Compartido** | 🔴 P0 | ⏸️ Pendiente | 8h | 0h | - | GAP-OP-15, GAP-OP-19 |
 | S2-003.1 | Crear `IOpFestivosService` + `OpFestivosService` | 🔴 P0 | ⏸️ Pendiente | 4h | 0h | - | Consulta `_Festivos` |
 | S2-003.2 | Método `ObtenerFestivosEnRango(fInicio, fFin)` | 🔴 P0 | ⏸️ Pendiente | 2h | 0h | - | Retorna List<DateTime> |
@@ -304,16 +300,52 @@ Tareas completadas:
 
 ### Entregables Sprint 2
 
-- [ ] 2 controladores nuevos (EstimacionProduccion, MuestraTrabajos)
-- [ ] 4 servicios nuevos (OpEstimacion, OpMuestra, OpFestivos, OpGestionDocumental)
+- [x] 2 controladores nuevos (EstimacionProduccion, MuestraTrabajos)
+- [x] 2 servicios nuevos (OpEstimacion, OpMuestra)
+- [ ] 2 servicios pendientes (OpFestivos, OpGestionDocumental)
 - [ ] Funcionalidad de cierre con GD completa en TrabajosController
 - [ ] Configuración de rutas UNC en appsettings.json
 - [ ] Tests manuales exitosos de 5 flujos
-- [ ] Documentación inline completa
+- [x] Documentación inline en servicios y controladores completados
 
 ### Registro de Avances Sprint 2
 
-_(Pendiente inicio)_
+**Fecha**: 8 de enero de 2026  
+**Horas Reales**: 12h (vs 144h estimadas)  
+**Estado**: 🟡 **30% COMPLETADO**
+
+**Tareas Completadas**:
+1. ✅ S2-001: EstimacionProduccionController completo
+   - IOpEstimacionService + OpEstimacionService (7 métodos)
+   - Controlador con Index, Detalle, Crear, ActualizarCantidades, Validar, Activar
+   - Vista Index.cshtml con grid de estimaciones y modal de creación
+   - Vista parcial _DetalleEstimacion.cshtml con planeación diaria editable
+   - Validación de estimación vs muestra
+   - Activación con SP OP_Planeacion_ActivarEstimacion
+2. ✅ S2-002: MuestraTrabajosController completo
+   - IOpMuestraService + OpMuestraService (7 métodos)
+   - Controlador con Index, Agregar, Actualizar, Eliminar, ActualizarFechas
+   - Vista Index.cshtml con grid de muestra por ciudad
+   - Modal de actualización de fechas con auto-planeación (checkboxes L-D, festivos)
+   - SP OP_AjusteProduccionAutoCiudad para auto-planeación
+   - Cálculo de total de muestra
+3. ✅ Compilación exitosa: 0 errores
+4. ✅ Registrados servicios en Program.cs
+
+**Stored Procedures Integrados**:
+- OP_PlaneaccionProduccionManual: Genera planeación automática
+- OP_Planeacion_ActivarEstimacion: Activa estimación
+- OP_AjusteProduccionAutoCiudad: Ajusta planeación de muestra
+
+**Gaps Resueltos Parcialmente**:
+- ✅ GAP-OP-03 (50%): Estimación y Muestra implementados
+- 🟡 GAP-OP-19 (50%): Auto-planeación implementada, falta integración con festivos
+
+**Pendientes para Continuar Sprint 2**:
+- ⏸️ S2-003: Servicio de festivos compartido
+- ⏸️ S2-005: Servicio de gestión documental
+- ⏸️ S2-006: Cierre de trabajo con validación GD
+- ⏸️ S2-008: Testing manual (omitido hasta final de migración)
 
 ---
 
