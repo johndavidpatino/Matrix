@@ -44,14 +44,17 @@ public class OpCargaService : IOpCargaService
     private readonly ILogger<OpCargaService> _logger;
     private readonly string _stagingDirectory;
     private readonly string _connectionString;
+    private readonly IOpFestivosService _festivosService;
 
     public OpCargaService(
         ILogger<OpCargaService> logger,
         IWebHostEnvironment environment,
-        IConfiguration configuration)
+        IConfiguration configuration,
+        IOpFestivosService festivosService)
     {
         _logger = logger;
         _connectionString = configuration.GetConnectionString("MatrixDb") ?? string.Empty;
+        _festivosService = festivosService;
         _stagingDirectory = Path.Combine(
             environment.WebRootPath ?? Directory.GetCurrentDirectory(),
             "uploads",
@@ -173,7 +176,21 @@ public class OpCargaService : IOpCargaService
         DataTable table,
         CancellationToken cancellationToken)
     {
-        var festivos = await LoadFestivosAsync(cancellationToken);
+        // Obtener rango de fechas del archivo para cargar festivos
+        var today = DateTime.Now;
+        var inicioCorte = new DateTime(today.AddMonths(-1).Year, today.AddMonths(-1).Month, 16);
+        var finCorte = new DateTime(today.Year, today.Month, 15);
+        
+        var fechaInicioCorte = DateOnly.FromDateTime(inicioCorte);
+        var fechaFinCorte = DateOnly.FromDateTime(finCorte);
+        
+        // Cargar festivos del rango usando el servicio compartido
+        var festivosList = await _festivosService.ObtenerFestivosEnRangoAsync(
+            fechaInicioCorte, 
+            fechaFinCorte, 
+            cancellationToken);
+        var festivos = new HashSet<DateOnly>(festivosList);
+        
         for (var index = 0; index < table.Rows.Count; index++)
         {
             var row = table.Rows[index];
@@ -188,9 +205,6 @@ public class OpCargaService : IOpCargaService
                 return (false, $"Fecha inválida en fila {rowNumber}.");
             }
 
-            var today = DateTime.Now;
-            var inicioCorte = new DateTime(today.AddMonths(-1).Year, today.AddMonths(-1).Month, 16);
-            var finCorte = new DateTime(today.Year, today.Month, 15);
             if (fecha.Date < inicioCorte || fecha.Date > finCorte)
             {
                 return (false, $"La fecha {fecha:dd/MM/yyyy} en fila {rowNumber} no está dentro del corte 16-15.");
@@ -212,43 +226,6 @@ public class OpCargaService : IOpCargaService
         }
 
         return (true, null);
-    }
-
-    private async Task<HashSet<DateOnly>> LoadFestivosAsync(CancellationToken cancellationToken)
-    {
-        var fechas = new HashSet<DateOnly>();
-        if (string.IsNullOrWhiteSpace(_connectionString))
-        {
-            _logger.LogWarning("No se encontró la cadena MatrixDb para validar festivos.");
-            return fechas;
-        }
-
-        try
-        {
-            await using var connection = new SqlConnection(_connectionString);
-            await connection.OpenAsync(cancellationToken);
-            await using var command = new SqlCommand("SELECT festivo FROM _Festivos", connection);
-            await using var reader = await command.ExecuteReaderAsync(cancellationToken);
-            while (await reader.ReadAsync(cancellationToken))
-            {
-                if (reader["festivo"] is not DateTime fecha)
-                {
-                    var raw = reader["festivo"]?.ToString();
-                    if (!DateTime.TryParse(raw, CultureInfo.InvariantCulture, DateTimeStyles.None, out fecha))
-                    {
-                        continue;
-                    }
-                }
-
-                fechas.Add(DateOnly.FromDateTime(fecha));
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger.LogWarning(ex, "No se pudieron cargar festivos desde _Festivos.");
-        }
-
-        return fechas;
     }
 
     private static async Task<DataTable> ReadWorksheetAsync(IFormFile archivo, CancellationToken cancellationToken)

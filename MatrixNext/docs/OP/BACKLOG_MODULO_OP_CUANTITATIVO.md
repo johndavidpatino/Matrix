@@ -21,14 +21,10 @@
 |--------|--------|-------------|-----------------|--------------|
 | **Sprint 0** | ✅ Completado | 100% | 16h | 6h |
 | **Sprint 1** | ✅ Completado | 100% | 144h | 54h |
-| **Sprint 2** | 🟡 En Progreso | 30% | 144h | 12h |
+| **Sprint 2** | 🟡 En Progreso | 36% | 144h | 14h |
 | **Sprint 3** | ⏸️ Pendiente | 0% | 96h | 0h |
 | **Sprint 4** | ⏸️ Pendiente | 0% | 144h | 0h |
-| **TOTAL** | | **42%** | **544h** | **72h** |
-
-**Objetivo**: Validar stored procedures, resolver decision points, crear infraestructura base  
-**Duración**: 2 días  
-**Fecha Inicio**: 8 de enero de 2026  
+| **TOTAL** | | **43%** | **544h** | **74h** |
 **Fecha Fin**: 9 de enero de 2026
 
 ### Tareas
@@ -263,11 +259,11 @@ Tareas completadas:
 | S2-002.3 | Actualizar fechas inicio/fin por ciudad | 🔴 P0 | ✅ Completado | 4h | 1h | - | POST muestra |
 | S2-002.4 | Auto-planeación con checkboxes días (L-D) | 🔴 P0 | ✅ Completado | 4h | 1h | - | GAP-OP-19, UI checkboxes |
 | S2-002.5 | Exclusión de festivos | 🔴 P0 | ✅ Completado | 2h | 1h | - | Implementado en modal |
-| **S2-003** | **Servicio de Festivos Compartido** | 🔴 P0 | ⏸️ Pendiente | 8h | 0h | - | GAP-OP-15, GAP-OP-19 |
-| S2-003.1 | Crear `IOpFestivosService` + `OpFestivosService` | 🔴 P0 | ⏸️ Pendiente | 4h | 0h | - | Consulta `_Festivos` |
-| S2-003.2 | Método `ObtenerFestivosEnRango(fInicio, fFin)` | 🔴 P0 | ⏸️ Pendiente | 2h | 0h | - | Retorna List<DateTime> |
-| S2-003.3 | Método `EsDiaFestivo(fecha)` | 🔴 P0 | ⏸️ Pendiente | 1h | 0h | - | Retorna bool |
-| S2-003.4 | Integrar en `OpCargaService.ValidatePlanillasAsync` | 🔴 P0 | ⏸️ Pendiente | 1h | 0h | - | Validación TipoActividad 22/23 |
+| **S2-003** | **Servicio de Festivos Compartido** | 🔴 P0 | ✅ Completado | 8h | 2h | - | GAP-OP-15, GAP-OP-19 |
+| S2-003.1 | Crear `IOpFestivosService` + `OpFestivosService` | 🔴 P0 | ✅ Completado | 4h | 1h | - | Consulta `_Festivos` |
+| S2-003.2 | Método `ObtenerFestivosEnRango(fInicio, fFin)` | 🔴 P0 | ✅ Completado | 2h | 0.5h | - | Retorna List<DateTime> |
+| S2-003.3 | Método `EsDiaFestivo(fecha)` | 🔴 P0 | ✅ Completado | 1h | 0.25h | - | Retorna bool |
+| S2-003.4 | Integrar en `OpCargaService.ValidatePlanillasAsync` | 🔴 P0 | ✅ Completado | 1h | 0.25h | - | Validación TipoActividad 22/23 |
 | **S2-004** | **Envío de Email a Coordinador** | 🟡 P2 | ⏸️ Pendiente | 4h | 0h | - | Desde MuestraTrabajos |
 | S2-004.1 | Plantilla de email de actualización de muestra | 🟡 P2 | ⏸️ Pendiente | 2h | 0h | - | HTML template |
 | S2-004.2 | Integrar `IEmailService.SendEmailAsync` | 🟡 P2 | ⏸️ Pendiente | 2h | 0h | - | En OpMuestraService |
@@ -301,8 +297,8 @@ Tareas completadas:
 ### Entregables Sprint 2
 
 - [x] 2 controladores nuevos (EstimacionProduccion, MuestraTrabajos)
-- [x] 2 servicios nuevos (OpEstimacion, OpMuestra)
-- [ ] 2 servicios pendientes (OpFestivos, OpGestionDocumental)
+- [x] 3 servicios nuevos (OpEstimacion, OpMuestra, OpFestivos)
+- [ ] 1 servicio pendiente (OpGestionDocumental)
 - [ ] Funcionalidad de cierre con GD completa en TrabajosController
 - [ ] Configuración de rutas UNC en appsettings.json
 - [ ] Tests manuales exitosos de 5 flujos
@@ -311,8 +307,8 @@ Tareas completadas:
 ### Registro de Avances Sprint 2
 
 **Fecha**: 8 de enero de 2026  
-**Horas Reales**: 12h (vs 144h estimadas)  
-**Estado**: 🟡 **30% COMPLETADO**
+**Horas Reales**: 14h (vs 144h estimadas)  
+**Estado**: 🟡 **36% COMPLETADO**
 
 **Tareas Completadas**:
 1. ✅ S2-001: EstimacionProduccionController completo
@@ -329,8 +325,16 @@ Tareas completadas:
    - Modal de actualización de fechas con auto-planeación (checkboxes L-D, festivos)
    - SP OP_AjusteProduccionAutoCiudad para auto-planeación
    - Cálculo de total de muestra
-3. ✅ Compilación exitosa: 0 errores
-4. ✅ Registrados servicios en Program.cs
+3. ✅ S2-003: Servicio de Festivos Compartido completo
+   - IOpFestivosService + OpFestivosService (4 métodos)
+   - ObtenerFestivosEnRangoAsync: Consulta rango de fechas
+   - EsDiaFestivoAsync: Validación individual con caché
+   - ObtenerFestivosPorAñoAsync: Caché por año (últimos 3 años)
+   - LimpiarCache: Limpieza manual del caché
+   - Integrado en OpCargaService para validación TipoActividad 22/23
+   - Caché en memoria para reducir consultas repetidas
+4. ✅ Compilación exitosa: 0 errores, 3 warnings
+5. ✅ Registrados servicios en Program.cs
 
 **Stored Procedures Integrados**:
 - OP_PlaneaccionProduccionManual: Genera planeación automática
@@ -339,10 +343,10 @@ Tareas completadas:
 
 **Gaps Resueltos Parcialmente**:
 - ✅ GAP-OP-03 (50%): Estimación y Muestra implementados
-- 🟡 GAP-OP-19 (50%): Auto-planeación implementada, falta integración con festivos
+- ✅ GAP-OP-15 (100%): Gestión de Festivos para Planillas
+- 🟡 GAP-OP-19 (75%): Auto-planeación con festivos implementada
 
 **Pendientes para Continuar Sprint 2**:
-- ⏸️ S2-003: Servicio de festivos compartido
 - ⏸️ S2-005: Servicio de gestión documental
 - ⏸️ S2-006: Cierre de trabajo con validación GD
 - ⏸️ S2-008: Testing manual (omitido hasta final de migración)
