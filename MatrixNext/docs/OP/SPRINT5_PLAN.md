@@ -6,7 +6,7 @@
 
 | Área | Alcance | Dependencias Core | Resultado esperado |
 |---|---|---|---|
-| Presupuestos internos | Migrar `SolicitudPresupuestoInterno.aspx` y `SolicitudPresupuestosInternos.aspx` manteniendo los modos completo/simplificado, validaciones y envíos de correo. | `PresupInt`, `EnviarCorreo`, `GD` | Formularios adaptativos con validaciones, triggers de correo y tarjetas de seguimiento en el portal OP. |
+| Presupuestos internos | Migrar `SolicitudPresupuestoInterno.aspx` y `SolicitudPresupuestosInternos.aspx` manteniendo los modos completo/simplificado, validaciones y envíos de correo; `PresupuestosController` expone `GET /OP/Presupuestos` con ambas opciones. | `PresupInt`, `EnviarCorreo`, `GD` | Solo queda pulir notificaciones y seguimiento en portal: la vista `/OP/Presupuestos` ya guarda solicitudes, valida duplicados y registra observaciones. |
 | Registro de producción y iField | Reutilizar `RegistroProduccionOP.aspx`, `RegistroProduccion.aspx` y `iFieldConfiguration.aspx` para exponer servicios de actividades, subactividades e iField. | `RegistroProduccion`, `EAreas`, `EReproceso`, `EActividad`, `DALDAP.iFieldSettings` | Formularios que consuman servicios EF/Dapper, actualicen configuraciones LDAP y registren operaciones de producción. |
 | Supervisión de campo telefonico | Reproducir `SupervisionCampoTelefonico.aspx`, corregir id hardcode y aplicar permisos dinámicos. | `SupervisionCampoTelefonico`, `PermisosService` | Checklist actualizable, filtros por rol y validaciones de campo en la vista consolidada del portal OP. |
 

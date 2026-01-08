@@ -1,0 +1,131 @@
+@model MatrixNext.Web.ViewModels.OP.PresupuestoViewModel
+
+@{
+    ViewData["Title"] = "Presupuestos internos";
+}
+
+<section class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h1>Presupuestos internos</h1>
+            <p class="text-muted">Sprint 5: formularios completo y simplificado.</p>
+        </div>
+        <div>
+            @if (TempData["PresupuestoMessage"] is string message)
+            {
+                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                    @message
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-3">
+                <div class="card-header">Solicitud completa</div>
+                <div class="card-body">
+                    <form asp-action="GuardarCompleta" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="TrabajoId" value="@Model.TrabajoId" />
+                        <input type="hidden" name="UsuarioId" value="@Model.Completo.UsuarioId" />
+
+                        <div class="mb-3">
+                            <label class="form-label">Número de muestra</label>
+                            <input type="number" name="Muestra" class="form-control" value="@Model.Completo.Muestra" />
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label class="form-label">Valor sugerido contratista</label>
+                                <input type="number" name="VrSugeridoContratista" class="form-control" value="@Model.Completo.VrSugeridoContratista" />
+                            </div>
+                            <div class="col">
+                                <label class="form-label">Distribución General</label>
+                                <input type="number" name="General" class="form-control" value="@Model.Completo.General" />
+                            </div>
+                        </div>
+
+                        <div class="row row-cols-2 mb-3">
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="Encuesta" value="true" @(Model.Completo.Encuesta ? "checked" : "") id="chkEncuesta" />
+                                    <label class="form-check-label" for="chkEncuesta">Encuesta</label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="Agendamiento" value="true" @(Model.Completo.Agendamiento ? "checked" : "") id="chkAgendamiento" />
+                                    <label class="form-check-label" for="chkAgendamiento">Agendamiento</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row row-cols-2 mb-3">
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="Jornada" value="true" @(Model.Completo.Jornada ? "checked" : "") id="chkJornada" />
+                                    <label class="form-check-label" for="chkJornada">Jornadas</label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="Reclutamiento" value="true" @(Model.Completo.Reclutamiento ? "checked" : "") id="chkReclutamiento" />
+                                    <label class="form-check-label" for="chkReclutamiento">Reclutamiento</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row row-cols-3 mb-3">
+                            <div class="col">
+                                <label class="form-label">NSE 1 y 2</label>
+                                <input type="number" name="NSE1y2" class="form-control" value="@Model.Completo.NSE1y2" />
+                            </div>
+                            <div class="col">
+                                <label class="form-label">NSE 3 y 4</label>
+                                <input type="number" name="NSE3y4" class="form-control" value="@Model.Completo.NSE3y4" />
+                            </div>
+                            <div class="col">
+                                <label class="form-label">NSE 5 y 6</label>
+                                <input type="number" name="NSE5y6" class="form-control" value="@Model.Completo.NSE5y6" />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Observaciones</label>
+                            <textarea name="Observacion" class="form-control" rows="3">@Model.Completo.Observacion</textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Guardar solicitud completa</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">Solicitud simplificada</div>
+                <div class="card-body">
+                    <form asp-action="GuardarSimplificada" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="TrabajoId" value="@Model.TrabajoId" />
+                        <input type="hidden" name="UsuarioId" value="@Model.Simplificado.UsuarioId" />
+
+                        <div class="mb-3">
+                            <label class="form-label">Observación</label>
+                            <textarea name="Observacion" class="form-control" rows="3">@Model.Simplificado.Observacion</textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Solicitud existente</label>
+                            <p class="mb-0">@((Model.TieneSolicitud) ? "Ya existe una solicitud para este trabajo" : "No hay solicitudes registradas")</p>
+                        </div>
+
+                        <button type="submit" class="btn btn-outline-secondary">Guardar observación</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
