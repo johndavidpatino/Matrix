@@ -126,6 +126,7 @@ builder.Services.AddScoped<IOpAvancesService, OpAvancesService>();
 builder.Services.AddScoped<IOpPortalService, OpPortalService>();
 builder.Services.AddScoped<IOpTraficoDataAdapter, OpTraficoDataAdapter>();
 builder.Services.AddScoped<IOpTraficoService, OpTraficoService>();
+builder.Services.AddScoped<IOpPermisosService, OpPermisosService>();
 
 var app = builder.Build();
 

@@ -20,6 +20,16 @@
                 Visualiza trabajos clave y navega a los flujos documentados en
                 <a href="/docs/OP/OP_CUANTITATIVO_AVANCE.md" target="_blank">OP_CUANTITATIVO_AVANCE.md</a>.
             </p>
+            <div class="mt-2">
+                @if (Model.TienePermiso100)
+                {
+                    <span class="badge bg-success">Permiso 100 confirmado</span>
+                }
+                else
+                {
+                    <span class="badge bg-warning text-dark">Permiso 100 requerido</span>
+                }
+            </div>
         </div>
         <div class="text-end">
             <small class="text-muted">Plan base documentado en ANALISIS_OP_CUANTITATIVO.md / DIRECTRICES_MIGRACION.md</small>

@@ -9,4 +9,5 @@ public sealed class OpPortalViewModel
     public OpPortalSnapshot? Snapshot { get; init; }
 
     public bool HasData => Snapshot is not null;
+    public bool TienePermiso100 { get; init; }
 }
