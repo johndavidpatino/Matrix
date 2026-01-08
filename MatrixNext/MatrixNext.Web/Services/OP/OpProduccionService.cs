@@ -1,3 +1,5 @@
+using System;
+using System.Data;
 using Dapper;
 using MatrixNext.Web.Infrastructure.Data;
 using MatrixNext.Web.ViewModels.OP;
@@ -130,6 +132,22 @@ public class OpProduccionService : IOpProduccionService
 
         _logger.LogInformation("Registro de producción guardado para trabajo {TrabajoId}", request.TrabajoId);
         return rows > 0;
+    }
+
+    public async Task<ProduccionSummary> ObtenerResumenGeneralAsync(CancellationToken cancellationToken = default)
+    {
+        await using var connection = _dbContext.Database.GetDbConnection();
+        if (connection.State != ConnectionState.Open)
+        {
+            await connection.OpenAsync(cancellationToken);
+        }
+
+        var total = await connection.ExecuteScalarAsync<int>("SELECT COUNT(*) FROM OP_Produccion");
+        var hoy = await connection.ExecuteScalarAsync<int>(
+            "SELECT COUNT(*) FROM OP_Produccion WHERE Fecha >= CAST(GETDATE() AS DATE)");
+        var ultima = await connection.ExecuteScalarAsync<DateTime?>("SELECT MAX(Fecha) FROM OP_Produccion");
+
+        return new ProduccionSummary(total, hoy, ultima);
     }
 
     private sealed class ProduccionRecord

@@ -72,6 +72,15 @@ public class IFieldController : Controller
         return RedirectToAction(nameof(Index), new { projectId });
     }
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Sincronizar()
+    {
+        var updated = await _iFieldService.SincronizarProyectosAsync();
+        TempData["IFieldMessage"] = $"Sincronización completada ({updated} proyectos actualizados).";
+        return RedirectToAction(nameof(Index));
+    }
+
     private IEnumerable<IFieldAddConfigInput> ParseEntries(int projectId, string entries)
     {
         var lines = entries.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);

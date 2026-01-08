@@ -11,4 +11,5 @@ public interface IOpIFieldService
     Task UpdateProjectJobBookAsync(int projectId, int trabajoId);
     Task InsertConfigItemsAsync(IEnumerable<IFieldAddConfigInput> inputs);
     Task RemoveConfigItemAsync(int configId);
+    Task<int> SincronizarProyectosAsync(CancellationToken cancellationToken = default);
 }

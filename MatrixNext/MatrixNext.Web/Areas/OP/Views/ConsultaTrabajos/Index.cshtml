@@ -1,0 +1,97 @@
+@model List<MatrixNext.Web.Models.PY.Trabajo>
+@using MatrixNext.Web.Models.PY
+
+@{
+    ViewData["Title"] = "Consulta de Trabajos";
+}
+
+<div class="container-fluid py-4">
+    <h1 class="h3 mb-4"><i class="bi bi-search"></i> Consulta de Trabajos</h1>
+    
+    <div class="card mb-4">
+        <div class="card-header"><h5 class="mb-0">Filtros de Búsqueda</h5></div>
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-2">
+                    <input type="number" class="form-control" name="trabajoId" placeholder="ID Trabajo" value="@ViewBag.TrabajoBuscado">
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" name="nombre" placeholder="Nombre">
+                </div>
+                <div class="col-md-2">
+                    <input type="text" class="form-control" name="jobBook" placeholder="Job Book">
+                </div>
+                <div class="col-md-2">
+                    <select class="form-select" name="unidadId">
+                        <option value="">Todas las Unidades</option>
+                        <!-- TODO: Cargar unidades dinámicamente -->
+                    </select>
+                </div>
+                <div class="col-md-1">
+                    <input type="number" class="form-control" name="año" placeholder="Año" value="@DateTime.Now.Year">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100"><i class="bi bi-search"></i> Buscar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Job Book</th>
+                        <th>Nombre</th>
+                        <th>Estado</th>
+                        <th>COE Asignado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var trabajo in Model)
+                    {
+                        <tr>
+                            <td>@trabajo.Id</td>
+                            <td>@trabajo.JobBook</td>
+                            <td>@trabajo.Nombre</td>
+                            <td>
+                                @if (trabajo.Estado == 1) { <span class="badge bg-primary">Nuevo</span> }
+                                else if (trabajo.Estado == 15) { <span class="badge bg-success">En Ejecución</span> }
+                                else if (trabajo.Estado == 9) { <span class="badge bg-warning">Cerrado</span> }
+                                else { <span class="badge bg-secondary">Estado @trabajo.Estado</span> }
+                            </td>
+                            <td><span class='text-muted'>Sin asignar</span></td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="@Url.Action("Avance", new { trabajoId = trabajo.Id })" class="btn btn-sm btn-success">
+                                        <i class="bi bi-graph-up"></i> Avance
+                                    </a>
+                                    <a href="@Url.Action("Presupuestos", new { trabajoId = trabajo.Id })" class="btn btn-sm btn-info">
+                                        <i class="bi bi-cash-stack"></i> Presupuesto
+                                    </a>
+                                    <button class="btn btn-sm btn-warning" onclick="asignarCOE(@trabajo.Id, '@trabajo.Nombre')">
+                                        <i class="bi bi-person-plus"></i> Asignar COE
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@await Html.PartialAsync("_ToastContainer")
+
+@section Scripts {
+    <script>
+        function asignarCOE(trabajoId, nombre) {
+            // TODO: Implementar modal de asignación de COE con validación de JobBook
+            alert('Asignar COE a trabajo ' + trabajoId + ' - ' + nombre + '\n\nSe validará que el trabajo tenga JobBook asignado.');
+        }
+    </script>
+}

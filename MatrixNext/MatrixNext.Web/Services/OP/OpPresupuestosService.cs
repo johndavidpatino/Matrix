@@ -1,4 +1,6 @@
+using System;
 using System.Data;
+using System.Linq;
 using Dapper;
 using MatrixNext.Web.Infrastructure.Data;
 using MatrixNext.Web.ViewModels.OP;
@@ -117,9 +119,48 @@ VALUES
         return filas > 0;
     }
 
+    public async Task<IReadOnlyList<PresupuestoNotificationRow>> ObtenerUltimasSolicitudesAsync(int limit = 5, CancellationToken cancellationToken = default)
+    {
+        await using var connection = _dbContext.Database.GetDbConnection();
+        if (connection.State != ConnectionState.Open)
+        {
+            await connection.OpenAsync(cancellationToken);
+        }
+
+        const string query = @"
+SELECT TOP (@Limit)
+    p.TrabajoId,
+    p.UsuarioId,
+    U.Usuario,
+    p.Fecha,
+    p.Observacion,
+    CASE 
+        WHEN p.Muestra IS NOT NULL OR p.General IS NOT NULL OR p.Encuesta = 1 OR p.Agendamiento = 1 
+             OR p.Jornada = 1 OR p.Reclutamiento = 1 THEN 'Completa'
+        ELSE 'Simplificada'
+    END AS Tipo
+FROM dbo.CC_SolicitudPresupuesto p
+LEFT JOIN US_Usuarios U ON U.id = p.UsuarioId
+ORDER BY p.Fecha DESC";
+
+        var records = await connection.QueryAsync<PresupuestoNotificationRecord>(
+            query,
+            new { Limit = limit },
+            commandType: CommandType.Text);
+
+        return records.Select(r => new PresupuestoNotificationRow(
+            r.TrabajoId,
+            r.Tipo,
+            string.IsNullOrWhiteSpace(r.Usuario) ? $"Usuario {r.UsuarioId}" : r.Usuario ?? string.Empty,
+            r.Fecha ?? DateTime.MinValue,
+            r.Observacion ?? string.Empty)).ToList();
+    }
+
     private sealed class PresupuestoRecord
     {
         public long Id { get; init; }
         public string? Observacion { get; init; }
     }
+
+    private sealed record PresupuestoNotificationRecord(long TrabajoId, long? UsuarioId, string? Usuario, DateTime? Fecha, string? Observacion, string Tipo);
 }

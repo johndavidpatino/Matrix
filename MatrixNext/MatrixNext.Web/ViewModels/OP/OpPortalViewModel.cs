@@ -10,4 +10,7 @@ public sealed class OpPortalViewModel
 
     public bool HasData => Snapshot is not null;
     public bool TienePermiso100 { get; init; }
+    public bool TienePermisoSupervision { get; init; }
+    public ProduccionSummary? Produccion => Snapshot?.Produccion;
+    public IReadOnlyList<PresupuestoNotificationRow> PresupuestoNotificaciones => Snapshot?.PresupuestoNotificaciones ?? Array.Empty<PresupuestoNotificationRow>();
 }

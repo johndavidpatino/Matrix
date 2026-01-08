@@ -1,0 +1,93 @@
+@model List<MatrixNext.Web.Services.OP.TrabajoCoordinadorDto>
+@using MatrixNext.Web.Services.OP
+
+@{
+    ViewData["Title"] = "Trabajos Call Center";
+}
+
+<div class="container-fluid py-4">
+    <h1 class="h3 mb-4"><i class="bi bi-headset"></i> Trabajos Call Center</h1>
+    
+    <div class="card mb-4">
+        <div class="card-header"><h5 class="mb-0">Búsqueda</h5></div>
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-4">
+                    <input type="text" class="form-control" name="nombre" placeholder="Nombre del Trabajo">
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" name="metodologia">
+                        <option value="">Todas</option>
+                        <option value="CATI">CATI</option>
+                        <option value="CAWI">CAWI</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" name="estado">
+                        <option value="">Todos</option>
+                        <option value="15">En Ejecución</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100"><i class="bi bi-search"></i> Buscar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Job Book</th>
+                        <th>Nombre</th>
+                        <th>Metodología</th>
+                        <th>Estado</th>
+                        <th>Encuestadores</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var trabajo in Model)
+                    {
+                        <tr>
+                            <td>@trabajo.Id</td>
+                            <td>@trabajo.JobBook</td>
+                            <td>@trabajo.Nombre</td>
+                            <td>
+                                @if (trabajo.Metodologia == "CATI") { <span class="badge bg-primary"><i class="bi bi-telephone"></i> CATI</span> }
+                                else if (trabajo.Metodologia == "CAWI") { <span class="badge bg-info"><i class="bi bi-globe"></i> CAWI</span> }
+                                else { <span class="badge bg-secondary">@trabajo.Metodologia</span> }
+                            </td>
+                            <td>
+                                @if (trabajo.Estado == 15) { <span class="badge bg-success">En Ejecución</span> }
+                                else { <span class="badge bg-secondary">Estado @trabajo.Estado</span> }
+                            </td>
+                            <td><span class="badge bg-light text-dark">0</span></td>
+                            <td>
+                                <button class="btn btn-sm btn-primary" onclick="gestionarEncuestadores(@trabajo.Id, '@trabajo.Nombre')">
+                                    <i class="bi bi-people"></i> Asignar
+                                </button>
+                                <a href="@Url.Action("Index", "Avances", new { trabajoId = trabajo.Id })" class="btn btn-sm btn-success">
+                                    <i class="bi bi-bar-chart"></i> Avance
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@await Html.PartialAsync("_ToastContainer")
+
+@section Scripts {
+    <script>
+        function gestionarEncuestadores(trabajoId, nombre) {
+            alert('Gestión de encuestadores para trabajo ' + trabajoId + ' - ' + nombre + '\n\nImplementación completa en Sprint posterior.');
+        }
+    </script>
+}

@@ -1,0 +1,398 @@
+@model MatrixNext.Web.ViewModels.OP.OpTrabajosViewModel
+
+@{
+    ViewData["Title"] = "Gestión de Trabajos COE - OP Cuantitativo";
+}
+
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="h3">
+                <i class="bi bi-briefcase"></i> Gestión de Trabajos - Portal COE
+            </h1>
+            <p class="text-muted mb-0">
+                Gestión de trabajos operativos cuantitativos (Permiso 100)
+            </p>
+        </div>
+    </div>
+
+    @* Sección de búsqueda y filtros *@
+    <div class="card mb-4">
+        <div class="card-header bg-light">
+            <h5 class="card-title mb-0">
+                <i class="bi bi-search"></i> Búsqueda y Filtros
+            </h5>
+        </div>
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-3">
+                    <label for="txtNombreBuscar" class="form-label">Nombre o Job Book</label>
+                    <input type="text" class="form-control" id="txtNombreBuscar" name="Busqueda" value="@Model.Filtros.Busqueda" placeholder="Nombre o Job Book">
+                </div>
+                <div class="col-md-2">
+                    <label for="ddlEstado" class="form-label">Estado</label>
+                    <select class="form-select" id="ddlEstado" name="Estado">
+                        <option value="-1">Todos</option>
+                        <option value="1" selected="@(Model.Filtros.Estado == 1)">Nuevo</option>
+                        <option value="15" selected="@(Model.Filtros.Estado == 15)">En Ejecución</option>
+                        <option value="10" selected="@(Model.Filtros.Estado == 10)">Cerrado</option>
+                        <option value="11" selected="@(Model.Filtros.Estado == 11)">Anulado</option>
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary me-2">
+                        <i class="bi bi-search"></i> Buscar
+                    </button>
+                    <a href="@Url.Action("Index")" class="btn btn-secondary">
+                        <i class="bi bi-x-circle"></i> Limpiar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @* Grid de trabajos *@
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h5 class="card-title mb-0">
+                <i class="bi bi-list-ul"></i> Listado de Trabajos
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Job Book</th>
+                            <th>Nombre</th>
+                            <th>Estado</th>
+                            <th>Proyecto</th>
+                            <th>Coordinador</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Trabajos?.Items != null && Model.Trabajos.Items.Any())
+                        {
+                            @foreach (var trabajo in Model.Trabajos.Items)
+                            {
+                                <tr>
+                                    <td>@trabajo.Id</td>
+                                    <td>@trabajo.JobBook</td>
+                                    <td>@trabajo.Nombre</td>
+                                    <td>
+                                        @switch (trabajo.Estado)
+                                        {
+                                            case 1:
+                                                <span class="badge bg-primary">Nuevo</span>
+                                                break;
+                                            case 15:
+                                                <span class="badge bg-info">En Ejecución</span>
+                                                break;
+                                            case 10:
+                                                <span class="badge bg-success">Cerrado</span>
+                                                break;
+                                            case 11:
+                                                <span class="badge bg-danger">Anulado</span>
+                                                break;
+                                            default:
+                                                <span class="badge bg-secondary">Estado @trabajo.Estado</span>
+                                                break;
+                                        }
+                                    </td>
+                                    <td>@trabajo.IdProyecto</td>
+                                    <td>@(trabajo.IdCoordinador?.ToString() ?? "-")</td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-outline-primary" 
+                                                onclick="seleccionarTrabajo(@trabajo.Id, '@trabajo.Nombre', '@trabajo.JobBook')">
+                                            <i class="bi bi-pencil-square"></i> Seleccionar
+                                        </button>
+                                        <a href="@Url.Action("Avance", new { trabajoId = trabajo.Id })" class="btn btn-sm btn-outline-success">
+                                            <i class="bi bi-graph-up"></i> Avance
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="7" class="text-center text-muted">
+                                    <i class="bi bi-inbox"></i> No se encontraron trabajos
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            @* Paginación *@
+            @if (Model.Trabajos?.TotalPages > 1)
+            {
+                <nav aria-label="Paginación de trabajos">
+                    <ul class="pagination justify-content-center mb-0">
+                        @for (int i = 1; i <= Model.Trabajos.TotalPages; i++)
+                        {
+                            <li class="page-item @(i == Model.Trabajos.PageNumber ? "active" : "")">
+                                <a class="page-link" href="?PageNumber=@i&Busqueda=@Model.Filtros.Busqueda&Estado=@Model.Filtros.Estado">@i</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            }
+        </div>
+    </div>
+
+    @* Panel de configuración del trabajo seleccionado *@
+    <div class="card mt-4" id="pnlConfiguracion" style="display: none;">
+        <div class="card-header bg-success text-white">
+            <h5 class="card-title mb-0">
+                <i class="bi bi-gear"></i> Configuración del Trabajo: <span id="lblNombreTrabajo"></span>
+            </h5>
+        </div>
+        <div class="card-body">
+            <input type="hidden" id="hfIdTrabajo" value="" />
+            
+            <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                    <label for="ddlTipoRecoleccion" class="form-label">Tipo de Recolección</label>
+                    <select class="form-select" id="ddlTipoRecoleccion">
+                        <option value="">Seleccione...</option>
+                        <option value="1">CATI</option>
+                        <option value="2">CAPI</option>
+                        <option value="3">PAPI</option>
+                        <option value="4">CAWI</option>
+                        <option value="5">Mixto</option>
+                    </select>
+                </div>
+                <div class="col-md-8 d-flex align-items-end">
+                    <button type="button" class="btn btn-success" onclick="guardarConfiguracion()">
+                        <i class="bi bi-save"></i> Guardar Configuración
+                    </button>
+                </div>
+            </div>
+
+            @* Navegación operativa *@
+            <div class="row g-3">
+                <div class="col-12">
+                    <h6 class="border-bottom pb-2">Navegación Operativa</h6>
+                </div>
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-outline-primary w-100" onclick="navegarFichaCuantitativa()">
+                        <i class="bi bi-file-earmark-text"></i> Ficha Cuantitativa
+                    </button>
+                </div>
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-outline-primary w-100" onclick="navegarMuestra()">
+                        <i class="bi bi-people"></i> Muestra
+                    </button>
+                </div>
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-outline-primary w-100" onclick="navegarEstimaciones()" id="btnEstimaciones">
+                        <i class="bi bi-calculator"></i> Estimaciones
+                    </button>
+                    <button type="button" class="btn btn-outline-warning w-100" onclick="navegarEstimaciones()" id="btnEstimacionAuto" style="display: none;">
+                        <i class="bi bi-calculator"></i> Estimación Automática
+                    </button>
+                </div>
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-outline-primary w-100" onclick="navegarPresupuestos()">
+                        <i class="bi bi-cash"></i> Presupuestos
+                    </button>
+                </div>
+            </div>
+
+            <div class="row g-3 mt-2">
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-outline-info w-100" onclick="navegarImportarDatos()">
+                        <i class="bi bi-upload"></i> Importar Datos
+                    </button>
+                </div>
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-outline-info w-100" onclick="navegarAvance()">
+                        <i class="bi bi-graph-up"></i> Avance de Campo
+                    </button>
+                </div>
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-outline-danger w-100" id="btnCerrarTrabajo" onclick="confirmarCierre()">
+                        <i class="bi bi-lock"></i> Cerrar Trabajo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* Toast Container para notificaciones *@
+@await Html.PartialAsync("_ToastContainer")
+
+@section Scripts {
+    <script>
+        let trabajoIdSeleccionado = null;
+
+        function seleccionarTrabajo(id, nombre, jobBook) {
+            trabajoIdSeleccionado = id;
+            
+            // Mostrar panel de configuración
+            $('#pnlConfiguracion').slideDown();
+            $('#lblNombreTrabajo').text(jobBook + ' | ' + nombre);
+            $('#hfIdTrabajo').val(id);
+
+            // Llamada AJAX para obtener configuración
+            $.ajax({
+                url: '@Url.Action("SeleccionarTrabajo")',
+                type: 'POST',
+                data: {
+                    trabajoId: id,
+                    __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function(response) {
+                    if (response.success) {
+                        // Cargar configuración
+                        if (response.tipoRecoleccionId) {
+                            $('#ddlTipoRecoleccion').val(response.tipoRecoleccionId);
+                        }
+
+                        // Mostrar/ocultar botones según estimación
+                        if (response.tieneEstimacion) {
+                            $('#btnEstimaciones').show();
+                            $('#btnEstimacionAuto').hide();
+                        } else {
+                            $('#btnEstimaciones').hide();
+                            $('#btnEstimacionAuto').show();
+                        }
+
+                        mostrarToast('success', 'Trabajo seleccionado', 'El trabajo ha sido cargado correctamente');
+                    } else {
+                        mostrarToast('error', 'Error', response.message || 'Error al seleccionar el trabajo');
+                    }
+                },
+                error: function() {
+                    mostrarToast('error', 'Error', 'Error de comunicación con el servidor');
+                }
+            });
+
+            // Scroll al panel
+            $('html, body').animate({
+                scrollTop: $('#pnlConfiguracion').offset().top - 100
+            }, 500);
+        }
+
+        function guardarConfiguracion() {
+            const trabajoId = $('#hfIdTrabajo').val();
+            const tipoRecoleccionId = $('#ddlTipoRecoleccion').val();
+
+            if (!trabajoId) {
+                mostrarToast('warning', 'Advertencia', 'Debe seleccionar un trabajo primero');
+                return;
+            }
+
+            if (!tipoRecoleccionId) {
+                mostrarToast('warning', 'Advertencia', 'Debe seleccionar un tipo de recolección');
+                return;
+            }
+
+            $.ajax({
+                url: '@Url.Action("GuardarConfiguracion")',
+                type: 'POST',
+                data: {
+                    trabajoId: trabajoId,
+                    tipoRecoleccionId: tipoRecoleccionId,
+                    __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function(response) {
+                    if (response.success) {
+                        mostrarToast('success', 'Éxito', response.message);
+                    } else {
+                        mostrarToast('error', 'Error', response.message);
+                    }
+                },
+                error: function() {
+                    mostrarToast('error', 'Error', 'Error al guardar la configuración');
+                }
+            });
+        }
+
+        function navegarFichaCuantitativa() {
+            const trabajoId = $('#hfIdTrabajo').val();
+            if (trabajoId) {
+                window.location.href = '@Url.Action("FichaCuantitativa")?trabajoId=' + trabajoId;
+            }
+        }
+
+        function navegarMuestra() {
+            const trabajoId = $('#hfIdTrabajo').val();
+            if (trabajoId) {
+                window.location.href = '@Url.Action("Muestra")?trabajoId=' + trabajoId;
+            }
+        }
+
+        function navegarEstimaciones() {
+            const trabajoId = $('#hfIdTrabajo').val();
+            if (trabajoId) {
+                window.location.href = '@Url.Action("Estimaciones")?trabajoId=' + trabajoId;
+            }
+        }
+
+        function navegarPresupuestos() {
+            const trabajoId = $('#hfIdTrabajo').val();
+            if (trabajoId) {
+                window.location.href = '@Url.Action("Presupuestos")?trabajoId=' + trabajoId;
+            }
+        }
+
+        function navegarImportarDatos() {
+            const trabajoId = $('#hfIdTrabajo').val();
+            if (trabajoId) {
+                window.location.href = '@Url.Action("ImportarDatos")?trabajoId=' + trabajoId;
+            }
+        }
+
+        function navegarAvance() {
+            const trabajoId = $('#hfIdTrabajo').val();
+            if (trabajoId) {
+                window.location.href = '@Url.Action("Avance")?trabajoId=' + trabajoId;
+            }
+        }
+
+        function confirmarCierre() {
+            const trabajoId = $('#hfIdTrabajo').val();
+            if (trabajoId) {
+                if (confirm('¿Está seguro de cerrar este trabajo? Esta acción validará los documentos en Gestión Documental.')) {
+                    // TODO: Implementar modal de confirmación en Sprint 2
+                    mostrarToast('info', 'En desarrollo', 'La funcionalidad de cierre se implementará en Sprint 2 (GAP-OP-08)');
+                }
+            }
+        }
+
+        function mostrarToast(tipo, titulo, mensaje) {
+            // Usando el componente _ToastContainer compartido
+            const toast = `
+                <div class="toast align-items-center text-white bg-${tipo === 'success' ? 'success' : tipo === 'error' ? 'danger' : tipo === 'warning' ? 'warning' : 'info'} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <strong>${titulo}</strong><br/>${mensaje}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+            `;
+            
+            const container = $('#toast-container');
+            if (container.length === 0) {
+                $('body').append('<div id="toast-container" class="position-fixed top-0 end-0 p-3" style="z-index: 9999"></div>');
+            }
+            
+            $('#toast-container').append(toast);
+            const toastElement = $('.toast').last()[0];
+            const bsToast = new bootstrap.Toast(toastElement);
+            bsToast.show();
+        }
+    </script>
+}
+
+@* Token anti-forgery oculto para AJAX *@
+<form style="display:none;">
+    @Html.AntiForgeryToken()
+</form>

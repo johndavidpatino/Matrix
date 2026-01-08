@@ -27,15 +27,16 @@ public class PortalController : Controller
     {
         var snapshot = await _portalService.ObtenerPortalAsync(filtros);
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        var tienePermiso = long.TryParse(userIdClaim, out var userId)
-            ? await _permisosService.TienePermisoAsync(userId, 100)
-            : false;
+        var hasUserId = long.TryParse(userIdClaim, out var userId);
+        var tienePermiso = hasUserId && await _permisosService.TienePermisoAsync(userId, 100);
+        var tienePermisoSupervision = hasUserId && await _permisosService.TienePermisoAsync(userId, 157);
 
         var viewModel = new OpPortalViewModel
         {
             Filtros = filtros ?? new FiltrosVM(),
             Snapshot = snapshot,
-            TienePermiso100 = tienePermiso
+            TienePermiso100 = tienePermiso,
+            TienePermisoSupervision = tienePermisoSupervision
         };
         return View(viewModel);
     }

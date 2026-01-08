@@ -12,6 +12,7 @@ using MatrixNext.Web.Infrastructure.Data;
 using MatrixNext.Web.Services;
 using MatrixNext.Web.Services.OP;
 using MatrixNext.Web.Services.PY;
+using MatrixNext.Web.Options;
 using MatrixNext.Web.Services.CORE;
 using MatrixNext.Web.Services.Shared;
 using Microsoft.EntityFrameworkCore;
@@ -47,6 +48,8 @@ builder.Services.AddHttpContextAccessor();
 // Add health checks
 builder.Services.AddHealthChecks()
     .AddCheck("self", () => Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult.Healthy());
+
+builder.Services.Configure<PresupuestoNotificationOptions>(builder.Configuration.GetSection("Notifications:Presupuestos"));
 
 // Register data services
 var connectionString = builder.Configuration.GetConnectionString("MatrixDb");
@@ -135,6 +138,9 @@ builder.Services.AddScoped<IOpIpsService, OpIpsService>();
 builder.Services.AddScoped<IOpPresupuestosService, OpPresupuestosService>();
 builder.Services.AddScoped<IOpProduccionService, OpProduccionService>();
 builder.Services.AddScoped<IOpIFieldService, OpIFieldService>();
+builder.Services.AddScoped<IOpSupervisionService, OpSupervisionService>();
+builder.Services.AddScoped<IOpTrabajosService, OpTrabajosService>();
+builder.Services.AddScoped<IOpCoordinacionService, OpCoordinacionService>();
 
 var app = builder.Build();
 

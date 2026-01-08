@@ -42,6 +42,11 @@
         </div>
     </form>
 
+    <form method="post" asp-action="Sincronizar">
+        @Html.AntiForgeryToken()
+        <button class="btn btn-outline-secondary mb-4">Sincronizar proyectos iField</button>
+    </form>
+
     @if (Model.SelectedProject != null)
     {
         <div class="row">

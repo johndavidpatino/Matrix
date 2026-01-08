@@ -1,0 +1,86 @@
+@model List<MatrixNext.Web.Services.OP.TrabajoCoordinadorDto>
+@using MatrixNext.Web.Services.OP
+
+@{
+    ViewData["Title"] = "Trabajos - Coordinador";
+}
+
+<div class="container-fluid py-4">
+    <h1 class="h3 mb-4"><i class="bi bi-people"></i> Trabajos Coordinador</h1>
+    
+    <div class="card mb-4">
+        <div class="card-header"><h5 class="mb-0">Búsqueda</h5></div>
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-3">
+                    <input type="number" class="form-control" name="trabajoId" placeholder="ID Trabajo" value="@ViewBag.TrabajoBuscado">
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" name="nombre" placeholder="Nombre">
+                </div>
+                <div class="col-md-2">
+                    <input type="text" class="form-control" name="jobBook" placeholder="Job Book">
+                </div>
+                <div class="col-md-2">
+                    <select class="form-select" name="estado">
+                        <option value="">Todos</option>
+                        <option value="1">Nuevo</option>
+                        <option value="15">En Ejecución</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100"><i class="bi bi-search"></i> Buscar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Job Book</th>
+                        <th>Nombre</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var trabajo in Model)
+                    {
+                        <tr>
+                            <td>@trabajo.Id</td>
+                            <td>@trabajo.JobBook</td>
+                            <td>@trabajo.Nombre</td>
+                            <td>
+                                @if (trabajo.Estado == 1) { <span class="badge bg-primary">Nuevo</span> }
+                                else if (trabajo.Estado == 15) { <span class="badge bg-info">En Ejecución</span> }
+                                else { <span class="badge bg-secondary">Estado @trabajo.Estado</span> }
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-primary" onclick="gestionarPersonal(@trabajo.Id, '@trabajo.Nombre')">
+                                    <i class="bi bi-people"></i> Gestionar Personal
+                                </button>
+                                <a href="@Url.Action("Index", "Avances", new { trabajoId = trabajo.Id })" class="btn btn-sm btn-success">
+                                    <i class="bi bi-graph-up"></i> Avance
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@await Html.PartialAsync("_ToastContainer")
+
+@section Scripts {
+    <script>
+        function gestionarPersonal(trabajoId, nombre) {
+            alert('Funcionalidad de gestión de personal para trabajo ' + trabajoId + ' - ' + nombre + '\n\nImplementación completa pendiente en Sprint posterior.');
+        }
+    </script>
+}

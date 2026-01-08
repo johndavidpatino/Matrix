@@ -1,0 +1,168 @@
+@model MatrixNext.Web.ViewModels.OP.SupervisionViewModel
+
+@{
+    ViewData["Title"] = "Supervisión campo telefónico";
+}
+
+<section class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h1>Supervisión campo telefónico</h1>
+            <p class="text-muted">Checklist con permisos dinámicos (Sprint 5).</p>
+        </div>
+        @if (TempData["SupervisionMessage"] is string message)
+        {
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                @message
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+            </div>
+        }
+    </div>
+
+    <form asp-action="Index" method="get" class="row g-2 mb-4">
+        <input type="hidden" name="trabajoId" value="@Model.TrabajoId" />
+        <div class="col-md-4">
+            <label class="form-label">Identificación/<br/>JobBook</label>
+            <input type="text" value="@Model.Identificacion" name="identificacion" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Operador</label>
+            <select name="operadorId" class="form-select">
+                <option value="">-- Seleccione --</option>
+                @foreach (var user in Model.Operadores)
+                {
+                    <option value="@user.Id">@user.Nombre</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Supervisor</label>
+            <select name="supervisorId" class="form-select">
+                <option value="">-- Seleccione --</option>
+                @foreach (var user in Model.Supervisores)
+                {
+                    <option value="@user.Id">@user.Nombre</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-2 align-self-end">
+            <button class="btn btn-primary w-100" type="submit">Cargar</button>
+        </div>
+    </form>
+
+    @if (Model.Historico.Any())
+    {
+        <div class="card mt-4">
+            <div class="card-header">Histórico de supervisiones</div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered mb-0">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Operador</th>
+                                <th>Supervisor</th>
+                                <th>Observación</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var entry in Model.Historico)
+                            {
+                                <tr>
+                                    <td>@entry.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td>@entry.Operador</td>
+                                    <td>@entry.Supervisor</td>
+                                    <td>@entry.Observacion</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+
+
+    <form asp-action="Guardar" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="TrabajoId" value="@Model.TrabajoId" />
+        <input type="hidden" name="Identificacion" value="@Model.Identificacion" />
+        <input type="hidden" name="SupervisorId" value="@Model.Request.SupervisorId" />
+        <input type="hidden" name="OperadorId" value="@Model.Request.OperadorId" />
+        <input type="hidden" name="FechaSupervision" value="@Model.FechaSupervision:O" />
+
+    <div class="row mb-3">
+        @for (int i = 0; i < 13; i++)
+        {
+            var criName = $"CriFlags[{i}]";
+            var criId = $"cri{i}";
+            <div class="col-4 col-md-2">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="@criName" value="true" @(Model.Request.CriFlags[i] ? "checked" : "") id="@criId" />
+                    <label class="form-check-label" for="@criId">CRI @((i + 1).ToString("00"))</label>
+                </div>
+            </div>
+        }
+    </div>
+
+        <div class="row mb-3">
+            @for (int i = 0; i < 4; i++)
+            {
+                var comIndex = Model.Request.ComValues[i];
+                var comName = $"ComValues[{i}]";
+                <div class="col-md-3">
+                    <label class="form-label">COM @(i + 1)</label>
+                    <input class="form-control" type="number" name="@comName" value="@comIndex" />
+                </div>
+            }
+        </div>
+        <div class="row mb-3">
+            @for (int i = 0; i < 4; i++)
+            {
+                var accIndex = Model.Request.AccValues[i];
+                var accName = $"AccValues[{i}]";
+                <div class="col-md-3">
+                    <label class="form-label">ACC @(i + 1)</label>
+                    <input class="form-control" type="number" name="@accName" value="@accIndex" />
+                </div>
+            }
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Observaciones</label>
+            <textarea class="form-control" rows="3" name="Observaciones">@Model.Request.Observaciones</textarea>
+        </div>
+
+        <button class="btn btn-success">Registrar supervisión</button>
+    </form>
+
+    {
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card text-dark bg-light mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Total registros</h5>
+                        <p class="card-text display-6">@Model.Summary.TotalRegistros</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-dark bg-light mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Hoy</h5>
+                        <p class="card-text display-6">@Model.Summary.RegistrosHoy</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-white @(Model.Summary.Alertas > 0 ? "bg-danger" : "bg-success") mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Alertas</h5>
+                        <p class="card-text display-6">@Model.Summary.Alertas</p>
+                        <p class="card-text small">@(Model.Summary.Alertas > 0 ? "Registros pendientes" : "OK")</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</section>

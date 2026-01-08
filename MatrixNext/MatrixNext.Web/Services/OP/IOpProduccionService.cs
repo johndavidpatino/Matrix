@@ -9,4 +9,5 @@ public interface IOpProduccionService
     Task<IReadOnlyList<JbeDto>> ObtenerJbeAsync(int tipo, string? busqueda, CancellationToken cancellationToken = default);
     Task<IReadOnlyList<ProduccionRowViewModel>> ObtenerProduccionAsync(DateTime? fechaInicio, DateTime? fechaFin, string? identificacion, int? unidad, CancellationToken cancellationToken = default);
     Task<bool> GuardarRegistroAsync(GuardarRegistroRequest request, CancellationToken cancellationToken = default);
+    Task<ProduccionSummary> ObtenerResumenGeneralAsync(CancellationToken cancellationToken = default);
 }

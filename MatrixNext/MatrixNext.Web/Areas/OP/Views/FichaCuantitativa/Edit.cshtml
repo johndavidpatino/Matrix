@@ -1,0 +1,127 @@
+@model MatrixNext.Web.ViewModels.OP.FichaCuantitativaVM
+
+@{
+    ViewData["Title"] = "Ficha Cuantitativa";
+}
+
+<div class="container-fluid py-4">
+    <h1 class="h3 mb-4"><i class="bi bi-card-checklist"></i> Ficha Cuantitativa</h1>
+    
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Trabajo: @ViewBag.NombreTrabajo</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" asp-action="Edit">
+                        <input type="hidden" asp-for="IdTrabajo" />
+                        <input type="hidden" asp-for="Id" />
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Incentivos a Encuestados</label>
+                            <textarea asp-for="Incentivos" class="form-control" rows="3" 
+                                      placeholder="Descripción de incentivos ofrecidos a los encuestados"></textarea>
+                            <span asp-validation-for="Incentivos" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Regalo a Clientes</label>
+                            <textarea asp-for="RegaloClientes" class="form-control" rows="2" 
+                                      placeholder="Descripción de regalos ofrecidos al cliente"></textarea>
+                            <span asp-validation-for="RegaloClientes" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Compra Ipsos</label>
+                            <textarea asp-for="CompraIpsos" class="form-control" rows="2" 
+                                      placeholder="Descripción de compras realizadas por Ipsos"></textarea>
+                            <span asp-validation-for="CompraIpsos" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Habeas Data</label>
+                            <textarea asp-for="HabeasData" class="form-control" rows="3" 
+                                      placeholder="Texto de consentimiento informado y protección de datos"></textarea>
+                            <span asp-validation-for="HabeasData" class="text-danger"></span>
+                            <small class="form-text text-muted">
+                                <i class="bi bi-info-circle"></i> Este campo se sincronizará con la tabla HabeasData si existe.
+                            </small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Grupo Objetivo</label>
+                            <textarea asp-for="GrupoObjetivo" class="form-control" rows="3" 
+                                      placeholder="Descripción del grupo objetivo del estudio"></textarea>
+                            <span asp-validation-for="GrupoObjetivo" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Marco Muestral</label>
+                            <textarea asp-for="MarcoMuestral" class="form-control" rows="3" 
+                                      placeholder="Descripción del marco muestral utilizado"></textarea>
+                            <span asp-validation-for="MarcoMuestral" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Observaciones</label>
+                            <textarea asp-for="Observaciones" class="form-control" rows="4" 
+                                      placeholder="Observaciones adicionales sobre la ficha cuantitativa"></textarea>
+                            <span asp-validation-for="Observaciones" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="@Url.Action("Index", "Trabajos")" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Volver
+                            </a>
+                            <div>
+                                <button type="submit" name="enviarEmail" value="false" class="btn btn-primary">
+                                    <i class="bi bi-save"></i> Guardar
+                                </button>
+                                <button type="submit" name="enviarEmail" value="true" class="btn btn-success">
+                                    <i class="bi bi-envelope"></i> Guardar y Enviar Email
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="bi bi-info-circle"></i> Ayuda</h5>
+                </div>
+                <div class="card-body">
+                    <h6>Campos Obligatorios</h6>
+                    <ul class="small">
+                        <li><strong>Grupo Objetivo:</strong> Describe la población de estudio</li>
+                        <li><strong>Marco Muestral:</strong> Metodología de selección</li>
+                    </ul>
+                    
+                    <h6 class="mt-3">Campos Opcionales</h6>
+                    <ul class="small">
+                        <li>Incentivos a encuestados</li>
+                        <li>Regalos a clientes</li>
+                        <li>Compras Ipsos</li>
+                        <li>Observaciones generales</li>
+                    </ul>
+
+                    <hr />
+                    
+                    <h6>Funcionalidad Email</h6>
+                    <p class="small">
+                        Al presionar "Guardar y Enviar Email", se enviará la ficha cuantitativa al coordinador y al COE asignado.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@await Html.PartialAsync("_ToastContainer")
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

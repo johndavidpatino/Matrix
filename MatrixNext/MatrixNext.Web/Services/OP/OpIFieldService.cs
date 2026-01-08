@@ -111,6 +111,26 @@ WHERE P.IdProjecto = @ProjectId";
         await connection.ExecuteAsync(sql, new { ConfigId = configId });
     }
 
+    public async Task<int> SincronizarProyectosAsync(CancellationToken cancellationToken = default)
+    {
+        await using var connection = _dbContext.Database.GetDbConnection();
+        await EnsureOpenAsync(connection);
+
+        var sql = @"
+UPDATE p
+SET TrabajoId = c.IdTrabajo
+FROM OP_ProyectosIField p
+CROSS APPLY (
+    SELECT TOP 1 IdTrabajo
+    FROM OP_ConfigIfieldData
+    WHERE IdIField = p.IdProjecto AND IdTrabajo IS NOT NULL
+    ORDER BY FechaConfig DESC
+) c
+WHERE p.TrabajoId IS NULL AND c.IdTrabajo IS NOT NULL;";
+
+        return await connection.ExecuteAsync(sql);
+    }
+
     private static async Task EnsureOpenAsync(System.Data.Common.DbConnection connection)
     {
         if (connection.State != ConnectionState.Open)
