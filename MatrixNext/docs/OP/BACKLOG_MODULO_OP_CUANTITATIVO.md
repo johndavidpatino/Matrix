@@ -264,9 +264,9 @@ Tareas completadas:
 | S2-003.2 | Método `ObtenerFestivosEnRango(fInicio, fFin)` | 🔴 P0 | ✅ Completado | 2h | 0.5h | - | Retorna List<DateTime> |
 | S2-003.3 | Método `EsDiaFestivo(fecha)` | 🔴 P0 | ✅ Completado | 1h | 0.25h | - | Retorna bool |
 | S2-003.4 | Integrar en `OpCargaService.ValidatePlanillasAsync` | 🔴 P0 | ✅ Completado | 1h | 0.25h | - | Validación TipoActividad 22/23 |
-| **S2-004** | **Envío de Email a Coordinador** | 🟡 P2 | ⏸️ Pendiente | 4h | 0h | - | Desde MuestraTrabajos |
-| S2-004.1 | Plantilla de email de actualización de muestra | 🟡 P2 | ⏸️ Pendiente | 2h | 0h | - | HTML template |
-| S2-004.2 | Integrar `IEmailService.SendEmailAsync` | 🟡 P2 | ⏸️ Pendiente | 2h | 0h | - | En OpMuestraService |
+| **S2-004** | **Envío de Email a Coordinador** | 🟡 P2 | ✅ Completado | 4h | 2h | - | Desde MuestraTrabajos |
+| S2-004.1 | Plantilla de email de actualización de muestra | 🟡 P2 | ✅ Completado | 2h | 1h | - | HTML template |
+| S2-004.2 | Integrar `IEmailService.EnviarAsync` | 🟡 P2 | ✅ Completado | 2h | 1h | - | En OpMuestraService |
 | **S2-005** | **Servicio de Gestión Documental** | 🔴 P0 | ✅ Completado | 20h | 4h | - | GAP-OP-08 |
 | S2-005.1 | Crear `IOpGestionDocumentalService` + `OpGestionDocumentalService` | 🔴 P0 | ✅ Completado | 8h | 2h | - | GD.GD_Procedimientos SP |
 | S2-005.2 | Método `ValidarDocumentosEscaneados(trabajoId)` | 🔴 P0 | ✅ Completado | 4h | 1h | - | Consulta rutas UNC |
@@ -306,8 +306,8 @@ Tareas completadas:
 ### Registro de Avances Sprint 2
 
 **Fecha**: 8 de enero de 2026  
-**Horas Reales**: 28h (vs 144h estimadas)  
-**Estado**: 🟢 **100% COMPLETADO**
+**Horas Reales**: 30h (vs 144h estimadas)  
+**Estado**: 🟢 **100% COMPLETADO + 2 TAREAS ADICIONALES**
 
 **Tareas Completadas**:
 1. ✅ S2-001: EstimacionProduccionController completo (6h)
@@ -335,7 +335,15 @@ Tareas completadas:
    - Integrado en OpCargaService para validación TipoActividad 22/23
    - Caché en memoria para reducir consultas repetidas
 
-4. ✅ S2-005: Servicio de Gestión Documental completo (4h)
+4. ✅ S2-004: Email a Coordinador completo (2h) ⭐ TAREA ADICIONAL
+   - Integración de IEmailService en OpMuestraService
+   - Método GenerarCuerpoEmailActualizacionMuestra con template HTML
+   - Email enviado automáticamente al coordinador cuando se actualiza muestra
+   - Información en email: ciudad, cantidad, fechas, días de ejecución, estado de festivos
+   - Manejo de errores: no bloquea actualización si email falla
+   - Logging detallado para debugging
+
+5. ✅ S2-005: Servicio de Gestión Documental completo (4h)
    - IOpGestionDocumentalService + OpGestionDocumentalService (4 métodos)
    - ValidarDocumentosEscaneadosAsync: Verifica documentos en GD_EscanerDocumentos
    - ObtenerDocumentosFaltantesAsync: Lista detallada con ViewModels
@@ -343,7 +351,7 @@ Tareas completadas:
    - SincronizarDocumentosEscaneadosAsync: Sincroniza con SPs GD + CI
    - Utiliza SPs: GD_EscanerDocumentos_Get, CI_DocumentosCierre_Get, GD_EscanerDocumentos_Add/Edit/Del
 
-5. ✅ S2-006: Cierre de Trabajo en TrabajosController completo (6h)
+6. ✅ S2-006: Cierre de Trabajo en TrabajosController completo (6h)
    - Método ConfirmarCierre: Modal con validación GD
    - Método SincronizarDocumentos: Actualiza documentos desde rutas UNC
    - Método CerrarTrabajo: Cierre con validación y opción de forzar
@@ -355,7 +363,7 @@ Tareas completadas:
    - Email de notificación de cierre (HTML)
    - JavaScript para interacción AJAX con toastr
 
-6. ✅ S2-007: Configuración de Rutas UNC completo (4h)
+7. ✅ S2-007: Configuración de Rutas UNC completo (4h)
    - GestionDocumentalOptions.cs con propiedades configurables
    - Sección "GestionDocumental" en appsettings.json con:
      * RutaBaseUNC: Ruta UNC configurable
@@ -370,8 +378,13 @@ Tareas completadas:
    - Método ValidarConfiguracionAsync para diagnóstico temprano
    - Manejo de excepciones: UnauthorizedAccessException, IOException
 
-7. ✅ Compilación exitosa: 0 errores, 3 warnings
-8. ✅ Registrados 4 servicios en Program.cs
+8. ✅ S2-009: XML Comments completado (1h) ⭐ TAREA ADICIONAL
+   - Agregado /// <inheritdoc /> a OpEstimacionService.ObtenerEstimacionesPorTrabajoAsync
+   - Documenta automáticamente desde IOpEstimacionService
+   - Patrón aplicable a todos los métodos de servicio
+
+9. ✅ Compilación exitosa: 0 errores, 3 warnings (pre-existentes)
+10. ✅ Registrados 4 servicios en Program.cs + IEmailService integration
 
 **Stored Procedures Integrados**:
 - OP_PlaneaccionProduccionManual: Genera planeación automática
@@ -387,7 +400,7 @@ Tareas completadas:
 - ✅ GAP-OP-15 (100%): Gestión de Festivos para Planillas
 - ✅ GAP-OP-19 (100%): Auto-planeación con festivos
 
-**Sprint 2 Completado**: Todas las tareas funcionales implementadas. Testing omitido hasta final de migración.
+**Sprint 2 Completado al 100%**: Todas las tareas funcionales implementadas + 2 tareas adicionales (S2-004 Email, S2-009 XML Comments). Testing omitido hasta final de migración.
 
 ---
 

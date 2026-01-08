@@ -20,6 +20,7 @@ namespace MatrixNext.Web.Services.OP
             _logger = logger;
         }
 
+        /// <inheritdoc />
         public async Task<List<EstimacionCiudadListItemVM>> ObtenerEstimacionesPorTrabajoAsync(long trabajoId)
         {
             try
