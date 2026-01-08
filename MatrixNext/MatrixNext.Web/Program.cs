@@ -10,6 +10,7 @@ using MatrixNext.Web.Areas.EQ.Services.Internal;
 using MatrixNext.Web.Areas.EQ.Services.Masters;
 using MatrixNext.Web.Infrastructure.Data;
 using MatrixNext.Web.Services;
+using MatrixNext.Web.Services.OP;
 using MatrixNext.Web.Services.PY;
 using MatrixNext.Web.Services.CORE;
 using MatrixNext.Web.Services.Shared;
@@ -120,6 +121,8 @@ builder.Services.AddScoped<IIndicadoresCumplimientoService, IndicadoresCumplimie
 builder.Services.AddScoped<IExportService, ExportService>();
 builder.Services.AddScoped<QuoteCalculator>();
 builder.Services.AddScoped<EasyQuoteMasterService>();
+// OP módulo
+builder.Services.AddScoped<IOpAvancesService, OpAvancesService>();
 
 var app = builder.Build();
 

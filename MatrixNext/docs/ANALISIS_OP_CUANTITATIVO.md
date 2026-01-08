@@ -610,6 +610,12 @@ Dim finCorteFecha = New DateTime(Now.Year, Now.Month, 15)
 
 ---
 
+## Registro de avances y seguimiento
+- Se creo `docs/OP/OP_CUANTITATIVO_AVANCE.md` para mantener fases, checklist de WebForms y decision points (se actualizara conforme se avance en cada sprint).
+- La fase actual (diagnostico + configuracion base) incluye validacion de las directrices, el inventario 1:1 de WebForms y la verificacion de la capa de datos en `CoreProject/Clases/OP_Cuanti` (servicios Dapper/EF y funciones que llaman a los stored procedures catalogados).
+- Cada flujo y dependencia se documentara aqui y en el nuevo registro; si se necesitan confirmaciones o decisiones se solicita el retorno en espanol, tal como lo pidio el equipo.
+- Se habilito una vista `/OP/Avances` en MatrixNext.Web que muestra el mismo checklist con enlaces a los documentos de analisis y directrices, ayudando a compartir avances con stakeholders sin salir del portal.
+
 **DOCUMENTO FINALIZADO**  
 **Versión**: 1.1  
 **Próxima revisión**: Post-spike técnico (OpenXml + Blob Storage validation) + Review de optimizaciones con UX  

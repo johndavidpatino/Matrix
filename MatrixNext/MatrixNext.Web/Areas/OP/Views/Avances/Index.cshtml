@@ -1,0 +1,55 @@
+@model MatrixNext.Web.ViewModels.OP.OpAvancesViewModel
+
+@{
+    ViewData["Title"] = "Avances OP_Cuantitativo";
+}
+
+<section class="container mt-4">
+    <h1>Seguimiento OP_Cuantitativo</h1>
+        <p class="lead">
+        Esta vista refleja el estado inicial de la migración completo del módulo OP_Cuantitativo conforme a
+        <a href="/docs/ANALISIS_OP_CUANTITATIVO.md" target="_blank" class="text-decoration-none">ANALISIS_OP_CUANTITATIVO.md</a>
+        y las <a href="/docs/DIRECTRICES_MIGRACION.md" target="_blank" class="text-decoration-none">DIRECTRICES_MIGRACION.md</a>.
+    </p>
+
+    <div class="alert alert-info" role="alert">
+        <strong>Última actualización:</strong> @Model.LastUpdated.ToLocalTime():f<br />
+        @Model.FocusNote
+    </div>
+
+        <div class="mb-4">
+        <p>
+            Documento de seguimiento completo disponible en:
+            <a href="/docs/OP/OP_CUANTITATIVO_AVANCE.md" target="_blank">docs/OP/OP_CUANTITATIVO_AVANCE.md</a>.
+        </p>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Flujo</th>
+                    <th>WebForms</th>
+                    <th>Dependencias Core</th>
+                    <th>Estado</th>
+                    <th>Próxima acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var flow in Model.Flows)
+                {
+                    <tr>
+                        <td>
+                            <strong>@flow.Title</strong><br />
+                            <small>Referencia: <a href="/docs/OP/OP_CUANTITATIVO_AVANCE.md" target="_blank">@flow.ReferenceDoc</a></small>
+                        </td>
+                        <td>@flow.WebForms</td>
+                        <td>@flow.CoreProjectDependencies</td>
+                        <td>@flow.Status</td>
+                        <td>@flow.NextAction</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</section>
