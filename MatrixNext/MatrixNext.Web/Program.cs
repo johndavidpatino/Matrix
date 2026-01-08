@@ -146,6 +146,8 @@ builder.Services.AddScoped<IOpEstimacionService, OpEstimacionService>();
 builder.Services.AddScoped<IOpMuestraService, OpMuestraService>();
 builder.Services.AddScoped<IOpFestivosService, OpFestivosService>();
 builder.Services.AddScoped<IOpGestionDocumentalService, OpGestionDocumentalService>();
+builder.Services.AddScoped<IOpRevisionProductividadService, OpRevisionProductividadService>();
+builder.Services.AddScoped<IOpRegistroProduccionService, OpRegistroProduccionService>();
 
 // Registrar opciones de configuración
 builder.Services.Configure<GestionDocumentalOptions>(
