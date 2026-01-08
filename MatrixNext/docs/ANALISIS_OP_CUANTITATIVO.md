@@ -619,6 +619,7 @@ Dim finCorteFecha = New DateTime(Now.Year, Now.Month, 15)
 - Sprint 1 (Portal COE) finalizado con grilla, permiso 100 y acciones contextuales; Sprint 2 (Tráfico + Activaciones) se completó con la vista `/OP/Encuestas`, un formulario que manda `OP_GestionCampo_ActivarEncuesta` y `OP_GestionCampo_AnularEncuesta`.
 - La fase 2 ahora se define por sprints explícitos (ver `docs/OP/OP_CUANTITATIVO_AVANCE.md:| Fase 2 - Sprints recomendados`) que cubren portal COE, tráfico, cargas masivas, planillas/productividad/IPS y utilidades como presupuestos y supervisión.
 - Se habilitó el portal COE `/OP/Portal` para listar trabajos activos, filtrar por estado y navegar a los flujos definidos en el backlog sin abandonar MatrixNext.Web.
+- Sprint 3 (Cargas masivas) en progreso: el wizard `/OP/ImportacionMasiva` y sus viewmodels/clientes interactúan con `OpCargaService`, que valida headers, `TipoActividad`, corte 16-15 y `_Festivos` con ClosedXML antes de dejar listos los SPs `CatiRMC_*` y `OP_CuantiPlanillas`.
 
 **DOCUMENTO FINALIZADO**  
 **Versión**: 1.1  

@@ -1,0 +1,110 @@
+@model MatrixNext.Web.ViewModels.OP.OpCargaWizardViewModel
+
+@{
+    ViewData["Title"] = "Importación masiva OP_Cuantitativo";
+}
+
+<section class="container mt-4">
+    <h1 class="mb-2">Importación masiva OP_Cuantitativo</h1>
+    <p class="lead">
+        Este wizard consolida los pasos legacy de <strong>ImportarDatos.aspx</strong> y
+        <strong>ImportarPlanillas.aspx</strong> respetando las
+        <a href="/docs/ANALISIS_OP_CUANTITATIVO.md" target="_blank">directrices de análisis</a>
+        y las <a href="/docs/DIRECTRICES_MIGRACION.md" target="_blank">directrices de migración</a>.
+    </p>
+
+    <div class="row mb-3">
+        @foreach (var step in Model.Steps)
+        {
+            <div class="col-md-6">
+                <div class="card mb-3 h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">@step.Title</h5>
+                        <p class="card-text">@step.Description</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="row mb-4">
+        @foreach (var summary in Model.TypeSummaries)
+        {
+            <div class="col-md-6">
+                <div class="card border-info mb-3">
+                    <div class="card-body">
+                        <p class="text-muted mb-1">Tipo</p>
+                        <h5 class="card-title">@summary.Title</h5>
+                        <p class="card-text">@summary.Hint</p>
+                        <span class="badge bg-secondary">@summary.Tipo</span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card border-success mb-3">
+                <div class="card-body">
+                    <h6>Columnas esperadas para CATI</h6>
+                    <ul class="list-unstyled mb-0">
+                        @foreach (var header in Model.CatiHeaders)
+                        {
+                            <li><span class="text-success me-2">&#9679;</span>@header</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card border-warning mb-3">
+                <div class="card-body">
+                    <h6>Columnas mínimas para planillas</h6>
+                    <ul class="list-unstyled mb-0">
+                        @foreach (var header in Model.PlanillaHeaders)
+                        {
+                            <li><span class="text-warning me-2">&#9679;</span>@header</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Formulario de carga</h5>
+            <form asp-action="Index" method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+                <div class="mb-3">
+                    <label asp-for="Form.Tipo" class="form-label"></label>
+                    <select asp-for="Form.Tipo" class="form-select">
+                        <option value="CatiRMC">Carga CATI (Respuestas)</option>
+                        <option value="Planillas">Planillas de productividad</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Form.Archivo" class="form-label"></label>
+                    <input asp-for="Form.Archivo" class="form-control" type="file" accept=".xls,.xlsx" />
+                    <span asp-validation-for="Form.Archivo" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-primary">Validar archivo</button>
+                <span class="text-muted ms-3">El archivo se mantiene en un backup auditado.</span>
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="mt-2 text-danger">
+                        @Html.ValidationSummary()
+                    </div>
+                }
+            </form>
+        </div>
+    </div>
+
+    @if (Model.Result is not null)
+    {
+        <div class="alert @(Model.Result.EsValido ? "alert-success" : "alert-danger")">
+            <strong>@(Model.Result.EsValido ? "Validado" : "Error"):</strong> @Model.Result.Mensaje
+        </div>
+    }
+</section>
