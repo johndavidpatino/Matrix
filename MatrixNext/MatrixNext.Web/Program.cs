@@ -130,6 +130,8 @@ builder.Services.AddScoped<IOpPermisosService, OpPermisosService>();
 builder.Services.AddScoped<IOpEncuestasService, OpEncuestasService>();
 builder.Services.AddScoped<IOpCargaService, OpCargaService>();
 builder.Services.AddScoped<IOpPlanillasService, OpPlanillasService>();
+builder.Services.AddScoped<IOpProductividadService, OpProductividadService>();
+builder.Services.AddScoped<IOpIpsService, OpIpsService>();
 
 var app = builder.Build();
 

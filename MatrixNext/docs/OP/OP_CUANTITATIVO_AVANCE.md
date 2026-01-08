@@ -63,8 +63,8 @@ Cada sprint se documentará aquí y en `ANALISIS_OP_CUANTITATIVO.md` para reflej
 - Sprint 1 (Portal COE) completado: la grilla filtra por JobBook/Estado, muestra el estado del permiso 100, enlaza a `/OP/Trafico`, `/OP/Avances` y `/OP/Encuestas`, y exhibe el badge del permiso 100; las acciones contextuales están listas.
 - Sprint 2 (Tráfico + Activaciones) completado: `/OP/Trafico` mantiene KPIs y agregamos `/OP/Encuestas`, una vista con formularios que ejecutan `OP_GestionCampo_ActivarEncuesta` y `OP_GestionCampo_AnularEncuesta` con formularios anti-forgery y mensajes de resultado, cerrando el sprint 2 con data real sobre activaciones/anulaciones.
 - Sprint 3 (Cargas masivas) completado: el wizard `/OP/ImportacionMasiva` valida, ejecuta los SP `CatiRMC_*` y dispara el bulk copy a `OP_CuantiPlanillas`, reporta métricas (`ResumenValidas/NoValidas/Duplicadas/Inconsistencias`) y guarda el backup en uploads/op/cargas, cerrando el sprint con trazabilidad completa.
-- Sprint 4 (Planillas/Productividad/IPS) en progreso: consolidar tabs de planillas cargadas/planillas revisadas y productividad, hacer grid role-based para productividad + IPS editable, conectar Dapper `OP_CuantiDapper` y notificaciones, y documentar aprobaciones con ClosedXML/exportes.
-- Se inició el sprint 4 con la nueva vista `/OP/PlanillasAprobacion`, que ya consume `OP_CuantiPlanillas_GET` y datos de `OP_IPS_Revision`, mantiene tabs/grilla/productividad y ahora ofrece botones de “Aprobar/Rechazar” que ejecutan `OP_CuantiPlanillas_Update/Remove` y actualizan los estados en la vista.
+- Sprint 4 (Planillas/Productividad/IPS) completado: `/OP/PlanillasAprobacion` consolida las planillas cargadas/revisadas/aprobadas con indicadores rol-based y control IPS, el endpoint `/OP/Productividad` redirige a la vista unificada y los exports IPS quedan guardados en `~/Files/ips-export-*.xlsx` antes de descargarse, cumpliendo todos los criterios de este sprint.
+- Sprint 5 (Presupuestos internos + utilidades) en progreso: iniciamos la documentación en `docs/OP/SPRINT5_PLAN.md` para abordar presupuestos internos, registro de producción, iField y supervisión de campo telefónico, asegurando trazabilidad hacia la fase 2.
 
 > Este es el checklist base; cada entrada se actualizara con notas y tiempos una vez arranquemos la implementacion de la vista/servicio correspondiente. Se debe asegurar que las dependencias de CoreProject (stored procedures y contexts) se consumen sin cambiar nombres, siguiendo la Regla Core 1 de las directrices.
 
@@ -74,6 +74,7 @@ Cada sprint se documentará aquí y en `ANALISIS_OP_CUANTITATIVO.md` para reflej
 - Definir las stories de Sprint 4, incluyendo la vista `PlanillasAprobacion`, el grid común para productividad (renderizado por rol) y el módulo IPS editable, para poder medir el avance sobre esa fase.
 - Registrar avances, bloqueos y decisiones en este documento; si se requiere confirmacion se solicitara en espanol (tal como lo solicita la directiva).
 - Cada vez que se cierre un flujo o se habilite un sprint, se anadira una nueva entrada con fecha y responsable.
+- Documentar la carpeta `~/Files` (expuesta como `/Files`) como el repositorio oficial de exportes IPS generados por el sprint 4, incluyendo nombre, fecha y enlace generado para mantener trazabilidad en los registros.
 
 ## Decision points abiertos
 1. Se mantiene un modelo 1:1 o se aplica la consolidacion de vistas optimizadas para productividades, planillas y encuestas (ver seccion de propuestas en ANALISIS_OP_CUANTITATIVO.md)? 

@@ -1,0 +1,77 @@
+@model MatrixNext.Web.ViewModels.OP.IpsRevisionViewModel
+
+@{
+    ViewData["Title"] = "IPS y observaciones";
+}
+
+<section class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h1>Control IPS</h1>
+            <p class="text-muted">Sprint 4 · seguimiento editable de observaciones/estado.</p>
+        </div>
+        <form class="d-flex" asp-action="Index" method="get">
+            <input type="number" class="form-control me-2" name="trabajoId" placeholder="Trabajo ID" value="@Model.TrabajoId" />
+            <button type="submit" class="btn btn-outline-primary">Filtrar</button>
+        </form>
+    </div>
+
+    @if (TempData["IpsMessage"] is string message)
+    {
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            @message
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
+    }
+
+    <div class="mb-3">
+        <a class="btn btn-sm btn-outline-success" asp-action="Exportar" asp-route-trabajoId="@Model.TrabajoId">Exportar a Excel</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Trabajo</th>
+                    <th>Pregunta</th>
+                    <th>Observación</th>
+                    <th>Descripción</th>
+                    <th>Estado</th>
+                    <th>Instrumento</th>
+                    <th>Fecha</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var revision in Model.Revisiones)
+                {
+                    <tr>
+                        <td>@revision.Id</td>
+                        <td>@revision.Trabajo</td>
+                        <td>@revision.Pregunta</td>
+                        <td>@revision.Observacion</td>
+                        <td>@revision.DescripcionObservacion</td>
+                        <td>@revision.Estado</td>
+                        <td>@revision.Instrumento</td>
+                        <td>@revision.FechaHoraObservacion:dd/MM/yyyy HH:mm</td>
+                        <td>
+                            <form asp-action="Guardar" method="post">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="Id" value="@revision.Id" />
+                                <input type="hidden" name="TrabajoId" value="@revision.TrabajoId" />
+                                <input type="text" name="Observacion" class="form-control form-control-sm mb-1" value="@revision.Observacion" placeholder="Observación" />
+                                <input type="text" name="DescripcionObservacion" class="form-control form-control-sm mb-1" value="@revision.DescripcionObservacion" placeholder="Descripción" />
+                                <select name="Estado" class="form-select form-select-sm mb-1">
+                                    <option value="1" selected="@(revision.Estado == "1" ? "selected" : null)">Activo</option>
+                                    <option value="0" selected="@(revision.Estado == "0" ? "selected" : null)">Resuelto</option>
+                                </select>
+                                <button type="submit" class="btn btn-sm btn-primary w-100">Guardar</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</section>
