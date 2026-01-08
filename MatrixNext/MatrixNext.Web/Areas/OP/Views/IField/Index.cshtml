@@ -1,0 +1,160 @@
+@model MatrixNext.Web.ViewModels.OP.IFieldViewModel
+
+@{
+    ViewData["Title"] = "Configuración iField";
+}
+
+<section class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h1>Sincronización iField</h1>
+            <p class="text-muted">Sprint 5: controlar proyectos con variables y sincronización pendiente.</p>
+        </div>
+        @if (TempData["IFieldMessage"] is string message)
+        {
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                @message
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+            </div>
+        }
+    </div>
+
+    <form method="get" asp-action="Index" class="row g-2 mb-4">
+        <div class="col-md-3">
+            <label class="form-label">Buscar</label>
+            <select class="form-select" name="tipo" onchange="this.form.submit()">
+                <option value="1" @(Model.TipoBusqueda == 1 ? "selected" : "")>Activos</option>
+                <option value="2" @(Model.TipoBusqueda == 2 ? "selected" : "")>Pendientes</option>
+                <option value="3" @(Model.TipoBusqueda == 3 ? "selected" : "")>Anteriores</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Proyecto iField</label>
+            <select class="form-select" name="projectId" onchange="this.form.submit()">
+                <option value="">-- Seleccione proyecto --</option>
+                @foreach (var project in Model.Projects)
+                {
+                    <option value="@project.ProjectId" @(Model.SelectedProject?.ProjectId == project.ProjectId ? "selected" : "")>
+                        (@project.ProjectId) @project.NombreProjecto
+                    </option>
+                }
+            </select>
+        </div>
+    </form>
+
+    @if (Model.SelectedProject != null)
+    {
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-header">Asignar trabajo</div>
+                    <div class="card-body">
+                        <form asp-action="UpdateProject" method="post" class="row g-2">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="projectId" value="@Model.SelectedProject.ProjectId" />
+                            <div class="col-12">
+                                <label class="form-label">JobBook / Trabajo</label>
+                                <input type="number" name="trabajoId" class="form-control" value="@Model.JobBook" />
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">Actualizar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-header">Agregar configuraciones (tabulado)</div>
+                    <div class="card-body">
+                        <form asp-action="AddConfig" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="projectId" value="@Model.SelectedProject.ProjectId" />
+                            <div class="mb-3">
+                                <label class="form-label">Formato: UsuarioIfield TAB Encuestador TAB Supervisor</label>
+                                <textarea class="form-control" name="entries" rows="5"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-outline-success">Subir configuraciones</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-7">
+                <div class="card">
+                    <div class="card-header">Configuración registrada</div>
+                    <div class="card-body">
+                        @if (!Model.Configuracion.Any())
+                        {
+                            <p>No hay configuraciones registradas.</p>
+                        }
+                        else
+                        {
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Usuario iField</th>
+                                            <th>Encuestador</th>
+                                            <th>Supervisor</th>
+                                            <th>Registró</th>
+                                            <th>Fecha</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var config in Model.Configuracion)
+                                        {
+                                            <tr>
+                                                <td>@config.ConfigId</td>
+                                                <td>@config.UsuarioIfield</td>
+                                                <td>@config.Encuestador</td>
+                                                <td>@config.Supervisor</td>
+                                                <td>@config.Usuario</td>
+                                                <td>@config.FechaConfig?.ToString("g")</td>
+                                                <td>
+                                                    <form asp-action="RemoveConfig" method="post" class="d-inline">
+                                                        @Html.AntiForgeryToken()
+                                                        <input type="hidden" name="projectId" value="@Model.SelectedProject.ProjectId" />
+                                                        <input type="hidden" name="configId" value="@config.ConfigId" />
+                                                        <button class="btn btn-sm btn-outline-danger" type="submit">Quitar</button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="card">
+                    <div class="card-header">Sincronización pendiente</div>
+                    <div class="card-body">
+                        @if (!Model.Pendientes.Any())
+                        {
+                            <p>No hay sincronizaciones pendientes.</p>
+                        }
+                        else
+                        {
+                            <ul class="list-group list-group-flush">
+                                @foreach (var pending in Model.Pendientes)
+                                {
+                                    <li class="list-group-item">
+                                        <strong>@pending.NumEncuesta</strong> - @pending.Encuestador - @pending.Ciudad<br />
+                                        <small class="text-muted">Fecha sync: @pending.FechaSync:dd/MM/yyyy HH:mm</small>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</section>

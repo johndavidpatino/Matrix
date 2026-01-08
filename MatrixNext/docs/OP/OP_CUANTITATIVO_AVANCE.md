@@ -44,7 +44,7 @@ Mantener un listado unico de todos los avances del modulo OP_Cuantitativo, apunt
 | Dashboard y home | HomeGestion.aspx, HomeRecoleccion.aspx | Datos.ClsPermisosUsuarios, WorkFlow | Pendiente | Disenar SPA de dashboards con tabs por rol. |
 | Produccion y registro | RegistroProduccionOP.aspx | RegistroProduccion, EAreas, EReproceso, EActividad | Pendiente | Exponer servicios de actividades, subactividades, reprocesos. |
 | Supervision campo telefonico | SupervisionCampoTelefonico.aspx | SupervisionCampoTelefonico (CoreProject) | Pendiente | Corregir id hardcoded y migrar checklist/campos. |
-| iField configuration | iFieldConfiguration.aspx | DALDAP.iFieldSettings | Pendiente | Validar integracion LDAP y sincronizacion de variables. |
+| iField configuration | iFieldConfiguration.aspx | DALDAP.iFieldSettings | En progreso | `/OP/IField` ya ofrece seleccion de proyectos, configuraciones y pendientes a partir de `DALDAP.iFieldSettings`; resta afinar las sincronizaciones y la notificacion del checklist telefónico. |
 
 ## Fase 2 - Sprints recomendados
 La fase 2 la dividimos en sprints consecutivos para no perder de vista cada flujo y garantizar la cobertura total (100%) del módulo.
