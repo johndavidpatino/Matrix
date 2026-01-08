@@ -1,0 +1,427 @@
+@{
+    ViewData["Title"] = "Registro de Actividades de Producción";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="h3 mb-0">
+                <i class="fas fa-clipboard-list"></i> Registro de Actividades de Producción
+            </h1>
+            <small class="text-muted">Registre las actividades realizadas en el terreno</small>
+        </div>
+    </div>
+
+    <!-- Tabs: Nuevo Registro vs Mis Registros -->
+    <ul class="nav nav-tabs mb-4" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="nuevoRegistroTab" data-bs-toggle="tab" data-bs-target="#nuevoRegistro" type="button" role="tab">
+                <i class="fas fa-plus"></i> Nuevo Registro
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="misRegistrosTab" data-bs-toggle="tab" data-bs-target="#misRegistros" type="button" role="tab">
+                <i class="fas fa-list"></i> Mis Registros
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <!-- TAB 1: NUEVO REGISTRO -->
+        <div class="tab-pane fade show active" id="nuevoRegistro" role="tabpanel">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-pencil-alt"></i> Formulario de Registro
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form id="formRegistroProduccion">
+                        <div class="row">
+                            <!-- Unidad (Cascada 1) -->
+                            <div class="col-md-6 mb-3">
+                                <label for="unidadId" class="form-label"><strong>Unidad / Área:</strong></label>
+                                <select id="unidadId" class="form-control form-control-lg" required>
+                                    <option value="">-- Seleccionar unidad --</option>
+                                </select>
+                            </div>
+
+                            <!-- Actividad (Cascada 2) -->
+                            <div class="col-md-6 mb-3">
+                                <label for="actividadId" class="form-label"><strong>Actividad:</strong></label>
+                                <select id="actividadId" class="form-control form-control-lg" required disabled>
+                                    <option value="">-- Seleccione unidad primero --</option>
+                                </select>
+                            </div>
+
+                            <!-- Subactividad (Cascada 3) -->
+                            <div class="col-md-6 mb-3">
+                                <label for="subactividadId" class="form-label"><strong>Subactividad:</strong></label>
+                                <select id="subactividadId" class="form-control form-control-lg" required disabled>
+                                    <option value="">-- Seleccione actividad primero --</option>
+                                </select>
+                            </div>
+
+                            <!-- Job Book (Modal Search) -->
+                            <div class="col-md-6 mb-3">
+                                <label for="jobBookId" class="form-label"><strong>Job Book:</strong></label>
+                                <div class="input-group">
+                                    <input type="text" id="jobBookDisplay" class="form-control form-control-lg" placeholder="Buscar Job Book..." readonly />
+                                    <button class="btn btn-outline-primary" type="button" id="btnBuscarJobBook" data-bs-toggle="modal" data-bs-target="#modalJobBooks">
+                                        <i class="fas fa-search"></i> Buscar
+                                    </button>
+                                </div>
+                                <input type="hidden" id="jobBookId" />
+                            </div>
+
+                            <!-- Cantidad -->
+                            <div class="col-md-6 mb-3">
+                                <label for="cantidad" class="form-label"><strong>Cantidad:</strong></label>
+                                <input type="number" id="cantidad" class="form-control form-control-lg" placeholder="Ingrese cantidad" required min="1" step="0.01" />
+                                <small class="text-danger d-none" id="errorCantidad"></small>
+                            </div>
+
+                            <!-- Fecha -->
+                            <div class="col-md-6 mb-3">
+                                <label for="fecha" class="form-label"><strong>Fecha:</strong></label>
+                                <input type="date" id="fecha" class="form-control form-control-lg" required />
+                                <small class="text-danger d-none" id="errorFecha"></small>
+                            </div>
+
+                            <!-- Hora Inicio (opcional) -->
+                            <div class="col-md-6 mb-3">
+                                <label for="horaInicio" class="form-label">Hora Inicio (opcional):</label>
+                                <input type="time" id="horaInicio" class="form-control form-control-lg" />
+                            </div>
+
+                            <!-- Hora Fin (opcional) -->
+                            <div class="col-md-6 mb-3">
+                                <label for="horaFin" class="form-label">Hora Fin (opcional):</label>
+                                <input type="time" id="horaFin" class="form-control form-control-lg" />
+                            </div>
+
+                            <!-- Observaciones -->
+                            <div class="col-12 mb-3">
+                                <label for="observaciones" class="form-label">Observaciones:</label>
+                                <textarea id="observaciones" class="form-control" rows="4" placeholder="Ingrese observaciones adicionales..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Botones -->
+                        <div class="row">
+                            <div class="col-12 d-flex gap-2 justify-content-end">
+                                <button type="reset" class="btn btn-secondary btn-lg">
+                                    <i class="fas fa-redo"></i> Limpiar
+                                </button>
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-save"></i> Guardar Registro
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: MIS REGISTROS -->
+        <div class="tab-pane fade" id="misRegistros" role="tabpanel">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-table"></i> Mis Registros Guardados
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    <div id="misRegistrosContainer">
+                        <p class="text-muted p-3 text-center">Haga clic en "Mis Registros" para ver sus registros guardados</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Búsqueda de Job Books -->
+<div class="modal fade" id="modalJobBooks" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-search"></i> Buscar Job Book
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label"><strong>Criterio de búsqueda:</strong></label>
+                    <div class="input-group">
+                        <input type="text" id="jobBookCriterio" class="form-control" placeholder="Código o nombre del Job Book..." />
+                        <button class="btn btn-primary" type="button" id="btnBuscarJobBooksModal">
+                            <i class="fas fa-search"></i> Buscar
+                        </button>
+                    </div>
+                </div>
+
+                <div id="jobBooksResultados" class="table-responsive">
+                    <p class="text-muted">Ingrese un criterio de búsqueda</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Initialize date to today
+        document.getElementById('fecha').valueAsDate = new Date();
+
+        let unidades = [];
+        let actividades = {};
+        let subactividades = {};
+        let jobBooksCache = [];
+
+        // Load unidades on page load
+        $(document).ready(function () {
+            loadUnidades();
+        });
+
+        // Load unidades
+        function loadUnidades() {
+            $.ajax({
+                url: '@Url.Action("ObtenerActividades", "RegistroProduccionOP")',
+                type: 'GET',
+                success: function (data) {
+                    unidades = data;
+                    const select = document.getElementById('unidadId');
+                    data.forEach(u => {
+                        const option = document.createElement('option');
+                        option.value = u.id;
+                        option.text = u.nombre;
+                        select.appendChild(option);
+                    });
+                },
+                error: function () {
+                    toastr.error('Error cargando unidades');
+                }
+            });
+        }
+
+        // Cascading: Unidad → Actividad
+        document.getElementById('unidadId').addEventListener('change', async function () {
+            const unidadId = this.value;
+            const actividadSelect = document.getElementById('actividadId');
+            const subactividadSelect = document.getElementById('subactividadId');
+
+            // Reset
+            actividadSelect.innerHTML = '<option value="">-- Seleccione actividad --</option>';
+            subactividadSelect.innerHTML = '<option value="">-- Seleccione subactividad --</option>';
+            actividadSelect.disabled = !unidadId;
+            subactividadSelect.disabled = true;
+
+            if (!unidadId) return;
+
+            try {
+                const response = await fetch(`@Url.Action("ObtenerActividades", "RegistroProduccionOP")?unidadId=${unidadId}`);
+                const data = await response.json();
+
+                data.forEach(a => {
+                    const option = document.createElement('option');
+                    option.value = a.id;
+                    option.text = a.nombre;
+                    actividadSelect.appendChild(option);
+                });
+            } catch (error) {
+                toastr.error('Error cargando actividades');
+                console.error(error);
+            }
+        });
+
+        // Cascading: Actividad → Subactividad
+        document.getElementById('actividadId').addEventListener('change', async function () {
+            const actividadId = this.value;
+            const subactividadSelect = document.getElementById('subactividadId');
+
+            // Reset
+            subactividadSelect.innerHTML = '<option value="">-- Seleccione subactividad --</option>';
+            subactividadSelect.disabled = !actividadId;
+
+            if (!actividadId) return;
+
+            try {
+                const response = await fetch(`@Url.Action("ObtenerSubactividades", "RegistroProduccionOP")?actividadId=${actividadId}`);
+                const data = await response.json();
+
+                data.forEach(s => {
+                    const option = document.createElement('option');
+                    option.value = s.id;
+                    option.text = s.nombre;
+                    subactividadSelect.appendChild(option);
+                });
+            } catch (error) {
+                toastr.error('Error cargando subactividades');
+                console.error(error);
+            }
+        });
+
+        // Job Book search button
+        document.getElementById('btnBuscarJobBooksModal').addEventListener('click', async function () {
+            const criterio = document.getElementById('jobBookCriterio').value.trim();
+            if (!criterio) {
+                toastr.warning('Ingrese un criterio de búsqueda');
+                return;
+            }
+
+            try {
+                const response = await fetch(`@Url.Action("BuscarJobBooks", "RegistroProduccionOP")?criterio=${encodeURIComponent(criterio)}`);
+                const data = await response.json();
+                jobBooksCache = data;
+
+                if (data.length === 0) {
+                    document.getElementById('jobBooksResultados').innerHTML = '<p class="text-warning p-3">No se encontraron resultados</p>';
+                    return;
+                }
+
+                let html = '<table class="table table-hover"><thead><tr><th>Código</th><th>Nombre</th><th>Tipo</th><th>Acción</th></tr></thead><tbody>';
+                data.forEach((jb, index) => {
+                    html += `<tr>`;
+                    html += `<td>${jb.codigo}</td>`;
+                    html += `<td>${jb.nombre}</td>`;
+                    html += `<td><span class="badge bg-info">${jb.tipo}</span></td>`;
+                    html += `<td><button class="btn btn-sm btn-primary" onclick="selectJobBook(${index})" type="button">Seleccionar</button></td>`;
+                    html += `</tr>`;
+                });
+                html += '</tbody></table>';
+                document.getElementById('jobBooksResultados').innerHTML = html;
+            } catch (error) {
+                toastr.error('Error buscando Job Books');
+                console.error(error);
+            }
+        });
+
+        function selectJobBook(index) {
+            const jb = jobBooksCache[index];
+            document.getElementById('jobBookId').value = jb.jobBookId;
+            document.getElementById('jobBookDisplay').value = `${jb.codigo} - ${jb.nombre}`;
+            bootstrap.Modal.getInstance(document.getElementById('modalJobBooks')).hide();
+            toastr.info('Job Book seleccionado');
+        }
+
+        // Form submission
+        document.getElementById('formRegistroProduccion').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            // Validation
+            const cantidad = parseFloat(document.getElementById('cantidad').value);
+            const fecha = document.getElementById('fecha').value;
+
+            if (cantidad <= 0) {
+                document.getElementById('errorCantidad').classList.remove('d-none').textContent = 'Debe ser mayor a 0';
+                return;
+            }
+
+            if (new Date(fecha) > new Date()) {
+                document.getElementById('errorFecha').classList.remove('d-none').textContent = 'No puede ser una fecha futura';
+                return;
+            }
+
+            const registro = {
+                unidadId: parseInt(document.getElementById('unidadId').value),
+                actividadId: parseInt(document.getElementById('actividadId').value),
+                subactividadId: parseInt(document.getElementById('subactividadId').value),
+                jobBookId: parseInt(document.getElementById('jobBookId').value) || null,
+                cantidad: cantidad,
+                fecha: fecha,
+                horaInicio: document.getElementById('horaInicio').value || null,
+                horaFin: document.getElementById('horaFin').value || null,
+                observaciones: document.getElementById('observaciones').value || null,
+                usuarioId: parseInt('@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "0"')
+            };
+
+            try {
+                const response = await fetch('@Url.Action("Guardar", "RegistroProduccionOP")', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(registro)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    toastr.success(`Registro guardado exitosamente (ID: ${result.id})`);
+                    document.getElementById('formRegistroProduccion').reset();
+                    document.getElementById('fecha').valueAsDate = new Date();
+                } else {
+                    toastr.error(result.message || 'Error al guardar');
+                }
+            } catch (error) {
+                toastr.error('Error al procesar el registro');
+                console.error(error);
+            }
+        });
+
+        // Load mis registros when tab clicked
+        document.getElementById('misRegistrosTab').addEventListener('click', function () {
+            $.ajax({
+                url: '@Url.Action("MisRegistros", "RegistroProduccionOP")',
+                type: 'GET',
+                success: function (registros) {
+                    renderMisRegistros(registros);
+                },
+                error: function () {
+                    toastr.error('Error cargando registros');
+                }
+            });
+        });
+
+        function renderMisRegistros(registros) {
+            if (!registros || registros.length === 0) {
+                document.getElementById('misRegistrosContainer').innerHTML = '<p class="text-muted p-3 text-center">No tienes registros guardados</p>';
+                return;
+            }
+
+            let html = '<div class="table-responsive"><table class="table table-hover"><thead><tr><th>Fecha</th><th>Unidad</th><th>Actividad</th><th>Cantidad</th><th>Job Book</th><th>Estado</th><th>Registrado</th></tr></thead><tbody>';
+
+            registros.forEach(r => {
+                html += `<tr>`;
+                html += `<td>${new Date(r.fecha).toLocaleDateString('es-CO')}</td>`;
+                html += `<td>${r.unidadNombre}</td>`;
+                html += `<td>${r.actividadNombre}</td>`;
+                html += `<td class="text-end">${r.cantidad}</td>`;
+                html += `<td>${r.jobBookCodigo}</td>`;
+                html += `<td><span class="badge bg-success">Registrado</span></td>`;
+                html += `<td>${new Date(r.fechaRegistro).toLocaleDateString('es-CO')}</td>`;
+                html += `</tr>`;
+            });
+
+            html += '</tbody></table></div>';
+            document.getElementById('misRegistrosContainer').innerHTML = html;
+        }
+    </script>
+
+    <style>
+        .nav-tabs .nav-link {
+            color: #6c757d;
+            cursor: pointer;
+        }
+
+        .nav-tabs .nav-link:hover {
+            color: #007bff;
+        }
+
+        .nav-tabs .nav-link.active {
+            color: #007bff;
+        }
+
+        .table-responsive {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .table th {
+            position: sticky;
+            top: 0;
+            background-color: #f8f9fa;
+        }
+    </style>
+}
