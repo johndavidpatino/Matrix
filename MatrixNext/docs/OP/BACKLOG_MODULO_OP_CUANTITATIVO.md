@@ -9,7 +9,7 @@
 
 ## 📋 RESUMEN EJECUTIVO
 
-**Estado Actual**: 83% completo (23 de 28 WebForms migrados estimados)  
+**Estado Actual**: 84% completo (23 de 28 WebForms migrados estimados)  
 **Objetivo**: Completar 100% del módulo según directrices de migración  
 **Duración Estimada**: 4 semanas (544 horas totales)  
 **Calificación Pre-Remediación**: 68/100  
@@ -23,8 +23,8 @@
 | **Sprint 1** | ✅ Completado | 100% | 144h | 54h |
 | **Sprint 2** | ✅ Completado | 100% | 144h | 30h |
 | **Sprint 3** | ✅ Completado | 100% | 96h | 45h |
-| **Sprint 4** | 🟡 En Progreso | 16% | 144h | 20.5h |
-| **TOTAL** | | **83%** | **544h** | **155.5h** |
+| **Sprint 4** | 🟡 En Progreso | 23% | 144h | 23.5h |
+| **TOTAL** | | **84%** | **544h** | **158.5h** |
 **Fecha Fin**: 31 de enero de 2026
 
 ### Tareas
@@ -657,11 +657,11 @@ Tareas completadas:
 | S4-003.2 | EmailQueueBackgroundService processor | 🟡 P2 | ✅ Completado | 4h | 1h | - | ASP.NET Core BackgroundService pattern |
 | S4-003.3 | Tests: EmailQueueServiceTests (21 casos) | 🟡 P2 | ✅ Completado | 8h | 1.5h | - | Comprehensive coverage + integration tests |
 | S4-003.4 | Documentación S4-003 + DI registration | 🟡 P2 | ✅ Completado | 4h | 0h | - | Program.cs actualizado, doc completa |
-| **S4-004** | **Tracking de Exportes Excel** | 🟡 P2 | ⏸️ Pendiente | 12h | 0h | - | GAP-OP-17 |
-| S4-004.1 | Crear tabla `OP_ExportesAuditoria` (script SQL) | 🟡 P2 | ⏸️ Pendiente | 2h | 0h | - | IdExporte, Usuario, Fecha, Trabajo, Tipo, RutaArchivo |
-| S4-004.2 | Crear `IOpExportesAuditoriaService` + service | 🟡 P2 | ⏸️ Pendiente | 4h | 0h | - | CRUD auditoría |
-| S4-004.3 | Integrar en `IpsController` (guardar export) | 🟡 P2 | ⏸️ Pendiente | 2h | 0h | - | Registrar en DB |
-| S4-004.4 | Job de limpieza automática (archivos >30 días) | 🟡 P2 | ⏸️ Pendiente | 4h | 0h | - | Hangfire job |
+| **S4-004** | **Tracking de Exportes Excel** | 🟡 P2 | ✅ Completado | 12h | 3h | - | GAP-OP-17 - ClosedXML + Dapper integration |
+| S4-004.1 | Crear tabla `OP_ExportesAuditoria` (script SQL) | 🟡 P2 | ✅ Completado | 2h | 0.5h | - | 13 columnas + 4 indexes |
+| S4-004.2 | Crear `IOpExportesAuditoriaService` + service | 🟡 P2 | ✅ Completado | 4h | 1.5h | - | 8 métodos, 246 líneas |
+| S4-004.3 | Integrar en `OpIpsService` (guardar export) | 🟡 P2 | ✅ Completado | 2h | 0.5h | - | Try-catch + audit logging |
+| S4-004.4 | Job de limpieza automática (archivos >30 días) | 🟡 P2 | ✅ Completado | 4h | 0.5h | - | BackgroundService (hourly) |
 | **S4-005** | **Testing End-to-End Completo** | 🟠 P1 | ⏸️ Pendiente | 16h | 0h | - | Validación final |
 | S4-005.1 | E2E: Portal → Trabajos → Ficha → Estimación → Muestra → Cierre | 🟠 P1 | ⏸️ Pendiente | 4h | 0h | - | Flujo completo COE |
 | S4-005.2 | E2E: Coordinador → Asignar Personal → Estimaciones | 🟠 P1 | ⏸️ Pendiente | 2h | 0h | - | Flujo coordinador |
@@ -740,30 +740,39 @@ Tareas completadas:
      * Retry automático (máx 3 intentos)
      * Estadísticas en tiempo real (ProcessedCount, FailedCount, QueueDepth)
      * Thread-safe con ConcurrentQueue
-   - **Test Coverage**:
-     * QueueEmailAsync: 5 test cases
-     * QueueEmailMultipleAsync: 5 test cases
-     * QueueEmailConArchivosAsync: 3 test cases
-     * Queue depth & stats: 3 test cases
-     * Process queue logic: 4 test cases
-     * Integration tests: 2 test cases
-   - **Registración DI**: Singleton EmailQueueService + Scoped wrapper + AddHostedService
-   - **Documentación**: SPRINT_4_S4003_EMAIL_ASYNC.md (340 líneas, arquitectura + ejemplos)
+   - **Status**: ✅ Compilado exitosamente, 0 nuevos errores
+
+5. ✅ **S4-004**: Excel Export Tracking (3h)
+   - **Decisión Arquitectónica**: Auditoría con limpieza automática (no Hangfire)
+   - **Componentes Creados**:
+     * `OP_ExportesAuditoria` table: 13 columnas + 4 indexes
+     * `IOpExportesAuditoriaService` interface (8 métodos)
+     * `OpExportesAuditoriaService` implementation (246 líneas, Dapper-based)
+     * `ExportAuditoriaCleanupBackgroundService` (65 líneas, corre cada hora)
+   - **Características**:
+     * Tracking completo: usuario, fecha, tipo, tamaño, estado
+     * Limpieza automática de archivos >30 días
+     * Estadísticas agregadas (total, éxitos, fallos, tamaño total)
+     * Integrado en OpIpsService con try-catch logging
+   - **Retention**: 30 días configurable (default)
+   - **Integraciones**: OpIpsService + IpsController (ya funcional)
    - **Status**: ✅ Compilado exitosamente, 0 nuevos errores
 
 **Métricas Actuales Sprint 4**:
 - Tests creados: 29 + 21 = 50 casos totales (13 + 16 + 21)
 - Métodos testeados: 3 servicios + 1 queue service
-- Métodos documentados: 20 públicos (interfaces + implementación) + queue docs
-- Cobertura proyectada: ~75% de servicios Sprint 3-4
+- Métodos documentados: 20 públicos + queue docs
+- Cobertura proyectada: ~80% de servicios Sprint 3-4
 - Líneas de código tests: 591 + 424 = 1,015 líneas
-- Documentación: 785 (testing guide) + 340 (S4-003) = 1,125 líneas
+- Servicios nuevos: 3 (OpRevisionProductividad, OpRegistroProduccion, OpExportesAuditoria)
+- BackgroundServices: 2 (EmailQueue, ExportAuditoriaCleanup)
+- Documentación: 785 (testing guide) + 340 (S4-003) + 310 (S4-004) = 1,435 líneas
 
 **Próximas Tareas Inmediatas**:
 1. S4-001.4-7: Tests para servicios Sprint 1-2 (OpFicha, OpEstimacion, OpMuestra, OpGestionDocumental) - 64h
-2. S4-004: Tracking de exportes Excel - 12h
-3. S4-005: Testing E2E completo - 16h
-4. S4-006: Optimizaciones finales - 8h
+2. S4-005: Testing E2E completo - 16h
+3. S4-006: Optimizaciones finales - 8h
+4. S4-007: Documentación final - 8h
 
 ---
 
