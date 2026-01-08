@@ -23,8 +23,8 @@
 | **Sprint 1** | ✅ Completado | 100% | 144h | 54h |
 | **Sprint 2** | ✅ Completado | 100% | 144h | 30h |
 | **Sprint 3** | ✅ Completado | 100% | 96h | 45h |
-| **Sprint 4** | 🟡 En Progreso | 23% | 144h | 23.5h |
-| **TOTAL** | | **84%** | **544h** | **158.5h** |
+| **Sprint 4** | 🟡 En Progreso | 30% | 144h | 32h |
+| **TOTAL** | | **87%** | **544h** | **167h** |
 **Fecha Fin**: 31 de enero de 2026
 
 ### Tareas
@@ -798,9 +798,9 @@ Sprint 0: [██████████] 100% ✅ Completado - Infraestructura
 Sprint 1: [██████████] 100% ✅ Completado - Navegación y Ficha
 Sprint 2: [██████████] 100% ✅ Completado - Estimación y Cierre
 Sprint 3: [██████████] 100% ✅ Completado - Revisión y Registro
-Sprint 4: [█░░░░░░░░░]  11% 🟡 En Progreso - Testing y Optimización
+Sprint 4: [███░░░░░░░]  30% 🟡 En Progreso - Testing y Optimización
 ─────────────────────────────────────────────────────────────────
-TOTAL:    [████████░░]  82% 🟡 Muy Avanzado
+TOTAL:    [█████████░]  87% 🟡 Muy Avanzado
 ```
 
 ---
