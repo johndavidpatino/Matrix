@@ -383,6 +383,9 @@ namespace MatrixNext.Data.Adapters.CU
         /// </summary>
         public (bool success, string message) GuardarPresupuesto(EditarPresupuestoViewModel model, long usuarioId)
         {
+            if (model is null)
+                throw new ArgumentNullException(nameof(model));
+
             using var context = CreateContext();
             using var transaction = context.Database.BeginTransaction();
 
@@ -395,9 +398,7 @@ namespace MatrixNext.Data.Adapters.CU
                         && p.MetCodigo == model.MetCodigo 
                         && p.ParNacional == model.ParNacional);
 
-                bool esNuevo = parametros == null;
-
-                if (esNuevo)
+                if (parametros == null)
                 {
                     parametros = new IQ_Parametros
                     {
@@ -410,8 +411,6 @@ namespace MatrixNext.Data.Adapters.CU
                     };
                     context.IQParametros.Add(parametros);
                 }
-
-                // Mapear 110+ propiedades
                 parametros.TecCodigo = model.TecCodigo;
                 parametros.TipoProyecto = model.TipoProyecto;
                 parametros.ParGrupoObjetivo = (model.ParGrupoObjetivo?.Trim() ?? string.Empty) ?? string.Empty;

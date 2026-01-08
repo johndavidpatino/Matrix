@@ -15,10 +15,10 @@ namespace MatrixNext.Web.Models.PY
         public long IdTrabajoCuali { get; set; }
 
         /// <summary>Nombre descriptivo del segmento</summary>
-        public string Nombre { get; set; }
+        public string? Nombre { get; set; }
 
         /// <summary>Descripción detallada de características del segmento</summary>
-        public string Descripcion { get; set; }
+        public string? Descripcion { get; set; }
 
         /// <summary>Número de participantes a entrevistar en este segmento</summary>
         public int NumeroParticipantes { get; set; }
@@ -30,23 +30,20 @@ namespace MatrixNext.Web.Models.PY
         public int? CuotaMaxima { get; set; }
 
         /// <summary>Descripción de criterios de inclusión</summary>
-        public string CriteriosInclusion { get; set; }
+        public string? CriteriosInclusion { get; set; }
 
         /// <summary>Descripción de criterios de exclusión</summary>
-        public string CriteriosExclusion { get; set; }
+        public string? CriteriosExclusion { get; set; }
 
         /// <summary>Notas sobre el segmento</summary>
-        public string Notas { get; set; }
+        public string? Notas { get; set; }
 
         /// <summary>Orden de presentación/importancia del segmento</summary>
         public int? Orden { get; set; }
 
-        /// <summary>Indica si el segmento está activo</summary>
-        public bool Activo { get; set; } = true;
-
         // Navegación
         /// <summary>Trabajo cualitativo al que pertenece</summary>
-        public virtual TrabajosCuali TrabajoCuali { get; set; }
+        public virtual TrabajosCuali? TrabajoCuali { get; set; }
 
         /// <summary>Muestras asociadas a este segmento</summary>
         public virtual ICollection<MuestrasCuali> Muestras { get; set; } = new List<MuestrasCuali>();

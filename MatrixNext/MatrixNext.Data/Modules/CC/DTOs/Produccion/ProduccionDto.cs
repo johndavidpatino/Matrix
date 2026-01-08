@@ -8,19 +8,19 @@ namespace MatrixNext.Data.Modules.CC.DTOs.Produccion
         public long IdProduccion { get; set; }
         public int Periodo { get; set; }
         public long IdTrabajo { get; set; }
-        public string CodigoTrabajo { get; set; }
-        public string NombreTrabajo { get; set; }
+        public string? CodigoTrabajo { get; set; }
+        public string? NombreTrabajo { get; set; }
         public long IdActividad { get; set; }
-        public string CodigoActividad { get; set; }
-        public string DescripcionActividad { get; set; }
+        public string? CodigoActividad { get; set; }
+        public string? DescripcionActividad { get; set; }
         public decimal Cantidad { get; set; }
         public decimal CostoUnitario { get; set; }
         public decimal CostoTotal => Cantidad * CostoUnitario;
         public long IdEmpleado { get; set; }
-        public string NombreEmpleado { get; set; }
+        public string? NombreEmpleado { get; set; }
         public DateTime FechaProduccion { get; set; }
         public byte Estado { get; set; }
-        public string Observaciones { get; set; }
+        public string? Observaciones { get; set; }
         public DateTime FechaRegistro { get; set; }
     }
 
@@ -32,10 +32,10 @@ namespace MatrixNext.Data.Modules.CC.DTOs.Produccion
         public long IdLiquidacion { get; set; }
         public int Periodo { get; set; }
         public long IdTrabajo { get; set; }
-        public string CodigoTrabajo { get; set; }
-        public string NombreTrabajo { get; set; }
+        public string? CodigoTrabajo { get; set; }
+        public string? NombreTrabajo { get; set; }
         public long IdEmpleado { get; set; }
-        public string NombreEmpleado { get; set; }
+        public string? NombreEmpleado { get; set; }
         public decimal SalarioBase { get; set; }
         public decimal ProduccionGenerada { get; set; }
         public decimal BonoProduccion { get; set; }
@@ -43,7 +43,7 @@ namespace MatrixNext.Data.Modules.CC.DTOs.Produccion
         public decimal ValorNeto { get; set; }
         public byte Estado { get; set; }
         public DateTime FechaLiquidacion { get; set; }
-        public string Observaciones { get; set; }
+        public string? Observaciones { get; set; }
     }
 
     /// <summary>
@@ -54,9 +54,9 @@ namespace MatrixNext.Data.Modules.CC.DTOs.Produccion
         public long IdBonificacion { get; set; }
         public int Periodo { get; set; }
         public long IdEmpleado { get; set; }
-        public string NombreEmpleado { get; set; }
+        public string? NombreEmpleado { get; set; }
         public long IdTrabajo { get; set; }
-        public string NombreTrabajo { get; set; }
+        public string? NombreTrabajo { get; set; }
         public decimal SalarioBase { get; set; }
         public decimal ProduccionTotal { get; set; }
         public decimal PercentajeMetaBonificacion { get; set; }
@@ -64,7 +64,7 @@ namespace MatrixNext.Data.Modules.CC.DTOs.Produccion
         public decimal BonoFinal { get; set; }
         public byte Estado { get; set; }
         public DateTime FechaGeneracion { get; set; }
-        public string Observaciones { get; set; }
+        public string? Observaciones { get; set; }
     }
 
     /// <summary>
@@ -75,13 +75,13 @@ namespace MatrixNext.Data.Modules.CC.DTOs.Produccion
         public long IdDescuento { get; set; }
         public int Periodo { get; set; }
         public long IdEmpleado { get; set; }
-        public string NombreEmpleado { get; set; }
-        public string TipoDescuento { get; set; }
+        public string? NombreEmpleado { get; set; }
+        public string? TipoDescuento { get; set; }
         public decimal ValorDescuento { get; set; }
         public decimal PercentajeDescuento { get; set; }
         public byte Estado { get; set; }
         public DateTime FechaCarga { get; set; }
-        public string Observaciones { get; set; }
+        public string? Observaciones { get; set; }
     }
 
     /// <summary>
@@ -92,17 +92,17 @@ namespace MatrixNext.Data.Modules.CC.DTOs.Produccion
         public long IdLiquidacionPST { get; set; }
         public int Periodo { get; set; }
         public long IdTrabajo { get; set; }
-        public string CodigoTrabajo { get; set; }
-        public string NombreTrabajo { get; set; }
+        public string? CodigoTrabajo { get; set; }
+        public string? NombreTrabajo { get; set; }
         public long IdEmpleado { get; set; }
-        public string NombreEmpleado { get; set; }
+        public string? NombreEmpleado { get; set; }
         public decimal ValorPST { get; set; }
         public decimal ProduccionGenerada { get; set; }
         public decimal PercentajeLiquidacion { get; set; }
         public decimal ValorLiquidado { get; set; }
         public byte Estado { get; set; }
         public DateTime FechaLiquidacion { get; set; }
-        public string Observaciones { get; set; }
+        public string? Observaciones { get; set; }
     }
 
     /// <summary>
@@ -113,15 +113,15 @@ namespace MatrixNext.Data.Modules.CC.DTOs.Produccion
         public long IdAsignacion { get; set; }
         public int Periodo { get; set; }
         public long IdTrabajo { get; set; }
-        public string CodigoTrabajo { get; set; }
-        public string NombreTrabajo { get; set; }
+        public string? CodigoTrabajo { get; set; }
+        public string? NombreTrabajo { get; set; }
         public long IdConcepto { get; set; }
-        public string NombreConcepto { get; set; }
+        public string? NombreConcepto { get; set; }
         public decimal CostoBase { get; set; }
         public decimal CostoAsignado { get; set; }
         public byte Estado { get; set; }
         public DateTime FechaAsignacion { get; set; }
-        public string Observaciones { get; set; }
+        public string? Observaciones { get; set; }
     }
 
     /// <summary>
@@ -131,15 +131,15 @@ namespace MatrixNext.Data.Modules.CC.DTOs.Produccion
     {
         public long IdJobBook { get; set; }
         public long IdTrabajo { get; set; }
-        public string CodigoTrabajo { get; set; }
-        public string NombreTrabajo { get; set; }
-        public string NumeroJobBook { get; set; }
+        public string? CodigoTrabajo { get; set; }
+        public string? NombreTrabajo { get; set; }
+        public string? NumeroJobBook { get; set; }
         public byte EstadoActual { get; set; }
-        public string EstadoActualNombre { get; set; }
+        public string? EstadoActualNombre { get; set; }
         public DateTime FechaApertura { get; set; }
         public DateTime? FechaCierre { get; set; }
         public decimal MontoTotal { get; set; }
-        public string Observaciones { get; set; }
+        public string? Observaciones { get; set; }
     }
 
     /// <summary>
@@ -150,15 +150,15 @@ namespace MatrixNext.Data.Modules.CC.DTOs.Produccion
         public long IdBonificacion { get; set; }
         public int Periodo { get; set; }
         public long IdEmpleado { get; set; }
-        public string NombreEmpleado { get; set; }
+        public string? NombreEmpleado { get; set; }
         public decimal SalarioBase { get; set; }
         public decimal ProduccionTotal { get; set; }
         public decimal BonoCalculado { get; set; }
         public decimal BonoFinal { get; set; }
         public byte Estado { get; set; }
         public DateTime FechaGeneracion { get; set; }
-        public string UsuarioGeneracion { get; set; }
-        public string UsuarioRevision { get; set; }
+        public string? UsuarioGeneracion { get; set; }
+        public string? UsuarioRevision { get; set; }
         public DateTime? FechaRevision { get; set; }
         public bool Aprobada { get; set; }
     }
@@ -171,16 +171,16 @@ namespace MatrixNext.Data.Modules.CC.DTOs.Produccion
         public long IdLiquidacion { get; set; }
         public int Periodo { get; set; }
         public long IdEmpleado { get; set; }
-        public string NombreEmpleado { get; set; }
+        public string? NombreEmpleado { get; set; }
         public long IdTrabajo { get; set; }
-        public string NombreTrabajo { get; set; }
+        public string? NombreTrabajo { get; set; }
         public decimal ValorLiquidado { get; set; }
         public byte EstadoActual { get; set; }
-        public string EstadoActualNombre { get; set; }
+        public string? EstadoActualNombre { get; set; }
         public DateTime FechaLiquidacion { get; set; }
-        public string Motivoanulacion { get; set; }
+        public string? Motivoanulacion { get; set; }
         public DateTime FechaAnulacion { get; set; }
-        public string UsuarioAnulacion { get; set; }
+        public string? UsuarioAnulacion { get; set; }
     }
 
     /// <summary>
@@ -226,7 +226,7 @@ namespace MatrixNext.Data.Modules.CC.DTOs.Produccion
     {
         public int? Periodo { get; set; }
         public long? IdEmpleado { get; set; }
-        public string TipoDescuento { get; set; }
+        public string? TipoDescuento { get; set; }
         public byte? Estado { get; set; }
     }
 

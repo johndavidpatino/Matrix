@@ -18,16 +18,16 @@ namespace MatrixNext.Web.Models.PY
         public long? IdTrabajoRelacionado { get; set; }
 
         /// <summary>Nombre del trabajo cualitativo</summary>
-        public string Nombre { get; set; }
+        public string? Nombre { get; set; }
 
         /// <summary>Descripción del trabajo</summary>
-        public string Descripcion { get; set; }
+        public string? Descripcion { get; set; }
 
         /// <summary>Estado del trabajo: Creado, En Ejecución, Completado, Cancelado</summary>
-        public string Estado { get; set; } = "Creado";
+        public string? Estado { get; set; } = "Creado";
 
         /// <summary>JobBook o código interno del trabajo</summary>
-        public string JobBook { get; set; }
+        public string? JobBook { get; set; }
 
         /// <summary>FK a usuario coordinador asignado</summary>
         public long? IdCoordinador { get; set; }
@@ -42,23 +42,20 @@ namespace MatrixNext.Web.Models.PY
         public decimal? PresupuestoEstimado { get; set; }
 
         /// <summary>Tipo de estudio cualitativo: Focus Group, Entrevista In-Depth, IDH, etc.</summary>
-        public string TipoEstudio { get; set; }
+        public string? TipoEstudio { get; set; }
 
         /// <summary>Número de participantes esperados</summary>
         public int? NumeroParticipantesEstimado { get; set; }
 
         /// <summary>Ciudad o zona geográfica</summary>
-        public string Ubicacion { get; set; }
+        public string? Ubicacion { get; set; }
 
         /// <summary>Notas adicionales del trabajo</summary>
-        public string Notas { get; set; }
-
-        /// <summary>Indica si el trabajo está activo o no</summary>
-        public bool Activo { get; set; } = true;
+        public string? Notas { get; set; }
 
         // Navegación
         /// <summary>Proyecto al que pertenece el trabajo</summary>
-        public virtual Proyecto Proyecto { get; set; }
+        public virtual Proyecto? Proyecto { get; set; }
 
         /// <summary>Segmentos definidos para este trabajo cualitativo</summary>
         public virtual ICollection<SegmentosCuali> Segmentos { get; set; } = new List<SegmentosCuali>();

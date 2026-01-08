@@ -15,7 +15,7 @@ namespace MatrixNext.Web.Services.PY
         Task<List<SegmentosCuali>> ObtenerPorTrabajoAsync(long idTrabajoCuali);
 
         /// <summary>Obtiene un segmento por ID</summary>
-        Task<SegmentosCuali> ObtenerPorIdAsync(long id);
+        Task<SegmentosCuali?> ObtenerPorIdAsync(long id);
 
         /// <summary>Crea un nuevo segmento</summary>
         Task<ResultVM<long>> CrearAsync(SegmentosCuali segmento, long idUsuario);

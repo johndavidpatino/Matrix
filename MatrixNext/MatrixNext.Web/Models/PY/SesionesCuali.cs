@@ -18,10 +18,10 @@ namespace MatrixNext.Web.Models.PY
         public long? IdSegmento { get; set; }
 
         /// <summary>Nombre o descripción de la sesión</summary>
-        public string Nombre { get; set; }
+        public string? Nombre { get; set; }
 
         /// <summary>Tipo de sesión: Focus Group, Entrevista In-Depth, IDH, Grupo de Discusión</summary>
-        public string Tipo { get; set; }
+        public string? Tipo { get; set; }
 
         /// <summary>Fecha programada de la sesión</summary>
         public DateTime FechaProgramada { get; set; }
@@ -30,10 +30,10 @@ namespace MatrixNext.Web.Models.PY
         public DateTime? FechaEjecucion { get; set; }
 
         /// <summary>Hora de inicio programada (formato HH:mm)</summary>
-        public string HoraInicio { get; set; }
+        public string? HoraInicio { get; set; }
 
         /// <summary>Hora de fin programada (formato HH:mm)</summary>
-        public string HoraFin { get; set; }
+        public string? HoraFin { get; set; }
 
         /// <summary>Duración estimada en minutos</summary>
         public int? DuracionEstimada { get; set; }
@@ -42,10 +42,10 @@ namespace MatrixNext.Web.Models.PY
         public int? DuracionReal { get; set; }
 
         /// <summary>Ubicación física de la sesión (dirección, sala, etc.)</summary>
-        public string Ubicacion { get; set; }
+        public string? Ubicacion { get; set; }
 
         /// <summary>Moderador o facilitador de la sesión</summary>
-        public string Moderador { get; set; }
+        public string? Moderador { get; set; }
 
         /// <summary>Número de participantes planeados</summary>
         public int? NumeroParticipantesPlaneado { get; set; }
@@ -54,26 +54,23 @@ namespace MatrixNext.Web.Models.PY
         public int? NumeroParticipantesReal { get; set; }
 
         /// <summary>Estado: Planeada, Ejecutada, Cancelada, Reprogramada</summary>
-        public string Estado { get; set; } = "Planeada";
+        public string? Estado { get; set; } = "Planeada";
 
         /// <summary>Observaciones sobre la ejecución de la sesión</summary>
-        public string Observaciones { get; set; }
+        public string? Observaciones { get; set; }
 
         /// <summary>URL o ruta del archivo de grabación (audio/video)</summary>
-        public string UrlGrabacion { get; set; }
+        public string? UrlGrabacion { get; set; }
 
         /// <summary>Notas adicionales</summary>
-        public string Notas { get; set; }
-
-        /// <summary>Indica si la sesión está activa</summary>
-        public bool Activo { get; set; } = true;
+        public string? Notas { get; set; }
 
         // Navegación
         /// <summary>Trabajo cualitativo al que pertenece la sesión</summary>
-        public virtual TrabajosCuali TrabajoCuali { get; set; }
+        public virtual TrabajosCuali? TrabajoCuali { get; set; }
 
         /// <summary>Segmento específico de la sesión (si aplica)</summary>
-        public virtual SegmentosCuali Segmento { get; set; }
+        public virtual SegmentosCuali? Segmento { get; set; }
 
         /// <summary>Participantes en esta sesión</summary>
         public virtual ICollection<ParticipantesSesion> Participantes { get; set; } = new List<ParticipantesSesion>();

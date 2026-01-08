@@ -17,7 +17,7 @@ namespace MatrixNext.Web.Models.PY
         public long IdMuestra { get; set; }
 
         /// <summary>Asistencia: Asistió, No Asistió, Canceló, Reprogramó</summary>
-        public string Asistencia { get; set; }
+        public string? Asistencia { get; set; }
 
         /// <summary>Hora de llegada real</summary>
         public DateTime? HoraLlegada { get; set; }
@@ -26,22 +26,19 @@ namespace MatrixNext.Web.Models.PY
         public DateTime? HoraSalida { get; set; }
 
         /// <summary>Observaciones sobre el participante durante la sesión</summary>
-        public string Observaciones { get; set; }
+        public string? Observaciones { get; set; }
 
         /// <summary>Calidad de respuestas del participante: Excelente, Buena, Regular, Pobre</summary>
-        public string CalidadRespuestas { get; set; }
+        public string? CalidadRespuestas { get; set; }
 
         /// <summary>Motivo si no asistió</summary>
-        public string MotivoInasistencia { get; set; }
-
-        /// <summary>Indica si está activo el registro</summary>
-        public bool Activo { get; set; } = true;
+        public string? MotivoInasistencia { get; set; }
 
         // Navegación
         /// <summary>Sesión en la que participó</summary>
-        public virtual SesionesCuali Sesion { get; set; }
+        public virtual SesionesCuali? Sesion { get; set; }
 
         /// <summary>Muestra/Participante</summary>
-        public virtual MuestrasCuali Muestra { get; set; }
+        public virtual MuestrasCuali? Muestra { get; set; }
     }
 }

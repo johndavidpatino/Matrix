@@ -107,8 +107,8 @@ namespace MatrixNext.Web.Services.PY
                     .Where(t => t.Proyecto?.IdGerenteProyectos > 0)
                     .GroupBy(t => new
                     {
-                        IdGerente = t.Proyecto!.IdGerenteProyectos,
-                        NombreGerente = $"Gerente {t.Proyecto.IdGerenteProyectos}"
+                        IdGerente = t.Proyecto!.IdGerenteProyectos!.Value,
+                        NombreGerente = $"Gerente {t.Proyecto.IdGerenteProyectos?.ToString() ?? "?"}"
                     })
                     .Select(g => new TrabajosPorGerenteDTO
                     {

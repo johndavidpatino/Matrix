@@ -1,6 +1,8 @@
 using Dapper;
 using MatrixNext.Data.Modules.CC.DTOs.ProcesosInternos;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 namespace MatrixNext.Data.Modules.CC.Adapters
 {
@@ -40,16 +42,21 @@ namespace MatrixNext.Data.Modules.CC.Adapters
             if (filtros.Estado.HasValue)
                 parameters.Add("@Estado", filtros.Estado.Value);
 
-            var result = await _dbConnection.QueryAsync<ReporteConteoDto>(
+            IEnumerable<ReporteConteoDto>? result = await _dbConnection.QueryAsync<ReporteConteoDto>(
                 sql, parameters, commandType: CommandType.StoredProcedure);
-            
+
+            if (result is null)
+            {
+                return Enumerable.Empty<ReporteConteoDto>();
+            }
+
             return result;
         }
 
         /// <summary>
         /// Obtiene totales agregados de conteos
         /// </summary>
-        public async Task<dynamic> ObtenerTotalesConteosAsync(
+        public async Task<dynamic?> ObtenerTotalesConteosAsync(
             DateTime? fechaInicio = null, DateTime? fechaFin = null)
         {
             const string sql = "CC_TotalesConteoTrabajos";
@@ -60,7 +67,7 @@ namespace MatrixNext.Data.Modules.CC.Adapters
             if (fechaFin.HasValue)
                 parameters.Add("@FechaFin", fechaFin.Value);
 
-            var result = await _dbConnection.QueryFirstOrDefaultAsync<dynamic>(
+            var result = await _dbConnection.QueryFirstOrDefaultAsync<dynamic?>(
                 sql, parameters, commandType: CommandType.StoredProcedure);
             
             return result;
@@ -90,10 +97,10 @@ namespace MatrixNext.Data.Modules.CC.Adapters
             if (!string.IsNullOrWhiteSpace(filtros.CodigoActividad))
                 parameters.Add("@CodigoActividad", filtros.CodigoActividad);
 
-            var result = await _dbConnection.QueryAsync<ResumenProductividadDto>(
+            IEnumerable<ResumenProductividadDto>? result = await _dbConnection.QueryAsync<ResumenProductividadDto>(
                 sql, parameters, commandType: CommandType.StoredProcedure);
             
-            return result;
+            return (result ?? Enumerable.Empty<ResumenProductividadDto>())!;
         }
 
         /// <summary>

@@ -363,10 +363,13 @@ namespace MatrixNext.Data.Modules.CC.Services
         {
             try
             {
-                _logger.LogInformation($"Obtener descuentos SS: período={filtros?.Periodo}");
+                if (filtros == null)
+                    throw new ArgumentNullException(nameof(filtros));
+
+                _logger.LogInformation($"Obtener descuentos SS: período={filtros.Periodo}");
 
                 var resultado = await _adapter.ObtenerDescuentosSsAsync(
-                    filtros?.Periodo, filtros?.IdEmpleado, filtros?.TipoDescuento, filtros?.Estado);
+                    filtros.Periodo, filtros.IdEmpleado, filtros.TipoDescuento, filtros.Estado);
 
                 _logger.LogInformation($"Se obtuvieron {resultado.Count} descuentos");
                 return resultado;

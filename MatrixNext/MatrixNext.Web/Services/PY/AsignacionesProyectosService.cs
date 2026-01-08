@@ -67,7 +67,8 @@ namespace MatrixNext.Web.Services.PY
 
                 if (!string.IsNullOrWhiteSpace(filtroNombre))
                 {
-                    query = query.Where(p => p.Nombre.Contains(filtroNombre) || p.JobBook.Contains(filtroNombre));
+                    query = query.Where(p => (p.Nombre != null && p.Nombre.Contains(filtroNombre)) ||
+                                             (p.JobBook != null && p.JobBook.Contains(filtroNombre)));
                 }
 
                 var proyectos = await query

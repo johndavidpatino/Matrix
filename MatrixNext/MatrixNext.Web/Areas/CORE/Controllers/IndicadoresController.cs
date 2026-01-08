@@ -65,9 +65,9 @@ namespace MatrixNext.Web.Areas.CORE.Controllers
 
                 var hojas = new Dictionary<string, object>
                 {
-                    { "Resumen General", new List<object> { resumenResult.Data } },
-                    { "Por Gerente", porGerenteResult.Data as object ?? new List<object>() },
-                    { "Por Tipo Hilo", porTipoHiloResult.Data as object ?? new List<object>() }
+                    { "Resumen General", new List<object?> { resumenResult.Data } },
+                    { "Por Gerente", porGerenteResult.Data as object ?? new List<object?>() },
+                    { "Por Tipo Hilo", porTipoHiloResult.Data as object ?? new List<object?>() }
                 };
 
                 var excelBytes = await _exportService.ExportarExcelMultiHojasAsync(

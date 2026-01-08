@@ -48,7 +48,7 @@ namespace MatrixNext.Web.Services.PY
                 .ToListAsync();
         }
 
-        public async Task<EntrevistadorasCuali> ObtenerPorIdAsync(long id)
+        public async Task<EntrevistadorasCuali?> ObtenerPorIdAsync(long id)
         {
             return await _context.EntrevistadorasCuali
                 .Include(e => e.Muestras)

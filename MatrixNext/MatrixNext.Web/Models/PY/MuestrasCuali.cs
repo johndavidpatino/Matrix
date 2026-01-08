@@ -21,34 +21,34 @@ namespace MatrixNext.Web.Models.PY
         public long? IdSesion { get; set; }
 
         /// <summary>Número de muestra único (secuencial o aleatorio)</summary>
-        public string NumeroMuestra { get; set; }
+        public string? NumeroMuestra { get; set; }
 
         /// <summary>Nombre completo del participante</summary>
-        public string NombreParticipante { get; set; }
+        public string? NombreParticipante { get; set; }
 
         /// <summary>Teléfono de contacto</summary>
-        public string Telefono { get; set; }
+        public string? Telefono { get; set; }
 
         /// <summary>Correo electrónico de contacto</summary>
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         /// <summary>Dirección del participante</summary>
-        public string Direccion { get; set; }
+        public string? Direccion { get; set; }
 
         /// <summary>Edad del participante</summary>
         public int? Edad { get; set; }
 
         /// <summary>Género: Masculino, Femenino, Otro</summary>
-        public string Genero { get; set; }
+        public string? Genero { get; set; }
 
         /// <summary>Estrato socioeconómico: 1-6</summary>
         public int? Estrato { get; set; }
 
         /// <summary>Ocupación o profesión</summary>
-        public string Ocupacion { get; set; }
+        public string? Ocupacion { get; set; }
 
         /// <summary>Estado de la muestra: Planeada, Contactada, Confirmada, Entrevistada, No Disponible, Rechazada</summary>
-        public string Estado { get; set; } = "Planeada";
+        public string? Estado { get; set; } = "Planeada";
 
         /// <summary>Fecha de primer contacto</summary>
         public DateTime? FechaContacto { get; set; }
@@ -60,29 +60,26 @@ namespace MatrixNext.Web.Models.PY
         public int? DuracionEntrevista { get; set; }
 
         /// <summary>Calidad de la entrevista: Excelente, Buena, Regular, Deficiente</summary>
-        public string CalidadDatos { get; set; }
+        public string? CalidadDatos { get; set; }
 
         /// <summary>Motivo si fue rechazada o no disponible</summary>
-        public string MotivoRechazo { get; set; }
+        public string? MotivoRechazo { get; set; }
 
         /// <summary>Notas adicionales sobre la muestra</summary>
-        public string Notas { get; set; }
-
-        /// <summary>Indica si la muestra está activa</summary>
-        public bool Activo { get; set; } = true;
+        public string? Notas { get; set; }
 
         // Navegación
         /// <summary>Trabajo cualitativo al que pertenece la muestra</summary>
-        public virtual TrabajosCuali TrabajoCuali { get; set; }
+        public virtual TrabajosCuali? TrabajoCuali { get; set; }
 
         /// <summary>Segmento al que pertenece la muestra</summary>
-        public virtual SegmentosCuali Segmento { get; set; }
+        public virtual SegmentosCuali? Segmento { get; set; }
 
         /// <summary>Sesión en la que se tomó la muestra</summary>
-        public virtual SesionesCuali Sesion { get; set; }
+        public virtual SesionesCuali? Sesion { get; set; }
 
         /// <summary>Entrevistador que realizó la entrevista</summary>
-        public virtual EntrevistadorasCuali Entrevistador { get; set; }
+        public virtual EntrevistadorasCuali? Entrevistador { get; set; }
         public long? IdEntrevistador { get; set; }
     }
 }

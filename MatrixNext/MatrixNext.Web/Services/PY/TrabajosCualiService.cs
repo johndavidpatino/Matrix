@@ -35,7 +35,7 @@ namespace MatrixNext.Web.Services.PY
                 .ToListAsync();
         }
 
-        public async Task<TrabajosCuali> ObtenerPorIdAsync(long id)
+        public async Task<TrabajosCuali?> ObtenerPorIdAsync(long id)
         {
             return await _context.TrabajosCuali
                 .Include(t => t.Segmentos)
@@ -162,7 +162,7 @@ namespace MatrixNext.Web.Services.PY
             }
         }
 
-        public async Task<ResultVM<bool>> CambiarEstadoAsync(long idTrabajo, string nuevoEstado, long idUsuario, string observacion = null)
+        public async Task<ResultVM<bool>> CambiarEstadoAsync(long idTrabajo, string nuevoEstado, long idUsuario, string? observacion = null)
         {
             try
             {

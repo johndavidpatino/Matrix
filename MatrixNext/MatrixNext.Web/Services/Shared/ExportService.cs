@@ -284,6 +284,7 @@ namespace MatrixNext.Web.Services.Shared
 
                             // Datos
                             var lista = datos as System.Collections.IEnumerable;
+                            if (lista == null) continue;
                             foreach (var item in lista)
                             {
                                 for (int i = 0; i < propiedades.Length; i++)

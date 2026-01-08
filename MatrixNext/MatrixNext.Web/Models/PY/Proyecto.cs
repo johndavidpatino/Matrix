@@ -11,7 +11,7 @@ namespace MatrixNext.Web.Models.PY
         
         public string? Descripcion { get; set; }
         
-        public long IdGerenteProyectos { get; set; }
+        public long? IdGerenteProyectos { get; set; }
         
         public long IdUnidad { get; set; }
         

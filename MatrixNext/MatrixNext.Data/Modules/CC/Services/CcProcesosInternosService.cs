@@ -14,7 +14,7 @@ namespace MatrixNext.Data.Modules.CC.Services
         Task<IEnumerable<ReporteConteoDto>> ObtenerReporteConteosAsync(
             FiltrosReporteConteoDto filtros);
         
-        Task<dynamic> ObtenerTotalesConteosAsync(
+        Task<dynamic?> ObtenerTotalesConteosAsync(
             DateTime? fechaInicio = null, DateTime? fechaFin = null);
         
         Task<byte[]> ExportarReporteConteosExcelAsync(
@@ -96,7 +96,7 @@ namespace MatrixNext.Data.Modules.CC.Services
             return conteos;
         }
 
-        public async Task<dynamic> ObtenerTotalesConteosAsync(
+        public async Task<dynamic?> ObtenerTotalesConteosAsync(
             DateTime? fechaInicio = null, DateTime? fechaFin = null)
         {
             var totales = await _adapter.ObtenerTotalesConteosAsync(fechaInicio, fechaFin);

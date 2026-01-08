@@ -109,7 +109,7 @@ namespace MatrixNext.Data.Modules.CC.Adapters
         /// Obtiene descuentos de seguridad social con filtros opcionales
         /// </summary>
         public async Task<List<CargueDescuentoSSDto>> ObtenerDescuentosSsAsync(
-            int? periodo, long? idEmpleado, string tipoDescuento, byte? estado)
+            int? periodo, long? idEmpleado, string? tipoDescuento, byte? estado)
         {
             var parameters = new DynamicParameters();
 

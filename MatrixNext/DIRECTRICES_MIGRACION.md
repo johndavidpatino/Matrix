@@ -59,7 +59,7 @@ connection.Query("GetAusencia", ...) // Debería ser TH_AUSENCIA_GET
 
 ### REGLA 2: Analizar y Reutilizar Procedimientos Almacenados en CoreProject
 
-**Descripción**: Antes de crear cualquier funcionalidad, investigar si ya existe un stored procedure en CoreProject (WebMatrix legacy) que ejecute esa lógica.
+**Descripción**: Antes de crear cualquier funcionalidad, investigar si ya existe un stored procedure o función  en CoreProject (WebMatrix legacy) que ejecute esa lógica para migrarlo.
 
 **Aplicación**:
 1. Mapear todos los SP existentes del módulo
@@ -1552,7 +1552,7 @@ public async Task<IActionResult> Index()
 | # | Regla | Prioridad | Aplicable |
 |---|-------|-----------|-----------|
 | 1 | Respetar nombres BD | 🔴 CRÍTICA | Siempre |
-| 2 | Analizar SP en CoreProject | 🔴 CRÍTICA | Siempre |
+| 2 | Analizar SP y tablas en CoreProject | 🔴 CRÍTICA | Siempre |
 | 3 | Usar EF para CRUD simple | 🟠 ALTA | Siempre |
 | 4 | Ejecutar SP de WebMatrix | 🔴 CRÍTICA | Siempre |
 | 5 | Preferir modales | 🟠 ALTA | UI |

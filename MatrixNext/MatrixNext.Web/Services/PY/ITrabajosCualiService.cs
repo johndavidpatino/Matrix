@@ -16,7 +16,7 @@ namespace MatrixNext.Web.Services.PY
         Task<List<TrabajosCuali>> ObtenerPorProyectoAsync(long idProyecto);
 
         /// <summary>Obtiene un trabajo cualitativo por ID</summary>
-        Task<TrabajosCuali> ObtenerPorIdAsync(long id);
+        Task<TrabajosCuali?> ObtenerPorIdAsync(long id);
 
         /// <summary>Obtiene trabajos cualitativos filtrados por estado</summary>
         Task<List<TrabajosCuali>> ObtenerPorEstadoAsync(string estado);
@@ -31,7 +31,7 @@ namespace MatrixNext.Web.Services.PY
         Task<ResultVM<bool>> ActualizarAsync(TrabajosCuali trabajo, long idUsuario);
 
         /// <summary>Cambia el estado de un trabajo cualitativo</summary>
-        Task<ResultVM<bool>> CambiarEstadoAsync(long idTrabajo, string nuevoEstado, long idUsuario, string observacion = null);
+        Task<ResultVM<bool>> CambiarEstadoAsync(long idTrabajo, string nuevoEstado, long idUsuario, string? observacion = null);
 
         /// <summary>Elimina (soft delete) un trabajo cualitativo</summary>
         Task<ResultVM<bool>> EliminarAsync(long idTrabajo, long idUsuario);
