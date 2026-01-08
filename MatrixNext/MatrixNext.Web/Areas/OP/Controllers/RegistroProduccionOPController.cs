@@ -69,20 +69,25 @@ namespace MatrixNext.Web.Areas.OP.Controllers
         /// <param name="unidadId">ID de la unidad</param>
         /// <returns>JSON con lista de actividades</returns>
         [HttpGet("ObtenerActividades")]
-        public async Task<IActionResult> ObtenerActividades(int unidadId)
+        public async Task<IActionResult> ObtenerActividades(int unidadId = 0)
         {
             try
             {
+                // Si no se proporciona unidadId, retornar unidades
                 if (unidadId <= 0)
-                    return Json(new { success = false, data = new List<CatalogoItemDto>() });
+                {
+                    var unidades = await _registroService.ObtenerUnidadesAsync();
+                    return Json(unidades);
+                }
 
+                // Si se proporciona unidadId, retornar actividades
                 var actividades = await _registroService.ObtenerActividadesAsync(unidadId);
-                return Json(new { success = true, data = actividades });
+                return Json(actividades);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error obteniendo actividades para unidad {UnidadId}", unidadId);
-                return Json(new { success = false, data = new List<CatalogoItemDto>() });
+                _logger.LogError(ex, "Error en ObtenerActividades: unidadId={UnidadId}", unidadId);
+                return Json(new List<CatalogoItemDto>());
             }
         }
 
@@ -97,15 +102,15 @@ namespace MatrixNext.Web.Areas.OP.Controllers
             try
             {
                 if (actividadId <= 0)
-                    return Json(new { success = false, data = new List<CatalogoItemDto>() });
+                    return Json(new List<CatalogoItemDto>());
 
                 var subactividades = await _registroService.ObtenerSubactividadesAsync(actividadId);
-                return Json(new { success = true, data = subactividades });
+                return Json(subactividades);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obteniendo subactividades para actividad {ActividadId}", actividadId);
-                return Json(new { success = false, data = new List<CatalogoItemDto>() });
+                return Json(new List<CatalogoItemDto>());
             }
         }
 
@@ -121,15 +126,15 @@ namespace MatrixNext.Web.Areas.OP.Controllers
             try
             {
                 if (string.IsNullOrWhiteSpace(criterio))
-                    return Json(new { success = false, data = new List<JobBookDto>() });
+                    return Json(new List<JobBookDto>());
 
                 var jobBooks = await _registroService.BuscarJobBooksAsync(criterio.Trim(), tipo);
-                return Json(new { success = true, data = jobBooks });
+                return Json(jobBooks);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error buscando JobBooks con criterio {Criterio}", criterio);
-                return Json(new { success = false, data = new List<JobBookDto>() });
+                return Json(new List<JobBookDto>());
             }
         }
 
@@ -167,13 +172,13 @@ namespace MatrixNext.Web.Areas.OP.Controllers
                 { 
                     success = true, 
                     message = "Actividad registrada exitosamente",
-                    idRegistro = idRegistro
+                    id = idRegistro
                 });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error guardando registro de producción");
-                return Json(new { success = false, message = "Error al guardar el registro" });
+                return Json(new { success = false, message = "Error al guardar el registro: " + ex.Message });
             }
         }
 
@@ -188,15 +193,18 @@ namespace MatrixNext.Web.Areas.OP.Controllers
             {
                 var usuarioId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
                 
-                // TODO: Implementar obtención de registros del usuario
+                // TODO: Implementar obtención de registros del usuario desde BD
                 // SELECT * FROM OP_RegistroProduccion WHERE UsuarioRegistro=@UsuarioId ORDER BY FechaRegistro DESC
+                // Por ahora retornar lista vacía
+                var registros = new List<RegistroProduccionDto>();
 
-                return Json(new { success = true, data = new List<RegistroProduccionDto>() });
+                _logger.LogInformation("Usuario {UsuarioId} consultó sus registros", usuarioId);
+                return Json(registros);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obteniendo mis registros");
-                return Json(new { success = false, message = "Error al obtener registros" });
+                return Json(new List<RegistroProduccionDto>());
             }
         }
     }
