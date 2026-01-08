@@ -220,7 +220,7 @@ public class OpTraficoServiceTests
     #region Movement Distribution Tests
 
     [Fact]
-    public async Task ObtenerResumenAsync_VerifyMovementDistribution_SumEquals Total()
+    public async Task ObtenerResumenAsync_VerifyMovementDistribution_SumEqualsTotal()
     {
         // Arrange
         var trabajoId = 1;
@@ -308,17 +308,4 @@ public class OpTraficoServiceTests
     }
 
     #endregion
-}
-
-/// <summary>
-/// Mock models for testing
-/// </summary>
-public class OpTraficoSummary
-{
-    public long TotalMovimientos { get; set; }
-    public long MovimientosRecibidos { get; set; }
-    public long MovimientosEnProceso { get; set; }
-    public long MovimientosRechazados { get; set; }
-    public decimal TasaRechazos { get; set; }
-    public DateTime FechaActualizacion { get; set; }
 }
