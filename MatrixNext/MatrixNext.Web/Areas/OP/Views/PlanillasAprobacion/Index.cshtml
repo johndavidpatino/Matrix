@@ -120,7 +120,35 @@
                 </div>
             </div>
 
-            <div class="card border-warning">
+            @if (Model.ProductividadDetalle.Any())
+            {
+                <div class="card mb-3">
+                    <div class="card-header">Detalle productividad</div>
+                    <div class="card-body p-0">
+                        <table class="table table-sm mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Trabajo</th>
+                                    <th>Rol</th>
+                                    <th>Cantidad</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var row in Model.ProductividadDetalle)
+                                {
+                                    <tr>
+                                        <td>@row.Trabajo</td>
+                                        <td>@row.Rol</td>
+                                        <td>@row.Cantidad</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+
+            <div class="card border-warning mb-3">
                 <div class="card-header">Control IPS</div>
                 <div class="card-body">
                     <p class="mb-1">Pendientes: <strong>@Model.Ips.Pendientes</strong></p>
@@ -129,6 +157,34 @@
                     <p class="small text-muted">@Model.Ips.Comentario</p>
                 </div>
             </div>
+
+            @if (Model.IpsDetalle.Any())
+            {
+                <div class="card">
+                    <div class="card-header">IPS recientes</div>
+                    <div class="card-body p-0">
+                        <table class="table table-sm mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Trabajo</th>
+                                    <th>Pregunta</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var ips in Model.IpsDetalle)
+                                {
+                                    <tr>
+                                        <td>@ips.Trabajo</td>
+                                        <td>@ips.Pregunta</td>
+                                        <td>@ips.Estado</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
         </div>
     </div>
 </section>

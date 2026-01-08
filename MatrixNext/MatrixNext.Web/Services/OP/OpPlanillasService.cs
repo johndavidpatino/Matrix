@@ -5,6 +5,7 @@ using MatrixNext.Web.ViewModels.OP;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
+
 namespace MatrixNext.Web.Services.OP;
 
 public class OpPlanillasService : IOpPlanillasService
@@ -91,6 +92,31 @@ public class OpPlanillasService : IOpPlanillasService
 
         var totalIps = await connection.ExecuteScalarAsync<int>("SELECT COUNT(*) FROM OP_IPS_Revision");
         var pendientesIps = await connection.ExecuteScalarAsync<int>("SELECT COUNT(*) FROM OP_IPS_Revision WHERE Estado = 0");
+        var ipsDetalle = (await connection.QueryAsync<IpsRevisionDto>(
+            "OP_IPS_Revision_Get",
+            new { ID = (long?)null, TrabajoID = (long?)null },
+            commandType: CommandType.StoredProcedure)).Take(5).Select(x => new IpsRowViewModel
+            {
+                Trabajo = x.JobBook ?? $"Trabajo {x.TrabajoId}",
+                Pregunta = x.Pregunta,
+                Observacion = x.Observacion,
+                Estado = x.Estado.ToString(),
+                FechaHoraObservacion = x.FechaHoraObservacion ?? DateTime.UtcNow
+            }).ToList();
+
+        var productividadDetalle = (await connection.QueryAsync<ProductividadDto>(
+            "OP_CuantiProduccionProductividadTrabajos_GET",
+            new { Revisado = (long?)null, PMO = (long?)null, Fini = (DateTime?)null, Ffin = (DateTime?)null, TrabajoId = (long?)null },
+            commandType: CommandType.StoredProcedure))
+            .Take(5)
+            .Select(x => new ProductivityRowViewModel
+            {
+                Trabajo = x.NombreTrabajo,
+                Rol = x.CargoMatrix ?? x.Cargo.ToString(),
+                Cantidad = x.Cantidad,
+                Fecha = x.FechaEjecucion
+            })
+            .ToList();
         var ipsSummary = new IpsSummaryViewModel
         {
             Pendientes = pendientesIps,
@@ -113,7 +139,9 @@ public class OpPlanillasService : IOpPlanillasService
                 TotalPendientes = pendientes,
                 Nota = "Basado en OP_CuantiPlanillas_GET"
             },
-            Ips = ipsSummary
+            Ips = ipsSummary,
+            IpsDetalle = ipsDetalle,
+            ProductividadDetalle = productividadDetalle
         };
     }
 
@@ -169,16 +197,35 @@ public class OpPlanillasService : IOpPlanillasService
         return result > 0;
     }
 
-    private sealed class PlanillaDto
-    {
-        public long TrabajoId { get; init; }
-        public string NombreTrabajo { get; init; } = string.Empty;
-        public string? NombrePersona { get; init; }
-        public string? PMO { get; init; }
-        public string? UsuarioCarga { get; init; }
-        public bool Revisado { get; init; }
-        public DateTime? FechaCarga { get; init; }
-        public int Cantidad { get; init; }
-        public string? TipoActividadDescripcion { get; init; }
-    }
+        private sealed class PlanillaDto
+        {
+            public long TrabajoId { get; init; }
+            public string NombreTrabajo { get; init; } = string.Empty;
+            public string? NombrePersona { get; init; }
+            public string? PMO { get; init; }
+            public string? UsuarioCarga { get; init; }
+            public bool Revisado { get; init; }
+            public DateTime? FechaCarga { get; init; }
+            public int Cantidad { get; init; }
+            public string? TipoActividadDescripcion { get; init; }
+        }
+
+        private sealed class IpsRevisionDto
+        {
+            public long TrabajoId { get; init; }
+            public string? JobBook { get; init; }
+            public string Pregunta { get; init; } = string.Empty;
+            public string Observacion { get; init; } = string.Empty;
+            public int Estado { get; init; }
+            public DateTime? FechaHoraObservacion { get; init; }
+        }
+
+        private sealed class ProductividadDto
+        {
+            public string NombreTrabajo { get; init; } = string.Empty;
+            public string? CargoMatrix { get; init; }
+            public int Cantidad { get; init; }
+            public DateTime FechaEjecucion { get; init; }
+            public int Cargo { get; init; }
+        }
 }

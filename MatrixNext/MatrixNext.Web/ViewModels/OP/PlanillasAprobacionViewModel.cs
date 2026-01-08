@@ -11,6 +11,10 @@ public sealed class PlanillasAprobacionViewModel
     public ProductivitySummaryViewModel Productivity { get; init; } = new();
 
     public IpsSummaryViewModel Ips { get; init; } = new();
+
+    public IReadOnlyList<ProductivityRowViewModel> ProductividadDetalle { get; init; } = Array.Empty<ProductivityRowViewModel>();
+
+    public IReadOnlyList<IpsRowViewModel> IpsDetalle { get; init; } = Array.Empty<IpsRowViewModel>();
 }
 
 public sealed class PlanillaStatusViewModel
@@ -48,4 +52,21 @@ public sealed class IpsSummaryViewModel
     public int Atendidas { get; init; }
     public string UltimaActualizacion { get; init; } = string.Empty;
     public string Comentario { get; init; } = string.Empty;
+}
+
+public sealed class ProductivityRowViewModel
+{
+    public string Trabajo { get; init; } = string.Empty;
+    public string Rol { get; init; } = string.Empty;
+    public int Cantidad { get; init; }
+    public DateTime Fecha { get; init; }
+}
+
+public sealed class IpsRowViewModel
+{
+    public string Trabajo { get; init; } = string.Empty;
+    public string Pregunta { get; init; } = string.Empty;
+    public string Observacion { get; init; } = string.Empty;
+    public string Estado { get; init; } = string.Empty;
+    public DateTime FechaHoraObservacion { get; init; }
 }

@@ -6,13 +6,13 @@
 
 | Área | Alcance | Dependencias Core | Resultado esperado |
 |---|---|---|---|
-| Planillas cargadas/revisión/aprobación | Consolidar las 3 WebForms legacy (PlanillasCargadas.aspx, RevisionPlanillas.aspx, PlanillasRevisadas.aspx) en una única vista tabulada `PlanillasAprobacion/Index.cshtml` con estado `Pendiente`, `En revisión`, `Aprobadas` y acciones contextuales (rechazo/aceptación). | `OP_CuantiDapper` (`CuantiPlanillas_*`), `GD`, `EnviarCorreo` | Tab sets con grid reutilizable, operaciones de rechazo/aceptación via Dapper, notificaciones y validación de permisos 100/135. |
+| Planillas cargadas/revisión/aprobación | Consolidar las 3 WebForms legacy (PlanillasCargadas.aspx, RevisionPlanillas.aspx, PlanillasRevisadas.aspx) en una única vista tabulada `PlanillasAprobacion/Index.cshtml` con estado `Pendiente`, `En revisión`, `Aprobadas` y acciones contextuales (rechazo/aceptación). | `OP_CuantiDapper` (`CuantiPlanillas_*`), `GD`, `EnviarCorreo` | Tab sets con grid reutilizable, operaciones de rechazo/aceptación via Dapper, notificaciones y validación de permisos 100/135; acciones invocan `OP_CuantiPlanillas_Update/Remove`. |
 | Productividad por rol | Migrar vistas repetidas `ProductividadRevisada*` y `RevisionProductividad*` a un solo componente con parámetros de rol (PMO, Coordinador, Campo, MyS/Call). | `OP_CuantiDapper` (`CuantiProduccion*`), `TrabajoOPCuanti`, `PermisosService` | Grid role-based con columnas dinámicas, filtros por trabajo/corte 16-15, y acciones de aprobación/rechazo. |
 | IPS y observaciones | Reproducir IPS.aspx grid editable con campos condicionales, exportes ClosedXML y notificaciones email. | `RevisionIPS`, `EjecucionIPS`, `ClosedXML`, `EnviarCorreo` | Vista con editor inline, guardado por tarea y exportación de Observaciones; alertas/queues y evidencia en doc. |
 
 ## Tareas clave (Sprint actual)
 
-1. **Planillas**: diseñar `PlanillasAprobacionController`, crear TabHelper para estados, reutilizar `OpGridComponent` y escribir servicios Dapper/Command para aprobar/rechazar.
+1. **Planillas**: escribir los endpoints `Aprobar`/`Rechazar` en `PlanillasAprobacionController`, reutilizar `OpGridComponent` y mirar `OP_CuantiPlanillas_Update/Remove` para cerrar el ciclo de aprobación.
 2. **Productividad**: implementar `ProductividadController` y `RevisionProductividadController` con parámetros `rol`, `corte`, `trabajoId`; centralizar lógica de validación (corte 16-15, límites por rol) y usar DataGrid shared.
 3. **IPS**: construir `IpsController` + view model, usar `RevisionIPS` y `EjecucionIPS` para persistir observaciones, preparar exportación ClosedXML y notificaciones en `NotificationService`.
 4. **Permisos y notificaciones**: extender middleware para requerir códigos 100/135/157 en la misma vista (directiva Regla Core 1) y reutilizar `NotificationService`/`EmailService` para confirmaciones.
