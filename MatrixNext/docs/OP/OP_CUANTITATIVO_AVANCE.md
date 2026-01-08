@@ -68,6 +68,7 @@ Cada sprint se documentará aquí y en `ANALISIS_OP_CUANTITATIVO.md` para reflej
 
 ## Validacion y seguimiento
 - Planear spiking con OpenXml y posible Blob storage antes de la migracion de cargas masivas (ImportarDatos y Planillas).
+- Registrar cada ejecución del wizard `/OP/ImportacionMasiva`: la interfaz ahora muestra el tracking de SP `CatiRMC_*` (válidas/no válidas/duplicadas/inconsistencias) y el backup en `uploads/op/cargas`, conectando resultados con los criterios del sprint 3.
 - Registrar avances, bloqueos y decisiones en este documento; si se requiere confirmacion se solicitara en espanol (tal como lo solicita la directiva).
 - Cada vez que se cierre un flujo o se habilite un sprint, se anadira una nueva entrada con fecha y responsable.
 

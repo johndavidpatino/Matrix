@@ -115,5 +115,47 @@
                 <div class="small text-muted mt-1">La carga fue procesada contra CoreProject.</div>
             }
         </div>
+
+        @if (Model.Result.Reporte is not null)
+        {
+            <div class="card border-secondary mb-3">
+                <div class="card-header">
+                    Tracking de carga (@Model.Result.Reporte.Tipo)
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <p class="mb-1 small text-muted">Filas validadas</p>
+                            <h5>@Model.Result.Reporte.FilasValidadas</h5>
+                        </div>
+                        <div class="col-md-3">
+                            <p class="mb-1 small text-muted">Válidas</p>
+                            <h5>@Model.Result.Reporte.Validas</h5>
+                        </div>
+                        <div class="col-md-3">
+                            <p class="mb-1 small text-muted">No válidas</p>
+                            <h5>@Model.Result.Reporte.NoValidas</h5>
+                        </div>
+                        <div class="col-md-3">
+                            <p class="mb-1 small text-muted">Duplicadas</p>
+                            <h5>@Model.Result.Reporte.Duplicadas</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <p class="mb-1 small text-muted">Inconsistencias</p>
+                            <h5>@Model.Result.Reporte.Inconsistencias</h5>
+                        </div>
+                        @if (!string.IsNullOrEmpty(Model.Result.Reporte.Comentario))
+                        {
+                            <div class="col-md-9">
+                                <p class="mb-1 small text-muted">Comentario</p>
+                                <p class="mb-0">@Model.Result.Reporte.Comentario</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
     }
 </section>

@@ -125,8 +125,8 @@ public class OpCargaService : IOpCargaService
 
         try
         {
-            var cargaMensaje = await EjecutarCargaAsync(worksheet, tipo, usuarioId, cancellationToken);
-            return new OpCargaResult(true, $"{mensajeBase} {cargaMensaje}", true);
+            var (cargaMensaje, resumen) = await EjecutarCargaAsync(worksheet, tipo, usuarioId, cancellationToken);
+            return new OpCargaResult(true, $"{mensajeBase} {cargaMensaje}", true, resumen);
         }
         catch (Exception ex)
         {
@@ -331,7 +331,7 @@ public class OpCargaService : IOpCargaService
         return DateTime.TryParse(value.ToString(), CultureInfo.InvariantCulture, DateTimeStyles.None, out result);
     }
 
-    private async Task<string> EjecutarCargaAsync(
+    private async Task<(string Mensaje, OpCargaSummary Resumen)> EjecutarCargaAsync(
         DataTable worksheet,
         OpCargaTipo tipo,
         long usuarioId,
@@ -376,7 +376,17 @@ public class OpCargaService : IOpCargaService
 
             await EjecutarSpParametroAsync(connection, "CatiRMC_InsertarDatosEnRespuestas", "@Usuario_Id", usuarioId, cancellationToken);
 
-            return $"Carga CATI ejecutada (válidas: {validas}, no válidas: {noValidas}, duplicadas: {duplicadas}, inconsistencias: {inconsistencias}).";
+            var resumen = new OpCargaSummary(
+                Tipo: OpCargaTipo.CatiRMC,
+                FilasValidadas: worksheet.Rows.Count,
+                Validas: validas,
+                NoValidas: noValidas,
+                Duplicadas: duplicadas,
+                Inconsistencias: inconsistencias,
+                Comentario: $"Usuario {usuarioId}");
+
+            var mensaje = $"Carga CATI ejecutada (válidas: {validas}, no válidas: {noValidas}, duplicadas: {duplicadas}, inconsistencias: {inconsistencias}).";
+            return (mensaje, resumen);
         }
 
         ConfigurePlanillaColumns(worksheet, usuarioId);
@@ -384,7 +394,16 @@ public class OpCargaService : IOpCargaService
         try
         {
             await BulkCopyAsync(worksheet, "OP_CuantiPlanillas", connection, cancellationToken);
-            return "Planillas cargadas en OP_CuantiPlanillas; revisa duplicados en el tablero de planillas.";
+            var resumenPlanilla = new OpCargaSummary(
+                Tipo: OpCargaTipo.Planillas,
+                FilasValidadas: worksheet.Rows.Count,
+                Validas: worksheet.Rows.Count,
+                NoValidas: 0,
+                Duplicadas: 0,
+                Inconsistencias: 0,
+                Comentario: usuarioId > 0 ? $"Usuario {usuarioId}" : null);
+
+            return ("Planillas cargadas en OP_CuantiPlanillas; revisa duplicados en el tablero de planillas.", resumenPlanilla);
         }
         catch (SqlException ex) when (ex.Message.Contains("IX_OP_CuantiPlanillas_Unique_Trabajo_Per_ResFecha"))
         {
