@@ -147,6 +147,10 @@ builder.Services.AddScoped<IOpMuestraService, OpMuestraService>();
 builder.Services.AddScoped<IOpFestivosService, OpFestivosService>();
 builder.Services.AddScoped<IOpGestionDocumentalService, OpGestionDocumentalService>();
 
+// Registrar opciones de configuración
+builder.Services.Configure<GestionDocumentalOptions>(
+    builder.Configuration.GetSection(GestionDocumentalOptions.SectionName));
+
 var app = builder.Build();
 
 // Middleware global de manejo de excepciones

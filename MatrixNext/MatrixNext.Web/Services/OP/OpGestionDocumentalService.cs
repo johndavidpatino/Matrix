@@ -1,8 +1,10 @@
 using Dapper;
 using MatrixNext.Web.Infrastructure.Data;
+using MatrixNext.Web.Options;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,13 +21,16 @@ namespace MatrixNext.Web.Services.OP
     {
         private readonly string? _connectionString;
         private readonly ILogger<OpGestionDocumentalService> _logger;
+        private readonly GestionDocumentalOptions _options;
 
         public OpGestionDocumentalService(
             MatrixDbContext context,
-            ILogger<OpGestionDocumentalService> logger)
+            ILogger<OpGestionDocumentalService> logger,
+            IOptions<GestionDocumentalOptions> options)
         {
             _connectionString = context.Database.GetConnectionString();
             _logger = logger;
+            _options = options.Value;
         }
 
         /// <inheritdoc />
@@ -170,8 +175,39 @@ namespace MatrixNext.Web.Services.OP
                             continue;
                         }
 
-                        // Validar si la ruta existe
-                        var existe = Directory.Exists(ruta);
+                        // Validar si la ruta existe usando System.IO.Directory.Exists
+                        // Esto es efectivo para rutas UNC locales o en red
+                        bool existe = false;
+                        
+                        // Intentar acceso directo a la ruta
+                        try
+                        {
+                            existe = Directory.Exists(ruta);
+                            
+                            // Si existe, intentar listar archivos para confirmar acceso real
+                            if (existe)
+                            {
+                                var files = Directory.EnumerateFileSystemEntries(ruta).Take(1).Count();
+                                existe = true;
+                            }
+                        }
+                        catch (UnauthorizedAccessException)
+                        {
+                            // La ruta existe pero no hay permisos
+                            existe = false;
+                            _logger.LogWarning(
+                                "Acceso denegado a ruta UNC {Ruta}. Verifique credenciales en appsettings.json",
+                                ruta);
+                        }
+                        catch (System.IO.IOException ioEx)
+                        {
+                            // Problema de red o ruta inaccesible
+                            existe = false;
+                            _logger.LogWarning(
+                                "Error de acceso a ruta UNC {Ruta}: {Mensaje}. Verifique conectividad de red",
+                                ruta, ioEx.Message);
+                        }
+
                         resultado[ruta] = existe;
 
                         _logger.LogDebug(
@@ -180,13 +216,48 @@ namespace MatrixNext.Web.Services.OP
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogWarning(ex, "Error al validar ruta UNC {Ruta}", ruta);
+                        _logger.LogWarning(ex, "Error al validar ruta UNC {Ruta}: {Mensaje}", ruta, ex.Message);
                         resultado[ruta] = false;
                     }
                 }
             }, cancellationToken);
 
             return resultado;
+        }
+
+        /// <summary>
+        /// Valida la configuración de rutas UNC al inicializar el servicio.
+        /// Útil para detectar problemas de conectividad tempranamente.
+        /// </summary>
+        /// <remarks>
+        /// Este método se puede llamar durante el startup de la aplicación si
+        /// <see cref="GestionDocumentalOptions.ValidarAccesoInicio"/> es true.
+        /// </remarks>
+        public async Task<bool> ValidarConfiguracionAsync(CancellationToken cancellationToken = default)
+        {
+            if (!_options.ValidarAccesoInicio)
+            {
+                _logger.LogInformation("Validación de rutas UNC en inicio deshabilitada en configuración");
+                return true;
+            }
+
+            _logger.LogInformation("Validando configuración de rutas UNC: {RutaBaseUNC}", _options.RutaBaseUNC);
+
+            var rutas = new List<string> { _options.RutaBaseUNC };
+            var validacion = await ValidarRutasUNCAsync(rutas, cancellationToken);
+
+            if (validacion.TryGetValue(_options.RutaBaseUNC, out var accesible) && accesible)
+            {
+                _logger.LogInformation("Configuración de rutas UNC validada exitosamente");
+                return true;
+            }
+
+            _logger.LogError(
+                "ADVERTENCIA: No se puede acceder a la ruta UNC base {RutaBaseUNC}. " +
+                "Verifique la configuración en appsettings.json: " +
+                "GestionDocumental:RutaBaseUNC, Servidor, Usuario, Contraseña",
+                _options.RutaBaseUNC);
+            return false;
         }
 
         /// <inheritdoc />
