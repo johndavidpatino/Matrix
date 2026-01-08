@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Dapper;
 
 namespace MatrixNext.Web.Services.OP
 {
@@ -17,7 +18,6 @@ namespace MatrixNext.Web.Services.OP
     {
         private readonly MatrixDbContext _context;
         private readonly ILogger<OpRevisionProductividadService> _logger;
-        private const string SP_OP_CuantiDapper = "OP_CuantiDapper_Get";
 
         public OpRevisionProductividadService(
             MatrixDbContext context,
@@ -33,15 +33,44 @@ namespace MatrixNext.Web.Services.OP
             try
             {
                 var planillas = new List<PlanillaProductividadDto>();
+                
+                var connectionString = _context.Database.GetConnectionString();
+                using (var connection = new System.Data.SqlClient.SqlConnection(connectionString))
+                {
+                    // Llamar SP OP_CuantiDapper_Get con filtro por rol
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@IdTrabajo", trabajoId);
+                    parameters.Add("@Rol", rol);
+                    parameters.Add("@Estado", 1); // Solo planillas pendientes (1=Pendiente)
 
-                // TODO: Implementar llamada a SP "OP_CuantiDapper_Get" con rol como parámetro
-                // La lógica varía según el rol:
-                // - PMO: Revisa todas las planillas de producción (TipoActividad 1-20)
-                // - Coordinador: Revisa planillas de su zona (TipoActividad 1-15)
-                // - Campo: Revisa planillas de su ciudad (TipoActividad 1-10)
-                // - MyS/Call: Revisa planillas de CATI/CAWI (TipoActividad 21-23)
+                    // Ejecutar SP y mapear a PlanillaProductividadDto
+                    var result = await connection.QueryAsync<dynamic>(
+                        "OP_CuantiDapper_Get",
+                        parameters,
+                        commandType: System.Data.CommandType.StoredProcedure,
+                        commandTimeout: 30
+                    );
 
-                _logger.LogInformation("Obtenidas planillas para trabajo {TrabajoId} con rol {Rol}", trabajoId, rol);
+                    // Mapear resultados dinámicos a DTO
+                    planillas = result.Select(r => new PlanillaProductividadDto
+                    {
+                        PlanillaId = r.IdPlanilla,
+                        TrabajoId = r.IdTrabajo,
+                        Concepto = r.Concepto ?? "Sin concepto",
+                        Cantidad = r.Cantidad ?? 0,
+                        ValorUnitario = r.ValorUnitario ?? 0m,
+                        MontoTotal = (r.Cantidad ?? 0) * (r.ValorUnitario ?? 0m),
+                        MontoPrevio = r.MontoPrevio ?? 0m,
+                        Estado = r.Estado ?? 1,
+                        UsuarioActualizacion = r.UsuarioActualizacion ?? "Sistema",
+                        FechaActualizacion = r.FechaActualizacion,
+                        Observaciones = r.Observaciones,
+                        TipoActividad = r.TipoActividad ?? 0
+                    }).ToList();
+                }
+
+                _logger.LogInformation("Obtenidas {Count} planillas para trabajo {TrabajoId} con rol {Rol}", 
+                    planillas.Count, trabajoId, rol);
                 return planillas;
             }
             catch (Exception ex)
@@ -56,15 +85,31 @@ namespace MatrixNext.Web.Services.OP
         {
             try
             {
-                // TODO: Implementar actualización de planilla en BD
-                // - Cambiar estado a "Aprobada" (2)
-                // - Registrar monto autorizado
-                // - Registrar usuario y fecha de aprobación
-                // - Llamar SP OP_PlanillaProductividad_Aprobar
+                var connectionString = _context.Database.GetConnectionString();
+                using (var connection = new System.Data.SqlClient.SqlConnection(connectionString))
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@IdPlanilla", planillaId);
+                    parameters.Add("@MontoAutorizado", montoAutorizado);
+                    parameters.Add("@IdUsuario", usuarioId);
+                    parameters.Add("@FechaAprobacion", DateTime.Now);
 
-                _logger.LogInformation("Planilla {PlanillaId} aprobada por usuario {UsuarioId} con monto {Monto}", 
-                    planillaId, usuarioId, montoAutorizado);
-                return true;
+                    // Ejecutar SP OP_PlanillaProductividad_Aprobar
+                    var result = await connection.ExecuteAsync(
+                        "OP_PlanillaProductividad_Aprobar",
+                        parameters,
+                        commandType: System.Data.CommandType.StoredProcedure,
+                        commandTimeout: 30
+                    );
+
+                    var success = result > 0;
+                    if (success)
+                    {
+                        _logger.LogInformation("Planilla {PlanillaId} aprobada por usuario {UsuarioId} con monto {Monto}", 
+                            planillaId, usuarioId, montoAutorizado);
+                    }
+                    return success;
+                }
             }
             catch (Exception ex)
             {
@@ -78,15 +123,31 @@ namespace MatrixNext.Web.Services.OP
         {
             try
             {
-                // TODO: Implementar rechazo de planilla en BD
-                // - Cambiar estado a "Rechazada" (3)
-                // - Registrar observación del rechazo
-                // - Registrar usuario y fecha de rechazo
-                // - Llamar SP OP_PlanillaProductividad_Rechazar
+                var connectionString = _context.Database.GetConnectionString();
+                using (var connection = new System.Data.SqlClient.SqlConnection(connectionString))
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@IdPlanilla", planillaId);
+                    parameters.Add("@Observacion", observacion ?? "");
+                    parameters.Add("@IdUsuario", usuarioId);
+                    parameters.Add("@FechaRechazo", DateTime.Now);
 
-                _logger.LogWarning("Planilla {PlanillaId} rechazada por usuario {UsuarioId}. Observación: {Obs}", 
-                    planillaId, usuarioId, observacion);
-                return true;
+                    // Ejecutar SP OP_PlanillaProductividad_Rechazar
+                    var result = await connection.ExecuteAsync(
+                        "OP_PlanillaProductividad_Rechazar",
+                        parameters,
+                        commandType: System.Data.CommandType.StoredProcedure,
+                        commandTimeout: 30
+                    );
+
+                    var success = result > 0;
+                    if (success)
+                    {
+                        _logger.LogWarning("Planilla {PlanillaId} rechazada por usuario {UsuarioId}. Observación: {Obs}", 
+                            planillaId, usuarioId, observacion);
+                    }
+                    return success;
+                }
             }
             catch (Exception ex)
             {
@@ -100,16 +161,29 @@ namespace MatrixNext.Web.Services.OP
         {
             try
             {
-                // TODO: Obtener máximo autorizado del trabajo desde TrabajoOPCuanti
-                // - Consultar tabla: TrabajoOPCuanti.CCProduccionPST (presupuesto)
-                // - Validar que montoTotal no exceda presupuesto
+                // Obtener máximo autorizado del trabajo
+                var trabajo = await _context.Set<dynamic>()
+                    .FromSqlRaw("SELECT CCProduccionPST as MaximoPresupuesto FROM TrabajoOPCuanti WHERE IdTrabajo = {0}", trabajoId)
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync();
+
+                if (trabajo == null)
+                {
+                    return (false, "No se encontró información del trabajo");
+                }
+
+                decimal maximoPresupuesto = trabajo.MaximoPresupuesto ?? 0m;
 
                 if (montoTotal < 0)
                 {
                     return (false, "El monto no puede ser negativo");
                 }
 
-                // Placeholder: En implementación real, consultar presupuesto
+                if (montoTotal > maximoPresupuesto)
+                {
+                    return (false, $"El monto ({montoTotal:C}) excede el presupuesto máximo ({maximoPresupuesto:C})");
+                }
+
                 return (true, "Validación exitosa");
             }
             catch (Exception ex)

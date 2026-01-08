@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Dapper;
 
 namespace MatrixNext.Web.Services.OP
 {
@@ -31,12 +32,20 @@ namespace MatrixNext.Web.Services.OP
         {
             try
             {
-                // TODO: Consultar tabla de unidades/áreas disponibles
-                // SELECT IdUnidad, NombreUnidad FROM Catalogo_Unidades WHERE Activo=1
-                var unidades = new List<CatalogoItemDto>();
+                var connectionString = _context.Database.GetConnectionString();
+                using (var connection = new System.Data.SqlClient.SqlConnection(connectionString))
+                {
+                    // Obtener unidades desde catálogo
+                    var unidades = await connection.QueryAsync<CatalogoItemDto>(
+                        "SELECT IdUnidad as Id, NombreUnidad as Nombre FROM Catalogo_Unidades WHERE Activo=1 ORDER BY Nombre",
+                        commandType: System.Data.CommandType.Text,
+                        commandTimeout: 30
+                    );
 
-                _logger.LogInformation("Obtenidas {Count} unidades para registro", unidades.Count);
-                return unidades;
+                    var resultado = unidades.ToList();
+                    _logger.LogInformation("Obtenidas {Count} unidades para registro", resultado.Count);
+                    return resultado;
+                }
             }
             catch (Exception ex)
             {
@@ -50,13 +59,24 @@ namespace MatrixNext.Web.Services.OP
         {
             try
             {
-                // TODO: Consultar actividades por unidad (cascada)
-                // SELECT IdActividad, NombreActividad FROM Catalogo_Actividades 
-                // WHERE IdUnidad=@UnidadId AND Activo=1
-                var actividades = new List<CatalogoItemDto>();
+                var connectionString = _context.Database.GetConnectionString();
+                using (var connection = new System.Data.SqlClient.SqlConnection(connectionString))
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@IdUnidad", unidadId);
 
-                _logger.LogInformation("Obtenidas {Count} actividades para unidad {UnidadId}", actividades.Count, unidadId);
-                return actividades;
+                    // Obtener actividades por unidad (cascada)
+                    var actividades = await connection.QueryAsync<CatalogoItemDto>(
+                        "SELECT IdActividad as Id, NombreActividad as Nombre FROM Catalogo_Actividades WHERE IdUnidad=@IdUnidad AND Activo=1 ORDER BY Nombre",
+                        parameters,
+                        commandType: System.Data.CommandType.Text,
+                        commandTimeout: 30
+                    );
+
+                    var resultado = actividades.ToList();
+                    _logger.LogInformation("Obtenidas {Count} actividades para unidad {UnidadId}", resultado.Count, unidadId);
+                    return resultado;
+                }
             }
             catch (Exception ex)
             {
@@ -70,13 +90,24 @@ namespace MatrixNext.Web.Services.OP
         {
             try
             {
-                // TODO: Consultar subactividades por actividad (cascada)
-                // SELECT IdSubactividad, NombreSubactividad FROM Catalogo_Subactividades 
-                // WHERE IdActividad=@ActividadId AND Activo=1
-                var subactividades = new List<CatalogoItemDto>();
+                var connectionString = _context.Database.GetConnectionString();
+                using (var connection = new System.Data.SqlClient.SqlConnection(connectionString))
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@IdActividad", actividadId);
 
-                _logger.LogInformation("Obtenidas {Count} subactividades para actividad {ActividadId}", subactividades.Count, actividadId);
-                return subactividades;
+                    // Obtener subactividades por actividad (cascada)
+                    var subactividades = await connection.QueryAsync<CatalogoItemDto>(
+                        "SELECT IdSubactividad as Id, NombreSubactividad as Nombre FROM Catalogo_Subactividades WHERE IdActividad=@IdActividad AND Activo=1 ORDER BY Nombre",
+                        parameters,
+                        commandType: System.Data.CommandType.Text,
+                        commandTimeout: 30
+                    );
+
+                    var resultado = subactividades.ToList();
+                    _logger.LogInformation("Obtenidas {Count} subactividades para actividad {ActividadId}", resultado.Count, actividadId);
+                    return resultado;
+                }
             }
             catch (Exception ex)
             {
@@ -90,17 +121,38 @@ namespace MatrixNext.Web.Services.OP
         {
             try
             {
-                // TODO: Implementar búsqueda según tipo
-                // Tipos soportados: "JBE" (JobBook Encuesta), "JBI" (JobBook Interno), "CC" (Centro de Costo)
-                // SELECT IdJobBook, NombreJobBook FROM JobBooks WHERE Tipo=@Tipo AND (Codigo LIKE @Criterio OR Nombre LIKE @Criterio)
-
                 if (string.IsNullOrWhiteSpace(criterio))
                     return new List<JobBookDto>();
 
-                var jobBooks = new List<JobBookDto>();
+                var connectionString = _context.Database.GetConnectionString();
+                using (var connection = new System.Data.SqlClient.SqlConnection(connectionString))
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@Criterio", $"%{criterio}%");
+                    parameters.Add("@Tipo", tipo ?? "JBE");
 
-                _logger.LogInformation("Búsqueda de JobBooks: tipo={Tipo}, criterio={Criterio}, resultados={Count}", tipo, criterio, jobBooks.Count);
-                return jobBooks;
+                    // Buscar JobBooks por tipo y criterio
+                    var jobBooks = await connection.QueryAsync<JobBookDto>(
+                        @"SELECT IdJobBook as JobBookId, 
+                                 Codigo, 
+                                 Nombre, 
+                                 Tipo, 
+                                 IdTrabajo as TrabajoId,
+                                 Estado
+                          FROM JobBooks 
+                          WHERE Tipo=@Tipo 
+                          AND (Codigo LIKE @Criterio OR Nombre LIKE @Criterio)
+                          AND Estado = 'Activo'
+                          ORDER BY Codigo",
+                        parameters,
+                        commandType: System.Data.CommandType.Text,
+                        commandTimeout: 30
+                    );
+
+                    var resultado = jobBooks.ToList();
+                    _logger.LogInformation("Búsqueda de JobBooks: tipo={Tipo}, criterio={Criterio}, resultados={Count}", tipo, criterio, resultado.Count);
+                    return resultado;
+                }
             }
             catch (Exception ex)
             {
@@ -114,26 +166,41 @@ namespace MatrixNext.Web.Services.OP
         {
             try
             {
-                // TODO: Validar primero
+                // Validar primero
                 var (valido, mensaje) = await ValidarRegistroAsync(registro);
                 if (!valido)
                     throw new InvalidOperationException($"Registro inválido: {mensaje}");
 
-                // TODO: Insertar en tabla OP_RegistroProduccion
-                // - IdUnidad
-                // - IdActividad
-                // - IdSubactividad
-                // - IdJobBook
-                // - Cantidad
-                // - HoraInicio / HoraFin
-                // - Fecha
-                // - UsuarioRegistro
-                // - FechaRegistro
+                var connectionString = _context.Database.GetConnectionString();
+                using (var connection = new System.Data.SqlClient.SqlConnection(connectionString))
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@IdUnidad", registro.UnidadId);
+                    parameters.Add("@IdActividad", registro.ActividadId);
+                    parameters.Add("@IdSubactividad", registro.SubactividadId);
+                    parameters.Add("@IdJobBook", registro.JobBookId);
+                    parameters.Add("@Cantidad", registro.Cantidad);
+                    parameters.Add("@HoraInicio", string.IsNullOrWhiteSpace(registro.HoraInicio) ? (object)DBNull.Value : registro.HoraInicio);
+                    parameters.Add("@HoraFin", string.IsNullOrWhiteSpace(registro.HoraFin) ? (object)DBNull.Value : registro.HoraFin);
+                    parameters.Add("@Fecha", DateTime.ParseExact(registro.Fecha, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture));
+                    parameters.Add("@Observaciones", string.IsNullOrWhiteSpace(registro.Observaciones) ? (object)DBNull.Value : registro.Observaciones);
+                    parameters.Add("@UsuarioRegistro", registro.UsuarioId);
+                    parameters.Add("@FechaRegistro", DateTime.Now);
+                    parameters.Add("@IdRegistroOut", dbType: System.Data.DbType.Int32, direction: System.Data.ParameterDirection.Output);
 
-                int idRegistro = 0; // Placeholder
+                    // Ejecutar SP OP_RegistroProduccion_Insert
+                    await connection.ExecuteAsync(
+                        "OP_RegistroProduccion_Insert",
+                        parameters,
+                        commandType: System.Data.CommandType.StoredProcedure,
+                        commandTimeout: 30
+                    );
 
-                _logger.LogInformation("Actividad de producción registrada: ID={IdRegistro}, Usuario={Usuario}", idRegistro, registro.UsuarioId);
-                return idRegistro;
+                    int idRegistro = parameters.Get<int>("@IdRegistroOut");
+
+                    _logger.LogInformation("Actividad de producción registrada: ID={IdRegistro}, Usuario={Usuario}", idRegistro, registro.UsuarioId);
+                    return idRegistro;
+                }
             }
             catch (Exception ex)
             {
