@@ -1,0 +1,181 @@
+@model MatrixNext.Web.ViewModels.OP.ProduccionViewModel
+
+@{
+    ViewData["Title"] = "Registro de producción";
+}
+
+<section class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h1>Registro de producción</h1>
+            <p class="text-muted">Sprint 5: actividades/registros + iField.</p>
+        </div>
+        <div>
+            @if (TempData["ProduccionMessage"] is string message)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    @message
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                </div>
+            }
+        </div>
+    </div>
+
+    <form asp-action="Index" method="get" class="row g-2 mb-4">
+        <input type="hidden" name="trabajoId" value="@Model.TrabajoId" />
+        <div class="col-md-4">
+            <label class="form-label">Identificación</label>
+            <input type="text" name="identificacion" class="form-control" value="@Model.Identificacion" />
+        </div>
+        <div class="col-md-4 align-self-end">
+            <button type="submit" class="btn btn-primary">Buscar unidades</button>
+        </div>
+    </form>
+
+    <form asp-action="Guardar" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="TrabajoId" value="@Model.TrabajoId" />
+        <input type="hidden" name="UsuarioId" value="@Model.UsuarioId" />
+
+        <div class="row">
+            <div class="col-lg-4 mb-3">
+                <label class="form-label">Unidad</label>
+                <select name="Unidad" class="form-select">
+                    @foreach (var unidad in Model.Unidades)
+                    {
+                        <option value="@unidad.Id">@unidad.Unidad</option>
+                    }
+                </select>
+            </div>
+            <div class="col-lg-4 mb-3">
+                <label class="form-label">Actividad</label>
+                <select name="Actividad" class="form-select">
+                    @foreach (var actividad in Model.Actividades)
+                    {
+                        <option value="@actividad.Cod">@actividad.Actividad</option>
+                    }
+                </select>
+            </div>
+            <div class="col-lg-4 mb-3">
+                <label class="form-label">Subactividad (opcional)</label>
+                <select name="SubActividad" class="form-select">
+                    <option value="">-- Sin seleccionar --</option>
+                    @foreach (var sub in Model.SubActividades.Where(a => a.SubActividadCod.HasValue))
+                    {
+                        <option value="@sub.SubActividadCod">@sub.SubActividad</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-3 mb-3">
+                <label class="form-label">Tipo de JB</label>
+                <select name="TipoJB" class="form-select">
+                    <option value="1">JBI</option>
+                    <option value="2">JBE</option>
+                </select>
+            </div>
+            <div class="col-lg-3 mb-3">
+                <label class="form-label">JB / JBE</label>
+                <select name="JBId" class="form-select">
+                    <option value="">-- Ninguno --</option>
+                    @foreach (var jbe in Model.Jbes)
+                    {
+                        <option value="@jbe.Id">@jbe.Nombre</option>
+                    }
+                </select>
+            </div>
+            <div class="col-lg-3 mb-3">
+                <label class="form-label">Fecha</label>
+                <input type="date" name="Fecha" class="form-control" value="@Model.Fecha:yyyy-MM-dd" />
+            </div>
+            <div class="col-lg-3 mb-3">
+                <label class="form-label">Hora inicio</label>
+                <input type="time" name="HoraInicio" class="form-control" value="@Model.HoraInicio:hh\\:mm" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-3 mb-3">
+                <label class="form-label">Hora fin</label>
+                <input type="time" name="HoraFin" class="form-control" value="@Model.HoraFin:hh\\:mm" />
+            </div>
+            <div class="col-lg-3 mb-3">
+                <label class="form-label">Cantidad general</label>
+                <input type="number" name="CantidadGeneral" class="form-control" value="@Model.CantidadGeneral" />
+            </div>
+            <div class="col-lg-3 mb-3">
+                <label class="form-label">Cantidad efectivas</label>
+                <input type="number" name="CantidadEfectivas" class="form-control" value="@Model.CantidadEfectivas" />
+            </div>
+            <div class="col-lg-3 mb-3 form-check">
+                <input class="form-check-input mt-4" type="checkbox" name="EsReproceso" value="true" @(Model.EsReproceso ? "checked" : "") id="chkReproceso" />
+                <label class="form-check-label" for="chkReproceso">Es reproceso</label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6 mb-3">
+                <label class="form-label">Observación</label>
+                <textarea name="Observacion" class="form-control" rows="3">@Model.Observacion</textarea>
+            </div>
+            <div class="col-lg-3 mb-3">
+                <label class="form-label">Tipo reproceso</label>
+                <input type="number" min="0" name="TipoReproceso" class="form-control" value="@Model.TipoReproceso" />
+            </div>
+            <div class="col-lg-3 mb-3">
+                <label class="form-label">Aplicativo proceso</label>
+                <input type="number" min="0" name="TipoAplicativoProceso" class="form-control" value="@Model.TipoAplicativoProceso" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-3 mb-3">
+                <label class="form-label">Variables script</label>
+                <input type="number" name="CantVarsScript" class="form-control" value="@Model.CantVarsScript" />
+            </div>
+            <div class="col-lg-3 mb-3">
+                <label class="form-label">Variables export</label>
+                <input type="number" name="CantVarsExport" class="form-control" value="@Model.CantVarsExport" />
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-success mb-4">Guardar registro</button>
+    </form>
+
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title">Histórico</h3>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Fecha</th>
+                            <th>Actividad</th>
+                            <th>Subactividad</th>
+                            <th>Cantidad</th>
+                            <th>Es reproceso</th>
+                            <th>Observación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var registro in Model.Registros)
+                        {
+                            <tr>
+                                <td>@registro.Id</td>
+                                <td>@registro.Fecha</td>
+                                <td>@registro.Actividad</td>
+                                <td>@registro.SubActividad</td>
+                                <td>@registro.CantidadGeneral ?? registro.CantidadEfectivas ?? 0</td>
+                                <td>@(registro.EsReproceso ? "Sí" : "No")</td>
+                                <td>@registro.Observacion</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
