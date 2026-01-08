@@ -1,0 +1,150 @@
+@using System.Linq
+@model MatrixNext.Web.ViewModels.OP.OpPortalViewModel
+
+@{
+    ViewData["Title"] = "Portal COE - OP_Cuantitativo";
+    var estados = new Dictionary<int, string>
+    {
+        { 1, "Nuevo" },
+        { 2, "Enviado" },
+        { 3, "Cerrado" },
+        { 11, "Anulado" }
+    };
+}
+
+<section class="container py-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1>Portal COE - OP Cuantitativo</h1>
+            <p class="text-muted mb-0">
+                Visualiza trabajos clave y navega a los flujos documentados en
+                <a href="/docs/OP/OP_CUANTITATIVO_AVANCE.md" target="_blank">OP_CUANTITATIVO_AVANCE.md</a>.
+            </p>
+        </div>
+        <div class="text-end">
+            <small class="text-muted">Plan base documentado en ANALISIS_OP_CUANTITATIVO.md / DIRECTRICES_MIGRACION.md</small>
+        </div>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-3 g-3 mt-4">
+        <div class="col">
+            <div class="card h-100 border-primary">
+                <div class="card-body">
+                    <h5 class="card-title">Cargas masivas</h5>
+                    <p class="card-text">Importar planillas y CATI con validaciones limpias y reuso de CoreProject.</p>
+                    <a class="btn btn-outline-primary btn-sm" href="/OP/Avances">Ver estado</a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100 border-success">
+                <div class="card-body">
+                    <h5 class="card-title">Planillas y productividad</h5>
+                    <p class="card-text">Aprobar planillas, revisar productividad por roles y controlar IPS.</p>
+                    <a class="btn btn-outline-success btn-sm" href="/docs/OP/OP_CUANTITATIVO_AVANCE.md" target="_blank">Ir al backlog</a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100 border-warning">
+                <div class="card-body">
+                    <h5 class="card-title">Navegación operativa</h5>
+                    <p class="card-text">Sincroniza sesiones, credenciales y cierres con GD/WorkFlow.</p>
+                    <a class="btn btn-outline-warning btn-sm" href="/OP/Avances">Documentación</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form method="get" class="row g-3 align-items-end my-4">
+        <div class="col-md-4">
+            <label class="form-label" for="Busqueda">Búsqueda</label>
+            <input type="search" class="form-control" id="Busqueda" name="Busqueda" value="@Model.Filtros.Busqueda" placeholder="Nombre, JobBook">
+        </div>
+        <div class="col-md-3">
+            <label class="form-label" for="Estado">Estado</label>
+            <select class="form-select" name="Estado" id="Estado">
+                <option value="-1" selected>Todos</option>
+                <option value="1" @(Model.Filtros.Estado == 1 ? "selected" : "")>Nuevo</option>
+                <option value="2" @(Model.Filtros.Estado == 2 ? "selected" : "")>Enviado</option>
+                <option value="3" @(Model.Filtros.Estado == 3 ? "selected" : "")>Cerrado</option>
+                <option value="11" @(Model.Filtros.Estado == 11 ? "selected" : "")>Anulado</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">&nbsp;</label>
+            <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+        </div>
+    </form>
+
+    @if (!Model.HasData)
+    {
+        <div class="alert alert-info">Cargando datos del portal OP...</div>
+    }
+    else
+    {
+        <div class="row g-3 mb-4">
+            @foreach (var estado in Model.Snapshot.EstadoCounts.OrderByDescending(e => e.Value))
+            {
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <div class="fs-4 fw-bold">@estado.Value</div>
+                            <div class="text-muted">@estados.GetValueOrDefault(estado.Key, $"Estado {estado.Key}")</div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="col-md-3">
+                <div class="card text-center border-secondary">
+                    <div class="card-body">
+                        <div class="fs-4 fw-bold">@Model.Snapshot.Trabajos.TotalCount</div>
+                        <div class="text-muted">Total de trabajos</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Trabajo</th>
+                        <th>JobBook</th>
+                        <th>Proyecto</th>
+                        <th>Metodología</th>
+                        <th>Estado</th>
+                        <th>Última actualización</th>
+                    </tr>
+                </thead>
+            <tbody>
+                @if (Model.Snapshot.Trabajos.Items.Any())
+                {
+                    foreach (var item in Model.Snapshot.Trabajos.Items)
+                    {
+                        <tr>
+                            <td>@item.Nombre</td>
+                            <td>@item.JobBook</td>
+                            <td>@item.IdProyecto</td>
+                            <td>@Model.Snapshot.MetodologiasMap.GetValueOrDefault(item.IdMetodologia, item.IdMetodologia.ToString())</td>
+                            <td>@estados.GetValueOrDefault(item.Estado, item.Estado.ToString())</td>
+                            <td>@item.FechaModificacion?.ToString("g")</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-muted">No hay trabajos que coincidan con el filtro.</td>
+                    </tr>
+                }
+            </tbody>
+            </table>
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <div class="text-muted">Vista actualizada: @Model.Snapshot.GeneratedAt.ToLocalTime():f</div>
+            <div><a href="/OP/Avances" class="link-secondary">Documentación completa</a></div>
+        </div>
+    }
+</section>

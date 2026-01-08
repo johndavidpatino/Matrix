@@ -123,6 +123,7 @@ builder.Services.AddScoped<QuoteCalculator>();
 builder.Services.AddScoped<EasyQuoteMasterService>();
 // OP módulo
 builder.Services.AddScoped<IOpAvancesService, OpAvancesService>();
+builder.Services.AddScoped<IOpPortalService, OpPortalService>();
 
 var app = builder.Build();
 

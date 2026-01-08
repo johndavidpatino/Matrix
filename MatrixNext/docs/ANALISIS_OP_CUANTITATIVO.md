@@ -615,6 +615,7 @@ Dim finCorteFecha = New DateTime(Now.Year, Now.Month, 15)
 - La fase actual (diagnostico + configuracion base) incluye validacion de las directrices, el inventario 1:1 de WebForms y la verificacion de la capa de datos en `CoreProject/Clases/OP_Cuanti` (servicios Dapper/EF y funciones que llaman a los stored procedures catalogados).
 - Cada flujo y dependencia se documentara aqui y en el nuevo registro; si se necesitan confirmaciones o decisiones se solicita el retorno en espanol, tal como lo pidio el equipo.
 - Se habilito una vista `/OP/Avances` en MatrixNext.Web que muestra el mismo checklist con enlaces a los documentos de analisis y directrices, ayudando a compartir avances con stakeholders sin salir del portal.
+- Se habilitó el portal COE `/OP/Portal` para listar trabajos activos, filtrar por estado y navegar a los flujos definidos en el backlog sin abandonar MatrixNext.Web.
 
 **DOCUMENTO FINALIZADO**  
 **Versión**: 1.1  

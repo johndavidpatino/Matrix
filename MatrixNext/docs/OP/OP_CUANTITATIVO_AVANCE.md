@@ -26,7 +26,7 @@ Mantener un listado unico de todos los avances del modulo OP_Cuantitativo, apunt
 - Configurar appsettings.json con *MatrixConnectionString*, *GestionCampoConnectionString*, rutas de archivos y limites de carga/size.
 - Asegurar que la capa de datos de CoreProject (OP_Cuanti, OP_Cuanti2, OP_CuantiDapper, Revisiones IPS, TrabajoOPCuanti, PlaneacionProduccion, RegistroProduccion) esta lista para ser consumida por MatrixNext.
 - Identificar las stored procedures catalogadas en el analisis (CatiRMC_*, OP_CuantiProduccion*, OP_IPS*, OP_FichaCuantitativo_*, OP_Planeacion_*, etc.) y planear adaptadores Dapper.
-- Poner un tablero vivo en MatrixNext.Web (`/OP/Avances`) para consultar el mismo checklist junto a las directrices y referencias de CoreProject.
+- Poner un tablero vivo en MatrixNext.Web (`/OP/Avances`) y un Portal COE (`/OP/Portal`) que muestran el checklist junto a la lista de trabajos y las directrices de CoreProject.
 
 ## Fase 2 - Migracion de flujos (por iniciar)
 | Flujo | WebForms actuales | CoreProject clave | Estado | Proxima accion |
