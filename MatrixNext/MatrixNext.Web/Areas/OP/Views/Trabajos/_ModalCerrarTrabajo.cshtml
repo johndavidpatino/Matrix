@@ -1,0 +1,188 @@
+@model MatrixNext.Web.ViewModels.OP.ConfirmarCierreVM
+
+<!-- Modal de Confirmación de Cierre -->
+<div class="modal fade" id="modalCerrarTrabajo" tabindex="-1" aria-labelledby="modalCerrarTrabajoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header @(Model.TodosDocumentosEncontrados ? "bg-primary" : "bg-warning") text-white">
+                <h5 class="modal-title" id="modalCerrarTrabajoLabel">
+                    <i class="bi bi-lock"></i> Cerrar Trabajo
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <h6 class="fw-bold">@Model.NombreTrabajo</h6>
+                    @if (!string.IsNullOrEmpty(Model.JobBook))
+                    {
+                        <p class="text-muted mb-0">JobBook: @Model.JobBook</p>
+                    }
+                </div>
+
+                <hr/>
+
+                @if (Model.TodosDocumentosEncontrados)
+                {
+                    <!-- Todos los documentos encontrados -->
+                    <div class="alert alert-success" role="alert">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <strong>Todos los documentos de cierre están completos</strong>
+                        <p class="mb-0 mt-2">El trabajo cumple con todos los requisitos de gestión documental y puede ser cerrado.</p>
+                    </div>
+                }
+                else
+                {
+                    <!-- Documentos faltantes -->
+                    <div class="alert alert-warning" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                        <strong>Documentos faltantes (@Model.DocumentosFaltantes.Count)</strong>
+                        <p class="mb-2 mt-2">Los siguientes documentos no han sido escaneados:</p>
+                        <ul class="mb-0">
+                            @foreach (var documento in Model.DocumentosFaltantes)
+                            {
+                                <li>@documento</li>
+                            }
+                        </ul>
+                    </div>
+
+                    <div class="d-flex gap-2 mb-3">
+                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="sincronizarDocumentos(@Model.TrabajoId)">
+                            <i class="bi bi-arrow-clockwise"></i> Actualizar Documentos
+                        </button>
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="chkForzarCierre">
+                        <label class="form-check-label fw-bold text-danger" for="chkForzarCierre">
+                            Forzar cierre sin documentos completos
+                        </label>
+                    </div>
+                }
+
+                <div class="mb-3">
+                    <label for="txtObservacionesCierre" class="form-label">Observaciones de cierre (opcional)</label>
+                    <textarea class="form-control" id="txtObservacionesCierre" rows="3" 
+                              placeholder="Ingrese observaciones sobre el cierre del trabajo..."></textarea>
+                </div>
+
+                <input type="hidden" id="hfTrabajoIdCierre" value="@Model.TrabajoId" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle"></i> Cancelar
+                </button>
+                <button type="button" class="btn btn-primary" onclick="confirmarCierreTrabajo()">
+                    <i class="bi bi-lock"></i> Cerrar Trabajo
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function sincronizarDocumentos(trabajoId) {
+        const btn = event.target;
+        const originalHtml = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Sincronizando...';
+
+        fetch('/OP/Trabajos/SincronizarDocumentos', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+            },
+            body: new URLSearchParams({ trabajoId: trabajoId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                toastr.success(data.message);
+                
+                // Recargar modal con datos actualizados
+                setTimeout(() => {
+                    $('#modalCerrarTrabajo').modal('hide');
+                    cargarModalCierre(trabajoId);
+                }, 1000);
+            } else {
+                toastr.error(data.message);
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            toastr.error('Error al sincronizar documentos');
+            btn.disabled = false;
+            btn.innerHTML = originalHtml;
+        });
+    }
+
+    function confirmarCierreTrabajo() {
+        const trabajoId = document.getElementById('hfTrabajoIdCierre').value;
+        const observaciones = document.getElementById('txtObservacionesCierre').value;
+        const forzar = document.getElementById('chkForzarCierre')?.checked || false;
+        const todosEncontrados = @Model.TodosDocumentosEncontrados.ToString().ToLower();
+
+        // Validar si se requiere forzar pero no está marcado
+        if (!todosEncontrados && !forzar) {
+            toastr.warning('Debe marcar "Forzar cierre" para cerrar sin documentos completos');
+            return;
+        }
+
+        // Confirmación adicional si es forzado
+        if (forzar) {
+            if (!confirm('¿Está seguro de forzar el cierre sin todos los documentos? Esta acción no se puede deshacer.')) {
+                return;
+            }
+        } else {
+            if (!confirm('¿Está seguro de cerrar este trabajo? Esta acción no se puede deshacer.')) {
+                return;
+            }
+        }
+
+        const btn = event.target;
+        const originalHtml = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Cerrando...';
+
+        fetch('/OP/Trabajos/CerrarTrabajo', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+            },
+            body: new URLSearchParams({
+                trabajoId: trabajoId,
+                forzar: forzar,
+                observaciones: observaciones
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                toastr.success(data.message);
+                $('#modalCerrarTrabajo').modal('hide');
+                
+                // Recargar la página o actualizar el grid
+                setTimeout(() => {
+                    location.reload();
+                }, 1500);
+            } else if (data.requiereForzar) {
+                toastr.warning(data.message);
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+            } else {
+                toastr.error(data.message);
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            toastr.error('Error al cerrar el trabajo');
+            btn.disabled = false;
+            btn.innerHTML = originalHtml;
+        });
+    }
+</script>

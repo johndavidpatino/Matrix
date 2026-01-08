@@ -359,11 +359,33 @@
         function confirmarCierre() {
             const trabajoId = $('#hfIdTrabajo').val();
             if (trabajoId) {
-                if (confirm('¿Está seguro de cerrar este trabajo? Esta acción validará los documentos en Gestión Documental.')) {
-                    // TODO: Implementar modal de confirmación en Sprint 2
-                    mostrarToast('info', 'En desarrollo', 'La funcionalidad de cierre se implementará en Sprint 2 (GAP-OP-08)');
-                }
+                cargarModalCierre(trabajoId);
             }
+        }
+
+        function cargarModalCierre(trabajoId) {
+            // Cargar modal de cierre con validación GD
+            fetch(`/OP/Trabajos/ConfirmarCierre?trabajoId=${trabajoId}`)
+                .then(response => response.text())
+                .then(html => {
+                    // Remover modal anterior si existe
+                    const oldModal = document.getElementById('modalCerrarTrabajo');
+                    if (oldModal) {
+                        oldModal.remove();
+                    }
+
+                    // Insertar nuevo modal en el body
+                    document.body.insertAdjacentHTML('beforeend', html);
+
+                    // Mostrar modal
+                    const modalElement = document.getElementById('modalCerrarTrabajo');
+                    const modal = new bootstrap.Modal(modalElement);
+                    modal.show();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    toastr.error('Error al cargar el modal de cierre');
+                });
         }
 
         function mostrarToast(tipo, titulo, mensaje) {
