@@ -60,8 +60,8 @@ La fase 2 la dividimos en sprints consecutivos para no perder de vista cada fluj
 Cada sprint se documentará aquí y en `ANALISIS_OP_CUANTITATIVO.md` para reflejar bloqueos, decisiones y avances. Los criterios se revisarán en las reuniones de seguimiento y el backlog se actualizará si cambian las prioridades o aparecen dependencias nuevas.
 
 ## Sprint actual
-- Sprint 1 (Portal COE) completado: la grilla filtra por JobBook/Estado, muestra el estado del permiso 100 y enlaza a `/OP/Trafico` y `/OP/Avances`; quedan pendientes validaciones secundarias y acciones contextuales (ya se planifica Sprint 2).
-- Sprint 2 (Tráfico + Activaciones) en curso: se arranca con la vista `/OP/Trafico` y se define la integración con `ActivacionEncuestas`/`AnulacionEncuestas` para exponer el resto del flujo.
+- Sprint 1 (Portal COE) completado: la grilla filtra por JobBook/Estado, muestra el estado del permiso 100, enlaza a `/OP/Trafico`, `/OP/Avances` y `/OP/Encuestas`, y exhibe el badge del permiso 100; las acciones contextuales están listas.
+- Sprint 2 (Tráfico + Activaciones) completado: `/OP/Trafico` mantiene KPIs y agregamos `/OP/Encuestas`, una vista con formularios que ejecutan `OP_GestionCampo_ActivarEncuesta` y `OP_GestionCampo_AnularEncuesta` con formularios anti-forgery y mensajes de resultado, cerrando el sprint 2 con data real sobre activaciones/anulaciones.
 
 > Este es el checklist base; cada entrada se actualizara con notas y tiempos una vez arranquemos la implementacion de la vista/servicio correspondiente. Se debe asegurar que las dependencias de CoreProject (stored procedures y contexts) se consumen sin cambiar nombres, siguiendo la Regla Core 1 de las directrices.
 
