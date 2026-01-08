@@ -15,6 +15,13 @@
 
     <div class="row">
         <div class="col-md-8">
+            @if (TempData["PlanillaMessage"] is string planillaMessage)
+            {
+                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                    @planillaMessage
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                </div>
+            }
             <ul class="nav nav-tabs mb-3" id="planillaTabs" role="tablist">
                 @if (Model.StatusTabs.Any())
                 {
@@ -66,21 +73,34 @@
                             <th>Fecha carga</th>
                             <th>Cantidad</th>
                             <th>Observaciones</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var planilla in Model.Planillas)
                         {
-                            <tr>
-                                <td>
-                                    <strong>@planilla.TrabajoNombre</strong><br />
-                                    <small>ID @planilla.TrabajoId</small>
-                                </td>
+                        <tr>
+                            <td>
+                                <strong>@planilla.TrabajoNombre</strong><br />
+                                <small>ID @planilla.TrabajoId</small>
+                            </td>
                                 <td>@planilla.Responsable</td>
                                 <td>@planilla.Estado</td>
                                 <td>@planilla.FechaCarga.ToString("dd/MM/yyyy")</td>
                                 <td>@planilla.Cantidad</td>
                                 <td>@planilla.Observaciones</td>
+                                <td>
+                                    <form asp-area="OP" asp-controller="PlanillasAprobacion" asp-action="ActualizarPlanilla" method="post">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="trabajoId" value="@planilla.TrabajoId" />
+                                        <button type="submit" name="accion" value="aprobar" class="btn btn-sm btn-success me-1">
+                                            Aprobar
+                                        </button>
+                                        <button type="submit" name="accion" value="rechazar" class="btn btn-sm btn-outline-danger">
+                                            Rechazar
+                                        </button>
+                                    </form>
+                                </td>
                             </tr>
                         }
                     </tbody>

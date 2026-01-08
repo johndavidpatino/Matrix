@@ -117,6 +117,58 @@ public class OpPlanillasService : IOpPlanillasService
         };
     }
 
+    public async Task<bool> AprobarPlanillaAsync(long trabajoId, long usuarioId, CancellationToken cancellationToken = default)
+    {
+        await using var connection = _dbContext.Database.GetDbConnection();
+        if (connection.State != ConnectionState.Open)
+        {
+            await connection.OpenAsync(cancellationToken);
+        }
+
+        var result = await connection.ExecuteAsync(
+            "OP_CuantiPlanillas_Update",
+            new
+            {
+                Revisado = true,
+                PMO = usuarioId,
+                Fini = (DateTime?)null,
+                Ffin = (DateTime?)null,
+                TrabajoId = trabajoId,
+                Coordinador = usuarioId,
+                UsuarioRevisa = usuarioId
+            },
+            commandType: CommandType.StoredProcedure);
+
+        _logger.LogInformation("Planilla {TrabajoId} aprobada por usuario {Usuario}", trabajoId, usuarioId);
+        return result > 0;
+    }
+
+    public async Task<bool> RechazarPlanillaAsync(long trabajoId, long usuarioId, CancellationToken cancellationToken = default)
+    {
+        await using var connection = _dbContext.Database.GetDbConnection();
+        if (connection.State != ConnectionState.Open)
+        {
+            await connection.OpenAsync(cancellationToken);
+        }
+
+        var result = await connection.ExecuteAsync(
+            "OP_CuantiPlanillas_Remove",
+            new
+            {
+                Revisado = false,
+                PMO = usuarioId,
+                Fini = (DateTime?)null,
+                Ffin = (DateTime?)null,
+                TrabajoId = trabajoId,
+                Coordinador = usuarioId,
+                UsuarioRevisa = usuarioId
+            },
+            commandType: CommandType.StoredProcedure);
+
+        _logger.LogInformation("Planilla {TrabajoId} rechazada por usuario {Usuario}", trabajoId, usuarioId);
+        return result > 0;
+    }
+
     private sealed class PlanillaDto
     {
         public long TrabajoId { get; init; }
