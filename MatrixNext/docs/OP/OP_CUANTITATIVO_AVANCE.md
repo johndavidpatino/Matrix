@@ -62,13 +62,16 @@ Cada sprint se documentará aquí y en `ANALISIS_OP_CUANTITATIVO.md` para reflej
 ## Sprint actual
 - Sprint 1 (Portal COE) completado: la grilla filtra por JobBook/Estado, muestra el estado del permiso 100, enlaza a `/OP/Trafico`, `/OP/Avances` y `/OP/Encuestas`, y exhibe el badge del permiso 100; las acciones contextuales están listas.
 - Sprint 2 (Tráfico + Activaciones) completado: `/OP/Trafico` mantiene KPIs y agregamos `/OP/Encuestas`, una vista con formularios que ejecutan `OP_GestionCampo_ActivarEncuesta` y `OP_GestionCampo_AnularEncuesta` con formularios anti-forgery y mensajes de resultado, cerrando el sprint 2 con data real sobre activaciones/anulaciones.
-- Sprint 3 (Cargas masivas) en progreso: el wizard `/OP/ImportacionMasiva` activa `OpCargaService`, que ahora ejecuta los SP `CatiRMC_*` (borrar, validar, reportes, insertar) y realiza el bulk copy sobre `OP_CuantiPlanillas`; los resultados se muestran en la vista junto con la copia de auditoría en uploads/op/cargas.
+- Sprint 3 (Cargas masivas) completado: el wizard `/OP/ImportacionMasiva` valida, ejecuta los SP `CatiRMC_*` y dispara el bulk copy a `OP_CuantiPlanillas`, reporta métricas (`ResumenValidas/NoValidas/Duplicadas/Inconsistencias`) y guarda el backup en uploads/op/cargas, cerrando el sprint con trazabilidad completa.
+- Sprint 4 (Planillas/Productividad/IPS) en progreso: consolidar tabs de planillas cargadas/planillas revisadas y productividad, hacer grid role-based para productividad + IPS editable, conectar Dapper `OP_CuantiDapper` y notificaciones, y documentar aprobaciones con ClosedXML/exportes.
+- Se inició el sprint 4 con la nueva vista `/OP/PlanillasAprobacion` (controller + view models + servicio) que despliega tabs, métricas productivas y control IPS como punto de partida para las funcionalidades restantes.
 
 > Este es el checklist base; cada entrada se actualizara con notas y tiempos una vez arranquemos la implementacion de la vista/servicio correspondiente. Se debe asegurar que las dependencias de CoreProject (stored procedures y contexts) se consumen sin cambiar nombres, siguiendo la Regla Core 1 de las directrices.
 
 ## Validacion y seguimiento
 - Planear spiking con OpenXml y posible Blob storage antes de la migracion de cargas masivas (ImportarDatos y Planillas).
 - Registrar cada ejecución del wizard `/OP/ImportacionMasiva`: la interfaz ahora muestra el tracking de SP `CatiRMC_*` (válidas/no válidas/duplicadas/inconsistencias) y el backup en `uploads/op/cargas`, conectando resultados con los criterios del sprint 3.
+- Definir las stories de Sprint 4, incluyendo la vista `PlanillasAprobacion`, el grid común para productividad (renderizado por rol) y el módulo IPS editable, para poder medir el avance sobre esa fase.
 - Registrar avances, bloqueos y decisiones en este documento; si se requiere confirmacion se solicitara en espanol (tal como lo solicita la directiva).
 - Cada vez que se cierre un flujo o se habilite un sprint, se anadira una nueva entrada con fecha y responsable.
 

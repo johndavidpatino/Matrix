@@ -1,0 +1,114 @@
+@model MatrixNext.Web.ViewModels.OP.PlanillasAprobacionViewModel
+
+@{
+    ViewData["Title"] = "Planillas y productividad";
+}
+
+<section class="container mt-4">
+    <div class="d-flex justify-content-between align-items-start mb-3">
+        <div>
+            <h1>Planillas y productividad</h1>
+            <p class="text-muted">Sprint 4: consolidando approvals, productividad y control IPS.</p>
+        </div>
+        <a class="btn btn-outline-secondary" href="/OP/Avances">Ver avances</a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <ul class="nav nav-tabs mb-3" id="planillaTabs" role="tablist">
+                @if (Model.StatusTabs.Any())
+                {
+                    var first = Model.StatusTabs.First();
+                    for (var i = 0; i < Model.StatusTabs.Count; i++)
+                    {
+                        var tab = Model.StatusTabs[i];
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link @(i == 0 ? "active" : "")"
+                                    id="@tab.TabId-tab"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#@tab.TabId"
+                                    type="button"
+                                    role="tab"
+                                    aria-controls="@tab.TabId"
+                                    aria-selected="@(i == 0)">
+                                @tab.Title
+                                <span class="badge bg-@tab.Badge ms-2">@tab.Count</span>
+                            </button>
+                        </li>
+                    }
+                }
+            </ul>
+
+            <div class="tab-content mb-4">
+                @foreach (var tab in Model.StatusTabs)
+                {
+                    <div class="tab-pane fade @(tab.TabId == Model.StatusTabs.First().TabId ? "show active" : null)"
+                         id="@tab.TabId"
+                         role="tabpanel"
+                         aria-labelledby="@tab.TabId-tab">
+                        <div class="card border-info mb-3">
+                            <div class="card-body">
+                                <p class="mb-1">@tab.Description</p>
+                                <small class="text-muted">Permiso 135 / 100 según rol.</small>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Trabajo</th>
+                            <th>Responsable</th>
+                            <th>Estado</th>
+                            <th>Fecha carga</th>
+                            <th>Cantidad</th>
+                            <th>Observaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var planilla in Model.Planillas)
+                        {
+                            <tr>
+                                <td>
+                                    <strong>@planilla.TrabajoNombre</strong><br />
+                                    <small>ID @planilla.TrabajoId</small>
+                                </td>
+                                <td>@planilla.Responsable</td>
+                                <td>@planilla.Estado</td>
+                                <td>@planilla.FechaCarga.ToString("dd/MM/yyyy")</td>
+                                <td>@planilla.Cantidad</td>
+                                <td>@planilla.Observaciones</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-header">Productividad @Model.Productivity.Rol</div>
+                <div class="card-body">
+                    <p class="small text-muted">@Model.Productivity.Corte</p>
+                    <h3 class="mb-1">@Model.Productivity.TotalAprobadas</h3>
+                    <p class="mb-1">Aprobadas</p>
+                    <p class="mb-1">Pendientes: <strong>@Model.Productivity.TotalPendientes</strong></p>
+                    <p class="text-muted small mb-0">@Model.Productivity.Nota</p>
+                </div>
+            </div>
+
+            <div class="card border-warning">
+                <div class="card-header">Control IPS</div>
+                <div class="card-body">
+                    <p class="mb-1">Pendientes: <strong>@Model.Ips.Pendientes</strong></p>
+                    <p class="mb-1">Atendidas: <strong>@Model.Ips.Atendidas</strong></p>
+                    <p class="mb-1 small text-muted">@Model.Ips.UltimaActualizacion</p>
+                    <p class="small text-muted">@Model.Ips.Comentario</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
