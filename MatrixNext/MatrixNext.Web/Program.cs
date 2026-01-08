@@ -141,6 +141,7 @@ builder.Services.AddScoped<IOpIFieldService, OpIFieldService>();
 builder.Services.AddScoped<IOpSupervisionService, OpSupervisionService>();
 builder.Services.AddScoped<IOpTrabajosService, OpTrabajosService>();
 builder.Services.AddScoped<IOpCoordinacionService, OpCoordinacionService>();
+builder.Services.AddScoped<IOpFichaService, OpFichaService>();
 
 var app = builder.Build();
 
