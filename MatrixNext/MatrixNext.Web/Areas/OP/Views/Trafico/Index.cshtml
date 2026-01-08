@@ -1,0 +1,90 @@
+@model MatrixNext.Web.ViewModels.OP.OpTraficoViewModel
+
+@{
+    ViewData["Title"] = "Trafico de Encuestas";
+}
+
+<section class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h1>Tráfico de Encuestas</h1>
+            <p class="text-muted mb-0">
+                Consulta los envíos por ciudad y manten la trazabilidad del flujo RMC / Crítica / Verificación.
+            </p>
+        </div>
+        <div class="text-muted">
+            Última actualización: @Model.Summary.GeneratedAt.ToLocalTime():f
+        </div>
+    </div>
+
+    <form method="get" class="row g-3 mb-4">
+        <div class="col-md-5">
+            <label for="trabajoId" class="form-label">Trabajo</label>
+            <select class="form-select" id="trabajoId" name="trabajoId">
+                <option value="">Seleccione</option>
+                @foreach (var trabajo in Model.Summary.Trabajos)
+                {
+                    <option value="@trabajo.Id" @(trabajo.Id == Model.Summary.SelectedTrabajoId ? "selected" : "")>
+                        @trabajo.JobBook - @trabajo.Nombre
+                    </option>
+                }
+            </select>
+        </div>
+        <div class="col-md-2 align-self-end">
+            <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+        </div>
+        <div class="col-md-5 align-self-end text-end">
+            <small class="text-muted">Mostrar datos del SP `OP_TraficoEncuestasCiudad` (Legacy).</small>
+        </div>
+    </form>
+
+    @if (!Model.HasData)
+    {
+        <div class="alert alert-warning">No hay trabajos registrados para mostrar tráfico.</div>
+    }
+    else if (!Model.Summary.Ciudades.Any())
+    {
+        <div class="alert alert-info">
+            Seleccione un trabajo para recuperar el tráfico (SP `OP_TraficoEncuestasCiudad`).
+        </div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-md-3 g-3 mb-4">
+            @foreach (var ciudad in Model.Summary.Ciudades.OrderByDescending(c => c.EncuestasEnviadas))
+            {
+                <div class="col">
+                    <div class="card border-secondary h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Ciudad @ciudad.CiudadCodigo</h5>
+                            <p class="card-text display-6 mb-0">@ciudad.EncuestasEnviadas</p>
+                            <small class="text-muted">Envios registrados</small>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th>City Code</th>
+                        <th>Encuestas enviadas</th>
+                        <th>Registro ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var ciudad in Model.Summary.Ciudades.OrderByDescending(c => c.EncuestasEnviadas))
+                    {
+                        <tr>
+                            <td>@ciudad.CiudadCodigo</td>
+                            <td>@ciudad.EncuestasEnviadas</td>
+                            <td>@ciudad.Id</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</section>

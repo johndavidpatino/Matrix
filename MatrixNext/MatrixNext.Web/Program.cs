@@ -124,6 +124,8 @@ builder.Services.AddScoped<EasyQuoteMasterService>();
 // OP módulo
 builder.Services.AddScoped<IOpAvancesService, OpAvancesService>();
 builder.Services.AddScoped<IOpPortalService, OpPortalService>();
+builder.Services.AddScoped<IOpTraficoDataAdapter, OpTraficoDataAdapter>();
+builder.Services.AddScoped<IOpTraficoService, OpTraficoService>();
 
 var app = builder.Build();
 

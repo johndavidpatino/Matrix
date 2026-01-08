@@ -27,12 +27,13 @@ Mantener un listado unico de todos los avances del modulo OP_Cuantitativo, apunt
 - Asegurar que la capa de datos de CoreProject (OP_Cuanti, OP_Cuanti2, OP_CuantiDapper, Revisiones IPS, TrabajoOPCuanti, PlaneacionProduccion, RegistroProduccion) esta lista para ser consumida por MatrixNext.
 - Identificar las stored procedures catalogadas en el analisis (CatiRMC_*, OP_CuantiProduccion*, OP_IPS*, OP_FichaCuantitativo_*, OP_Planeacion_*, etc.) y planear adaptadores Dapper.
 - Poner un tablero vivo en MatrixNext.Web (`/OP/Avances`) y un Portal COE (`/OP/Portal`) que muestran el checklist junto a la lista de trabajos y las directrices de CoreProject.
+- Publicar el portal de tráfico (`/OP/Trafico`) para validar la SP `OP_TraficoEncuestasCiudad` con los trabajos ya documentados y ofrecer un primer flujo 1:1.
 
 ## Fase 2 - Migracion de flujos (por iniciar)
 | Flujo | WebForms actuales | CoreProject clave | Estado | Proxima accion |
 |---|---|---|---|---|
 | Portal COE y navegacion general | Trabajos.aspx, TrabajosCoordinador.aspx, TrabajosCallCenter.aspx, ConsultaTrabajos.aspx | TrabajoOPCuanti, PlaneacionProduccion, CoordinacionCampoPersonal, GD, EnviarCorreo | Pendiente | Definir controladores/Servicios, crear vistas Razor/Blazor de lista de trabajos y navegacion. |
-| Trafico de encuestas | TraficoEncuestas.aspx | TraficoEncuestas, CoordinacionCampo, OP_CuantiDapper (envio/recepcion) | Pendiente | Mapear permisos 117-120, construir vista de envio/recepcion e integracion ClosedXML. |
+| Trafico de encuestas | TraficoEncuestas.aspx | TraficoEncuestas, CoordinacionCampo, OP_CuantiDapper (envio/recepcion) | En progreso | Nueva vista `/OP/Trafico` con filtros y KPIs basada en `OP_TraficoEncuestasCiudad`. |
 | Importacion de datos CATI | ImportarDatos.aspx | CatiRMC_* SP, OP_Cuanti Modelo, ExcelValidationService (OpenXml) | Pendiente | Disenar wizard de carga con validaciones y adaptacion a Blob storage. |
 | Importacion de planillas productividad | ImportarPlanillas.aspx | OP_CuantiDapper (planillas), OP_Cuanti.Modelo, _Festivos | Pendiente | Crear helper de ventana nomina (corte 16-15 + feriados) y servicio de carga con SqlBulkCopy. |
 | Planillas y revisiones COE | PlanillasCargadas.aspx, RevisionPlanillas.aspx, PlanillasRevisadas.aspx | OP_CuantiDapper (CuantiPlanillas_GET/Update/Remove) | Pendiente | Consolidar vista con tabs y adaptador Dapper para aprobaciones. |
