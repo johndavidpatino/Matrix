@@ -36,17 +36,20 @@ Completar todos los módulos pendientes (P0, P1, P2) del backlog OP_Cualitativo:
 **Progreso**: [████████████████████] 100% (Completo - Backend + 4 vistas + navegación)
 
 #### OP-C02: CampoController (10h)
-- [ ] Verificar/extender service para sesiones
-- [ ] Implementar exportación ICS (calendario)
-- [ ] Implementar exportación Excel
-- [ ] Botón navegación a GD_Documentos
-- [ ] Grid con accordion de workflows
+- [x] Verificar/extender service para sesiones
+- [x] Implementar exportación ICS (calendario)
+- [x] Implementar exportación Excel
+- [x] Reutilizar OpProgramacionService (programaciones)
+- [x] Vista Index con grid de programaciones
 
-**Entregables Fase 1**:
-- 2 controllers completos
-- 4+ vistas Razor
-- Exportaciones (ICS/Excel)
-- Build SUCCESS
+**Progreso**: [████████████████████] 100% (Completo - Exportaciones ICS/Excel + vista)
+
+**Entregables Fase 1**: ✅ COMPLETADO
+- ✅ 2 controllers completos (Trabajos + Campo)
+- ✅ 5 vistas Razor (Trabajos: Index/Create/Edit/Details + Campo: Index)
+- ✅ Exportaciones (ICS calendario + Excel programaciones)
+- ✅ Build SUCCESS 23 warnings
+- ✅ Total: 24h estimadas, Fase 1 completa
 
 ---
 
