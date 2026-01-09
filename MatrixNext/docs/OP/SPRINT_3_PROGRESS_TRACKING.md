@@ -26,11 +26,11 @@ Completar módulos de Programación e IPS para gestión de campo cualitativo, in
 
 #### OP-I01: Gestión de Procesos IPS
 **Backend**: [████████████████████] 100% → COMPLETADO
-- ✅ IOpIpsService extendido (6 nuevos métodos)
-- ✅ OpIpsService implementación (~250 LOC nuevos)
-- ✅ CualitativoIpsController (5 actions) - pre-existente
-- ✅ ViewModels (IpsRevisionVm, ProcesoIpsVm)
-- ✅ Build successful con 22 advertencias (nullability - pre-existentes)
++ ✅ IOpIpsService extendido (6 nuevos métodos)
++ ✅ OpIpsService implementación (~250 LOC nuevos)
++ ✅ CualitativoIpsController actualizado con 4 métodos V2
++ ✅ ViewModels (IpsRevisionVm, ProcesoIpsVm)
++ ✅ Build SUCCESS con 22 advertencias (nullability - no bloqueantes)
 
 **Frontend**: [████████████████████] 100% → COMPLETO (pre-existente)
 - ✅ Views/CualitativoIps/Index.cshtml
