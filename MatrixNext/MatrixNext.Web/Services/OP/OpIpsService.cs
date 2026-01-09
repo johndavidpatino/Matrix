@@ -4,6 +4,7 @@ using ClosedXML.Excel;
 using Dapper;
 using MatrixNext.Web.Infrastructure.Data;
 using MatrixNext.Web.ViewModels.OP;
+using MatrixNext.Web.Services.OP.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -176,5 +177,287 @@ public class OpIpsService : IOpIpsService
         public string Estado { get; init; } = string.Empty;
         public string Instrumento { get; init; } = string.Empty;
         public DateTime? FechaHoraObservacion { get; init; }
+    }
+
+    // ==================== NUEVOS MÉTODOS SPRINT 3 (OP-I01) ====================
+
+    public async Task<(bool success, List<IpsRevisionVm> data, string error)> ObtenerRevisionesAsync(
+        long? trabajoId, int? procesoId, string? metodo, string? userRol)
+    {
+        try
+        {
+            await using var connection = _dbContext.Database.GetDbConnection();
+            if (connection.State != ConnectionState.Open)
+            {
+                await connection.OpenAsync();
+            }
+
+            // Query SP OP_IPS_Procesos con filtros
+            // Ref: IPSCuali.aspx.vb líneas 28-35 (SqlDataSource)
+            var sql = @"
+                SELECT 
+                    r.Id,
+                    r.IdProceso,
+                    r.TrabajoId,
+                    j.JobDesc AS TrabajoNombre,
+                    r.ProcesoId,
+                    p.Proceso AS ProcesoNombre,
+                    r.TareaId,
+                    r.TareaNombre,
+                    r.EstadoWorkflow,
+                    CASE r.EstadoWorkflow
+                        WHEN 1 THEN 'Generado'
+                        WHEN 2 THEN 'Notificado'
+                        WHEN 3 THEN 'En Revisión'
+                        WHEN 4 THEN 'Aprobado'
+                        WHEN 5 THEN 'Rechazado'
+                        ELSE 'Desconocido'
+                    END AS EstadoWorkflowDescripcion,
+                    r.FechaRevision,
+                    r.RevisadoPor,
+                    u.Nombre AS RevisadoPorNombre,
+                    r.Observaciones,
+                    r.RequiereAtencion,
+                    r.FechaCreacion,
+                    r.FechaModificacion
+                FROM OP_IPS_Revisiones r
+                LEFT JOIN PY_Trabajo j ON r.TrabajoId = j.IdJob
+                LEFT JOIN OP_IPS_Procesos p ON r.ProcesoId = p.Id
+                LEFT JOIN US_Usuarios u ON r.RevisadoPor = u.Id
+                WHERE (@TrabajoId IS NULL OR r.TrabajoId = @TrabajoId)
+                  AND (@ProcesoId IS NULL OR r.ProcesoId = @ProcesoId)
+                  AND (@Metodo IS NULL OR j.MetodoRecoleccion = @Metodo)
+                ORDER BY r.FechaCreacion DESC";
+
+            var data = await connection.QueryAsync<IpsRevisionVm>(sql, new
+            {
+                TrabajoId = trabajoId,
+                ProcesoId = procesoId,
+                Metodo = metodo
+            });
+
+            return (true, data.AsList(), string.Empty);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error obteniendo revisiones IPS. Trabajo: {TrabajoId}", trabajoId);
+            return (false, new List<IpsRevisionVm>(), "Error obteniendo revisiones IPS");
+        }
+    }
+
+    public async Task<(bool success, List<ProcesoIpsVm> data, string error)> ObtenerProcesosAsync()
+    {
+        try
+        {
+            await using var connection = _dbContext.Database.GetDbConnection();
+            if (connection.State != ConnectionState.Open)
+            {
+                await connection.OpenAsync();
+            }
+
+            var sql = @"
+                SELECT 
+                    Id,
+                    Proceso,
+                    Descripcion,
+                    Activo
+                FROM OP_IPS_Procesos
+                WHERE Activo = 1
+                ORDER BY Proceso";
+
+            var data = await connection.QueryAsync<ProcesoIpsVm>(sql);
+            return (true, data.AsList(), string.Empty);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error obteniendo procesos IPS");
+            return (false, new List<ProcesoIpsVm>(), "Error obteniendo procesos");
+        }
+    }
+
+    public async Task<(bool success, string error)> NotificarProcesoAsync(long id, long usuarioId)
+    {
+        try
+        {
+            // Ref: IPSCuali.aspx.vb líneas 145-178 (btnNotificar_Click)
+            await using var connection = _dbContext.Database.GetDbConnection();
+            if (connection.State != ConnectionState.Open)
+            {
+                await connection.OpenAsync();
+            }
+
+            var sql = @"
+                UPDATE OP_IPS_Revisiones
+                SET EstadoWorkflow = 2, -- Notificado
+                    FechaRevision = GETDATE(),
+                    RevisadoPor = @UsuarioId,
+                    FechaModificacion = GETDATE()
+                WHERE Id = @Id
+                  AND EstadoWorkflow = 1"; // Solo si está en Generado
+
+            var rowsAffected = await connection.ExecuteAsync(sql, new { Id = id, UsuarioId = usuarioId });
+
+            if (rowsAffected == 0)
+            {
+                return (false, "Proceso no encontrado o ya fue notificado");
+            }
+
+            _logger.LogInformation("Proceso IPS {Id} notificado por usuario {UsuarioId}", id, usuarioId);
+            return (true, string.Empty);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error notificando proceso IPS {Id}", id);
+            return (false, "Error al notificar proceso");
+        }
+    }
+
+    public async Task<(bool success, string error)> RechazarProcesoAsync(long id, long usuarioId, string observaciones)
+    {
+        try
+        {
+            // Ref: IPSCuali.aspx.vb líneas 180-215 (btnRechazar_Click)
+            if (string.IsNullOrWhiteSpace(observaciones))
+            {
+                return (false, "Las observaciones son requeridas para rechazar");
+            }
+
+            await using var connection = _dbContext.Database.GetDbConnection();
+            if (connection.State != ConnectionState.Open)
+            {
+                await connection.OpenAsync();
+            }
+
+            var sql = @"
+                UPDATE OP_IPS_Revisiones
+                SET EstadoWorkflow = 5, -- Rechazado
+                    FechaRevision = GETDATE(),
+                    RevisadoPor = @UsuarioId,
+                    Observaciones = @Observaciones,
+                    FechaModificacion = GETDATE()
+                WHERE Id = @Id
+                  AND EstadoWorkflow IN (1, 2, 3)"; // Solo si no está Aprobado o Rechazado
+
+            var rowsAffected = await connection.ExecuteAsync(sql, new
+            {
+                Id = id,
+                UsuarioId = usuarioId,
+                Observaciones = observaciones
+            });
+
+            if (rowsAffected == 0)
+            {
+                return (false, "Proceso no encontrado o ya fue procesado");
+            }
+
+            _logger.LogInformation("Proceso IPS {Id} rechazado por usuario {UsuarioId}", id, usuarioId);
+            return (true, string.Empty);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error rechazando proceso IPS {Id}", id);
+            return (false, "Error al rechazar proceso");
+        }
+    }
+
+    public async Task<(bool success, string error)> ActualizarEstadoAsync(
+        long id, int nuevoEstado, long usuarioId, string? observaciones)
+    {
+        try
+        {
+            // Validar estado válido (1-5)
+            if (nuevoEstado < 1 || nuevoEstado > 5)
+            {
+                return (false, "Estado inválido");
+            }
+
+            await using var connection = _dbContext.Database.GetDbConnection();
+            if (connection.State != ConnectionState.Open)
+            {
+                await connection.OpenAsync();
+            }
+
+            var sql = @"
+                UPDATE OP_IPS_Revisiones
+                SET EstadoWorkflow = @NuevoEstado,
+                    FechaRevision = GETDATE(),
+                    RevisadoPor = @UsuarioId,
+                    Observaciones = COALESCE(@Observaciones, Observaciones),
+                    FechaModificacion = GETDATE()
+                WHERE Id = @Id";
+
+            var rowsAffected = await connection.ExecuteAsync(sql, new
+            {
+                Id = id,
+                NuevoEstado = nuevoEstado,
+                UsuarioId = usuarioId,
+                Observaciones = observaciones
+            });
+
+            if (rowsAffected == 0)
+            {
+                return (false, "Proceso no encontrado");
+            }
+
+            _logger.LogInformation("Proceso IPS {Id} actualizado a estado {Estado} por usuario {UsuarioId}",
+                id, nuevoEstado, usuarioId);
+            return (true, string.Empty);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error actualizando estado proceso IPS {Id}", id);
+            return (false, "Error al actualizar estado");
+        }
+    }
+
+    public async Task<byte[]> ExportarRevisionesExcelAsync(
+        long? trabajoId, int? procesoId, string? metodo, string? userRol)
+    {
+        var (success, data, _) = await ObtenerRevisionesAsync(trabajoId, procesoId, metodo, userRol);
+
+        if (!success || !data.Any())
+        {
+            return Array.Empty<byte>();
+        }
+
+        using var workbook = new XLWorkbook();
+        var worksheet = workbook.Worksheets.Add("Revisiones IPS");
+
+        // Headers
+        worksheet.Cell(1, 1).Value = "ID";
+        worksheet.Cell(1, 2).Value = "Trabajo";
+        worksheet.Cell(1, 3).Value = "Proceso";
+        worksheet.Cell(1, 4).Value = "Tarea";
+        worksheet.Cell(1, 5).Value = "Estado";
+        worksheet.Cell(1, 6).Value = "Fecha Revisión";
+        worksheet.Cell(1, 7).Value = "Revisado Por";
+        worksheet.Cell(1, 8).Value = "Observaciones";
+
+        // Header style
+        var headerRange = worksheet.Range(1, 1, 1, 8);
+        headerRange.Style.Font.Bold = true;
+        headerRange.Style.Fill.BackgroundColor = XLColor.LightBlue;
+
+        // Data
+        int row = 2;
+        foreach (var revision in data)
+        {
+            worksheet.Cell(row, 1).Value = revision.Id;
+            worksheet.Cell(row, 2).Value = revision.TrabajoNombre;
+            worksheet.Cell(row, 3).Value = revision.ProcesoNombre;
+            worksheet.Cell(row, 4).Value = revision.TareaNombre;
+            worksheet.Cell(row, 5).Value = revision.EstadoWorkflowDescripcion;
+            worksheet.Cell(row, 6).Value = revision.FechaRevision?.ToString("dd/MM/yyyy HH:mm") ?? "";
+            worksheet.Cell(row, 7).Value = revision.RevisadoPorNombre ?? "";
+            worksheet.Cell(row, 8).Value = revision.Observaciones ?? "";
+            row++;
+        }
+
+        // Auto-fit columns
+        worksheet.Columns().AdjustToContents();
+
+        using var stream = new MemoryStream();
+        workbook.SaveAs(stream);
+        return stream.ToArray();
     }
 }
