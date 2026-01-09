@@ -35,28 +35,32 @@ public class OpFichasTecnicasService : IOpFichasTecnicasService
     {
         try
         {
-            // Ref: FichaEntrevista.aspx.vb líneas 41-123 (cargarDatos)
+            // Ref: CoreProject/Clases/OP/FichaEntrevistas.vb -> OP_FichaEntrevistas_Get
             using var connection = new SqlConnection(_connectionString);
-            
-            var ficha = await connection.QueryFirstOrDefaultAsync<FichaTecnicaVm>(
-                @"SELECT 
-                    f.*,
-                    t.Nombre AS TrabajoNombre
-                  FROM OP_FichasTecnicas f
-                  INNER JOIN PY_Trabajos t ON f.TrabajoId = t.Id
-                  WHERE f.TrabajoId = @TrabajoId AND f.TipoFicha = 1",
-                new { TrabajoId = trabajoId });
 
-            if (ficha == null)
+            var rows = await connection.QueryAsync<dynamic>(
+                "OP_FichaEntrevistas_Get",
+                new { ID = (long?)null, TrabajoID = trabajoId },
+                commandType: CommandType.StoredProcedure);
+
+            var r = rows.FirstOrDefault();
+
+            // Obtener nombre del trabajo desde PY_Trabajo
+            var trabajoNombre = await connection.QueryFirstOrDefaultAsync<string>(
+                "SELECT NombreTrabajo FROM PY_Trabajo WHERE Id = @Id",
+                new { Id = trabajoId });
+
+            var ficha = new FichaTecnicaVm
             {
-                // Crear nueva ficha en blanco
-                ficha = new FichaTecnicaVm
-                {
-                    TrabajoId = trabajoId,
-                    TipoFicha = 1,
-                    EstadoFicha = "Borrador"
-                };
-            }
+                TrabajoId = trabajoId,
+                TrabajoNombre = trabajoNombre ?? string.Empty,
+                TipoFicha = 1,
+                EstadoFicha = "Borrador",
+                CantidadEntrevistas = (int?)r?.CantidadRequerida ?? 0,
+                PerfilEntrevistados = (string?)r?.GrupoObjetivo ?? string.Empty,
+                MontoIncentivos = (decimal?)r?.PresupuestoIncentivo ?? 0,
+                ObservacionesGenerales = (string?)r?.Observaciones ?? string.Empty
+            };
 
             return (true, ficha, string.Empty);
         }
@@ -102,111 +106,64 @@ public class OpFichasTecnicasService : IOpFichasTecnicasService
             if (ficha.CantidadEntrevistas <= 0)
                 return (false, "Cantidad de entrevistas debe ser mayor a 0");
 
-            // GUARDAR
+            // GUARDAR vía SPs CoreProject (OP_FichaEntrevistas_Add/Edit)
             using var connection = new SqlConnection(_connectionString);
-            
-            var existente = await connection.QueryFirstOrDefaultAsync<long?>(
-                "SELECT Id FROM OP_FichasTecnicas WHERE TrabajoId = @TrabajoId AND TipoFicha = 1",
-                new { ficha.TrabajoId });
 
-            if (existente == null)
+            var existente = await connection.QueryFirstOrDefaultAsync<long?>(
+                "SELECT TOP 1 Id FROM OP_FichaEntrevistas WHERE TrabajoId = @TrabajoId ORDER BY Id DESC",
+                new { TrabajoId = ficha.TrabajoId });
+
+            var parametros = new
             {
-                // INSERT
+                ID = existente,
+                TrabajoId = ficha.TrabajoId,
+                CantidadRequerida = (short?)ficha.CantidadEntrevistas,
+                FlashReport = (bool?)false,
+                DescripcionIncentivos = ficha.TematicaPrincipal ?? string.Empty,
+                IncentivoEconomico = (bool?)(ficha.MontoIncentivos > 0),
+                PresupuestoIncentivo = (double?)(decimal.ToDouble(ficha.MontoIncentivos)),
+                RegalosCliente = (bool?)false,
+                CompraIpsos = (bool?)false,
+                Presupuesto = (double?)0,
+                CircuitoCerrado = (bool?)false,
+                FilmacionFija = (bool?)false,
+                CamaraFotografica = (bool?)false,
+                Tv_DVD = (bool?)false,
+                FilmacionActiva = (bool?)false,
+                VideoBeam = (bool?)false,
+                EntregaFiltrosReclutamiento = (bool?)false,
+                EntregaFiltrosAsistente = (bool?)false,
+                EntregaCartaInvitacion = (bool?)false,
+                EntregaFaxConfirmacion = (bool?)false,
+                ListadosCliente = (bool?)false,
+                CallCenter = (bool?)false,
+                SacaCita = (bool?)false,
+                FlashReportEscrito = (bool?)false,
+                FlashReportVerbal = (bool?)false,
+                Transcripcion = (bool?)false,
+                Grabacion = (bool?)false,
+                GrupoObjetivo = ficha.PerfilEntrevistados ?? string.Empty,
+                CaracteristicasEspeciales = string.Empty,
+                Comentarios = ficha.ObservacionesGenerales ?? string.Empty,
+                MetodoAceptableReclutamiento = string.Empty,
+                ExclusionesYRestriccionesEspecificas = string.Empty,
+                RecursosPropiedadCliente = string.Empty,
+                Observaciones = ficha.ObservacionesGenerales ?? string.Empty
+            };
+
+            if (existente.HasValue && existente.Value > 0)
+            {
                 await connection.ExecuteAsync(
-                    @"INSERT INTO OP_FichasTecnicas 
-                        (TrabajoId, TipoFicha, Objetivos, PerfilEntrevistados, CantidadEntrevistas, 
-                         Metodologia, TematicaPrincipal, MontoIncentivos, AyudasAudiovisuales, 
-                         RecursosAdicionales, CantidadReclutadores, PerfilReclutadores, 
-                         FechaInicioReclutamiento, FechaFinReclutamiento, LugarRealizacion, 
-                         DireccionCompleta, CiudadId, FechaRealizacion, HoraInicio, HoraFin, 
-                         HabeasDataFirmado, ObservacionesGenerales, EstadoFicha, 
-                         CreadoPor, FechaCreacion)
-                      VALUES 
-                        (@TrabajoId, @TipoFicha, @Objetivos, @PerfilEntrevistados, @CantidadEntrevistas,
-                         @Metodologia, @TematicaPrincipal, @MontoIncentivos, @AyudasAudiovisuales,
-                         @RecursosAdicionales, @CantidadReclutadores, @PerfilReclutadores,
-                         @FechaInicioReclutamiento, @FechaFinReclutamiento, @LugarRealizacion,
-                         @DireccionCompleta, @CiudadId, @FechaRealizacion, @HoraInicio, @HoraFin,
-                         @HabeasDataFirmado, @ObservacionesGenerales, 'Borrador',
-                         @CreadoPor, GETDATE())",
-                    new
-                    {
-                        ficha.TrabajoId,
-                        ficha.TipoFicha,
-                        ficha.Objetivos,
-                        ficha.PerfilEntrevistados,
-                        ficha.CantidadEntrevistas,
-                        ficha.Metodologia,
-                        ficha.TematicaPrincipal,
-                        ficha.MontoIncentivos,
-                        ficha.AyudasAudiovisuales,
-                        ficha.RecursosAdicionales,
-                        ficha.CantidadReclutadores,
-                        ficha.PerfilReclutadores,
-                        ficha.FechaInicioReclutamiento,
-                        ficha.FechaFinReclutamiento,
-                        ficha.LugarRealizacion,
-                        ficha.DireccionCompleta,
-                        ficha.CiudadId,
-                        ficha.FechaRealizacion,
-                        ficha.HoraInicio,
-                        ficha.HoraFin,
-                        ficha.HabeasDataFirmado,
-                        ficha.ObservacionesGenerales,
-                        CreadoPor = usuarioId
-                    });
+                    "OP_FichaEntrevistas_Edit",
+                    parametros,
+                    commandType: CommandType.StoredProcedure);
             }
             else
             {
-                // UPDATE
                 await connection.ExecuteAsync(
-                    @"UPDATE OP_FichasTecnicas 
-                      SET Objetivos = @Objetivos,
-                          PerfilEntrevistados = @PerfilEntrevistados,
-                          CantidadEntrevistas = @CantidadEntrevistas,
-                          Metodologia = @Metodologia,
-                          TematicaPrincipal = @TematicaPrincipal,
-                          MontoIncentivos = @MontoIncentivos,
-                          AyudasAudiovisuales = @AyudasAudiovisuales,
-                          RecursosAdicionales = @RecursosAdicionales,
-                          CantidadReclutadores = @CantidadReclutadores,
-                          PerfilReclutadores = @PerfilReclutadores,
-                          FechaInicioReclutamiento = @FechaInicioReclutamiento,
-                          FechaFinReclutamiento = @FechaFinReclutamiento,
-                          LugarRealizacion = @LugarRealizacion,
-                          DireccionCompleta = @DireccionCompleta,
-                          CiudadId = @CiudadId,
-                          FechaRealizacion = @FechaRealizacion,
-                          HoraInicio = @HoraInicio,
-                          HoraFin = @HoraFin,
-                          HabeasDataFirmado = @HabeasDataFirmado,
-                          ObservacionesGenerales = @ObservacionesGenerales,
-                          FechaModificacion = GETDATE()
-                      WHERE TrabajoId = @TrabajoId AND TipoFicha = 1",
-                    new
-                    {
-                        ficha.TrabajoId,
-                        ficha.Objetivos,
-                        ficha.PerfilEntrevistados,
-                        ficha.CantidadEntrevistas,
-                        ficha.Metodologia,
-                        ficha.TematicaPrincipal,
-                        ficha.MontoIncentivos,
-                        ficha.AyudasAudiovisuales,
-                        ficha.RecursosAdicionales,
-                        ficha.CantidadReclutadores,
-                        ficha.PerfilReclutadores,
-                        ficha.FechaInicioReclutamiento,
-                        ficha.FechaFinReclutamiento,
-                        ficha.LugarRealizacion,
-                        ficha.DireccionCompleta,
-                        ficha.CiudadId,
-                        ficha.FechaRealizacion,
-                        ficha.HoraInicio,
-                        ficha.HoraFin,
-                        ficha.HabeasDataFirmado,
-                        ficha.ObservacionesGenerales
-                    });
+                    "OP_FichaEntrevistas_Add",
+                    parametros,
+                    commandType: CommandType.StoredProcedure);
             }
 
             return (true, string.Empty);
@@ -256,8 +213,80 @@ public class OpFichasTecnicasService : IOpFichasTecnicasService
     public async Task<(bool Success, string Error)> GuardarFichaSesionAsync(
         FichaTecnicaVm ficha, long usuarioId)
     {
-        ficha.TipoFicha = 2;
-        return await GuardarFichaEntrevistaAsync(ficha, usuarioId);
+        try
+        {
+            ficha.TipoFicha = 2;
+
+            var (validacionOk, disponible, errorValidacion) = await ValidarPresupuestoIncentivosAsync(
+                ficha.TrabajoId, ficha.MontoIncentivos);
+            if (!validacionOk) return (false, errorValidacion);
+            if (ficha.MontoIncentivos > disponible)
+                return (false, $"Monto de incentivos ({ficha.MontoIncentivos:C}) excede disponible ({disponible:C})");
+
+            using var connection = new SqlConnection(_connectionString);
+
+            var existente = await connection.QueryFirstOrDefaultAsync<long?>(
+                "SELECT TOP 1 Id FROM OP_FichaSesiones WHERE TrabajoId = @TrabajoId ORDER BY Id DESC",
+                new { TrabajoId = ficha.TrabajoId });
+
+            var parametros = new
+            {
+                ID = existente,
+                TrabajoId = ficha.TrabajoId,
+                CantidadRequerida = (short?)ficha.CantidadEntrevistas,
+                SoporteAnalisis = (bool?)false,
+                SoporteAdicional = string.Empty,
+                AsistentesRequeridos = (short?)0,
+                SoporteCritica = (bool?)false,
+                ApoyoLogistico = (bool?)false,
+                FlashReport = (bool?)false,
+                DescripcionIncentivos = ficha.TematicaPrincipal ?? string.Empty,
+                IncentivoEconomico = (bool?)(ficha.MontoIncentivos > 0),
+                PresupuestoIncentivo = (double?)(decimal.ToDouble(ficha.MontoIncentivos)),
+                RegalosCliente = (bool?)false,
+                CompraIpsos = (bool?)false,
+                Presupuesto = (double?)0,
+                CircuitoCerrado = (bool?)false,
+                FilmacionFija = (bool?)false,
+                CamaraFotografica = (bool?)false,
+                Tv_DVD = (bool?)false,
+                FilmacionActiva = (bool?)false,
+                VideoBeam = (bool?)false,
+                EntregaFiltrosReclutamiento = (bool?)false,
+                EntregaFiltrosAsistente = (bool?)false,
+                EntregaCartaInvitacion = (bool?)false,
+                EntregaFaxConfirmacion = (bool?)false,
+                GrupoObjetivo = ficha.PerfilEntrevistados ?? string.Empty,
+                CaracteristicasEspeciales = string.Empty,
+                Comentarios = ficha.ObservacionesGenerales ?? string.Empty,
+                MetodoAceptableReclutamiento = string.Empty,
+                ExclusionesYRestriccionesEspecificas = string.Empty,
+                RecursosPropiedadCliente = string.Empty,
+                Observaciones = ficha.ObservacionesGenerales ?? string.Empty
+            };
+
+            if (existente.HasValue && existente.Value > 0)
+            {
+                await connection.ExecuteAsync(
+                    "OP_FichaSesiones_Edit",
+                    parametros,
+                    commandType: CommandType.StoredProcedure);
+            }
+            else
+            {
+                await connection.ExecuteAsync(
+                    "OP_FichaSesiones_Add",
+                    parametros,
+                    commandType: CommandType.StoredProcedure);
+            }
+
+            return (true, string.Empty);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error guardando ficha sesión trabajo {TrabajoId}", ficha.TrabajoId);
+            return (false, ex.Message);
+        }
     }
 
     public async Task<(bool Success, FichaTecnicaVm Data, string Error)> ObtenerFichaObservacionAsync(long trabajoId)
@@ -269,8 +298,82 @@ public class OpFichasTecnicasService : IOpFichasTecnicasService
     public async Task<(bool Success, string Error)> GuardarFichaObservacionAsync(
         FichaTecnicaVm ficha, long usuarioId)
     {
-        ficha.TipoFicha = 3;
-        return await GuardarFichaEntrevistaAsync(ficha, usuarioId);
+        try
+        {
+            ficha.TipoFicha = 3;
+
+            var (validacionOk, disponible, errorValidacion) = await ValidarPresupuestoIncentivosAsync(
+                ficha.TrabajoId, ficha.MontoIncentivos);
+            if (!validacionOk) return (false, errorValidacion);
+            if (ficha.MontoIncentivos > disponible)
+                return (false, $"Monto de incentivos ({ficha.MontoIncentivos:C}) excede disponible ({disponible:C})");
+
+            using var connection = new SqlConnection(_connectionString);
+
+            var existente = await connection.QueryFirstOrDefaultAsync<long?>(
+                "SELECT TOP 1 Id FROM OP_FichaObservaciones WHERE TrabajoId = @TrabajoId ORDER BY Id DESC",
+                new { TrabajoId = ficha.TrabajoId });
+
+            var parametros = new
+            {
+                ID = existente,
+                TrabajoId = ficha.TrabajoId,
+                CantidadRequerida = (short?)ficha.CantidadEntrevistas,
+                FlashReport = (bool?)false,
+                DescripcionIncentivos = ficha.TematicaPrincipal ?? string.Empty,
+                IncentivoEconomico = (bool?)(ficha.MontoIncentivos > 0),
+                PresupuestoIncentivo = (double?)(decimal.ToDouble(ficha.MontoIncentivos)),
+                RegalosCliente = (bool?)false,
+                CompraIpsos = (bool?)false,
+                Presupuesto = (double?)0,
+                CircuitoCerrado = (bool?)false,
+                FilmacionFija = (bool?)false,
+                CamaraFotografica = (bool?)false,
+                Tv_DVD = (bool?)false,
+                FilmacionActiva = (bool?)false,
+                VideoBeam = (bool?)false,
+                EntregaFiltrosReclutamiento = (bool?)false,
+                EntregaFiltrosAsistente = (bool?)false,
+                EntregaCartaInvitacion = (bool?)false,
+                EntregaFaxConfirmacion = (bool?)false,
+                ListadosCliente = (bool?)false,
+                CallCenter = (bool?)false,
+                SacaCita = (bool?)false,
+                FlashReportEscrito = (bool?)false,
+                FlashReportVerbal = (bool?)false,
+                Transcripcion = (bool?)false,
+                Grabacion = (bool?)false,
+                GrupoObjetivo = ficha.PerfilEntrevistados ?? string.Empty,
+                CaracteristicasEspeciales = string.Empty,
+                Comentarios = ficha.ObservacionesGenerales ?? string.Empty,
+                MetodoAceptableReclutamiento = string.Empty,
+                ExclusionesYRestriccionesEspecificas = string.Empty,
+                RecursosPropiedadCliente = string.Empty,
+                Observaciones = ficha.ObservacionesGenerales ?? string.Empty
+            };
+
+            if (existente.HasValue && existente.Value > 0)
+            {
+                await connection.ExecuteAsync(
+                    "OP_FichaObservaciones_Edit",
+                    parametros,
+                    commandType: CommandType.StoredProcedure);
+            }
+            else
+            {
+                await connection.ExecuteAsync(
+                    "OP_FichaObservaciones_Add",
+                    parametros,
+                    commandType: CommandType.StoredProcedure);
+            }
+
+            return (true, string.Empty);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error guardando ficha observación trabajo {TrabajoId}", ficha.TrabajoId);
+            return (false, ex.Message);
+        }
     }
 
     public async Task<(bool Success, decimal Disponible, string Error)> ValidarPresupuestoIncentivosAsync(
@@ -278,18 +381,20 @@ public class OpFichasTecnicasService : IOpFichasTecnicasService
     {
         try
         {
-            // Ref: FichaEntrevista.aspx.vb líneas 269-305 (ValidarPresupuesto)
+            // Refactor: sumar incentivos desde OP_FichaEntrevistas/Sesiones/Observaciones para alinear con CoreProject
             using var connection = new SqlConnection(_connectionString);
-            
+
             var resultado = await connection.QueryFirstOrDefaultAsync<dynamic>(
                 @"SELECT 
-                    ISNULL(p.PresupuestoIncentivos, 0) AS PresupuestoTotal,
-                    ISNULL(SUM(f.MontoIncentivos), 0) AS MontoUtilizado
-                  FROM PY_Trabajos t
-                  LEFT JOIN OP_PresupuestosCualitativo p ON t.Id = p.TrabajoId
-                  LEFT JOIN OP_FichasTecnicas f ON t.Id = f.TrabajoId
-                  WHERE t.Id = @TrabajoId
-                  GROUP BY p.PresupuestoIncentivos",
+                    ISNULL(p.PresupuestoIncentivo, 0) AS PresupuestoTotal,
+                    (
+                        ISNULL((SELECT SUM(CAST(PresupuestoIncentivo AS decimal(18,2))) FROM OP_FichaEntrevistas WHERE TrabajoId = @TrabajoId), 0) +
+                        ISNULL((SELECT SUM(CAST(PresupuestoIncentivo AS decimal(18,2))) FROM OP_FichaSesiones WHERE TrabajoId = @TrabajoId), 0) +
+                        ISNULL((SELECT SUM(CAST(PresupuestoIncentivo AS decimal(18,2))) FROM OP_FichaObservaciones WHERE TrabajoId = @TrabajoId), 0)
+                    ) AS MontoUtilizado
+                  FROM PY_Trabajo t
+                  LEFT JOIN PY_TrabajoCuali p ON t.Id = p.TrabajoId
+                  WHERE t.Id = @TrabajoId",
                 new { TrabajoId = trabajoId });
 
             if (resultado == null)
@@ -339,25 +444,48 @@ public class OpFichasTecnicasService : IOpFichasTecnicasService
         try
         {
             using var connection = new SqlConnection(_connectionString);
-            
-            var ficha = await connection.QueryFirstOrDefaultAsync<FichaTecnicaVm>(
-                @"SELECT 
-                    f.*,
-                    t.Nombre AS TrabajoNombre
-                  FROM OP_FichasTecnicas f
-                  INNER JOIN PY_Trabajos t ON f.TrabajoId = t.Id
-                  WHERE f.TrabajoId = @TrabajoId AND f.TipoFicha = @TipoFicha",
-                new { TrabajoId = trabajoId, TipoFicha = tipoFicha });
 
-            if (ficha == null)
+            IEnumerable<dynamic> rows;
+            switch (tipoFicha)
             {
-                ficha = new FichaTecnicaVm
-                {
-                    TrabajoId = trabajoId,
-                    TipoFicha = tipoFicha,
-                    EstadoFicha = "Borrador"
-                };
+                case 1:
+                    rows = await connection.QueryAsync<dynamic>(
+                        "OP_FichaEntrevistas_Get",
+                        new { ID = (long?)null, TrabajoID = trabajoId },
+                        commandType: CommandType.StoredProcedure);
+                    break;
+                case 2:
+                    rows = await connection.QueryAsync<dynamic>(
+                        "OP_FichaSesiones_Get",
+                        new { ID = (long?)null, TrabajoID = trabajoId },
+                        commandType: CommandType.StoredProcedure);
+                    break;
+                case 3:
+                    rows = await connection.QueryAsync<dynamic>(
+                        "OP_FichaObservaciones_Get",
+                        new { ID = (long?)null, TrabajoID = trabajoId },
+                        commandType: CommandType.StoredProcedure);
+                    break;
+                default:
+                    return (false, null!, "Tipo de ficha inválido");
             }
+
+            var r = rows.FirstOrDefault();
+            var trabajoNombre = await connection.QueryFirstOrDefaultAsync<string>(
+                "SELECT NombreTrabajo FROM PY_Trabajo WHERE Id = @Id",
+                new { Id = trabajoId });
+
+            var ficha = new FichaTecnicaVm
+            {
+                TrabajoId = trabajoId,
+                TrabajoNombre = trabajoNombre ?? string.Empty,
+                TipoFicha = tipoFicha,
+                EstadoFicha = "Borrador",
+                CantidadEntrevistas = (int?)r?.CantidadRequerida ?? 0,
+                PerfilEntrevistados = (string?)r?.GrupoObjetivo ?? string.Empty,
+                MontoIncentivos = (decimal?)r?.PresupuestoIncentivo ?? 0,
+                ObservacionesGenerales = (string?)r?.Observaciones ?? string.Empty
+            };
 
             return (true, ficha, string.Empty);
         }
