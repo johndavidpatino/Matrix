@@ -31,3 +31,21 @@ public class TrabajoCualitativoVm
     public bool TieneFiltroReclutamiento { get; set; }
     public bool TieneFiltroAsistencia { get; set; }
 }
+
+/// <summary>
+/// ViewModel para navegación desde Trabajos a módulos relacionados
+/// Ref: Trabajos.aspx botones de navegación condicionales
+/// </summary>
+public class NavigacionTrabajoVm
+{
+    public long TrabajoId { get; set; }
+    public bool PuedeIrAFichaEntrevista { get; set; }
+    public bool PuedeIrAFichaSesion { get; set; }
+    public bool PuedeIrAFichaObservacion { get; set; }
+    public bool PuedeIrAMuestra { get; set; }
+    public bool PuedeIrAFiltroReclutamiento { get; set; }
+    public bool PuedeIrAFiltroAsistencia { get; set; }
+    public bool PuedeIrAProgramacion { get; set; }
+    public bool PuedeIrAIps { get; set; }
+    public string MensajeNavegacion { get; set; } = string.Empty;
+}

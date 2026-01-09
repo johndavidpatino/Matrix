@@ -42,4 +42,36 @@ public interface IOpCualitativoService
     /// Ref: Trabajos.aspx.vb línea 26 (VerificarPermisoUsuario 42, 148)
     /// </summary>
     Task<bool> ValidarPermisoCoordinadorAsync(long usuarioId, int permisoId);
+
+    /// <summary>
+    /// Obtiene detalle completo de un trabajo cualitativo
+    /// Ref: OP-C01 (Details view)
+    /// </summary>
+    Task<(bool Success, TrabajoCualitativoVm Data, string Error)> ObtenerTrabajoDetalleAsync(long trabajoId);
+
+    /// <summary>
+    /// Crea un nuevo trabajo cualitativo
+    /// Ref: OP-C01 (Create action)
+    /// </summary>
+    Task<(bool Success, long TrabajoId, string Error)> CrearTrabajoAsync(
+        TrabajoCualitativoVm trabajo, long usuarioId);
+
+    /// <summary>
+    /// Actualiza un trabajo cualitativo existente
+    /// Ref: OP-C01 (Edit action)
+    /// </summary>
+    Task<(bool Success, string Error)> ActualizarTrabajoAsync(
+        TrabajoCualitativoVm trabajo, long usuarioId);
+
+    /// <summary>
+    /// Elimina (lógicamente) un trabajo cualitativo
+    /// Ref: OP-C01 (Delete action)
+    /// </summary>
+    Task<(bool Success, string Error)> EliminarTrabajoAsync(long trabajoId, long usuarioId);
+
+    /// <summary>
+    /// Obtiene información de navegación (fichas, muestra, filtros disponibles)
+    /// Ref: Trabajos.aspx botones de navegación condicionales
+    /// </summary>
+    Task<(bool Success, NavigacionTrabajoVm Data, string Error)> ObtenerNavegacionTrabajoAsync(long trabajoId);
 }

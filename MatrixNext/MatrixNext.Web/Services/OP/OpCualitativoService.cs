@@ -243,4 +243,246 @@ public class OpCualitativoService : IOpCualitativoService
             return false;
         }
     }
+
+    public async Task<(bool Success, TrabajoCualitativoVm Data, string Error)> ObtenerTrabajoDetalleAsync(long trabajoId)
+    {
+        try
+        {
+            using var connection = new SqlConnection(_connectionString);
+            
+            var trabajo = await connection.QueryFirstOrDefaultAsync<TrabajoCualitativoVm>(@"
+                SELECT 
+                    t.id AS Id,
+                    t.NombreTrabajo AS Nombre,
+                    u.Unidad AS UnidadNegocio,
+                    t.COE AS CoeId,
+                    COALESCE(coe.Nombres + ' ' + coe.Apellidos, 'Sin COE') AS CoeNombre,
+                    t.OP_MetodologiaId AS Tipo,
+                    met.MetNombre AS TipoDescripcion,
+                    COALESCE(est.EstadoDesc, CAST(t.Estado AS varchar(20))) AS Estado,
+                    t.FechaInicio,
+                    t.FechaTerminacion,
+                    tc.FechaInicioCampo,
+                    tc.FechaFinalCampo AS FechaFinCampo,
+                    t.TipoRecoleccionId AS TipoRecoleccion,
+                    tr.Recoleccion AS TipoRecoleccionDescripcion,
+                    CASE WHEN EXISTS(SELECT 1 FROM OP_FichasTecnicas f WHERE f.TrabajoId = t.id AND f.TipoFicha = 1) THEN 1 ELSE 0 END AS TieneFichaEntrevista,
+                    CASE WHEN EXISTS(SELECT 1 FROM OP_FichasTecnicas f WHERE f.TrabajoId = t.id AND f.TipoFicha = 2) THEN 1 ELSE 0 END AS TieneFichaSesion,
+                    CASE WHEN EXISTS(SELECT 1 FROM OP_FichasTecnicas f WHERE f.TrabajoId = t.id AND f.TipoFicha = 3) THEN 1 ELSE 0 END AS TieneFichaObservacion,
+                    CASE WHEN EXISTS(SELECT 1 FROM OP_MuestraTrabajos m WHERE m.TrabajoId = t.id) THEN 1 ELSE 0 END AS TieneMuestra
+                FROM PY_Trabajo t
+                LEFT JOIN OP_TrabajoConfiguracion tc ON t.id = tc.TrabajoId
+                LEFT JOIN US_Unidades u ON t.Unidad = u.id
+                LEFT JOIN US_Usuarios coe ON t.COE = coe.id
+                LEFT JOIN OP_Metodologias met ON t.OP_MetodologiaId = met.id
+                LEFT JOIN PY_EstadosTrabajo est ON t.Estado = est.id
+                LEFT JOIN OP_TipoRecoleccion tr ON t.TipoRecoleccionId = tr.id
+                WHERE t.id = @TrabajoId",
+                new { TrabajoId = trabajoId });
+
+            if (trabajo == null)
+                return (false, null!, "Trabajo no encontrado");
+
+            return (true, trabajo, string.Empty);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error obteniendo detalle trabajo {TrabajoId}", trabajoId);
+            return (false, null!, ex.Message);
+        }
+    }
+
+    public async Task<(bool Success, long TrabajoId, string Error)> CrearTrabajoAsync(
+        TrabajoCualitativoVm trabajo, long usuarioId)
+    {
+        try
+        {
+            using var connection = new SqlConnection(_connectionString);
+            
+            var trabajoId = await connection.QuerySingleAsync<long>(@"
+                INSERT INTO PY_Trabajo 
+                    (NombreTrabajo, COE, Unidad, OP_MetodologiaId, TipoRecoleccionId, Estado, FechaInicio, FechaTerminacion)
+                OUTPUT INSERTED.id
+                VALUES 
+                    (@Nombre, @CoeId, 1, @Tipo, @TipoRecoleccion, 1, @FechaInicio, @FechaTerminacion)",
+                new
+                {
+                    trabajo.Nombre,
+                    trabajo.CoeId,
+                    trabajo.Tipo,
+                    TipoRecoleccion = trabajo.TipoRecoleccion ?? 1,
+                    trabajo.FechaInicio,
+                    trabajo.FechaTerminacion
+                });
+
+            // Crear configuración si hay fechas de campo
+            if (trabajo.FechaInicioCampo.HasValue || trabajo.FechaFinCampo.HasValue)
+            {
+                await connection.ExecuteAsync(@"
+                    INSERT INTO OP_TrabajoConfiguracion (TrabajoId, FechaInicioCampo, FechaFinalCampo)
+                    VALUES (@TrabajoId, @FechaInicioCampo, @FechaFinCampo)",
+                    new
+                    {
+                        TrabajoId = trabajoId,
+                        trabajo.FechaInicioCampo,
+                        FechaFinCampo = trabajo.FechaFinCampo
+                    });
+            }
+
+            _logger.LogInformation("Trabajo {TrabajoId} creado por usuario {UsuarioId}", trabajoId, usuarioId);
+            return (true, trabajoId, string.Empty);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error creando trabajo");
+            return (false, 0, ex.Message);
+        }
+    }
+
+    public async Task<(bool Success, string Error)> ActualizarTrabajoAsync(
+        TrabajoCualitativoVm trabajo, long usuarioId)
+    {
+        try
+        {
+            using var connection = new SqlConnection(_connectionString);
+            
+            await connection.ExecuteAsync(@"
+                UPDATE PY_Trabajo
+                SET NombreTrabajo = @Nombre,
+                    COE = @CoeId,
+                    OP_MetodologiaId = @Tipo,
+                    TipoRecoleccionId = @TipoRecoleccion,
+                    FechaInicio = @FechaInicio,
+                    FechaTerminacion = @FechaTerminacion
+                WHERE id = @Id",
+                new
+                {
+                    trabajo.Id,
+                    trabajo.Nombre,
+                    trabajo.CoeId,
+                    trabajo.Tipo,
+                    TipoRecoleccion = trabajo.TipoRecoleccion ?? 1,
+                    trabajo.FechaInicio,
+                    trabajo.FechaTerminacion
+                });
+
+            // Actualizar o crear configuración
+            var existe = await connection.QueryFirstOrDefaultAsync<int>(
+                "SELECT COUNT(*) FROM OP_TrabajoConfiguracion WHERE TrabajoId = @TrabajoId",
+                new { TrabajoId = trabajo.Id });
+
+            if (existe > 0)
+            {
+                await connection.ExecuteAsync(@"
+                    UPDATE OP_TrabajoConfiguracion
+                    SET FechaInicioCampo = @FechaInicioCampo,
+                        FechaFinalCampo = @FechaFinCampo
+                    WHERE TrabajoId = @TrabajoId",
+                    new
+                    {
+                        TrabajoId = trabajo.Id,
+                        trabajo.FechaInicioCampo,
+                        FechaFinCampo = trabajo.FechaFinCampo
+                    });
+            }
+            else if (trabajo.FechaInicioCampo.HasValue || trabajo.FechaFinCampo.HasValue)
+            {
+                await connection.ExecuteAsync(@"
+                    INSERT INTO OP_TrabajoConfiguracion (TrabajoId, FechaInicioCampo, FechaFinalCampo)
+                    VALUES (@TrabajoId, @FechaInicioCampo, @FechaFinCampo)",
+                    new
+                    {
+                        TrabajoId = trabajo.Id,
+                        trabajo.FechaInicioCampo,
+                        FechaFinCampo = trabajo.FechaFinCampo
+                    });
+            }
+
+            _logger.LogInformation("Trabajo {TrabajoId} actualizado por usuario {UsuarioId}", trabajo.Id, usuarioId);
+            return (true, string.Empty);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error actualizando trabajo {TrabajoId}", trabajo.Id);
+            return (false, ex.Message);
+        }
+    }
+
+    public async Task<(bool Success, string Error)> EliminarTrabajoAsync(long trabajoId, long usuarioId)
+    {
+        try
+        {
+            // Validar que no tenga dependencias
+            using var connection = new SqlConnection(_connectionString);
+            
+            var tieneDependencias = await connection.QueryFirstAsync<int>(@"
+                SELECT 
+                    (SELECT COUNT(*) FROM OP_FichasTecnicas WHERE TrabajoId = @TrabajoId) +
+                    (SELECT COUNT(*) FROM OP_MuestraTrabajos WHERE TrabajoId = @TrabajoId) +
+                    (SELECT COUNT(*) FROM OP_Programados_Entrevistados WHERE TrabajoId = @TrabajoId) +
+                    (SELECT COUNT(*) FROM PY_PlanillaModeracion WHERE TrabajoId = @TrabajoId)",
+                new { TrabajoId = trabajoId });
+
+            if (tieneDependencias > 0)
+            {
+                return (false, "No se puede eliminar el trabajo porque tiene fichas, muestra, programaciones o planillas asociadas");
+            }
+
+            // Eliminación lógica (cambiar estado)
+            await connection.ExecuteAsync(@"
+                UPDATE PY_Trabajo
+                SET Estado = 99  -- Estado eliminado
+                WHERE id = @TrabajoId",
+                new { TrabajoId = trabajoId });
+
+            _logger.LogInformation("Trabajo {TrabajoId} eliminado lógicamente por usuario {UsuarioId}", trabajoId, usuarioId);
+            return (true, string.Empty);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error eliminando trabajo {TrabajoId}", trabajoId);
+            return (false, ex.Message);
+        }
+    }
+
+    public async Task<(bool Success, NavigacionTrabajoVm Data, string Error)> ObtenerNavegacionTrabajoAsync(long trabajoId)
+    {
+        try
+        {
+            using var connection = new SqlConnection(_connectionString);
+            
+            var nav = await connection.QueryFirstOrDefaultAsync<dynamic>(@"
+                SELECT 
+                    CASE WHEN EXISTS(SELECT 1 FROM OP_FichasTecnicas WHERE TrabajoId = @TrabajoId AND TipoFicha = 1) THEN 1 ELSE 0 END AS TieneFichaEntrevista,
+                    CASE WHEN EXISTS(SELECT 1 FROM OP_FichasTecnicas WHERE TrabajoId = @TrabajoId AND TipoFicha = 2) THEN 1 ELSE 0 END AS TieneFichaSesion,
+                    CASE WHEN EXISTS(SELECT 1 FROM OP_FichasTecnicas WHERE TrabajoId = @TrabajoId AND TipoFicha = 3) THEN 1 ELSE 0 END AS TieneFichaObservacion,
+                    CASE WHEN EXISTS(SELECT 1 FROM OP_MuestraTrabajos WHERE TrabajoId = @TrabajoId) THEN 1 ELSE 0 END AS TieneMuestra,
+                    CASE WHEN EXISTS(SELECT 1 FROM OP_PreguntasFiltro WHERE TrabajoId = @TrabajoId AND TipoFiltro = 1) THEN 1 ELSE 0 END AS TieneFiltroReclutamiento,
+                    CASE WHEN EXISTS(SELECT 1 FROM OP_PreguntasFiltro WHERE TrabajoId = @TrabajoId AND TipoFiltro = 2) THEN 1 ELSE 0 END AS TieneFiltroAsistencia,
+                    CASE WHEN EXISTS(SELECT 1 FROM OP_Programados_Entrevistados WHERE TrabajoId = @TrabajoId) THEN 1 ELSE 0 END AS TieneProgramacion,
+                    CASE WHEN EXISTS(SELECT 1 FROM OP_IPS_Revisiones WHERE TrabajoId = @TrabajoId) THEN 1 ELSE 0 END AS TieneIps",
+                new { TrabajoId = trabajoId });
+
+            var navegacion = new NavigacionTrabajoVm
+            {
+                TrabajoId = trabajoId,
+                PuedeIrAFichaEntrevista = nav.TieneFichaEntrevista == 1,
+                PuedeIrAFichaSesion = nav.TieneFichaSesion == 1,
+                PuedeIrAFichaObservacion = nav.TieneFichaObservacion == 1,
+                PuedeIrAMuestra = nav.TieneMuestra == 1,
+                PuedeIrAFiltroReclutamiento = nav.TieneFiltroReclutamiento == 1,
+                PuedeIrAFiltroAsistencia = nav.TieneFiltroAsistencia == 1,
+                PuedeIrAProgramacion = nav.TieneProgramacion == 1,
+                PuedeIrAIps = nav.TieneIps == 1,
+                MensajeNavegacion = "Navegación disponible según módulos configurados"
+            };
+
+            return (true, navegacion, string.Empty);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error obteniendo navegación trabajo {TrabajoId}", trabajoId);
+            return (false, null!, ex.Message);
+        }
+    }
 }

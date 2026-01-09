@@ -184,6 +184,179 @@ public class CualitativoTrabajosController : Controller
     }
 
     /// <summary>
+    /// Details - Ver detalle de un trabajo
+    /// Ref: OP-C01 (Details view)
+    /// </summary>
+    [HttpGet("Details/{id}")]
+    public async Task<IActionResult> Details(long id)
+    {
+        try
+        {
+            var (success, data, error) = await _cualitativoService.ObtenerTrabajoDetalleAsync(id);
+
+            if (!success)
+            {
+                TempData["Error"] = error;
+                return RedirectToAction("Index");
+            }
+
+            // Obtener info de navegación
+            var (navSuccess, navData, navError) = await _cualitativoService.ObtenerNavegacionTrabajoAsync(id);
+            ViewBag.Navegacion = navSuccess ? navData : null;
+
+            return View(data);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error cargando detalle trabajo {Id}", id);
+            TempData["Error"] = "Error cargando detalle del trabajo";
+            return RedirectToAction("Index");
+        }
+    }
+
+    /// <summary>
+    /// Create - Formulario crear nuevo trabajo (GET)
+    /// Ref: OP-C01 (Create view)
+    /// </summary>
+    [HttpGet("Create")]
+    public IActionResult Create()
+    {
+        return View(new TrabajoCualitativoVm());
+    }
+
+    /// <summary>
+    /// Create - Guardar nuevo trabajo (POST)
+    /// Ref: OP-C01 (Create action)
+    /// </summary>
+    [HttpPost("Create")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(TrabajoCualitativoVm trabajo)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(trabajo);
+            }
+
+            var usuarioId = long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            var (success, trabajoId, error) = await _cualitativoService.CrearTrabajoAsync(trabajo, usuarioId);
+
+            if (!success)
+            {
+                ModelState.AddModelError(string.Empty, error);
+                return View(trabajo);
+            }
+
+            TempData["Success"] = "Trabajo creado exitosamente";
+            return RedirectToAction("Details", new { id = trabajoId });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error creando trabajo");
+            ModelState.AddModelError(string.Empty, "Error creando trabajo");
+            return View(trabajo);
+        }
+    }
+
+    /// <summary>
+    /// Edit - Formulario editar trabajo (GET)
+    /// Ref: OP-C01 (Edit view)
+    /// </summary>
+    [HttpGet("Edit/{id}")]
+    public async Task<IActionResult> Edit(long id)
+    {
+        try
+        {
+            var (success, data, error) = await _cualitativoService.ObtenerTrabajoDetalleAsync(id);
+
+            if (!success)
+            {
+                TempData["Error"] = error;
+                return RedirectToAction("Index");
+            }
+
+            return View(data);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error cargando edición trabajo {Id}", id);
+            TempData["Error"] = "Error cargando trabajo";
+            return RedirectToAction("Index");
+        }
+    }
+
+    /// <summary>
+    /// Edit - Actualizar trabajo (POST)
+    /// Ref: OP-C01 (Edit action)
+    /// </summary>
+    [HttpPost("Edit/{id}")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(long id, TrabajoCualitativoVm trabajo)
+    {
+        try
+        {
+            if (id != trabajo.Id)
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(trabajo);
+            }
+
+            var usuarioId = long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            var (success, error) = await _cualitativoService.ActualizarTrabajoAsync(trabajo, usuarioId);
+
+            if (!success)
+            {
+                ModelState.AddModelError(string.Empty, error);
+                return View(trabajo);
+            }
+
+            TempData["Success"] = "Trabajo actualizado exitosamente";
+            return RedirectToAction("Details", new { id });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error actualizando trabajo {Id}", id);
+            ModelState.AddModelError(string.Empty, "Error actualizando trabajo");
+            return View(trabajo);
+        }
+    }
+
+    /// <summary>
+    /// Delete - Eliminar trabajo (POST AJAX)
+    /// Ref: OP-C01 (Delete action)
+    /// </summary>
+    [HttpPost("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Delete(long id)
+    {
+        try
+        {
+            var usuarioId = long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            var (success, error) = await _cualitativoService.EliminarTrabajoAsync(id, usuarioId);
+
+            if (!success)
+            {
+                return Json(new { success = false, message = error });
+            }
+
+            return Json(new { success = true, message = "Trabajo eliminado exitosamente" });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error eliminando trabajo {Id}", id);
+            return Json(new { success = false, message = "Error eliminando trabajo" });
+        }
+    }
+
+    /// <summary>
     /// PASO 1.7: Navegación a módulos relacionados
     /// Ref: Trabajos.aspx.vb líneas 80-143 (gvTrabajos_RowCommand con 8 redirecciones)
     /// </summary>
