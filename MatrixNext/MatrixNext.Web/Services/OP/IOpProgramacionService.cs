@@ -43,4 +43,11 @@ public interface IOpProgramacionService
     /// </summary>
     Task<(bool Success, List<EntrevistadoDisponibleVm> Data, string Error)> ObtenerEntrevistadosDisponiblesAsync(
         long trabajoId);
+
+    /// <summary>
+    /// Validar participantes seleccionados para una programación
+    /// Reglas: existencia, disponibilidad, duplicados y estado futuro confirmado/ejecutado
+    /// </summary>
+    Task<(bool Success, List<ParticipanteValidacionVm> Data, string Error)> ValidarParticipantesAsync(
+        long trabajoId, IEnumerable<long> idsParticipantes, DateTime? fechaProgramada = null);
 }

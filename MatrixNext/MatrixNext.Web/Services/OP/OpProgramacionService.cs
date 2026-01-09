@@ -274,4 +274,125 @@ public class OpProgramacionService : IOpProgramacionService
             return (false, new List<EntrevistadoDisponibleVm>(), ex.Message);
         }
     }
+
+    public async Task<(bool Success, List<ParticipanteValidacionVm> Data, string Error)> ValidarParticipantesAsync(
+        long trabajoId, IEnumerable<long> idsParticipantes, DateTime? fechaProgramada = null)
+    {
+        try
+        {
+            using var connection = new SqlConnection(_connectionString);
+
+            // Obtener info base de los participantes seleccionados
+            var participantes = (await connection.QueryAsync<EntrevistadoDisponibleVm>(
+                @"SELECT 
+                    m.Id,
+                    COALESCE(m.Nombres + ' ' + m.Apellidos, '') AS NombreCompleto,
+                    m.Telefono,
+                    m.Direccion,
+                    c.Ciudad,
+                    CASE WHEN EXISTS(
+                        SELECT 1 FROM OP_Programados_Entrevistados p
+                        WHERE p.EntrevistadoId = m.Id
+                          AND p.Estado IN (3, 4) -- Confirmado o Ejecutado
+                          AND (
+                               p.FechaProgramada >= GETDATE()
+                               OR (@FechaProgramada IS NOT NULL AND CAST(p.FechaProgramada AS DATE) = CAST(@FechaProgramada AS DATE))
+                          )
+                    ) THEN 0 ELSE 1 END AS EstaDisponible,
+                    (SELECT COUNT(*) FROM OP_Programados_Entrevistados p WHERE p.EntrevistadoId = m.Id) AS CantidadProgramaciones,
+                    (SELECT MAX(p.FechaProgramada) FROM OP_Programados_Entrevistados p WHERE p.EntrevistadoId = m.Id) AS UltimaProgramacion
+                  FROM OP_MuestraTrabajos m
+                  LEFT JOIN C_Ciudades c ON m.CiudadId = c.id
+                  WHERE m.TrabajoId = @TrabajoId AND m.Id IN @Ids
+                  ORDER BY m.Id",
+                new { TrabajoId = trabajoId, Ids = idsParticipantes, FechaProgramada = fechaProgramada }))
+                .ToList();
+
+            // Armar resultado de validación
+            var resultados = new List<ParticipanteValidacionVm>();
+
+            var idsSet = new HashSet<long>(idsParticipantes);
+            foreach (var p in participantes)
+            {
+                var disponible = p.EstaDisponible;
+                string? motivo = null;
+
+                if (!idsSet.Contains(p.Id))
+                {
+                    disponible = false;
+                    motivo = "Participante no incluido en la selección";
+                }
+                else if (!disponible)
+                {
+                    motivo = "Ya programado (confirmado/ejecutado) en fecha futura o misma fecha";
+                }
+
+                resultados.Add(new ParticipanteValidacionVm
+                {
+                    ParticipanteId = p.Id,
+                    NombreCompleto = p.NombreCompleto,
+                    Disponible = disponible,
+                    MotivoNoValido = motivo,
+                    ProgramacionesPrevias = p.CantidadProgramaciones,
+                    UltimaProgramacion = p.UltimaProgramacion
+                });
+            }
+
+            // Detectar duplicados en la lista seleccionada
+            var duplicados = idsParticipantes
+                .GroupBy(id => id)
+                .Where(g => g.Count() > 1)
+                .Select(g => g.Key)
+                .ToHashSet();
+
+            foreach (var dupId in duplicados)
+            {
+                var item = resultados.FirstOrDefault(r => r.ParticipanteId == dupId);
+                if (item != null)
+                {
+                    item.Disponible = false;
+                    item.MotivoNoValido = string.IsNullOrEmpty(item.MotivoNoValido)
+                        ? "Participante duplicado en selección"
+                        : item.MotivoNoValido + "; Participante duplicado";
+                }
+                else
+                {
+                    resultados.Add(new ParticipanteValidacionVm
+                    {
+                        ParticipanteId = dupId,
+                        NombreCompleto = string.Empty,
+                        Disponible = false,
+                        MotivoNoValido = "Participante duplicado en selección",
+                        ProgramacionesPrevias = 0,
+                        UltimaProgramacion = null
+                    });
+                }
+            }
+
+            // Si algún participante de ids no existe en la tabla, agregamos entrada no válida
+            var existentes = participantes.Select(p => p.Id).ToHashSet();
+            foreach (var idSel in idsSet)
+            {
+                if (!existentes.Contains(idSel))
+                {
+                    resultados.Add(new ParticipanteValidacionVm
+                    {
+                        ParticipanteId = idSel,
+                        NombreCompleto = string.Empty,
+                        Disponible = false,
+                        MotivoNoValido = "Participante no existe para el trabajo",
+                        ProgramacionesPrevias = 0,
+                        UltimaProgramacion = null
+                    });
+                }
+            }
+
+            return (true, resultados, string.Empty);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error validando participantes trabajo {TrabajoId}", trabajoId);
+            return (false, new List<ParticipanteValidacionVm>(), ex.Message);
+        }
+    }
 }

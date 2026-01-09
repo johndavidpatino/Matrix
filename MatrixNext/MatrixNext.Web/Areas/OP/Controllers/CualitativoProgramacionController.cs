@@ -224,4 +224,38 @@ public class CualitativoProgramacionController : Controller
             return Json(new { success = false, message = "Error obteniendo entrevistados" });
         }
     }
+
+    /// <summary>
+    /// Validar participantes seleccionados (AJAX)
+    /// Ref: Sprint 4 - Validación Participantes
+    /// </summary>
+    [HttpPost("ValidateParticipants")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ValidateParticipants(long trabajoId, [FromBody] ValidateParticipantsRequest req)
+    {
+        try
+        {
+            if (req == null || req.Ids == null || !req.Ids.Any())
+                return Json(new { success = false, message = "Debe seleccionar al menos un participante" });
+
+            var (success, data, error) = await _programacionService.ValidarParticipantesAsync(
+                trabajoId, req.Ids, req.FechaProgramada);
+
+            if (!success)
+                return Json(new { success = false, message = error });
+
+            return Json(new { success = true, data });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error validando participantes trabajo {TrabajoId}", trabajoId);
+            return Json(new { success = false, message = "Error validando participantes" });
+        }
+    }
+
+    public class ValidateParticipantsRequest
+    {
+        public List<long> Ids { get; set; } = new();
+        public DateTime? FechaProgramada { get; set; }
+    }
 }
