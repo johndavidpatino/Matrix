@@ -38,22 +38,24 @@
 
                     <div class="col-md-6">
                         <label asp-for="EntrevistadoId" class="form-label">Entrevistado <span class="text-danger">*</span></label>
-                        <select asp-for="EntrevistadoId" id="entrevistadoId" class="form-select" required>
-                            <option value="">Seleccione un entrevistado...</option>
+                        <select asp-for="EntrevistadoId" id="entrevistadoId" class="form-select" required multiple size="5">
                             @if (ViewData["EntrevistadosDisponibles"] != null)
                             {
                                 @foreach (var entrevistado in (IEnumerable<dynamic>)ViewData["EntrevistadosDisponibles"])
                                 {
-                                    <option value="@entrevistado.EntrevistadoId" 
+                                    <option value="@entrevistado.Id" 
                                             data-telefono="@entrevistado.Telefono"
-                                            data-email="@entrevistado.Email"
-                                            selected="@(entrevistado.EntrevistadoId == Model?.EntrevistadoId)">
-                                        @entrevistado.Nombre - @entrevistado.Telefono
+                                            data-direccion="@entrevistado.Direccion"
+                                            selected="@(entrevistado.Id == Model?.EntrevistadoId)">
+                                        @entrevistado.NombreCompleto - @entrevistado.Telefono
                                     </option>
                                 }
                             }
                         </select>
                         <span asp-validation-for="EntrevistadoId" class="text-danger"></span>
+                        <button type="button" class="btn btn-sm btn-outline-primary mt-2" id="btnValidarParticipantes">
+                            <i class="bi bi-check-circle"></i> Validar Participantes Seleccionados
+                        </button>
                     </div>
 
                     <div class="col-md-4">
@@ -125,6 +127,47 @@
     </div>
 </div>
 
+<!-- Modal de Validación de Participantes -->
+<div class="modal fade" id="modalValidacionParticipantes" tabindex="-1" aria-labelledby="modalValidacionLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalValidacionLabel">Resultado de Validación de Participantes</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="validacionLoading" class="text-center" style="display: none;">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Validando...</span>
+                    </div>
+                    <p class="mt-2">Validando participantes...</p>
+                </div>
+                <div id="validacionResultados" style="display: none;">
+                    <div class="alert alert-info" id="validacionSummary"></div>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Participante</th>
+                                    <th>Estado</th>
+                                    <th>Motivo</th>
+                                    <th>Programaciones Previas</th>
+                                    <th>Última Programación</th>
+                                </tr>
+                            </thead>
+                            <tbody id="validacionTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
@@ -147,6 +190,97 @@
             @if (Model?.EntrevistadoId > 0)
             {
                 @:$('#entrevistadoId').trigger('change');
+            }
+
+            // Validar participantes seleccionados
+            $('#btnValidarParticipantes').click(function() {
+                const selectedIds = $('#entrevistadoId').val();
+                const fechaProgramada = $('#FechaProgramada').val();
+
+                if (!selectedIds || selectedIds.length === 0) {
+                    alert('Debe seleccionar al menos un participante para validar');
+                    return;
+                }
+
+                const trabajoId = @Model?.TrabajoId ?? 0;
+                if (trabajoId === 0) {
+                    alert('TrabajoId no válido');
+                    return;
+                }
+
+                // Mostrar modal y loading
+                const modal = new bootstrap.Modal(document.getElementById('modalValidacionParticipantes'));
+                modal.show();
+                $('#validacionLoading').show();
+                $('#validacionResultados').hide();
+
+                // AJAX call
+                $.ajax({
+                    url: '@Url.Action("ValidateParticipants", "CualitativoProgramacion", new { Area = "OP" })',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        ids: selectedIds.map(id => parseInt(id)),
+                        fechaProgramada: fechaProgramada || null
+                    }),
+                    headers: {
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function(response) {
+                        $('#validacionLoading').hide();
+                        if (response.success) {
+                            mostrarResultadosValidacion(response.data);
+                        } else {
+                            $('#validacionResultados').html('<div class="alert alert-danger">Error: ' + response.message + '</div>').show();
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        $('#validacionLoading').hide();
+                        $('#validacionResultados').html('<div class="alert alert-danger">Error en la petición: ' + error + '</div>').show();
+                    }
+                });
+            });
+
+            function mostrarResultadosValidacion(data) {
+                const totalValidos = data.filter(p => p.disponible).length;
+                const totalNoValidos = data.length - totalValidos;
+
+                // Summary
+                let summaryHtml = `<strong>Total participantes:</strong> ${data.length} | 
+                                   <span class="text-success">Válidos: ${totalValidos}</span> | 
+                                   <span class="text-danger">No válidos: ${totalNoValidos}</span>`;
+                $('#validacionSummary').html(summaryHtml);
+
+                // Table rows
+                let tableHtml = '';
+                data.forEach(p => {
+                    const badgeClass = p.disponible ? 'bg-success' : 'bg-danger';
+                    const estadoText = p.disponible ? 'Disponible' : 'No Disponible';
+                    const motivoText = p.motivoNoValido || '-';
+                    const ultimaProg = p.ultimaProgramacion ? new Date(p.ultimaProgramacion).toLocaleDateString() : 'Nunca';
+
+                    tableHtml += `<tr class="${p.disponible ? '' : 'table-warning'}">
+                        <td>${p.participanteId}</td>
+                        <td>${p.nombreCompleto || 'Desconocido'}</td>
+                        <td><span class="badge ${badgeClass}">${estadoText}</span></td>
+                        <td>${motivoText}</td>
+                        <td>${p.programacionesPrevias}</td>
+                        <td>${ultimaProg}</td>
+                    </tr>`;
+                });
+
+                $('#validacionTableBody').html(tableHtml);
+                $('#validacionResultados').show();
+
+                // Opcional: bloquear submit si hay no válidos
+                if (totalNoValidos > 0) {
+                    $('#formProgramacion button[type="submit"]').prop('disabled', true).addClass('btn-secondary').removeClass('btn-primary');
+                    $('#formProgramacion').prepend('<div class="alert alert-warning alert-dismissible fade show" role="alert">'
+                        + '<strong>Atención:</strong> Hay participantes no válidos. Corrija la selección antes de guardar.'
+                        + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+                } else {
+                    $('#formProgramacion button[type="submit"]').prop('disabled', false).addClass('btn-primary').removeClass('btn-secondary');
+                }
             }
         });
     </script>
