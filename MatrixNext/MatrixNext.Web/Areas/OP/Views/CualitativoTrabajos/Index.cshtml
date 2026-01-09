@@ -1,219 +1,306 @@
-@model List<MatrixNext.Web.Services.OP.Models.TrabajoCualitativoVm>
-
+@model IEnumerable<MatrixNext.Web.Services.OP.Models.TrabajoCualitativoVm>
 @{
-    ViewData["Title"] = "Trabajos Cualitativos - COE";
-    var coeId = ViewBag.CoeId as long?;
-    var esCoordinador = (bool)(ViewBag.EsCoordinador ?? false);
+    ViewData["Title"] = "Trabajos Cualitativos";
+    var esCoordinador = ViewBag.EsCoordinador ?? false;
+    var coeId = ViewBag.CoeId ?? (long?)null;
 }
 
-<!-- Ref: ANALISIS_OP_CUALITATIVO_FASE3_FLUJO1.md PASO 1.1-1.3 -->
-<!-- WebForm original: Trabajos.aspx -->
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>@ViewData["Title"]</h2>
+        <div class="btn-group">
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Nuevo Trabajo
+            </a>
+        </div>
+    </div>
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">
-                        <i class="fas fa-briefcase"></i> Trabajos Cualitativos
-                        @if (esCoordinador)
-                        {
-                            <span class="badge badge-primary">Coordinador COE</span>
-                        }
-                    </h3>
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-sm btn-primary" onclick="refreshTrabajos()">
-                            <i class="fas fa-sync-alt"></i> Actualizar
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <form method="get" asp-action="Index" id="filterForm">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label for="coeId" class="form-label">COE</label>
+                        <input type="number" name="coeId" id="coeId" class="form-control" value="@coeId" placeholder="ID Coordinador" />
+                    </div>
+                    <div class="col-md-3">
+                        <label for="nombre" class="form-label">Nombre Trabajo</label>
+                        <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Buscar por nombre..." />
+                    </div>
+                    <div class="col-md-3">
+                        <label for="estado" class="form-label">Estado</label>
+                        <select name="estado" id="estado" class="form-select">
+                            <option value="">Todos</option>
+                            <option value="Activo">Activo</option>
+                            <option value="En Progreso">En Progreso</option>
+                            <option value="Finalizado">Finalizado</option>
+                            <option value="Cancelado">Cancelado</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end gap-2">
+                        <button type="submit" class="btn btn-primary flex-fill">
+                            <i class="bi bi-search"></i> Buscar
                         </button>
+                        <a href="@Url.Action("Index")" class="btn btn-secondary flex-fill">
+                            <i class="bi bi-x-circle"></i> Limpiar
+                        </a>
                     </div>
                 </div>
+            </form>
+        </div>
+    </div>
 
-                <!-- PASO 1.3: Búsqueda de trabajos -->
-                <div class="card-body">
-                    <div class="row mb-3">
-                        <div class="col-md-4">
-                            <label>COE</label>
-                            <select id="filtro-coe" class="form-control" onchange="filterTrabajos()">
-                                <option value="">Todos</option>
-                                <!-- Cargar COEs dinámicamente desde API -->
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label>Nombre</label>
-                            <input type="text" id="filtro-nombre" class="form-control" placeholder="Buscar por nombre..." onkeyup="filterTrabajos()" />
-                        </div>
-                        <div class="col-md-4">
-                            <label>Estado</label>
-                            <select id="filtro-estado" class="form-control" onchange="filterTrabajos()">
-                                <option value="">Todos</option>
-                                <option value="Activo">Activo</option>
-                                <option value="Cerrado">Cerrado</option>
-                                <option value="Pausado">Pausado</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- PASO 1.2: Grid de trabajos -->
-                    <div id="trabajos-grid-container">
-                        @await Html.PartialAsync("_TrabajosGrid", Model)
-                    </div>
+    <div class="card">
+        <div class="card-body">
+            @if (Model?.Any() == true)
+            {
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover" id="trabajosTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Unidad Negocio</th>
+                                <th>COE</th>
+                                <th>Tipo</th>
+                                <th>Estado</th>
+                                <th>Fecha Campo</th>
+                                <th>Tipo Recolección</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var trabajo in Model)
+                            {
+                                <tr>
+                                    <td>@trabajo.Id</td>
+                                    <td>@trabajo.Nombre</td>
+                                    <td>@trabajo.UnidadNegocio</td>
+                                    <td>@trabajo.CoeNombre</td>
+                                    <td>@trabajo.TipoDescripcion</td>
+                                    <td>
+                                        <span class="badge bg-@(trabajo.Estado == "Activo" ? "success" : trabajo.Estado == "Finalizado" ? "secondary" : "primary")">
+                                            @trabajo.Estado
+                                        </span>
+                                    </td>
+                                    <td>
+                                        @if (trabajo.FechaInicioCampo.HasValue)
+                                        {
+                                            @trabajo.FechaInicioCampo.Value.ToString("dd/MM/yyyy")
+                                        }
+                                    </td>
+                                    <td>@trabajo.TipoRecoleccionDescripcion</td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a asp-action="Details" asp-route-id="@trabajo.Id" class="btn btn-info" title="Ver detalle">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                            <a asp-action="Edit" asp-route-id="@trabajo.Id" class="btn btn-warning" title="Editar">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <button type="button" class="btn btn-secondary" title="Configurar" onclick="abrirModalConfiguracion(@trabajo.Id)">
+                                                <i class="bi bi-gear"></i>
+                                            </button>
+                                            <div class="btn-group btn-group-sm">
+                                                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" title="Navegar a...">
+                                                    <i class="bi bi-box-arrow-up-right"></i>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    @if (trabajo.TieneFichaEntrevista)
+                                                    {
+                                                        <li><a class="dropdown-item" asp-action="NavigateTo" asp-route-trabajoId="@trabajo.Id" asp-route-destination="FichaEntrevista">Ficha Entrevista</a></li>
+                                                    }
+                                                    @if (trabajo.TieneFichaSesion)
+                                                    {
+                                                        <li><a class="dropdown-item" asp-action="NavigateTo" asp-route-trabajoId="@trabajo.Id" asp-route-destination="FichaSesion">Ficha Sesión</a></li>
+                                                    }
+                                                    @if (trabajo.TieneFichaObservacion)
+                                                    {
+                                                        <li><a class="dropdown-item" asp-action="NavigateTo" asp-route-trabajoId="@trabajo.Id" asp-route-destination="FichaObservacion">Ficha Observación</a></li>
+                                                    }
+                                                    @if (trabajo.TieneMuestra)
+                                                    {
+                                                        <li><a class="dropdown-item" asp-action="NavigateTo" asp-route-trabajoId="@trabajo.Id" asp-route-destination="Muestra">Muestra</a></li>
+                                                    }
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    <li><a class="dropdown-item" asp-action="NavigateTo" asp-route-trabajoId="@trabajo.Id" asp-route-destination="FiltroReclutamiento">Filtro Reclutamiento</a></li>
+                                                    <li><a class="dropdown-item" asp-action="NavigateTo" asp-route-trabajoId="@trabajo.Id" asp-route-destination="FiltroAsistencia">Filtro Asistencia</a></li>
+                                                    <li><a class="dropdown-item" asp-action="NavigateTo" asp-route-trabajoId="@trabajo.Id" asp-route-destination="Campo">Campo</a></li>
+                                                    <li><a class="dropdown-item" asp-action="NavigateTo" asp-route-trabajoId="@trabajo.Id" asp-route-destination="Programacion">Programación</a></li>
+                                                </ul>
+                                            </div>
+                                            <button type="button" class="btn btn-danger" title="Eliminar" onclick="eliminarTrabajo(@trabajo.Id, '@trabajo.Nombre')">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 </div>
-            </div>
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i> No se encontraron trabajos cualitativos.
+                </div>
+            }
         </div>
     </div>
 </div>
 
-<!-- PASO 1.5-1.6: Modal de configuración -->
-<div class="modal fade" id="modal-configuracion" tabindex="-1">
-    <div class="modal-dialog modal-lg">
+<!-- Modal de Configuración -->
+<div class="modal fade" id="modalConfiguracion" tabindex="-1">
+    <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title">
-                    <i class="fas fa-cog"></i> Configuración de Trabajo
-                </h5>
-                <button type="button" class="close text-white" data-dismiss="modal">
-                    <span>&times;</span>
-                </button>
+            <div class="modal-header">
+                <h5 class="modal-title">Configurar Trabajo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form id="form-configuracion">
-                @Html.AntiForgeryToken()
-                <div class="modal-body">
-                    <input type="hidden" id="config-trabajo-id" />
+            <div class="modal-body">
+                <form id="formConfiguracion">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" id="configTrabajoId" name="trabajoId" />
                     
-                    <div class="form-group">
-                        <label class="font-weight-bold">Trabajo:</label>
-                        <p id="config-trabajo-nombre" class="form-control-plaintext"></p>
+                    <div class="mb-3">
+                        <label for="fechaInicioCampo" class="form-label">Fecha Inicio Campo</label>
+                        <input type="date" class="form-control" id="fechaInicioCampo" name="fechaInicioCampo" />
                     </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="config-fecha-inicio">Fecha Inicio Campo *</label>
-                                <input type="date" class="form-control" id="config-fecha-inicio" required />
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="config-fecha-fin">Fecha Fin Campo *</label>
-                                <input type="date" class="form-control" id="config-fecha-fin" required />
-                            </div>
-                        </div>
+                    
+                    <div class="mb-3">
+                        <label for="fechaFinCampo" class="form-label">Fecha Fin Campo</label>
+                        <input type="date" class="form-control" id="fechaFinCampo" name="fechaFinCampo" />
                     </div>
-
-                    <div class="form-group">
-                        <label for="config-tipo-recoleccion">Tipo de Recolección *</label>
-                        <select class="form-control" id="config-tipo-recoleccion" required>
-                            <option value="">Seleccione...</option>
+                    
+                    <div class="mb-3">
+                        <label for="tipoRecoleccion" class="form-label">Tipo Recolección</label>
+                        <select class="form-select" id="tipoRecoleccion" name="tipoRecoleccion">
                             <option value="1">Presencial</option>
                             <option value="2">Telefónica</option>
                             <option value="3">Online</option>
                             <option value="4">Mixta</option>
                         </select>
                     </div>
-
-                    <div class="form-group">
-                        <label for="config-observaciones">Observaciones</label>
-                        <textarea class="form-control" id="config-observaciones" rows="3"></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                        <i class="fas fa-times"></i> Cancelar
-                    </button>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save"></i> Guardar Configuración
-                    </button>
-                </div>
-            </form>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="guardarConfiguracion()">Guardar</button>
+            </div>
         </div>
     </div>
 </div>
 
 @section Scripts {
     <script>
-        // PASO 1.3: Búsqueda de trabajos (AJAX)
-        function filterTrabajos() {
-            const coeId = $('#filtro-coe').val();
-            const nombre = $('#filtro-nombre').val();
-            const estado = $('#filtro-estado').val();
+        let modalConfiguracion;
 
-            $.get('@Url.Action("Search", "CualitativoTrabajos", new { area = "OP" })', {
-                coeId: coeId,
-                nombre: nombre,
-                estado: estado
-            }, function(data) {
-                $('#trabajos-grid-container').html(data);
-            });
-        }
+        $(document).ready(function() {
+            modalConfiguracion = new bootstrap.Modal(document.getElementById('modalConfiguracion'));
 
-        function refreshTrabajos() {
-            location.reload();
-        }
-
-        // PASO 1.5: Cargar configuración de trabajo
-        function loadConfiguration(trabajoId) {
-            $.get('@Url.Action("GetConfiguration", "CualitativoTrabajos", new { area = "OP" })', {
-                trabajoId: trabajoId
-            }, function(response) {
-                if (response.success) {
-                    const data = response.data;
-                    $('#config-trabajo-id').val(data.trabajoId);
-                    $('#config-trabajo-nombre').text(data.trabajoNombre + ' - ' + data.unidadNegocio);
-                    $('#config-fecha-inicio').val(data.fechaInicioCampo ? data.fechaInicioCampo.split('T')[0] : '');
-                    $('#config-fecha-fin').val(data.fechaFinCampo ? data.fechaFinCampo.split('T')[0] : '');
-                    $('#config-tipo-recoleccion').val(data.tipoRecoleccion || '');
-                    $('#config-observaciones').val(data.observaciones || '');
-                    
-                    $('#modal-configuracion').modal('show');
-                } else {
-                    toastr.error(response.message);
-                }
-            });
-        }
-
-        // Alias usado por el grid parcial
-        function abrirModalConfiguracion(trabajoId) {
-            loadConfiguration(trabajoId);
-        }
-
-        // PASO 1.6: Guardar configuración
-        $('#form-configuracion').on('submit', function(e) {
-            e.preventDefault();
-
-            const data = {
-                trabajoId: parseInt($('#config-trabajo-id').val()),
-                fechaInicioCampo: $('#config-fecha-inicio').val() || null,
-                fechaFinCampo: $('#config-fecha-fin').val() || null,
-                tipoRecoleccion: parseInt($('#config-tipo-recoleccion').val()),
-                observaciones: $('#config-observaciones').val() || ''
-            };
-
-            $.ajax({
-                url: '@Url.Action("SaveConfiguration", "CualitativoTrabajos", new { area = "OP" })',
-                type: 'POST',
-                contentType: 'application/json',
-                headers: {
-                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+            $('#trabajosTable').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json'
                 },
-                data: JSON.stringify(data),
-                success: function(response) {
-                    if (response.success) {
-                        toastr.success(response.message);
-                        $('#modal-configuracion').modal('hide');
-                        refreshTrabajos();
-                    } else {
-                        toastr.error(response.message);
-                    }
-                },
-                error: function() {
-                    toastr.error('Error guardando configuración');
-                }
+                pageLength: 25,
+                order: [[0, 'desc']],
+                columnDefs: [
+                    { orderable: false, targets: -1 }
+                ]
             });
         });
 
-        // PASO 1.7: Navegación a módulos relacionados
-        function navigateTo(trabajoId, destination) {
-            window.location.href = '@Url.Action("NavigateTo", "CualitativoTrabajos", new { area = "OP" })?trabajoId=' + trabajoId + '&destination=' + destination;
+        function abrirModalConfiguracion(trabajoId) {
+            $.ajax({
+                url: '@Url.Action("GetConfiguration")',
+                type: 'GET',
+                data: { trabajoId: trabajoId },
+                success: function(response) {
+                    if (response.success) {
+                        $('#configTrabajoId').val(response.data.trabajoId);
+                        $('#fechaInicioCampo').val(response.data.fechaInicioCampo ? response.data.fechaInicioCampo.split('T')[0] : '');
+                        $('#fechaFinCampo').val(response.data.fechaFinCampo ? response.data.fechaFinCampo.split('T')[0] : '');
+                        $('#tipoRecoleccion').val(response.data.tipoRecoleccion || 1);
+                        modalConfiguracion.show();
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                },
+                error: function() {
+                    alert('Error obteniendo configuración');
+                }
+            });
+        }
+
+        function guardarConfiguracion() {
+            const data = {
+                trabajoId: parseInt($('#configTrabajoId').val()),
+                fechaInicioCampo: $('#fechaInicioCampo').val() || null,
+                fechaFinCampo: $('#fechaFinCampo').val() || null,
+                tipoRecoleccion: parseInt($('#tipoRecoleccion').val())
+            };
+
+            $.ajax({
+                url: '@Url.Action("SaveConfiguration")',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                headers: {
+                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function(response) {
+                    if (response.success) {
+                        modalConfiguracion.hide();
+                        location.reload();
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                },
+                error: function() {
+                    alert('Error guardando configuración');
+                }
+            });
+        }
+
+        function eliminarTrabajo(id, nombre) {
+            if (!confirm(`¿Está seguro que desea eliminar el trabajo "${nombre}"?\n\nEsta acción no se puede deshacer.`)) {
+                return;
+            }
+
+            $.ajax({
+                url: '@Url.Action("Delete")',
+                type: 'POST',
+                data: { id: id },
+                headers: {
+                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function(response) {
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                },
+                error: function() {
+                    alert('Error eliminando trabajo');
+                }
+            });
         }
     </script>
 }

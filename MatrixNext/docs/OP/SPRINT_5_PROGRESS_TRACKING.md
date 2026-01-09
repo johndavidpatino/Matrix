@@ -29,11 +29,11 @@ Completar todos los módulos pendientes (P0, P1, P2) del backlog OP_Cualitativo:
 - [x] Verificar/extender IOpCualitativoService (6 métodos nuevos)
 - [x] Implementar OpCualitativoService métodos CRUD (~180 LOC)
 - [x] Implementar CualitativoTrabajosController completo (8 actions nuevas)
-- [ ] Crear vistas: Index (grid + filtros), Create, Edit, Details
-- [ ] Integrar navegación a Fichas y Muestra
-- [ ] Validación de permisos por rol
+- [x] Crear vistas: Index (grid + filtros), Create, Edit, Details
+- [x] Integrar navegación a Fichas y Muestra
+- [x] Validación de permisos por rol
 
-**Progreso**: [████████████░░░░░░░░] 60% (Backend completo, vistas pendientes)
+**Progreso**: [████████████████████] 100% (Completo - Backend + 4 vistas + navegación)
 
 #### OP-C02: CampoController (10h)
 - [ ] Verificar/extender service para sesiones
