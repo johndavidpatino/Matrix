@@ -9,10 +9,10 @@ namespace MatrixNext.Web.Models.OP.Dtos
         public int Id { get; set; }
 
         /// <summary>Nombre/Descripción del item</summary>
-        public string Nombre { get; set; }
+        public string Nombre { get; set; } = string.Empty;
 
         /// <summary>Descripción adicional (opcional)</summary>
-        public string Descripcion { get; set; }
+        public string Descripcion { get; set; } = string.Empty;
 
         /// <summary>Si está activo para seleccionar</summary>
         public bool Activo { get; set; } = true;

@@ -24,7 +24,7 @@
                 <option value="">Seleccione</option>
                 @foreach (var trabajo in Model.Summary.Trabajos)
                 {
-                    <option value="@trabajo.Id" @(trabajo.Id == Model.Summary.SelectedTrabajoId ? "selected" : "")>
+                    <option value="@trabajo.Id" selected="@(trabajo.Id == Model.Summary.SelectedTrabajoId ? "selected" : null)">
                         @trabajo.JobBook - @trabajo.Nombre
                     </option>
                 }

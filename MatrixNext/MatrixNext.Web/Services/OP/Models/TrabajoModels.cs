@@ -5,12 +5,12 @@ namespace MatrixNext.Web.Services.OP.Models;
 /// </summary>
 public record TrabajoOpConfiguracion
 {
-    public long IdTrabajo { get; init; }
+    public long TrabajoId { get; init; }
     public short? TipoRecoleccionId { get; init; }
-    public DateTime? FechaCreacion { get; init; }
-    public long? CreadoPor { get; init; }
-    public DateTime? FechaActualizacion { get; init; }
-    public long? ActualizadoPor { get; init; }
+    public DateTime? FechaInicioCampo { get; init; }
+    public DateTime? FechaFinalCampo { get; init; }
+    public double? PorcentajeVerificacion { get; init; }
+    public long? UnidadCritica { get; init; }
 }
 
 /// <summary>

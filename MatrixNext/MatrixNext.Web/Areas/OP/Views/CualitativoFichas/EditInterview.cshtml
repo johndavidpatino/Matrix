@@ -1,0 +1,218 @@
+@model MatrixNext.Web.Services.OP.Models.FichaTecnicaVm
+@{
+    var fichaNombre = Model.TipoFicha == 1 ? "Entrevista" : (Model.TipoFicha == 2 ? "Sesión" : "Observación");
+    var saveAction = Model.TipoFicha == 1 ? "SaveInterview" : (Model.TipoFicha == 2 ? "SaveSession" : "SaveObservation");
+    ViewData["Title"] = $"Ficha Técnica - {fichaNombre}";
+}
+
+<div class="container">
+    <h2>
+        <i class="bi bi-file-text"></i> Ficha Técnica (@fichaNombre) - @Model.TrabajoNombre
+    </h2>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle"></i> @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle"></i> @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <form asp-action="@saveAction" asp-controller="CualitativoFichas" asp-area="OP" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="TrabajoId" />
+        <input type="hidden" asp-for="TipoFicha" />
+
+        <div class="card mb-3">
+            <div class="card-header">Datos Generales</div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label asp-for="Objetivos" class="form-label">Objetivos *</label>
+                    <textarea asp-for="Objetivos" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="PerfilEntrevistados" class="form-label">Perfil de entrevistados *</label>
+                    <textarea asp-for="PerfilEntrevistados" class="form-control" rows="2"></textarea>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <label asp-for="CantidadEntrevistas" class="form-label">Cantidad entrevistas *</label>
+                        <input asp-for="CantidadEntrevistas" type="number" class="form-control" min="1" />
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="Metodologia" class="form-label">Metodología</label>
+                        <input asp-for="Metodologia" class="form-control" />
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="TematicaPrincipal" class="form-label">Temática principal</label>
+                        <input asp-for="TematicaPrincipal" class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header">Recursos y Presupuesto</div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label asp-for="MontoIncentivos" class="form-label">Monto incentivos *</label>
+                        <input asp-for="MontoIncentivos" type="number" step="0.01" class="form-control" />
+                        <small class="text-muted" id="presupuestoHelp"></small>
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="AyudasAudiovisuales" class="form-label">Ayudas audiovisuales</label>
+                        <input asp-for="AyudasAudiovisuales" class="form-control" />
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="RecursosAdicionales" class="form-label">Recursos adicionales</label>
+                        <input asp-for="RecursosAdicionales" class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header">Reclutamiento</div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label asp-for="CantidadReclutadores" class="form-label">Cantidad reclutadores</label>
+                        <input asp-for="CantidadReclutadores" type="number" class="form-control" />
+                    </div>
+                    <div class="col-md-8">
+                        <label asp-for="PerfilReclutadores" class="form-label">Perfil reclutadores</label>
+                        <input asp-for="PerfilReclutadores" class="form-control" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label asp-for="FechaInicioReclutamiento" class="form-label">Fecha inicio reclutamiento</label>
+                        <input asp-for="FechaInicioReclutamiento" type="date" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="FechaFinReclutamiento" class="form-label">Fecha fin reclutamiento</label>
+                        <input asp-for="FechaFinReclutamiento" type="date" class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header">Logística</div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label asp-for="LugarRealizacion" class="form-label">Lugar de realización</label>
+                        <input asp-for="LugarRealizacion" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="DireccionCompleta" class="form-label">Dirección completa</label>
+                        <input asp-for="DireccionCompleta" class="form-control" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <label asp-for="CiudadId" class="form-label">Ciudad</label>
+                        <input asp-for="CiudadId" type="number" class="form-control" />
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="FechaRealizacion" class="form-label">Fecha realización</label>
+                        <input asp-for="FechaRealizacion" type="date" class="form-control" />
+                    </div>
+                    <div class="col-md-2">
+                        <label asp-for="HoraInicio" class="form-label">Hora Inicio</label>
+                        <input asp-for="HoraInicio" type="time" class="form-control" />
+                    </div>
+                    <div class="col-md-2">
+                        <label asp-for="HoraFin" class="form-label">Hora Fin</label>
+                        <input asp-for="HoraFin" type="time" class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header">Control</div>
+            <div class="card-body">
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="HabeasDataFirmado" />
+                    <label class="form-check-label" asp-for="HabeasDataFirmado">Habeas Data firmado</label>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="ObservacionesGenerales" class="form-label">Observaciones</label>
+                    <textarea asp-for="ObservacionesGenerales" class="form-control" rows="3"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-save"></i> Guardar
+            </button>
+            @if (Model.TipoFicha == 1)
+            {
+                <button type="button" class="btn btn-success" id="btnSubmitFicha">
+                    <i class="bi bi-send"></i> Entregar Ficha
+                </button>
+            }
+            <a class="btn btn-secondary" asp-area="OP" asp-controller="CualitativoTrabajos" asp-action="Index">
+                <i class="bi bi-arrow-left"></i> Regresar
+            </a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+<script>
+    // Validación presupuesto (AJAX)
+    const montoInput = document.getElementById('MontoIncentivos');
+    const presupuestoHelp = document.getElementById('presupuestoHelp');
+    if (montoInput) {
+        montoInput.addEventListener('blur', function() {
+            const monto = parseFloat(montoInput.value || '0');
+            fetch('@Url.Action("ValidateBudget", "CualitativoFichas", new { area = "OP" })?trabajoId=@Model.TrabajoId&monto=' + monto)
+                .then(r => r.json())
+                .then(res => {
+                    if (res.success) {
+                        presupuestoHelp.textContent = res.isValid 
+                            ? `Presupuesto disponible. Disponible: ${res.disponible}`
+                            : `Monto excede disponible. Disponible: ${res.disponible}`;
+                        presupuestoHelp.className = res.isValid ? 'text-success' : 'text-danger';
+                    } else {
+                        presupuestoHelp.textContent = res.message;
+                        presupuestoHelp.className = 'text-danger';
+                    }
+                });
+        });
+    }
+
+    // Entregar ficha (solo Entrevista)
+    const submitBtn = document.getElementById('btnSubmitFicha');
+    if (submitBtn) {
+        submitBtn.addEventListener('click', function() {
+            if (!confirm('¿Confirmas la entrega de la ficha?')) return;
+            const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+            fetch('@Url.Action("SubmitInterview", "CualitativoFichas", new { area = "OP" })', {
+                method: 'POST',
+                headers: { 'RequestVerificationToken': token },
+                body: new URLSearchParams({ trabajoId: '@Model.TrabajoId' })
+            }).then(r => r.json()).then(res => {
+                if (res.success) {
+                    alert(res.message);
+                    window.location.reload();
+                } else {
+                    alert(res.message);
+                }
+            });
+        });
+    }
+</script>
+}

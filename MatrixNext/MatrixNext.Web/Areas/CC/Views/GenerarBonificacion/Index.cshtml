@@ -118,7 +118,7 @@
                     { data: 'percentajeMetaBonificacion', render: $.fn.dataTable.render.number(',', '.', 2, '', '%') },
                     { data: 'bonoCalculado', render: $.fn.dataTable.render.number(',', '.', 2, '$') },
                     { data: 'bonoFinal', render: $.fn.dataTable.render.number(',', '.', 2, '$') },
-                    { data: 'fechaGeneracion', render: (d) => new Date(d).toLocaleDateString('es-CO') }
+                    { data: 'fechaGeneracion', render: (d) => d ? new Date(d).toLocaleDateString('es-CO') : '--' }
                 ]
             });
 

@@ -50,7 +50,8 @@ namespace MatrixNext.Web.Areas.OP.Controllers
                     return View("Index", new List<PlanillaProductividadDto>());
                 }
 
-                var planillas = await _revisionService.ObtenerPlanillasPorRolAsync(trabajoId.Value, "MyS/Call");
+                var usuarioId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+                var planillas = await _revisionService.ObtenerPlanillasPorRolAsync(trabajoId.Value, "MyS/Call", usuarioId);
 
                 _logger.LogInformation("Supervisor MyS/Call {User} accedió a revisión para trabajo {TrabajoId}", 
                     User.FindFirst(ClaimTypes.NameIdentifier)?.Value, trabajoId);
@@ -80,7 +81,7 @@ namespace MatrixNext.Web.Areas.OP.Controllers
                     return Json(new { success = false, message = "El monto no puede ser negativo" });
 
                 var usuarioId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
-                var resultado = await _revisionService.AprobarPlanillaAsync(planillaId, montoAutorizado, usuarioId);
+                var resultado = await _revisionService.AprobarPlanillaAsync(planillaId, montoAutorizado, usuarioId, "MyS/Call");
 
                 if (resultado)
                 {
@@ -112,7 +113,7 @@ namespace MatrixNext.Web.Areas.OP.Controllers
                     return Json(new { success = false, message = "Debe proporcionar una observación" });
 
                 var usuarioId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
-                var resultado = await _revisionService.RechazarPlanillaAsync(planillaId, observacion.Trim(), usuarioId);
+                var resultado = await _revisionService.RechazarPlanillaAsync(planillaId, observacion.Trim(), usuarioId, "MyS/Call");
 
                 if (resultado)
                 {

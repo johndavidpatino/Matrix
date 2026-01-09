@@ -51,9 +51,9 @@
                     <label>Tipo Descuento</label>
                     <select id="filtro-tipo" class="form-control">
                         <option value="">Todos</option>
-                        <option>AFP</option>
-                        <option>EPS</option>
-                        <option>ARL</option>
+                        <option>SS</option>
+                        <option>ICA</option>
+                        <option>Descuento</option>
                     </select>
                 </div>
                 <div class="col-md-3">
@@ -106,7 +106,7 @@
                     { data: 'tipoDescuento' },
                     { data: 'valorDescuento', render: $.fn.dataTable.render.number(',', '.', 2, '$') },
                     { data: 'percentajeDescuento', render: $.fn.dataTable.render.number(',', '.', 2, '', '%') },
-                    { data: 'fechaCarga', render: (d) => new Date(d).toLocaleDateString('es-CO') },
+                    { data: 'fechaCarga', render: (d) => d ? new Date(d).toLocaleDateString('es-CO') : '--' },
                     { data: 'estado' }
                 ]
             });

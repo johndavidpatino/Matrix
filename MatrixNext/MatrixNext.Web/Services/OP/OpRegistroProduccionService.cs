@@ -109,33 +109,77 @@ namespace MatrixNext.Web.Services.OP
                 if (string.IsNullOrWhiteSpace(criterio))
                     return new List<JobBookDto>();
 
+                var tipoNormalizado = (tipo ?? "JBE").Trim().ToUpperInvariant();
                 var connectionString = _context.Database.GetConnectionString();
                 using (var connection = new System.Data.SqlClient.SqlConnection(connectionString))
                 {
-                    var parameters = new DynamicParameters();
-                    parameters.Add("@Criterio", $"%{criterio}%");
-                    parameters.Add("@Tipo", tipo ?? "JBE");
+                    var criterioLike = $"%{criterio}%";
+                    List<JobBookDto> resultado;
 
-                    // Buscar JobBooks por tipo y criterio
-                    var jobBooks = await connection.QueryAsync<JobBookDto>(
-                        @"SELECT IdJobBook as JobBookId, 
-                                 Codigo, 
-                                 Nombre, 
-                                 Tipo, 
-                                 IdTrabajo as TrabajoId,
-                                 Estado
-                          FROM JobBooks 
-                          WHERE Tipo=@Tipo 
-                          AND (Codigo LIKE @Criterio OR Nombre LIKE @Criterio)
-                          AND Estado = 'Activo'
-                          ORDER BY Codigo",
-                        parameters,
-                        commandType: System.Data.CommandType.Text,
-                        commandTimeout: 30
-                    );
+                    if (tipoNormalizado == "JBI")
+                    {
+                        resultado = (await connection.QueryAsync<JobBookDto>(
+                            @"SELECT 
+                                CAST(Id AS int) AS JobBookId,
+                                JobBook AS Codigo,
+                                NombreTrabajo AS Nombre,
+                                'JBI' AS Tipo,
+                                CAST(Id AS int) AS TrabajoId,
+                                CAST(Estado AS varchar(10)) AS Estado
+                              FROM PY_Trabajo
+                              WHERE Estado IN (1,2,13,15)
+                                AND JobBook IS NOT NULL
+                                AND (
+                                    @Criterio IS NULL
+                                    OR JobBook LIKE @Criterio
+                                    OR NombreTrabajo LIKE @Criterio
+                                    OR CAST(Id AS varchar(10)) = @CriterioExacto
+                                )
+                              ORDER BY JobBook",
+                            new { Criterio = criterioLike, CriterioExacto = criterio },
+                            commandType: System.Data.CommandType.Text,
+                            commandTimeout: 30)).ToList();
+                    }
+                    else if (tipoNormalizado == "CC")
+                    {
+                        resultado = new List<JobBookDto>
+                        {
+                            new JobBookDto
+                            {
+                                JobBookId = 0,
+                                Codigo = "Unidad",
+                                Nombre = "Unidad",
+                                Tipo = "CC",
+                                TrabajoId = 0,
+                                Estado = string.Empty
+                            }
+                        };
+                    }
+                    else
+                    {
+                        resultado = (await connection.QueryAsync<JobBookDto>(
+                            @"SELECT 
+                                CAST(Id AS int) AS JobBookId,
+                                JobBook AS Codigo,
+                                Nombre,
+                                'JBE' AS Tipo,
+                                CAST(0 AS int) AS TrabajoId,
+                                CAST(Estado AS varchar(10)) AS Estado
+                              FROM PY_Proyectos
+                              WHERE Estado IN (1,2,13,15)
+                                AND JobBook IS NOT NULL
+                                AND (
+                                    @Criterio IS NULL
+                                    OR JobBook LIKE @Criterio
+                                    OR Nombre LIKE @Criterio
+                                )
+                              ORDER BY JobBook",
+                            new { Criterio = criterioLike },
+                            commandType: System.Data.CommandType.Text,
+                            commandTimeout: 30)).ToList();
+                    }
 
-                    var resultado = jobBooks.ToList();
-                    _logger.LogInformation("Búsqueda de JobBooks: tipo={Tipo}, criterio={Criterio}, resultados={Count}", tipo, criterio, resultado.Count);
+                    _logger.LogInformation("B??squeda de JobBooks: tipo={Tipo}, criterio={Criterio}, resultados={Count}", tipo, criterio, resultado.Count);
                     return resultado;
                 }
             }
@@ -146,7 +190,6 @@ namespace MatrixNext.Web.Services.OP
             }
         }
 
-        /// <inheritdoc />
         public async Task<int> RegistrarActividadAsync(RegistroProduccionDto registro)
         {
             try
@@ -154,47 +197,91 @@ namespace MatrixNext.Web.Services.OP
                 // Validar primero
                 var (valido, mensaje) = await ValidarRegistroAsync(registro);
                 if (!valido)
-                    throw new InvalidOperationException($"Registro inválido: {mensaje}");
+                    throw new InvalidOperationException($"Registro inv??lido: {mensaje}");
 
                 var connectionString = _context.Database.GetConnectionString();
                 using (var connection = new System.Data.SqlClient.SqlConnection(connectionString))
                 {
-                    var parameters = new DynamicParameters();
-                    parameters.Add("@IdUnidad", registro.UnidadId);
-                    parameters.Add("@IdActividad", registro.ActividadId);
-                    parameters.Add("@IdSubactividad", registro.SubactividadId);
-                    parameters.Add("@IdJobBook", registro.JobBookId);
-                    parameters.Add("@Cantidad", registro.Cantidad);
-                    parameters.Add("@HoraInicio", string.IsNullOrWhiteSpace(registro.HoraInicio) ? (object)DBNull.Value : registro.HoraInicio);
-                    parameters.Add("@HoraFin", string.IsNullOrWhiteSpace(registro.HoraFin) ? (object)DBNull.Value : registro.HoraFin);
-                    parameters.Add("@Fecha", DateTime.ParseExact(registro.Fecha, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture));
-                    parameters.Add("@Observaciones", string.IsNullOrWhiteSpace(registro.Observaciones) ? (object)DBNull.Value : registro.Observaciones);
-                    parameters.Add("@UsuarioRegistro", registro.UsuarioId);
-                    parameters.Add("@FechaRegistro", DateTime.Now);
-                    parameters.Add("@IdRegistroOut", dbType: System.Data.DbType.Int32, direction: System.Data.ParameterDirection.Output);
+                    int? trabajoId = null;
+                    int? estudioId = null;
 
-                    // Ejecutar SP OP_RegistroProduccion_Insert
-                    await connection.ExecuteAsync(
-                        "OP_RegistroProduccion_Insert",
+                    if (registro.JobBookId.HasValue && registro.JobBookId.Value > 0)
+                    {
+                        var foundTrabajo = await connection.ExecuteScalarAsync<int?>(
+                            "SELECT TOP 1 Id FROM PY_Trabajo WHERE Id = @Id",
+                            new { Id = registro.JobBookId.Value });
+
+                        if (foundTrabajo.HasValue)
+                        {
+                            trabajoId = registro.JobBookId.Value;
+                        }
+                        else
+                        {
+                            var foundProyecto = await connection.ExecuteScalarAsync<int?>(
+                                "SELECT TOP 1 Id FROM PY_Proyectos WHERE Id = @Id",
+                                new { Id = registro.JobBookId.Value });
+
+                            if (foundProyecto.HasValue)
+                            {
+                                estudioId = registro.JobBookId.Value;
+                            }
+                        }
+                    }
+
+                    TimeSpan? horaInicio = null;
+                    if (!string.IsNullOrWhiteSpace(registro.HoraInicio) && TimeSpan.TryParse(registro.HoraInicio, out var horaInicioParsed))
+                    {
+                        horaInicio = horaInicioParsed;
+                    }
+
+                    TimeSpan? horaFin = null;
+                    if (!string.IsNullOrWhiteSpace(registro.HoraFin) && TimeSpan.TryParse(registro.HoraFin, out var horaFinParsed))
+                    {
+                        horaFin = horaFinParsed;
+                    }
+
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@Actividad", registro.ActividadId);
+                    parameters.Add("@SubActividad", registro.SubactividadId > 0 ? registro.SubactividadId : (int?)null);
+                    parameters.Add("@Unidad", registro.UnidadId);
+                    parameters.Add("@TrabajoId", trabajoId);
+                    parameters.Add("@EstudioId", estudioId);
+                    parameters.Add("@Fecha", DateTime.ParseExact(registro.Fecha, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture));
+                    parameters.Add("@HoraInicio", horaInicio);
+                    parameters.Add("@HoraFin", horaFin);
+                    parameters.Add("@Cantidad", registro.Cantidad);
+                    parameters.Add("@Observacion", string.IsNullOrWhiteSpace(registro.Observaciones) ? (object)DBNull.Value : registro.Observaciones);
+                    parameters.Add("@Estado", (int?)null);
+                    parameters.Add("@ValidadoPor", (long?)null);
+                    parameters.Add("@PersonaId", (long?)registro.UsuarioId);
+                    parameters.Add("@EsReproceso", (bool?)null);
+                    parameters.Add("@CantidadEfectivas", (int?)null);
+                    parameters.Add("@TipoReproceso", (byte?)null);
+                    parameters.Add("@TipoAplicativoProceso", (byte?)null);
+                    parameters.Add("@CantVarsScript", (int?)null);
+                    parameters.Add("@CantVarsExport", (int?)null);
+
+                    // Ejecutar SP OP_Produccion_Add
+                    var idRegistroDecimal = await connection.ExecuteScalarAsync<decimal?>(
+                        "OP_Produccion_Add",
                         parameters,
                         commandType: System.Data.CommandType.StoredProcedure,
                         commandTimeout: 30
                     );
 
-                    int idRegistro = parameters.Get<int>("@IdRegistroOut");
+                    var idRegistro = idRegistroDecimal.HasValue ? (int)idRegistroDecimal.Value : 0;
 
-                    _logger.LogInformation("Actividad de producción registrada: ID={IdRegistro}, Usuario={Usuario}", idRegistro, registro.UsuarioId);
+                    _logger.LogInformation("Actividad de producci??n registrada: ID={IdRegistro}, Usuario={Usuario}", idRegistro, registro.UsuarioId);
                     return idRegistro;
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error registrando actividad de producción");
+                _logger.LogError(ex, "Error registrando actividad de producci??n");
                 throw;
             }
         }
 
-        /// <inheritdoc />
         public async Task<(bool Valid, string Message)> ValidarRegistroAsync(RegistroProduccionDto registro)
         {
             try

@@ -140,7 +140,7 @@
                     { data: 'bonoProduccion', render: $.fn.dataTable.render.number(',', '.', 2, '$') },
                     { data: 'descuentosSS', render: $.fn.dataTable.render.number(',', '.', 2, '$') },
                     { data: 'valorNeto', render: $.fn.dataTable.render.number(',', '.', 2, '$') },
-                    { data: 'fechaLiquidacion', render: (data) => new Date(data).toLocaleDateString('es-CO') }
+                    { data: 'fechaLiquidacion', render: (data) => data ? new Date(data).toLocaleDateString('es-CO') : '--' }
                 ]
             });
 

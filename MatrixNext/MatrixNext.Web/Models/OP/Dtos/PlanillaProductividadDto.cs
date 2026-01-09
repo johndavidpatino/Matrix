@@ -14,7 +14,7 @@ namespace MatrixNext.Web.Models.OP.Dtos
         public int TrabajoId { get; set; }
 
         /// <summary>Identificador del centro de costo o actividad</summary>
-        public string Concepto { get; set; }
+        public string Concepto { get; set; } = string.Empty;
 
         /// <summary>Cantidad registrada en la planilla</summary>
         public int Cantidad { get; set; }
@@ -48,13 +48,13 @@ namespace MatrixNext.Web.Models.OP.Dtos
         }
 
         /// <summary>Usuario que realizó la última actualización</summary>
-        public string UsuarioActualizacion { get; set; }
+        public string UsuarioActualizacion { get; set; } = string.Empty;
 
         /// <summary>Fecha de última actualización</summary>
         public DateTime? FechaActualizacion { get; set; }
 
         /// <summary>Observaciones si fue rechazada</summary>
-        public string Observaciones { get; set; }
+        public string Observaciones { get; set; } = string.Empty;
 
         /// <summary>Tipo de actividad (para filtrado por rol): 1-20=Producción, 21-23=CATI/CAWI, etc.</summary>
         public int TipoActividad { get; set; }

@@ -1,0 +1,195 @@
+@model MatrixNext.Web.Services.OP.Models.FiltroConfigVm
+@{
+    ViewData["Title"] = "Diseño de Filtro - " + (Model.TipoFiltro == 1 ? "Reclutamiento" : "Asistencia");
+}
+
+<div class="container">
+    <h2>
+        <i class="bi bi-filter"></i> Filtro de @ViewBag.TipoFiltro - @Model.TrabajoNombre
+    </h2>
+    <div style="display:none">@Html.AntiForgeryToken()</div>
+
+    <div class="card mb-3">
+        <div class="card-header">Preguntas del Filtro</div>
+        <div class="card-body">
+            <table class="table table-sm table-striped">
+                <thead>
+                    <tr>
+                        <th>Orden</th>
+                        <th>Pregunta</th>
+                        <th>Tipo</th>
+                        <th>Obligatoria</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="preguntasBody">
+                    @foreach (var p in Model.Preguntas.OrderBy(x => x.Orden))
+                    {
+                        <tr data-id="@p.Id">
+                            <td>@p.Orden</td>
+                            <td>@p.TextoPregunta</td>
+                            <td>@p.TipoPregunta</td>
+                            <td>@(p.Obligatoria ? "Sí" : "No")</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary" onclick="editarPregunta(@p.Id)">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="eliminarPregunta(@p.Id)">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header">Agregar Pregunta</div>
+        <div class="card-body">
+            <form id="formAddPregunta">
+                <input type="hidden" id="TrabajoId" value="@Model.TrabajoId" />
+                <input type="hidden" id="TipoFiltro" value="@Model.TipoFiltro" />
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Texto de la pregunta</label>
+                        <input id="TextoPregunta" class="form-control" required />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Tipo</label>
+                        <select id="TipoPregunta" class="form-select" required>
+                            <option value="1">Texto</option>
+                            <option value="2">Numérica</option>
+                            <option value="3">Selección</option>
+                            <option value="4">Selección múltiple</option>
+                            <option value="5">Fecha</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Orden</label>
+                        <input id="Orden" type="number" class="form-control" value="@(Model.Preguntas.Count + 1)" />
+                    </div>
+                </div>
+                <div class="form-check mt-2">
+                    <input id="Obligatoria" type="checkbox" class="form-check-input" />
+                    <label class="form-check-label">Obligatoria</label>
+                </div>
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-plus-circle"></i> Agregar Pregunta
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <a class="btn btn-secondary" href="@Url.Action("Index", "CualitativoTrabajos", new { area = "OP" })">
+            <i class="bi bi-arrow-left"></i> Regresar
+        </a>
+        <a class="btn btn-info" id="btnGenerarLink">
+            <i class="bi bi-link"></i> Generar Link de Visualización
+        </a>
+        <span id="linkVisualizacion" class="ms-2 text-muted"></span>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    function getCsrfToken() {
+        const el = document.querySelector('input[name="__RequestVerificationToken"]');
+        return el ? el.value : '';
+    }
+
+    document.getElementById('formAddPregunta').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const payload = {
+            trabajoId: parseInt(document.getElementById('TrabajoId').value),
+            tipoFiltro: parseInt(document.getElementById('TipoFiltro').value),
+            textoPregunta: document.getElementById('TextoPregunta').value,
+            tipoPregunta: parseInt(document.getElementById('TipoPregunta').value),
+            orden: parseInt(document.getElementById('Orden').value),
+            obligatoria: document.getElementById('Obligatoria').checked
+        };
+        fetch('@Url.Action("AddQuestion", "CualitativoFiltros", new { area = "OP" })', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'RequestVerificationToken': getCsrfToken() },
+            body: JSON.stringify(payload)
+        }).then(r => r.json()).then(res => {
+            if (res.success) {
+                alert(res.message);
+                window.location.reload();
+            } else {
+                alert(res.message);
+            }
+        });
+    });
+
+    function eliminarPregunta(id) {
+        if (!confirm('¿Eliminar esta pregunta?')) return;
+        fetch('@Url.Action("DeleteQuestion", "CualitativoFiltros", new { area = "OP" })', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'RequestVerificationToken': getCsrfToken() },
+            body: new URLSearchParams({ preguntaId: id })
+        }).then(r => r.json()).then(res => {
+            if (res.success) {
+                window.location.reload();
+            } else {
+                alert(res.message);
+            }
+        });
+    }
+
+    function editarPregunta(id) {
+        const tr = document.querySelector(`tr[data-id='${id}']`);
+        if (!tr) return;
+        const textoActual = tr.children[1].textContent.trim();
+        const tipoActual = tr.children[2].textContent.trim();
+        const ordenActual = parseInt(tr.children[0].textContent.trim());
+        const texto = prompt('Texto de la pregunta:', textoActual);
+        if (texto === null) return;
+        const orden = parseInt(prompt('Orden:', String(ordenActual)) || String(ordenActual));
+        if (!orden || isNaN(orden)) { alert('Orden inválido'); return; }
+        // Mapea tipos por nombre básico a código
+        const tipoMap = { 'Texto': 1, 'Numérica': 2, 'Selección': 3, 'Selección múltiple': 4, 'Fecha': 5 };
+        const tipoNombre = prompt('Tipo (Texto, Numérica, Selección, Selección múltiple, Fecha):', tipoActual) || tipoActual;
+        const tipo = tipoMap[tipoNombre] || 1;
+        const obligatoria = confirm('¿Marcar como obligatoria? Aceptar = Sí, Cancelar = No');
+        const payload = {
+            id: id,
+            trabajoId: parseInt(document.getElementById('TrabajoId').value),
+            tipoFiltro: parseInt(document.getElementById('TipoFiltro').value),
+            textoPregunta: texto,
+            tipoPregunta: tipo,
+            orden: orden,
+            obligatoria: obligatoria
+        };
+        fetch('@Url.Action("UpdateQuestion", "CualitativoFiltros", new { area = "OP" })', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'RequestVerificationToken': getCsrfToken() },
+            body: JSON.stringify(payload)
+        }).then(r => r.json()).then(res => {
+            if (res.success) {
+                alert(res.message);
+                window.location.reload();
+            } else {
+                alert(res.message);
+            }
+        });
+    }
+
+    document.getElementById('btnGenerarLink').addEventListener('click', function() {
+        const trabajoId = parseInt(document.getElementById('TrabajoId').value);
+        const tipo = parseInt(document.getElementById('TipoFiltro').value);
+        fetch('@Url.Action("GenerateLink", "CualitativoFiltros", new { area = "OP" })?trabajoId=' + trabajoId + '&tipo=' + tipo)
+            .then(r => r.json()).then(res => {
+                if (res.success) {
+                    document.getElementById('linkVisualizacion').textContent = res.link;
+                } else {
+                    alert(res.message);
+                }
+            });
+    });
+</script>
+}

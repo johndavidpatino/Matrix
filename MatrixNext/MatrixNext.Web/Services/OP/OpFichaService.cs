@@ -189,7 +189,7 @@ public class OpFichaService : IOpFichaService
         {
             var sql = @"
                 SELECT p.RequestHabeasData
-                FROM CU_Propuesta p
+                FROM CU_Propuestas p
                 INNER JOIN PY_Trabajo t ON t.IdProyecto = p.Id
                 WHERE t.Id = @TrabajoId";
 

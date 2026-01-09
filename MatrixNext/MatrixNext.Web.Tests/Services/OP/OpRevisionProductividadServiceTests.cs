@@ -40,9 +40,10 @@ namespace MatrixNext.Web.Tests.Services.OP
             // Arrange
             int trabajoId = 1;
             string rol = "PMO";
+            int usuarioId = 1;
 
             // Act
-            var result = await _service.ObtenerPlanillasPorRolAsync(trabajoId, rol);
+            var result = await _service.ObtenerPlanillasPorRolAsync(trabajoId, rol, usuarioId);
 
             // Assert
             Assert.NotNull(result);
@@ -55,9 +56,10 @@ namespace MatrixNext.Web.Tests.Services.OP
             // Arrange
             int invalidTrabajoId = -1;
             string rol = "PMO";
+            int usuarioId = 1;
 
             // Act
-            var result = await _service.ObtenerPlanillasPorRolAsync(invalidTrabajoId, rol);
+            var result = await _service.ObtenerPlanillasPorRolAsync(invalidTrabajoId, rol, usuarioId);
 
             // Assert
             Assert.NotNull(result);
@@ -73,9 +75,10 @@ namespace MatrixNext.Web.Tests.Services.OP
         {
             // Arrange
             int trabajoId = 1;
+            int usuarioId = 1;
 
             // Act
-            var result = await _service.ObtenerPlanillasPorRolAsync(trabajoId, rol);
+            var result = await _service.ObtenerPlanillasPorRolAsync(trabajoId, rol, usuarioId);
 
             // Assert
             Assert.NotNull(result);
@@ -89,9 +92,10 @@ namespace MatrixNext.Web.Tests.Services.OP
             int planillaId = 1;
             decimal montoAutorizado = 1000m;
             int usuarioId = 1;
+            string rol = "PMO";
 
             // Act
-            var result = await _service.AprobarPlanillaAsync(planillaId, montoAutorizado, usuarioId);
+            var result = await _service.AprobarPlanillaAsync(planillaId, montoAutorizado, usuarioId, rol);
 
             // Assert
             // Note: Resultado dependerá de si el SP existe en la BD
@@ -106,9 +110,10 @@ namespace MatrixNext.Web.Tests.Services.OP
             int planillaId = 1;
             decimal montoAutorizado = 0m;
             int usuarioId = 1;
+            string rol = "PMO";
 
             // Act
-            var result = await _service.AprobarPlanillaAsync(planillaId, montoAutorizado, usuarioId);
+            var result = await _service.AprobarPlanillaAsync(planillaId, montoAutorizado, usuarioId, rol);
 
             // Assert
             Assert.IsType<bool>(result);
@@ -121,9 +126,10 @@ namespace MatrixNext.Web.Tests.Services.OP
             int planillaId = 1;
             string observacion = "Monto excedido";
             int usuarioId = 1;
+            string rol = "PMO";
 
             // Act
-            var result = await _service.RechazarPlanillaAsync(planillaId, observacion, usuarioId);
+            var result = await _service.RechazarPlanillaAsync(planillaId, observacion, usuarioId, rol);
 
             // Assert
             Assert.IsType<bool>(result);
@@ -136,9 +142,10 @@ namespace MatrixNext.Web.Tests.Services.OP
             int planillaId = 1;
             string observacion = null;
             int usuarioId = 1;
+            string rol = "PMO";
 
             // Act
-            var result = await _service.RechazarPlanillaAsync(planillaId, observacion, usuarioId);
+            var result = await _service.RechazarPlanillaAsync(planillaId, observacion, usuarioId, rol);
 
             // Assert
             Assert.IsType<bool>(result);
@@ -197,9 +204,10 @@ namespace MatrixNext.Web.Tests.Services.OP
             // Arrange
             int trabajoId = 1;
             string rol = "PMO";
+            int usuarioId = 1;
 
             // Act
-            var task = _service.ObtenerPlanillasPorRolAsync(trabajoId, rol);
+            var task = _service.ObtenerPlanillasPorRolAsync(trabajoId, rol, usuarioId);
             task.Wait();
 
             // Assert

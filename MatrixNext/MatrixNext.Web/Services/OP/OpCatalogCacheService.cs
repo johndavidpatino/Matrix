@@ -55,7 +55,7 @@ namespace MatrixNext.Web.Services.OP
         {
             const string cacheKey = CACHE_KEY_UNIDADES;
 
-            if (!forceRefresh && _cache.TryGetValue(cacheKey, out List<CatalogoItemDto> cached))
+            if (!forceRefresh && _cache.TryGetValue(cacheKey, out List<CatalogoItemDto>? cached) && cached is not null)
             {
                 _logger.LogDebug("Unidades retrieved from cache");
                 return cached;
@@ -66,16 +66,21 @@ namespace MatrixNext.Web.Services.OP
                 var connectionString = _configuration.GetConnectionString("MatrixDb") ?? throw new InvalidOperationException("Connection string not configured");
                 using (var connection = new System.Data.SqlClient.SqlConnection(connectionString))
                 {
-                    var unidades = await connection.QueryAsync<CatalogoItemDto>(
-                        @"SELECT IdUnidad as Id, NombreUnidad as Nombre 
-                          FROM Catalogo_Unidades 
-                          WHERE Activo = 1 
-                          ORDER BY Nombre",
-                        commandType: CommandType.Text,
-                        commandTimeout: 30
-                    );
+                    var unidades = await connection.QueryAsync<UnidadProduccionRow>(
+                        "OP_UnidadesProduccionGet",
+                        new { identificacion = (long?)null },
+                        commandType: CommandType.StoredProcedure,
+                        commandTimeout: 30);
 
-                    var result = unidades.ToList();
+                    var result = unidades
+                        .Where(u => u.Id.HasValue && !string.IsNullOrWhiteSpace(u.Unidad))
+                        .Select(u => new CatalogoItemDto
+                        {
+                            Id = u.Id.GetValueOrDefault(),
+                            Nombre = u.Unidad ?? string.Empty,
+                            Activo = true
+                        })
+                        .ToList();
                     _cache.Set(cacheKey, result, CacheDuration);
                     
                     _logger.LogInformation(
@@ -96,7 +101,7 @@ namespace MatrixNext.Web.Services.OP
         {
             var cacheKey = string.Format(CACHE_KEY_ACTIVIDADES_TEMPLATE, unidadId);
 
-            if (!forceRefresh && _cache.TryGetValue(cacheKey, out List<CatalogoItemDto> cached))
+            if (!forceRefresh && _cache.TryGetValue(cacheKey, out List<CatalogoItemDto>? cached) && cached is not null)
             {
                 _logger.LogDebug("Actividades for unidad {UnidadId} retrieved from cache", unidadId);
                 return cached;
@@ -107,21 +112,29 @@ namespace MatrixNext.Web.Services.OP
                 var connectionString = _configuration.GetConnectionString("MatrixDb") ?? throw new InvalidOperationException("Connection string not configured");
                 using (var connection = new System.Data.SqlClient.SqlConnection(connectionString))
                 {
-                    var parameters = new DynamicParameters();
-                    parameters.Add("@IdUnidad", unidadId);
+                    var actividades = await connection.QueryAsync<ActividadProduccionRow>(
+                        "OP_ActividadesProduccionGet",
+                        new
+                        {
+                            unidad = unidadId,
+                            Actividad = (int?)null,
+                            SubActividad = (int?)null,
+                            activa = true
+                        },
+                        commandType: CommandType.StoredProcedure,
+                        commandTimeout: 30);
 
-                    var actividades = await connection.QueryAsync<CatalogoItemDto>(
-                        @"SELECT IdActividad as Id, NombreActividad as Nombre 
-                          FROM Catalogo_Actividades 
-                          WHERE IdUnidad = @IdUnidad 
-                          AND Activo = 1 
-                          ORDER BY Nombre",
-                        parameters,
-                        commandType: CommandType.Text,
-                        commandTimeout: 30
-                    );
-
-                    var result = actividades.ToList();
+                    var result = actividades
+                        .Where(a => a.ActividadCod.HasValue && !string.IsNullOrWhiteSpace(a.Actividad))
+                        .GroupBy(a => new { a.ActividadCod, a.Actividad })
+                        .Select(g => new CatalogoItemDto
+                        {
+                            Id = g.Key.ActividadCod!.Value,
+                            Nombre = g.Key.Actividad ?? string.Empty,
+                            Activo = true
+                        })
+                        .OrderBy(a => a.Nombre)
+                        .ToList();
                     _cache.Set(cacheKey, result, CacheDuration);
 
                     _logger.LogInformation(
@@ -142,7 +155,7 @@ namespace MatrixNext.Web.Services.OP
         {
             var cacheKey = string.Format(CACHE_KEY_SUBACTIVIDADES_TEMPLATE, actividadId);
 
-            if (!forceRefresh && _cache.TryGetValue(cacheKey, out List<CatalogoItemDto> cached))
+            if (!forceRefresh && _cache.TryGetValue(cacheKey, out List<CatalogoItemDto>? cached) && cached is not null)
             {
                 _logger.LogDebug("Subactividades for actividad {ActividadId} retrieved from cache", actividadId);
                 return cached;
@@ -153,21 +166,29 @@ namespace MatrixNext.Web.Services.OP
                 var connectionString = _configuration.GetConnectionString("MatrixDb") ?? throw new InvalidOperationException("Connection string not configured");
                 using (var connection = new System.Data.SqlClient.SqlConnection(connectionString))
                 {
-                    var parameters = new DynamicParameters();
-                    parameters.Add("@IdActividad", actividadId);
+                    var subactividades = await connection.QueryAsync<ActividadProduccionRow>(
+                        "OP_ActividadesProduccionGet",
+                        new
+                        {
+                            unidad = (int?)null,
+                            Actividad = actividadId,
+                            SubActividad = (int?)null,
+                            activa = true
+                        },
+                        commandType: CommandType.StoredProcedure,
+                        commandTimeout: 30);
 
-                    var subactividades = await connection.QueryAsync<CatalogoItemDto>(
-                        @"SELECT IdSubactividad as Id, NombreSubactividad as Nombre 
-                          FROM Catalogo_Subactividades 
-                          WHERE IdActividad = @IdActividad 
-                          AND Activo = 1 
-                          ORDER BY Nombre",
-                        parameters,
-                        commandType: CommandType.Text,
-                        commandTimeout: 30
-                    );
-
-                    var result = subactividades.ToList();
+                    var result = subactividades
+                        .Where(s => s.SubActividadCod.HasValue && !string.IsNullOrWhiteSpace(s.SubActividad))
+                        .GroupBy(s => new { s.SubActividadCod, s.SubActividad })
+                        .Select(g => new CatalogoItemDto
+                        {
+                            Id = g.Key.SubActividadCod!.Value,
+                            Nombre = g.Key.SubActividad ?? string.Empty,
+                            Activo = true
+                        })
+                        .OrderBy(s => s.Nombre)
+                        .ToList();
                     _cache.Set(cacheKey, result, CacheDuration);
 
                     _logger.LogInformation(
@@ -223,6 +244,20 @@ namespace MatrixNext.Web.Services.OP
             {
                 _logger.LogError(ex, "Error invalidating subactividades cache for actividad {ActividadId}", actividadId);
             }
+        }
+
+        private sealed class UnidadProduccionRow
+        {
+            public int? Id { get; init; }
+            public string? Unidad { get; init; }
+        }
+
+        private sealed class ActividadProduccionRow
+        {
+            public int? ActividadCod { get; init; }
+            public string? Actividad { get; init; }
+            public int? SubActividadCod { get; init; }
+            public string? SubActividad { get; init; }
         }
     }
 }

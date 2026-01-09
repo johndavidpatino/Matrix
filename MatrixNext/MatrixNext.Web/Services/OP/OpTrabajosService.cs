@@ -28,17 +28,21 @@ public class OpTrabajosService : IOpTrabajosService
     {
         try
         {
-            // TODO: Implementar consulta a tabla OP_TrabajoConfiguracion
-            // Por ahora retornamos null si no existe
-            // Esto debe mapear al SP TrabajoOPCuanti.ObtenerTrabajoConfiguracion
-            
-            _logger.LogInformation("Obteniendo configuración para trabajo {TrabajoId}", trabajoId);
-            
-            // Query directa a la tabla (ajustar según estructura real de BD)
+            _logger.LogInformation("Obteniendo configuracion para trabajo {TrabajoId}", trabajoId);
+
+            // Consulta alineada con PY_Trabajo + OP_TrabajoConfiguracion
             var config = await _db.Database
                 .SqlQueryRaw<TrabajoOpConfiguracion>(
-                    "SELECT IdTrabajo, TipoRecoleccionId, FechaCreacion, CreadoPor, FechaActualizacion, ActualizadoPor " +
-                    "FROM OP_TrabajoConfiguracion WHERE IdTrabajo = {0}", 
+                    @"SELECT 
+                          T.id AS TrabajoId,
+                          T.TipoRecoleccionId,
+                          CONF.FechaInicioCampo,
+                          CONF.FechaFinalCampo,
+                          CONF.PorcentajeVerificacion,
+                          CONF.UnidadCritica
+                      FROM PY_Trabajo T
+                      LEFT JOIN OP_TrabajoConfiguracion CONF ON CONF.TrabajoId = T.id
+                      WHERE T.id = {0}",
                     trabajoId)
                 .FirstOrDefaultAsync();
 
@@ -46,7 +50,7 @@ public class OpTrabajosService : IOpTrabajosService
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "No se encontró configuración para trabajo {TrabajoId}", trabajoId);
+            _logger.LogWarning(ex, "No se encontro configuracion para trabajo {TrabajoId}", trabajoId);
             return null;
         }
     }
@@ -58,34 +62,29 @@ public class OpTrabajosService : IOpTrabajosService
     {
         try
         {
-            _logger.LogInformation("Guardando configuración para trabajo {TrabajoId}", trabajoId);
+            _logger.LogInformation("Guardando configuracion para trabajo {TrabajoId}", trabajoId);
 
-            // Verificar si existe configuración
-            var existente = await ObtenerConfiguracionAsync(trabajoId);
+            // Tipo de recoleccion reside en PY_Trabajo
+            await _db.Database.ExecuteSqlRawAsync(
+                "UPDATE PY_Trabajo SET TipoRecoleccionId = {0} WHERE id = {1}",
+                tipoRecoleccionId, trabajoId);
 
-            if (existente == null)
-            {
-                // INSERT
-                await _db.Database.ExecuteSqlRawAsync(
-                    "INSERT INTO OP_TrabajoConfiguracion (IdTrabajo, TipoRecoleccionId, FechaCreacion, CreadoPor) " +
-                    "VALUES ({0}, {1}, GETDATE(), {2})",
-                    trabajoId, tipoRecoleccionId, usuarioId);
-            }
-            else
-            {
-                // UPDATE
-                await _db.Database.ExecuteSqlRawAsync(
-                    "UPDATE OP_TrabajoConfiguracion " +
-                    "SET TipoRecoleccionId = {0}, FechaActualizacion = GETDATE(), ActualizadoPor = {1} " +
-                    "WHERE IdTrabajo = {2}",
-                    tipoRecoleccionId, usuarioId, trabajoId);
-            }
+            // Garantizar existencia de configuracion para FK en OP_EstimacionesProduccionCiudad
+            await _db.Database.ExecuteSqlRawAsync(@"
+IF NOT EXISTS (SELECT 1 FROM OP_TrabajoConfiguracion WHERE TrabajoId = {0})
+BEGIN
+    INSERT INTO OP_TrabajoConfiguracion
+        (TrabajoId, FechaInicioCampo, FechaFinalCampo, PorcentajeVerificacion, UnidadCritica)
+    VALUES
+        ({0}, NULL, NULL, NULL, NULL)
+END",
+                trabajoId);
 
             return true;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error al guardar configuración para trabajo {TrabajoId}", trabajoId);
+            _logger.LogError(ex, "Error al guardar configuracion para trabajo {TrabajoId}", trabajoId);
             return false;
         }
     }
@@ -128,7 +127,7 @@ public class OpTrabajosService : IOpTrabajosService
             // Mapea a FichaCuantitativo.DevolverxTrabajoID
             var result = await _db.Database
                 .SqlQueryRaw<long?>(
-                    "SELECT TOP 1 id FROM FichaCuantitativo WHERE IdTrabajo = {0}",
+                    "SELECT TOP 1 id FROM OP_FichaCuantitativo WHERE TrabajoId = {0}",
                     trabajoId)
                 .FirstOrDefaultAsync();
 
@@ -151,7 +150,7 @@ public class OpTrabajosService : IOpTrabajosService
             // Mapea a PlaneacionProduccion.ObtenerEstimacionCiudadxTrabajoList
             var count = await _db.Database
                 .SqlQueryRaw<int>(
-                    "SELECT COUNT(*) as Value FROM PlaneacionProduccion_EstimacionCiudad WHERE IdTrabajo = {0}",
+                    "SELECT COUNT(*) as Value FROM OP_EstimacionesProduccionCiudad WHERE TrabajoId = {0}",
                     trabajoId)
                 .FirstOrDefaultAsync();
 
@@ -164,3 +163,4 @@ public class OpTrabajosService : IOpTrabajosService
         }
     }
 }
+

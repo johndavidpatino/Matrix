@@ -57,41 +57,39 @@ connection.Query("GetAusencia", ...) // Debería ser TH_AUSENCIA_GET
 
 ---
 
-### REGLA 2: Analizar y Reutilizar Procedimientos Almacenados en CoreProject
+### REGLA 2: Consultar CoreProject y Mapear Metadata de Base de Datos (Tablas, SP, Campos)
 
-**Descripción**: Antes de crear cualquier funcionalidad, investigar si ya existe un stored procedure o función  en CoreProject (WebMatrix legacy) que ejecute esa lógica para migrarlo.
+**Descripción**: Antes de crear o rehacer cualquier funcionalidad, siempre consultar el código y los adaptadores en `CoreProject` (WebMatrix legacy) para mapear de forma exhaustiva los nombres de tablas, procedimientos almacenados, vistas, nombres de campos, tipos de datos y cualquier otra metadata de la base de datos. `CoreProject` es la fuente primaria para nomenclatura y uso; `CO_Matrix_Structure.sql` debe usarse como referencia autoritativa del esquema (tipos y estructura).
 
 **Aplicación**:
-1. Mapear todos los SP existentes del módulo
-2. Documentar qué SP hace cada acción
-3. Ejecutar el SP original en lugar de reimplementar
-4. Crear adaptador que encapsule el SP
-5. No duplicar lógica SQL
+1. Revisar `CoreProject` para identificar: nombres exactos de tablas, SP, parámetros y campos usados por cada acción.
+2. Documentar el mapeo (acción → SP(s) → parámetros → columnas afectadas).
+3. No reimplementar lógica SQL existente sin justificarlo; preferir invocar SP ya existentes o migrarlos de forma controlada.
+4. Crear adaptadores que usen exactamente los nombres y parámetros identificados en `CoreProject`.
+5. Cross-check: corroborar nombres y tipos contra `CO_Matrix_Structure.sql` (ver sección "Verificación con CO_Matrix_Structure.sql").
 
 **Proceso**:
 ```
-Paso 1: Analizar WebMatrix
-└─ ¿Qué SP ejecuta en DataLayer? → TH_Ausencia.RegistrosAusencia
+Paso 1: Analizar CoreProject
+└─ ¿Qué SP/tabla/columnas usa el DataLayer? → ej: TH_Ausencia.RegistrosAusencia, tabla TH_SolicitudAusencia, columna IdEmpleado
 
-Paso 2: Validar en SQL Server
-└─ EXEC TH_Ausencia.RegistrosAusencia @param1, @param2
+Paso 2: Validar en SQL Server o contra CO_Matrix_Structure.sql
+└─ Confirmar existencia y tipo: SELECT TOP 0 * FROM TH_SolicitudAusencia;  -- o revisar script CO_Matrix_Structure.sql
 
-Paso 3: Mapear en Adapter
-└─ public List<...> ObtenerSolicitudes(...) 
-     { return connection.Query("TH_Ausencia.RegistrosAusencia", ...) }
+Paso 3: Mapear en Adapter (usar nombres exactos)
+└─ public List<...> ObtenerSolicitudes(...) { return connection.Query("TH_Ausencia.RegistrosAusencia", ...) }
 
-Paso 4: Exponer en Service
+Paso 4: Exponer en Service y Controller
 └─ public (bool, List<...>) ObtenerSolicitudes(...) { ... }
 
-Paso 5: Usar en Controller
-└─ var (success, data) = _service.ObtenerSolicitudes(...);
+Paso 5: Documentar y agregar pruebas que ejecuten el SP/consulta sobre ambiente de staging
 ```
 
 **Beneficios**:
-- ✅ Sin duplicación de lógica
-- ✅ Consistencia con WebMatrix
-- ✅ Menos bugs (SP ya testado)
-- ✅ Reversibilidad si es necesario
+- ✅ Evita ruptura por nombres/tipos inconsistentes
+- ✅ Mantiene compatibilidad con procesos y reportes ya existentes
+- ✅ Facilita auditoría y rollback
+- ✅ Permite validar cambios contra el script oficial `CO_Matrix_Structure.sql`
 
 ---
 
@@ -972,6 +970,44 @@ public class AusenciaDataAdapter
 | **FK** | `Id[Tabla]` | `IdEmpleado`, `IdSolicitud` | Referencia a tabla |
 | **Auditoría** | `RegistradoPor`, `FechaRegistro`, `ModificadoPor`, `FechaModificacion` | - | En cada tabla |
 
+### Verificación con los scripts divididos y `CoreProject`
+
+**Objetivo**: Corroborar que la estructura (tablas), nombres de objetos (tablas, SP, vistas), columnas y tipos de datos en la implementación coinciden con los scripts oficiales y con el uso observado en `CoreProject`.
+
+**Archivos disponibles (ruta: `MatrixNext/docs/OP/SQL/`)**:
+- `CO_Matrix_SP_Names.csv` — CSV con la lista de nombres de Stored Procedures (ideal para búsquedas rápidas).
+- `CO_Matrix_Structure_SP.sql` — definiciones completas de Stored Procedures (cuerpo y parámetros).
+- `CO_Matrix_Structure_Tables.sql` — definiciones completas de tablas (columnas, tipos, constraints).
+- `CO_Matrix_Structure_Views.sql` — definiciones de vistas.
+
+**Uso recomendado**:
+- Necesito sólo los nombres de SP → abrir `CO_Matrix_SP_Names.csv`.
+- Inspeccionar parámetros y lógica del SP → `CO_Matrix_Structure_SP.sql`.
+- Ver definición de columnas, tipos y constraints → `CO_Matrix_Structure_Tables.sql`.
+- Revisar vistas utilizadas en reportes/joins → `CO_Matrix_Structure_Views.sql`.
+
+**Pasos replicables**:
+1. Identificar objetivo (nombre SP / tabla / vista) y elegir el archivo correcto según la tabla anterior.
+2. Buscar en archivo correspondiente con el editor o desde PowerShell/CLI:
+    - Buscar en CSV (SP names): `Select-String -Path .\MatrixNext\docs\OP\SQL\CO_Matrix_SP_Names.csv -Pattern "TH_AUSENCIA"`
+    - Buscar en scripts: `Select-String -Path .\MatrixNext\docs\OP\SQL\CO_Matrix_Structure_*.sql -Pattern "TH_AUSENCIA"`
+3. Verificar definición y types:
+    - Para tablas: revisar columnas, `NULL/NOT NULL`, `PK`, `FK` en `CO_Matrix_Structure_Tables.sql`.
+    - Para SP: revisar parámetros y valor de retorno en `CO_Matrix_Structure_SP.sql`.
+4. Comparar con el uso en `CoreProject` (DataLayer): confirmar que los parámetros y campos usados coinciden con lo descrito en los archivos.
+5. En ambiente de staging, ejecutar verificaciones en BD real (no productiva):
+    - `SELECT TOP 0 * FROM [Schema].[Table];` — valida columnas y nombres localmente.
+    - `EXEC sp_describe_first_result_set N'SELECT * FROM Schema.Table';` — muestra tipos y metadata.
+6. Si hay diferencias de nombres o tipos:
+    - Documentar la discrepancia en `MIGRACION_[MODULO]_COMPLETADA.md` y notificar al DBA/CoreProject owner.
+    - No cambiar el código hasta acordar plan de reconciliación.
+
+**Automatización mínima (opcional)**:
+- Extraer lista de objetos de los `.sql` y generar CSV para comparaciones automáticas (PowerShell, Python).
+- Usar `sqlpackage` o herramientas de schema-compare para detectar diferencias entre el script y la BD de staging.
+
+**Nota**: `CoreProject` dicta cómo se usan los objetos; los archivos bajo `MatrixNext/docs/OP/SQL/` documentan cómo están definidos. Ambos deben coincidir o tener un plan de reconciliación.
+
 ### Mapeo EF Core
 
 **Definición en DbContext**:
@@ -1396,6 +1432,24 @@ Antes de commitear código, verificar:
 □ Sin archivos sin usar
 □ Sin TODO comentarios
 ```
+
+### Requisitos de commit y auditoría de Sprint
+
+Al finalizar cada sprint (o cuando existan cambios relevantes), es obligatorio realizar un commit y push con la siguiente información mínima:
+
+- **Branch**: usar `feature/<modulo>-<descripcion>` o `hotfix/<descripcion>` según corresponda.
+- **Commit**: mensaje estructurado siguiendo la plantilla de este repo (módulo: acción corta). Incluir referencia a ticket/issue si aplica.
+- **Contenido mínimo**:
+    - Código fuente modificado (Controllers, Services, Adapters, Views).
+    - Scripts SQL modificados o evidencia de verificación (si aplica) y/o archivos `CO_Matrix_*` usados para validación.
+    - Resultados de verificación frente a `MatrixNext/docs/OP/SQL/` (captura o CSV con resultados de comparación si se utilizó herramienta).
+    - Actualización de `MIGRACION_[MODULO]_COMPLETADA.md` o `BACKLOG_MODULO_*` con observaciones y decisiones tomadas.
+- **Push y PR**: subir branch remoto y crear Pull Request con descripción, checklist de aceptación y referencias a las reglas de migración.
+- **Etiqueta en PR**: añadir etiqueta `sprint-complete` o `relevant-change` según corresponda.
+
+No se acepta merge a main/master sin PR revisado y aprobado por el arquitecto o responsable del módulo.
+
+Si durante el sprint se detectan discrepancias en nombres/tipos (BD vs CoreProject), documentarlas en la PR y en `MIGRACION_[MODULO]_COMPLETADA.md` y marcar la PR con `requires-dba` para atención del equipo DBA.
 
 ### Testing Funcional Mínimo
 

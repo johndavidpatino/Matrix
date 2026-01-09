@@ -44,9 +44,9 @@ namespace MatrixNext.Data.Modules.CC.Adapters
         public async Task<PresupuestoInternoDto?> ObtenerPresupuestoInternoDetalleAsync(
             long idPresupuestoInterno)
         {
-            const string sql = "CC_PresupuestosInternoDetalle";
+            const string sql = "CC_PresupuestosInternosGetXId";
             var parameters = new DynamicParameters();
-            parameters.Add("@IdPresupuestoInterno", idPresupuestoInterno);
+            parameters.Add("@IdPresupuesto", idPresupuestoInterno);
 
             var result = await _dbConnection.QueryFirstOrDefaultAsync<PresupuestoInternoDto>(
                 sql, parameters, commandType: CommandType.StoredProcedure);
@@ -60,9 +60,9 @@ namespace MatrixNext.Data.Modules.CC.Adapters
         public async Task<IEnumerable<DetallePresupuestoInternoDto>> 
             ObtenerDetallesPresupuestoInternoAsync(long idPresupuestoInterno)
         {
-            const string sql = "CC_DetallesPresupuestosInterno";
+            const string sql = "CC_DetallePresupuestosSelect";
             var parameters = new DynamicParameters();
-            parameters.Add("@IdPresupuestoInterno", idPresupuestoInterno);
+            parameters.Add("@idpresup", idPresupuestoInterno);
 
             var result = await _dbConnection.QueryAsync<DetallePresupuestoInternoDto>(
                 sql, parameters, commandType: CommandType.StoredProcedure);
@@ -123,9 +123,9 @@ namespace MatrixNext.Data.Modules.CC.Adapters
         /// </summary>
         public async Task EliminarPresupuestoInternoAsync(long idPresupuestoInterno)
         {
-            const string sql = "CC_EliminarPresupuestoInterno";
+            const string sql = "CC_PresupuestoInternoDelete";
             var parameters = new DynamicParameters();
-            parameters.Add("@IdPresupuestoInterno", idPresupuestoInterno);
+            parameters.Add("@PresupuestoId", idPresupuestoInterno);
 
             await _dbConnection.ExecuteAsync(
                 sql, parameters, commandType: CommandType.StoredProcedure);

@@ -194,7 +194,7 @@ namespace MatrixNext.Web.Areas.OP.Controllers
                 var usuarioId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
                 
                 // TODO: Implementar obtención de registros del usuario desde BD
-                // SELECT * FROM OP_RegistroProduccion WHERE UsuarioRegistro=@UsuarioId ORDER BY FechaRegistro DESC
+                // SELECT * FROM OP_Produccion WHERE PersonaId=@UsuarioId ORDER BY FechaRegistro DESC
                 // Por ahora retornar lista vacía
                 var registros = new List<RegistroProduccionDto>();
 

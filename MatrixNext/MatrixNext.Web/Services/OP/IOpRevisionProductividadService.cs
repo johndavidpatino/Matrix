@@ -16,7 +16,7 @@ namespace MatrixNext.Web.Services.OP
         /// <param name="trabajoId">ID del trabajo a revisar</param>
         /// <param name="rol">Rol del usuario: PMO, Coordinador, Campo, MyS/Call</param>
         /// <returns>Lista de planillas con información de cantidades y montos</returns>
-        Task<List<PlanillaProductividadDto>> ObtenerPlanillasPorRolAsync(int trabajoId, string rol);
+        Task<List<PlanillaProductividadDto>> ObtenerPlanillasPorRolAsync(int trabajoId, string rol, int usuarioId);
 
         /// <summary>
         /// Aprueba una planilla de productividad con monto autorizado.
@@ -25,7 +25,7 @@ namespace MatrixNext.Web.Services.OP
         /// <param name="montoAutorizado">Monto autorizado para esta revisión</param>
         /// <param name="usuarioId">ID del usuario que aprueba</param>
         /// <returns>Resultado de la aprobación (true si exitosa)</returns>
-        Task<bool> AprobarPlanillaAsync(int planillaId, decimal montoAutorizado, int usuarioId);
+        Task<bool> AprobarPlanillaAsync(int planillaId, decimal montoAutorizado, int usuarioId, string rol);
 
         /// <summary>
         /// Rechaza una planilla de productividad con observaciones.
@@ -34,7 +34,7 @@ namespace MatrixNext.Web.Services.OP
         /// <param name="observacion">Motivo del rechazo</param>
         /// <param name="usuarioId">ID del usuario que rechaza</param>
         /// <returns>Resultado del rechazo (true si exitosa)</returns>
-        Task<bool> RechazarPlanillaAsync(int planillaId, string observacion, int usuarioId);
+        Task<bool> RechazarPlanillaAsync(int planillaId, string observacion, int usuarioId, string rol);
 
         /// <summary>
         /// Valida si el monto actual de la planilla es válido según máximos del trabajo.

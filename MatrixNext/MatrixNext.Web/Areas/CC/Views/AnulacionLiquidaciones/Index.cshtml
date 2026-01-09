@@ -81,8 +81,8 @@
                 language:{url:'//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'},pageLength:10,
                 columns:[{data:'idLiquidacion'},{data:'periodo'},{data:'nombreEmpleado'},{data:'nombreTrabajo'},
                 {data:'valorLiquidado',render:$.fn.dataTable.render.number(',','.',2,'$')},
-                {data:'estadoActualNombre'},{data:'fechaLiquidacion',render:(d)=>new Date(d).toLocaleDateString('es-CO')},
-                {data:'motivoanulacion'},{data:'fechaAnulacion',render:(d)=>new Date(d).toLocaleDateString('es-CO')},{data:'usuarioAnulacion'}]
+                {data:'estadoActualNombre'},{data:'fechaLiquidacion',render:(d)=>d?new Date(d).toLocaleDateString('es-CO'):'--'},
+                {data:'motivoanulacion'},{data:'fechaAnulacion',render:(d)=>d?new Date(d).toLocaleDateString('es-CO'):'--'},{data:'usuarioAnulacion'}]
             });
 
             $('#b').click(()=>{

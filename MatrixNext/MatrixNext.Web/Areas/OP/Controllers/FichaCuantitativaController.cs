@@ -136,8 +136,10 @@ public class FichaCuantitativaController : Controller
             var destinatarios = await ObtenerDestinatariosEmailAsync(trabajoId);
             if (!destinatarios.Any()) return;
 
-            var asunto = $"Ficha Cuantitativa - {trabajo.Nombre} ({trabajo.JobBook})";
-            var cuerpo = GenerarCuerpoEmailFicha(trabajo.Nombre, trabajo.JobBook, ficha);
+            var nombreTrabajo = trabajo.Nombre ?? $"Trabajo {trabajoId}";
+            var jobBook = string.IsNullOrWhiteSpace(trabajo.JobBook) ? "N/A" : trabajo.JobBook;
+            var asunto = $"Ficha Cuantitativa - {nombreTrabajo} ({jobBook})";
+            var cuerpo = GenerarCuerpoEmailFicha(nombreTrabajo, trabajo.JobBook, ficha);
 
             await _emailService.EnviarMultipleAsync(destinatarios, asunto, cuerpo);
         }

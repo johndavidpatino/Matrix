@@ -23,9 +23,9 @@
         <div class="col-md-3">
             <label class="form-label">Buscar</label>
             <select class="form-select" name="tipo" onchange="this.form.submit()">
-                <option value="1" @(Model.TipoBusqueda == 1 ? "selected" : "")>Activos</option>
-                <option value="2" @(Model.TipoBusqueda == 2 ? "selected" : "")>Pendientes</option>
-                <option value="3" @(Model.TipoBusqueda == 3 ? "selected" : "")>Anteriores</option>
+                <option value="1" selected="@(Model.TipoBusqueda == 1 ? "selected" : null)">Activos</option>
+                <option value="2" selected="@(Model.TipoBusqueda == 2 ? "selected" : null)">Pendientes</option>
+                <option value="3" selected="@(Model.TipoBusqueda == 3 ? "selected" : null)">Anteriores</option>
             </select>
         </div>
         <div class="col-md-6">
@@ -34,7 +34,7 @@
                 <option value="">-- Seleccione proyecto --</option>
                 @foreach (var project in Model.Projects)
                 {
-                    <option value="@project.ProjectId" @(Model.SelectedProject?.ProjectId == project.ProjectId ? "selected" : "")>
+                    <option value="@project.ProjectId" selected="@(Model.SelectedProject?.ProjectId == project.ProjectId ? "selected" : null)">
                         (@project.ProjectId) @project.NombreProjecto
                     </option>
                 }

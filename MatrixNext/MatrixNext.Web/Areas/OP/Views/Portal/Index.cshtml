@@ -83,10 +83,10 @@
             <label class="form-label" for="Estado">Estado</label>
             <select class="form-select" name="Estado" id="Estado">
                 <option value="-1" selected>Todos</option>
-                <option value="1" @(Model.Filtros.Estado == 1 ? "selected" : "")>Nuevo</option>
-                <option value="2" @(Model.Filtros.Estado == 2 ? "selected" : "")>Enviado</option>
-                <option value="3" @(Model.Filtros.Estado == 3 ? "selected" : "")>Cerrado</option>
-                <option value="11" @(Model.Filtros.Estado == 11 ? "selected" : "")>Anulado</option>
+                <option value="1" selected="@(Model.Filtros.Estado == 1 ? "selected" : null)">Nuevo</option>
+                <option value="2" selected="@(Model.Filtros.Estado == 2 ? "selected" : null)">Enviado</option>
+                <option value="3" selected="@(Model.Filtros.Estado == 3 ? "selected" : null)">Cerrado</option>
+                <option value="11" selected="@(Model.Filtros.Estado == 11 ? "selected" : null)">Anulado</option>
             </select>
         </div>
         <div class="col-md-2">

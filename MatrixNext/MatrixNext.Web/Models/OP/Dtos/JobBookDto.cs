@@ -9,19 +9,19 @@ namespace MatrixNext.Web.Models.OP.Dtos
         public int JobBookId { get; set; }
 
         /// <summary>Código del JobBook (ej: CALI-2024-001)</summary>
-        public string Codigo { get; set; }
+        public string Codigo { get; set; } = string.Empty;
 
         /// <summary>Nombre/descripción del JobBook</summary>
-        public string Nombre { get; set; }
+        public string Nombre { get; set; } = string.Empty;
 
         /// <summary>Tipo: JBE (Encuesta), JBI (Interno), CC (Centro de Costo)</summary>
-        public string Tipo { get; set; }
+        public string Tipo { get; set; } = string.Empty;
 
         /// <summary>ID del trabajo asociado</summary>
         public int TrabajoId { get; set; }
 
         /// <summary>Estado actual del JobBook</summary>
-        public string Estado { get; set; }
+        public string Estado { get; set; } = string.Empty;
 
         /// <summary>Información adicional para display</summary>
         public string DisplayText => $"{Codigo} - {Nombre}";

@@ -54,7 +54,7 @@ public class SupervisionController : Controller
         var model = new SupervisionViewModel
         {
             TrabajoId = trabajoId,
-            Identificacion = identificacion,
+            Identificacion = identificacion ?? string.Empty,
             Operadores = usuarios,
             Supervisores = usuarios,
             Request = new GuardarSupervisionRequest

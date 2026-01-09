@@ -1,6 +1,7 @@
 using MatrixNext.Web.Infrastructure.Data;
 using MatrixNext.Web.Services.OP.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace MatrixNext.Web.Services.OP;
 
@@ -24,18 +25,18 @@ public class OpCoordinacionService : IOpCoordinacionService
         {
             // Llamar a SP GestionTrabajosOP.ListaTrabajosXCoordinador
             var query = @"
-                SELECT t.Id, t.JobBook, t.Nombre, t.Estado, m.MetNombre as Metodologia, t.IdProyecto
+                SELECT t.id AS Id, t.JobBook, t.NombreTrabajo AS Nombre, t.Estado, m.MetNombre as Metodologia, t.ProyectoId AS IdProyecto
                 FROM PY_Trabajo t
-                LEFT JOIN OP_Metodologias m ON t.IdMetodologia = m.id
-                WHERE t.IdCoordinador = {0}
-                AND (@trabajoId IS NULL OR t.Id = @trabajoId)
-                AND (@nombre IS NULL OR t.Nombre LIKE '%' + @nombre + '%')
-                AND (@jobBook IS NULL OR t.JobBook LIKE '%' + @jobBook + '%')
-                AND (@estado IS NULL OR t.Estado = @estado)
-                ORDER BY t.Id DESC";
+                LEFT JOIN OP_Metodologias m ON t.OP_MetodologiaId = m.Id
+                WHERE t.COE = {0}
+                AND ({1} IS NULL OR t.id = {1})
+                AND ({2} IS NULL OR t.NombreTrabajo LIKE '%' + {2} + '%')
+                AND ({3} IS NULL OR t.JobBook LIKE '%' + {3} + '%')
+                AND ({4} IS NULL OR t.Estado = {4})
+                ORDER BY t.id DESC";
 
             var trabajos = await _db.Database
-                .SqlQueryRaw<TrabajoCoordinadorDto>(query, coordinadorId)
+                .SqlQueryRaw<TrabajoCoordinadorDto>(query, coordinadorId, DbValue(trabajoId), DbValue(nombre), DbValue(jobBook), DbValue(estado))
                 .ToListAsync();
 
             return trabajos;
@@ -53,19 +54,18 @@ public class OpCoordinacionService : IOpCoordinacionService
         {
             // Llamar a SP GestionTrabajosOP.ListaTrabajosCallCenter
             var query = @"
-                SELECT t.Id, t.JobBook, t.Nombre, t.Estado, m.MetNombre as Metodologia, t.IdProyecto
+                SELECT t.id AS Id, t.JobBook, t.NombreTrabajo AS Nombre, t.Estado, m.MetNombre as Metodologia, t.ProyectoId AS IdProyecto
                 FROM PY_Trabajo t
-                LEFT JOIN OP_Metodologias m ON t.IdMetodologia = m.id
-                LEFT JOIN FichaCuantitativo fc ON t.Id = fc.IdTrabajo
-                WHERE fc.TipoRecoleccionId IN (1, 4) -- CATI o CAWI
-                AND (@trabajoId IS NULL OR t.Id = @trabajoId)
-                AND (@nombre IS NULL OR t.Nombre LIKE '%' + @nombre + '%')
-                AND (@jobBook IS NULL OR t.JobBook LIKE '%' + @jobBook + '%')
-                AND (@estado IS NULL OR t.Estado = @estado)
-                ORDER BY t.Id DESC";
+                LEFT JOIN OP_Metodologias m ON t.OP_MetodologiaId = m.Id
+                WHERE t.TipoRecoleccionId IN (1, 4) -- CATI o CAWI
+                AND ({0} IS NULL OR t.id = {0})
+                AND ({1} IS NULL OR t.NombreTrabajo LIKE '%' + {1} + '%')
+                AND ({2} IS NULL OR t.JobBook LIKE '%' + {2} + '%')
+                AND ({3} IS NULL OR t.Estado = {3})
+                ORDER BY t.id DESC";
 
             var trabajos = await _db.Database
-                .SqlQueryRaw<TrabajoCoordinadorDto>(query)
+                .SqlQueryRaw<TrabajoCoordinadorDto>(query, DbValue(trabajoId), DbValue(nombre), DbValue(jobBook), DbValue(estado))
                 .ToListAsync();
 
             return trabajos;
@@ -83,10 +83,10 @@ public class OpCoordinacionService : IOpCoordinacionService
         {
             // Llamar a SP CoordinacionCampo.ObtenerMuestraxCoordinadoryTrabajo
             var query = @"
-                SELECT m.Id, m.CiudadId, d.DivMuniNombre as Ciudad, m.Cantidad as Muestra
-                FROM CoordinacionCampo_Muestra m
+                SELECT m.Id, m.CiudadId, d.DivMuniNombre as Ciudad, CAST(m.Cantidad AS int) as Muestra
+                FROM OP_MuestraTrabajos m
                 INNER JOIN C_Divipola d ON m.CiudadId = d.DivMuniCodigo
-                WHERE m.IdTrabajo = {0} AND m.CoordinadorId = {1}";
+                WHERE m.TrabajoId = {0} AND m.Coordinador = {1}";
 
             var ciudades = await _db.Database
                 .SqlQueryRaw<CiudadAsignadaDto>(query, trabajoId, coordinadorId)
@@ -109,19 +109,19 @@ public class OpCoordinacionService : IOpCoordinacionService
             var query = @"
                 SELECT 
                     pa.Id, 
-                    pa.PersonaId, 
+                    pa.Persona as PersonaId, 
                     p.Nombres + ' ' + p.Apellidos as Nombre,
                     c.Cargo,
                     d.DivMuniNombre as Ciudad
-                FROM CoordinacionCampo_PersonalAsignado pa
-                INNER JOIN TH_Personas p ON pa.PersonaId = p.Id
+                FROM OP_PersonasAsignadasTrabajo pa
+                INNER JOIN TH_Personas p ON pa.Persona = p.Id
                 INNER JOIN TH_Cargos c ON p.CargoId = c.Id
-                LEFT JOIN C_Divipola d ON p.CiudadId = d.DivMuniCodigo
-                WHERE pa.IdTrabajo = {0}
-                AND (@ciudadId IS NULL OR p.CiudadId = @ciudadId)";
+                LEFT JOIN C_Divipola d ON pa.Ciudad = d.DivMuniCodigo
+                WHERE pa.TrabajoId = {0}
+                AND ({1} IS NULL OR pa.Ciudad = {1})";
 
             var personal = await _db.Database
-                .SqlQueryRaw<PersonalAsignadoDto>(query, trabajoId)
+                .SqlQueryRaw<PersonalAsignadoDto>(query, trabajoId, DbValue(ciudadId))
                 .ToListAsync();
 
             return personal;
@@ -148,18 +148,18 @@ public class OpCoordinacionService : IOpCoordinacionService
                     d.DivMuniNombre as Ciudad
                 FROM TH_Personas p
                 INNER JOIN TH_Cargos c ON p.CargoId = c.Id
-                LEFT JOIN OP_Encuestadores e ON p.Id = e.PersonaId
-                LEFT JOIN OP_TipoEncuestador te ON e.TipoEncuestadorId = te.Id
+                LEFT JOIN OP_Encuestadores e ON p.Id = e.id
+                LEFT JOIN OP_TipoEncuestador te ON e.TipoId = te.id
                 LEFT JOIN TH_TipoContratacion tc ON p.TipoContratacionId = tc.Id
                 LEFT JOIN C_Divipola d ON p.CiudadId = d.DivMuniCodigo
                 WHERE p.Id NOT IN (
-                    SELECT PersonaId FROM CoordinacionCampo_PersonalAsignado WHERE IdTrabajo = {0}
+                    SELECT Persona FROM OP_PersonasAsignadasTrabajo WHERE TrabajoId = {0}
                 )
                 AND p.Activo = 1
-                AND (@ciudadId IS NULL OR p.CiudadId = @ciudadId)";
+                AND ({1} IS NULL OR p.CiudadId = {1})";
 
             var personal = await _db.Database
-                .SqlQueryRaw<PersonalDisponibleDto>(query, trabajoId)
+                .SqlQueryRaw<PersonalDisponibleDto>(query, trabajoId, DbValue(ciudadId))
                 .ToListAsync();
 
             return personal;
@@ -176,9 +176,9 @@ public class OpCoordinacionService : IOpCoordinacionService
         try
         {
             await _db.Database.ExecuteSqlRawAsync(@"
-                INSERT INTO CoordinacionCampo_PersonalAsignado (IdTrabajo, PersonaId, CiudadId, FechaAsignacion, AsignadoPor)
-                VALUES ({0}, {1}, {2}, GETDATE(), {3})",
-                trabajoId, personalId, ciudadId, usuarioId);
+                INSERT INTO OP_PersonasAsignadasTrabajo (TrabajoId, Persona, Ciudad, Fecha)
+                VALUES ({0}, {1}, {2}, GETDATE())",
+                trabajoId, personalId, DbValue(ciudadId));
 
             _logger.LogInformation("Personal {PersonalId} asignado a trabajo {TrabajoId} por usuario {UsuarioId}", personalId, trabajoId, usuarioId);
             return true;
@@ -195,7 +195,7 @@ public class OpCoordinacionService : IOpCoordinacionService
         try
         {
             await _db.Database.ExecuteSqlRawAsync(@"
-                DELETE FROM CoordinacionCampo_PersonalAsignado WHERE Id = {0}",
+                DELETE FROM OP_PersonasAsignadasTrabajo WHERE Id = {0}",
                 asignacionId);
 
             _logger.LogInformation("Asignación {AsignacionId} eliminada por usuario {UsuarioId}", asignacionId, usuarioId);
@@ -207,4 +207,5 @@ public class OpCoordinacionService : IOpCoordinacionService
             return false;
         }
     }
+    private static object DbValue(object? value) => value ?? DBNull.Value;
 }

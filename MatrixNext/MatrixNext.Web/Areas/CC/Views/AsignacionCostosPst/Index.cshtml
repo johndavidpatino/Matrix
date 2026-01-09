@@ -72,7 +72,7 @@
                 columns:[{data:'idAsignacion'},{data:'periodo'},{data:'codigoTrabajo'},
                 {data:'nombreConcepto'},{data:'costoBase',render:$.fn.dataTable.render.number(',','.',2,'$')},
                 {data:'costoAsignado',render:$.fn.dataTable.render.number(',','.',2,'$')},
-                {data:'fechaAsignacion',render:(d)=>new Date(d).toLocaleDateString('es-CO')},{data:'estado'}]
+                {data:'fechaAsignacion',render:(d)=>d?new Date(d).toLocaleDateString('es-CO'):'--'},{data:'estado'}]
             });
 
             $('#b').click(()=>{

@@ -1,0 +1,102 @@
+@model List<MatrixNext.Web.Services.OP.Models.RespuestaFiltroVm>
+@{
+    ViewData["Title"] = "Aprobaciones de Filtro - " + (ViewBag.TipoFiltroNombre ?? "");
+}
+
+<div class="container">
+    <h2>
+        <i class="bi bi-check2-square"></i> Aprobaciones - @ViewBag.TipoFiltroNombre
+    </h2>
+    <div style="display:none">@Html.AntiForgeryToken()</div>
+
+    <div class="mb-3">
+        <a class="btn btn-secondary" href="@Url.Action("Index", "CualitativoTrabajos", new { area = "OP" })">
+            <i class="bi bi-arrow-left"></i> Regresar
+        </a>
+        <a class="btn btn-success" id="btnAprobar">
+            <i class="bi bi-check2-circle"></i> Aprobar Seleccionados
+        </a>
+        <a class="btn btn-danger" id="btnRechazar">
+            <i class="bi bi-x-circle"></i> Rechazar Seleccionados
+        </a>
+        <a class="btn btn-info" href="@Url.Action("ExportExcel", "CualitativoFiltros", new { area = "OP", trabajoId = ViewBag.TrabajoId, tipo = ViewBag.TipoFiltro })">
+            <i class="bi bi-file-earmark-excel"></i> Exportar Excel
+        </a>
+    </div>
+
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th><input type="checkbox" id="chkAll" /></th>
+                <th>Persona</th>
+                <th>Documento</th>
+                <th>Estado</th>
+                <th>Fecha</th>
+                <th>Observaciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var r in Model)
+            {
+                <tr data-id="@r.Id">
+                    <td><input type="checkbox" class="chkRow" /></td>
+                    <td>@r.PersonaNombre</td>
+                    <td>@r.PersonaDocumento</td>
+                    <td>@r.Estado</td>
+                    <td>@r.FechaRespuesta.ToString("yyyy-MM-dd")</td>
+                    <td>@r.ObservacionesAprobacion</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+<script>
+    function getCsrfToken() {
+        const el = document.querySelector('input[name="__RequestVerificationToken"]');
+        return el ? el.value : '';
+    }
+
+    document.getElementById('chkAll').addEventListener('change', function() {
+        document.querySelectorAll('.chkRow').forEach(cb => cb.checked = this.checked);
+    });
+
+    function getSelectedIds() {
+        const ids = [];
+        document.querySelectorAll('tbody tr').forEach(tr => {
+            const cb = tr.querySelector('.chkRow');
+            if (cb && cb.checked) {
+                ids.push(parseInt(tr.getAttribute('data-id')));
+            }
+        });
+        return ids;
+    }
+
+    document.getElementById('btnAprobar').addEventListener('click', function() {
+        const ids = getSelectedIds();
+        if (ids.length === 0) { alert('Selecciona al menos una respuesta'); return; }
+        fetch('@Url.Action("ApproveResponses", "CualitativoFiltros", new { area = "OP" })', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'RequestVerificationToken': getCsrfToken() },
+            body: JSON.stringify({ respuestasIds: ids, observaciones: '' })
+        }).then(r => r.json()).then(res => {
+            if (res.success) { alert(res.message); window.location.reload(); } else { alert(res.message); }
+        });
+    });
+
+    document.getElementById('btnRechazar').addEventListener('click', function() {
+        const ids = getSelectedIds();
+        if (ids.length === 0) { alert('Selecciona al menos una respuesta'); return; }
+        const obs = prompt('Observaciones de rechazo:');
+        if (!obs) return;
+        fetch('@Url.Action("RejectResponses", "CualitativoFiltros", new { area = "OP" })', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'RequestVerificationToken': getCsrfToken() },
+            body: JSON.stringify({ respuestasIds: ids, observaciones: obs })
+        }).then(r => r.json()).then(res => {
+            if (res.success) { alert(res.message); window.location.reload(); } else { alert(res.message); }
+        });
+    });
+</script>
+}

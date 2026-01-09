@@ -145,7 +145,7 @@
                     { data: 'cantidad', render: $.fn.dataTable.render.number(',', '.', 0, '', '%') },
                     { data: 'costoUnitario', render: $.fn.dataTable.render.number(',', '.', 2, '$') },
                     { data: 'costoTotal', render: $.fn.dataTable.render.number(',', '.', 2, '$') },
-                    { data: 'fechaProduccion', render: (data) => new Date(data).toLocaleDateString('es-CO') },
+                    { data: 'fechaProduccion', render: (data) => data ? new Date(data).toLocaleDateString('es-CO') : '--' },
                     { data: 'estado' }
                 ]
             });

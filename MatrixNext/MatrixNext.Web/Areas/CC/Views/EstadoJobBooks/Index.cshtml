@@ -68,7 +68,7 @@
             const t = $('#tbl').DataTable({
                 language:{url:'//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'},pageLength:10,
                 columns:[{data:'idJobBook'},{data:'codigoTrabajo'},{data:'numeroJobBook'},{data:'estadoActualNombre'},
-                {data:'fechaApertura',render:(d)=>new Date(d).toLocaleDateString('es-CO')},
+                {data:'fechaApertura',render:(d)=>d?new Date(d).toLocaleDateString('es-CO'):'--'},
                 {data:'fechaCierre',render:(d)=>d?new Date(d).toLocaleDateString('es-CO'):'--'},
                 {data:'montoTotal',render:$.fn.dataTable.render.number(',','.',2,'$')}]
             });

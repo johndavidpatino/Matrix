@@ -317,6 +317,64 @@ Cada tarea en la sección 5.1 referencia directamente al documento FASE donde se
 
 ## 6️⃣ Próximos pasos inmediatos (SEMANA 1)
 
+### 🎉 AVANCES COMPLETADOS (8 de enero, 2026)
+
+#### ✅ Sprint 1 - Infraestructura COMPLETADO (8 enero 2026)
+
+**Servicios base creados**:
+1. ✅ `IOpCualitativoService` + `OpCualitativoService` - Gestión de trabajos COE
+2. ✅ `IOpFiltrosService` + `OpFiltrosService` - Filtros de reclutamiento/asistencia
+3. ✅ `IOpFichasTecnicasService` + `OpFichasTecnicasService` - Fichas técnicas (Entrevista/Sesión/Observación)
+
+**ViewModels creados**:
+1. ✅ `TrabajoCualitativoVm` - Lista de trabajos
+2. ✅ `ConfiguracionTrabajoVm` - Configuración de fechas y tipo recolección
+3. ✅ `FiltroConfigVm`, `PreguntaFiltroVm`, `RespuestaFiltroVm` - Filtros dinámicos
+4. ✅ `FichaTecnicaVm` - Fichas técnicas
+
+**Controllers creados**:
+1. ✅ `CualitativoTrabajosController` - FLUJO 1 (7 pasos completos)
+   - Index (lista trabajos por coordinador/permiso)
+   - Search (búsqueda AJAX)
+   - GetConfiguration/SaveConfiguration (modal configuración)
+   - NavigateTo (8 redirecciones)
+   
+2. ✅ `CualitativoFichasController` - FLUJO 3 (5 pasos completos)
+   - EditInterview/SaveInterview/SubmitInterview (Entrevista)
+   - EditSession/SaveSession (Sesión)
+   - EditObservation/SaveObservation (Observación)
+   - ValidateBudget (validación presupuesto AJAX)
+   - UpdateHabeasData (actualización Habeas Data)
+   
+3. ✅ `CualitativoFiltrosController` - FLUJO 2 (7 pasos completos)
+   - Configure (diseño de filtro)
+   - AddQuestion/UpdateQuestion/DeleteQuestion (CRUD preguntas)
+   - GenerateLink (link visualización)
+   - Approve (aprobación respuestas)
+   - ApproveResponses/RejectResponses (aprobar/rechazar con log)
+   - ExportExcel (SP REP_OP_Respuestas_Filtro)
+
+**Registro en Program.cs**:
+✅ Servicios registrados con DI en líneas 158-160
+
+**Evidencia de código**:
+- Servicios: 3 interfaces + 3 implementaciones = **1,200+ LOC**
+- Controllers: 3 controllers con **600+ LOC**
+- ViewModels: 6 modelos con **250+ LOC**
+- **Total implementado: ~2,050 LOC**
+
+**Adherencia a directrices**:
+- ✅ REGLA 1: Respeto nombres BD (OP_TrabajosConfiguracion, OP_FichasTecnicas, OP_PreguntasFiltro)
+- ✅ REGLA 2: Consulta a CoreProject (evidencia en comentarios de código)
+- ✅ REGLA 3: EF Core para INSERT/UPDATE simples
+- ✅ REGLA 4: Dapper para SPs (OP_ObtenerTrabajosCualitativosXCoordinador, REP_OP_Respuestas_Filtro)
+- ✅ REGLA 5: Rutas con [Route] explícitas
+- ✅ Claims authentication (reemplazo de Session)
+- ✅ Validaciones FluentValidation en servicios
+- ✅ Logging con ILogger en todos los métodos
+
+---
+
 ### 6.1 Acciones inmediatas
 
 1. **Kick-off Meeting** (Lunes, 2 horas)
@@ -334,9 +392,22 @@ Cada tarea en la sección 5.1 referencia directamente al documento FASE donde se
    - [ ] Crear Services base (LocationService, BudgetValidationService, AuditLoggingService)
 
 3. **Validar SPs y Tablas** (Miércoles, 4 horas)
-   - [ ] Confirmar 10 SPs listadas en FASE 5, Sección 5.2
-   - [ ] Validar 15 tablas BD (FASE 5, Sección 5.1)
-   - [ ] Documentar parámetros de entrada/salida
+   - [ ] Confirmar 10 SPs listadas en FASE 5, Sección 5.2 (usar `CO_Matrix_SP_Names.csv` para búsqueda rápida)
+   - [ ] Validar 15 tablas BD (FASE 5, Sección 5.1) contra `CO_Matrix_Structure_Tables.sql` y registrar discrepancias
+   - [ ] Revisar parámetros y cuerpos de SP en `CO_Matrix_Structure_SP.sql` y cotejar con uso en `CoreProject` (DataLayer)
+   - [ ] Generar evidencia de verificación (CSV o captura) con resultados de comparación y adjuntarla al ticket/PR
+   - [ ] Si existen discrepancias de nombres/tipos, abrir issue `requires-dba` y documentar acciones acordadas antes de cambio de código
+
+### 6.2 Actualización de Vistas P0 (8 de enero 2026)
+
+**Cambios implementados en Views (OP/Cualitativo):**
+- ✅ `CualitativoTrabajos/Index`: Token anti-CSRF en formulario de configuración y alias `abrirModalConfiguracion()` para el grid parcial.
+- ✅ `CualitativoFichas/EditInterview`: Título y `asp-action` dinámicos por `TipoFicha` (Entrevista/Sesión/Observación), botón de entrega solo para Entrevista, y corrección de envío del token anti-CSRF en `fetch`.
+- ✅ `CualitativoFiltros/Configure`: Token anti-CSRF y uso correcto en `Add/DeleteQuestion`; agregado flujo sencillo de edición (`editarPregunta`) con prompts y llamada a `UpdateQuestion`.
+- ✅ `CualitativoFiltros/Approve`: Token anti-CSRF y uso correcto en `ApproveResponses` / `RejectResponses`.
+
+**Resultado:**
+- Compilación correcta con advertencias no bloqueantes (nullability). Vistas funcionales para P0 con CSRF protegido y acciones alineadas con Controllers.
 
 4. **Preparar Sprint 1 Board** (Jueves, 3 horas)
    - [ ] Cargar tareas P0 (6 tareas) a Azure DevOps/GitHub Projects
@@ -364,6 +435,7 @@ Antes de comenzar código, validar:
 - [ ] 15 riesgos críticos y soluciones leidas (FASE 5, Sección 6.2)
 - [ ] FluentValidation strategy confirmada (FASE 6, Sección 10)
 - [ ] Decisión EF+Dapper hybrid (FASE 5, Sección 5.3) entendida
+ - [ ] Commits y PRs: al final de cada sprint (o cambios relevantes) se debe hacer commit/push, crear PR y adjuntar evidencias de validación (scripts/CSV). No merge sin revisión.
 
 ### Funcional
 - [ ] 3 Flujos principales entendidos (FLUJO 1, 2, 3 en FASE 3-4)

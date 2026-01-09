@@ -1,0 +1,219 @@
+@model List<MatrixNext.Web.Services.OP.Models.TrabajoCualitativoVm>
+
+@{
+    ViewData["Title"] = "Trabajos Cualitativos - COE";
+    var coeId = ViewBag.CoeId as long?;
+    var esCoordinador = (bool)(ViewBag.EsCoordinador ?? false);
+}
+
+<!-- Ref: ANALISIS_OP_CUALITATIVO_FASE3_FLUJO1.md PASO 1.1-1.3 -->
+<!-- WebForm original: Trabajos.aspx -->
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-briefcase"></i> Trabajos Cualitativos
+                        @if (esCoordinador)
+                        {
+                            <span class="badge badge-primary">Coordinador COE</span>
+                        }
+                    </h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-sm btn-primary" onclick="refreshTrabajos()">
+                            <i class="fas fa-sync-alt"></i> Actualizar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- PASO 1.3: Búsqueda de trabajos -->
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label>COE</label>
+                            <select id="filtro-coe" class="form-control" onchange="filterTrabajos()">
+                                <option value="">Todos</option>
+                                <!-- Cargar COEs dinámicamente desde API -->
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Nombre</label>
+                            <input type="text" id="filtro-nombre" class="form-control" placeholder="Buscar por nombre..." onkeyup="filterTrabajos()" />
+                        </div>
+                        <div class="col-md-4">
+                            <label>Estado</label>
+                            <select id="filtro-estado" class="form-control" onchange="filterTrabajos()">
+                                <option value="">Todos</option>
+                                <option value="Activo">Activo</option>
+                                <option value="Cerrado">Cerrado</option>
+                                <option value="Pausado">Pausado</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- PASO 1.2: Grid de trabajos -->
+                    <div id="trabajos-grid-container">
+                        @await Html.PartialAsync("_TrabajosGrid", Model)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- PASO 1.5-1.6: Modal de configuración -->
+<div class="modal fade" id="modal-configuracion" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-cog"></i> Configuración de Trabajo
+                </h5>
+                <button type="button" class="close text-white" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <form id="form-configuracion">
+                @Html.AntiForgeryToken()
+                <div class="modal-body">
+                    <input type="hidden" id="config-trabajo-id" />
+                    
+                    <div class="form-group">
+                        <label class="font-weight-bold">Trabajo:</label>
+                        <p id="config-trabajo-nombre" class="form-control-plaintext"></p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="config-fecha-inicio">Fecha Inicio Campo *</label>
+                                <input type="date" class="form-control" id="config-fecha-inicio" required />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="config-fecha-fin">Fecha Fin Campo *</label>
+                                <input type="date" class="form-control" id="config-fecha-fin" required />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="config-tipo-recoleccion">Tipo de Recolección *</label>
+                        <select class="form-control" id="config-tipo-recoleccion" required>
+                            <option value="">Seleccione...</option>
+                            <option value="1">Presencial</option>
+                            <option value="2">Telefónica</option>
+                            <option value="3">Online</option>
+                            <option value="4">Mixta</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="config-observaciones">Observaciones</label>
+                        <textarea class="form-control" id="config-observaciones" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <i class="fas fa-times"></i> Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Guardar Configuración
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // PASO 1.3: Búsqueda de trabajos (AJAX)
+        function filterTrabajos() {
+            const coeId = $('#filtro-coe').val();
+            const nombre = $('#filtro-nombre').val();
+            const estado = $('#filtro-estado').val();
+
+            $.get('@Url.Action("Search", "CualitativoTrabajos", new { area = "OP" })', {
+                coeId: coeId,
+                nombre: nombre,
+                estado: estado
+            }, function(data) {
+                $('#trabajos-grid-container').html(data);
+            });
+        }
+
+        function refreshTrabajos() {
+            location.reload();
+        }
+
+        // PASO 1.5: Cargar configuración de trabajo
+        function loadConfiguration(trabajoId) {
+            $.get('@Url.Action("GetConfiguration", "CualitativoTrabajos", new { area = "OP" })', {
+                trabajoId: trabajoId
+            }, function(response) {
+                if (response.success) {
+                    const data = response.data;
+                    $('#config-trabajo-id').val(data.trabajoId);
+                    $('#config-trabajo-nombre').text(data.trabajoNombre + ' - ' + data.unidadNegocio);
+                    $('#config-fecha-inicio').val(data.fechaInicioCampo ? data.fechaInicioCampo.split('T')[0] : '');
+                    $('#config-fecha-fin').val(data.fechaFinCampo ? data.fechaFinCampo.split('T')[0] : '');
+                    $('#config-tipo-recoleccion').val(data.tipoRecoleccion || '');
+                    $('#config-observaciones').val(data.observaciones || '');
+                    
+                    $('#modal-configuracion').modal('show');
+                } else {
+                    toastr.error(response.message);
+                }
+            });
+        }
+
+        // Alias usado por el grid parcial
+        function abrirModalConfiguracion(trabajoId) {
+            loadConfiguration(trabajoId);
+        }
+
+        // PASO 1.6: Guardar configuración
+        $('#form-configuracion').on('submit', function(e) {
+            e.preventDefault();
+
+            const data = {
+                trabajoId: parseInt($('#config-trabajo-id').val()),
+                fechaInicioCampo: $('#config-fecha-inicio').val() || null,
+                fechaFinCampo: $('#config-fecha-fin').val() || null,
+                tipoRecoleccion: parseInt($('#config-tipo-recoleccion').val()),
+                observaciones: $('#config-observaciones').val() || ''
+            };
+
+            $.ajax({
+                url: '@Url.Action("SaveConfiguration", "CualitativoTrabajos", new { area = "OP" })',
+                type: 'POST',
+                contentType: 'application/json',
+                headers: {
+                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                },
+                data: JSON.stringify(data),
+                success: function(response) {
+                    if (response.success) {
+                        toastr.success(response.message);
+                        $('#modal-configuracion').modal('hide');
+                        refreshTrabajos();
+                    } else {
+                        toastr.error(response.message);
+                    }
+                },
+                error: function() {
+                    toastr.error('Error guardando configuración');
+                }
+            });
+        });
+
+        // PASO 1.7: Navegación a módulos relacionados
+        function navigateTo(trabajoId, destination) {
+            window.location.href = '@Url.Action("NavigateTo", "CualitativoTrabajos", new { area = "OP" })?trabajoId=' + trabajoId + '&destination=' + destination;
+        }
+    </script>
+}

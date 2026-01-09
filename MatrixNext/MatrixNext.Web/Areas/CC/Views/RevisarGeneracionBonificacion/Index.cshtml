@@ -82,7 +82,7 @@
                 {data:'produccionTotal',render:$.fn.dataTable.render.number(',','.',2,'$')},
                 {data:'bonoCalculado',render:$.fn.dataTable.render.number(',','.',2,'$')},
                 {data:'bonoFinal',render:$.fn.dataTable.render.number(',','.',2,'$')},
-                {data:'fechaGeneracion',render:(d)=>new Date(d).toLocaleDateString('es-CO')},
+                {data:'fechaGeneracion',render:(d)=>d?new Date(d).toLocaleDateString('es-CO'):'--'},
                 {data:'fechaRevision',render:(d)=>d?new Date(d).toLocaleDateString('es-CO'):'--'},
                 {data:'aprobada',render:(d)=>d?'<span class="badge badge-success">Sí</span>':'<span class="badge badge-danger">No</span>'}]
             });

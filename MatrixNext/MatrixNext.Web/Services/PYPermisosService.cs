@@ -6,7 +6,7 @@ namespace MatrixNext.Web.Services
 {
     /// <summary>
     /// Implementación de IPYPermisosService
-    /// Conecta a tablas US_Usuarios_Permisos y US_RolesUsuarios en BD legacy
+    /// Conecta a tablas US_PermisosUsuarios y US_RolesUsuarios en BD legacy
     /// Ref: MATRIZ_PERMISOS_ROLES.md § 5.1
     /// ISSUE RESUELTO: Sprint 0 GAP-0.1 / Sprint 6 GAP-6.1
     /// </summary>
@@ -26,8 +26,8 @@ namespace MatrixNext.Web.Services
 
         /// <summary>
         /// Verifica si un usuario tiene un permiso específico
-        /// Consulta: SELECT COUNT(*) FROM US_Usuarios_Permisos
-        ///          WHERE IdUsuario = @IdUsuario AND IdPermiso = @IdPermiso
+        /// Consulta: SELECT COUNT(*) FROM US_PermisosUsuarios
+        ///          WHERE UsuarioId = @UsuarioId AND PermisoId = @PermisoId
         /// </summary>
         public async Task<bool> VerificarPermisoAsync(int permisoId, long usuarioId)
         {
@@ -39,13 +39,13 @@ namespace MatrixNext.Web.Services
 
                     const string query = @"
                         SELECT COUNT(*) 
-                        FROM US_Usuarios_Permisos 
-                        WHERE IdUsuario = @IdUsuario 
-                          AND IdPermiso = @IdPermiso";
+                        FROM US_PermisosUsuarios 
+                        WHERE UsuarioId = @UsuarioId 
+                          AND PermisoId = @PermisoId";
 
                     var count = await connection.QueryFirstOrDefaultAsync<int>(
                         query,
-                        new { IdUsuario = usuarioId, IdPermiso = permisoId },
+                        new { UsuarioId = usuarioId, PermisoId = permisoId },
                         commandType: CommandType.Text);
 
                     var tienePermiso = count > 0;
@@ -110,9 +110,9 @@ namespace MatrixNext.Web.Services
 
         /// <summary>
         /// Obtiene lista de permisos de un usuario
-        /// Consulta: SELECT DISTINCT IdPermiso 
-        ///          FROM US_Usuarios_Permisos 
-        ///          WHERE IdUsuario = @IdUsuario
+        /// Consulta: SELECT DISTINCT PermisoId 
+        ///          FROM US_PermisosUsuarios 
+        ///          WHERE UsuarioId = @UsuarioId
         /// </summary>
         public async Task<List<int>> ObtenerPermisosUsuarioAsync(long usuarioId)
         {
@@ -123,13 +123,13 @@ namespace MatrixNext.Web.Services
                     await connection.OpenAsync();
 
                     const string query = @"
-                        SELECT DISTINCT IdPermiso 
-                        FROM US_Usuarios_Permisos 
-                        WHERE IdUsuario = @IdUsuario";
+                        SELECT DISTINCT PermisoId 
+                        FROM US_PermisosUsuarios 
+                        WHERE UsuarioId = @UsuarioId";
 
                     var permisos = (await connection.QueryAsync<int>(
                         query,
-                        new { IdUsuario = usuarioId },
+                        new { UsuarioId = usuarioId },
                         commandType: CommandType.Text)).ToList();
 
                     _logger.LogInformation(

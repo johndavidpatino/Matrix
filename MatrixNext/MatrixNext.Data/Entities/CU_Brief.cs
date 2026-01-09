@@ -12,9 +12,6 @@ namespace MatrixNext.Data.Entities
         [Column("Cliente")]
         public string? Cliente { get; set; }
 
-        [Column("ClienteId")]
-        public long? ClienteId { get; set; }
-
         [Column("Contacto")]
         public string? Contacto { get; set; }
 

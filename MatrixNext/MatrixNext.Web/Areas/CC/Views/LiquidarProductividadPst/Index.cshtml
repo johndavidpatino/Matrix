@@ -99,7 +99,7 @@
                     {data:'produccionGenerada',render:$.fn.dataTable.render.number(',','.',2,'$')},
                     {data:'percentajeLiquidacion',render:$.fn.dataTable.render.number(',','.',2,'','%')},
                     {data:'valorLiquidado',render:$.fn.dataTable.render.number(',','.',2,'$')},
-                    {data:'fechaLiquidacion',render:(d)=>new Date(d).toLocaleDateString('es-CO')}
+                    {data:'fechaLiquidacion',render:(d)=>d?new Date(d).toLocaleDateString('es-CO'):'--'}
                 ]
             });
 
