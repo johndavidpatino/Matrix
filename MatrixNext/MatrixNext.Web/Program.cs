@@ -167,6 +167,7 @@ builder.Services.AddScoped<IOpCualitativoService, OpCualitativoService>();
 builder.Services.AddScoped<IOpFiltrosService, OpFiltrosService>();
 builder.Services.AddScoped<IOpFichasTecnicasService, OpFichasTecnicasService>();
 builder.Services.AddScoped<IOpProgramacionService, OpProgramacionService>();
+builder.Services.AddScoped<IOpPlanillasModeracionService, OpPlanillasModeracionService>(); // Sprint 2
 // IOpIpsService ya registrado previamente
 
 // Registrar opciones de configuración

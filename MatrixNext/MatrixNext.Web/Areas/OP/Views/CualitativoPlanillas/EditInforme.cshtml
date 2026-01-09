@@ -1,0 +1,190 @@
+@model MatrixNext.Web.Services.OP.Models.PlanillaInformeVm
+@{
+    ViewData["Title"] = Model.IdPlanilla == 0 ? "Nueva Planilla de Informes" : "Editar Planilla de Informes";
+}
+
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>@ViewData["Title"]</h2>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Volver al Listado
+        </a>
+    </div>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="card">
+        <div class="card-body">
+            <form asp-action="SaveInforme" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="IdPlanilla" />
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="JobBook" class="form-label">JobBook *</label>
+                        <div class="input-group">
+                            <input type="text" asp-for="JobBook" class="form-control" id="JobBook" required 
+                                   placeholder="Buscar JobBook..." autocomplete="off" />
+                            <button class="btn btn-outline-secondary" type="button" id="btnBuscarJob">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                        <div id="jobBookResults" class="list-group position-absolute w-50" style="z-index: 1000; display: none;"></div>
+                        <span asp-validation-for="JobBook" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="Fecha" class="form-label">Fecha *</label>
+                        <input type="date" asp-for="Fecha" class="form-control" required 
+                               value="@(Model.Fecha?.ToString("yyyy-MM-dd") ?? DateTime.Now.ToString("yyyy-MM-dd"))" />
+                        <span asp-validation-for="Fecha" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="Tecnica" class="form-label">Técnica *</label>
+                        <input type="text" asp-for="Tecnica" class="form-control" required 
+                               placeholder="Ej: Focus Group, Entrevista en Profundidad..." />
+                        <span asp-validation-for="Tecnica" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="Muestra" class="form-label">Muestra *</label>
+                        <input type="number" asp-for="Muestra" class="form-control" required min="1" />
+                        <span asp-validation-for="Muestra" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="IdCuentasUU" class="form-label">ID Cuentas UU</label>
+                        <input type="number" asp-for="IdCuentasUU" class="form-control" min="0" />
+                        <span asp-validation-for="IdCuentasUU" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="Analista" class="form-label">Analista *</label>
+                        <input type="text" asp-for="Analista" class="form-control" required 
+                               placeholder="Nombre del analista responsable..." />
+                        <span asp-validation-for="Analista" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="ServiceLineName" class="form-label">Service Line</label>
+                        <input type="text" asp-for="ServiceLineName" class="form-control" 
+                               placeholder="Nombre de la línea de servicio..." />
+                        <span asp-validation-for="ServiceLineName" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="IdEstadoAprobacion" class="form-label">Estado Aprobación</label>
+                        <select asp-for="IdEstadoAprobacion" class="form-select" disabled>
+                            <option value="1" selected="@(Model.IdEstadoAprobacion == 1)">En Espera</option>
+                            <option value="2" selected="@(Model.IdEstadoAprobacion == 2)">Aprobado</option>
+                            <option value="3" selected="@(Model.IdEstadoAprobacion == 3)">No Aprobado</option>
+                        </select>
+                        <div class="form-text">El estado se actualiza mediante aprobación/rechazo en el listado</div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label for="Observaciones" class="form-label">Observaciones</label>
+                        <textarea asp-for="Observaciones" class="form-control" rows="4" 
+                                  placeholder="Observaciones adicionales..."></textarea>
+                        <span asp-validation-for="Observaciones" class="text-danger"></span>
+                    </div>
+
+                    @if (Model.IdPlanilla > 0)
+                    {
+                        <div class="col-md-6">
+                            <label class="form-label">Usuario Creación</label>
+                            <input type="text" class="form-control" value="@Model.UsuarioCreacion" disabled />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Fecha Creación</label>
+                            <input type="text" class="form-control" value="@Model.FechaCreacion?.ToString("dd/MM/yyyy HH:mm")" disabled />
+                        </div>
+                        @if (!string.IsNullOrEmpty(Model.UsuarioAprobacion))
+                        {
+                            <div class="col-md-6">
+                                <label class="form-label">Usuario Aprobación</label>
+                                <input type="text" class="form-control" value="@Model.UsuarioAprobacion" disabled />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Fecha Aprobación</label>
+                                <input type="text" class="form-control" value="@Model.FechaAprobacion?.ToString("dd/MM/yyyy HH:mm")" disabled />
+                            </div>
+                        }
+                    }
+                </div>
+
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save"></i> Guardar Planilla
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    
+    <script>
+        $(document).ready(function() {
+            let jobBookTimeout = null;
+
+            // JobBook autocomplete
+            $('#JobBook').on('input', function() {
+                clearTimeout(jobBookTimeout);
+                const termino = $(this).val().trim();
+
+                if (termino.length < 2) {
+                    $('#jobBookResults').hide();
+                    return;
+                }
+
+                jobBookTimeout = setTimeout(function() {
+                    $.get('@Url.Action("BuscarJobBooks")', { termino: termino }, function(data) {
+                        if (data && data.length > 0) {
+                            let html = '';
+                            data.forEach(function(job) {
+                                html += `<a href="#" class="list-group-item list-group-item-action jobbook-item" 
+                                           data-jobbook="${job.jobBook}">
+                                           ${job.jobBook} - ${job.nombreTrabajo}
+                                         </a>`;
+                            });
+                            $('#jobBookResults').html(html).show();
+                        } else {
+                            $('#jobBookResults').hide();
+                        }
+                    });
+                }, 300);
+            });
+
+            // Click en resultado autocomplete
+            $(document).on('click', '.jobbook-item', function(e) {
+                e.preventDefault();
+                const jobBook = $(this).data('jobbook');
+                $('#JobBook').val(jobBook);
+                $('#jobBookResults').hide();
+            });
+
+            // Ocultar resultados al hacer click fuera
+            $(document).on('click', function(e) {
+                if (!$(e.target).closest('#JobBook, #jobBookResults').length) {
+                    $('#jobBookResults').hide();
+                }
+            });
+
+            // Botón buscar JobBook
+            $('#btnBuscarJob').on('click', function() {
+                $('#JobBook').focus().trigger('input');
+            });
+        });
+    </script>
+}
