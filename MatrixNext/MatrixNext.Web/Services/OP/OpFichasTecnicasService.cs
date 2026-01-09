@@ -376,6 +376,98 @@ public class OpFichasTecnicasService : IOpFichasTecnicasService
         }
     }
 
+    public async Task<(bool Success, FichaTecnicaVm Data, string Error)> ObtenerFichaTranscripcionAsync(long trabajoId)
+    {
+        // Similar a otros tipos, TipoFicha = 4
+        return await ObtenerFichaPorTipoAsync(trabajoId, 4);
+    }
+
+    public async Task<(bool Success, string Error)> GuardarFichaTranscripcionAsync(
+        FichaTecnicaVm ficha, long usuarioId)
+    {
+        try
+        {
+            ficha.TipoFicha = 4;
+
+            // Validación de presupuesto reutilizada
+            var (validacionOk, disponible, errorValidacion) = await ValidarPresupuestoIncentivosAsync(
+                ficha.TrabajoId, ficha.MontoIncentivos);
+            if (!validacionOk) return (false, errorValidacion);
+            if (ficha.MontoIncentivos > disponible)
+                return (false, $"Monto de incentivos ({ficha.MontoIncentivos:C}) excede disponible ({disponible:C})");
+
+            using var connection = new SqlConnection(_connectionString);
+
+            var existente = await connection.QueryFirstOrDefaultAsync<long?>(
+                "SELECT TOP 1 Id FROM OP_FichaTranscripciones WHERE TrabajoId = @TrabajoId ORDER BY Id DESC",
+                new { TrabajoId = ficha.TrabajoId });
+
+            var parametros = new
+            {
+                ID = existente,
+                TrabajoId = ficha.TrabajoId,
+                CantidadRequerida = (short?)ficha.CantidadEntrevistas,
+                DescripcionIncentivos = ficha.TematicaPrincipal ?? string.Empty,
+                IncentivoEconomico = (bool?)(ficha.MontoIncentivos > 0),
+                PresupuestoIncentivo = (double?)(decimal.ToDouble(ficha.MontoIncentivos)),
+                Observaciones = ficha.ObservacionesGenerales ?? string.Empty,
+                GrupoObjetivo = ficha.PerfilEntrevistados ?? string.Empty
+            };
+
+            if (existente.HasValue && existente.Value > 0)
+            {
+                await connection.ExecuteAsync(
+                    "OP_FichaTranscripciones_Edit",
+                    parametros,
+                    commandType: CommandType.StoredProcedure);
+            }
+            else
+            {
+                await connection.ExecuteAsync(
+                    "OP_FichaTranscripciones_Add",
+                    parametros,
+                    commandType: CommandType.StoredProcedure);
+            }
+
+            return (true, string.Empty);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error guardando ficha transcripción trabajo {TrabajoId}", ficha.TrabajoId);
+            return (false, ex.Message);
+        }
+    }
+
+    public async Task<(bool Success, string Error)> EntregarFichaTranscripcionAsync(long trabajoId, long usuarioId)
+    {
+        try
+        {
+            using var connection = new SqlConnection(_connectionString);
+
+            // Cambiar estado a Entregada para tipo 4
+            await connection.ExecuteAsync(
+                @"UPDATE OP_FichasTecnicas 
+                  SET EstadoFicha = 'Entregada',
+                      FechaEntrega = GETDATE(),
+                      EntregadoPor = @UsuarioId
+                  WHERE TrabajoId = @TrabajoId AND TipoFicha = 4",
+                new { TrabajoId = trabajoId, UsuarioId = usuarioId });
+
+            // Enviar correo de notificación (usar servicio de email existente)
+            var asunto = $"Entrega de Transcripción - Trabajo {trabajoId}";
+            var cuerpo = $"Se ha entregado la transcripción del trabajo {trabajoId} el {DateTime.Now:dd/MM/yyyy HH:mm}.";
+            // Nota: destinatario real debería venir de configuración del trabajo/coordinador
+            await _emailService.EnviarAsync("notificaciones@empresa.com", asunto, cuerpo);
+
+            return (true, string.Empty);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error entregando ficha transcripción trabajo {TrabajoId}", trabajoId);
+            return (false, ex.Message);
+        }
+    }
+
     public async Task<(bool Success, decimal Disponible, string Error)> ValidarPresupuestoIncentivosAsync(
         long trabajoId, decimal montoSolicitado)
     {
@@ -463,6 +555,12 @@ public class OpFichasTecnicasService : IOpFichasTecnicasService
                 case 3:
                     rows = await connection.QueryAsync<dynamic>(
                         "OP_FichaObservaciones_Get",
+                        new { ID = (long?)null, TrabajoID = trabajoId },
+                        commandType: CommandType.StoredProcedure);
+                    break;
+                case 4:
+                    rows = await connection.QueryAsync<dynamic>(
+                        "OP_FichaTranscripciones_Get",
                         new { ID = (long?)null, TrabajoID = trabajoId },
                         commandType: CommandType.StoredProcedure);
                     break;

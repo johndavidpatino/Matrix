@@ -1,7 +1,15 @@
 @model MatrixNext.Web.Services.OP.Models.FichaTecnicaVm
 @{
-    var fichaNombre = Model.TipoFicha == 1 ? "Entrevista" : (Model.TipoFicha == 2 ? "Sesión" : "Observación");
-    var saveAction = Model.TipoFicha == 1 ? "SaveInterview" : (Model.TipoFicha == 2 ? "SaveSession" : "SaveObservation");
+    var fichaNombre = Model.TipoFicha == 1
+        ? "Entrevista"
+        : (Model.TipoFicha == 2
+            ? "Sesión"
+            : (Model.TipoFicha == 3 ? "Observación" : "Transcripción"));
+    var saveAction = Model.TipoFicha == 1
+        ? "SaveInterview"
+        : (Model.TipoFicha == 2
+            ? "SaveSession"
+            : (Model.TipoFicha == 3 ? "SaveObservation" : "SaveTranscription"));
     ViewData["Title"] = $"Ficha Técnica - {fichaNombre}";
 }
 
@@ -163,6 +171,12 @@
                     <i class="bi bi-send"></i> Entregar Ficha
                 </button>
             }
+            @if (Model.TipoFicha == 4)
+            {
+                <button type="button" class="btn btn-success" id="btnSubmitTranscripcion">
+                    <i class="bi bi-send"></i> Entregar Transcripción
+                </button>
+            }
             <a class="btn btn-secondary" asp-area="OP" asp-controller="CualitativoTrabajos" asp-action="Index">
                 <i class="bi bi-arrow-left"></i> Regresar
             </a>
@@ -201,6 +215,27 @@
             if (!confirm('¿Confirmas la entrega de la ficha?')) return;
             const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
             fetch('@Url.Action("SubmitInterview", "CualitativoFichas", new { area = "OP" })', {
+                method: 'POST',
+                headers: { 'RequestVerificationToken': token },
+                body: new URLSearchParams({ trabajoId: '@Model.TrabajoId' })
+            }).then(r => r.json()).then(res => {
+                if (res.success) {
+                    alert(res.message);
+                    window.location.reload();
+                } else {
+                    alert(res.message);
+                }
+            });
+        });
+    }
+
+    // Entregar transcripción (tipo 4)
+    const submitTransBtn = document.getElementById('btnSubmitTranscripcion');
+    if (submitTransBtn) {
+        submitTransBtn.addEventListener('click', function() {
+            if (!confirm('¿Confirmas la entrega de la transcripción?')) return;
+            const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+            fetch('@Url.Action("SubmitTranscription", "CualitativoFichas", new { area = "OP" })', {
                 method: 'POST',
                 headers: { 'RequestVerificationToken': token },
                 body: new URLSearchParams({ trabajoId: '@Model.TrabajoId' })

@@ -58,6 +58,24 @@ public interface IOpFichasTecnicasService
         FichaTecnicaVm ficha, long usuarioId);
 
     /// <summary>
+    /// Obtiene ficha de transcripción (nuevo tipo 4)
+    /// </summary>
+    Task<(bool Success, FichaTecnicaVm Data, string Error)> ObtenerFichaTranscripcionAsync(
+        long trabajoId);
+
+    /// <summary>
+    /// Guarda ficha de transcripción
+    /// </summary>
+    Task<(bool Success, string Error)> GuardarFichaTranscripcionAsync(
+        FichaTecnicaVm ficha, long usuarioId);
+
+    /// <summary>
+    /// Entrega ficha de transcripción y envía correo
+    /// </summary>
+    Task<(bool Success, string Error)> EntregarFichaTranscripcionAsync(
+        long trabajoId, long usuarioId);
+
+    /// <summary>
     /// Valida presupuesto disponible para incentivos
     /// Ref: FichaEntrevista.aspx.vb líneas 269-305 (ValidarPresupuesto)
     /// </summary>

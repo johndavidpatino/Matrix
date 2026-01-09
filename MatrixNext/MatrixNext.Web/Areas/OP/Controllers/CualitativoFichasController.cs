@@ -239,6 +239,92 @@ public class CualitativoFichasController : Controller
     }
 
     /// <summary>
+    /// Editar ficha de transcripción
+    /// Similar a EditInterview, tipo = 4
+    /// </summary>
+    [HttpGet("EditTranscription")]
+    public async Task<IActionResult> EditTranscription(long trabajoId)
+    {
+        try
+        {
+            var (success, data, error) = await _fichasService.ObtenerFichaTranscripcionAsync(trabajoId);
+
+            if (!success)
+            {
+                TempData["Error"] = error;
+                return RedirectToAction("Index", "CualitativoTrabajos");
+            }
+
+            return View("EditInterview", data); // Reutilizar misma vista
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error cargando ficha transcripción trabajo {TrabajoId}", trabajoId);
+            TempData["Error"] = "Error cargando ficha de transcripción";
+            return RedirectToAction("Index", "CualitativoTrabajos");
+        }
+    }
+
+    [HttpPost("SaveTranscription")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> SaveTranscription(FichaTecnicaVm ficha)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("EditInterview", ficha);
+            }
+
+            var usuarioId = long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            var (success, error) = await _fichasService.GuardarFichaTranscripcionAsync(ficha, usuarioId);
+
+            if (!success)
+            {
+                ModelState.AddModelError(string.Empty, error);
+                return View("EditInterview", ficha);
+            }
+
+            TempData["Success"] = "Ficha de transcripción guardada exitosamente";
+            return RedirectToAction("EditTranscription", new { trabajoId = ficha.TrabajoId });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error guardando ficha transcripción trabajo {TrabajoId}", ficha.TrabajoId);
+            ModelState.AddModelError(string.Empty, "Error guardando ficha");
+            return View("EditInterview", ficha);
+        }
+    }
+
+    /// <summary>
+    /// Entregar ficha de transcripción y notificar por email
+    /// </summary>
+    [HttpPost("SubmitTranscription")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> SubmitTranscription(long trabajoId)
+    {
+        try
+        {
+            var usuarioId = long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            var (success, error) = await _fichasService.EntregarFichaTranscripcionAsync(trabajoId, usuarioId);
+
+            if (!success)
+            {
+                return Json(new { success = false, message = error });
+            }
+
+            return Json(new { success = true, message = "Transcripción entregada exitosamente" });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error entregando ficha transcripción trabajo {TrabajoId}", trabajoId);
+            return Json(new { success = false, message = "Error entregando ficha" });
+        }
+    }
+
+    /// <summary>
     /// Validar presupuesto disponible (AJAX)
     /// Ref: FichaEntrevista.aspx.vb líneas 269-305 (ValidarPresupuesto)
     /// </summary>
