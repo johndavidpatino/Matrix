@@ -68,8 +68,8 @@ namespace MatrixNext.Web.Services
         /// <summary>
         /// Verifica si un usuario tiene un rol específico
         /// Consulta: SELECT COUNT(*) FROM US_RolesUsuarios ur
-        ///          JOIN US_Roles r ON ur.IdRol = r.IdRol
-        ///          WHERE ur.IdUsuario = @IdUsuario AND r.NombreRol = @NombreRol
+        ///          JOIN US_Roles r ON ur.RolId = r.id
+        ///          WHERE ur.UsuarioId = @UsuarioId AND r.Rol = @Rol
         /// </summary>
         public async Task<bool> VerificarRolAsync(long usuarioId, string rolNombre)
         {
@@ -82,13 +82,13 @@ namespace MatrixNext.Web.Services
                     const string query = @"
                         SELECT COUNT(*) 
                         FROM US_RolesUsuarios ur
-                        INNER JOIN US_Roles r ON ur.IdRol = r.IdRol
-                        WHERE ur.IdUsuario = @IdUsuario 
-                          AND r.NombreRol = @NombreRol";
+                        INNER JOIN US_Roles r ON ur.RolId = r.id
+                        WHERE ur.UsuarioId = @UsuarioId 
+                          AND r.Rol = @Rol";
 
                     var count = await connection.QueryFirstOrDefaultAsync<int>(
                         query,
-                        new { IdUsuario = usuarioId, NombreRol = rolNombre },
+                        new { UsuarioId = usuarioId, Rol = rolNombre },
                         commandType: CommandType.Text);
 
                     var tieneRol = count > 0;

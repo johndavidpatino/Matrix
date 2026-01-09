@@ -45,18 +45,18 @@ namespace MatrixNext.Web.Areas.CORE.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View(new TareaPrevía());
+            return View(new TareaPrevia());
         }
 
         [HttpGet]
         public IActionResult CreateModal()
         {
-            return PartialView("_Create", new TareaPrevía());
+            return PartialView("_Create", new TareaPrevia());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(TareaPrevía model)
+        public async Task<IActionResult> Create(TareaPrevia model)
         {
             if (!ModelState.IsValid)
             {

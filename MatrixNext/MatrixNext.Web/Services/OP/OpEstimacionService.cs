@@ -38,7 +38,7 @@ namespace MatrixNext.Web.Services.OP
                             e.Bloqueada
                         FROM OP_EstimacionesProduccionCiudad e
                         LEFT JOIN C_Divipola d ON e.CiudadId = d.DivMuniCodigo
-                        LEFT JOIN US_Usuarios u ON e.UsuarioEstimacion = u.IdUsuario
+                        LEFT JOIN US_Usuarios u ON e.UsuarioEstimacion = u.id
                         WHERE e.TrabajoId = {0}
                         ORDER BY e.FechaEstimacion DESC",
                         trabajoId)

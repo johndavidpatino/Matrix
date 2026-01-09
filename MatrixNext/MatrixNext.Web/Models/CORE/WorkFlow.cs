@@ -26,6 +26,6 @@ namespace MatrixNext.Web.Models.CORE
         
         public virtual ICollection<ObservacionTarea> Observaciones_Log { get; set; } = new List<ObservacionTarea>();
         
-        public virtual ICollection<TareaPrevía> TareasPrevias { get; set; } = new List<TareaPrevía>();
+        public virtual ICollection<TareaPrevia> TareasPrevias { get; set; } = new List<TareaPrevia>();
     }
 }

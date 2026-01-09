@@ -484,6 +484,48 @@ Cada tarea en la sección 5.1 referencia directamente al documento FASE donde se
 - Ejecutar: `sqlcmd -S .\SQLEXPRESS -d CO_Matrix_Intranet -i validate_sps_tables.sql`
 - Resultado: Confirmar existencia de SPs y tablas antes de Sprint 1
 
+### 6.4 Sprint 1 - Controllers P1 (9 de enero 2026) - EN CURSO
+
+**Tareas activas:**
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│ OP-P01: ProgramacionController + ProgramacionCampoVm                │
+├─────────────────────────────────────────────────────────────────────┤
+│ [████████████████████] 100% - COMPLETADO                            │
+│ ├─ ✅ IOpProgramacionService interface                             │
+│ ├─ ✅ OpProgramacionService implementation                         │
+│ ├─ ✅ CualitativoProgramacionController (7 actions)                │
+│ ├─ ⏳ Views: Index + Edit (siguiente)                              │
+│ └─ ✅ ViewModels: ProgramacionCampoVm + EntrevistadoDisponibleVm   │
+│                                                                      │
+│ Ref: ProgramacionCampo.aspx.vb (822 LOC)                            │
+│ Estados: Creado, Asignado, Confirmado, Ejecutado, Cancelado, etc.   │
+│ Export: Excel via IExportService                                    │
+│ Build: ✅ OK (13 warnings nullability)                              │
+└─────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ OP-I01: IpsController + IpsRevisionVm                               │
+├─────────────────────────────────────────────────────────────────────┤
+│ [░░░░░░░░░░░░░░░░░░░░] 0% - Iniciando                              │
+│ ├─ ✅ IOpIpsService interface (ya existente)                       │
+│ ├─ ⏳ Validar OpIpsService implementation existente                │
+│ ├─ ⏳ Adaptar CualitativoIpsController (5 actions)                 │
+│ ├─ ⏳ Views: Index + _IpsGrid                                      │
+│ └─ ✅ ViewModels: IpsRevisionVm + ProcesoIpsVm                    │
+│                                                                      │
+│ Ref: IPSCuali.aspx.vb (682 LOC)                                     │
+│ Acciones: Notificar, Rechazar, Export Excel                         │
+│ SP: OP_IPS_Procesos query                                           │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+**Estimación:**
+- OP-P01: 12h → ✅ Backend completo, 2h views pendientes
+- OP-I01: 10h → 10h restantes (adaptar a existing service)
+- **Total Sprint 1 P1: 22h** (12h restantes)
+
 4. **Preparar Sprint 1 Board** (Jueves, 3 horas)
    - [ ] Cargar tareas P0 (6 tareas) a Azure DevOps/GitHub Projects
    - [ ] Asignar story points (fibonacci)

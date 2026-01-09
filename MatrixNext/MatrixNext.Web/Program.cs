@@ -166,6 +166,8 @@ builder.Services.AddScoped<IOpRegistroProduccionService, OpRegistroProduccionSer
 builder.Services.AddScoped<IOpCualitativoService, OpCualitativoService>();
 builder.Services.AddScoped<IOpFiltrosService, OpFiltrosService>();
 builder.Services.AddScoped<IOpFichasTecnicasService, OpFichasTecnicasService>();
+builder.Services.AddScoped<IOpProgramacionService, OpProgramacionService>();
+// IOpIpsService ya registrado previamente
 
 // Registrar opciones de configuración
 builder.Services.Configure<GestionDocumentalOptions>(

@@ -1,0 +1,235 @@
+@model IEnumerable<MatrixNext.Web.ViewModels.OP.IpsRevisionVm>
+@{
+    ViewData["Title"] = "Revisión IPS - Investigación Cualitativa";
+}
+
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>@ViewData["Title"]</h2>
+        <div class="btn-group">
+            <a asp-action="ExportExcel" class="btn btn-success">
+                <i class="bi bi-file-earmark-excel"></i> Exportar Excel
+            </a>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <form method="get" asp-action="Index">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label for="trabajoId" class="form-label">Trabajo</label>
+                        <select name="trabajoId" id="trabajoId" class="form-select">
+                            <option value="">Todos</option>
+                            @if (ViewData["Trabajos"] != null)
+                            {
+                                @foreach (var trabajo in (IEnumerable<dynamic>)ViewData["Trabajos"])
+                                {
+                                    <option value="@trabajo.TrabajoId" selected="@(trabajo.TrabajoId == ViewData["TrabajoId"])">
+                                        @trabajo.TrabajoId - @trabajo.NombreTrabajo
+                                    </option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="fechaDesde" class="form-label">Fecha Desde</label>
+                        <input type="date" name="fechaDesde" id="fechaDesde" class="form-control" value="@ViewData["FechaDesde"]" />
+                    </div>
+                    <div class="col-md-3">
+                        <label for="fechaHasta" class="form-label">Fecha Hasta</label>
+                        <input type="date" name="fechaHasta" id="fechaHasta" class="form-control" value="@ViewData["FechaHasta"]" />
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-search"></i> Buscar
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID Proceso</th>
+                                <th>Trabajo</th>
+                                <th>Tipo Proceso</th>
+                                <th>Fecha Generación</th>
+                                <th>Estado</th>
+                                <th>Observaciones Revisión</th>
+                                <th>Usuario Revisión</th>
+                                <th>Fecha Revisión</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var rev in Model)
+                            {
+                                <tr>
+                                    <td>@rev.IdProceso</td>
+                                    <td>@rev.TrabajoId - @rev.NombreTrabajo</td>
+                                    <td>@rev.TipoProceso</td>
+                                    <td>@rev.FechaGeneracion?.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td>
+                                        <span class="badge bg-@(rev.Estado switch
+                                        {
+                                            "Pendiente" => "warning",
+                                            "Aprobado" => "success",
+                                            "Rechazado" => "danger",
+                                            "En Revisión" => "info",
+                                            _ => "secondary"
+                                        })">
+                                            @rev.Estado
+                                        </span>
+                                    </td>
+                                    <td>@(string.IsNullOrEmpty(rev.ObservacionesRevision) ? "-" : rev.ObservacionesRevision.Substring(0, Math.Min(50, rev.ObservacionesRevision.Length)))</td>
+                                    <td>@(string.IsNullOrEmpty(rev.UsuarioRevision) ? "-" : rev.UsuarioRevision)</td>
+                                    <td>@(rev.FechaRevision?.ToString("dd/MM/yyyy HH:mm") ?? "-")</td>
+                                    <td>
+                                        @if (rev.Estado == "Pendiente" || rev.Estado == "En Revisión")
+                                        {
+                                            <div class="btn-group btn-group-sm">
+                                                <button type="button" class="btn btn-outline-success btn-aprobar" 
+                                                        data-id="@rev.IdProceso" title="Aprobar">
+                                                    <i class="bi bi-check-circle"></i> Aprobar
+                                                </button>
+                                                <button type="button" class="btn btn-outline-danger btn-rechazar" 
+                                                        data-id="@rev.IdProceso" title="Rechazar">
+                                                    <i class="bi bi-x-circle"></i> Rechazar
+                                                </button>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Revisado</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            No hay procesos IPS pendientes de revisión para los filtros seleccionados.
+        </div>
+    }
+</div>
+
+<!-- Modal para Rechazar -->
+<div class="modal fade" id="modalRechazo" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Rechazar Proceso IPS</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formRechazo">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" id="rechazarIdProceso" />
+                    <div class="mb-3">
+                        <label for="observacionesRechazo" class="form-label">Observaciones <span class="text-danger">*</span></label>
+                        <textarea id="observacionesRechazo" class="form-control" rows="4" required 
+                                  placeholder="Ingrese las razones del rechazo..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="btnConfirmarRechazo">
+                    <i class="bi bi-x-circle"></i> Confirmar Rechazo
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let modalRechazo;
+        
+        $(document).ready(function() {
+            modalRechazo = new bootstrap.Modal(document.getElementById('modalRechazo'));
+
+            // Aprobar
+            $('.btn-aprobar').click(function() {
+                const idProceso = $(this).data('id');
+                
+                if (confirm('¿Confirma que desea aprobar este proceso IPS?')) {
+                    $.ajax({
+                        url: '@Url.Action("Notify")',
+                        type: 'POST',
+                        data: {
+                            __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
+                            idProceso: idProceso
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                alert('Proceso aprobado exitosamente');
+                                location.reload();
+                            } else {
+                                alert('Error: ' + (response.error || 'No se pudo aprobar el proceso'));
+                            }
+                        },
+                        error: function() {
+                            alert('Error al procesar la solicitud');
+                        }
+                    });
+                }
+            });
+
+            // Rechazar - Abrir modal
+            $('.btn-rechazar').click(function() {
+                const idProceso = $(this).data('id');
+                $('#rechazarIdProceso').val(idProceso);
+                $('#observacionesRechazo').val('');
+                modalRechazo.show();
+            });
+
+            // Confirmar Rechazo
+            $('#btnConfirmarRechazo').click(function() {
+                const idProceso = $('#rechazarIdProceso').val();
+                const observaciones = $('#observacionesRechazo').val().trim();
+                
+                if (!observaciones) {
+                    alert('Debe ingresar las observaciones del rechazo');
+                    return;
+                }
+
+                $.ajax({
+                    url: '@Url.Action("Reject")',
+                    type: 'POST',
+                    data: {
+                        __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
+                        idProceso: idProceso,
+                        observaciones: observaciones
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            alert('Proceso rechazado exitosamente');
+                            modalRechazo.hide();
+                            location.reload();
+                        } else {
+                            alert('Error: ' + (response.error || 'No se pudo rechazar el proceso'));
+                        }
+                    },
+                    error: function() {
+                        alert('Error al procesar la solicitud');
+                    }
+                });
+            });
+        });
+    </script>
+}

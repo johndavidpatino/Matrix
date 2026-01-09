@@ -1,0 +1,153 @@
+@model MatrixNext.Web.Services.OP.Models.ProgramacionCampoVm
+@{
+    ViewData["Title"] = Model?.ProgramacionId > 0 ? "Editar Programación" : "Nueva Programación";
+}
+
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>@ViewData["Title"]</h2>
+        <a asp-action="Index" asp-route-trabajoId="@Model?.TrabajoId" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Volver al Listado
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <form asp-action="Save" method="post" id="formProgramacion">
+                @Html.AntiForgeryToken()
+                
+                <input type="hidden" asp-for="ProgramacionId" />
+                <input type="hidden" asp-for="TrabajoId" />
+                
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label asp-for="TrabajoId" class="form-label">Trabajo</label>
+                        <select asp-for="TrabajoId" class="form-select" disabled>
+                            @if (ViewData["Trabajos"] != null)
+                            {
+                                @foreach (var trabajo in (IEnumerable<dynamic>)ViewData["Trabajos"])
+                                {
+                                    <option value="@trabajo.TrabajoId" selected="@(trabajo.TrabajoId == Model.TrabajoId)">
+                                        @trabajo.TrabajoId - @trabajo.NombreTrabajo
+                                    </option>
+                                }
+                            }
+                        </select>
+                        <small class="text-muted">@Model?.NombreTrabajo</small>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="EntrevistadoId" class="form-label">Entrevistado <span class="text-danger">*</span></label>
+                        <select asp-for="EntrevistadoId" id="entrevistadoId" class="form-select" required>
+                            <option value="">Seleccione un entrevistado...</option>
+                            @if (ViewData["EntrevistadosDisponibles"] != null)
+                            {
+                                @foreach (var entrevistado in (IEnumerable<dynamic>)ViewData["EntrevistadosDisponibles"])
+                                {
+                                    <option value="@entrevistado.EntrevistadoId" 
+                                            data-telefono="@entrevistado.Telefono"
+                                            data-email="@entrevistado.Email"
+                                            selected="@(entrevistado.EntrevistadoId == Model?.EntrevistadoId)">
+                                        @entrevistado.Nombre - @entrevistado.Telefono
+                                    </option>
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="EntrevistadoId" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="FechaProgramada" class="form-label">Fecha Programada <span class="text-danger">*</span></label>
+                        <input asp-for="FechaProgramada" type="date" class="form-control" required />
+                        <span asp-validation-for="FechaProgramada" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="HoraProgramada" class="form-label">Hora Programada</label>
+                        <input asp-for="HoraProgramada" type="time" class="form-control" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="EstadoId" class="form-label">Estado</label>
+                        <select asp-for="EstadoId" class="form-select">
+                            <option value="1">Creado</option>
+                            <option value="2">Asignado</option>
+                            <option value="3">Confirmado</option>
+                            <option value="4">Ejecutado</option>
+                            <option value="5">Cancelado</option>
+                            <option value="6">No Asistió</option>
+                            <option value="7">Reprogramado</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label asp-for="Observaciones" class="form-label">Observaciones</label>
+                        <textarea asp-for="Observaciones" class="form-control" rows="3" maxlength="500"></textarea>
+                        <small class="text-muted">Máximo 500 caracteres</small>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="MedioProgramacion" class="form-label">Medio de Programación</label>
+                        <select asp-for="MedioProgramacion" class="form-select">
+                            <option value="">Seleccione...</option>
+                            <option value="Teléfono">Teléfono</option>
+                            <option value="Email">Email</option>
+                            <option value="WhatsApp">WhatsApp</option>
+                            <option value="SMS">SMS</option>
+                            <option value="Presencial">Presencial</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="DuracionEstimada" class="form-label">Duración Estimada (minutos)</label>
+                        <input asp-for="DuracionEstimada" type="number" class="form-control" min="1" max="480" />
+                    </div>
+
+                    <div class="col-12" id="infoEntrevistado" style="display: none;">
+                        <div class="alert alert-info">
+                            <strong>Información de Contacto:</strong><br/>
+                            <span id="infoTelefono"></span><br/>
+                            <span id="infoEmail"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save"></i> Guardar Programación
+                    </button>
+                    <a asp-action="Index" asp-route-trabajoId="@Model?.TrabajoId" class="btn btn-secondary">
+                        Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function() {
+            $('#entrevistadoId').change(function() {
+                const selected = $(this).find(':selected');
+                const telefono = selected.data('telefono');
+                const email = selected.data('email');
+                
+                if (telefono || email) {
+                    $('#infoTelefono').text('Teléfono: ' + (telefono || 'No registrado'));
+                    $('#infoEmail').text('Email: ' + (email || 'No registrado'));
+                    $('#infoEntrevistado').show();
+                } else {
+                    $('#infoEntrevistado').hide();
+                }
+            });
+
+            // Trigger on load if editing
+            @if (Model?.EntrevistadoId > 0)
+            {
+                @:$('#entrevistadoId').trigger('change');
+            }
+        });
+    </script>
+}

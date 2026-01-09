@@ -11,10 +11,10 @@ namespace MatrixNext.Web.Services.CORE
     /// </summary>
     public interface ITareasPreviasService
     {
-        Task<ResultVM<TareaPrevía>> CrearAsync(TareaPrevía entity);
+        Task<ResultVM<TareaPrevia>> CrearAsync(TareaPrevia entity);
         Task<ResultVM<bool>> EliminarAsync(long id);
-        Task<IEnumerable<TareaPrevía>> ObtenerPorTareaAsync(long idTarea);
-        Task<IEnumerable<TareaPrevía>> ObtenerTodasAsync();
+        Task<IEnumerable<TareaPrevia>> ObtenerPorTareaAsync(long idTarea);
+        Task<IEnumerable<TareaPrevia>> ObtenerTodasAsync();
     }
 
     public class TareasPreviasService : ITareasPreviasService
@@ -36,18 +36,18 @@ namespace MatrixNext.Web.Services.CORE
             _auditoria = auditoria;
         }
 
-        public async Task<ResultVM<TareaPrevía>> CrearAsync(TareaPrevía entity)
+        public async Task<ResultVM<TareaPrevia>> CrearAsync(TareaPrevia entity)
         {
             // Validar que no sea autorreferencial
             if (entity.IdTarea == entity.IdTareaPreviaRequerida)
             {
-                return ResultVM<TareaPrevía>.Fail("Una tarea no puede ser previa de sí misma");
+                return ResultVM<TareaPrevia>.Fail("Una tarea no puede ser previa de sí misma");
             }
 
             // Validar grafo acíclico con datos reales de BD
             var actuales = await _adapter.ObtenerTodasAsync();
             var simuladas = actuales.ToList();
-            simuladas.Add(new TareaPrevía
+            simuladas.Add(new TareaPrevia
             {
                 IdTarea = entity.IdTarea,
                 IdTareaPreviaRequerida = entity.IdTareaPreviaRequerida,
@@ -62,7 +62,7 @@ namespace MatrixNext.Web.Services.CORE
 
             if (!esAciclico)
             {
-                return ResultVM<TareaPrevía>.Fail(
+                return ResultVM<TareaPrevia>.Fail(
                     "La relación crea un ciclo de dependencias. " +
                     $"Tarea {entity.IdTarea} → Previa {entity.IdTareaPreviaRequerida} genera ciclo."
                 );
@@ -75,17 +75,17 @@ namespace MatrixNext.Web.Services.CORE
 
                 await _auditoria.LogearAsync(new AuditoriaVM
                 {
-                    Entidad = "CORE_WorkFlow_TareasPrevias",
+                    Entidad = "CORE_TareasPrevias",
                     EntidadId = entity.Id,
                     Accion = "CREATE",
                     Detalles = $"Tarea={entity.IdTarea} requiere Previa={entity.IdTareaPreviaRequerida}, Orden={entity.Orden}"
                 });
 
-                return ResultVM<TareaPrevía>.Ok(entity, "Precedencia creada exitosamente");
+                return ResultVM<TareaPrevia>.Ok(entity, "Precedencia creada exitosamente");
             }
             catch (Exception ex)
             {
-                return ResultVM<TareaPrevía>.Fail($"Error al crear precedencia: {ex.Message}");
+                return ResultVM<TareaPrevia>.Fail($"Error al crear precedencia: {ex.Message}");
             }
         }
 
@@ -104,7 +104,7 @@ namespace MatrixNext.Web.Services.CORE
 
                 await _auditoria.LogearAsync(new AuditoriaVM
                 {
-                    Entidad = "CORE_WorkFlow_TareasPrevias",
+                    Entidad = "CORE_TareasPrevias",
                     EntidadId = id,
                     Accion = "DELETE",
                     Detalles = $"Tarea={entity.IdTarea}, Previa={entity.IdTareaPreviaRequerida}"
@@ -118,12 +118,12 @@ namespace MatrixNext.Web.Services.CORE
             }
         }
 
-        public async Task<IEnumerable<TareaPrevía>> ObtenerPorTareaAsync(long idTarea)
+        public async Task<IEnumerable<TareaPrevia>> ObtenerPorTareaAsync(long idTarea)
         {
             return await _adapter.ObtenerPorTareaAsync(idTarea);
         }
 
-        public async Task<IEnumerable<TareaPrevía>> ObtenerTodasAsync()
+        public async Task<IEnumerable<TareaPrevia>> ObtenerTodasAsync()
         {
             return await _adapter.ObtenerTodasAsync();
         }

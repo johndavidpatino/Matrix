@@ -47,7 +47,7 @@ namespace MatrixNext.Web.Services.OP
                         CONCAT(u.Nombres, ' ', u.Apellidos) AS CoordinadorNombre
                     FROM OP_MuestraTrabajos m
                     LEFT JOIN C_Divipola d ON m.CiudadId = d.DivMuniCodigo
-                    LEFT JOIN TH_Personas u ON m.Coordinador = u.IdPersona
+                    LEFT JOIN TH_Personas u ON m.Coordinador = u.id
                     WHERE m.TrabajoId = @TrabajoId
                     ORDER BY d.DivMuniNombre",
                     new { TrabajoId = trabajoId });
@@ -250,7 +250,7 @@ namespace MatrixNext.Web.Services.OP
                             u.Email AS CoordinadorEmail
                         FROM OP_MuestraTrabajos m
                         LEFT JOIN C_Divipola d ON m.CiudadId = d.DivMuniCodigo
-                        LEFT JOIN TH_Personas u ON m.Coordinador = u.IdPersona
+                        LEFT JOIN TH_Personas u ON m.Coordinador = u.id
                         WHERE m.Id = @IdMuestra",
                         new { IdMuestra = model.IdMuestra },
                         transaction: transaction);

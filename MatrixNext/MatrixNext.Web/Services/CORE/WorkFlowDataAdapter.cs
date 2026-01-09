@@ -13,7 +13,6 @@ namespace MatrixNext.Web.Services.CORE
     {
         private readonly string _connectionString;
         private const string _spGetPorTrabajoYTarea = "CORE_WorkFlow_GetXTrabajoXTarea";
-        private const string _spGetLista = "CORE_WorkFlow_Get";
         private const string _spCrearHilo = "CORE_WorkFlow_CrearHiloCrearTareas";
         private const string _spRegistrarLogCreacion = "CORE_Log_WorkFlow_MasivoEstadoCreada_Add";
 
@@ -47,7 +46,7 @@ namespace MatrixNext.Web.Services.CORE
         }
 
         /// <summary>
-        /// SP: CORE_WorkFlow_Get (lectura paginada o filtrada)
+        /// Lectura filtrada del WorkFlow usando tablas reales (no hay SP por trabajo)
         /// </summary>
         public async Task<IEnumerable<WorkFlow>> ObtenerListaAsync(
             long? idTrabajo = null, 
@@ -55,16 +54,28 @@ namespace MatrixNext.Web.Services.CORE
             int? estado = null)
         {
             using var connection = new SqlConnection(_connectionString);
-            var parameters = new DynamicParameters();
-            if (idTrabajo.HasValue) parameters.Add("@IdTrabajo", idTrabajo.Value);
-            if (idTarea.HasValue) parameters.Add("@IdTarea", idTarea.Value);
-            if (estado.HasValue) parameters.Add("@Estado", estado.Value);
+            const string sql = @"
+                SELECT
+                    w.id AS Id,
+                    h.ContenedorId AS IdTrabajo,
+                    w.TareaId AS IdTarea,
+                    h.TipoHiloId AS IdTipoHilo,
+                    COALESCE(we.Estado, CAST(w.Estado AS varchar(50))) AS Estado,
+                    1 AS Prioridad,
+                    CAST(NULL AS datetime) AS FechaVencimiento,
+                    COALESCE(w.ObservacionesEjecucion, w.ObservacionesPlaneacion) AS Observaciones
+                FROM CORE_WorkFlow w
+                INNER JOIN CORE_Hilos h ON h.id = w.HiloId
+                LEFT JOIN CORE_WorkflowEstados we ON we.id = w.Estado
+                WHERE (@IdTrabajo IS NULL OR h.ContenedorId = @IdTrabajo)
+                  AND (@IdTarea IS NULL OR w.TareaId = @IdTarea)
+                  AND (@Estado IS NULL OR w.Estado = @Estado)
+                ORDER BY w.id DESC";
 
-            await EnsureStoredProcedureExistsAsync(connection, _spGetLista);
             var result = await connection.QueryAsync<WorkFlow>(
-                _spGetLista,
-                parameters,
-                commandType: CommandType.StoredProcedure
+                sql,
+                new { IdTrabajo = idTrabajo, IdTarea = idTarea, Estado = estado },
+                commandType: CommandType.Text
             );
 
             return result;

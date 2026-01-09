@@ -1,0 +1,277 @@
+using Dapper;
+using MatrixNext.Web.Infrastructure.Data;
+using MatrixNext.Web.Services.OP.Models;
+using MatrixNext.Web.Services.Shared;
+using Microsoft.Data.SqlClient;
+using System.Data;
+
+namespace MatrixNext.Web.Services.OP;
+
+/// <summary>
+/// Implementación del servicio de programación de campo cualitativo
+/// Ref: ProgramacionCampo.aspx.vb (822 LOC)
+/// Strategy: Dapper para consultas complejas y SPs
+/// </summary>
+public class OpProgramacionService : IOpProgramacionService
+{
+    private readonly MatrixDbContext _context;
+    private readonly string _connectionString;
+    private readonly ILogger<OpProgramacionService> _logger;
+    private readonly IExportService _exportService;
+
+    public OpProgramacionService(
+        MatrixDbContext context,
+        IConfiguration configuration,
+        ILogger<OpProgramacionService> logger,
+        IExportService exportService)
+    {
+        _context = context;
+        _connectionString = configuration.GetConnectionString("MatrixDb")!;
+        _logger = logger;
+        _exportService = exportService;
+    }
+
+    public async Task<(bool Success, List<ProgramacionCampoVm> Data, string Error)> ObtenerProgramacionesPorTrabajoAsync(
+        long trabajoId, string? estado = null)
+    {
+        try
+        {
+            // Ref: ProgramacionCampo.aspx.vb líneas 45-89 (Page_Load, CargarProgramaciones)
+            using var connection = new SqlConnection(_connectionString);
+
+            var programaciones = await connection.QueryAsync<ProgramacionCampoVm>(
+                @"SELECT 
+                    p.Id,
+                    p.TrabajoId,
+                    t.NombreTrabajo AS TrabajoNombre,
+                    p.EntrevistadoId,
+                    COALESCE(e.Nombres + ' ' + e.Apellidos, '') AS EntrevistadoNombre,
+                    e.Telefono AS EntrevistadoTelefono,
+                    e.Direccion AS EntrevistadoDireccion,
+                    p.Estado,
+                    est.Descripcion AS EstadoDescripcion,
+                    p.FechaProgramada,
+                    p.HoraProgramada,
+                    p.LugarCita,
+                    p.DireccionCita,
+                    p.EntrevistadorAsignadoId,
+                    COALESCE(ent.Nombres + ' ' + ent.Apellidos, '') AS EntrevistadorAsignadoNombre,
+                    p.Observaciones,
+                    p.FechaCreacion,
+                    p.CreadoPor,
+                    p.FechaModificacion,
+                    p.ModificadoPor
+                  FROM OP_Programados_Entrevistados p
+                  INNER JOIN PY_Trabajo t ON p.TrabajoId = t.Id
+                  LEFT JOIN OP_MuestraTrabajos e ON p.EntrevistadoId = e.Id
+                  LEFT JOIN OP_EstadosProgramacion est ON p.Estado = est.Id
+                  LEFT JOIN US_Usuarios ent ON p.EntrevistadorAsignadoId = ent.id
+                  WHERE p.TrabajoId = @TrabajoId
+                    AND (@Estado IS NULL OR est.Descripcion = @Estado)
+                  ORDER BY p.FechaProgramada DESC, p.Id DESC",
+                new { TrabajoId = trabajoId, Estado = estado });
+
+            return (true, programaciones.ToList(), string.Empty);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error obteniendo programaciones trabajo {TrabajoId}", trabajoId);
+            return (false, new List<ProgramacionCampoVm>(), ex.Message);
+        }
+    }
+
+    public async Task<(bool Success, long ProgramacionId, string Error)> GuardarProgramacionAsync(
+        ProgramacionCampoVm programacion, long usuarioId)
+    {
+        try
+        {
+            // Ref: ProgramacionCampo.aspx.vb líneas 125-214 (btnSaveProgramar_Click)
+            using var connection = new SqlConnection(_connectionString);
+
+            // Validaciones
+            if (programacion.FechaProgramada == null)
+                return (false, 0, "Fecha programada es obligatoria");
+
+            if (programacion.EntrevistadoId <= 0)
+                return (false, 0, "Entrevistado es obligatorio");
+
+            long programacionId;
+
+            if (programacion.Id > 0)
+            {
+                // UPDATE
+                await connection.ExecuteAsync(
+                    @"UPDATE OP_Programados_Entrevistados
+                      SET EntrevistadoId = @EntrevistadoId,
+                          Estado = @Estado,
+                          FechaProgramada = @FechaProgramada,
+                          HoraProgramada = @HoraProgramada,
+                          LugarCita = @LugarCita,
+                          DireccionCita = @DireccionCita,
+                          EntrevistadorAsignadoId = @EntrevistadorAsignadoId,
+                          Observaciones = @Observaciones,
+                          FechaModificacion = GETDATE(),
+                          ModificadoPor = @UsuarioId
+                      WHERE Id = @Id",
+                    new
+                    {
+                        programacion.Id,
+                        programacion.EntrevistadoId,
+                        programacion.Estado,
+                        programacion.FechaProgramada,
+                        programacion.HoraProgramada,
+                        programacion.LugarCita,
+                        programacion.DireccionCita,
+                        programacion.EntrevistadorAsignadoId,
+                        programacion.Observaciones,
+                        UsuarioId = usuarioId
+                    });
+
+                programacionId = programacion.Id;
+            }
+            else
+            {
+                // INSERT
+                programacionId = await connection.QuerySingleAsync<long>(
+                    @"INSERT INTO OP_Programados_Entrevistados
+                        (TrabajoId, EntrevistadoId, Estado, FechaProgramada, HoraProgramada,
+                         LugarCita, DireccionCita, EntrevistadorAsignadoId, Observaciones,
+                         FechaCreacion, CreadoPor)
+                      OUTPUT INSERTED.Id
+                      VALUES
+                        (@TrabajoId, @EntrevistadoId, @Estado, @FechaProgramada, @HoraProgramada,
+                         @LugarCita, @DireccionCita, @EntrevistadorAsignadoId, @Observaciones,
+                         GETDATE(), @UsuarioId)",
+                    new
+                    {
+                        programacion.TrabajoId,
+                        programacion.EntrevistadoId,
+                        Estado = programacion.Estado > 0 ? programacion.Estado : 1, // 1 = Creado
+                        programacion.FechaProgramada,
+                        programacion.HoraProgramada,
+                        programacion.LugarCita,
+                        programacion.DireccionCita,
+                        programacion.EntrevistadorAsignadoId,
+                        programacion.Observaciones,
+                        UsuarioId = usuarioId
+                    });
+            }
+
+            return (true, programacionId, string.Empty);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error guardando programación trabajo {TrabajoId}", programacion.TrabajoId);
+            return (false, 0, ex.Message);
+        }
+    }
+
+    public async Task<(bool Success, string Error)> CambiarEstadoProgramacionAsync(
+        long programacionId, int nuevoEstado, long usuarioId, string? observaciones = null)
+    {
+        try
+        {
+            // Ref: ProgramacionCampo.aspx.vb líneas 320-365 (CambiarEstado)
+            using var connection = new SqlConnection(_connectionString);
+
+            await connection.ExecuteAsync(
+                @"UPDATE OP_Programados_Entrevistados
+                  SET Estado = @NuevoEstado,
+                      Observaciones = COALESCE(@Observaciones, Observaciones),
+                      FechaModificacion = GETDATE(),
+                      ModificadoPor = @UsuarioId
+                  WHERE Id = @ProgramacionId",
+                new
+                {
+                    ProgramacionId = programacionId,
+                    NuevoEstado = nuevoEstado,
+                    Observaciones = observaciones,
+                    UsuarioId = usuarioId
+                });
+
+            return (true, string.Empty);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error cambiando estado programación {ProgramacionId}", programacionId);
+            return (false, ex.Message);
+        }
+    }
+
+    public async Task<(bool Success, byte[] Data, string Error)> ExportarProgramacionesExcelAsync(
+        long trabajoId, string? estado = null)
+    {
+        try
+        {
+            // Ref: ProgramacionCampo.aspx.vb líneas 520-618 (ExportarExcel con ClosedXML)
+            var (success, programaciones, error) = await ObtenerProgramacionesPorTrabajoAsync(trabajoId, estado);
+
+            if (!success)
+                return (false, Array.Empty<byte>(), error);
+
+            var data = programaciones.Select(p => new Dictionary<string, object?>
+            {
+                ["ID"] = p.Id,
+                ["Entrevistado"] = p.EntrevistadoNombre,
+                ["Teléfono"] = p.EntrevistadoTelefono,
+                ["Dirección"] = p.EntrevistadoDireccion,
+                ["Estado"] = p.EstadoDescripcion,
+                ["Fecha Programada"] = p.FechaProgramada?.ToString("dd/MM/yyyy"),
+                ["Hora"] = p.HoraProgramada?.ToString(@"hh\:mm"),
+                ["Lugar"] = p.LugarCita,
+                ["Entrevistador"] = p.EntrevistadorAsignadoNombre,
+                ["Observaciones"] = p.Observaciones
+            }).ToList();
+
+            var excelBytes = await _exportService.ExportarExcelAsync(
+                data,
+                $"Programaciones_Trabajo_{trabajoId}",
+                "Programaciones");
+
+            return (true, excelBytes, string.Empty);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error exportando programaciones trabajo {TrabajoId}", trabajoId);
+            return (false, Array.Empty<byte>(), ex.Message);
+        }
+    }
+
+    public async Task<(bool Success, List<EntrevistadoDisponibleVm> Data, string Error)> ObtenerEntrevistadosDisponiblesAsync(
+        long trabajoId)
+    {
+        try
+        {
+            // Ref: ProgramacionCampo.aspx.vb líneas 220-287 (CargarEntrevistados)
+            using var connection = new SqlConnection(_connectionString);
+
+            var entrevistados = await connection.QueryAsync<EntrevistadoDisponibleVm>(
+                @"SELECT 
+                    m.Id,
+                    COALESCE(m.Nombres + ' ' + m.Apellidos, '') AS NombreCompleto,
+                    m.Telefono,
+                    m.Direccion,
+                    c.Ciudad,
+                    CASE WHEN EXISTS(
+                        SELECT 1 FROM OP_Programados_Entrevistados p
+                        WHERE p.EntrevistadoId = m.Id
+                          AND p.Estado IN (3, 4) -- Confirmado o Ejecutado
+                          AND p.FechaProgramada >= GETDATE()
+                    ) THEN 0 ELSE 1 END AS EstaDisponible,
+                    (SELECT COUNT(*) FROM OP_Programados_Entrevistados p WHERE p.EntrevistadoId = m.Id) AS CantidadProgramaciones,
+                    (SELECT MAX(p.FechaProgramada) FROM OP_Programados_Entrevistados p WHERE p.EntrevistadoId = m.Id) AS UltimaProgramacion
+                  FROM OP_MuestraTrabajos m
+                  LEFT JOIN C_Ciudades c ON m.CiudadId = c.id
+                  WHERE m.TrabajoId = @TrabajoId
+                  ORDER BY m.Id",
+                new { TrabajoId = trabajoId });
+
+            return (true, entrevistados.ToList(), string.Empty);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error obteniendo entrevistados disponibles trabajo {TrabajoId}", trabajoId);
+            return (false, new List<EntrevistadoDisponibleVm>(), ex.Message);
+        }
+    }
+}

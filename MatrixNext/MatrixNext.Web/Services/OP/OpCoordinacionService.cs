@@ -114,8 +114,8 @@ public class OpCoordinacionService : IOpCoordinacionService
                     c.Cargo,
                     d.DivMuniNombre as Ciudad
                 FROM OP_PersonasAsignadasTrabajo pa
-                INNER JOIN TH_Personas p ON pa.Persona = p.Id
-                INNER JOIN TH_Cargos c ON p.CargoId = c.Id
+                INNER JOIN TH_Personas p ON pa.Persona = p.id
+                INNER JOIN TH_Cargos c ON p.Cargo = c.id
                 LEFT JOIN C_Divipola d ON pa.Ciudad = d.DivMuniCodigo
                 WHERE pa.TrabajoId = {0}
                 AND ({1} IS NULL OR pa.Ciudad = {1})";
@@ -140,17 +140,17 @@ public class OpCoordinacionService : IOpCoordinacionService
             // Llamar a SP CoordinacionCampoPersonal.ObtenerPersonalSinAsignar
             var query = @"
                 SELECT 
-                    p.Id,
+                    p.id AS Id,
                     p.Nombres + ' ' + p.Apellidos as Nombre,
                     c.Cargo,
                     te.Tipo,
                     tc.Tipo as Contratacion,
                     d.DivMuniNombre as Ciudad
                 FROM TH_Personas p
-                INNER JOIN TH_Cargos c ON p.CargoId = c.Id
-                LEFT JOIN OP_Encuestadores e ON p.Id = e.id
+                INNER JOIN TH_Cargos c ON p.Cargo = c.id
+                LEFT JOIN OP_Encuestadores e ON p.id = e.id
                 LEFT JOIN OP_TipoEncuestador te ON e.TipoId = te.id
-                LEFT JOIN TH_TipoContratacion tc ON p.TipoContratacionId = tc.Id
+                LEFT JOIN TH_TipoContratacion tc ON p.TipoContratacion = tc.id
                 LEFT JOIN C_Divipola d ON p.CiudadId = d.DivMuniCodigo
                 WHERE p.Id NOT IN (
                     SELECT Persona FROM OP_PersonasAsignadasTrabajo WHERE TrabajoId = {0}

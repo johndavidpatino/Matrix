@@ -33,7 +33,7 @@ namespace MatrixNext.Web.Infrastructure.Data
         // ===== CORE: WORKFLOW Y TAREAS =====
         public DbSet<Tarea> Tareas { get; set; }
         public DbSet<WorkFlow> WorkFlows { get; set; }
-        public DbSet<TareaPrevía> TareasPrevias { get; set; }
+        public DbSet<TareaPrevia> TareasPrevias { get; set; }
         public DbSet<WorkFlowUsuarioAsignado> WorkFlowUsuariosAsignados { get; set; }
         public DbSet<ObservacionTarea> ObservacionesTareas { get; set; }
 
@@ -171,7 +171,7 @@ namespace MatrixNext.Web.Infrastructure.Data
             });
 
             // ===== CONFIGURACIÓN CORE: TAREAS PREVIAS =====
-            modelBuilder.Entity<TareaPrevía>(entity =>
+            modelBuilder.Entity<TareaPrevia>(entity =>
             {
                 entity.HasKey(e => e.Id);
 
@@ -179,7 +179,7 @@ namespace MatrixNext.Web.Infrastructure.Data
 
                 // Índice para búsquedas de precedencias
                 entity.HasIndex(e => e.IdTareaPreviaRequerida)
-                    .HasDatabaseName("IX_TareaPrevía_IdTareaPreviaRequerida");
+                    .HasDatabaseName("IX_TareaPrevia_IdTareaPreviaRequerida");
 
                 // Relación: Una tarea previa requiere otra
                 entity.HasOne(e => e.TareaPreviaRequerida)

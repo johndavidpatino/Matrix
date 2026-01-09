@@ -110,7 +110,7 @@ namespace MatrixNext.Web.Services
         /// </summary>
         public bool PermiteTransicion(
             long idTarea,
-            List<(long IdTarea, long? IdTareaPreviaRequerida, string EstadoTareaPrevía)> precedencias
+            List<(long IdTarea, long? IdTareaPreviaRequerida, string EstadoTareaPrevia)> precedencias
         )
         {
             try
@@ -122,7 +122,7 @@ namespace MatrixNext.Web.Services
                 foreach (var tarea in treasPrevias)
                 {
                     // Si tarea previa no está completada, no permite transición
-                    if (tarea.EstadoTareaPrevía != "Completada")
+                    if (tarea.EstadoTareaPrevia != "Completada")
                     {
                         _logger.LogWarning($"Transición bloqueada: Tarea {idTarea} tiene previa no completada");
                         return false;
