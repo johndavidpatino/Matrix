@@ -1300,9 +1300,9 @@ public class RepositorioController : Controller
 
 | Tarea | Horas | Estado |
 |-------|-------|--------|
-| 3.1 Validar UploadService | 1h | ⏳ |
-| 3.2 Mapear SP repositorio | 1h | ⏳ |
-| 3.3 ViewModels repositorio | 1.5h | ⏳ |
+| 3.1 Validar UploadService | 1h | ✅ |
+| 3.2 Mapear SP repositorio | 1h | ✅ |
+| 3.3 ViewModels repositorio | 1.5h | ✅ |
 | 3.4 Adapter repositorio | 2h | ⏳ |
 | 3.5 Service repositorio | 2h | ⏳ |
 | 3.6 Controller repositorio | 3h | ⏳ |

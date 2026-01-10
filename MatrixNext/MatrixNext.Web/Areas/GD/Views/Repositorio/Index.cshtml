@@ -1,8 +1,132 @@
+@model MatrixNext.Web.Models.ViewModels.GD.RepositorioIndexVM
 @{
-    ViewData["Title"] = "Repositorio de Documentos";
+    ViewData["Title"] = ViewData["Title"] ?? "Repositorio de Documentos";
 }
 
-<div class="container py-4">
-    <h2>@ViewData["Title"]</h2>
-    <p class="text-muted">Carga y versionamiento de documentos.</p>
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="mb-0">@ViewData["Title"]</h2>
+            <p class="text-muted mb-0">Carga y versionamiento de documentos vinculados a un contenedor.</p>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-secondary">Contenedor: @Model.IdContenedor</span>
+            <span class="badge bg-info text-dark">Tipo: @Model.TipoContenedor</span>
+            <button class="btn btn-primary" id="btnUpload" @(Model.IdContenedor <= 0 ? "disabled" : string.Empty)>
+                <i class="fas fa-upload"></i> Subir documento
+            </button>
+        </div>
+    </div>
+
+    @if (ViewData["Error"] != null)
+    {
+        <div class="alert alert-danger">@ViewData["Error"]</div>
+    }
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle" id="tblRepositorio">
+            <thead class="table-light">
+                <tr>
+                    <th>Archivo</th>
+                    <th>Versión</th>
+                    <th>Fecha</th>
+                    <th>Comentarios</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Documentos ?? new List<MatrixNext.Web.Models.ViewModels.GD.RepositorioListVM>())
+                {
+                    <tr>
+                        <td>@item.NombreArchivo</td>
+                        <td><span class="badge bg-primary">v@item.Version</span></td>
+                        <td>@item.FechaRegistro.ToString("dd/MM/yyyy")</td>
+                        <td>@item.Comentarios</td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-outline-secondary" title="Descargar" href="@Url.Action("Descargar", new { id = item.Id })">
+                                <i class="fas fa-download"></i>
+                            </a>
+                            <button class="btn btn-sm btn-outline-danger btnDelete" data-id="@item.Id" title="Eliminar">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
+
+<div class="modal fade" id="uploadModal" tabindex="-1" aria-hidden="true"></div>
+
+<form id="antiForgeryForm" method="post">@Html.AntiForgeryToken()</form>
+
+@section Scripts {
+    <script>
+        (function () {
+            const modal = $('#uploadModal');
+            const token = $('#antiForgeryForm input[name="__RequestVerificationToken"]').val();
+
+            $('#btnUpload').on('click', function () {
+                const url = '@Url.Action("Upload", new { idContenedor = Model.IdContenedor, tipoContenedor = Model.TipoContenedor, idDocumento = Model.IdDocumento ?? 0 })';
+                $.get(url, function (html) {
+                    modal.html(html).modal('show');
+                });
+            });
+
+            $(document).on('submit', '#formUploadDocumento', function (e) {
+                e.preventDefault();
+                const form = $(this)[0];
+                const formData = new FormData(form);
+                formData.append('__RequestVerificationToken', token);
+
+                $.ajax({
+                    url: form.action,
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (res) {
+                        if (typeof res === 'string') {
+                            modal.html(res);
+                            return;
+                        }
+
+                        if (res.success) {
+                            toastr.success(res.message || 'Documento subido');
+                            modal.modal('hide');
+                            setTimeout(() => window.location.reload(), 700);
+                        } else {
+                            toastr.error(res.message || 'No se pudo subir el documento');
+                        }
+                    },
+                    error: function () {
+                        toastr.error('Error inesperado');
+                    }
+                });
+            });
+
+            $(document).on('click', '.btnDelete', function () {
+                const id = $(this).data('id');
+                if (!confirm('¿Eliminar este documento del repositorio?')) return;
+
+                $.ajax({
+                    url: '@Url.Action("Eliminar")',
+                    type: 'POST',
+                    data: { id, __RequestVerificationToken: token },
+                    success: function (res) {
+                        if (res.success) {
+                            toastr.success(res.message || 'Eliminado');
+                            setTimeout(() => window.location.reload(), 600);
+                        } else {
+                            toastr.error(res.message || 'No se pudo eliminar');
+                        }
+                    },
+                    error: function () {
+                        toastr.error('Error inesperado');
+                    }
+                });
+            });
+        })();
+    </script>
+}

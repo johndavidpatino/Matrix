@@ -1,0 +1,40 @@
+@model MatrixNext.Web.Models.ViewModels.GD.UploadDocumentoVM
+
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Subir documento</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form id="formUploadDocumento" method="post" enctype="multipart/form-data" action="@Url.Action("Upload", "Repositorio", new { area = "GD" })">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="IdContenedor" />
+                <input type="hidden" asp-for="TipoContenedor" />
+
+                <div class="mb-3">
+                    <label asp-for="IdDocumento" class="form-label">Documento Id</label>
+                    <input asp-for="IdDocumento" class="form-control" />
+                    <span asp-validation-for="IdDocumento" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" asp-for="Archivo">Archivo</label>
+                    <input asp-for="Archivo" type="file" class="form-control" />
+                    <span asp-validation-for="Archivo" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Comentarios" class="form-label">Comentarios</label>
+                    <textarea asp-for="Comentarios" rows="3" class="form-control"></textarea>
+                    <span asp-validation-for="Comentarios" class="text-danger"></span>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

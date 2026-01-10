@@ -87,13 +87,22 @@ namespace MatrixNext.Data.Adapters.GD
                 return null;
             }
 
+            int tiempoRetencion = 0;
+            if (row.TiempoRetencion != null)
+            {
+                if (int.TryParse(row.TiempoRetencion.ToString(), out int tr))
+                {
+                    tiempoRetencion = tr;
+                }
+            }
+
             return new DocumentoControlledDto
             {
                 Id = (int)row.Id,
                 IdMaestro = (int)row.DocumentoId,
                 Ubicacion = row.UbicacionArchivo,
                 MetodoRecuperacion = row.MetodoRecuperacion,
-                TiempoRetencion = int.TryParse(row.TiempoRetencion?.ToString(), out var tr) ? tr : 0,
+                TiempoRetencion = tiempoRetencion,
                 DisposicionFinal = row.DisposicionFinal,
                 Activo = row.Activo,
                 FechaRegistro = row.FechaRegistro

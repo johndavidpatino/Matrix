@@ -24,9 +24,10 @@
                     <div class="col-md-4">
                         <label class="form-label" for="TipoSolicitud">Tipo de solicitud</label>
                         <select asp-for="TipoSolicitud" class="form-select" id="TipoSolicitud">
+                            <option value="">-- Seleccione --</option>
                             @foreach (var tipo in Model.TiposSolicitud)
                             {
-                                <option value="@tipo.Id" @(tipo.Id == Model.TipoSolicitud ? "selected" : string.Empty)>@tipo.Nombre</option>
+                                <option value="@tipo.Id" selected="@(tipo.Id == Model.TipoSolicitud)">@tipo.Nombre</option>
                             }
                         </select>
                         <span asp-validation-for="TipoSolicitud" class="text-danger"></span>
@@ -34,9 +35,10 @@
                     <div class="col-md-4">
                         <label class="form-label" for="IdProceso">Proceso</label>
                         <select asp-for="IdProceso" class="form-select">
+                            <option value="">-- Seleccione --</option>
                             @foreach (var proc in Model.Procesos)
                             {
-                                <option value="@proc.Id" @(proc.Id == Model.IdProceso ? "selected" : string.Empty)>@proc.Nombre</option>
+                                <option value="@proc.Id" selected="@(proc.Id == Model.IdProceso)">@proc.Nombre</option>
                             }
                         </select>
                         <span asp-validation-for="IdProceso" class="text-danger"></span>
@@ -44,9 +46,10 @@
                     <div class="col-md-4">
                         <label class="form-label" for="IdResponsable">Responsable</label>
                         <select asp-for="IdResponsable" class="form-select">
+                            <option value="">-- Seleccione --</option>
                             @foreach (var user in Model.Usuarios)
                             {
-                                <option value="@user.Id" @(user.Id == Model.IdResponsable ? "selected" : string.Empty)>@user.NombreCompleto (@user.Usuario)</option>
+                                <option value="@user.Id" selected="@(user.Id == Model.IdResponsable)">@user.NombreCompleto (@user.Usuario)</option>
                             }
                         </select>
                         <span asp-validation-for="IdResponsable" class="text-danger"></span>
