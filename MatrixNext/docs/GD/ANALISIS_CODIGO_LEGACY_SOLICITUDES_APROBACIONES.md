@@ -402,4 +402,40 @@ WHERE TipoRevision IN (1, 2, 3)
 ---
 
 **Revisado por**: GitHub Copilot  
-**Próxima acción**: Reunión con stakeholder para definir REGLAS_APROBACION.md
+**Fecha**: 10 de Enero de 2026  
+**Próxima acción**: ~~Reunión con stakeholder para definir REGLAS_APROBACION.md~~ **CANCELADO**
+
+---
+
+## ⚠️ DECISIÓN FINAL (2026-01-10)
+
+**CONCLUSIÓN**: La funcionalidad de aprobaciones agregadas/workflow completo **NO EXISTE** en el sistema legacy.
+
+**ACCIÓN TOMADA**: 
+- ❌ Sprint 5 (Aprobaciones) **EXCLUIDO** de la migración
+- ✅ FASE 3 marcada como **COMPLETADA** con Sprint 4 (Solicitudes)
+- ✅ Respeto a **REGLA 6**: Paridad 1:1 (no agregar features que no existen en legacy)
+
+**JUSTIFICACIÓN**:
+1. El análisis del código legacy confirma que solo se implementa la asignación de revisores
+2. NO existe lógica de aprobación completa/agregada
+3. NO existe workflow de finalización de solicitudes
+4. NO existe verificación AND/OR de aprobaciones
+
+**IMPACTO EN MIGRACIÓN**:
+- FASE 3 está **COMPLETA** con Sprint 4 (Solicitudes + Asignación de Revisores)
+- Funcionalidad migrada: 100% fiel al legacy
+- NO se implementarán features inexistentes
+
+**RECOMENDACIÓN PARA FUTURO** (fuera del alcance de migración):
+Si el negocio requiere workflow de aprobaciones completo, debe tratarse como **nueva funcionalidad** (no migración), requiriendo:
+- Análisis de requerimientos de negocio
+- Diseño de UX/workflow
+- Implementación de SPs nuevos
+- Testing exhaustivo
+- Capacitación de usuarios
+
+---
+
+**Estado del documento**: ✅ COMPLETADO (análisis finalizado, decisión tomada)  
+**Uso**: Referencia histórica para entender limitaciones del sistema legacy

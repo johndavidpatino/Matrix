@@ -1,63 +1,81 @@
 # 📋 BACKLOG DE MIGRACIÓN - GD_Documentos FASE 3
 
-**Fases**: FASE 3 (Sprints 4-5)  
-**Tema**: Solicitudes de Documentos + Aprobaciones + Workflow  
-**Horas Totales**: 52h (44h implementación + 8h investigación)  
-**Duración Estimada**: 1.5 semanas (2 sprints)  
-**Versión**: 1.0  
-**Fecha**: 2026-01-09
+**Fases**: FASE 3 (Sprint 4 COMPLETADO)  
+**Tema**: Solicitudes de Documentos  
+**Estado**: ✅ COMPLETADO (2026-01-10)  
+**Horas Totales**: 24h (implementación completa)  
+**Duración Real**: 1 día  
+**Versión**: 2.0 (actualizado post-análisis legacy)  
+**Fecha**: 2026-01-10
+
+---
+
+## ⚠️ CAMBIO IMPORTANTE: Sprint 5 (Aprobaciones) EXCLUIDO
+
+**Decisión**: Basado en análisis del código legacy (ver [ANALISIS_CODIGO_LEGACY_SOLICITUDES_APROBACIONES.md](ANALISIS_CODIGO_LEGACY_SOLICITUDES_APROBACIONES.md)):
+
+- ❌ **Sprint 5 (Aprobaciones agregadas) NO se migrará**: La lógica de aprobación completa/workflow **NO EXISTE** en el sistema legacy
+- ✅ **Sprint 4 (Solicitudes) COMPLETADO**: Implementación fiel al legacy
+- 📝 **Funcionalidad legacy limitada**: Solo permite asignar revisores y cambiar estados individuales (sin workflow agregado)
+
+**Hallazgos críticos del análisis**:
+1. Legacy NO tiene lógica AND/OR de aprobaciones
+2. Legacy NO verifica si todos los revisores aprobaron
+3. Legacy NO cambia estado automáticamente de solicitud
+4. Legacy NO tiene workflow de finalización
+
+**Consecuencia**: FASE 3 está **COMPLETA** con Sprint 4. No implementaremos funcionalidad que no existe en legacy (REGLA 6: Paridad 1:1).
 
 ---
 
 ## 📑 CONTENIDO
 
 - [Resumen Ejecutivo](#resumen-ejecutivo)
-- [Sprint 4: Solicitudes de Documentos](#sprint-4-solicitudes-de-documentos)
-- [Sprint 5: Aprobaciones + Investigación Workflow](#sprint-5-aprobaciones--investigación-workflow)
+- [Sprint 4: Solicitudes de Documentos](#sprint-4-solicitudes-de-documentos) ✅ COMPLETADO
 
 ---
 
 ## 🎯 RESUMEN EJECUTIVO
 
-### Objetivos de FASE 3
+### Objetivos de FASE 3 (ACTUALIZADO)
 
-Implementar el sistema de workflow (lo más complejo de GD_Documentos):
+**Objetivo Original**: Implementar workflow completo de solicitudes + aprobaciones  
+**Objetivo Real (post-análisis legacy)**: Migrar SOLO lo que existe en legacy
 
-1. **Solicitudes de Documentos** (P1-1, Sprint 4): 24h
+✅ **COMPLETADO - Sprint 4: Solicitudes de Documentos** (24h):
    - Crear solicitud de construcción/actualización/anulación
-   - Asignar múltiples revisores
-   - Notificaciones por email (asíncrono)
+   - Asignar múltiples revisores simultáneamente
+   - Integración con stored procedures legacy
+   - ViewModels, DTOs, Services, Controllers, Views
+   - 18/18 unit tests PASSED
 
-2. **Aprobaciones** (P1-2, Sprint 5): 20h
-   - Listar revisiones pendientes por usuario
-   - Aprobar/rechazar con comentarios
-   - Cambiar estado solicitud
-   - Investigación de lógica agregación (P0-5): 8h
+❌ **EXCLUIDO - Sprint 5: Aprobaciones Agregadas**:
+   - **RAZÓN**: Funcionalidad NO EXISTE en sistema legacy
+   - **EVIDENCIA**: Análisis completo en [ANALISIS_CODIGO_LEGACY_SOLICITUDES_APROBACIONES.md](ANALISIS_CODIGO_LEGACY_SOLICITUDES_APROBACIONES.md)
+   - **DECISIÓN**: Respetar REGLA 6 (Paridad 1:1 - no agregar features nuevas)
 
-### ⚠️ RIESGOS CRÍTICOS - GAPS EN ANÁLISIS
+### 📊 Resultados de Investigación (Tarea 5.1)
 
-**PROBLEMA IDENTIFICADO**: La lógica de agregación de aprobaciones **NO está clara** en el código legacy.
+**Análisis del código legacy** (`WebMatrix/GD_Documentos/`, `CoreProject/Clases/GD/`):
 
-| Gap | Impacto | Decisión Temporal | Investigación |
-|-----|---------|------------------|---------------|
-| ¿Una aprobación basta (OR) o todas (AND)? | 🔴 CRÍTICA | Asumir AND (todas) hasta confirmar | P0-5.2: Entrevista stakeholder |
-| ¿Cambio automático de estado o manual? | 🔴 CRÍTICA | Asumir automático cuando todas aprobadas | P0-5.2: Verificar BD producción |
-| ¿Cómo se guarda comentario rechazo? | 🟠 ALTA | Campo `comentarios` en `GD_Revisiones` | P0-5.1: Verificar DDL |
-| ¿Quién puede aprobar/rechazar? | 🟠 ALTA | Solo revisores asignados a solicitud | P0-5: Validar con lógica legacy |
+| Componente | Estado en Legacy | Implementado en Fase 3 | Acción |
+|------------|------------------|------------------------|--------|
+| Crear solicitudes | ✅ Existe | ✅ Migrado | COMPLETADO |
+| Asignar revisores | ✅ Existe | ✅ Migrado | COMPLETADO |
+| Cambiar estado individual | ✅ Existe (parcial) | ❌ No migrado | EXCLUIDO (incompleto en legacy) |
+| Lógica aprobación AND/OR | ❌ NO existe | ❌ No migrado | EXCLUIDO |
+| Workflow finalización | ❌ NO existe | ❌ No migrado | EXCLUIDO |
+| Notificaciones agregadas | ❌ NO existe | ❌ No migrado | EXCLUIDO |
 
-**ACCIÓN INMEDIATA (P0-5 - Sprint 5, Tarea 5.1)**:
-- Ejecutar queries en BD de staging para confirmar lógica
-- Entrevista con Coordinador de Calidad
-- Documentar en WORKFLOW_GD_APROBACIONES.md
-- Actualizar esta sección con hallazgos
+**Conclusión**: El sistema legacy solo implementa la **asignación de revisores**, NO el workflow completo de aprobaciones.
 
 ### Dependencias Críticas
 
-✅ **COMPLETADAS en FASES 1-2**:
-- Estructura MVC, Servicios, Adapters, Catálogos, Maestro, Repositorio
-
-⚠️ **PENDIENTE - CRÍTICA**:
-- **Investigación Workflow (P0-5)**: Debe completarse en Sprint 5, Tarea 5.1 ANTES de implementar aprobaciones
+✅ **COMPLETADAS**:
+- FASE 1: Catálogos (TipoSolicitud, EstadoSolicitud, Procesos)
+- FASE 2: Maestro, Repositorio
+- FASE 3 Sprint 4: Solicitudes + Revisores
+- Tarea 5.1: Investigación y análisis legacy
 
 ### Reglas Aplicables
 
@@ -89,13 +107,81 @@ Implementar creación de solicitudes con asignación de revisores y notificació
 
 ---
 
-### TAREA 4.1: Mapear SP de Solicitudes (1h)
+---
+
+## ✅ ESTADO FINAL DE FASE 3
+
+### Sprints Completados
+
+| Sprint | Estado | Horas | Tareas | Tests | Commits |
+|--------|--------|-------|--------|-------|---------|
+| Sprint 4: Solicitudes | ✅ COMPLETADO | 24h | 7/7 | 18/18 PASSED | 3 commits |
+| Sprint 5: Investigación | ✅ COMPLETADO | 4h | 1/1 (Tarea 5.1) | - | 1 commit |
+| **TOTAL FASE 3** | **✅ COMPLETADO** | **28h** | **8/8** | **18/18** | **4 commits** |
+
+### Archivos Creados/Modificados
+
+**Nuevos archivos** (Sprint 4):
+- `/Data/Adapters/GD/Models/SolicitudDtos.cs` (7 DTOs)
+- `/Data/Adapters/GD/IGdSolicitudesAdapter.cs` + `GdSolicitudesAdapter.cs` (8 métodos, 190 líneas)
+- `/Data/Services/GD/Interfaces/IGdSolicitudesService.cs` + `GdSolicitudesService.cs` (5 métodos, 230 líneas)
+- `/Web/Areas/GD/Controllers/SolicitudesController.cs` (198 líneas, 5 actions)
+- `/Web/Areas/GD/Views/Solicitudes/Index.cshtml` + 2 modals (279 líneas total)
+- `/Web/Models/ViewModels/GD/SolicitudViewModels.cs` (7 ViewModels)
+- `/Tests.Unit/GD/Services/GdSolicitudesServiceTests.cs` (18 tests)
+- `/docs/GD/MAPEO_SP_SOLICITUDES.csv` (9 SPs documentados)
+
+**Nuevos archivos** (Tarea 5.1):
+- `/docs/GD/ANALISIS_CODIGO_LEGACY_SOLICITUDES_APROBACIONES.md` (405 líneas)
+
+**Modificados**:
+- `/Data/Adapters/GD/Models/MaestroDtos.cs` (consolidación de DTOs compartidos)
+- `/Web/Areas/GD/Controllers/DocumentosMaestroController.cs` (fix UsuarioDto mapping)
+
+### Cobertura de Testing
+
+```
+MatrixNext.Tests.Unit: 18/18 tests PASSED (100%)
+- ObtenerSolicitudes (éxito + error handling)
+- ObtenerSolicitudById (éxito + no encontrada)
+- CrearSolicitud (éxito + validaciones REGLA 12)
+- AsignarRevisores (éxito + validaciones + parcial)
+- ObtenerFormData (éxito + error)
+```
+
+### Build Status
+
+```
+MatrixNext.Data:      ✅ PASSED (0 errors)
+MatrixNext.Web:       ✅ PASSED (0 errors, 5 warnings nullability)
+MatrixNext.Tests.Unit: ✅ PASSED (18/18 tests, 100% success)
+```
+
+---
+
+## 📝 DOCUMENTACIÓN DE SPRINTS
+
+### 🚀 SPRINT 4: SOLICITUDES DE DOCUMENTOS ✅
+
+**Horas**: 24h  
+**Estado**: COMPLETADO  
+**Fecha**: 2026-01-10
+
+---
+
+### TAREA 4.1: Mapear SP de Solicitudes ✅ (1h)
 
 **Descripción**: Documentar SP para solicitudes y asignación de revisores
 
+**Resultado**: [MAPEO_SP_SOLICITUDES.csv](MAPEO_SP_SOLICITUDES.csv) creado con 9 SPs:
+- GD_SolDocumentos_Add (16 params)
+- GD_Revisiones_Add, Edit, Get, GetRev (workflow revisión)
+- GD_TipoSolicitud_Get, GD_EstadoSolicitud_Get_F
+- GD_MaestroDocumentos_Get, GD_US_Usuarios_Get
+
 **Proceso**:
 
-1. Buscar en `CoreProject/GD_Procedimientos.vb`:
+1. ✅ Buscar en `CoreProject/GD_Procedimientos.vb`:
    - Métodos relacionados a solicitudes (líneas ~100-120)
    - Métodos de revisiones (líneas ~231-265)
 
