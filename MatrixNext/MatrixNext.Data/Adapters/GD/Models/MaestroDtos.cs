@@ -52,10 +52,33 @@ namespace MatrixNext.Data.Adapters.GD.Models
     public class UsuarioDto
     {
         public int Id { get; set; }
-        public string Usuario { get; set; } = string.Empty;
-        public string Nombres { get; set; } = string.Empty;
-        public string Apellidos { get; set; } = string.Empty;
+        public string Nombre { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
-        public bool Activo { get; set; }
+    }
+
+    public class EstadoSolicitudDto
+    {
+        public int Id { get; set; }
+        public string Nombre { get; set; } = string.Empty;
+    }
+
+    public class MaestroListDto
+    {
+        public int Id { get; set; }
+        public string Nombre { get; set; } = string.Empty;
+    }
+
+    public class SelectListItemDto
+    {
+        public int Id { get; set; }
+        public string Nombre { get; set; } = string.Empty;
+    }
+
+    public class SolicitudFormDataDto
+    {
+        public List<SelectListItemDto> TiposSolicitud { get; set; } = new();
+        public List<SelectListItemDto> Documentos { get; set; } = new();
+        public List<SelectListItemDto> Usuarios { get; set; } = new();
+        public List<SelectListItemDto> Estados { get; set; } = new();
     }
 }

@@ -257,11 +257,8 @@ namespace MatrixNext.Data.Adapters.GD
             return rows.Select(r => new UsuarioDto
             {
                 Id = (int)r.id,
-                Usuario = (string)r.Usuario,
-                Nombres = r.Nombres is string n ? n : string.Empty,
-                Apellidos = r.Apellidos is string a ? a : string.Empty,
-                Email = r.Email is string e ? e : string.Empty,
-                Activo = r.Activo is bool act && act
+                Nombre = r.Nombres is string n ? n : (r.Usuario is string u ? u : string.Empty),
+                Email = r.Email is string e ? e : string.Empty
             }).ToList();
         }
     }
