@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Dapper;
 using MatrixNext.Data.Adapters.GD;
 using MatrixNext.Data.Services.GD.Interfaces;
 using MatrixNext.Web.Services;
@@ -23,6 +25,7 @@ namespace MatrixNext.Data.Services.GD
         private readonly ILogger<GdEmailService> _logger;
         private readonly IHostEnvironment _env;
         private readonly IConfiguration _config;
+        private readonly string _connectionString;
 
         public GdEmailService(
             IEmailQueueService emailQueueService,
@@ -36,6 +39,8 @@ namespace MatrixNext.Data.Services.GD
             _logger = logger;
             _env = env;
             _config = config;
+            _connectionString = config.GetConnectionString("DefaultConnection")
+                ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found");
         }
 
         /// <summary>
@@ -169,19 +174,28 @@ namespace MatrixNext.Data.Services.GD
         }
 
         /// <summary>
-        /// Obtiene email de un usuario desde BD usando SP US_Usuarios_GetMail
-        /// REGLA 2: Mapear SP exactamente
+        /// Obtiene email de un usuario desde tabla US_Usuarios
+        /// REGLA 14: Async/await
         /// </summary>
         private async Task<string> ObtenerEmailUsuario(int idUsuario)
         {
             try
             {
-                // TODO: Implementar llamada a SP US_Usuarios_GetMail
-                // Por ahora retornamos email de ejemplo
-                // En implementación final, crear adapter/context call al SP
+                using var conn = new SqlConnection(_connectionString);
+                await conn.OpenAsync();
                 
-                _logger.LogWarning("ObtenerEmailUsuario: Implementación pendiente para usuario {IdUsuario}", idUsuario);
-                return $"usuario{idUsuario}@example.com"; // TEMPORAL
+                var email = await conn.QueryFirstOrDefaultAsync<string>(
+                    "SELECT Email FROM US_Usuarios WHERE Id = @Id",
+                    new { Id = idUsuario }
+                );
+
+                if (string.IsNullOrWhiteSpace(email))
+                {
+                    _logger.LogWarning("Usuario {IdUsuario} no tiene email configurado en BD", idUsuario);
+                    return string.Empty;
+                }
+
+                return email;
             }
             catch (Exception ex)
             {

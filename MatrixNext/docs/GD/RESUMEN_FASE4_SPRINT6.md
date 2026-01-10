@@ -212,25 +212,30 @@ builder.Services.AddScoped<IGdEmailService, GdEmailService>();
 
 ## ⚠️ TODOs Pendientes (Fuera de Alcance Sprint 6)
 
-### TODO 1: Implementar ObtenerEmailUsuario()
+### ~~TODO 1: Implementar ObtenerEmailUsuario()~~ ✅ RESUELTO
 
-**Estado**: TEMPORAL - retorna `usuario{id}@example.com`
+**Estado**: ✅ IMPLEMENTADO - consulta directa a tabla `US_Usuarios`
 
-**Acción Requerida**:
-1. Crear adapter para llamar SP `US_Usuarios_GetMail`
-2. Modificar método en GdEmailService.cs:
+**Solución Aplicada**:
+Consulta SQL directa usando Dapper:
 
 ```csharp
 private async Task<string> ObtenerEmailUsuario(int idUsuario)
 {
-    using var context = new CC_FinzOpeEntities();
-    var result = await context.US_Usuarios_GetMail(idUsuario).FirstOrDefaultAsync();
-    return result?.Email ?? string.Empty;
+    using var conn = new SqlConnection(_connectionString);
+    await conn.OpenAsync();
+    
+    var email = await conn.QueryFirstOrDefaultAsync<string>(
+        "SELECT Email FROM US_Usuarios WHERE Id = @Id",
+        new { Id = idUsuario }
+    );
+
+    return string.IsNullOrWhiteSpace(email) ? string.Empty : email;
 }
 ```
 
-**Estimación**: 0.5h  
-**Prioridad**: 🔴 ALTA (crítico para production)
+**Resuelto en**: Commit posterior  
+**Tiempo Real**: 0.5h
 
 ---
 

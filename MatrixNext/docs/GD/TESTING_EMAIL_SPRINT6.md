@@ -226,30 +226,33 @@ _logger.LogInformation("Queue Depth: {Depth}, Processed: {Processed}, Failed: {F
 
 ## 🚨 Problemas Conocidos
 
-### Problema 1: ObtenerEmailUsuario() es TEMPORAL
+### ~~Problema 1: ObtenerEmailUsuario() es TEMPORAL~~ ✅ RESUELTO
 
-**Descripción**: Método `ObtenerEmailUsuario()` en `GdEmailService.cs` retorna email de ejemplo:
+**Descripción**: Método `ObtenerEmailUsuario()` en `GdEmailService.cs` retornaba email de ejemplo
+
+**Impacto**: ~~Emails no se envían a destinatarios reales~~ → **RESUELTO**
+
+**Solución Implementada**: 
+Consulta directa a tabla `US_Usuarios` usando Dapper
+
+**Código implementado**:
 ```csharp
-return $"usuario{idUsuario}@example.com"; // TEMPORAL
-```
-
-**Impacto**: Emails no se envían a destinatarios reales
-
-**Solución**: 
-1. Crear adapter/context para llamar SP `US_Usuarios_GetMail`
-2. Mapear resultado a string
-3. Reemplazar implementación temporal
-
-**Código propuesto**:
-```csharp
-// En GdEmailService.cs (futuro)
+// En GdEmailService.cs (IMPLEMENTADO)
 private async Task<string> ObtenerEmailUsuario(int idUsuario)
 {
-    using var context = new CC_FinzOpeEntities();
-    var result = await context.US_Usuarios_GetMail(idUsuario).FirstOrDefaultAsync();
-    return result?.Email ?? string.Empty;
+    using var conn = new SqlConnection(_connectionString);
+    await conn.OpenAsync();
+    
+    var email = await conn.QueryFirstOrDefaultAsync<string>(
+        "SELECT Email FROM US_Usuarios WHERE Id = @Id",
+        new { Id = idUsuario }
+    );
+
+    return string.IsNullOrWhiteSpace(email) ? string.Empty : email;
 }
 ```
+
+**Estado**: ✅ COMPLETADO
 
 ---
 
