@@ -1,0 +1,84 @@
+@{
+    ViewData["Title"] = "Agregar Causa - Modal";
+}
+
+<!-- Este archivo se carga como partial en Detalle.cshtml vía AJAX -->
+<!-- Pero también puede usarse como vista independiente si es necesario -->
+
+<div class="modal fade" id="modalAgregarCausa" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">
+                    <i class="bi bi-exclamation-triangle"></i> Agregar Causa Raíz
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="frmAgregarCausa">
+                <div class="modal-body">
+                    <input type="hidden" id="idPncCausa" name="IdPNC">
+
+                    <div class="mb-3">
+                        <label for="causaRaiz" class="form-label">Causa Raíz *</label>
+                        <textarea class="form-control" id="causaRaiz" name="CausaRaiz" 
+                                  rows="4" placeholder="Describa la causa raíz del problema..."
+                                  required></textarea>
+                        <small class="form-text text-muted">
+                            Análisis detallado que identifica por qué ocurrió el problema
+                        </small>
+                    </div>
+
+                    <div class="alert alert-info small" role="alert">
+                        <strong><i class="bi bi-info-circle"></i> Recuerde:</strong><br>
+                        Esta causa DEBE tener una acción inmediata para cumplijr con ISO 9001.
+                        Podrá agregarla después de crear la causa.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-circle"></i> Guardar Causa
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    $('#frmAgregarCausa').submit(function (e) {
+        e.preventDefault();
+
+        var causa = {
+            idPNC: $('#idPncCausa').val(),
+            causaRaiz: $('#causaRaiz').val()
+        };
+
+        var idPnc = $('#idPncCausa').val();
+
+        $.ajax({
+            type: 'POST',
+            url: '/api/pnc/' + idPnc + '/causas',
+            contentType: 'application/json',
+            data: JSON.stringify(causa),
+            success: function (response) {
+                if (response.success) {
+                    $('#modalAgregarCausa').modal('hide');
+                    $('#frmAgregarCausa')[0].reset();
+                    alert('Causa registrada. Ahora agregue la acción inmediata.');
+                    location.reload();
+                } else {
+                    alert('Error: ' + response.message);
+                }
+            },
+            error: function (error) {
+                alert('Error al guardar la causa.');
+                console.error(error);
+            }
+        });
+    });
+</script>
+}

@@ -1,0 +1,216 @@
+@model PncFiltrosVM
+@{
+    ViewData["Title"] = "Gestión de PNC - Productos No Conformes";
+    var breadcrumbs = new List<(string label, string url)> { ("PNC", "#") };
+}
+
+<div class="container-fluid mt-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1 class="display-4">
+                <i class="bi bi-exclamation-circle-fill text-danger"></i> Productos No Conformes (PNC)
+            </h1>
+            <p class="text-muted">Gestión de Calidad ISO 9001 - Sistema de reclamos y acciones correctivas</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <button class="btn btn-primary btn-lg" id="btnNuevoPnc">
+                <i class="bi bi-plus-circle"></i> Nuevo PNC
+            </button>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="card mb-4">
+        <div class="card-header bg-light">
+            <h5 class="mb-0">
+                <i class="bi bi-funnel"></i> Filtros de Búsqueda
+            </h5>
+        </div>
+        <div class="card-body">
+            <form id="frmFiltros" class="row g-3">
+                <!-- JobBook -->
+                <div class="col-md-3">
+                    <label for="jobbook" class="form-label">JobBook</label>
+                    <input type="text" class="form-control" id="jobbook" name="JobBook" 
+                           placeholder="Ej: IPSOS-2025-001">
+                </div>
+
+                <!-- Fecha Desde -->
+                <div class="col-md-2">
+                    <label for="fechaDesde" class="form-label">Desde</label>
+                    <input type="date" class="form-control" id="fechaDesde" name="FechaDesde">
+                </div>
+
+                <!-- Fecha Hasta -->
+                <div class="col-md-2">
+                    <label for="fechaHasta" class="form-label">Hasta</label>
+                    <input type="date" class="form-control" id="fechaHasta" name="FechaHasta">
+                </div>
+
+                <!-- Estado -->
+                <div class="col-md-2">
+                    <label for="estado" class="form-label">Estado</label>
+                    <select class="form-select" id="estado" name="Estado">
+                        <option value="">Todos</option>
+                        <option value="1">Abiertos</option>
+                        <option value="2">Cerrados</option>
+                    </select>
+                </div>
+
+                <!-- Botones -->
+                <div class="col-md-3 d-flex gap-2 align-items-end">
+                    <button type="button" class="btn btn-primary" id="btnBuscar">
+                        <i class="bi bi-search"></i> Buscar
+                    </button>
+                    <button type="reset" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-counterclockwise"></i> Limpiar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Resultados -->
+    <div class="card">
+        <div class="card-header bg-light">
+            <h5 class="mb-0">
+                <i class="bi bi-table"></i> Listado de PNC
+                <span class="badge bg-secondary ms-2" id="totalRegistros">0</span>
+            </h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0" id="tablaPnc">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width: 60px;">ID</th>
+                            <th>JobBook</th>
+                            <th>Estudio</th>
+                            <th>Fecha Reclamo</th>
+                            <th>Fuente</th>
+                            <th>Estado</th>
+                            <th style="width: 80px;">Indicadores</th>
+                            <th style="width: 100px;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyPnc">
+                        <tr>
+                            <td colspan="8" class="text-center py-4">
+                                <p class="text-muted">Ingrese criterios de búsqueda y haga clic en "Buscar"</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Paginación -->
+        <div class="card-footer bg-light d-flex justify-content-between align-items-center">
+            <small class="text-muted">Página <span id="paginaActual">1</span> de <span id="totalPaginas">1</span></small>
+            <nav aria-label="Paginación">
+                <ul class="pagination mb-0">
+                    <li class="page-item" id="liPrevio">
+                        <a class="page-link" href="#" id="btnPrevio">Anterior</a>
+                    </li>
+                    <li class="page-item active" id="liSiguiente">
+                        <a class="page-link" href="#" id="btnSiguiente">Siguiente</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    $(document).ready(function () {
+        // Botón Nuevo PNC
+        $('#btnNuevoPnc').click(function () {
+            window.location.href = '/Pnc/Crear';
+        });
+
+        // Buscar
+        $('#btnBuscar').click(function () {
+            cargarPnc(1);
+        });
+
+        // Paginación
+        $(document).on('click', '#btnPrevio', function (e) {
+            e.preventDefault();
+            var pagina = parseInt($('#paginaActual').text());
+            if (pagina > 1) cargarPnc(pagina - 1);
+        });
+
+        $(document).on('click', '#btnSiguiente', function (e) {
+            e.preventDefault();
+            var pagina = parseInt($('#paginaActual').text());
+            cargarPnc(pagina + 1);
+        });
+
+        function cargarPnc(pagina) {
+            var filtros = {
+                jobBook: $('#jobbook').val(),
+                fechaDesde: $('#fechaDesde').val(),
+                fechaHasta: $('#fechaHasta').val(),
+                estado: $('#estado').val(),
+                paginaActual: pagina,
+                registrosPorPagina: 20
+            };
+
+            $.get('/api/pnc/listado', filtros, function (response) {
+                if (response.success) {
+                    var html = '';
+                    response.data.resultados.forEach(function (pnc) {
+                        var estadoBadge = pnc.cerrado 
+                            ? '<span class="badge bg-success">Cerrado</span>'
+                            : '<span class="badge bg-warning">Abierto</span>';
+
+                        html += '<tr onclick="abrirDetalle(' + pnc.id + ')" style="cursor:pointer;">' +
+                            '<td><strong>#' + pnc.id + '</strong></td>' +
+                            '<td><strong>' + pnc.jobBook + '</strong></td>' +
+                            '<td>' + (pnc.nombreEstudio || '') + '</td>' +
+                            '<td>' + new Date(pnc.fechaReclamo).toLocaleDateString('es-CO') + '</td>' +
+                            '<td>' + (pnc.fuenteReclamo || '') + '</td>' +
+                            '<td>' + estadoBadge + '</td>' +
+                            '<td><span class="badge bg-info">' + pnc.totalCausas + ' causas</span></td>' +
+                            '<td>' +
+                            '<button class="btn btn-sm btn-info" title="Ver detalle" onclick="abrirDetalle(' + pnc.id + '); return false;">' +
+                            '<i class="bi bi-eye"></i>' +
+                            '</button> ' +
+                            (pnc.cerrado ? '' : '<button class="btn btn-sm btn-danger" title="Cerrar PNC" onclick="cerrarPnc(' + pnc.id + '); return false;"><i class="bi bi-check-circle"></i></button>') +
+                            '</td>' +
+                            '</tr>';
+                    });
+
+                    $('#tbodyPnc').html(html);
+                    $('#totalRegistros').text(response.data.totalRegistros);
+                    $('#paginaActual').text(response.data.paginaActual || pagina);
+                    $('#totalPaginas').text(response.data.totalPaginas || 1);
+
+                    // Habilitar/deshabilitar botones paginación
+                    $('#btnPrevio').closest('li').toggleClass('disabled', pagina <= 1);
+                    $('#btnSiguiente').closest('li').toggleClass('disabled', pagina >= response.data.totalPaginas);
+                }
+            });
+        }
+    });
+
+    function abrirDetalle(id) {
+        window.location.href = '/Pnc/Detalle/' + id;
+    }
+
+    function cerrarPnc(id) {
+        if (confirm('¿Desea cerrar este PNC? Asegúrese que todas las acciones estén completadas.')) {
+            $.post('/api/pnc/' + id + '/cerrar', {}, function (response) {
+                if (response.success) {
+                    alert('PNC cerrado correctamente');
+                    location.reload();
+                } else {
+                    alert('Error: ' + response.message);
+                }
+            });
+        }
+    }
+</script>
+}

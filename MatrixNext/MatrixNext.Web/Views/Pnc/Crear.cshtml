@@ -1,0 +1,206 @@
+@{
+    ViewData["Title"] = "Crear Nuevo PNC";
+}
+
+<div class="container-fluid mt-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <a href="/Pnc" class="text-decoration-none">
+                <i class="bi bi-arrow-left"></i> Volver a listado
+            </a>
+            <h1 class="display-5 mt-2">Crear Nuevo PNC</h1>
+            <p class="text-muted">Producto No Conforme - Sistema de Gestión de Calidad ISO 9001</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-form-check"></i> Datos del Reclamo</h5>
+                </div>
+                <div class="card-body">
+                    <form id="frmCrearPnc">
+                        <!-- JobBook y Fecha -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="jobBook" class="form-label">JobBook *</label>
+                                <input type="text" class="form-control" id="jobBook" name="JobBook" 
+                                       placeholder="Ej: IPSOS-2025-001" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="fechaReclamo" class="form-label">Fecha Reclamo *</label>
+                                <input type="date" class="form-control" id="fechaReclamo" name="FechaReclamo" 
+                                       max="" required>
+                            </div>
+                        </div>
+
+                        <!-- Reporta y Cliente -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="idReporta" class="form-label">Quién Reporta *</label>
+                                <input type="text" class="form-control" id="idReporta" name="IdReporta" 
+                                       placeholder="Buscar usuario..." required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="idClienteExterno" class="form-label">Cliente Externo</label>
+                                <input type="text" class="form-control" id="idClienteExterno" name="IdClienteExterno" 
+                                       placeholder="Opcional">
+                            </div>
+                        </div>
+
+                        <!-- Fuente y Categoría -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="fuenteReclamo" class="form-label">Fuente de Reclamo *</label>
+                                <select class="form-select" id="fuenteReclamo" name="FuenteReclamo" required>
+                                    <option value="">Seleccione...</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="categoria" class="form-label">Categoría *</label>
+                                <select class="form-select" id="categoria" name="Categoria" required>
+                                    <option value="">Seleccione...</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Descripción -->
+                        <div class="mb-3">
+                            <label for="descripcion" class="form-label">Descripción del Problema *</label>
+                            <textarea class="form-control" id="descripcion" name="Descripcion" rows="4" 
+                                      placeholder="Describe detalladamente el problema..." required></textarea>
+                        </div>
+
+                        <!-- Causas (dinámico) -->
+                        <div class="mb-4">
+                            <label class="form-label">Causas Raíz (Opcional)</label>
+                            <div id="containerCausas">
+                                <div class="input-group mb-2">
+                                    <input type="text" class="form-control" placeholder="Causa raíz..." 
+                                           name="Causas">
+                                    <button class="btn btn-outline-danger" type="button" onclick="eliminarCausa(this)">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-secondary" id="btnAgregarCausa">
+                                <i class="bi bi-plus-circle"></i> Agregar Causa
+                            </button>
+                        </div>
+
+                        <!-- Botones -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="/Pnc" class="btn btn-outline-secondary">Cancelar</a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save"></i> Crear PNC
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lado derecho - Info -->
+        <div class="col-md-4">
+            <div class="card bg-light">
+                <div class="card-header">
+                    <h6 class="mb-0"><i class="bi bi-info-circle"></i> Información</h6>
+                </div>
+                <div class="card-body">
+                    <h6>Flujo de Registro</h6>
+                    <ol class="ms-3 small">
+                        <li>Registrar datos del reclamo (obligatorios)</li>
+                        <li>Agregar causas raíz (opcional aquí, puede hacerlo después)</li>
+                        <li>Crear PNC</li>
+                        <li>Completar causas y acciones en el detalle</li>
+                        <li>Cerrar cuando todas las acciones estén ejecutadas</li>
+                    </ol>
+
+                    <div class="alert alert-warning mt-4 small" role="alert">
+                        <strong><i class="bi bi-exclamation-triangle"></i> Nota Importante:</strong><br>
+                        Toda causa DEBE tener al menos una acción inmediata (ISO 9001).
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    $(document).ready(function () {
+        // Cargar catálogos
+        cargarCatalogos();
+
+        // Fijar fecha máxima a hoy
+        $('#fechaReclamo').attr('max', new Date().toISOString().split('T')[0]);
+
+        // Agregar/Eliminar causas dinámicamente
+        $('#btnAgregarCausa').click(function () {
+            var html = '<div class="input-group mb-2">' +
+                '<input type="text" class="form-control" placeholder="Causa raíz..." name="Causas">' +
+                '<button class="btn btn-outline-danger" type="button" onclick="eliminarCausa(this)">' +
+                '<i class="bi bi-trash"></i>' +
+                '</button>' +
+                '</div>';
+            $('#containerCausas').append(html);
+        });
+
+        // Enviar formulario
+        $('#frmCrearPnc').submit(function (e) {
+            e.preventDefault();
+
+            var causas = [];
+            $('input[name="Causas"]').each(function () {
+                if ($(this).val()) causas.push($(this).val());
+            });
+
+            var pnc = {
+                jobBook: $('#jobBook').val(),
+                fechaReclamo: $('#fechaReclamo').val(),
+                idReporta: $('#idReporta').val(),
+                idClienteExterno: $('#idClienteExterno').val() || null,
+                fuenteReclamo: $('#fuenteReclamo').val(),
+                categoria: $('#categoria').val(),
+                descripcion: $('#descripcion').val(),
+                causas: causas
+            };
+
+            $.post('/api/pnc', pnc, function (response) {
+                if (response.success) {
+                    alert('PNC creado correctamente');
+                    window.location.href = '/Pnc/Detalle/' + response.data;
+                } else {
+                    alert('Error: ' + response.message);
+                }
+            });
+        });
+    });
+
+    function cargarCatalogos() {
+        $.get('/api/pnc/catalogos', function (response) {
+            if (response.success) {
+                // Fuentes
+                var htmlFuentes = '<option value="">Seleccione...</option>';
+                response.data.fuentesReclamo.forEach(function (f) {
+                    htmlFuentes += '<option value="' + f.id + '">' + f.descripcion + '</option>';
+                });
+                $('#fuenteReclamo').html(htmlFuentes);
+
+                // Categorías
+                var htmlCategorias = '<option value="">Seleccione...</option>';
+                response.data.categorias.forEach(function (c) {
+                    htmlCategorias += '<option value="' + c.id + '">' + c.descripcion + '</option>';
+                });
+                $('#categoria').html(htmlCategorias);
+            }
+        });
+    }
+
+    function eliminarCausa(btn) {
+        $(btn).closest('.input-group').remove();
+    }
+</script>
+}

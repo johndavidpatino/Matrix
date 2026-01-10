@@ -1,0 +1,249 @@
+@{
+    ViewData["Title"] = "Seguimiento PNC - Dashboard";
+}
+
+<div class="container-fluid mt-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h1 class="display-5">
+                <i class="bi bi-graph-up"></i> Seguimiento PNC - Dashboard
+            </h1>
+            <p class="text-muted">Indicadores de desempeño del sistema de gestión de calidad ISO 9001</p>
+        </div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card border-left-4" style="border-left: 4px solid #0d6efd;">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted mb-1">PNC Activos</h6>
+                            <h3 id="kpiActivos" class="mb-0">-</h3>
+                        </div>
+                        <i class="bi bi-exclamation-circle-fill text-primary" style="font-size: 2rem;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card border-left-4" style="border-left: 4px solid #198754;">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted mb-1">Cerrados Este Mes</h6>
+                            <h3 id="kpiCerrados" class="mb-0">-</h3>
+                        </div>
+                        <i class="bi bi-check-circle-fill text-success" style="font-size: 2rem;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card border-left-4" style="border-left: 4px solid #dc3545;">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted mb-1">Acciones Vencidas</h6>
+                            <h3 id="kpiVencidas" class="mb-0">-</h3>
+                        </div>
+                        <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 2rem;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card border-left-4" style="border-left: 4px solid #fd7e14;">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted mb-1">Próximas Vencer (3 días)</h6>
+                            <h3 id="kpiProximas" class="mb-0">-</h3>
+                        </div>
+                        <i class="bi bi-clock-fill text-warning" style="font-size: 2rem;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráficos y Tablas -->
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h6 class="mb-0"><i class="bi bi-pie-chart"></i> Estado de PNC</h6>
+                </div>
+                <div class="card-body">
+                    <canvas id="chartEstados" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h6 class="mb-0"><i class="bi bi-bar-chart"></i> Acciones por Estado</h6>
+                </div>
+                <div class="card-body">
+                    <canvas id="chartAcciones" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Listado de PNC Pendientes -->
+    <div class="card">
+        <div class="card-header bg-light">
+            <h6 class="mb-0">
+                <i class="bi bi-list-ul"></i> PNC Abiertos Pendientes de Atención
+            </h6>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0" id="tablaPncPendientes">
+                    <thead class="table-light">
+                        <tr>
+                            <th>PNC</th>
+                            <th>Estudio</th>
+                            <th>Fecha Reclamo</th>
+                            <th>Días Abierto</th>
+                            <th>Acciones</th>
+                            <th>Progreso</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Cargado por JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    var chartsInstances = {};
+
+    $(document).ready(function () {
+        cargarDatos();
+    });
+
+    function cargarDatos() {
+        $.get('/api/pnc/seguimiento/dashboard', function (response) {
+            if (response.success) {
+                var data = response.data;
+
+                // KPIs
+                $('#kpiActivos').text(data.totalPncActivos);
+                $('#kpiCerrados').text(data.pncCerradosEsteMes);
+                $('#kpiVencidas').text(data.accionesVencidas);
+                $('#kpiProximas').text(data.accionesProximasVencer);
+
+                // Gráfico Estados
+                if (chartsInstances.chartEstados) chartsInstances.chartEstados.destroy();
+                chartsInstances.chartEstados = new Chart(document.getElementById('chartEstados'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Abiertos', 'Cerrados'],
+                        datasets: [{
+                            data: [data.totalPncActivos, data.pncCerradosEsteMes],
+                            backgroundColor: ['#ffc107', '#198754'],
+                            borderColor: ['#fff', '#fff'],
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'bottom' }
+                        }
+                    }
+                });
+
+                // Gráfico Acciones
+                if (chartsInstances.chartAcciones) chartsInstances.chartAcciones.destroy();
+                var accionesEjecutadas = data.items ? data.items.reduce((a, b) => a + (b.accionesEjecutadas || 0), 0) : 0;
+                var accionesPendientes = data.items ? data.items.reduce((a, b) => a + (b.accionesPendientes || 0), 0) : 0;
+                
+                chartsInstances.chartAcciones = new Chart(document.getElementById('chartAcciones'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['Acciones'],
+                        datasets: [
+                            {
+                                label: 'Ejecutadas',
+                                data: [accionesEjecutadas],
+                                backgroundColor: '#198754'
+                            },
+                            {
+                                label: 'Pendientes',
+                                data: [accionesPendientes],
+                                backgroundColor: '#ffc107'
+                            },
+                            {
+                                label: 'Vencidas',
+                                data: [data.accionesVencidas],
+                                backgroundColor: '#dc3545'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        indexAxis: 'y',
+                        plugins: {
+                            legend: { position: 'bottom' }
+                        }
+                    }
+                });
+
+                // Tabla PNC Pendientes
+                if (data.items && data.items.length > 0) {
+                    var html = '';
+                    data.items.forEach(function (item) {
+                        var diasAbierto = Math.floor((new Date() - new Date(item.fechaReclamo)) / (1000 * 60 * 60 * 24));
+                        var porcentaje = item.totalAcciones > 0 ? Math.round((item.accionesEjecutadas / item.totalAcciones) * 100) : 0;
+                        
+                        html += '<tr onclick="abrirDetalle(' + item.idPNC + ')" style="cursor:pointer;">' +
+                            '<td><strong>#' + item.idPNC + '</strong></td>' +
+                            '<td>' + (item.nombreEstudio || '') + '</td>' +
+                            '<td>' + new Date(item.fechaReclamo).toLocaleDateString('es-CO') + '</td>' +
+                            '<td><span class="badge bg-info">' + diasAbierto + ' días</span></td>' +
+                            '<td>' + item.totalAcciones + '</td>' +
+                            '<td>' +
+                            '<div class="progress" style="height: 20px;">' +
+                            '<div class="progress-bar" style="width: ' + porcentaje + '%">' + porcentaje + '%</div>' +
+                            '</div>' +
+                            '</td>' +
+                            '<td>';
+                        
+                        if (item.accionesVencidas > 0) {
+                            html += '<span class="badge bg-danger">⚠ ' + item.accionesVencidas + ' vencidas</span>';
+                        } else if (item.accionesPendientes > 0) {
+                            html += '<span class="badge bg-warning">⏳ ' + item.accionesPendientes + ' pendientes</span>';
+                        } else {
+                            html += '<span class="badge bg-success">✓ Listo para cerrar</span>';
+                        }
+                        
+                        html += '</td></tr>';
+                    });
+                    $('#tablaPncPendientes tbody').html(html);
+                } else {
+                    $('#tablaPncPendientes tbody').html('<tr><td colspan="7" class="text-center py-5 text-muted">Sin PNC abiertos</td></tr>');
+                }
+            }
+        });
+    }
+
+    function abrirDetalle(id) {
+        window.location.href = '/Pnc/Detalle/' + id;
+    }
+</script>
+}

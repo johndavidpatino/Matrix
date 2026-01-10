@@ -1,0 +1,364 @@
+@model ProductoNoConformeDetalleVM
+@{
+    ViewData["Title"] = "PNC #" + Model.Pnc.Id + " - " + Model.Pnc.JobBook;
+}
+
+<div class="container-fluid mt-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-md-9">
+            <div>
+                <a href="/Pnc" class="text-decoration-none">
+                    <i class="bi bi-arrow-left"></i> Volver a listado
+                </a>
+            </div>
+            <h1 class="display-5 mt-2">
+                PNC #@Model.Pnc.Id
+                @if (Model.Pnc.Cerrado)
+                {
+                    <span class="badge bg-success">Cerrado</span>
+                }
+                else
+                {
+                    <span class="badge bg-warning">Abierto</span>
+                }
+            </h1>
+        </div>
+        <div class="col-md-3 text-end">
+            @if (!Model.Pnc.Cerrado)
+            {
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarCausa">
+                    <i class="bi bi-plus-circle"></i> Agregar Causa
+                </button>
+                <button class="btn btn-success" id="btnCerrarPnc">
+                    <i class="bi bi-check-circle"></i> Cerrar PNC
+                </button>
+            }
+        </div>
+    </div>
+
+    <!-- Maestro PNC -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-info-circle"></i> Información del Reclamo</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label text-muted">JobBook</label>
+                            <p class="h6">@Model.Pnc.JobBook</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted">Fecha Reclamo</label>
+                            <p class="h6">@Model.Pnc.FechaReclamo.ToString("dd/MM/yyyy")</p>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label class="form-label text-muted">Estudio</label>
+                            <p class="h6">@Model.Pnc.NombreEstudio</p>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label text-muted">Cliente</label>
+                            <p class="h6">@(Model.Pnc.NombreCliente ?? "N/A")</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted">Reporta</label>
+                            <p class="h6">@Model.Pnc.NombreReporta</p>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label text-muted">Fuente</label>
+                            <p class="h6">@Model.Pnc.DescripcionFuenteReclamo</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted">Categoría</label>
+                            <p class="h6">@Model.Pnc.DescripcionCategoria</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="bi bi-description"></i> Descripción del Problema</h5>
+                </div>
+                <div class="card-body">
+                    <p>@Model.Pnc.Descripcion</p>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0"><i class="bi bi-graph-up"></i> Progreso</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-6">
+                            <h3 class="text-primary">@Model.PorcentajeAvance%</h3>
+                            <p class="text-muted small">Completado</p>
+                            <div class="progress">
+                                <div class="progress-bar" style="width: @Model.PorcentajeAvance%"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4 class="text-warning">@Model.AccionesPendientes</h4>
+                                    <small>Pendientes</small>
+                                </div>
+                                <div class="col-md-6">
+                                    <h4 class="text-success">@(Model.TotalAcciones - Model.AccionesPendientes)</h4>
+                                    <small>Ejecutadas</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Causas y Acciones -->
+    <div class="card">
+        <div class="card-header bg-light">
+            <h5 class="mb-0">
+                <i class="bi bi-diagram-3"></i> Causas Raíz y Acciones
+                <span class="badge bg-primary ms-2">@Model.TotalCausas causas</span>
+            </h5>
+        </div>
+        <div class="card-body">
+            @if (Model.Causas.Any())
+            {
+                var causaNum = 1;
+                @foreach (var causa in Model.Causas)
+                {
+                    <div class="card mb-3 border-left-4" style="border-left: 4px solid #0d6efd;">
+                        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-0">
+                                    <i class="bi bi-exclamation-triangle-fill text-warning"></i>
+                                    Causa @causaNum: @causa.CausaRaiz
+                                    @if (!causa.TieneAccionInmediata)
+                                    {
+                                        <span class="badge bg-danger">Sin acción inmediata</span>
+                                    }
+                                </h6>
+                            </div>
+                            @if (!Model.Pnc.Cerrado)
+                            {
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <button type="button" class="btn btn-outline-warning" 
+                                            onclick="editarCausa(@causa.Id, '@causa.CausaRaiz')">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-danger" 
+                                            onclick="eliminarCausa(@causa.Id)">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            }
+                        </div>
+                        <div class="card-body">
+                            @if (causa.Acciones.Any())
+                            {
+                                <div class="table-responsive">
+                                    <table class="table table-sm mb-0">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Tipo</th>
+                                                <th>Descripción</th>
+                                                <th>Responsable</th>
+                                                <th>Fecha Planeada</th>
+                                                <th>Estado</th>
+                                                <th style="width: 80px;">Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var accion in causa.Acciones)
+                                            {
+                                                var tipoClass = accion.TipoAccion == 1 ? "danger" : (accion.TipoAccion == 2 ? "warning" : "info");
+                                                var estadoClass = accion.EstaEjecutada ? "success" : (accion.EstaVencida ? "danger" : "warning");
+                                                var estadoTexto = accion.EstaEjecutada ? "Ejecutada" : (accion.EstaVencida ? "Vencida" : "Pendiente");
+
+                                                <tr>
+                                                    <td>
+                                                        <span class="badge bg-@tipoClass">
+                                                            @{
+                                                                var tipoTexto = accion.TipoAccion == 1 ? "Inmediata" : (accion.TipoAccion == 2 ? "Correctiva" : "Preventiva");
+                                                                @tipoTexto
+                                                            }
+                                                        </span>
+                                                    </td>
+                                                    <td>@accion.Accion</td>
+                                                    <td>
+                                                        <small>@(accion.NombreResponsableAccion ?? "N/A")</small>
+                                                    </td>
+                                                    <td>@accion.FechaPlaneada?.ToString("dd/MM/yyyy")</td>
+                                                    <td>
+                                                        <span class="badge bg-@estadoClass">@estadoTexto</span>
+                                                    </td>
+                                                    <td>
+                                                        @if (!accion.EstaEjecutada && !Model.Pnc.Cerrado)
+                                                        {
+                                                            <button class="btn btn-sm btn-success" 
+                                                                    onclick="ejecutarAccion(@accion.Id)"
+                                                                    title="Marcar como ejecutada">
+                                                                <i class="bi bi-check"></i>
+                                                            </button>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                @if (!Model.Pnc.Cerrado)
+                                {
+                                    <button class="btn btn-sm btn-primary mt-2" 
+                                            onclick="agregarAccion(@causa.IdPNC, @causa.Id)">
+                                        <i class="bi bi-plus-circle"></i> Agregar Acción
+                                    </button>
+                                }
+                            }
+                            else
+                            {
+                                <p class="text-muted mb-0">Sin acciones registradas</p>
+                                @if (!Model.Pnc.Cerrado)
+                                {
+                                    <button class="btn btn-sm btn-primary" 
+                                            onclick="agregarAccion(@causa.IdPNC, @causa.Id)">
+                                        <i class="bi bi-plus-circle"></i> Agregar Acción
+                                    </button>
+                                }
+                            }
+                        </div>
+                    </div>
+                    causaNum++;
+                }
+            }
+            else
+            {
+                <p class="text-muted text-center py-5">
+                    <i class="bi bi-inbox"></i> Sin causas registradas
+                </p>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Modal Agregar Causa -->
+<div class="modal fade" id="modalAgregarCausa" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Agregar Causa Raíz</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="frmAgregarCausa">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="causaRaiz" class="form-label">Causa Raíz *</label>
+                        <textarea class="form-control" id="causaRaiz" name="CausaRaiz" rows="3" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    var idPncActual = @Model.Pnc.Id;
+
+    // Agregar Causa
+    $('#frmAgregarCausa').submit(function (e) {
+        e.preventDefault();
+        var causa = {
+            idPNC: idPncActual,
+            causaRaiz: $('#causaRaiz').val()
+        };
+        
+        $.post('/api/pnc/' + idPncActual + '/causas', causa, function (response) {
+            if (response.success) {
+                alert('Causa agregada correctamente');
+                location.reload();
+            } else {
+                alert('Error: ' + response.message);
+            }
+        });
+    });
+
+    function agregarAccion(idPnc, idCausa) {
+        // TODO: Implementar modal para agregar acción
+        alert('Agregar acción a causa ' + idCausa);
+    }
+
+    function ejecutarAccion(idAccion) {
+        var evidencia = prompt('Ingrese evidencia de cierre:');
+        if (evidencia) {
+            var datos = {
+                idAccion: idAccion,
+                fechaEjecucion: new Date().toISOString().split('T')[0],
+                evidenciaCierre: evidencia
+            };
+            
+            $.post('/api/pnc/acciones/' + idAccion + '/ejecutar', datos, function (response) {
+                if (response.success) {
+                    alert('Acción ejecutada correctamente');
+                    location.reload();
+                } else {
+                    alert('Error: ' + response.message);
+                }
+            });
+        }
+    }
+
+    function editarCausa(id, causaRaiz) {
+        // TODO: Implementar edición de causa
+        alert('Editar causa ' + id);
+    }
+
+    function eliminarCausa(id) {
+        if (confirm('¿Desea eliminar esta causa? Se eliminarán todas sus acciones.')) {
+            $.ajax({
+                url: '/api/pnc/causas/' + id,
+                method: 'DELETE',
+                success: function (response) {
+                    if (response.success) {
+                        alert('Causa eliminada correctamente');
+                        location.reload();
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                }
+            });
+        }
+    }
+
+    $('#btnCerrarPnc').click(function () {
+        if (confirm('¿Desea cerrar este PNC? Asegúrese que todas las acciones estén completadas.')) {
+            $.post('/api/pnc/' + idPncActual + '/cerrar', {}, function (response) {
+                if (response.success) {
+                    alert('PNC cerrado correctamente');
+                    location.reload();
+                } else {
+                    alert('Error: ' + response.message);
+                }
+            });
+        }
+    });
+</script>
+}

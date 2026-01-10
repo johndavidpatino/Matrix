@@ -1,0 +1,168 @@
+@{
+    ViewData["Title"] = "Agregar Acción - Modal";
+}
+
+<!-- Este archivo se carga como partial en Detalle.cshtml vía AJAX -->
+<!-- Contiene el modal para agregar acciones (Inmediata, Correctiva, Preventiva) -->
+
+<div class="modal fade" id="modalAgregarAccion" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">
+                    <i class="bi bi-hammer"></i> Agregar Acción
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="frmAgregarAccion">
+                <div class="modal-body">
+                    <input type="hidden" id="idPncAccion" name="IdPNC">
+                    <input type="hidden" id="idCausaAccion" name="IdCausa">
+
+                    <!-- Tipo de Acción -->
+                    <div class="mb-3">
+                        <label for="tipoAccion" class="form-label">Tipo de Acción *</label>
+                        <select class="form-select" id="tipoAccion" name="TipoAccion" required>
+                            <option value="">Seleccione el tipo...</option>
+                            <option value="1" class="text-danger"><strong>1 - INMEDIATA</strong> (Obligatoria por ISO 9001)</option>
+                            <option value="2">2 - Correctiva (Elimina causa raíz)</option>
+                            <option value="3">3 - Preventiva (Evita futuros problemas)</option>
+                        </select>
+                        <small class="form-text text-muted d-block mt-1" id="avisoAccionInmediata" style="display: none;">
+                            <strong><i class="bi bi-exclamation-triangle"></i> Esta causa ya tiene acción inmediata.</strong>
+                            Podrá agregar esta acción pero solo habrá una acción inmediata vigente.
+                        </small>
+                    </div>
+
+                    <!-- Descripción -->
+                    <div class="mb-3">
+                        <label for="descripcionAccion" class="form-label">Descripción de la Acción *</label>
+                        <textarea class="form-control" id="descripcionAccion" name="Accion" 
+                                  rows="3" placeholder="Describa la acción a ejecutar..."
+                                  required></textarea>
+                    </div>
+
+                    <!-- Responsable -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="responsable" class="form-label">Responsable Acción</label>
+                            <input type="text" class="form-control" id="responsable" name="IdResponsableAccion" 
+                                   placeholder="Nombre o ID">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="responsableSeguimiento" class="form-label">Responsable Seguimiento</label>
+                            <input type="text" class="form-control" id="responsableSeguimiento" 
+                                   name="IdResponsableSeguimiento" placeholder="Nombre o ID">
+                        </div>
+                    </div>
+
+                    <!-- Fechas -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="fechaPlaneada" class="form-label">Fecha Planeada *</label>
+                            <input type="date" class="form-control" id="fechaPlaneada" name="FechaPlaneada" required>
+                            <small class="form-text text-muted">Cuándo se ejecutará la acción</small>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="fechaAprobacion" class="form-label">Fecha Aprobación</label>
+                            <input type="date" class="form-control" id="fechaAprobacion" name="FechaAprobacion">
+                        </div>
+                    </div>
+
+                    <!-- Observaciones -->
+                    <div class="mb-3">
+                        <label for="observacionesAccion" class="form-label">Observaciones</label>
+                        <textarea class="form-control" id="observacionesAccion" name="Observaciones" 
+                                  rows="2" placeholder="Observaciones adicionales..."></textarea>
+                    </div>
+
+                    <div class="alert alert-warning small" role="alert">
+                        <strong><i class="bi bi-info-circle"></i> Validación ISO 9001:</strong><br>
+                        Cada causa DEBE tener al menos una acción inmediata. 
+                        Si esta es la primera acción, debe ser de tipo INMEDIATA.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-check-circle"></i> Guardar Acción
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    // Validar acción inmediata
+    $('#tipoAccion').change(function () {
+        var tipoSeleccionado = $(this).val();
+        var idCausa = $('#idCausaAccion').val();
+
+        if (tipoSeleccionado && idCausa) {
+            validarAccionInmediata(idCausa, tipoSeleccionado);
+        }
+    });
+
+    function validarAccionInmediata(idCausa, tipoAccion) {
+        $.get('/api/pnc/' + $('#idPncAccion').val() + '/causas/' + idCausa + '/validar-accion-inmediata',
+            function (response) {
+                if (response.success) {
+                    var tieneInmediata = response.data.tieneAccionInmediata;
+                    if (tieneInmediata && tipoAccion === '1') {
+                        $('#avisoAccionInmediata').show();
+                    } else {
+                        $('#avisoAccionInmediata').hide();
+                    }
+                }
+            });
+    }
+
+    // Fijar fecha mínima a hoy
+    $('#fechaPlaneada').attr('min', new Date().toISOString().split('T')[0]);
+    $('#fechaAprobacion').attr('max', new Date().toISOString().split('T')[0]);
+
+    // Enviar formulario
+    $('#frmAgregarAccion').submit(function (e) {
+        e.preventDefault();
+
+        var accion = {
+            idPNC: $('#idPncAccion').val(),
+            idCausa: $('#idCausaAccion').val(),
+            tipoAccion: parseInt($('#tipoAccion').val()),
+            accion: $('#descripcionAccion').val(),
+            idResponsableAccion: $('#responsable').val() || null,
+            idResponsableSeguimiento: $('#responsableSeguimiento').val() || null,
+            fechaPlaneada: $('#fechaPlaneada').val(),
+            fechaAprobacion: $('#fechaAprobacion').val() || null,
+            observaciones: $('#observacionesAccion').val() || null
+        };
+
+        var idPnc = $('#idPncAccion').val();
+
+        $.ajax({
+            type: 'POST',
+            url: '/api/pnc/' + idPnc + '/acciones',
+            contentType: 'application/json',
+            data: JSON.stringify(accion),
+            success: function (response) {
+                if (response.success) {
+                    $('#modalAgregarAccion').modal('hide');
+                    $('#frmAgregarAccion')[0].reset();
+                    alert('Acción registrada correctamente');
+                    location.reload();
+                } else {
+                    alert('Error: ' + response.message);
+                }
+            },
+            error: function (error) {
+                alert('Error al guardar la acción.');
+                console.error(error);
+            }
+        });
+    });
+</script>
+}
