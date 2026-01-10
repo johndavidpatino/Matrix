@@ -1,0 +1,10 @@
+Acción,SP Name,Parámetros,Retorna,Archivo SP,Línea,Notas
+Crear Solicitud,GD_SolDocumentos_Add,"@FechaSolicitud, @Solicitante, @Area, @Cargo, @Tipoid, @DocumentoId, @NombreDocumento, @Codigo, @AreaUso, @SitioAcceso, @RazonSolicitud, @DescripcionSolicitud, @Estadoid, @FechaEstado, @Comentarios, @Modificacion",SCOPE_IDENTITY(),CO_Matrix_Structure_SP.sql,21595,Insertar nueva solicitud. Devuelve ID. Tipoid=1(Construcción), 2(Actualización), 3(Anulación). Estadoid=1(En Revisión), 2(Aprobado), 3(Rechazado)
+Agregar Revisión,GD_Revisiones_Add,"@DocumentoId, @UsuarioId, @FechaAprobacion, @TipoRevision",void,CO_Matrix_Structure_SP.sql,21492,Asignar revisor a solicitud. TipoRevision=1(Pendiente), 2(Completada)
+Actualizar Revisión,GD_Revisiones_Edit,"@IdRevision, @DocumentoId, @UsuarioId, @FechaAprobacion, @TipoRevision",void,CO_Matrix_Structure_SP.sql,21516,Actualizar estado revisión (aprobar/rechazar). Incluye comentarios en aplicación
+Obtener Revisiones Usuario,GD_Revisiones_Get,@UsuarioId,DataTable,CO_Matrix_Structure_SP.sql,21536,Listar revisiones pendientes de usuario. Filtra TipoRevision=1 (pendientes)
+Obtener Revisiones Completadas,GD_Revisiones_GetRev,@UsuarioId,DataTable,CO_Matrix_Structure_SP.sql,21563,Listar revisiones completadas de usuario. Filtra TipoRevision=2 (completadas)
+Obtener Documento,GD_MaestroDocumentos_Get,none,DataTable,CO_Matrix_Structure_SP.sql,~21270,Listar maestros para dropdown
+Obtener Usuarios,GD_US_Usuarios_Get,none,DataTable,CO_Matrix_Structure_SP.sql,~11000,Listar usuarios para dropdown revisores
+Obtener Estados Solicitud,GD_EstadoSolicitud_Get,none,DataTable,CO_Matrix_Structure_SP.sql,~21xxx,Listar estados (En Revisión, Aprobado, Rechazado)
+Obtener Tipos Solicitud,GD_TipoSolicitud_Get,none,DataTable,CO_Matrix_Structure_SP.sql,~21xxx,Listar tipos (Construcción, Actualización, Anulación)
