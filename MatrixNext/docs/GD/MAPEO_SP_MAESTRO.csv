@@ -1,0 +1,9 @@
+Accion,SP Name,Parametros,Retorna,Archivo SP,Linea
+Construccion - Maestro,GD_MaestroDocumentos_Add2,"@doc varchar(250), @controlado bit, @activo bit, @codigo varchar(100), @idProc smallint, @Responsable varchar(max)","@@IDENTITY as ultimoId",CO_Matrix_Structure_SP.sql,21287
+Construccion - Controlado,GD_DocumentosControlados_Add,"@docId bigint, @activo bit, @ubiArchivo varchar(250), @metRecuperacion varchar(50), @tiempoRetencion varchar(50), @dispoFinal varchar(50)","(none) inserta/actualiza controlado",CO_Matrix_Structure_SP.sql,20935
+Actualizacion - Maestro (soft delete),GD_DocumentosMaestros_Update,"@docId bigint","(none) Set Activo = 0",CO_Matrix_Structure_SP.sql,20956
+Anulacion - Controlado (soft delete),GD_DocumentosControlados_Activo,"@docId bigint","(none) Set Activo = 0",CO_Matrix_Structure_SP.sql,20922
+Listado maestros,GD_MaestroDocumentos_Get,(none),"IdDocumento, Documento",CO_Matrix_Structure_SP.sql,21303
+Procesos dropdown,GD_Procesos_Get,(none),"IdProceso, Proceso",CO_Matrix_Structure_SP.sql,21355
+Tipos solicitud dropdown,GD_TipoSolicitud_Get,(none),"id, Tipo",CO_Matrix_Structure_SP.sql,21689
+Usuarios dropdown,GD_US_Usuarios_Get,(none),"id, Usuario, Password, Nombres, Apellidos, Email, Activo",CO_Matrix_Structure_SP.sql,21710

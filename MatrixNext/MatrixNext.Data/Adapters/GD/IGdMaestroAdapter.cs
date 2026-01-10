@@ -1,14 +1,30 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MatrixNext.Data.Adapters.GD.Models;
 
 namespace MatrixNext.Data.Adapters.GD
 {
     public interface IGdMaestroAdapter
     {
-        Task<IEnumerable<dynamic>> MaestroDocumentosGet();
-        Task<int> MaestroDocumentosAdd(object parameters);
-        Task<int> DocumentosControladosAdd(object parameters);
-        Task<bool> DocumentosMaestrosUpdate(object parameters);
-        Task<bool> DocumentosControladosActivo(int documentoId, bool activo);
+        // Lectura
+        Task<List<MaestroDocumentoDto>> ObtenerMaestros();
+        Task<MaestroDocumentoDto?> ObtenerMaestroById(int idMaestro);
+        Task<DocumentoControlledDto?> ObtenerControlledDocById(int idMaestro);
+
+        // Creación
+        Task<int> CrearMaestroConControlled(MaestroDocumentoDto dto);
+
+        // Actualización (por tipo)
+        Task<bool> ActualizarMaestroConstitucion(int idMaestro, MaestroDocumentoDto dto);
+        Task<bool> ActualizarMaestroActualizacion(int idMaestro, MaestroDocumentoDto dto);
+
+        // Anulación
+        Task<bool> AnularMaestro(int idMaestro);
+        Task<bool> AnularControlado(int idMaestro);
+
+        // Dropdowns
+        Task<List<TipoSolicitudDto>> ObtenerTiposSolicitud();
+        Task<List<ProcesoDto>> ObtenerProcesos();
+        Task<List<UsuarioDto>> ObtenerUsuarios();
     }
 }

@@ -1,0 +1,64 @@
+@model MatrixNext.Web.Models.ViewModels.GD.MaestroUpdateVM
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Editar Documento</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form id="formEditMaestro" asp-action="Edit" asp-controller="DocumentosMaestro" asp-area="GD" asp-route-id="@Model.Id" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label" for="Nombre">Nombre</label>
+                        <input asp-for="Nombre" class="form-control" />
+                        <span asp-validation-for="Nombre" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="Codigo">Código</label>
+                        <input asp-for="Codigo" class="form-control" />
+                        <span asp-validation-for="Codigo" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="TipoSolicitud">Tipo de solicitud</label>
+                        <select asp-for="TipoSolicitud" class="form-select" id="TipoSolicitud">
+                            @foreach (var tipo in Model.TiposSolicitud)
+                            {
+                                <option value="@tipo.Id" @(tipo.Id == Model.TipoSolicitud ? "selected" : string.Empty)>@tipo.Nombre</option>
+                            }
+                        </select>
+                        <span asp-validation-for="TipoSolicitud" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="IdProceso">Proceso</label>
+                        <select asp-for="IdProceso" class="form-select">
+                            @foreach (var proc in Model.Procesos)
+                            {
+                                <option value="@proc.Id" @(proc.Id == Model.IdProceso ? "selected" : string.Empty)>@proc.Nombre</option>
+                            }
+                        </select>
+                        <span asp-validation-for="IdProceso" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="IdResponsable">Responsable</label>
+                        <select asp-for="IdResponsable" class="form-select">
+                            @foreach (var user in Model.Usuarios)
+                            {
+                                <option value="@user.Id" @(user.Id == Model.IdResponsable ? "selected" : string.Empty)>@user.NombreCompleto (@user.Usuario)</option>
+                            }
+                        </select>
+                        <span asp-validation-for="IdResponsable" class="text-danger"></span>
+                    </div>
+                </div>
+
+                @await Html.PartialAsync("_DocumentoControlledPartial", Model.ControlledDoc)
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="submit" form="formEditMaestro" class="btn btn-primary">Guardar cambios</button>
+        </div>
+    </div>
+</div>

@@ -123,6 +123,7 @@ Implementar CRUD completo de Maestro de Documentos con 3 tipos de solicitud (Con
 - ✅ Todos los SP validados contra CO_Matrix_Structure_SP.sql
 - ✅ Discrepancias documentadas
 - ✅ Parámetros confirmados
+- Note: GD_MaestroDocumentos_Add2 solo recibe doc/controlado/activo/codigo/idProc/Responsable; ubicación y retención viajan en GD_DocumentosControlados_Add. GD_DocumentosMaestros_Update y GD_DocumentosControlados_Activo son soft delete (Activo=0).
 
 ---
 
@@ -804,13 +805,13 @@ public class DocumentosMaestroController : Controller
 
 | Tarea | Horas | Estado |
 |-------|-------|--------|
-| 2.1 Mapear SP maestro | 1h | ⏳ |
-| 2.2 ViewModels maestro | 1.5h | ⏳ |
-| 2.3 Adapter maestro | 2h | ⏳ |
-| 2.4 Service maestro | 2h | ⏳ |
-| 2.5 Controller maestro | 3h | ⏳ |
-| 2.6 Vistas maestro | 3h | ⏳ |
-| 2.7 Testing maestro | 1h | ⏳ |
+| 2.1 Mapear SP maestro | 1h | ✅ |
+| 2.2 ViewModels maestro | 1.5h | ✅ |
+| 2.3 Adapter maestro | 2h | ✅ |
+| 2.4 Service maestro | 2h | ✅ |
+| 2.5 Controller maestro | 3h | ✅ |
+| 2.6 Vistas maestro | 3h | ✅ |
+| 2.7 Testing maestro | 1h | 🚫 (fuera de scope: tests manuales) |
 | **TOTAL SPRINT 2** | **16h** | **⏳** |
 
 ---
@@ -1306,7 +1307,7 @@ public class RepositorioController : Controller
 | 3.5 Service repositorio | 2h | ⏳ |
 | 3.6 Controller repositorio | 3h | ⏳ |
 | 3.7 Vistas repositorio | 3h | ⏳ |
-| 3.8 Testing repositorio | 1h | ⏳ |
+| 3.8 Testing repositorio | 1h | 🚫 (fuera de scope: tests manuales) |
 | **TOTAL SPRINT 3** | **20h** | **⏳** |
 
 ---

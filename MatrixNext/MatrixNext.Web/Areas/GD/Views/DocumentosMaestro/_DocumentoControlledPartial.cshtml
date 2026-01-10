@@ -1,0 +1,25 @@
+@model MatrixNext.Web.Models.ViewModels.GD.DocumentoControlledVM
+<div id="controlled-section" class="mt-3 d-none">
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label class="form-label" for="ControlledDoc_Ubicacion">Ubicación</label>
+            <input asp-for="Ubicacion" class="form-control" id="ControlledDoc_Ubicacion" />
+            <span asp-validation-for="Ubicacion" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label" for="ControlledDoc_MetodoRecuperacion">Método de recuperación</label>
+            <input asp-for="MetodoRecuperacion" class="form-control" id="ControlledDoc_MetodoRecuperacion" />
+            <span asp-validation-for="MetodoRecuperacion" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" for="ControlledDoc_TiempoRetencion">Tiempo de retención (años)</label>
+            <input asp-for="TiempoRetencion" class="form-control" id="ControlledDoc_TiempoRetencion" type="number" min="1" />
+            <span asp-validation-for="TiempoRetencion" class="text-danger"></span>
+        </div>
+        <div class="col-md-8">
+            <label class="form-label" for="ControlledDoc_DisposicionFinal">Disposición final</label>
+            <input asp-for="DisposicionFinal" class="form-control" id="ControlledDoc_DisposicionFinal" />
+            <span asp-validation-for="DisposicionFinal" class="text-danger"></span>
+        </div>
+    </div>
+</div>
