@@ -34,6 +34,35 @@
 							
 							<li class="slide has-sub">
 								<a href="javascript:void(0);" class="side-menu__item">
+									<svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"/><path d="M40,64H216a8,8,0,0,1,8,8V184a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V72A8,8,0,0,1,40,64Z" opacity="0.2"/><rect x="32" y="64" width="192" height="128" rx="8" stroke="currentColor" stroke-width="16" fill="none"/><line x1="32" y1="96" x2="224" y2="96" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg>
+									<span class="side-menu__label">Gestión Documental</span>
+									<i class="ri-arrow-right-s-line side-menu__angle"></i>
+								</a>
+								<ul class="slide-menu child1">
+									<li class="slide">
+										<a asp-area="GD" asp-controller="Dashboard" asp-action="Index" class="side-menu__item">Dashboard</a>
+									</li>
+									<li class="slide">
+										<a asp-area="GD" asp-controller="DocumentosMaestro" asp-action="Index" class="side-menu__item">Maestro Documentos</a>
+									</li>
+									<li class="slide">
+										<a asp-area="GD" asp-controller="Solicitudes" asp-action="Index" class="side-menu__item">Solicitudes</a>
+									</li>
+									<li class="slide">
+										<a asp-area="GD" asp-controller="Aprobaciones" asp-action="Index" class="side-menu__item">Aprobaciones</a>
+									</li>
+									<li class="slide">
+										<a asp-area="GD" asp-controller="Repositorio" asp-action="Index" class="side-menu__item">Repositorio</a>
+									</li>
+									<li class="slide">
+										<a asp-area="GD" asp-controller="Pnc" asp-action="Index" class="side-menu__item">Productos No Conformes</a>
+									</li>
+									<li class="slide">
+										<a asp-area="GD" asp-controller="Catalogos" asp-action="TiposSolicitud" class="side-menu__item">Catálogos</a>
+									</li>
+								</ul>
+							</li>
+								<a href="javascript:void(0);" class="side-menu__item">
 									<svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 256 256"><circle cx="128" cy="128" r="96" fill="none" stroke="currentColor" stroke-width="16"></circle><path d="M128 64v128M64 128h128" stroke="currentColor" stroke-width="16" stroke-linecap="round"></path></svg>
 									<span class="side-menu__label">Operaciones</span>
 									<i class="ri-arrow-right-s-line side-menu__angle"></i>

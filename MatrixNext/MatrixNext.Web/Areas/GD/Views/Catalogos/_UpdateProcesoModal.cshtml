@@ -1,0 +1,45 @@
+@model MatrixNext.Web.Models.ViewModels.GD.ProcesoViewModel
+<form asp-action="UpdateProceso" method="post" id="frmUpdateProceso">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <div class="modal-header">
+        <h5 class="modal-title">Editar Proceso</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+        <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input class="form-control" name="Nombre" value="@Model.Nombre" required />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Descripción</label>
+            <input class="form-control" name="Descripcion" value="@Model.Descripcion" />
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+    </div>
+</form>
+<script>
+    $(function(){
+        $('#frmUpdateProceso').on('submit', function(e){
+            e.preventDefault();
+            var data = $(this).serialize();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("UpdateProceso")',
+                data: data,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                success: function(res){
+                    if(res.success){
+                        location.reload();
+                    } else {
+                        alert(res.message || 'Error');
+                    }
+                },
+                error: function(){ alert('Error en la solicitud'); }
+            });
+        });
+    });
+</script>

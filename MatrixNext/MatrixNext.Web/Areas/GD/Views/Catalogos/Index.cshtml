@@ -1,0 +1,12 @@
+@{
+    ViewData["Title"] = "Catálogos Gestión Documental";
+}
+
+<div class="container py-4">
+    <h2>@ViewData["Title"]</h2>
+    <div class="list-group">
+        <a class="list-group-item list-group-item-action" asp-area="GD" asp-controller="Catalogos" asp-action="TiposSolicitud">Tipos de Solicitud</a>
+        <a class="list-group-item list-group-item-action" asp-area="GD" asp-controller="Catalogos" asp-action="EstadosSolicitud">Estados de Solicitud</a>
+        <a class="list-group-item list-group-item-action" asp-area="GD" asp-controller="Catalogos" asp-action="Procesos">Procesos</a>
+    </div>
+</div>

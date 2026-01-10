@@ -1,0 +1,57 @@
+@model MatrixNext.Web.Models.ViewModels.GD.TipoSolicitudViewModel
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Nuevo Tipo de Solicitud</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <form id="frmCreateTipo" method="post">
+            @Html.AntiForgeryToken()
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="Nombre" class="form-label">Nombre *</label>
+                    <input type="text" class="form-control" id="Nombre" name="Nombre" value="@Model?.Nombre" required maxlength="100" />
+                    <span class="text-danger" asp-validation-for="Nombre"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label for="Descripcion" class="form-label">Descripción</label>
+                    <textarea class="form-control" id="Descripcion" name="Descripcion" rows="3">@Model?.Descripcion</textarea>
+                    <span class="text-danger" asp-validation-for="Descripcion"></span>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(function() {
+            $('#frmCreateTipo').on('submit', function(e) {
+                e.preventDefault();
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("CreateTipo")',
+                    data: $(this).serialize(),
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                    success: function(result) {
+                        if (result.success) {
+                            toastr && toastr.success(result.message);
+                            location.reload();
+                        }
+                    },
+                    error: function(xhr) {
+                        toastr && toastr.error('Error al guardar');
+                    }
+                });
+            });
+        });
+    </script>
+}

@@ -1,0 +1,82 @@
+@model System.Collections.Generic.List<MatrixNext.Web.Models.ViewModels.GD.EstadoSolicitudViewModel>
+@{
+    ViewData["Title"] = "Estados de Solicitud";
+}
+
+<div class="container mt-4">
+    <h2>Estados de Solicitud</h2>
+
+    <button class="btn btn-primary mb-3" id="btnCreateEstado">
+        <i class="fas fa-plus"></i> Nuevo Estado
+    </button>
+
+    <table class="table table-striped" id="tblEstados">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model ?? new System.Collections.Generic.List<MatrixNext.Web.Models.ViewModels.GD.EstadoSolicitudViewModel>())
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Nombre</td>
+                    <td>@item.Descripcion</td>
+                    <td>
+                        <button class="btn btn-sm btn-warning btnEdit" data-id="@item.Id">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <form method="post" class="d-inline frmDelete" data-id="@item.Id">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-sm btn-danger">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        $(function() {
+            $('#btnCreateEstado').click(function() {
+                $.get('@Url.Action("CreateEstado")', function(html) {
+                    $('#ajaxModal').html(html).modal('show');
+                });
+            });
+
+            $(document).on('click', '.btnEdit', function() {
+                var id = $(this).data('id');
+                $.get('@Url.Action("UpdateEstado")/' + id, function(html) {
+                    $('#ajaxModal').html(html).modal('show');
+                });
+            });
+
+            $(document).on('submit', '.frmDelete', function(e) {
+                e.preventDefault();
+                if (confirm('¿Está seguro?')) {
+                    var id = $(this).data('id');
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("DeleteEstado")',
+                        data: { id: id },
+                        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                        success: function(result) {
+                            if (result.success) {
+                                location.reload();
+                            }
+                        },
+                        error: function() { alert('Error al eliminar'); }
+                    });
+                }
+            });
+        });
+    </script>
+}

@@ -16,6 +16,9 @@ using MatrixNext.Web.Options;
 using MatrixNext.Web.Services.CORE;
 using MatrixNext.Web.Services.Shared;
 using Microsoft.EntityFrameworkCore;
+using MatrixNext.Data.Services.GD.Interfaces;
+using MatrixNext.Data.Services.GD;
+using MatrixNext.Data.Adapters.GD;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -174,6 +177,23 @@ builder.Services.AddScoped<IOpPlanillasModeracionService, OpPlanillasModeracionS
 builder.Services.Configure<GestionDocumentalOptions>(
     builder.Configuration.GetSection(GestionDocumentalOptions.SectionName));
 
+// ===== GD module (Gestión Documental) =====
+// Ref: BACKLOG_MIGRACION_GD_DOCUMENTOS_FASE1.md § T1.3-T1.4
+builder.Services.AddScoped<IGdCatalogosService, GdCatalogosService>();
+builder.Services.AddScoped<IGdMaestroService, GdMaestroService>();
+builder.Services.AddScoped<IGdSolicitudesService, GdSolicitudesService>();
+builder.Services.AddScoped<IGdRepositorioService, GdRepositorioService>();
+builder.Services.AddScoped<IGdAprobacionesService, GdAprobacionesService>();
+builder.Services.AddScoped<IGdPncService, GdPncService>();
+builder.Services.AddScoped<IGdEmailService, GdEmailService>();
+
+// GD adapters
+builder.Services.AddScoped<IGdCatalogosAdapter, GdCatalogosAdapter>();
+builder.Services.AddScoped<IGdMaestroAdapter, GdMaestroAdapter>();
+builder.Services.AddScoped<IGdSolicitudesAdapter, GdSolicitudesAdapter>();
+builder.Services.AddScoped<IGdRepositorioAdapter, GdRepositorioAdapter>();
+builder.Services.AddScoped<IGdAprobacionesAdapter, GdAprobacionesAdapter>();
+
 var app = builder.Build();
 
 // Middleware global de manejo de excepciones
@@ -202,6 +222,12 @@ app.MapHealthChecks("/health");
 app.MapControllerRoute(
     name: "areas",
     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+// Gestión Documental (GD) area explicit route
+app.MapAreaControllerRoute(
+    name: "gd_route",
+    areaName: "GD",
+    pattern: "GD/{controller=Dashboard}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
     name: "usuariosRoute",
