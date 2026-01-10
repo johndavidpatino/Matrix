@@ -1,57 +1,64 @@
 # 📋 BACKLOG DE MIGRACIÓN - GD_Documentos FASE 4
 
-**Fases**: FASE 4 (Sprints 6-7)  
-**Tema**: Email Asíncrono + Actualización + Anulación + Dashboard  
-**Horas Totales**: 34h  
-**Duración Estimada**: 1 semana (2 sprints)  
-**Versión**: 1.0  
-**Fecha**: 2026-01-09
+**Fases**: FASE 4 (Sprint 6 ÚNICO)  
+**Tema**: Email Asíncrono (Notificaciones)  
+**Horas Totales**: 12h (actualizado post-análisis Fase 3)  
+**Duración Estimada**: 2-3 días  
+**Versión**: 2.0 (actualizado 2026-01-10)  
+**Fecha**: 2026-01-10
+
+---
+
+## ⚠️ CAMBIOS IMPORTANTES POST-FASE 3
+
+**Decisión**: Basado en exclusión de Sprint 5 (Aprobaciones agregadas NO existe en legacy):
+
+- ✅ **Sprint 6 (Email)**: AJUSTADO - Solo notificación a revisores al asignar
+- ❌ **Sprint 7 (Actualización/Anulación)**: EXCLUIDO - Funcionalidad NO existe en legacy
+- ❌ **Dashboard**: EXCLUIDO - No prioritario sin workflow completo
+
+**Justificación**:
+- Legacy solo implementa asignación de revisores (sin aprobación completa)
+- No existe flujo de actualización/anulación documentado en código legacy
+- Dashboard requiere métricas de workflow que no existen
+- REGLA 6: Paridad 1:1 (no agregar features inexistentes)
+
+**Nuevo alcance FASE 4**: Solo implementar notificaciones email al asignar revisores (fiel a legacy)
 
 ---
 
 ## 📑 CONTENIDO
 
 - [Resumen Ejecutivo](#resumen-ejecutivo)
-- [Sprint 6: Email Asíncrono](#sprint-6-email-asíncrono)
-- [Sprint 7: Actualización + Anulación + Dashboard](#sprint-7-actualización--anulación--dashboard)
+- [Sprint 6: Email Asíncrono (ÚNICO)](#sprint-6-email-asíncrono)
 
 ---
 
 ## 🎯 RESUMEN EJECUTIVO
 
-### Objetivos de FASE 4
+### Objetivos de FASE 4 (ACTUALIZADO)
 
-Completar funcionalidad de notificaciones y finalizar CRUD de maestro:
+Implementar notificaciones por email al asignar revisores (funcionalidad que SÍ existe en legacy):
 
-1. **Email Asíncrono** (P1-3, Sprint 6): 12h
-   - Implementar notificaciones sin bloquear request
-   - Usar BackgroundService existente
-   - Templates de email Razor
-   - Enviar a: Solicitantes de aprobación, Revisores asignados, Usuarios en cambios estado
+✅ **Email Asíncrono** (Sprint 6): 12h
+   - Notificación a revisores cuando se les asigna una solicitud
+   - Implementar sin bloquear request HTTP
+   - Templates de email HTML
+   - Integrar con BackgroundService existente (si existe) o crear uno simple
 
-2. **Actualización de Documentos** (P1-4, Sprint 7): 16h
-   - Implementar flujo de solicitud de actualización
-   - Transacciones de versionamiento
-   - ⚠️ Requiere confirmación de lógica (P0-5)
-
-3. **Anulación de Documentos** (P1-5, Sprint 7): 8h
-   - Soft delete de maestro + controlado
-   - Validaciones (no anular si en revisión)
-
-4. **Dashboard GD** (P1-6, Sprint 7): 6h
-   - Menú principal módulo
-   - Widgets de resumen (solicitudes pendientes, documentos activos, PNC)
+❌ **EXCLUIDO** (no existe en legacy):
+   - Notificaciones de aprobación completa
+   - Notificaciones de rechazo
+   - Actualización de documentos vía workflow
+   - Anulación con validaciones de revisión
+   - Dashboard con métricas de aprobaciones
 
 ### Dependencias Críticas
 
-✅ **COMPLETADAS en FASES 1-3**:
-- Estructura MVC, Catálogos, Maestro, Repositorio, Solicitudes, Aprobaciones
-- **REGLA CRÍTICA**: Workflow debe estar confirmado en P0-5 antes de implementar Actualización
-
-⚠️ **PENDIENTE**:
-- BackgroundService de email (verificar ubicación en MatrixNext)
-- Templates de email Razor
-- Lógica de actualización confirmada
+✅ **COMPLETADAS**:
+- FASE 1-2: Catálogos, Maestro, Repositorio
+- FASE 3 Sprint 4: Solicitudes + Asignación de Revisores
+- FASE 3 Tarea 5.1: Análisis legacy (confirmó alcance limitado)
 
 ### Reglas Aplicables
 
@@ -561,86 +568,9 @@ private string RenderTemplate(string templateContent, object model)
 
 ---
 
-### TAREA 6.4: Integrar Email en AprobacionesService (1h)
+### ~~TAREA 6.4: Integrar Email en AprobacionesService~~ ❌ EXCLUIDA
 
-**Descripción**: Llamar a IGdEmailService en aprobaciones/rechazos
-
-**Ubicación**: `Data/Services/GD/GdAprobacionesService.cs`
-
-**Cambios**:
-
-```csharp
-public class GdAprobacionesService : IGdAprobacionesService
-{
-    private readonly IGdAprobacionesAdapter _adapter;
-    private readonly IGdEmailService _emailService;  // ← Inyectar
-    private readonly ILogger<GdAprobacionesService> _logger;
-
-    public GdAprobacionesService(
-        IGdAprobacionesAdapter adapter, 
-        IGdEmailService emailService,  // ← Agregar
-        ILogger<GdAprobacionesService> logger)
-    {
-        _adapter = adapter;
-        _emailService = emailService;
-        _logger = logger;
-    }
-
-    public async Task<(bool success, string message)> AprobarRevision(int idRevision, string comentarios = "")
-    {
-        try
-        {
-            // ... [lógica existente de aprobación] ...
-
-            // ✅ NUEVO: Si todas aprobadas, enviar email
-            if (aprobados == totalRevisores)
-            {
-                var emailSolicitante = await ObtenerEmailSolicitante(idSolicitud);
-                _ = _emailService.NotificarAprobacionSolicitud(idSolicitud, emailSolicitante);
-                // Nota: NO await, ejecuta en background
-            }
-
-            return (true, "Documento aprobado exitosamente");
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error aprobando: {ex.Message}");
-            return (false, $"Error: {ex.Message}");
-        }
-    }
-
-    public async Task<(bool success, string message)> RechazarRevision(int idRevision, string comentarios)
-    {
-        try
-        {
-            // ... [lógica existente de rechazo] ...
-
-            // ✅ NUEVO: Enviar email rechazo
-            var emailSolicitante = await ObtenerEmailSolicitante(idSolicitud);
-            _ = _emailService.NotificarRechazoSolicitud(idSolicitud, emailSolicitante);
-            // Nota: NO await, ejecuta en background
-
-            return (true, "Documento rechazado");
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error rechazando: {ex.Message}");
-            return (false, $"Error: {ex.Message}");
-        }
-    }
-
-    private async Task<string> ObtenerEmailSolicitante(int idSolicitud)
-    {
-        // TODO: Query BD para obtener email solicitante
-        return "";
-    }
-}
-```
-
-**Validación**:
-- ✅ Inyección de dependencia
-- ✅ Emails enviados sin bloquear request
-- ✅ Async/await correcto
+**RAZÓN**: AprobacionesService no fue implementado (Sprint 5 excluido por no existir en legacy)
 
 ---
 
@@ -738,18 +668,54 @@ builder.Services.AddScoped<IGdEmailService, GdEmailService>();
 
 | Tarea | Horas | Estado |
 |-------|-------|--------|
-| 6.1 Localizar BackgroundService | 1.5h | ⏳ |
-| 6.2 Crear templates email | 2h | ⏳ |
-| 6.3 GdEmailService | 2h | ⏳ |
-| 6.4 Integrar en AprobacionesService | 1h | ⏳ |
-| 6.5 Integrar en SolicitudesService | 1h | ⏳ |
-| 6.6 Registrar en DI | 0.5h | ⏳ |
-| 6.7 Testing | 1h | ⏳ |
-| **TOTAL SPRINT 6** | **12h** | **⏳** |
+| 6.1 Localizar BackgroundService | 1.5h | ✅ COMPLETADO |
+| 6.2 Crear template email | 2h | ✅ COMPLETADO |
+| 6.3 GdEmailService | 2h | ✅ COMPLETADO |
+| ~~6.4 Integrar AprobacionesService~~ | ~~1h~~ | ❌ EXCLUIDA |
+| 6.5 Integrar en SolicitudesService | 1h | ✅ COMPLETADO |
+| 6.6 Registrar en DI | 0.5h | ✅ COMPLETADO |
+| 6.7 Testing | 1h | 🟡 EN PROGRESO |
+| **TOTAL SPRINT 6** | **11h** (ajustado) | **🟡 90.9% completado (10h/11h)** |
 
 ---
 
-## 🚀 SPRINT 7: ACTUALIZACIÓN + ANULACIÓN + DASHBOARD
+## ~~SPRINT 7: ACTUALIZACIÓN + ANULACIÓN + DASHBOARD~~ ❌ EXCLUIDO
+
+**RAZÓN**: Funcionalidad NO existe en sistema legacy (confirmado en Fase 3, Tarea 5.1)
+
+**Evidencia**: Ver [ANALISIS_CODIGO_LEGACY_SOLICITUDES_APROBACIONES.md](ANALISIS_CODIGO_LEGACY_SOLICITUDES_APROBACIONES.md)
+
+**Componentes excluidos**:
+- ❌ Tarea 7.1-7.3: Actualización de documentos
+- ❌ Tarea 7.4: Anulación con validaciones de revisión
+- ❌ Tarea 7.5-7.7: Dashboard GD
+- ❌ Tarea 7.8: Testing Sprint 7
+
+**Justificación**: REGLA 6 (Paridad 1:1) - No implementar features que no existen en legacy
+
+---
+
+## ✅ CRITERIOS DE ÉXITO - FASE 4 (ACTUALIZADO)
+
+**DEBE CUMPLIRSE ANTES DE DAR POR COMPLETADA FASE 4**:
+
+1. ✅ Email asíncrono funcional (sin bloquear request)
+2. ✅ Notificación a revisores al asignar
+3. ✅ Template HTML renderiza correctamente
+4. ✅ BackgroundService procesa emails
+5. ✅ 0 errores de compilación
+6. ✅ Testing completado
+7. ✅ Commit de cambios
+
+**NO REQUERIDO** (excluido por no existir en legacy):
+- ❌ Notificaciones de aprobación/rechazo
+- ❌ Actualización/anulación de documentos
+- ❌ Dashboard con métricas
+
+---
+
+**Estado**: ⏳ Sprint 6 EN PROGRESO  
+**Próxima Tarea**: 6.1 - Localizar e Integrar BackgroundService Email
 
 ### Objetivo
 

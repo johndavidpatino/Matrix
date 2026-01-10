@@ -12,11 +12,16 @@ namespace MatrixNext.Data.Services.GD
     public class GdSolicitudesService : IGdSolicitudesService
     {
         private readonly IGdSolicitudesAdapter _adapter;
+        private readonly IGdEmailService _emailService;
         private readonly ILogger<GdSolicitudesService> _logger;
 
-        public GdSolicitudesService(IGdSolicitudesAdapter adapter, ILogger<GdSolicitudesService> logger)
+        public GdSolicitudesService(
+            IGdSolicitudesAdapter adapter,
+            IGdEmailService emailService,
+            ILogger<GdSolicitudesService> logger)
         {
             _adapter = adapter;
+            _emailService = emailService;
             _logger = logger;
         }
 
@@ -177,6 +182,25 @@ namespace MatrixNext.Data.Services.GD
                     mensaje += $"; {string.Join("; ", errores)}";
 
                 _logger.LogInformation("Revisores asignados a solicitud {Id}: {Mensaje}", idSolicitud, mensaje);
+
+                // Enviar notificaciones por email a revisores asignados (FASE 4 - Sprint 6)
+                // IMPORTANTE: NO await - fire-and-forget para no bloquear request
+                _ = Task.Run(async () =>
+                {
+                    try
+                    {
+                        var (success, emailMessage) = await _emailService.EnviarNotificacionSolicitud(idSolicitud);
+                        if (success)
+                            _logger.LogInformation("Notificaciones enviadas para solicitud {Id}: {Mensaje}", idSolicitud, emailMessage);
+                        else
+                            _logger.LogWarning("Error enviando notificaciones para solicitud {Id}: {Mensaje}", idSolicitud, emailMessage);
+                    }
+                    catch (Exception exEmail)
+                    {
+                        _logger.LogError(exEmail, "Excepción al enviar notificaciones para solicitud {Id}", idSolicitud);
+                    }
+                });
+
                 return (true, mensaje);
             }
             catch (Exception ex)

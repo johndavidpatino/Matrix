@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nueva Solicitud de Documento</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        .content {
+            padding: 30px 25px;
+            background-color: #ffffff;
+        }
+        .content p {
+            margin: 0 0 15px 0;
+        }
+        .info-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .info-box table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .info-box td {
+            padding: 8px 0;
+        }
+        .info-box td:first-child {
+            font-weight: 600;
+            color: #555;
+            width: 35%;
+        }
+        .description-box {
+            background-color: #fff9e6;
+            border: 1px solid #ffc107;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .description-box h3 {
+            margin: 0 0 10px 0;
+            color: #856404;
+            font-size: 16px;
+        }
+        .btn-container {
+            text-align: center;
+            padding: 20px 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #007bff;
+            color: white !important;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            border-top: 1px solid #e9ecef;
+        }
+        .footer p {
+            margin: 5px 0;
+        }
+        .divider {
+            height: 1px;
+            background-color: #e9ecef;
+            margin: 20px 0;
+        }
+        .icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="icon">📋</div>
+            <h1>Nueva Solicitud de Documento</h1>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <p>Hola <strong>{{NombreRevisor}}</strong>,</p>
+            
+            <p>Se te ha asignado una nueva solicitud de documento para tu revisión y aprobación en el sistema de Gestión Documental.</p>
+            
+            <!-- Information Box -->
+            <div class="info-box">
+                <table>
+                    <tr>
+                        <td><strong>Documento:</strong></td>
+                        <td>{{NombreDocumento}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Solicitante:</strong></td>
+                        <td>{{Solicitante}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Área:</strong></td>
+                        <td>{{Area}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Razón:</strong></td>
+                        <td>{{Razon}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fecha Solicitud:</strong></td>
+                        <td>{{FechaSolicitud}}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Description Box (if available) -->
+            <div class="description-box">
+                <h3>📝 Descripción de la Solicitud:</h3>
+                <p style="margin: 0; white-space: pre-wrap;">{{Descripcion}}</p>
+            </div>
+
+            <div class="divider"></div>
+
+            <p style="font-size: 14px; color: #666;">
+                <strong>¿Qué debes hacer?</strong><br>
+                Por favor, revisa la solicitud y decide si apruebas o rechazas el documento. 
+                Puedes agregar comentarios si es necesario.
+            </p>
+
+            <!-- Call to Action Button -->
+            <div class="btn-container">
+                <a href="{{LinkAprobacion}}" class="btn">
+                    🔍 Revisar Solicitud
+                </a>
+            </div>
+
+            <p style="font-size: 12px; color: #999; text-align: center; margin-top: 10px;">
+                Si el botón no funciona, copia y pega este enlace en tu navegador:<br>
+                <span style="word-break: break-all; color: #007bff;">{{LinkAprobacion}}</span>
+            </p>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>Sistema de Gestión Documental - MatrixNext</strong></p>
+            <p>Este es un mensaje automático, por favor no respondas a este correo.</p>
+            <p style="margin-top: 10px; color: #999;">
+                &copy; 2025 Matrix. Todos los derechos reservados.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
