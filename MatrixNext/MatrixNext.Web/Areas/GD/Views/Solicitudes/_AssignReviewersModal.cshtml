@@ -1,0 +1,51 @@
+@model MatrixNext.Web.Models.ViewModels.GD.AsignReviewersVM
+
+<div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title">Asignar Revisores</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+
+    <form id="frmAssignReviewers" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="IdSolicitud" value="@Model.IdSolicitud" />
+        
+        <div class="modal-body" style="max-height: 60vh; overflow-y: auto;">
+            <p class="text-muted">Solicitud #<strong>@Model.IdSolicitud</strong></p>
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                        @foreach (var key in ViewData.ModelState.Keys.Where(k => ViewData.ModelState[k].Errors.Count > 0))
+                        {
+                            <li>@ViewData.ModelState[key].Errors.First().ErrorMessage</li>
+                        }
+                    </ul>
+                </div>
+            }
+
+            <label for="IdRevisores" class="form-label">Revisores <span class="text-danger">*</span></label>
+            <div class="list-group">
+                @foreach (var revisor in (Model?.RevisoresDisponibles ?? new List<MatrixNext.Data.Adapters.GD.Models.SelectListItemDto>()).Where(x => x != null))
+                {
+                    <label class="list-group-item">
+                        <input class="form-check-input me-2" type="checkbox" name="IdRevisores" value="@revisor.Id" />
+                        @revisor.Nombre
+                    </label>
+                }
+            </div>
+            @if ((Model.RevisoresDisponibles?.Count ?? 0) == 0)
+            {
+                <div class="alert alert-warning mt-3">No hay revisores disponibles.</div>
+            }
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-check"></i> Asignar Revisores
+            </button>
+        </div>
+    </form>
+</div>

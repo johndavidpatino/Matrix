@@ -235,7 +235,7 @@ namespace MatrixNext.Web.Areas.GD.Controllers
             {
                 TiposSolicitud = success ? data.TiposSolicitud.Select(t => new TipoSolicitudViewModel { Id = t.Id, Nombre = t.Nombre }).ToList() : new System.Collections.Generic.List<TipoSolicitudViewModel>(),
                 Procesos = success ? data.Procesos.Select(p => new ProcesoViewModel { Id = p.Id, Nombre = p.Nombre }).ToList() : new System.Collections.Generic.List<ProcesoViewModel>(),
-                Usuarios = success ? data.Usuarios.Select(u => new UsuarioViewModel { Id = u.Id, Usuario = u.Usuario, Nombres = u.Nombres, Apellidos = u.Apellidos, Email = u.Email, Activo = u.Activo }).ToList() : new System.Collections.Generic.List<UsuarioViewModel>()
+                Usuarios = success ? data.Usuarios.Select(u => new UsuarioViewModel { Id = u.Id, Nombres = u.Nombre, Email = u.Email }).ToList() : new System.Collections.Generic.List<UsuarioViewModel>()
             };
             return vm;
         }

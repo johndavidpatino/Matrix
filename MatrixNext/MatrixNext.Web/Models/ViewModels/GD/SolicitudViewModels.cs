@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using MatrixNext.Data.Adapters.GD.Models;
 
 namespace MatrixNext.Web.Models.ViewModels.GD
 {
@@ -36,7 +37,7 @@ namespace MatrixNext.Web.Models.ViewModels.GD
         [MaxLength(1000)]
         public string Descripcion { get; set; } = string.Empty;
 
-        public int IdEstado { get; set; } = 1; // Por defecto: En Revisión
+        public int? IdEstado { get; set; } = 1; // Por defecto: En Revisión
 
         [MaxLength(500)]
         public string Comentarios { get; set; } = string.Empty;
@@ -55,10 +56,10 @@ namespace MatrixNext.Web.Models.ViewModels.GD
     /// </summary>
     public class SolicitudCreateVM : SolicitudDocumentoVM
     {
-        public List<TipoSolicitudViewModel> TiposSolicitud { get; set; } = new();
-        public List<MaestroListVM> Documentos { get; set; } = new();
-        public List<UsuarioViewModel> Usuarios { get; set; } = new();
-        public List<EstadoSolicitudViewModel> Estados { get; set; } = new();
+        public List<SelectListItemDto> TiposSolicitud { get; set; } = new();
+        public List<SelectListItemDto> Documentos { get; set; } = new();
+        public List<SelectListItemDto> Usuarios { get; set; } = new();
+        public List<SelectListItemDto> Estados { get; set; } = new();
 
         // Campos condicionales según tipo
         public string? AreaUso { get; set; }
@@ -75,16 +76,24 @@ namespace MatrixNext.Web.Models.ViewModels.GD
         [Required(ErrorMessage = "Debe seleccionar al menos un revisor")]
         public List<int> IdRevisores { get; set; } = new();
 
-        public List<UsuarioViewModel> RevisoresDisponibles { get; set; } = new();
+        public List<SelectListItemDto> RevisoresDisponibles { get; set; } = new();
 
         public string NombreSolicitud { get; set; } = string.Empty;
         public string NombreDocumento { get; set; } = string.Empty;
     }
 
     /// <summary>
-    /// ViewModel para listar solicitudes en tabla
+    /// ViewModel para listar solicitudes en tabla (contenedor)
     /// </summary>
     public class SolicitudListVM
+    {
+        public List<SolicitudListItemVM> Solicitudes { get; set; } = new();
+    }
+
+    /// <summary>
+    /// ViewModel para item de solicitud en tabla
+    /// </summary>
+    public class SolicitudListItemVM
     {
         public int Id { get; set; }
         public string NombreDocumento { get; set; } = string.Empty;
@@ -94,14 +103,5 @@ namespace MatrixNext.Web.Models.ViewModels.GD
         public int RevisoresPendientes { get; set; }
         public int RevisoresAprobados { get; set; }
         public DateTime FechaRegistro { get; set; }
-    }
-
-    /// <summary>
-    /// ViewModel para estado solicitud (catálogo)
-    /// </summary>
-    public class EstadoSolicitudViewModel
-    {
-        public int Id { get; set; }
-        public string Nombre { get; set; } = string.Empty;
     }
 }
