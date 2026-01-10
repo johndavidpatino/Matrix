@@ -1,14 +1,30 @@
 @model IEnumerable<MatrixNext.Web.Services.OP.Models.ProgramacionCampoVm>
 @{
     ViewData["Title"] = "Programación de Campo";
+    var trabajos = (IEnumerable<dynamic>?)ViewData["Trabajos"] ?? Array.Empty<dynamic>();
+    var selectedTrabajoId = Convert.ToString(ViewData["TrabajoId"]) ?? string.Empty;
+    var estadoFiltro = Convert.ToString(ViewData["EstadoFiltro"]) ?? string.Empty;
+    var fechaDesde = Convert.ToString(ViewData["FechaDesde"]) ?? string.Empty;
+    var fechaHasta = Convert.ToString(ViewData["FechaHasta"]) ?? string.Empty;
 }
 
 <div class="container-fluid mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>@ViewData["Title"]</h2>
-        <a asp-action="Edit" asp-route-trabajoId="@ViewData["TrabajoId"]" class="btn btn-primary">
+        <a asp-action="Edit" asp-route-trabajoId="@selectedTrabajoId" class="btn btn-primary">
             <i class="bi bi-plus-circle"></i> Nueva Programación
         </a>
+        <div class="btn-group ms-2">
+            <a asp-action="ExportExcel" asp-route-trabajoId="@selectedTrabajoId" asp-route-estado="@estadoFiltro" class="btn btn-success">
+                <i class="bi bi-file-earmark-excel"></i> Exportar Excel
+            </a>
+            <a asp-action="ExportIcs" asp-route-trabajoId="@selectedTrabajoId" asp-route-estado="@estadoFiltro" class="btn btn-outline-success">
+                <i class="bi bi-calendar2-plus"></i> Exportar ICS
+            </a>
+            <a asp-action="Calendar" asp-route-trabajoId="@selectedTrabajoId" asp-route-estado="@estadoFiltro" class="btn btn-outline-primary">
+                <i class="bi bi-calendar3"></i> Ver Calendario
+            </a>
+        </div>
     </div>
 
     <div class="card mb-3">
@@ -19,24 +35,22 @@
                         <label for="trabajoId" class="form-label">Trabajo</label>
                         <select name="trabajoId" id="trabajoId" class="form-select">
                             <option value="">Seleccione...</option>
-                            @if (ViewData["Trabajos"] != null)
+                            @foreach (var trabajo in trabajos)
                             {
-                                @foreach (var trabajo in (IEnumerable<dynamic>)ViewData["Trabajos"])
-                                {
-                                    <option value="@trabajo.TrabajoId" selected="@(trabajo.TrabajoId == ViewData["TrabajoId"])">
-                                        @trabajo.TrabajoId - @trabajo.NombreTrabajo
-                                    </option>
-                                }
+                                var currentTrabajoId = Convert.ToString(trabajo.TrabajoId) ?? string.Empty;
+                                <option value="@trabajo.TrabajoId" selected="@(string.Equals(currentTrabajoId, selectedTrabajoId, StringComparison.Ordinal))">
+                                    @trabajo.TrabajoId - @trabajo.NombreTrabajo
+                                </option>
                             }
                         </select>
                     </div>
                     <div class="col-md-3">
                         <label for="fechaDesde" class="form-label">Fecha Desde</label>
-                        <input type="date" name="fechaDesde" id="fechaDesde" class="form-control" value="@ViewData["FechaDesde"]" />
+                        <input type="date" name="fechaDesde" id="fechaDesde" class="form-control" value="@fechaDesde" />
                     </div>
                     <div class="col-md-3">
                         <label for="fechaHasta" class="form-label">Fecha Hasta</label>
-                        <input type="date" name="fechaHasta" id="fechaHasta" class="form-control" value="@ViewData["FechaHasta"]" />
+                        <input type="date" name="fechaHasta" id="fechaHasta" class="form-control" value="@fechaHasta" />
                     </div>
                     <div class="col-md-6">
                         <label for="estadoId" class="form-label">Estado</label>
@@ -55,7 +69,7 @@
                         <button type="submit" class="btn btn-primary">
                             <i class="bi bi-search"></i> Buscar
                         </button>
-                        <a asp-action="ExportExcel" class="btn btn-success">
+                        <a asp-action="ExportExcel" asp-route-trabajoId="@selectedTrabajoId" asp-route-estado="@estadoFiltro" class="btn btn-success">
                             <i class="bi bi-file-earmark-excel"></i> Exportar Excel
                         </a>
                     </div>
@@ -64,7 +78,7 @@
         </div>
     </div>
 
-    @if (Model != null && Model.Any())
+    @if (Model?.Any() == true)
     {
         <div class="card">
             <div class="card-body">
@@ -158,8 +172,8 @@
                         type: 'POST',
                         data: {
                             __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
-                            programacionId: id,
-                            nuevoEstadoId: estadoId
+                            id: id,
+                            estado: estadoId
                         },
                         success: function(response) {
                             if (response.success) {

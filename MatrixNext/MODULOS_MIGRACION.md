@@ -79,6 +79,7 @@
 - **Carpeta**: `WebMatrix/OP_Cualitativo/`
 - **Contexto**: `OP_Entities` (CoreProject)
 - **Dependencias**: Altas (entrevistas, moderadores, sesiones)
+- **Nota 2026-01-09**: Validación de tablas reales y limpieza de warnings completadas; pendiente continuar migración funcional completa.
 
 #### 6. **FI_AdministrativoFinanciero + CC_FinzOpe** (28 págs FI + infraestructura CC)
 - **Carpeta**: `WebMatrix/FI_AdministrativoFinanciero/` + `CoreProject/CC_FinzOpe`

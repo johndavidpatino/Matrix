@@ -180,7 +180,7 @@ public class CualitativoFiltrosController : Controller
     /// Ref: AprobacionesFiltros.aspx.vb líneas 28-91 (Page_Load, cargarRespuestas)
     /// </summary>
     [HttpGet("Approve")]
-    public async Task<IActionResult> Approve(long trabajoId, int tipo, string estado = null)
+    public async Task<IActionResult> Approve(long trabajoId, int tipo, string? estado = null)
     {
         try
         {

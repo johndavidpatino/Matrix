@@ -15,6 +15,8 @@
 └─────────────────────────────────────────────────────────────────┘
 ```
 
+**Actualización 2026-01-09**: OP_Cualitativo (validación de tablas reales, ajustes de filtros y limpieza de warnings) cerrada con build ✅.
+
 ---
 
 ## 📦 MÓDULOS MIGRADOS - COMPLETADOS ✅

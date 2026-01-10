@@ -68,5 +68,10 @@ namespace MatrixNext.Web.Services.OP
         /// <param name="trabajoId">ID del trabajo</param>
         /// <returns>Total de muestra del trabajo</returns>
         Task<double> CalcularTotalMuestraAsync(long trabajoId);
+
+        /// <summary>
+        /// Obtiene detalle de muestra para notificación por email (incluye email del coordinador)
+        /// </summary>
+        Task<MuestraEmailDetalle?> ObtenerDetalleMuestraParaEmailAsync(long idMuestra);
     }
 }

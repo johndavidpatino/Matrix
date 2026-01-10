@@ -1,6 +1,10 @@
 @model IEnumerable<MatrixNext.Web.Services.OP.Models.IpsRevisionVm>
 @{
     ViewData["Title"] = "Revisión IPS - Investigación Cualitativa";
+    var trabajos = (IEnumerable<dynamic>?)ViewData["Trabajos"] ?? Array.Empty<dynamic>();
+    var selectedTrabajoId = Convert.ToString(ViewData["TrabajoId"]) ?? string.Empty;
+    var fechaDesde = Convert.ToString(ViewData["FechaDesde"]) ?? string.Empty;
+    var fechaHasta = Convert.ToString(ViewData["FechaHasta"]) ?? string.Empty;
 }
 
 <div class="container-fluid mt-4">
@@ -21,24 +25,22 @@
                         <label for="trabajoId" class="form-label">Trabajo</label>
                         <select name="trabajoId" id="trabajoId" class="form-select">
                             <option value="">Todos</option>
-                            @if (ViewData["Trabajos"] != null)
+                            @foreach (var trabajo in trabajos)
                             {
-                                @foreach (var trabajo in (IEnumerable<dynamic>)ViewData["Trabajos"])
-                                {
-                                    <option value="@trabajo.TrabajoId" selected="@(trabajo.TrabajoId == ViewData["TrabajoId"])">
-                                        @trabajo.TrabajoId - @trabajo.NombreTrabajo
-                                    </option>
-                                }
+                                var currentTrabajoId = Convert.ToString(trabajo.TrabajoId) ?? string.Empty;
+                                <option value="@trabajo.TrabajoId" selected="@(string.Equals(currentTrabajoId, selectedTrabajoId, StringComparison.Ordinal))">
+                                    @trabajo.TrabajoId - @trabajo.NombreTrabajo
+                                </option>
                             }
                         </select>
                     </div>
                     <div class="col-md-3">
                         <label for="fechaDesde" class="form-label">Fecha Desde</label>
-                        <input type="date" name="fechaDesde" id="fechaDesde" class="form-control" value="@ViewData["FechaDesde"]" />
+                        <input type="date" name="fechaDesde" id="fechaDesde" class="form-control" value="@fechaDesde" />
                     </div>
                     <div class="col-md-3">
                         <label for="fechaHasta" class="form-label">Fecha Hasta</label>
-                        <input type="date" name="fechaHasta" id="fechaHasta" class="form-control" value="@ViewData["FechaHasta"]" />
+                        <input type="date" name="fechaHasta" id="fechaHasta" class="form-control" value="@fechaHasta" />
                     </div>
                     <div class="col-md-2 d-flex align-items-end">
                         <button type="submit" class="btn btn-primary w-100">
@@ -50,7 +52,7 @@
         </div>
     </div>
 
-    @if (Model != null && Model.Any())
+    @if (Model?.Any() == true)
     {
         <div class="card">
             <div class="card-body">

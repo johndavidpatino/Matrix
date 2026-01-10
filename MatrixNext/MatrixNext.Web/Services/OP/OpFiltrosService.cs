@@ -36,37 +36,19 @@ public class OpFiltrosService : IOpFiltrosService
         try
         {
             // Ref: DisenarFiltros.aspx.vb líneas 45-89 (cargarPreguntasFiltro)
-            using var connection = new SqlConnection(_connectionString);
-            var parameters = new DynamicParameters();
-            parameters.Add("@TrabajoId", trabajoId);
-            parameters.Add("@TipoFiltro", tipoFiltro);
-
+            // NOTA: Tablas OP_Filtros y OP_Preguntas_Filtro existen; los SP de carga no están migrados.
+            // Funcionalidad de filtros dinámicos requiere migrar los SP legacy antes de habilitarla.
+            // Por ahora retorna configuración vacía (placeholder).
+            
             var config = new FiltroConfigVm
             {
                 TrabajoId = trabajoId,
-                TipoFiltro = tipoFiltro
+                TipoFiltro = tipoFiltro,
+                Preguntas = new List<PreguntaFiltroVm>()
             };
 
-            // Obtener preguntas
-            var preguntas = await connection.QueryAsync<PreguntaFiltroVm>(
-                "OP_ObtenerPreguntasFiltro",
-                parameters,
-                commandType: CommandType.StoredProcedure);
-
-            config.Preguntas = preguntas.ToList();
-
-            // Obtener opciones para preguntas de selección/multi
-            foreach (var pregunta in config.Preguntas.Where(p => p.TipoPregunta == 3 || p.TipoPregunta == 4))
-            {
-                var opciones = await connection.QueryAsync<OpcionPreguntaVm>(
-                    "OP_ObtenerOpcionesPregunta",
-                    new { PreguntaId = pregunta.Id },
-                    commandType: CommandType.StoredProcedure);
-                
-                pregunta.Opciones = opciones.ToList();
-            }
-
-            return (true, config, string.Empty);
+            _logger.LogWarning("Filtros dinámicos no disponibles - SPs de filtros no migrados. TrabajoId: {TrabajoId}", trabajoId);
+            return (true, config, "Funcionalidad de filtros en construcción");
         }
         catch (Exception ex)
         {
@@ -82,50 +64,9 @@ public class OpFiltrosService : IOpFiltrosService
         try
         {
             // Ref: DisenarFiltros.aspx.vb líneas 321-459 (btnAgregarPregunta_Click)
-            using var connection = new SqlConnection(_connectionString);
-            using var transaction = connection.BeginTransaction();
-
-            try
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@TrabajoId", trabajoId);
-                parameters.Add("@TipoFiltro", tipoFiltro);
-                parameters.Add("@TipoPregunta", pregunta.TipoPregunta);
-                parameters.Add("@TextoPregunta", pregunta.TextoPregunta);
-                parameters.Add("@Obligatoria", pregunta.Obligatoria);
-                parameters.Add("@Orden", pregunta.Orden);
-                parameters.Add("@CreadoPor", usuarioId);
-                parameters.Add("@PreguntaId", dbType: DbType.Int64, direction: ParameterDirection.Output);
-
-                await connection.ExecuteAsync(
-                    "OP_InsertarPreguntaFiltro",
-                    parameters,
-                    transaction: transaction,
-                    commandType: CommandType.StoredProcedure);
-
-                var preguntaId = parameters.Get<long>("@PreguntaId");
-
-                // Insertar opciones si aplica
-                if (pregunta.Opciones?.Count > 0)
-                {
-                    foreach (var opcion in pregunta.Opciones)
-                    {
-                        await connection.ExecuteAsync(
-                            @"INSERT INTO OP_OpcionesPreguntaFiltro (PreguntaId, Texto, Orden)
-                              VALUES (@PreguntaId, @Texto, @Orden)",
-                            new { PreguntaId = preguntaId, opcion.Texto, opcion.Orden },
-                            transaction: transaction);
-                    }
-                }
-
-                transaction.Commit();
-                return (true, preguntaId, string.Empty);
-            }
-            catch
-            {
-                transaction.Rollback();
-                throw;
-            }
+            // NOTA: Tablas OP_Filtros y OP_Preguntas_Filtro existen; SP OP_InsertarPreguntaFiltro no está migrado.
+            _logger.LogWarning("Agregación de preguntas de filtro no disponible - SP no migrado");
+            return (false, 0, "Funcionalidad de filtros dinámicos no disponible");
         }
         catch (Exception ex)
         {
@@ -140,13 +81,9 @@ public class OpFiltrosService : IOpFiltrosService
         try
         {
             // Ref: DisenarFiltros.aspx.vb líneas 493-517 (btnEliminar_Click)
-            using var connection = new SqlConnection(_connectionString);
-            
-            await connection.ExecuteAsync(
-                "DELETE FROM OP_PreguntasFiltro WHERE Id = @PreguntaId",
-                new { PreguntaId = preguntaId });
-
-            return (true, string.Empty);
+            // NOTA: Tabla real es OP_Preguntas_Filtro; SP de eliminación no está migrado.
+            _logger.LogWarning("Eliminación de preguntas de filtro no disponible");
+            return (false, "Funcionalidad no disponible");
         }
         catch (Exception ex)
         {
@@ -160,17 +97,9 @@ public class OpFiltrosService : IOpFiltrosService
     {
         try
         {
-            using var connection = new SqlConnection(_connectionString);
-            
-            await connection.ExecuteAsync(
-                @"UPDATE OP_PreguntasFiltro 
-                  SET TextoPregunta = @TextoPregunta,
-                      Obligatoria = @Obligatoria,
-                      Orden = @Orden
-                  WHERE Id = @PreguntaId",
-                new { PreguntaId = preguntaId, pregunta.TextoPregunta, pregunta.Obligatoria, pregunta.Orden });
-
-            return (true, string.Empty);
+            // NOTA: Tabla real es OP_Preguntas_Filtro; SP de actualización no está migrado.
+            _logger.LogWarning("Actualización de preguntas de filtro no disponible");
+            return (false, "Funcionalidad no disponible");
         }
         catch (Exception ex)
         {
@@ -198,7 +127,7 @@ public class OpFiltrosService : IOpFiltrosService
     }
 
     public async Task<(bool Success, List<RespuestaFiltroVm> Data, string Error)> ObtenerRespuestasFiltroAsync(
-        long trabajoId, int tipoFiltro, string estado = null)
+        long trabajoId, int tipoFiltro, string? estado = null)
     {
         try
         {
@@ -224,7 +153,7 @@ public class OpFiltrosService : IOpFiltrosService
     }
 
     public async Task<(bool Success, string Error)> AprobarRespuestasFiltroAsync(
-        List<long> respuestasIds, long usuarioId, string observaciones = null)
+        List<long> respuestasIds, long usuarioId, string? observaciones = null)
     {
         try
         {
@@ -259,7 +188,7 @@ public class OpFiltrosService : IOpFiltrosService
     }
 
     public async Task<(bool Success, string Error)> RechazarRespuestasFiltroAsync(
-        List<long> respuestasIds, long usuarioId, string observaciones)
+        List<long> respuestasIds, long usuarioId, string? observaciones)
     {
         try
         {

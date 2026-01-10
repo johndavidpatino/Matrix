@@ -49,21 +49,21 @@ public interface IOpFiltrosService
     /// Ref: AprobacionesFiltros.aspx.vb líneas 28-91 (Page_Load, cargarRespuestas)
     /// </summary>
     Task<(bool Success, List<RespuestaFiltroVm> Data, string Error)> ObtenerRespuestasFiltroAsync(
-        long trabajoId, int tipoFiltro, string estado = null);
+        long trabajoId, int tipoFiltro, string? estado = null);
 
     /// <summary>
     /// Aprueba respuestas de filtro
     /// Ref: AprobacionesFiltros.aspx.vb líneas 143-188 (btnAprobar_Click)
     /// </summary>
     Task<(bool Success, string Error)> AprobarRespuestasFiltroAsync(
-        List<long> respuestasIds, long usuarioId, string observaciones = null);
+        List<long> respuestasIds, long usuarioId, string? observaciones = null);
 
     /// <summary>
     /// Rechaza respuestas de filtro
     /// Ref: AprobacionesFiltros.aspx.vb líneas 190-235 (btnRechazar_Click)
     /// </summary>
     Task<(bool Success, string Error)> RechazarRespuestasFiltroAsync(
-        List<long> respuestasIds, long usuarioId, string observaciones);
+        List<long> respuestasIds, long usuarioId, string? observaciones);
 
     /// <summary>
     /// Exporta respuestas a Excel (SP REP_OP_Respuestas_Filtro)

@@ -258,4 +258,92 @@ public class CualitativoProgramacionController : Controller
         public List<long> Ids { get; set; } = new();
         public DateTime? FechaProgramada { get; set; }
     }
+
+    /// <summary>
+    /// Exportar programaciones a archivo ICS (iCalendar)
+    /// Ref: CampoCualitativo.aspx.vb (Crear_Archivo_ICS)
+    /// </summary>
+    [HttpGet("ExportIcs")]
+    public async Task<IActionResult> ExportIcs(long trabajoId, string? estado = null)
+    {
+        try
+        {
+            var (success, programaciones, error) = await _programacionService.ObtenerProgramacionesPorTrabajoAsync(trabajoId, estado);
+
+            if (!success || programaciones == null || !programaciones.Any())
+            {
+                TempData["Warning"] = "No hay sesiones programadas para exportar";
+                return RedirectToAction("Index", new { trabajoId, estado });
+            }
+
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine("BEGIN:VCALENDAR");
+            sb.AppendLine("VERSION:2.0");
+            sb.AppendLine("PRODID:-//MatrixNext//OP_Programacion//EN");
+            sb.AppendLine("CALSCALE:GREGORIAN");
+
+            foreach (var prog in programaciones.Where(p => p.FechaProgramada.HasValue))
+            {
+                var fechaInicio = prog.FechaProgramada!.Value;
+                var duracion = prog.DuracionEstimada.HasValue && prog.DuracionEstimada.Value > 0
+                    ? TimeSpan.FromMinutes(prog.DuracionEstimada.Value)
+                    : TimeSpan.FromHours(2);
+                var fechaFin = fechaInicio.Add(duracion);
+
+                sb.AppendLine("BEGIN:VEVENT");
+                sb.AppendLine($"UID:{Guid.NewGuid()}");
+                sb.AppendLine($"DTSTAMP:{DateTime.UtcNow:yyyyMMdd\\THHmmss\\Z}");
+                sb.AppendLine($"DTSTART:{fechaInicio.ToUniversalTime():yyyyMMdd\\THHmmss\\Z}");
+                sb.AppendLine($"DTEND:{fechaFin.ToUniversalTime():yyyyMMdd\\THHmmss\\Z}");
+                var resumen = string.IsNullOrEmpty(prog.NombreEntrevistado) ? prog.EntrevistadoNombre : prog.NombreEntrevistado;
+                sb.AppendLine($"SUMMARY:Programación - {resumen}");
+                var estadoDesc = string.IsNullOrEmpty(prog.NombreEstado) ? prog.EstadoDescripcion : prog.NombreEstado;
+                sb.AppendLine($"DESCRIPTION:Trabajo {trabajoId} - Estado: {estadoDesc}");
+                if (!string.IsNullOrEmpty(prog.DireccionCita))
+                    sb.AppendLine($"LOCATION:{prog.DireccionCita}");
+                sb.AppendLine("CLASS:PUBLIC");
+                sb.AppendLine("STATUS:CONFIRMED");
+                sb.AppendLine("END:VEVENT");
+            }
+
+            sb.AppendLine("END:VCALENDAR");
+
+            var bytes = System.Text.Encoding.UTF8.GetBytes(sb.ToString());
+            var fileName = $"Programacion_Trabajo_{trabajoId}_{DateTime.Now:yyyyMMdd}.ics";
+            return File(bytes, "text/calendar", fileName);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error exportando ICS programaciones trabajo {TrabajoId}", trabajoId);
+            TempData["Error"] = "Error generando archivo de calendario";
+            return RedirectToAction("Index", new { trabajoId, estado });
+        }
+    }
+
+    /// <summary>
+    /// Vista de calendario simple de programaciones
+    /// </summary>
+    [HttpGet("Calendar")]
+    public async Task<IActionResult> Calendar(long trabajoId, string? estado = null)
+    {
+        try
+        {
+            var (success, data, error) = await _programacionService.ObtenerProgramacionesPorTrabajoAsync(trabajoId, estado);
+            if (!success)
+            {
+                TempData["Error"] = error;
+                return RedirectToAction("Index", new { trabajoId, estado });
+            }
+
+            ViewBag.TrabajoId = trabajoId;
+            ViewBag.EstadoFiltro = estado;
+            return View(data);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error cargando calendario trabajo {TrabajoId}", trabajoId);
+            TempData["Error"] = "Error cargando calendario";
+            return RedirectToAction("Index", new { trabajoId, estado });
+        }
+    }
 }

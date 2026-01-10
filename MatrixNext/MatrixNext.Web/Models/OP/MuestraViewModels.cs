@@ -67,4 +67,20 @@ namespace MatrixNext.Web.Models.OP
         /// </summary>
         public bool ExcluirFestivos { get; set; } = true;
     }
+
+        /// <summary>
+        /// Detalle de muestra para construcción de email de notificación
+        /// </summary>
+        public class MuestraEmailDetalle
+        {
+            public long IdMuestra { get; set; }
+            public long TrabajoId { get; set; }
+            public string? Departamento { get; set; }
+            public string? Ciudad { get; set; }
+            public double Cantidad { get; set; }
+            public DateTime? FechaInicio { get; set; }
+            public DateTime? FechaFin { get; set; }
+            public string? CoordinadorNombre { get; set; }
+            public string? CoordinadorEmail { get; set; }
+        }
 }

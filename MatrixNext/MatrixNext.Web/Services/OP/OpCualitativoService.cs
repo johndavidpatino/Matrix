@@ -74,7 +74,7 @@ public class OpCualitativoService : IOpCualitativoService
     }
 
     public async Task<(bool Success, List<TrabajoCualitativoVm> Data, string Error)> ObtenerTrabajosPorCoeAsync(
-        long? coeId = null, int? tipo = null, string estado = null)
+        long? coeId = null, int? tipo = null, string? estado = null)
     {
         try
         {
@@ -187,9 +187,12 @@ public class OpCualitativoService : IOpCualitativoService
                     INSERT INTO OP_TrabajoConfiguracion 
                         (TrabajoId, FechaInicioCampo, FechaFinalCampo)
                     VALUES ({0}, {1}, {2})",
-                    trabajoId,
-                    configuracion.FechaInicioCampo,
-                    configuracion.FechaFinCampo);
+                    new object[]
+                    {
+                        trabajoId,
+                        (object?)configuracion.FechaInicioCampo ?? DBNull.Value,
+                        (object?)configuracion.FechaFinCampo ?? DBNull.Value
+                    });
             }
             else
             {
@@ -199,17 +202,23 @@ public class OpCualitativoService : IOpCualitativoService
                     SET FechaInicioCampo = {1}, 
                         FechaFinalCampo = {2}
                     WHERE TrabajoId = {0}",
-                    trabajoId,
-                    configuracion.FechaInicioCampo,
-                    configuracion.FechaFinCampo);
+                    new object[]
+                    {
+                        trabajoId,
+                        (object?)configuracion.FechaInicioCampo ?? DBNull.Value,
+                        (object?)configuracion.FechaFinCampo ?? DBNull.Value
+                    });
             }
 
             await _context.Database.ExecuteSqlRawAsync(@"
                 UPDATE PY_Trabajo
                 SET TipoRecoleccionId = {1}
                 WHERE Id = {0}",
-                trabajoId,
-                configuracion.TipoRecoleccion);
+                new object[]
+                {
+                    trabajoId,
+                    configuracion.TipoRecoleccion
+                });
 
             return (true, string.Empty);
         }
@@ -266,9 +275,9 @@ public class OpCualitativoService : IOpCualitativoService
                     tc.FechaFinalCampo AS FechaFinCampo,
                     t.TipoRecoleccionId AS TipoRecoleccion,
                     tr.Recoleccion AS TipoRecoleccionDescripcion,
-                    CASE WHEN EXISTS(SELECT 1 FROM OP_FichasTecnicas f WHERE f.TrabajoId = t.id AND f.TipoFicha = 1) THEN 1 ELSE 0 END AS TieneFichaEntrevista,
-                    CASE WHEN EXISTS(SELECT 1 FROM OP_FichasTecnicas f WHERE f.TrabajoId = t.id AND f.TipoFicha = 2) THEN 1 ELSE 0 END AS TieneFichaSesion,
-                    CASE WHEN EXISTS(SELECT 1 FROM OP_FichasTecnicas f WHERE f.TrabajoId = t.id AND f.TipoFicha = 3) THEN 1 ELSE 0 END AS TieneFichaObservacion,
+                    CASE WHEN EXISTS(SELECT 1 FROM PY_TrabajoCuali tc WHERE tc.TrabajoId = t.id) THEN 1 ELSE 0 END AS TieneFichaEntrevista,
+                    CASE WHEN EXISTS(SELECT 1 FROM PY_TrabajoCuali tc WHERE tc.TrabajoId = t.id AND tc.IncentivoEconomico = 1) THEN 1 ELSE 0 END AS TieneFichaSesion,
+                    CASE WHEN EXISTS(SELECT 1 FROM PY_TrabajoCuali tc WHERE tc.TrabajoId = t.id) THEN 1 ELSE 0 END AS TieneFichaObservacion,
                     CASE WHEN EXISTS(SELECT 1 FROM OP_MuestraTrabajos m WHERE m.TrabajoId = t.id) THEN 1 ELSE 0 END AS TieneMuestra
                 FROM PY_Trabajo t
                 LEFT JOIN OP_TrabajoConfiguracion tc ON t.id = tc.TrabajoId
@@ -417,9 +426,10 @@ public class OpCualitativoService : IOpCualitativoService
             
             var tieneDependencias = await connection.QueryFirstAsync<int>(@"
                 SELECT 
-                    (SELECT COUNT(*) FROM OP_FichasTecnicas WHERE TrabajoId = @TrabajoId) +
+                    (SELECT COUNT(*) FROM OP_FichaEntrevistas WHERE TrabajoId = @TrabajoId) +
+                    (SELECT COUNT(*) FROM OP_FichaSesiones WHERE TrabajoId = @TrabajoId) +
+                    (SELECT COUNT(*) FROM OP_FichaObservaciones WHERE TrabajoId = @TrabajoId) +
                     (SELECT COUNT(*) FROM OP_MuestraTrabajos WHERE TrabajoId = @TrabajoId) +
-                    (SELECT COUNT(*) FROM OP_Programados_Entrevistados WHERE TrabajoId = @TrabajoId) +
                     (SELECT COUNT(*) FROM PY_PlanillaModeracion WHERE TrabajoId = @TrabajoId)",
                 new { TrabajoId = trabajoId });
 
@@ -453,27 +463,42 @@ public class OpCualitativoService : IOpCualitativoService
             
             var nav = await connection.QueryFirstOrDefaultAsync<dynamic>(@"
                 SELECT 
-                    CASE WHEN EXISTS(SELECT 1 FROM OP_FichasTecnicas WHERE TrabajoId = @TrabajoId AND TipoFicha = 1) THEN 1 ELSE 0 END AS TieneFichaEntrevista,
-                    CASE WHEN EXISTS(SELECT 1 FROM OP_FichasTecnicas WHERE TrabajoId = @TrabajoId AND TipoFicha = 2) THEN 1 ELSE 0 END AS TieneFichaSesion,
-                    CASE WHEN EXISTS(SELECT 1 FROM OP_FichasTecnicas WHERE TrabajoId = @TrabajoId AND TipoFicha = 3) THEN 1 ELSE 0 END AS TieneFichaObservacion,
+                    CASE WHEN EXISTS(SELECT 1 FROM OP_FichaEntrevistas WHERE TrabajoId = @TrabajoId) THEN 1 ELSE 0 END AS TieneFichaEntrevista,
+                    CASE WHEN EXISTS(SELECT 1 FROM OP_FichaSesiones WHERE TrabajoId = @TrabajoId) THEN 1 ELSE 0 END AS TieneFichaSesion,
+                    CASE WHEN EXISTS(SELECT 1 FROM OP_FichaObservaciones WHERE TrabajoId = @TrabajoId) THEN 1 ELSE 0 END AS TieneFichaObservacion,
                     CASE WHEN EXISTS(SELECT 1 FROM OP_MuestraTrabajos WHERE TrabajoId = @TrabajoId) THEN 1 ELSE 0 END AS TieneMuestra,
-                    CASE WHEN EXISTS(SELECT 1 FROM OP_PreguntasFiltro WHERE TrabajoId = @TrabajoId AND TipoFiltro = 1) THEN 1 ELSE 0 END AS TieneFiltroReclutamiento,
-                    CASE WHEN EXISTS(SELECT 1 FROM OP_PreguntasFiltro WHERE TrabajoId = @TrabajoId AND TipoFiltro = 2) THEN 1 ELSE 0 END AS TieneFiltroAsistencia,
-                    CASE WHEN EXISTS(SELECT 1 FROM OP_Programados_Entrevistados WHERE TrabajoId = @TrabajoId) THEN 1 ELSE 0 END AS TieneProgramacion,
+                    CASE
+                        WHEN EXISTS (
+                            SELECT 1
+                            FROM OP_Filtros F
+                            INNER JOIN OP_Preguntas_Filtro PF ON PF.IdFiltro = F.Id
+                            WHERE F.IdTrabajo = @TrabajoId
+                        ) THEN 1 ELSE 0 END AS TieneFiltroReclutamiento,
+                    0 AS TieneFiltroAsistencia,
+                    0 AS TieneProgramacion,
                     CASE WHEN EXISTS(SELECT 1 FROM OP_IPS_Revisiones WHERE TrabajoId = @TrabajoId) THEN 1 ELSE 0 END AS TieneIps",
                 new { TrabajoId = trabajoId });
+
+            var tieneFichaEntrevista = (int?)(nav?.TieneFichaEntrevista) ?? 0;
+            var tieneFichaSesion = (int?)(nav?.TieneFichaSesion) ?? 0;
+            var tieneFichaObservacion = (int?)(nav?.TieneFichaObservacion) ?? 0;
+            var tieneMuestra = (int?)(nav?.TieneMuestra) ?? 0;
+            var tieneFiltroReclutamiento = (int?)(nav?.TieneFiltroReclutamiento) ?? 0;
+            var tieneFiltroAsistencia = (int?)(nav?.TieneFiltroAsistencia) ?? 0;
+            var tieneProgramacion = (int?)(nav?.TieneProgramacion) ?? 0;
+            var tieneIps = (int?)(nav?.TieneIps) ?? 0;
 
             var navegacion = new NavigacionTrabajoVm
             {
                 TrabajoId = trabajoId,
-                PuedeIrAFichaEntrevista = nav.TieneFichaEntrevista == 1,
-                PuedeIrAFichaSesion = nav.TieneFichaSesion == 1,
-                PuedeIrAFichaObservacion = nav.TieneFichaObservacion == 1,
-                PuedeIrAMuestra = nav.TieneMuestra == 1,
-                PuedeIrAFiltroReclutamiento = nav.TieneFiltroReclutamiento == 1,
-                PuedeIrAFiltroAsistencia = nav.TieneFiltroAsistencia == 1,
-                PuedeIrAProgramacion = nav.TieneProgramacion == 1,
-                PuedeIrAIps = nav.TieneIps == 1,
+                PuedeIrAFichaEntrevista = tieneFichaEntrevista == 1,
+                PuedeIrAFichaSesion = tieneFichaSesion == 1,
+                PuedeIrAFichaObservacion = tieneFichaObservacion == 1,
+                PuedeIrAMuestra = tieneMuestra == 1,
+                PuedeIrAFiltroReclutamiento = tieneFiltroReclutamiento == 1,
+                PuedeIrAFiltroAsistencia = tieneFiltroAsistencia == 1,
+                PuedeIrAProgramacion = tieneProgramacion == 1,
+                PuedeIrAIps = tieneIps == 1,
                 MensajeNavegacion = "Navegación disponible según módulos configurados"
             };
 

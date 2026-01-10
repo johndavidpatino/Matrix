@@ -1,0 +1,87 @@
+@model IEnumerable<MatrixNext.Web.Services.OP.Models.ProgramacionCampoVm>
+@{
+    ViewData["Title"] = "Calendario de Programación";
+}
+
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>@ViewData["Title"]</h2>
+        <div class="btn-group">
+            <a asp-action="Index" asp-route-trabajoId="@ViewBag.TrabajoId" class="btn btn-secondary">
+                <i class="bi bi-list"></i> Listado
+            </a>
+            <a asp-action="ExportIcs" asp-route-trabajoId="@ViewBag.TrabajoId" asp-route-estado="@ViewBag.EstadoFiltro" class="btn btn-outline-success">
+                <i class="bi bi-calendar2-plus"></i> Exportar ICS
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            @if (Model != null && Model.Any())
+            {
+                var grupos = Model
+                    .Where(p => p.FechaProgramada.HasValue)
+                    .OrderBy(p => p.FechaProgramada)
+                    .GroupBy(p => p.FechaProgramada!.Value.Date)
+                    .ToList();
+
+                <div class="row g-3">
+                    @foreach (var dia in grupos)
+                    {
+                        <div class="col-md-4">
+                            <div class="border rounded h-100">
+                                <div class="p-2 bg-light border-bottom">
+                                    <strong>@dia.Key.ToString("dddd, dd/MM/yyyy")</strong>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    @foreach (var item in dia)
+                                    {
+                                        var estadoBadge = item.EstadoId switch
+                                        {
+                                            1 => "secondary",
+                                            2 => "info",
+                                            3 => "primary",
+                                            4 => "success",
+                                            5 => "danger",
+                                            6 => "warning",
+                                            7 => "dark",
+                                            _ => "light"
+                                        };
+                                        <li class="list-group-item">
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                    <div class="fw-semibold">
+                                                        @((string.IsNullOrEmpty(item.NombreEntrevistado) ? item.EntrevistadoNombre : item.NombreEntrevistado))
+                                                    </div>
+                                                    <div class="small text-muted">
+                                                        @item.HoraProgramada?.ToString(@"hh\:mm")
+                                                        @if (!string.IsNullOrEmpty(item.LugarCita))
+                                                        {
+                                                            @($" · {item.LugarCita}")
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <span class="badge bg-@estadoBadge">
+                                                    @(string.IsNullOrEmpty(item.NombreEstado) ? item.EstadoDescripcion : item.NombreEstado)
+                                                </span>
+                                            </div>
+                                            @if (!string.IsNullOrEmpty(item.Observaciones))
+                                            {
+                                                <div class="mt-2 small">@item.Observaciones</div>
+                                            }
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info">No hay programaciones para el calendario.</div>
+            }
+        </div>
+    </div>
+</div>

@@ -435,6 +435,40 @@ namespace MatrixNext.Web.Services.OP
             }
         }
 
+        public async Task<MuestraEmailDetalle?> ObtenerDetalleMuestraParaEmailAsync(long idMuestra)
+        {
+            try
+            {
+                await using var connection = _dbContext.Database.GetDbConnection();
+                if (connection.State != ConnectionState.Open)
+                    await connection.OpenAsync();
+
+                var detalle = await connection.QueryFirstOrDefaultAsync<MuestraEmailDetalle>(@"
+                        SELECT 
+                            m.Id AS IdMuestra,
+                            m.TrabajoId,
+                            d.DivDeptoNombre AS Departamento,
+                            d.DivMuniNombre AS Ciudad,
+                            m.Cantidad,
+                            m.FechaInicio,
+                            m.FechaFin,
+                            CONCAT(u.Nombres, ' ', u.Apellidos) AS CoordinadorNombre,
+                            u.Email AS CoordinadorEmail
+                        FROM OP_MuestraTrabajos m
+                        LEFT JOIN C_Divipola d ON m.CiudadId = d.DivMuniCodigo
+                        LEFT JOIN TH_Personas u ON m.Coordinador = u.id
+                        WHERE m.Id = @IdMuestra",
+                    new { IdMuestra = idMuestra });
+
+                return detalle;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error obteniendo detalle de muestra para email {IdMuestra}", idMuestra);
+                return null;
+            }
+        }
+
         #region DTOs Internos
 
         private class MuestraCiudadDto

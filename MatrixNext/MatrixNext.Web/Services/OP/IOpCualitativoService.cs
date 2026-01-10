@@ -21,7 +21,7 @@ public interface IOpCualitativoService
     /// Ref: Trabajos.aspx.vb líneas 26-45 (Permiso 148)
     /// </summary>
     Task<(bool Success, List<TrabajoCualitativoVm> Data, string Error)> ObtenerTrabajosPorCoeAsync(
-        long? coeId = null, int? tipo = null, string estado = null);
+        long? coeId = null, int? tipo = null, string? estado = null);
 
     /// <summary>
     /// Obtiene configuración actual de un trabajo cualitativo

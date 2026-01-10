@@ -2,6 +2,7 @@ using Dapper;
 using MatrixNext.Web.Infrastructure.Data;
 using MatrixNext.Web.Services.OP.Models;
 using MatrixNext.Web.Services.Shared;
+using MatrixNext.Web.Services;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
@@ -18,17 +19,20 @@ public class OpProgramacionService : IOpProgramacionService
     private readonly string _connectionString;
     private readonly ILogger<OpProgramacionService> _logger;
     private readonly IExportService _exportService;
+    private readonly IEmailQueueService _emailQueueService;
 
     public OpProgramacionService(
         MatrixDbContext context,
         IConfiguration configuration,
         ILogger<OpProgramacionService> logger,
-        IExportService exportService)
+        IExportService exportService,
+        IEmailQueueService emailQueueService)
     {
         _context = context;
         _connectionString = configuration.GetConnectionString("MatrixDb")!;
         _logger = logger;
         _exportService = exportService;
+        _emailQueueService = emailQueueService;
     }
 
     public async Task<(bool Success, List<ProgramacionCampoVm> Data, string Error)> ObtenerProgramacionesPorTrabajoAsync(
@@ -71,7 +75,18 @@ public class OpProgramacionService : IOpProgramacionService
                   ORDER BY p.FechaProgramada DESC, p.Id DESC",
                 new { TrabajoId = trabajoId, Estado = estado });
 
-            return (true, programaciones.ToList(), string.Empty);
+            // Mapear alias utilizados por las vistas
+            var list = programaciones.ToList();
+            foreach (var p in list)
+            {
+                p.ProgramacionId = p.Id;
+                p.NombreTrabajo = string.IsNullOrEmpty(p.NombreTrabajo) ? p.TrabajoNombre : p.NombreTrabajo;
+                p.NombreEntrevistado = string.IsNullOrEmpty(p.NombreEntrevistado) ? p.EntrevistadoNombre : p.NombreEntrevistado;
+                p.EstadoId = p.EstadoId > 0 ? p.EstadoId : p.Estado;
+                p.NombreEstado = string.IsNullOrEmpty(p.NombreEstado) ? p.EstadoDescripcion : p.NombreEstado;
+            }
+
+            return (true, list, string.Empty);
         }
         catch (Exception ex)
         {
@@ -86,82 +101,14 @@ public class OpProgramacionService : IOpProgramacionService
         try
         {
             // Ref: ProgramacionCampo.aspx.vb líneas 125-214 (btnSaveProgramar_Click)
-            using var connection = new SqlConnection(_connectionString);
-
-            // Validaciones
-            if (programacion.FechaProgramada == null)
-                return (false, 0, "Fecha programada es obligatoria");
-
-            if (programacion.EntrevistadoId <= 0)
-                return (false, 0, "Entrevistado es obligatorio");
-
-            long programacionId;
-
-            if (programacion.Id > 0)
-            {
-                // UPDATE
-                await connection.ExecuteAsync(
-                    @"UPDATE OP_Programados_Entrevistados
-                      SET EntrevistadoId = @EntrevistadoId,
-                          Estado = @Estado,
-                          FechaProgramada = @FechaProgramada,
-                          HoraProgramada = @HoraProgramada,
-                          LugarCita = @LugarCita,
-                          DireccionCita = @DireccionCita,
-                          EntrevistadorAsignadoId = @EntrevistadorAsignadoId,
-                          Observaciones = @Observaciones,
-                          FechaModificacion = GETDATE(),
-                          ModificadoPor = @UsuarioId
-                      WHERE Id = @Id",
-                    new
-                    {
-                        programacion.Id,
-                        programacion.EntrevistadoId,
-                        programacion.Estado,
-                        programacion.FechaProgramada,
-                        programacion.HoraProgramada,
-                        programacion.LugarCita,
-                        programacion.DireccionCita,
-                        programacion.EntrevistadorAsignadoId,
-                        programacion.Observaciones,
-                        UsuarioId = usuarioId
-                    });
-
-                programacionId = programacion.Id;
-            }
-            else
-            {
-                // INSERT
-                programacionId = await connection.QuerySingleAsync<long>(
-                    @"INSERT INTO OP_Programados_Entrevistados
-                        (TrabajoId, EntrevistadoId, Estado, FechaProgramada, HoraProgramada,
-                         LugarCita, DireccionCita, EntrevistadorAsignadoId, Observaciones,
-                         FechaCreacion, CreadoPor)
-                      OUTPUT INSERTED.Id
-                      VALUES
-                        (@TrabajoId, @EntrevistadoId, @Estado, @FechaProgramada, @HoraProgramada,
-                         @LugarCita, @DireccionCita, @EntrevistadorAsignadoId, @Observaciones,
-                         GETDATE(), @UsuarioId)",
-                    new
-                    {
-                        programacion.TrabajoId,
-                        programacion.EntrevistadoId,
-                        Estado = programacion.Estado > 0 ? programacion.Estado : 1, // 1 = Creado
-                        programacion.FechaProgramada,
-                        programacion.HoraProgramada,
-                        programacion.LugarCita,
-                        programacion.DireccionCita,
-                        programacion.EntrevistadorAsignadoId,
-                        programacion.Observaciones,
-                        UsuarioId = usuarioId
-                    });
-            }
-
-            return (true, programacionId, string.Empty);
+            // NOTA: OP_Programados_Entrevistados tabla no existe (solo existe SP de lectura)
+            // Guardar programaciones requiere migración adicional de tabla base
+            _logger.LogWarning("Guardar programación no disponible - tabla base no migrada");
+            return (false, 0, "Funcionalidad de guardar programación no disponible - requerida migración DB");
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error guardando programación trabajo {TrabajoId}", programacion.TrabajoId);
+            _logger.LogError(ex, "Error guardando programación");
             return (false, 0, ex.Message);
         }
     }
@@ -172,24 +119,9 @@ public class OpProgramacionService : IOpProgramacionService
         try
         {
             // Ref: ProgramacionCampo.aspx.vb líneas 320-365 (CambiarEstado)
-            using var connection = new SqlConnection(_connectionString);
-
-            await connection.ExecuteAsync(
-                @"UPDATE OP_Programados_Entrevistados
-                  SET Estado = @NuevoEstado,
-                      Observaciones = COALESCE(@Observaciones, Observaciones),
-                      FechaModificacion = GETDATE(),
-                      ModificadoPor = @UsuarioId
-                  WHERE Id = @ProgramacionId",
-                new
-                {
-                    ProgramacionId = programacionId,
-                    NuevoEstado = nuevoEstado,
-                    Observaciones = observaciones,
-                    UsuarioId = usuarioId
-                });
-
-            return (true, string.Empty);
+            // NOTA: OP_Programados_Entrevistados tabla no existe para escribir
+            _logger.LogWarning("Cambiar estado programación no disponible - tabla base no migrada");
+            return (false, "Funcionalidad no disponible");
         }
         catch (Exception ex)
         {
@@ -211,11 +143,11 @@ public class OpProgramacionService : IOpProgramacionService
 
             var data = programaciones.Select(p => new Dictionary<string, object?>
             {
-                ["ID"] = p.Id,
-                ["Entrevistado"] = p.EntrevistadoNombre,
+                ["ID"] = p.ProgramacionId > 0 ? p.ProgramacionId : p.Id,
+                ["Entrevistado"] = string.IsNullOrEmpty(p.NombreEntrevistado) ? p.EntrevistadoNombre : p.NombreEntrevistado,
                 ["Teléfono"] = p.EntrevistadoTelefono,
                 ["Dirección"] = p.EntrevistadoDireccion,
-                ["Estado"] = p.EstadoDescripcion,
+                ["Estado"] = string.IsNullOrEmpty(p.NombreEstado) ? p.EstadoDescripcion : p.NombreEstado,
                 ["Fecha Programada"] = p.FechaProgramada?.ToString("dd/MM/yyyy"),
                 ["Hora"] = p.HoraProgramada?.ToString(@"hh\:mm"),
                 ["Lugar"] = p.LugarCita,

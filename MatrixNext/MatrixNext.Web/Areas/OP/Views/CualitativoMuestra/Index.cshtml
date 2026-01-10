@@ -1,0 +1,240 @@
+@model IEnumerable<MatrixNext.Web.Models.OP.MuestraCiudadListItemVM>
+@{
+    ViewData["Title"] = "Muestra por Ciudad";
+}
+
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>@ViewData["Title"]</h2>
+        <div class="btn-group">
+            <a asp-action="Index" asp-controller="CualitativoTrabajos" asp-route-id="@ViewBag.TrabajoId" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Volver a Trabajos
+            </a>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <form asp-action="Create" method="post" class="row g-3">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="TrabajoId" value="@ViewBag.TrabajoId" />
+                <div class="col-md-3">
+                    <label class="form-label">CiudadId</label>
+                    <input type="number" name="CiudadId" class="form-control" required min="1" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Cantidad</label>
+                    <input type="number" name="Cantidad" class="form-control" required min="1" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Fecha Inicio</label>
+                    <input type="date" name="FechaInicio" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Fecha Fin</label>
+                    <input type="date" name="FechaFin" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">CoordinadorId</label>
+                    <input type="number" name="CoordinadorId" class="form-control" min="1" />
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-plus-circle"></i> Agregar Muestra
+                    </button>
+                </div>
+                <div class="col-md-6 d-flex align-items-end">
+                    <form asp-action="ImportCsv" method="post" enctype="multipart/form-data">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="trabajoId" value="@ViewBag.TrabajoId" />
+                        <div class="input-group">
+                            <input type="file" name="file" class="form-control" accept=".csv" required />
+                            <button type="submit" class="btn btn-outline-secondary">
+                                <i class="bi bi-upload"></i> Importar CSV
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Departamento</th>
+                                <th>Ciudad</th>
+                                <th>Cantidad</th>
+                                <th>Inicio</th>
+                                <th>Fin</th>
+                                <th>Coordinador</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var m in Model)
+                            {
+                                <tr>
+                                    <td>@m.Id</td>
+                                    <td>@m.Departamento</td>
+                                    <td>@m.Ciudad</td>
+                                    <td>@m.Cantidad</td>
+                                    <td>@m.FechaInicio?.ToString("dd/MM/yyyy")</td>
+                                    <td>@m.FechaFin?.ToString("dd/MM/yyyy")</td>
+                                    <td>@m.CoordinadorNombre</td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal" data-id="@m.Id">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <form asp-action="Delete" method="post" class="d-inline">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@m.Id" />
+                                                <input type="hidden" name="trabajoId" value="@ViewBag.TrabajoId" />
+                                                <button type="submit" class="btn btn-outline-danger" onclick="return confirm('¿Eliminar muestra?');">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#datesModal" data-id="@m.Id">
+                                                <i class="bi bi-calendar-event"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">No hay muestra registrada para este trabajo.</div>
+    }
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Editar Muestra</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="editForm" asp-action="Update" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="Id" id="editId" />
+            <input type="hidden" name="TrabajoId" value="@ViewBag.TrabajoId" />
+            <div class="mb-3">
+                <label class="form-label">CiudadId</label>
+                <input type="number" name="CiudadId" id="editCiudadId" class="form-control" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Cantidad</label>
+                <input type="number" name="Cantidad" id="editCantidad" class="form-control" required min="1" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Fecha Inicio</label>
+                <input type="date" name="FechaInicio" id="editFechaInicio" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Fecha Fin</label>
+                <input type="date" name="FechaFin" id="editFechaFin" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">CoordinadorId</label>
+                <input type="number" name="CoordinadorId" id="editCoordinadorId" class="form-control" />
+            </div>
+            <div class="text-end">
+                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Update Dates Modal -->
+<div class="modal fade" id="datesModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Actualizar Fechas y Planeación</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="datesForm" asp-action="UpdateDates" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="IdMuestra" id="datesIdMuestra" />
+            <input type="hidden" name="trabajoId" value="@ViewBag.TrabajoId" />
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Fecha Inicio</label>
+                    <input type="date" name="FechaInicio" class="form-control" required />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Fecha Fin</label>
+                    <input type="date" name="FechaFin" class="form-control" required />
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Días de Ejecución</label>
+                    <div class="d-flex flex-wrap gap-3">
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="Lunes" checked /><label class="form-check-label">Lunes</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="Martes" checked /><label class="form-check-label">Martes</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="Miercoles" checked /><label class="form-check-label">Miércoles</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="Jueves" checked /><label class="form-check-label">Jueves</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="Viernes" checked /><label class="form-check-label">Viernes</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="Sabado" /><label class="form-check-label">Sábado</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="Domingo" /><label class="form-check-label">Domingo</label></div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="ExcluirFestivos" checked />
+                        <label class="form-check-label">Excluir Festivos</label>
+                    </div>
+                </div>
+                <div class="col-12 text-end">
+                    <button type="submit" class="btn btn-success">Actualizar</button>
+                </div>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+    <script>
+        const editModal = document.getElementById('editModal');
+        editModal.addEventListener('show.bs.modal', event => {
+            const button = event.relatedTarget;
+            const id = button.getAttribute('data-id');
+            fetch(`@Url.Action("ObtenerMuestra", "MuestraTrabajos", new { area = "OP" })?id=${id}`)
+                .then(r => r.json())
+                .then(data => {
+                    document.getElementById('editId').value = data.id;
+                    document.getElementById('editCiudadId').value = data.ciudadId;
+                    document.getElementById('editCantidad').value = data.cantidad;
+                    document.getElementById('editFechaInicio').value = data.fechaInicio ? data.fechaInicio.substring(0,10) : '';
+                    document.getElementById('editFechaFin').value = data.fechaFin ? data.fechaFin.substring(0,10) : '';
+                    document.getElementById('editCoordinadorId').value = data.coordinadorId || '';
+                });
+        });
+
+        const datesModal = document.getElementById('datesModal');
+        datesModal.addEventListener('show.bs.modal', event => {
+            const button = event.relatedTarget;
+            const id = button.getAttribute('data-id');
+            document.getElementById('datesIdMuestra').value = id;
+        });
+    </script>
+}

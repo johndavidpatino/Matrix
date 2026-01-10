@@ -1,6 +1,8 @@
 @model MatrixNext.Web.Services.OP.Models.ProgramacionCampoVm
 @{
     ViewData["Title"] = Model?.ProgramacionId > 0 ? "Editar Programación" : "Nueva Programación";
+    var trabajos = (IEnumerable<dynamic>?)ViewData["Trabajos"] ?? Array.Empty<dynamic>();
+    var entrevistados = (IEnumerable<dynamic>?)ViewData["EntrevistadosDisponibles"] ?? Array.Empty<dynamic>();
 }
 
 <div class="container-fluid mt-4">
@@ -23,14 +25,11 @@
                     <div class="col-md-6">
                         <label asp-for="TrabajoId" class="form-label">Trabajo</label>
                         <select asp-for="TrabajoId" class="form-select" disabled>
-                            @if (ViewData["Trabajos"] != null)
+                            @foreach (var trabajo in trabajos)
                             {
-                                @foreach (var trabajo in (IEnumerable<dynamic>)ViewData["Trabajos"])
-                                {
-                                    <option value="@trabajo.TrabajoId" selected="@(trabajo.TrabajoId == Model.TrabajoId)">
-                                        @trabajo.TrabajoId - @trabajo.NombreTrabajo
-                                    </option>
-                                }
+                                <option value="@trabajo.TrabajoId" selected="@(trabajo.TrabajoId == (Model?.TrabajoId ?? 0))">
+                                    @trabajo.TrabajoId - @trabajo.NombreTrabajo
+                                </option>
                             }
                         </select>
                         <small class="text-muted">@Model?.NombreTrabajo</small>
@@ -39,17 +38,14 @@
                     <div class="col-md-6">
                         <label asp-for="EntrevistadoId" class="form-label">Entrevistado <span class="text-danger">*</span></label>
                         <select asp-for="EntrevistadoId" id="entrevistadoId" class="form-select" required multiple size="5">
-                            @if (ViewData["EntrevistadosDisponibles"] != null)
+                            @foreach (var entrevistado in entrevistados)
                             {
-                                @foreach (var entrevistado in (IEnumerable<dynamic>)ViewData["EntrevistadosDisponibles"])
-                                {
-                                    <option value="@entrevistado.Id" 
-                                            data-telefono="@entrevistado.Telefono"
-                                            data-direccion="@entrevistado.Direccion"
-                                            selected="@(entrevistado.Id == Model?.EntrevistadoId)">
-                                        @entrevistado.NombreCompleto - @entrevistado.Telefono
-                                    </option>
-                                }
+                                <option value="@entrevistado.Id" 
+                                        data-telefono="@entrevistado.Telefono"
+                                        data-direccion="@entrevistado.Direccion"
+                                        selected="@(entrevistado.Id == (Model?.EntrevistadoId ?? 0))">
+                                    @entrevistado.NombreCompleto - @entrevistado.Telefono
+                                </option>
                             }
                         </select>
                         <span asp-validation-for="EntrevistadoId" class="text-danger"></span>

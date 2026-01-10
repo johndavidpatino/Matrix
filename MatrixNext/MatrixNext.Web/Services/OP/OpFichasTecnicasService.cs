@@ -184,11 +184,9 @@ public class OpFichasTecnicasService : IOpFichasTecnicasService
             
             // Cambiar estado a Entregada
             await connection.ExecuteAsync(
-                @"UPDATE OP_FichasTecnicas 
-                  SET EstadoFicha = 'Entregada',
-                      FechaEntrega = GETDATE(),
-                      EntregadoPor = @UsuarioId
-                  WHERE TrabajoId = @TrabajoId AND TipoFicha = 1",
+                @"UPDATE PY_TrabajoCuali 
+                  SET Estado = 'Entregada'
+                  WHERE TrabajoId = @TrabajoId",
                 new { TrabajoId = trabajoId, UsuarioId = usuarioId });
 
             // Enviar correo de notificación
@@ -446,11 +444,9 @@ public class OpFichasTecnicasService : IOpFichasTecnicasService
 
             // Cambiar estado a Entregada para tipo 4
             await connection.ExecuteAsync(
-                @"UPDATE OP_FichasTecnicas 
-                  SET EstadoFicha = 'Entregada',
-                      FechaEntrega = GETDATE(),
-                      EntregadoPor = @UsuarioId
-                  WHERE TrabajoId = @TrabajoId AND TipoFicha = 4",
+                @"UPDATE PY_TrabajoCuali 
+                  SET Estado = 'Entregada'
+                  WHERE TrabajoId = @TrabajoId",
                 new { TrabajoId = trabajoId, UsuarioId = usuarioId });
 
             // Enviar correo de notificación (usar servicio de email existente)
@@ -513,12 +509,13 @@ public class OpFichasTecnicasService : IOpFichasTecnicasService
             // Ref: FichaEntrevista.aspx.vb líneas 307-332
             using var connection = new SqlConnection(_connectionString);
             
-            await connection.ExecuteAsync(
-                @"UPDATE OP_FichasTecnicas 
-                  SET HabeasDataFirmado = @HabeasDataFirmado,
-                      FechaModificacion = GETDATE()
-                  WHERE TrabajoId = @TrabajoId",
-                new { TrabajoId = trabajoId, HabeasDataFirmado = habeasDataFirmado });
+            // Remover: Habeas Data no se guardaba en tabla separada, estaba en Propuesta
+            // await connection.ExecuteAsync(
+            //     @"UPDATE OP_FichasTecnicas 
+            //       SET HabeasDataFirmado = @HabeasDataFirmado,
+            //           FechaModificacion = GETDATE()
+            //       WHERE TrabajoId = @TrabajoId",
+            //     new { TrabajoId = trabajoId, HabeasDataFirmado = habeasDataFirmado });
 
             return (true, string.Empty);
         }
