@@ -1,24 +1,89 @@
-# 📋 BACKLOG DE MIGRACIÓN - GD_Documentos FASE 5 PARTE A
+# ⚠️ BACKLOG OBSOLETO - REEMPLAZADO POR BACKLOG_MIGRACION_PNC_PRODUCTOS_NO_CONFORMES.md
 
-**Fases**: FASE 5 PARTE A (Sprint 8)  
-**Tema**: PNC - Proceso Nueva Creación  
-**Horas Totales**: 40h  
-**Duración Estimada**: 1 semana (1 sprint)  
-**Versión**: 1.0  
-**Fecha**: 2026-01-09
+## 🚨 AVISO IMPORTANTE
+
+**Este backlog ha sido DESCARTADO** tras análisis detallado del sistema legacy (2026-01-10).
+
+### Razón del Descarte
+
+El backlog original proponía **"PNC - Proceso Nueva Creación"** (sistema para crear nuevos documentos controlados) que **NO EXISTE** en el sistema legacy.
+
+### Hallazgos Críticos
+
+La investigación reveló que **PNC** en el legacy significa:
+
+- ✅ **PNC = Producto No Conforme** (sistema de calidad ISO 9001)
+- ❌ **PNC ≠ Proceso Nueva Creación** (feature inventada)
+
+**Evidencia técnica:**
+```bash
+# grep_search "GD_SolicitudPNC" → 0 matches (SPs propuestos NO existen)
+# grep_search "PNC" en SQL → 20+ matches → Todas tablas PNC_ProductoNoConforme (calidad)
+# CoreProject/Clases/PNC/PNCClass.vb → Sistema calidad ISO 9001
+# WebMatrix/GD_Documentos/ProductoNoConformeRegistrar.aspx → Registro no conformidades
+```
+
+### Sistema Real Encontrado
+
+**PNC (Producto No Conforme)** es un módulo de **gestión de calidad ISO 9001** para:
+- ✅ Registrar reclamos de clientes sobre productos que NO cumplen especificaciones
+- ✅ Identificar causas raíz de no conformidades
+- ✅ Implementar acciones correctivas (inmediatas, correctivas, preventivas)
+- ✅ Hacer seguimiento hasta cierre del PNC
+- ✅ Generar reportes para auditorías ISO 9001
+
+**NO es un sistema de gestión documental.** La funcionalidad de "crear nuevos documentos" YA está implementada en:
+- `GD_SolicitudDocumentos` con `TipoSolicitud = 1` (Construcción)
+- FASE 3 completada (Solicitudes + Revisores + Workflow)
 
 ---
 
-## 📑 CONTENIDO
+## ✅ REEMPLAZO
+
+**Ver backlog correcto:**  
+📄 [BACKLOG_MIGRACION_PNC_PRODUCTOS_NO_CONFORMES.md](./BACKLOG_MIGRACION_PNC_PRODUCTOS_NO_CONFORMES.md)
+
+**Contenido:**
+- Sprint 8: Migración PNC REAL (Producto No Conforme) - 40h
+- Sistema calidad ISO 9001 completo
+- 16 SPs existentes (PNC_ObtenerProductoNoConforme, PNC_GetById, etc.)
+- 12 tablas reales (PNC_ProductoNoConforme, PNC_Causas, PNC_Acciones, etc.)
+- 3 páginas WebForms legacy identificadas
+
+**Prioridad:** MEDIA (módulo calidad independiente, opcional para GD core)
+
+---
+
+## 📚 Lección Aprendida - REGLA 6 (Paridad 1:1)
+
+**REGLA 6 violada:** NO agregar features que NO existen en legacy.
+
+**Proceso correcto aplicado:**
+1. ✅ Iniciar Tarea 8.1: "Mapear SPs PNC"
+2. ✅ Buscar SPs propuestos: `grep_search "GD_SolicitudPNC"`
+3. ✅ Resultado: **0 matches** → ⚠️ ALERTA
+4. ✅ Investigar legacy: `grep_search "PNC"` → 40+ matches sistema calidad
+5. ✅ Analizar código: `PNCClass.vb`, tablas `PNC_ProductoNoConforme`
+6. ✅ Rediseñar backlog según realidad
+
+**Evitar:** Asumir funcionalidad sin evidencia código legacy.
+
+---
+
+# ❌ CONTENIDO ORIGINAL DESCARTADO (SOLO REFERENCIA HISTÓRICA)
+
+---
+
+## 📑 CONTENIDO ORIGINAL
 
 - [Resumen Ejecutivo](#resumen-ejecutivo)
 - [Sprint 8: PNC - Proceso Nueva Creación](#sprint-8-pnc---proceso-nueva-creación)
 
 ---
 
-## 🎯 RESUMEN EJECUTIVO
+## 🎯 RESUMEN EJECUTIVO ORIGINAL (OBSOLETO)
 
-### Objetivos de FASE 5 PARTE A
+### Objetivos de FASE 5 PARTE A (PROPUESTA INCORRECTA)
 
 Implementar **Proceso Nueva Creación (PNC)** - Sistema para crear nuevos documentos controlados con aprobación multirevidor.
 
