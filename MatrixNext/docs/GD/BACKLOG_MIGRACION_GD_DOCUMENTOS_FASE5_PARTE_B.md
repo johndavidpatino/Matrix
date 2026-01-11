@@ -1,7 +1,7 @@
 # 📋 BACKLOG DE MIGRACIÓN - GD_Documentos FASE 5 PARTE B
 
 **Fases**: FASE 5 PARTE B (Sprint 9)  
-**Tema**: Escáner + Configuraciones  
+**Tema**: Configuraciones + Testing (Escáner omitido)  
 **Horas Totales**: 18h  
 **Duración Estimada**: 3-4 días (1 sprint)  
 **Versión**: 1.0  
@@ -17,6 +17,8 @@
 ---
 
 ## 🎯 RESUMEN EJECUTIVO
+> ACTUALIZACIÓN 2026-01-10: Se omite la migración del módulo de Escáner.
+> Continuamos con Configuraciones de GD y Testing E2E del módulo PNC.
 
 ### Objetivos de FASE 5 PARTE B
 
@@ -54,286 +56,86 @@
 
 ---
 
-## 🚀 SPRINT 9: ESCÁNER + CONFIGURACIONES
+## 🚀 SPRINT 9: CONFIGURACIONES + TESTING (SIN ESCÁNER)
 
 ### Objetivo
 
-Integrar servicio escáner y crear panel de configuraciones GD.
+Completar configuraciones de GD y ejecutar testing E2E del módulo **PNC** y flujos asociados.
 
 **Horas Estimadas**: 18h  
 **Duración**: 3-4 días  
 **Criterio de Éxito**:
-- ✅ Escáner captura archivos
-- ✅ Auto-carga a repositorio
-- ✅ Seguimiento escáner registrado
-- ✅ Config panel funcional
-- ✅ 0 errores
-- ✅ Commit cambios
+- ✅ Navegación a PNC desde el menú
+- ✅ Controlador MVC UI para PNC funcional
+- ✅ Rutas y DI configuradas (IPncService)
+- ✅ appsettings con cadenas de conexión correctas
+- ✅ Testing E2E de creación, edición, cierre PNC
+- ✅ 0 errores críticos
+- ✅ Commits y documentación
 
 ---
 
-### TAREA 9.1: Investigar Servicio Escáner Existente (1.5h)
+### TAREA 9.1: Configurar UI MVC PNC (2h)
 
-**Descripción**: Localizar e integrar API escáner
+**Descripción**: Crear controlador MVC (UI) para servir las vistas Razor del módulo PNC.
 
-**Proceso**:
+**Ubicación**: `MatrixNext.Web/Controllers/PncUiController.cs`
 
-1. **Buscar implementación existente**:
-   - ¿`IDocumentScannerService`, `IScannerService`, etc.?
-   - ¿Ubicación en MatrixNext.Core o MatrixNext.Web?
-   - ¿Métodos: `ScanDocumentAsync()`, `CapturePDFAsync()`, etc.?
-
-2. **Documentar API**:
-   ```csharp
-   public interface IScannerService
-   {
-       Task<(bool success, string filePath, string mimeType)> ScanDocumentAsync(ScannerConfig config);
-       Task<List<string>> ObtenerDispositivosEscaner();
-       Task<bool> ProbarConexion(string dispositivoId);
-   }
-   ```
-
-3. **Crear MAPEO_SCANNER_SERVICE.md**:
-   ```markdown
-   # Integración Escáner MatrixNext
-
-   ## Servicio Escáner
-
-   **Ubicación**: `Data/Services/Scanner/IScannerService`  
-   **Métodos**:
-   - `ScanDocumentAsync(ScannerConfig config)` → (bool success, string filePath, string mimeType)
-   - `ObtenerDispositivosEscaner()` → List<string>
-   - `ProbarConexion(string dispositivoId)` → bool
-
-   ## Configuración
-
-   En `appsettings.json`:
-   ```json
-   {
-     "ScannerSettings": {
-       "EnabledScanners": ["Canon", "Xerox"],
-       "DefaultResolution": 300,
-       "ColorMode": "RGB",
-       "OutputFormat": "PDF"
-     }
-   }
-   ```
-
-   ## Flujo Escáner GD
-
-   1. Usuario abre interfaz escáner en GD
-   2. Selecciona dispositivo escáner
-   3. Click "Escanear"
-   4. Sistema llama IScannerService.ScanDocumentAsync()
-   5. Archivo PDF generado en temp
-   6. Auto-carga a repositorio o solicitud PNC
-   ```
+**Acciones**:
+- `Index()` → Renderiza listado (Views/Pnc/Index.cshtml)
+- `Crear()` → Renderiza formulario (Views/Pnc/Crear.cshtml)
+- `Seguimiento()` → Renderiza dashboard (Views/Pnc/Seguimiento.cshtml)
+- `Detalle(int id)` → Carga modelo vía `IPncService.ObtenerPncById(id)` y renderiza detalle
 
 **Validación**:
-- ✅ Escáner service localizado
-- ✅ API documentada
-- ✅ MAPEO_SCANNER_SERVICE.md creado
+- ✅ Compila y navega a `/Pnc`, `/Pnc/Crear`, `/Pnc/Seguimiento`, `/Pnc/Detalle/{id}`
+- ✅ Inyección de `IPncService` funcionando
 
 ---
 
-### TAREA 9.2: Crear ViewModel para Escáner (1h)
+### TAREA 9.2: Navegación en Layout (1h)
 
-**Descripción**: ViewModels para interfaz escáner
+**Descripción**: Agregar entrada del menú lateral hacia PNC.
 
-**Ubicación**: `Models/ViewModels/GD/Scanner/`
+**Ubicación**: `MatrixNext.Web/Views/Shared/layouts/_main-sidebar.cshtml`
 
-**ViewModels**:
-
-#### 1. ScannerConfigVM
-```csharp
-public class ScannerConfigVM
-{
-    public string DispositivoId { get; set; }
-    public int Resolucion { get; set; } = 300; // DPI
-    public string Modo { get; set; } = "RGB"; // B&W, Grayscale, RGB
-    public int Paginas { get; set; } = 1; // Cantidad a escanear
-    public bool BordeAutomatico { get; set; } = true;
-    public string DestinoPor { get; set; } = "Repositorio"; // Repositorio o SolicitudPNC
-}
-```
-
-#### 2. ScannerDispositivoVM
-```csharp
-public class ScannerDispositivoVM
-{
-    public string Id { get; set; }
-    public string Nombre { get; set; }
-    public string Estado { get; set; } // Online, Offline
-    public bool Disponible { get; set; }
-}
-```
-
-#### 3. ScannerResultVM
-```csharp
-public class ScannerResultVM
-{
-    public bool Success { get; set; }
-    public string FilePath { get; set; }
-    public string MimeType { get; set; }
-    public int PaginasEscaneadas { get; set; }
-    public string Mensaje { get; set; }
-    public DateTime FechaEscaneo { get; set; }
-}
-```
+**Cambio**:
+- Reemplazar entrada de área GD por enlace directo: `/Pnc`
 
 **Validación**:
-- ✅ ViewModels compilables
-- ✅ Propiedades correctas
+- ✅ Menú muestra "Productos No Conformes" y navega a `/Pnc`
 
 ---
 
-### TAREA 9.3: Crear Scanner Controller (2h)
+### TAREA 9.3: appsettings y DI (2h)
 
-**Descripción**: Controller para interfaz escáner
+**Descripción**: Validar `appsettings.json` y registro de DI para PNC.
 
-**Ubicación**: `Areas/GD/Controllers/ScannerController.cs`
+**Acciones**:
+- Verificar cadena de conexión utilizada por `PncAdapter` (via `IConfiguration`)
+- Confirmar registro de `IPncService` y `IPncAdapter` en `Program.cs` / `Startup.cs`
+- Revisar CORS/JWT si aplica para llamadas AJAX desde vistas
 
 **Métodos**:
-
-```csharp
-[Area("GD")]
-[Authorize]
-[Route("GD/Scanner")]
-public class ScannerController : Controller
-{
-    private readonly IScannerService _scannerService;
-    private readonly IGdPncService _pncService;
-    private readonly IGdRepositorioService _repositorioService;
-    private readonly ILogger<ScannerController> _logger;
-
-    // GET: /GD/Scanner
-    public async Task<IActionResult> Index()
-    {
-        var dispositivos = await _scannerService.ObtenerDispositivosEscaner();
-        var vm = new ScannerIndexVM
-        {
-            Dispositivos = dispositivos.Select(d => new ScannerDispositivoVM 
-            { 
-                Id = d,
-                Nombre = d,
-                Disponible = true 
-            }).ToList()
-        };
-        return View(vm);
-    }
-
-    // POST: /GD/Scanner/GetDispositivosAjax
-    [HttpPost]
-    public async Task<IActionResult> GetDispositivosAjax()
-    {
-        try
-        {
-            var dispositivos = await _scannerService.ObtenerDispositivosEscaner();
-            var resultado = dispositivos.Select(d => new 
-            { 
-                id = d, 
-                nombre = d 
-            }).ToList();
-            
-            return Json(new { success = true, data = resultado });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error obteniendo dispositivos: {ex.Message}");
-            return Json(new { success = false, message = ex.Message });
-        }
-    }
-
-    // POST: /GD/Scanner/ProbarConexion
-    [HttpPost]
-    public async Task<IActionResult> ProbarConexion(string dispositivoId)
-    {
-        try
-        {
-            var conectado = await _scannerService.ProbarConexion(dispositivoId);
-            return Json(new { success = conectado });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error probando conexión: {ex.Message}");
-            return Json(new { success = false, message = ex.Message });
-        }
-    }
-
-    // POST: /GD/Scanner/Escanear
-    [HttpPost]
-    public async Task<IActionResult> Escanear(ScannerConfigVM config)
-    {
-        try
-        {
-            if (!ModelState.IsValid)
-                return Json(new { success = false, message = "Configuración inválida" });
-
-            // ✅ Llamar escáner
-            var (success, filePath, mimeType) = await _scannerService.ScanDocumentAsync(config);
-
-            if (!success)
-                return Json(new { success = false, message = "Error escaneando documento" });
-
-            // ✅ Auto-cargar según destino
-            if (config.DestinoPor == "Repositorio")
-            {
-                // ⚠️ TODO: Cargar a repositorio de documento existente
-                // Requiere: idDocumento, versión automática
-            }
-            else if (config.DestinoPor == "SolicitudPNC")
-            {
-                // ✅ Crear nueva solicitud PNC con documento escaneado
-                var (pncSuccess, idSolicitud, pncMessage) = await CrearSolicitudPNCDesdeEscaneo(
-                    filePath, 
-                    mimeType);
-
-                if (!pncSuccess)
-                    return Json(new { success = false, message = pncMessage });
-
-                return Json(new 
-                { 
-                    success = true, 
-                    message = "Documento escaneado y solicitud PNC creada",
-                    idSolicitud = idSolicitud,
-                    redirectUrl = Url.Action("Detail", "Pnc", new { id = idSolicitud })
-                });
-            }
-
-            return Json(new { success = true, message = "Documento escaneado exitosamente" });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error escaneando: {ex.Message}");
-            return Json(new { success = false, message = $"Error: {ex.Message}" });
-        }
-    }
-
-    // Método auxiliar
-    private async Task<(bool, int, string)> CrearSolicitudPNCDesdeEscaneo(string filePath, string mimeType)
-    {
-        // ⚠️ TODO: Implementar lógica para crear solicitud PNC con archivo escaneado
-        // 1. Obtener información escáner (usuario, dispositivo, etc.)
-        // 2. Proponer valores por defecto (nombre = fecha + dispositivo)
-        // 3. Llamar PncService.CrearSolicitud()
-        return (true, 0, "OK");
-    }
-}
-```
-
 **Validación**:
-- ✅ Controller compilable
-- ✅ 4+ métodos
-- ✅ Async/await
-- ✅ Manejo de errores
+- ✅ `PncAdapter` obtiene connection string correcta
+- ✅ Servicios registrados en DI sin errores
+- ✅ Peticiones AJAX autenticadas
 
 ---
 
-### TAREA 9.4: Crear Vista Escáner (2h)
+### TAREA 9.4: Testing E2E PNC (8h)
 
-**Descripción**: Interfaz para escanear documentos
+**Descripción**: Pruebas de extremo a extremo para el módulo PNC.
 
-**Ubicación**: `Areas/GD/Views/Scanner/Index.cshtml`
+**Escenarios**:
+- Crear PNC con causas iniciales
+- Agregar causa en detalle
+- Agregar acción inmediata (validación ISO 9001)
+- Agregar acción correctiva/preventiva
+- Ejecutar acción con evidencia
+- Validar cierre PNC (pre-check)
+- Cerrar PNC y verificar notificaciones
 
 **Contenido**:
 
@@ -350,74 +152,29 @@ public class ScannerController : Controller
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <h5>Configurar Escaneo</h5>
-                </div>
-                <div class="card-body">
-                    <form id="formScanner">
-                        <!-- Dispositivo -->
-                        <div class="mb-3">
-                            <label class="form-label">Dispositivo Escáner *</label>
-                            <select id="dispositivoId" name="dispositivoId" class="form-select" required>
-                                <option value="">Cargando dispositivos...</option>
-                            </select>
-                            <small class="form-text text-muted">
-                                <button type="button" class="btn btn-link btn-sm p-0" id="btnProbar">
-                                    Probar conexión
-                                </button>
-                            </small>
-                            <div id="estadoConexion" class="mt-2"></div>
-                        </div>
+                    **Herramientas**:
+                    - Navegación UI (Razor)
+                    - Llamadas API (PncController `api/pnc/*`)
+                    - Logs de `ILogger` en Service y Controller
 
-                        <!-- Resolución -->
-                        <div class="mb-3">
-                            <label class="form-label">Resolución (DPI)</label>
-                            <select name="resolucion" class="form-select">
-                                <option value="150">150 DPI (Baja - Rápido)</option>
-                                <option value="200">200 DPI</option>
-                                <option value="300" selected>300 DPI (Estándar)</option>
-                                <option value="600">600 DPI (Alta - Lento)</option>
-                            </select>
-                        </div>
+                    **Validación**:
+                    - ✅ Todos los escenarios pasan sin errores
+                    - ✅ Mensajes claros al usuario en errores
 
-                        <!-- Modo Color -->
-                        <div class="mb-3">
-                            <label class="form-label">Modo Color</label>
-                            <select name="modo" class="form-select">
-                                <option value="B&W">Blanco y Negro (Pequeño)</option>
-                                <option value="Grayscale">Escala de Grises</option>
-                                <option value="RGB" selected>Color (RGB)</option>
-                            </select>
-                        </div>
+                    ### TAREA 9.5: Fixes y Deploy (4h)
 
-                        <!-- Páginas -->
-                        <div class="mb-3">
-                            <label class="form-label">Cantidad Páginas</label>
-                            <input type="number" name="paginas" class="form-control" value="1" min="1" max="999">
-                        </div>
+                    **Descripción**: Correcciones detectadas en pruebas y preparación para deploy.
 
-                        <!-- Borde automático -->
-                        <div class="mb-3">
-                            <div class="form-check">
-                                <input type="checkbox" id="bordeAuto" name="bordeAutomatico" 
-                                       class="form-check-input" checked>
-                                <label class="form-check-label" for="bordeAuto">
-                                    Detectar borde automáticamente
-                                </label>
-                            </div>
-                        </div>
+                    **Acciones**:
+                    - Ajustes menores UI/UX en vistas
+                    - Revisión de permisos `[Authorize]`
+                    - Documentación breve de uso PNC
+                    - Preparar variables de entorno y connection strings para staging/producción
 
-                        <!-- Destino -->
-                        <div class="mb-3">
-                            <label class="form-label">Destino *</label>
-                            <select name="destinoPor" class="form-select" required>
-                                <option value="SolicitudPNC">Crear Solicitud PNC (Nuevo documento)</option>
-                                <option value="Repositorio">Agregar a Repositorio (Documento existente)</option>
-                            </select>
-                            <small class="form-text text-muted">
-                                Selecciona dónde guardar el documento escaneado
-                            </small>
-                        </div>
-
+                    **Validación**:
+                    - ✅ Sin warnings críticos
+                    - ✅ Documentación actualizada
+                    - ✅ Preparado para deployment
                         <!-- Botones -->
                         <div class="d-grid gap-2">
                             <button type="button" id="btnEscanear" class="btn btn-primary btn-lg">
