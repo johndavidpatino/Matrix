@@ -242,6 +242,14 @@ builder.Services.AddScoped<IThEmpleadosService, ThEmpleadosService>();
 builder.Services.AddScoped<IThDesvinculacionService, ThDesvinculacionService>();
 builder.Services.AddScoped<IThCatalogosService, ThCatalogosService>();
 
+// ===== SPRINT 7: CORE Workflow/Tareas =====
+// Ref: SPRINT_7_KICKOFF.md § Architecture
+builder.Services.AddScoped<ICoreTaskService, CoreTaskService>();
+builder.Services.AddScoped<ICoreWorkflowService, CoreWorkflowService>();
+builder.Services.AddScoped<ICoreAssignmentService, CoreAssignmentService>();
+builder.Services.AddScoped<ICoreNotificationService, CoreNotificationService>();
+builder.Services.AddScoped<ICoreAuditService, CoreAuditService>();
+
 var app = builder.Build();
 
 // Middleware global de manejo de excepciones
@@ -288,5 +296,6 @@ app.MapControllerRoute(
 
 // ===== SPRINT 6: SignalR Hubs para notificaciones =====
 app.MapHub<MatrixNext.Web.Services.OP.Hubs.OpNotificationsHub>("/hubs/op-notifications");
+app.MapHub<MatrixNext.Web.Services.CORE.CoreNotificationsHub>("/hubs/core-notifications");
 
 app.Run();

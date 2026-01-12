@@ -1,0 +1,148 @@
+@{
+    ViewData["Title"] = "CORE - Tareas";
+}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Tareas asignadas</h5>
+        <button class="btn btn-primary" id="btnCrear">Crear tarea</button>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped" id="tablaTareas">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Trabajo</th>
+                        <th>Tarea</th>
+                        <th>Estado</th>
+                        <th>Prioridad</th>
+                        <th>Vencimiento</th>
+                        <th>Observaciones</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Crear Tarea Modal -->
+<div class="modal fade" id="crearTareaModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Crear nueva tarea</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formCrearTarea">
+          <div class="mb-3">
+            <label class="form-label">Id Trabajo</label>
+            <input type="number" class="form-control" name="IdTrabajo" required />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Id Tarea</label>
+            <input type="number" class="form-control" name="IdTarea" required />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Id Tipo Hilo</label>
+            <input type="number" class="form-control" name="IdTipoHilo" required />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Prioridad</label>
+            <select class="form-select" name="Prioridad">
+              <option value="1">Normal</option>
+              <option value="2">Alta</option>
+              <option value="3">Baja</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Fecha Vencimiento</label>
+            <input type="date" class="form-control" name="FechaVencimiento" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Observaciones</label>
+            <textarea class="form-control" name="Observaciones"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" id="btnGuardarCrear">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Asignar Tarea Modal -->
+<div class="modal fade" id="asignarTareaModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Asignar tarea</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formAsignarTarea">
+          <div class="mb-3">
+            <label class="form-label">IDs Usuarios (separados por coma)</label>
+            <input type="text" class="form-control" name="IdUsuarios" placeholder="101, 102" required />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Rol</label>
+            <select class="form-select" name="Rol">
+              <option value="Ejecutor">Ejecutor</option>
+              <option value="Revisor">Revisor</option>
+              <option value="Supervisor">Supervisor</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Comentario</label>
+            <textarea class="form-control" name="Comentario"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" id="btnGuardarAsignar">Asignar</button>
+      </div>
+    </div>
+  </div>
+  </div>
+
+<!-- Escalar Tarea Modal -->
+<div class="modal fade" id="escalarTareaModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Escalar tarea</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formEscalarTarea">
+          <div class="mb-3">
+            <label class="form-label">ID Usuario destino</label>
+            <input type="number" class="form-control" name="IdUsuarioDestino" required />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Motivo</label>
+            <input type="text" class="form-control" name="Motivo" required />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Comentario</label>
+            <textarea class="form-control" name="Comentario"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" id="btnGuardarEscalar">Escalar</button>
+      </div>
+    </div>
+  </div>
+  </div>
+
+@section Scripts {
+    <script src="@Url.Content("~/js/core-tasks.js")"></script>
+}

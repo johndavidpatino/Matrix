@@ -5,7 +5,7 @@
 
 ---
 
-## 📊 ESTADO GLOBAL (2026-01-15)
+## 📊 ESTADO GLOBAL (2026-01-12)
 
 ```
 ✅ COMPLETADO (Sprints 0-4)
@@ -21,7 +21,7 @@
 ├── PY_Proyectos (70% ok, 5 features faltantes)
 ├── TH_Empleados (API ✅, Views 🔴)
 ├── OP_Cualitativo (MVP ✅, Complementos 🔴)
-├── CORE Workflow (Bloqueado, Sprint 7)
+├── CORE Workflow (API + UI ✅ Sprint 7 COMPLETADO)
 └── EQ_EasyQuote (0%, análisis crítico)
 
 🔴 NO INICIADO (Sprints 8-12+)
@@ -39,7 +39,7 @@
 |---|---|---|---|---|---|---|---|
 | **5** | TH Views/UI | 2w | 80h | 15 Ene | 29 Ene | 🟡 |
 | **6** | OP_Cualitativo Complementos | 2w | 75h | 01 Feb | 12 Feb | 🟡 |
-| **7** | CORE Workflow | 2w | 85h | 15 Feb | 26 Feb | 🟡 |
+| **7** | CORE Workflow | 2w | 85h | 15 Feb | 26 Feb | ✅ |
 | **8** | EQ_EasyQuote Análisis + Fase 1 | 2-3w | 120h | 01 Mar | 19 Mar | 🟡 |
 | **9** | Home Dashboard | 1-2w | 50h | 22 Mar | 02 Abr | 🔴 |
 | **10** | RP_Reportes | 1-2w | 60h | 05 Abr | 16 Abr | 🔴 |
@@ -132,11 +132,12 @@ Sprint 6: Reportes + Filtros Avanzados de OP_Cualitativo
 ├── Validaciones avanzadas
 └── Documento: MIGRACION_OP_CUALITATIVO_COMPLETADA.md
 
-Sprint 7: Workflow de Tareas + Integraciones CORE
-├── API REST de tareas (CRUD, escalaciones)
-├── Notificaciones automáticas
-├── Dashboard de tareas personales
-├── Integraciones con PY/OP/TH/GD
+Sprint 7: Workflow de Tareas + Integraciones CORE ✅ COMPLETADO
+├── API REST de tareas (CRUD, escalaciones, asignaciones)
+├── Notificaciones automáticas (SignalR hub)
+├── UI de tareas personales + Assign/Escalate actions
+├── Services alineados con WorkFlow model
+├── Unit tests (EF InMemory)
 └── Documento: MIGRACION_CORE_WORKFLOW_COMPLETADA.md
 
 Sprint 8: EQ_EasyQuote Análisis + Catálogos
