@@ -11,6 +11,7 @@ using MatrixNext.Web.Areas.EQ.Services.Masters;
 using MatrixNext.Web.Infrastructure.Data;
 using MatrixNext.Web.Services;
 using MatrixNext.Web.Services.OP;
+using MatrixNext.Web.Services.OP.Interfaces;
 using MatrixNext.Web.Services.PY;
 using MatrixNext.Web.Options;
 using MatrixNext.Web.Services.CORE;
@@ -179,6 +180,7 @@ builder.Services.AddScoped<IOpFiltrosService, OpFiltrosService>();
 builder.Services.AddScoped<IOpFichasTecnicasService, OpFichasTecnicasService>();
 builder.Services.AddScoped<IOpProgramacionService, OpProgramacionService>();
 builder.Services.AddScoped<IOpPlanillasModeracionService, OpPlanillasModeracionService>(); // Sprint 2
+builder.Services.AddScoped<IOpReportService, OpReportService>(); // Sprint 6 - Reportes/Exportes
 // IOpIpsService ya registrado previamente
 
 // Registrar opciones de configuración

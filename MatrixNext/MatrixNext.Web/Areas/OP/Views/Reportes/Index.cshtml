@@ -1,0 +1,210 @@
+@{
+    ViewData["Title"] = "Reportes - OP Cualitativo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2 class="mb-3">
+                <i class="bi bi-file-earmark-text"></i> Reportes - Operaciones Cualitativas
+            </h2>
+        </div>
+    </div>
+
+    <!-- Filtros Avanzados -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">
+                <i class="bi bi-funnel"></i> Filtros Avanzados
+            </h5>
+        </div>
+        <div class="card-body">
+            <form id="filterForm" class="row g-3">
+                <div class="col-md-3">
+                    <label for="trabajoId" class="form-label">Trabajo</label>
+                    <select class="form-select form-select-sm" id="trabajoId" name="trabajoId">
+                        <option value="">-- Todos --</option>
+                        <!-- Poblado por JS con autocomplete -->
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="fechaDesde" class="form-label">Fecha Desde</label>
+                    <input type="date" class="form-control form-control-sm" id="fechaDesde" name="fechaDesde" />
+                </div>
+
+                <div class="col-md-3">
+                    <label for="fechaHasta" class="form-label">Fecha Hasta</label>
+                    <input type="date" class="form-control form-control-sm" id="fechaHasta" name="fechaHasta" />
+                </div>
+
+                <div class="col-md-3">
+                    <label for="estado" class="form-label">Estado</label>
+                    <select class="form-select form-select-sm" id="estado" name="estado">
+                        <option value="">-- Todos --</option>
+                        <option value="Completado">Completado</option>
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="Cancelado">Cancelado</option>
+                    </select>
+                </div>
+
+                <div class="col-md-12 d-flex gap-2">
+                    <button type="button" class="btn btn-sm btn-primary" id="btnApplyFilters">
+                        <i class="bi bi-search"></i> Aplicar Filtros
+                    </button>
+                    <button type="button" class="btn btn-sm btn-secondary" id="btnClearFilters">
+                        <i class="bi bi-arrow-clockwise"></i> Limpiar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Tabs de Reportes -->
+    <ul class="nav nav-tabs mb-4" id="reportTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="sesiones-tab" data-bs-toggle="tab" data-bs-target="#sesionesTab" type="button">
+                <i class="bi bi-calendar-event"></i> Sesiones
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="entrevistas-tab" data-bs-toggle="tab" data-bs-target="#entrevistasTab" type="button">
+                <i class="bi bi-chat-dots"></i> Entrevistas
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="moderadores-tab" data-bs-toggle="tab" data-bs-target="#moderadoresTab" type="button">
+                <i class="bi bi-people"></i> Moderadores
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="reportTabsContent">
+
+        <!-- SESIONES -->
+        <div class="tab-pane fade show active" id="sesionesTab" role="tabpanel">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Reporte de Sesiones</h5>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-sm btn-success" id="btnExportSesionesExcel">
+                            <i class="bi bi-file-earmark-excel"></i> Excel
+                        </button>
+                        <button type="button" class="btn btn-sm btn-danger" id="btnExportSesionesPdf">
+                            <i class="bi bi-file-earmark-pdf"></i> PDF
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-sm" id="sesionesTable">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Trabajo</th>
+                                    <th>Fecha Inicio</th>
+                                    <th>Duración</th>
+                                    <th>Ubicación</th>
+                                    <th>Estado</th>
+                                    <th>Participantes</th>
+                                    <th>Moderador</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sesionesBody">
+                                <tr>
+                                    <td colspan="8" class="text-center text-muted">
+                                        Cargando...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ENTREVISTAS -->
+        <div class="tab-pane fade" id="entrevistasTab" role="tabpanel">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Reporte de Entrevistas</h5>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-sm btn-success" id="btnExportEntrevistasExcel">
+                            <i class="bi bi-file-earmark-excel"></i> Excel
+                        </button>
+                        <button type="button" class="btn btn-sm btn-danger" id="btnExportEntrevistasPdf">
+                            <i class="bi bi-file-earmark-pdf"></i> PDF
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-sm" id="entrevistasTable">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Trabajo</th>
+                                    <th>Fecha</th>
+                                    <th>Entrevistador</th>
+                                    <th>Encuestado</th>
+                                    <th>Duración</th>
+                                    <th>Completitud</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody id="entrevistasBody">
+                                <tr>
+                                    <td colspan="8" class="text-center text-muted">
+                                        Cargando...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODERADORES -->
+        <div class="tab-pane fade" id="moderadoresTab" role="tabpanel">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Estadísticas de Moderadores</h5>
+                    <button type="button" class="btn btn-sm btn-success" id="btnExportModeradoresExcel">
+                        <i class="bi bi-file-earmark-excel"></i> Excel
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-sm" id="moderadoresTable">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Total Sesiones</th>
+                                    <th>Completadas</th>
+                                    <th>Horas</th>
+                                    <th>Promedio Participantes</th>
+                                    <th>Última Sesión</th>
+                                </tr>
+                            </thead>
+                            <tbody id="moderadoresBody">
+                                <tr>
+                                    <td colspan="7" class="text-center text-muted">
+                                        Cargando...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/op-reportes.js"></script>
+}
