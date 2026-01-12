@@ -1,0 +1,155 @@
+@{
+    ViewData["Title"] = "Catálogos TH";
+}
+
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h1 class="h3 mb-0">Catálogos de Talento Humano</h1>
+            <small class="text-muted">Visualización de catálogos del sistema</small>
+        </div>
+    </div>
+
+    <!-- Tabs para catálogos -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="areas-tab" data-bs-toggle="tab" data-bs-target="#areas" type="button" role="tab">Áreas</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="cargos-tab" data-bs-toggle="tab" data-bs-target="#cargos" type="button" role="tab">Cargos</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="bandas-tab" data-bs-toggle="tab" data-bs-target="#bandas" type="button" role="tab">Bandas</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="estadosciviles-tab" data-bs-toggle="tab" data-bs-target="#estadosciviles" type="button" role="tab">Estados Civiles</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="grupos-tab" data-bs-toggle="tab" data-bs-target="#grupos" type="button" role="tab">Grupos Sanguíneos</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="sedes-tab" data-bs-toggle="tab" data-bs-target="#sedes" type="button" role="tab">Sedes</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tipos-tab" data-bs-toggle="tab" data-bs-target="#tipos" type="button" role="tab">Tipos Contrato</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tiempos-tab" data-bs-toggle="tab" data-bs-target="#tiempos" type="button" role="tab">Tiempos Contrato</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="empresas-tab" data-bs-toggle="tab" data-bs-target="#empresas" type="button" role="tab">Empresas</button>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <!-- Áreas -->
+        <div class="tab-pane fade show active" id="areas" role="tabpanel">
+            <div class="table-responsive mt-3">
+                <table class="table table-sm table-hover" id="areasTable">
+                    <thead class="table-light"><tr><th>ID</th><th>Nombre</th></tr></thead>
+                    <tbody id="areasTableBody"><tr><td colspan="2" class="text-center py-4">Cargando...</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Cargos -->
+        <div class="tab-pane fade" id="cargos" role="tabpanel">
+            <div class="table-responsive mt-3">
+                <table class="table table-sm table-hover" id="cargosTable">
+                    <thead class="table-light"><tr><th>ID</th><th>Nombre</th><th>Descripción</th></tr></thead>
+                    <tbody id="cargosTableBody"><tr><td colspan="3" class="text-center py-4">Cargando...</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Bandas -->
+        <div class="tab-pane fade" id="bandas" role="tabpanel">
+            <div class="table-responsive mt-3">
+                <table class="table table-sm table-hover" id="bandasTable">
+                    <thead class="table-light"><tr><th>ID</th><th>Nombre</th><th>Salario Base</th></tr></thead>
+                    <tbody id="bandasTableBody"><tr><td colspan="3" class="text-center py-4">Cargando...</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Estados Civiles -->
+        <div class="tab-pane fade" id="estadosciviles" role="tabpanel">
+            <div class="table-responsive mt-3">
+                <table class="table table-sm table-hover" id="estadosTable">
+                    <thead class="table-light"><tr><th>ID</th><th>Nombre</th></tr></thead>
+                    <tbody id="estadosTableBody"><tr><td colspan="2" class="text-center py-4">Cargando...</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Grupos Sanguíneos -->
+        <div class="tab-pane fade" id="grupos" role="tabpanel">
+            <div class="table-responsive mt-3">
+                <table class="table table-sm table-hover" id="gruposTable">
+                    <thead class="table-light"><tr><th>ID</th><th>Tipo</th></tr></thead>
+                    <tbody id="gruposTableBody"><tr><td colspan="2" class="text-center py-4">Cargando...</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Sedes -->
+        <div class="tab-pane fade" id="sedes" role="tabpanel">
+            <div class="table-responsive mt-3">
+                <table class="table table-sm table-hover" id="sedesTable">
+                    <thead class="table-light"><tr><th>ID</th><th>Nombre</th><th>Ciudad</th></tr></thead>
+                    <tbody id="sedesTableBody"><tr><td colspan="3" class="text-center py-4">Cargando...</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tipos Contrato -->
+        <div class="tab-pane fade" id="tipos" role="tabpanel">
+            <div class="table-responsive mt-3">
+                <table class="table table-sm table-hover" id="tiposTable">
+                    <thead class="table-light"><tr><th>ID</th><th>Nombre</th></tr></thead>
+                    <tbody id="tiposTableBody"><tr><td colspan="2" class="text-center py-4">Cargando...</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tiempos Contrato -->
+        <div class="tab-pane fade" id="tiempos" role="tabpanel">
+            <div class="table-responsive mt-3">
+                <table class="table table-sm table-hover" id="tiemposTable">
+                    <thead class="table-light"><tr><th>ID</th><th>Nombre</th><th>Meses</th></tr></thead>
+                    <tbody id="tiemposTableBody"><tr><td colspan="3" class="text-center py-4">Cargando...</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Empresas -->
+        <div class="tab-pane fade" id="empresas" role="tabpanel">
+            <div class="table-responsive mt-3">
+                <table class="table table-sm table-hover" id="empresasTable">
+                    <thead class="table-light"><tr><th>ID</th><th>Nombre</th><th>NIT</th></tr></thead>
+                    <tbody id="empresasTableBody"><tr><td colspan="3" class="text-center py-4">Cargando...</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Notifications -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div id="errorToast" class="toast" role="alert">
+        <div class="toast-header bg-danger text-white">
+            <strong class="me-auto">Error</strong>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+        </div>
+        <div class="toast-body" id="errorToastMessage"></div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/catalogos.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            CatalogosModule.init();
+        });
+    </script>
+}

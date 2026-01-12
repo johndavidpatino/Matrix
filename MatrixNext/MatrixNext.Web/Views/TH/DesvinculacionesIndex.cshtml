@@ -1,0 +1,134 @@
+@{
+    ViewData["Title"] = "Desvinculaciones";
+}
+
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h1 class="h3 mb-0">Desvinculaciones</h1>
+        </div>
+        <div class="col-md-6 text-end">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#desvinculacionModal" onclick="DesvinculacionesModule.resetForm()">
+                <i class="bi bi-plus-circle"></i> Nueva Desvinculación
+            </button>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <input type="text" id="filtroText" class="form-control" placeholder="Buscar por nombre o identificación...">
+                </div>
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-outline-secondary me-2" onclick="DesvinculacionesModule.applyFilters()">
+                        <i class="bi bi-search"></i> Filtrar
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" onclick="DesvinculacionesModule.clearFilters()">
+                        <i class="bi bi-arrow-clockwise"></i> Limpiar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla -->
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0" id="desvinculacionesTable">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width: 10%">ID</th>
+                        <th style="width: 20%">Empleado</th>
+                        <th style="width: 15%">Identificación</th>
+                        <th style="width: 15%">Fecha Retiro</th>
+                        <th style="width: 15%">Estado</th>
+                        <th style="width: 25%" class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="desvinculacionesTableBody">
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-muted">Cargando desvinculaciones...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Paginación -->
+        <nav aria-label="Page navigation" class="d-flex justify-content-center py-3">
+            <ul class="pagination">
+                <li class="page-item" id="prevPageBtn">
+                    <a class="page-link" href="javascript:DesvinculacionesModule.previousPage()" tabindex="-1">Anterior</a>
+                </li>
+                <li class="page-item active" id="pageIndicator">
+                    <span class="page-link">Página 1</span>
+                </li>
+                <li class="page-item" id="nextPageBtn">
+                    <a class="page-link" href="javascript:DesvinculacionesModule.nextPage()">Siguiente</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<!-- Modal de Desvinculación -->
+<div class="modal fade" id="desvinculacionModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="desvinculacionModalLabel">Nueva Desvinculación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="desvinculacionForm" novalidate>
+                    <div class="mb-3">
+                        <label for="empleadoId" class="form-label">Empleado</label>
+                        <input type="number" class="form-control" id="empleadoId" required>
+                        <div class="invalid-feedback">Seleccione un empleado válido</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="fechaRetiro" class="form-label">Fecha de Retiro</label>
+                        <input type="date" class="form-control" id="fechaRetiro" required>
+                        <div class="invalid-feedback">La fecha de retiro es requerida</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="observacion" class="form-label">Observación</label>
+                        <textarea class="form-control" id="observacion" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="DesvinculacionesModule.saveDesvinculacion()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Notifications -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div id="successToast" class="toast" role="alert">
+        <div class="toast-header bg-success text-white">
+            <strong class="me-auto">Éxito</strong>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+        </div>
+        <div class="toast-body" id="successToastMessage"></div>
+    </div>
+    <div id="errorToast" class="toast" role="alert">
+        <div class="toast-header bg-danger text-white">
+            <strong class="me-auto">Error</strong>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+        </div>
+        <div class="toast-body" id="errorToastMessage"></div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/desvinculaciones.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            DesvinculacionesModule.init();
+        });
+    </script>
+}
