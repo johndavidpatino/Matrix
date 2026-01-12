@@ -181,6 +181,7 @@ builder.Services.AddScoped<IOpFichasTecnicasService, OpFichasTecnicasService>();
 builder.Services.AddScoped<IOpProgramacionService, OpProgramacionService>();
 builder.Services.AddScoped<IOpPlanillasModeracionService, OpPlanillasModeracionService>(); // Sprint 2
 builder.Services.AddScoped<IOpReportService, OpReportService>(); // Sprint 6 - Reportes/Exportes
+builder.Services.AddScoped<IOpAdvancedFiltersService, OpAdvancedFiltersService>(); // Sprint 6 - Filtros avanzados
 // IOpIpsService ya registrado previamente
 
 // Registrar opciones de configuración
