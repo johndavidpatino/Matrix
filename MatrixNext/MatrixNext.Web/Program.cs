@@ -24,6 +24,9 @@ using MatrixNext.Data.Services.PY;
 using MatrixNext.Data.Adapters.GD;
 using MatrixNext.Data.Services.Pnc;
 using MatrixNext.Data.Adapters.Pnc;
+using MatrixNext.Data.Adapters.TH;
+using MatrixNext.Data.Services.TH;
+using MatrixNext.Data.Services.TH.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -221,6 +224,18 @@ builder.Services.AddScoped<IPyInstructivosService, PyInstructivosService>();
 builder.Services.AddScoped<IPyPlanillasService, PyPlanillasService>();
 builder.Services.AddScoped<IPyDistribucionEntrevistasService, PyDistribucionEntrevistasService>();
 builder.Services.AddScoped<IPyTrabajosService, PyTrabajosService>();
+
+// ===== SPRINT 4: TH Talento Humano Module =====
+// Ref: PLAN_IMPLEMENTACION_SPRINTS.md § Sprint 4 TH
+// TH Adapters
+builder.Services.AddScoped<IThEmpleadosAdapter, ThEmpleadosAdapter>();
+builder.Services.AddScoped<IThDesvinculacionAdapter, ThDesvinculacionAdapter>();
+builder.Services.AddScoped<IThCatalogosAdapter, ThCatalogosAdapter>();
+
+// TH Services
+builder.Services.AddScoped<IThEmpleadosService, ThEmpleadosService>();
+builder.Services.AddScoped<IThDesvinculacionService, ThDesvinculacionService>();
+builder.Services.AddScoped<IThCatalogosService, ThCatalogosService>();
 
 var app = builder.Build();
 
