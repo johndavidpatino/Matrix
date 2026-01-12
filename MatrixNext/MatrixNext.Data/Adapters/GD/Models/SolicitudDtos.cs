@@ -20,6 +20,8 @@ namespace MatrixNext.Data.Adapters.GD.Models
         public DateTime FechaRegistro { get; set; }
         public string? AreaUso { get; set; }
         public string? SitioAcceso { get; set; }
+        public string? NombreDocumento { get; set; }
+        public string? Codigo { get; set; }
     }
 
     /// <summary>
@@ -38,6 +40,8 @@ namespace MatrixNext.Data.Adapters.GD.Models
         public string? Comentarios { get; set; }
         public string? AreaUso { get; set; }
         public string? SitioAcceso { get; set; }
+        public string? NombreDocumento { get; set; }
+        public string? Codigo { get; set; }
     }
 
     /// <summary>
@@ -69,5 +73,20 @@ namespace MatrixNext.Data.Adapters.GD.Models
         public int RevisoresPendientes { get; set; }
         public int RevisoresAprobados { get; set; }
         public DateTime FechaRegistro { get; set; }
+    }
+
+    /// <summary>
+    /// DTO para revisiones pendientes de aprobación
+    /// </summary>
+    public class RevisionAprobacionDto
+    {
+        public int IdRevision { get; set; }
+        public int DocumentoId { get; set; }
+        public int UsuarioId { get; set; }
+        public int TipoRevisionId { get; set; }
+        public string TipoRevision { get; set; } = string.Empty;
+        public int DocumentoControladoId { get; set; }
+        public string NombreDocumento { get; set; } = string.Empty;
+        public DateTime? FechaAprobacion { get; set; }
     }
 }

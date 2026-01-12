@@ -46,6 +46,7 @@ namespace MatrixNext.Web.Models.ViewModels.GD
 
         // Para visualización
         public string NombreDocumento { get; set; } = string.Empty;
+        public string Codigo { get; set; } = string.Empty;
         public string NombreSolicitante { get; set; } = string.Empty;
         public string NombreEstado { get; set; } = string.Empty;
         public string NombreTipo { get; set; } = string.Empty;

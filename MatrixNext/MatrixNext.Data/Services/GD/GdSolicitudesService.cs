@@ -111,7 +111,9 @@ namespace MatrixNext.Data.Services.GD
                     Comentarios = dto.Comentarios ?? string.Empty,
                     FechaRegistro = DateTime.Now,
                     AreaUso = dto.AreaUso,
-                    SitioAcceso = dto.SitioAcceso
+                    SitioAcceso = dto.SitioAcceso,
+                    NombreDocumento = dto.NombreDocumento ?? string.Empty,
+                    Codigo = dto.Codigo ?? string.Empty
                 };
 
                 // REGLA 4: Ejecución exacta del SP

@@ -1,6 +1,8 @@
 @model MatrixNext.Web.Models.ViewModels.GD.SolicitudCreateVM
 @{
-    var hasErrors = !ViewData.ModelState.IsValid;
+    var m = Model ?? new MatrixNext.Web.Models.ViewModels.GD.SolicitudCreateVM();
+    var modelState = ViewData?.ModelState;
+    var hasErrors = !(modelState?.IsValid ?? true);
 }
 
 <div class="modal-content">
@@ -16,9 +18,9 @@
             {
                 <div class="alert alert-danger">
                     <ul class="mb-0">
-                        @foreach (var key in ViewData.ModelState.Keys.Where(k => ViewData.ModelState[k].Errors.Count > 0))
+                        @foreach (var key in (modelState?.Keys ?? Enumerable.Empty<string>()).Where(k => modelState?[k]?.Errors?.Count > 0))
                         {
-                            <li>@ViewData.ModelState[key].Errors.First().ErrorMessage</li>
+                            <li>@modelState?[key]?.Errors?.FirstOrDefault()?.ErrorMessage</li>
                         }
                     </ul>
                 </div>
@@ -30,7 +32,7 @@
                     <label for="TipoSolicitud" class="form-label">Tipo de Solicitud <span class="text-danger">*</span></label>
                     <select id="TipoSolicitud" name="TipoSolicitud" class="form-select" required>
                         <option value="">-- Seleccionar --</option>
-                        @foreach (var item in (Model.TiposSolicitud ?? new List<MatrixNext.Data.Adapters.GD.Models.SelectListItemDto>()).Where(x => x != null))
+                        @foreach (var item in ((m.TiposSolicitud ?? Enumerable.Empty<MatrixNext.Data.Adapters.GD.Models.SelectListItemDto>())).Where(x => x != null))
                         {
                             <option value="@item.Id">@item.Nombre</option>
                         }
@@ -41,9 +43,9 @@
                 <!-- Documento -->
                 <div class="col-md-6">
                     <label for="IdDocumento" class="form-label">Documento <span class="text-danger">*</span></label>
-                    <select id="IdDocumento" name="IdDocumento" class="form-select" required>
+                    <select id="IdDocumento" name="IdDocumento" class="form-select" required data-nombre-target="#NombreDocumento" data-codigo-target="#Codigo">
                         <option value="">-- Seleccionar --</option>
-                        @foreach (var item in (Model.Documentos ?? new List<MatrixNext.Data.Adapters.GD.Models.SelectListItemDto>()).Where(x => x != null))
+                        @foreach (var item in ((m.Documentos ?? Enumerable.Empty<MatrixNext.Data.Adapters.GD.Models.SelectListItemDto>())).Where(x => x != null))
                         {
                             <option value="@item.Id">@item.Nombre</option>
                         }
@@ -51,50 +53,53 @@
                     @Html.ValidationMessageFor(m => m.IdDocumento)
                 </div>
 
+                <input type="hidden" id="NombreDocumento" name="NombreDocumento" value="@m.NombreDocumento" />
+                <input type="hidden" id="Codigo" name="Codigo" value="@m.Codigo" />
+
                 <!-- Área -->
                 <div class="col-md-6">
                     <label for="Area" class="form-label">Área <span class="text-danger">*</span></label>
-                    <input type="text" id="Area" name="Area" class="form-control" value="@Model.Area" required maxlength="100" />
+                    <input type="text" id="Area" name="Area" class="form-control" value="@m.Area" required maxlength="100" />
                     @Html.ValidationMessageFor(m => m.Area)
                 </div>
 
                 <!-- Cargo -->
                 <div class="col-md-6">
                     <label for="Cargo" class="form-label">Cargo <span class="text-danger">*</span></label>
-                    <input type="text" id="Cargo" name="Cargo" class="form-control" value="@Model.Cargo" required maxlength="100" />
+                    <input type="text" id="Cargo" name="Cargo" class="form-control" value="@m.Cargo" required maxlength="100" />
                     @Html.ValidationMessageFor(m => m.Cargo)
                 </div>
 
                 <!-- Razón -->
                 <div class="col-12">
                     <label for="Razon" class="form-label">Razón de la Solicitud <span class="text-danger">*</span></label>
-                    <input type="text" id="Razon" name="Razon" class="form-control" value="@Model.Razon" required maxlength="500" />
+                    <input type="text" id="Razon" name="Razon" class="form-control" value="@m.Razon" required maxlength="500" />
                     @Html.ValidationMessageFor(m => m.Razon)
                 </div>
 
                 <!-- Descripción -->
                 <div class="col-12">
                     <label for="Descripcion" class="form-label">Descripción <span class="text-danger">*</span></label>
-                    <textarea id="Descripcion" name="Descripcion" class="form-control" rows="3" required maxlength="1000">@Model.Descripcion</textarea>
+                    <textarea id="Descripcion" name="Descripcion" class="form-control" rows="3" required maxlength="1000">@m.Descripcion</textarea>
                     @Html.ValidationMessageFor(m => m.Descripcion)
                 </div>
 
                 <!-- Área de Uso (opcional) -->
                 <div class="col-md-6">
                     <label for="AreaUso" class="form-label">Área de Uso</label>
-                    <input type="text" id="AreaUso" name="AreaUso" class="form-control" value="@Model.AreaUso" maxlength="100" />
+                    <input type="text" id="AreaUso" name="AreaUso" class="form-control" value="@m.AreaUso" maxlength="100" />
                 </div>
 
                 <!-- Sitio de Acceso (opcional) -->
                 <div class="col-md-6">
                     <label for="SitioAcceso" class="form-label">Sitio de Acceso</label>
-                    <input type="text" id="SitioAcceso" name="SitioAcceso" class="form-control" value="@Model.SitioAcceso" maxlength="100" />
+                    <input type="text" id="SitioAcceso" name="SitioAcceso" class="form-control" value="@m.SitioAcceso" maxlength="100" />
                 </div>
 
                 <!-- Comentarios (opcional) -->
                 <div class="col-12">
                     <label for="Comentarios" class="form-label">Comentarios Adicionales</label>
-                    <textarea id="Comentarios" name="Comentarios" class="form-control" rows="2" maxlength="500">@Model.Comentarios</textarea>
+                    <textarea id="Comentarios" name="Comentarios" class="form-control" rows="2" maxlength="500">@m.Comentarios</textarea>
                 </div>
             </div>
         </div>

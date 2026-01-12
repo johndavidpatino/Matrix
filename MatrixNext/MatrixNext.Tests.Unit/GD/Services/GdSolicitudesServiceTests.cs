@@ -19,14 +19,16 @@ namespace MatrixNext.Tests.GD.Services
     public class GdSolicitudesServiceTests
     {
         private readonly Mock<IGdSolicitudesAdapter> _mockAdapter;
+        private readonly Mock<IGdEmailService> _mockEmail;
         private readonly Mock<ILogger<GdSolicitudesService>> _mockLogger;
         private readonly IGdSolicitudesService _service;
 
         public GdSolicitudesServiceTests()
         {
             _mockAdapter = new Mock<IGdSolicitudesAdapter>();
+            _mockEmail = new Mock<IGdEmailService>();
             _mockLogger = new Mock<ILogger<GdSolicitudesService>>();
-            _service = new GdSolicitudesService(_mockAdapter.Object, _mockLogger.Object);
+            _service = new GdSolicitudesService(_mockAdapter.Object, _mockEmail.Object, _mockLogger.Object);
         }
 
         #region ObtenerSolicitudes Tests

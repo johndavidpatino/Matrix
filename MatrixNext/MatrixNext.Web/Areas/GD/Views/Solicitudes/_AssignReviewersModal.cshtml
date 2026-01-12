@@ -1,4 +1,8 @@
 @model MatrixNext.Web.Models.ViewModels.GD.AsignReviewersVM
+@{
+    var m = Model ?? new MatrixNext.Web.Models.ViewModels.GD.AsignReviewersVM();
+    var modelState = ViewData?.ModelState;
+}
 
 <div class="modal-content">
     <div class="modal-header">
@@ -8,18 +12,18 @@
 
     <form id="frmAssignReviewers" method="post">
         @Html.AntiForgeryToken()
-        <input type="hidden" name="IdSolicitud" value="@Model.IdSolicitud" />
+        <input type="hidden" name="IdSolicitud" value="@m.IdSolicitud" />
         
         <div class="modal-body" style="max-height: 60vh; overflow-y: auto;">
-            <p class="text-muted">Solicitud #<strong>@Model.IdSolicitud</strong></p>
+            <p class="text-muted">Solicitud #<strong>@m.IdSolicitud</strong></p>
 
-            @if (!ViewData.ModelState.IsValid)
+            @if (!(modelState?.IsValid ?? true))
             {
                 <div class="alert alert-danger">
                     <ul class="mb-0">
-                        @foreach (var key in ViewData.ModelState.Keys.Where(k => ViewData.ModelState[k].Errors.Count > 0))
+                        @foreach (var key in (modelState?.Keys ?? Enumerable.Empty<string>()).Where(k => modelState?[k]?.Errors?.Count > 0))
                         {
-                            <li>@ViewData.ModelState[key].Errors.First().ErrorMessage</li>
+                            <li>@modelState?[key]?.Errors?.FirstOrDefault()?.ErrorMessage</li>
                         }
                     </ul>
                 </div>
@@ -27,7 +31,7 @@
 
             <label for="IdRevisores" class="form-label">Revisores <span class="text-danger">*</span></label>
             <div class="list-group">
-                @foreach (var revisor in (Model?.RevisoresDisponibles ?? new List<MatrixNext.Data.Adapters.GD.Models.SelectListItemDto>()).Where(x => x != null))
+                @foreach (var revisor in (m.RevisoresDisponibles ?? new List<MatrixNext.Data.Adapters.GD.Models.SelectListItemDto>()).Where(x => x != null))
                 {
                     <label class="list-group-item">
                         <input class="form-check-input me-2" type="checkbox" name="IdRevisores" value="@revisor.Id" />
@@ -35,7 +39,7 @@
                     </label>
                 }
             </div>
-            @if ((Model.RevisoresDisponibles?.Count ?? 0) == 0)
+            @if (((m.RevisoresDisponibles?.Count) ?? 0) == 0)
             {
                 <div class="alert alert-warning mt-3">No hay revisores disponibles.</div>
             }

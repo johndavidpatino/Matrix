@@ -102,7 +102,9 @@ namespace MatrixNext.Web.Areas.GD.Controllers
                 IdEstado = vm.IdEstado ?? 1,
                 Comentarios = vm.Comentarios,
                 AreaUso = vm.AreaUso,
-                SitioAcceso = vm.SitioAcceso
+                SitioAcceso = vm.SitioAcceso,
+                NombreDocumento = vm.NombreDocumento,
+                Codigo = vm.Codigo
             };
 
             var (success, idSolicitud, message) = await _service.CrearSolicitud(inputDto);

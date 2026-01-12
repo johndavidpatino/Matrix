@@ -55,14 +55,21 @@ namespace MatrixNext.Data.Adapters.GD
             using var connection = new SqlConnection(_connectionString);
             var parametros = new DynamicParameters();
             parametros.Add("@FechaSolicitud", dto.FechaRegistro == default ? DateTime.Now : dto.FechaRegistro);
-            parametros.Add("@IdSolicitante", dto.IdSolicitante);
-            parametros.Add("@IdTipo", dto.TipoSolicitud);
-            parametros.Add("@IdDocumento", dto.IdDocumento);
-            parametros.Add("@AreaUso", dto.Area);
-            parametros.Add("@SitioAcceso", "");
-            parametros.Add("@RazonSolicitud", dto.Razon ?? "");
-            parametros.Add("@DescripcionSolicitud", dto.Descripcion ?? "");
+            parametros.Add("@Solicitante", dto.IdSolicitante);
+            parametros.Add("@Area", dto.Area);
+            parametros.Add("@Cargo", dto.Cargo ?? string.Empty);
+            parametros.Add("@Tipoid", dto.TipoSolicitud);
+            parametros.Add("@DocumentoId", dto.IdDocumento);
+            parametros.Add("@NombreDocumento", dto.NombreDocumento ?? string.Empty);
+            parametros.Add("@Codigo", dto.Codigo ?? string.Empty);
+            parametros.Add("@AreaUso", dto.AreaUso ?? string.Empty);
+            parametros.Add("@SitioAcceso", dto.SitioAcceso ?? string.Empty);
+            parametros.Add("@RazonSolicitud", dto.Razon ?? string.Empty);
+            parametros.Add("@DescripcionSolicitud", dto.Descripcion ?? string.Empty);
             parametros.Add("@IdEstado", dto.IdEstado);
+            parametros.Add("@FechaEstado", DateTime.Now);
+            parametros.Add("@Comentarios", dto.Comentarios ?? string.Empty);
+            parametros.Add("@Modificacion", "");
 
             var id = await connection.ExecuteScalarAsync<int>(
                 "GD_SolDocumentos_Add",
