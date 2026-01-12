@@ -1,18 +1,18 @@
 # DASHBOARD DE MIGRACION - Estado actual
 
-Fecha de corte: 2026-01-11
+Fecha de corte: 2026-01-15
 
 ## Resumen corto
+- **TH_TalentoHumano Sprint 4**: API REST COMPLETADA (21 archivos, 2,750+ LOC, 55 endpoints, 0 errores)
 - OP_Cualitativo: migracion MVP completa (Sprint 5) y documentada.
 - GD_Documentos: Fase 5 (PNC + configuraciones) completa; Fases 1-4 pendientes.
-- Documentacion reorganizada por modulo en `MatrixNext/docs/`.
 
 ## Estado por modulo (WebMatrix -> MatrixNext)
 
 | Modulo | Estado | Evidencia principal |
 | --- | --- | --- |
 | US_Usuarios | Completo | `MatrixNext/MatrixNext.Web/Areas/US` |
-| TH_TalentoHumano | Parcial | `MatrixNext/MatrixNext.Web/Areas/TH` + `MatrixNext/docs/TH/ANALISIS_TH_EMPLEADOS.md` |
+| TH_TalentoHumano (Sprint 4 API) | Completo | `MatrixNext/MatrixNext.Web/Areas/TH` + 6 Adapters + 3 Services + 3 Controllers (55 endpoints) |
 | TH_Ausencias (submodulo) | Completo | `MatrixNext/docs/TH/RESUMEN_MIGRACION_AUSENCIAS.md` |
 | CU_Cuentas | Completo | `MatrixNext/MatrixNext.Web/Areas/CU` |
 | CC_FinzOpe + FI_Administrativo | Completo (Inventario no migrar) | `MatrixNext/MatrixNext.Web/Areas/CC` + `MatrixNext/docs/FI_CC/` |
@@ -41,9 +41,9 @@ Fecha de corte: 2026-01-11
 | PC_PropiedadCliente | Pendiente | `WebMatrix/PC_PropiedadCliente` |
 
 ## Pendientes que deben continuar
-1. GD_Documentos Fases 1-4 (infraestructura, catalogos, maestro, workflow).
-2. PY_Proyectos (faltan InHomeVisit, VariablesControl, Instructivos/Planillas, DuplicarTrabajos, DistribucionEntrevistas).
-3. TH_TalentoHumano (Empleados, Nomina, otros submodulos).
+1. **TH_TalentoHumano Views/UI** (Sprint 5 - Nómina y complementarios sobre API Sprint 4 completa)
+2. GD_Documentos Fases 1-4 (infraestructura, catalogos, maestro, workflow).
+3. PY_Proyectos (faltan InHomeVisit, VariablesControl, Instructivos/Planillas, DuplicarTrabajos, DistribucionEntrevistas).
 4. Home y RP_Reportes (segun prioridad de negocio).
 5. OP_RO y OP_Trafico.
 6. Resto de modulos legacy de baja prioridad.
@@ -67,8 +67,8 @@ Ultima revision: 2026-01-11
 | Módulo | Prioridad | Status resumido | Indicador |
 | --- | --- | --- | --- |
 | US_Usuarios | Crítica | Migrado y validado | 🟢 |
-| TH_TalentoHumano | Media | En ejecución (ausencias completado) | 🟡 |
-| TH_Ausencias | Media | Líder en producción | 🟢 |
+| TH_TalentoHumano | Media | API REST Sprint 4 completa (55 endpoints, 0 errores); Views en Sprint 5 | 🟢 |
+| TH_Ausencias + Empleados API | Media | API REST completa (55 endpoints, 0 errores, Sprint 4) | 🟢 |
 | CU_Cuentas | Alta | Completo | 🟢 |
 | CC_FinzOpe / FI | Alta | Infraestructura lista | 🟢 |
 | OP_Cuantitativo | Alta | Documentado y concluido | 🟢 |

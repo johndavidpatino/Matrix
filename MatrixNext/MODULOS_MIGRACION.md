@@ -117,14 +117,23 @@
 - **Contexto**: `REP_Model`
 - **Notas**: Consultas complejas → ideal para Dapper
 
-#### 9. **TH_TalentoHumano** (28 páginas) ✅ EN PROGRESO
+#### 9. **TH_TalentoHumano** (28 páginas) ✅ SPRINT 4 COMPLETADO
 - **Carpeta**: `WebMatrix/TH_TalentoHumano/`
 - **Contexto**: `TH_Model` (CoreProject)
 - **Dependencias**: Medias (empleados, usuarios, catálogos)
 - **Estado**: 
   - ✅ **Ausencias** (4 páginas) - COMPLETADO
-  - 🔄 **Empleados** (pendiente)
-  - 🔄 **Nómina** (pendiente)
+  - ✅ **Empleados API REST** (21 archivos, 2,750+ LOC) - SPRINT 4 COMPLETO
+    * 6 Adapters (ThEmpleadosAdapter, ThExperienciaLaboralAdapter, ThEducacionAdapter, ThDatosComplementariosAdapter, ThDesvinculacionAdapter, ThCatalogosAdapter)
+    * 3 Services (ThEmpleadosService, ThDesvinculacionService, ThCatalogosService)
+    * 3 Controllers (EmpleadosController 37 endpoints, DesvinculacionesController 5 endpoints, CatalogosController 13 endpoints)
+    * 30+ DTOs con Input/Output segregación
+    * DI Registration (9 AddScoped en Program.cs)
+    * 55 endpoints con [Authorize], ApiResponse<T>, ILogger<T>, validaciones
+    * 35+ SPs documentados y consumidos
+    * 0 errores de compilación
+    * Documentación: INVENTARIO_MAPEO_TH + CIERRE_SPRINT_4
+  - 🔄 **Nómina** (Views/UI - Sprint 5)
   - 🔄 **Otros** (pendiente)
 
 **Análisis Detallado - GESTIÓN DE AUSENCIAS (4 páginas - Prioridad Alta dentro del módulo)**
