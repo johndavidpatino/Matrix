@@ -1,12 +1,12 @@
 # DASHBOARD DE MIGRACION - Estado actual
 
-Fecha de corte: 2026-01-15
+Fecha de corte: 2026-01-15 (SPRINT 5 KICKOFF INICIADO)
 
 ## Resumen corto
+- **SPRINT 5 INICIADO**: TH_TalentoHumano Views/UI (15-29 enero, 80h)
 - **TH_TalentoHumano Sprint 4**: API REST COMPLETADA (21 archivos, 2,750+ LOC, 55 endpoints, 0 errores)
-- **Sprints 5-12 Planificados**: 560h (~3.5 meses) para llevar todos los módulos parciales a 100%
+- **Sprints 6-12 Planificados**: Roadmap de 3.5 meses para 100% completado el 2026-05-03
 - OP_Cualitativo: migracion MVP completa (Sprint 5) y documentada.
-- GD_Documentos: Fase 5 (PNC + configuraciones) completa; Fases 1-4 pendientes.
 
 ## Estado por modulo (WebMatrix -> MatrixNext)
 
@@ -91,8 +91,8 @@ Usa este semáforo como referencia rápida para los standups; los detalles de ca
 
 | Sprint | Módulo | Duración | Fechas Estimadas | Esfuerzo | Estado |
 |---|---|---|---|---|---|
-| 5 | TH Views/UI | 2 sem | 2026-01-15 → 2026-01-29 | 80h | 🟡 PLANIFICADO |
-| 6 | OP_Cualitativo Complementos | 2 sem | 2026-02-01 → 2026-02-12 | 75h | 🟡 PLANIFICADO |
+| 5 | TH Views/UI | 2 sem | 2026-01-15 → 2026-01-29 | 80h | 🟡 **IN PROGRESS** ⏱️ |
+| 6 | OP_Cualitativo Complementos | 2 sem | 2026-02-01 → 2026-02-12 | 75h | ⚪️ PRÓXIMO |
 | 7 | CORE Workflow | 2 sem | 2026-02-15 → 2026-02-26 | 85h | 🟡 PLANIFICADO |
 | 8 | EQ_EasyQuote Fase 1 | 2-3 sem | 2026-03-01 → 2026-03-19 | 120h | 🟡 PLANIFICADO |
 | 9 | Home Dashboard | 1-2 sem | 2026-03-22 → 2026-04-02 | 50h | 🔴 PLANIFICADO |
