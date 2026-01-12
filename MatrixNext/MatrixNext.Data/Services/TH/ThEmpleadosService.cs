@@ -36,7 +36,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var empleados = await _empleadosAdapter.ObtenerEmpleados(id, nombres, apellidos, activo, serviceLive, cargo, sede);
-                return ApiResponse<List<EmpleadoDto>>.Success(empleados, "Empleados obtenidos correctamente");
+                return ApiResponse<List<EmpleadoDto>>.Ok(empleados, "Empleados obtenidos correctamente");
             }
             catch (Exception ex)
             {
@@ -53,7 +53,7 @@ namespace MatrixNext.Data.Services.TH
                 if (empleado == null)
                     return ApiResponse<EmpleadoDto>.Error($"Empleado con ID {id} no encontrado");
 
-                return ApiResponse<EmpleadoDto>.Success(empleado, "Empleado obtenido correctamente");
+                return ApiResponse<EmpleadoDto>.Ok(empleado, "Empleado obtenido correctamente");
             }
             catch (Exception ex)
             {
@@ -74,7 +74,7 @@ namespace MatrixNext.Data.Services.TH
                     return ApiResponse<long>.Error("Identificación inválida");
 
                 var newId = await _empleadosAdapter.CrearEmpleado(input);
-                return ApiResponse<long>.Success(newId, "Empleado creado correctamente", 201);
+                return ApiResponse<long>.Ok(newId, "Empleado creado correctamente", 201);
             }
             catch (Exception ex)
             {
@@ -91,7 +91,7 @@ namespace MatrixNext.Data.Services.TH
                 if (!result)
                     return ApiResponse<bool>.Error($"No se pudo actualizar el empleado {id}");
 
-                return ApiResponse<bool>.Success(true, "Datos generales actualizados correctamente");
+                return ApiResponse<bool>.Ok(true, "Datos generales actualizados correctamente");
             }
             catch (Exception ex)
             {
@@ -108,7 +108,7 @@ namespace MatrixNext.Data.Services.TH
                 if (!result)
                     return ApiResponse<bool>.Error($"No se pudo actualizar el empleado {input.Id}");
 
-                return ApiResponse<bool>.Success(true, "Datos laborales actualizados correctamente");
+                return ApiResponse<bool>.Ok(true, "Datos laborales actualizados correctamente");
             }
             catch (Exception ex)
             {
@@ -125,7 +125,7 @@ namespace MatrixNext.Data.Services.TH
                 if (!result)
                     return ApiResponse<bool>.Error($"No se pudo actualizar el empleado {input.Id}");
 
-                return ApiResponse<bool>.Success(true, "Datos personales actualizados correctamente");
+                return ApiResponse<bool>.Ok(true, "Datos personales actualizados correctamente");
             }
             catch (Exception ex)
             {
@@ -142,7 +142,7 @@ namespace MatrixNext.Data.Services.TH
                 if (!result)
                     return ApiResponse<bool>.Error($"No se pudo actualizar la nómina del empleado {input.Id}");
 
-                return ApiResponse<bool>.Success(true, "Datos de nómina actualizados correctamente");
+                return ApiResponse<bool>.Ok(true, "Datos de nómina actualizados correctamente");
             }
             catch (Exception ex)
             {
@@ -162,7 +162,7 @@ namespace MatrixNext.Data.Services.TH
                 if (!result)
                     return ApiResponse<bool>.Error($"No se pudo actualizar el salario del empleado");
 
-                return ApiResponse<bool>.Success(true, "Salario actualizado correctamente");
+                return ApiResponse<bool>.Ok(true, "Salario actualizado correctamente");
             }
             catch (Exception ex)
             {
@@ -182,7 +182,7 @@ namespace MatrixNext.Data.Services.TH
                 if (!result)
                     return ApiResponse<bool>.Error($"No se pudo retirar el empleado");
 
-                return ApiResponse<bool>.Success(true, "Empleado retirado correctamente");
+                return ApiResponse<bool>.Ok(true, "Empleado retirado correctamente");
             }
             catch (Exception ex)
             {
@@ -202,7 +202,7 @@ namespace MatrixNext.Data.Services.TH
                 if (!result)
                     return ApiResponse<bool>.Error($"No se pudo reintegrar el empleado");
 
-                return ApiResponse<bool>.Success(true, "Empleado reintegrado correctamente");
+                return ApiResponse<bool>.Ok(true, "Empleado reintegrado correctamente");
             }
             catch (Exception ex)
             {
@@ -220,7 +220,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var experiencias = await _empleadosAdapter.ObtenerExperienciasLaborales(personaId);
-                return ApiResponse<List<ExperienciaLaboralDto>>.Success(experiencias);
+                return ApiResponse<List<ExperienciaLaboralDto>>.Ok(experiencias);
             }
             catch (Exception ex)
             {
@@ -237,7 +237,7 @@ namespace MatrixNext.Data.Services.TH
                     return ApiResponse<long>.Error("Fecha inicio no puede ser mayor a fecha fin");
 
                 var newId = await _empleadosAdapter.AgregarExperienciaLaboral(input);
-                return ApiResponse<long>.Success(newId, "Experiencia agregada correctamente", 201);
+                return ApiResponse<long>.Ok(newId, "Experiencia agregada correctamente", 201);
             }
             catch (Exception ex)
             {
@@ -251,7 +251,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var result = await _empleadosAdapter.EliminarExperienciaLaboral(id);
-                return ApiResponse<bool>.Success(result);
+                return ApiResponse<bool>.Ok(result);
             }
             catch (Exception ex)
             {
@@ -265,7 +265,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var educacion = await _empleadosAdapter.ObtenerEducacion(personaId);
-                return ApiResponse<List<EducacionDto>>.Success(educacion);
+                return ApiResponse<List<EducacionDto>>.Ok(educacion);
             }
             catch (Exception ex)
             {
@@ -279,7 +279,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var newId = await _empleadosAdapter.AgregarEducacion(input);
-                return ApiResponse<long>.Success(newId, "Educación agregada correctamente", 201);
+                return ApiResponse<long>.Ok(newId, "Educación agregada correctamente", 201);
             }
             catch (Exception ex)
             {
@@ -293,7 +293,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var result = await _empleadosAdapter.EliminarEducacion(id);
-                return ApiResponse<bool>.Success(result);
+                return ApiResponse<bool>.Ok(result);
             }
             catch (Exception ex)
             {
@@ -307,7 +307,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var hijos = await _empleadosAdapter.ObtenerHijos(personaId);
-                return ApiResponse<List<HijoDto>>.Success(hijos);
+                return ApiResponse<List<HijoDto>>.Ok(hijos);
             }
             catch (Exception ex)
             {
@@ -321,7 +321,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var newId = await _empleadosAdapter.AgregarHijo(input);
-                return ApiResponse<long>.Success(newId, "Hijo agregado correctamente", 201);
+                return ApiResponse<long>.Ok(newId, "Hijo agregado correctamente", 201);
             }
             catch (Exception ex)
             {
@@ -335,7 +335,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var result = await _empleadosAdapter.EliminarHijo(id);
-                return ApiResponse<bool>.Success(result);
+                return ApiResponse<bool>.Ok(result);
             }
             catch (Exception ex)
             {
@@ -349,7 +349,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var contactos = await _empleadosAdapter.ObtenerContactosEmergencia(personaId);
-                return ApiResponse<List<ContactoEmergenciaDto>>.Success(contactos);
+                return ApiResponse<List<ContactoEmergenciaDto>>.Ok(contactos);
             }
             catch (Exception ex)
             {
@@ -363,7 +363,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var newId = await _empleadosAdapter.AgregarContactoEmergencia(input);
-                return ApiResponse<long>.Success(newId, "Contacto agregado correctamente", 201);
+                return ApiResponse<long>.Ok(newId, "Contacto agregado correctamente", 201);
             }
             catch (Exception ex)
             {
@@ -377,7 +377,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var result = await _empleadosAdapter.EliminarContactoEmergencia(id);
-                return ApiResponse<bool>.Success(result);
+                return ApiResponse<bool>.Ok(result);
             }
             catch (Exception ex)
             {
@@ -391,7 +391,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var promociones = await _empleadosAdapter.ObtenerPromociones(personaId);
-                return ApiResponse<List<PromocionDto>>.Success(promociones);
+                return ApiResponse<List<PromocionDto>>.Ok(promociones);
             }
             catch (Exception ex)
             {
@@ -405,7 +405,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var newId = await _empleadosAdapter.AgregarPromocion(input);
-                return ApiResponse<long>.Success(newId, "Promoción agregada correctamente", 201);
+                return ApiResponse<long>.Ok(newId, "Promoción agregada correctamente", 201);
             }
             catch (Exception ex)
             {
@@ -419,7 +419,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var result = await _empleadosAdapter.EliminarPromocion(id);
-                return ApiResponse<bool>.Success(result);
+                return ApiResponse<bool>.Ok(result);
             }
             catch (Exception ex)
             {
@@ -433,7 +433,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var salarios = await _empleadosAdapter.ObtenerSalarios(personaId);
-                return ApiResponse<List<SalarioDto>>.Success(salarios);
+                return ApiResponse<List<SalarioDto>>.Ok(salarios);
             }
             catch (Exception ex)
             {
@@ -450,7 +450,7 @@ namespace MatrixNext.Data.Services.TH
                     return ApiResponse<long>.Error("Monto debe ser mayor a 0");
 
                 var newId = await _empleadosAdapter.AgregarSalario(input);
-                return ApiResponse<long>.Success(newId, "Salario agregado correctamente", 201);
+                return ApiResponse<long>.Ok(newId, "Salario agregado correctamente", 201);
             }
             catch (Exception ex)
             {
@@ -464,7 +464,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var result = await _empleadosAdapter.EliminarSalario(id);
-                return ApiResponse<bool>.Success(result);
+                return ApiResponse<bool>.Ok(result);
             }
             catch (Exception ex)
             {
@@ -482,7 +482,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var areas = await _catalogosAdapter.ObtenerAreas();
-                return ApiResponse<List<AreaDto>>.Success(areas);
+                return ApiResponse<List<AreaDto>>.Ok(areas);
             }
             catch (Exception ex)
             {
@@ -496,7 +496,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var cargos = await _catalogosAdapter.ObtenerCargos();
-                return ApiResponse<List<CargoDto>>.Success(cargos);
+                return ApiResponse<List<CargoDto>>.Ok(cargos);
             }
             catch (Exception ex)
             {
@@ -510,7 +510,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var bandas = await _catalogosAdapter.ObtenerBandas();
-                return ApiResponse<List<BandaDto>>.Success(bandas);
+                return ApiResponse<List<BandaDto>>.Ok(bandas);
             }
             catch (Exception ex)
             {
@@ -524,7 +524,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var estados = await _catalogosAdapter.ObtenerEstadosCiviles();
-                return ApiResponse<List<EstadoCivilDto>>.Success(estados);
+                return ApiResponse<List<EstadoCivilDto>>.Ok(estados);
             }
             catch (Exception ex)
             {
@@ -538,7 +538,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var grupos = await _catalogosAdapter.ObtenerGruposSanguineos();
-                return ApiResponse<List<GrupoSanguineoDto>>.Success(grupos);
+                return ApiResponse<List<GrupoSanguineoDto>>.Ok(grupos);
             }
             catch (Exception ex)
             {
@@ -552,7 +552,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var sedes = await _catalogosAdapter.ObtenerSedes();
-                return ApiResponse<List<SedeDto>>.Success(sedes);
+                return ApiResponse<List<SedeDto>>.Ok(sedes);
             }
             catch (Exception ex)
             {
@@ -566,7 +566,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var tipos = await _catalogosAdapter.ObtenerTiposContrato();
-                return ApiResponse<List<TipoContratoDto>>.Success(tipos);
+                return ApiResponse<List<TipoContratoDto>>.Ok(tipos);
             }
             catch (Exception ex)
             {
@@ -580,7 +580,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var tiempos = await _catalogosAdapter.ObtenerTiemposContrato();
-                return ApiResponse<List<TiempContratoDto>>.Success(tiempos);
+                return ApiResponse<List<TiempContratoDto>>.Ok(tiempos);
             }
             catch (Exception ex)
             {
@@ -594,7 +594,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var empresas = await _catalogosAdapter.ObtenerEmpresas();
-                return ApiResponse<List<EmpresaDto>>.Success(empresas);
+                return ApiResponse<List<EmpresaDto>>.Ok(empresas);
             }
             catch (Exception ex)
             {
@@ -608,7 +608,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var jobFunctions = await _catalogosAdapter.ObtenerJobFunctions();
-                return ApiResponse<List<JobFunctionDto>>.Success(jobFunctions);
+                return ApiResponse<List<JobFunctionDto>>.Ok(jobFunctions);
             }
             catch (Exception ex)
             {
@@ -622,7 +622,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var parentescos = await _catalogosAdapter.ObtenerParentescos();
-                return ApiResponse<List<ParentescoDto>>.Success(parentescos);
+                return ApiResponse<List<ParentescoDto>>.Ok(parentescos);
             }
             catch (Exception ex)
             {
@@ -636,7 +636,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var motivos = await _catalogosAdapter.ObtenerMotivosCambioSalario();
-                return ApiResponse<List<MotivoCambioSalarioDto>>.Success(motivos);
+                return ApiResponse<List<MotivoCambioSalarioDto>>.Ok(motivos);
             }
             catch (Exception ex)
             {
@@ -650,7 +650,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var tipos = await _catalogosAdapter.ObtenerTiposSalario();
-                return ApiResponse<List<TipoSalarioDto>>.Success(tipos);
+                return ApiResponse<List<TipoSalarioDto>>.Ok(tipos);
             }
             catch (Exception ex)
             {

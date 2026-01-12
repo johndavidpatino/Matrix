@@ -69,19 +69,6 @@ namespace MatrixNext.Data.Adapters.TH
     }
 
     /// <summary>
-    /// Interfaz para adaptador de Desvinculaciones
-    /// </summary>
-    public interface IThDesvinculacionAdapter
-    {
-        Task<List<DesvinculacionDto>> ObtenerDesvinculaciones(int pageSize, int pageIndex, string textoBuscado);
-        Task<long> IniciarProcesoDesvinculacion(DesvinculacionInputDto input);
-        Task<List<dynamic>> ObtenerEvaluacionesDesvinculacion(long desvinculacionId);
-        Task<bool> GuardarEvaluacionDesvinculacion(DesvinculacionEvaluacionInputDto input, string usuario);
-        Task<bool> FinalizarProcesoDesvinculacion(long desvinculacionId);
-        Task<string> GenerarPDFDesvinculacion(long desvinculacionId);
-    }
-
-    /// <summary>
     /// Interfaz para adaptador de Catálogos TH
     /// </summary>
     public interface IThCatalogosAdapter
@@ -99,5 +86,18 @@ namespace MatrixNext.Data.Adapters.TH
         Task<List<ParentescoDto>> ObtenerParentescos();
         Task<List<MotivoCambioSalarioDto>> ObtenerMotivosCambioSalario();
         Task<List<TipoSalarioDto>> ObtenerTiposSalario();
+    }
+
+    /// <summary>
+    /// Interfaz para adaptador de Desvinculaciones
+    /// </summary>
+    public interface IThDesvinculacionAdapter
+    {
+        Task<List<DesvinculacionDto>> ObtenerDesvinculaciones(int pageSize, int pageIndex, string textoBuscado);
+        Task<long> IniciarProcesoDesvinculacion(DesvinculacionInputDto input);
+        Task<List<dynamic>> ObtenerEvaluacionesDesvinculacion(long desvinculacionId);
+        Task<bool> GuardarEvaluacionDesvinculacion(DesvinculacionEvaluacionInputDto input, string usuario);
+        Task<bool> FinalizarProcesoDesvinculacion(long desvinculacionId);
+        Task<string> GenerarPDFDesvinculacion(long desvinculacionId);
     }
 }

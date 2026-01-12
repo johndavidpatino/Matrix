@@ -30,7 +30,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var desvinculaciones = await _desvinculacionAdapter.ObtenerDesvinculaciones(pageSize, pageIndex, textoBuscado);
-                return ApiResponse<List<DesvinculacionDto>>.Success(desvinculaciones, "Desvinculaciones obtenidas correctamente");
+                return ApiResponse<List<DesvinculacionDto>>.Ok(desvinculaciones, "Desvinculaciones obtenidas correctamente");
             }
             catch (Exception ex)
             {
@@ -47,7 +47,7 @@ namespace MatrixNext.Data.Services.TH
                     return ApiResponse<long>.Error("Fecha de retiro es requerida");
 
                 var newId = await _desvinculacionAdapter.IniciarProcesoDesvinculacion(input);
-                return ApiResponse<long>.Success(newId, "Proceso de desvinculación iniciado correctamente", 201);
+                return ApiResponse<long>.Ok(newId, "Proceso de desvinculación iniciado correctamente");
             }
             catch (Exception ex)
             {
@@ -61,7 +61,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var evaluaciones = await _desvinculacionAdapter.ObtenerEvaluacionesDesvinculacion(desvinculacionId);
-                return ApiResponse<List<dynamic>>.Success(evaluaciones);
+                return ApiResponse<List<dynamic>>.Ok(evaluaciones);
             }
             catch (Exception ex)
             {
@@ -81,7 +81,7 @@ namespace MatrixNext.Data.Services.TH
                 if (!result)
                     return ApiResponse<bool>.Error("No se pudo guardar la evaluación");
 
-                return ApiResponse<bool>.Success(true, "Evaluación guardada correctamente");
+                return ApiResponse<bool>.Ok(true, "Evaluación guardada correctamente");
             }
             catch (Exception ex)
             {
@@ -98,7 +98,7 @@ namespace MatrixNext.Data.Services.TH
                 if (!result)
                     return ApiResponse<bool>.Error("No se pudo finalizar el proceso");
 
-                return ApiResponse<bool>.Success(true, "Proceso finalizado correctamente");
+                return ApiResponse<bool>.Ok(true, "Proceso finalizado correctamente");
             }
             catch (Exception ex)
             {
@@ -115,7 +115,7 @@ namespace MatrixNext.Data.Services.TH
                 if (string.IsNullOrEmpty(pdfBase64))
                     return ApiResponse<string>.Error("No se pudo generar el PDF");
 
-                return ApiResponse<string>.Success(pdfBase64, "PDF generado correctamente");
+                return ApiResponse<string>.Ok(pdfBase64, "PDF generado correctamente");
             }
             catch (Exception ex)
             {

@@ -24,7 +24,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var data = await _adapter.ObtenerAreas();
-                return ApiResponse<List<AreaDto>>.Success(data);
+                return ApiResponse<List<AreaDto>>.Ok(data);
             }
             catch (Exception ex)
             {
@@ -38,7 +38,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var data = await _adapter.ObtenerCargos();
-                return ApiResponse<List<CargoDto>>.Success(data);
+                return ApiResponse<List<CargoDto>>.Ok(data);
             }
             catch (Exception ex)
             {
@@ -52,7 +52,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var data = await _adapter.ObtenerBandas();
-                return ApiResponse<List<BandaDto>>.Success(data);
+                return ApiResponse<List<BandaDto>>.Ok(data);
             }
             catch (Exception ex)
             {
@@ -66,7 +66,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var data = await _adapter.ObtenerEstadosCiviles();
-                return ApiResponse<List<EstadoCivilDto>>.Success(data);
+                return ApiResponse<List<EstadoCivilDto>>.Ok(data);
             }
             catch (Exception ex)
             {
@@ -80,7 +80,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var data = await _adapter.ObtenerGruposSanguineos();
-                return ApiResponse<List<GrupoSanguineoDto>>.Success(data);
+                return ApiResponse<List<GrupoSanguineoDto>>.Ok(data);
             }
             catch (Exception ex)
             {
@@ -94,7 +94,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var data = await _adapter.ObtenerSedes();
-                return ApiResponse<List<SedeDto>>.Success(data);
+                return ApiResponse<List<SedeDto>>.Ok(data);
             }
             catch (Exception ex)
             {
@@ -108,7 +108,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var data = await _adapter.ObtenerTiposContrato();
-                return ApiResponse<List<TipoContratoDto>>.Success(data);
+                return ApiResponse<List<TipoContratoDto>>.Ok(data);
             }
             catch (Exception ex)
             {
@@ -122,7 +122,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var data = await _adapter.ObtenerTiemposContrato();
-                return ApiResponse<List<TiempContratoDto>>.Success(data);
+                return ApiResponse<List<TiempContratoDto>>.Ok(data);
             }
             catch (Exception ex)
             {
@@ -136,7 +136,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var data = await _adapter.ObtenerEmpresas();
-                return ApiResponse<List<EmpresaDto>>.Success(data);
+                return ApiResponse<List<EmpresaDto>>.Ok(data);
             }
             catch (Exception ex)
             {
@@ -150,7 +150,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var data = await _adapter.ObtenerJobFunctions();
-                return ApiResponse<List<JobFunctionDto>>.Success(data);
+                return ApiResponse<List<JobFunctionDto>>.Ok(data);
             }
             catch (Exception ex)
             {
@@ -164,7 +164,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var data = await _adapter.ObtenerParentescos();
-                return ApiResponse<List<ParentescoDto>>.Success(data);
+                return ApiResponse<List<ParentescoDto>>.Ok(data);
             }
             catch (Exception ex)
             {
@@ -178,7 +178,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var data = await _adapter.ObtenerMotivosCambioSalario();
-                return ApiResponse<List<MotivoCambioSalarioDto>>.Success(data);
+                return ApiResponse<List<MotivoCambioSalarioDto>>.Ok(data);
             }
             catch (Exception ex)
             {
@@ -192,7 +192,7 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var data = await _adapter.ObtenerTiposSalario();
-                return ApiResponse<List<TipoSalarioDto>>.Success(data);
+                return ApiResponse<List<TipoSalarioDto>>.Ok(data);
             }
             catch (Exception ex)
             {

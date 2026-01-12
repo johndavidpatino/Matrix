@@ -5,6 +5,7 @@ using MatrixNext.Data.Modules.TH.Empleados.Adapters;
 using MatrixNext.Data.Modules.TH.Empleados.Services;
 using MatrixNext.Data.Adapters.TH;
 using MatrixNext.Data.Services.TH;
+using MatrixNext.Data.Services.TH.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,13 +40,9 @@ namespace MatrixNext.Data.Modules.TH
             services.AddScoped<IThEmpleadosAdapter, ThEmpleadosAdapter>();
             services.AddScoped<IThEmpleadosService, ThEmpleadosService>();
             
-            services.AddScoped<IThExperienciaLaboralAdapter, ThExperienciaLaboralAdapter>();
-            services.AddScoped<IThEducacionAdapter, ThEducacionAdapter>();
-            services.AddScoped<IThDatosComplementariosAdapter, ThDatosComplementariosAdapter>();
-            services.AddScoped<IThDesvinculacionAdapter, ThDesvinculacionAdapter>();
-            
             services.AddScoped<IThCatalogosAdapter, ThCatalogosAdapter>();
             services.AddScoped<IThCatalogosService, ThCatalogosService>();
+            services.AddScoped<IThDesvinculacionAdapter, ThDesvinculacionAdapter>();
             services.AddScoped<IThDesvinculacionService, ThDesvinculacionService>();
             
             return services;
