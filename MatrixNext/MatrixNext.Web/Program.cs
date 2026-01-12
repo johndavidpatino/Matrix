@@ -19,6 +19,8 @@ using Microsoft.EntityFrameworkCore;
 using MatrixNext.Data.Services.GD.Interfaces;
 using MatrixNext.Data.Services.GD;
 using MatrixNext.Data.Adapters.GD;
+using MatrixNext.Data.Services.Pnc;
+using MatrixNext.Data.Adapters.Pnc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -193,6 +195,11 @@ builder.Services.AddScoped<IGdMaestroAdapter, GdMaestroAdapter>();
 builder.Services.AddScoped<IGdSolicitudesAdapter, GdSolicitudesAdapter>();
 builder.Services.AddScoped<IGdRepositorioAdapter, GdRepositorioAdapter>();
 builder.Services.AddScoped<IGdAprobacionesAdapter, GdAprobacionesAdapter>();
+
+// ===== PNC module (Producto No Conforme) =====
+// Ref: FASE 5 PARTE A - Sprint 8 (PNC)
+builder.Services.AddScoped<IPncAdapter, PncAdapter>();
+builder.Services.AddScoped<IPncService, PncService>();
 
 var app = builder.Build();
 

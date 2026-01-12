@@ -1,7 +1,7 @@
 using MatrixNext.Data.Adapters.Pnc;
-using MatrixNext.ViewModels.Pnc;
-using MatrixNext.ViewModels.Pnc.DTOs;
-using MatrixNext.Web.Services;
+using MatrixNext.Data.Models.ViewModels.Pnc;
+using MatrixNext.Data.Models.ViewModels.Pnc.DTOs;
+using MatrixNext.Data.Services;
 using Microsoft.Extensions.Logging;
 
 namespace MatrixNext.Data.Services.Pnc
@@ -81,7 +81,9 @@ namespace MatrixNext.Data.Services.Pnc
                     Categoria = p.DescripcionCategoria,
                     Cerrado = p.Cerrado ?? false,
                     FechaCierre = p.FechaCierre,
-                    DescripcionCorta = p.Descripcion?.Substring(0, Math.Min(100, p.Descripcion.Length)) ?? string.Empty
+                    DescripcionCorta = p.Descripcion != null && p.Descripcion.Length > 0 
+                        ? p.Descripcion.Substring(0, Math.Min(100, p.Descripcion.Length)) 
+                        : string.Empty
                 }).ToList();
 
                 // Paginación
@@ -435,7 +437,7 @@ namespace MatrixNext.Data.Services.Pnc
                 if (string.IsNullOrWhiteSpace(modelo.Accion))
                     return (false, 0, "La acción es requerida");
 
-                if (!modelo.FechaPlaneada.HasValue || modelo.FechaPlaneada <= DateTime.Now)
+                if (modelo.FechaPlaneada <= DateTime.Now)
                     return (false, 0, "La fecha planeada debe ser futura");
 
                 // VALIDACIÓN CRÍTICA: Acción Inmediata OBLIGATORIA (ISO 9001)
@@ -634,7 +636,7 @@ namespace MatrixNext.Data.Services.Pnc
                     <p>Por favor revise el PNC y registre las acciones correspondientes.</p>
                 ";
 
-                await _emailQueue.EnqueueEmailAsync(emails, asunto, cuerpo);
+                await _emailQueue.QueueEmailMultipleAsync(emails, asunto, cuerpo);
                 _logger.LogInformation("Notificación enviada para PNC {IdPnc} a {Count} destinatarios", idPnc, emails.Count);
             }
             catch (Exception ex)
@@ -666,7 +668,7 @@ namespace MatrixNext.Data.Services.Pnc
                     <p>Por favor complete la acción antes de la fecha planeada.</p>
                 ";
 
-                await _emailQueue.EnqueueEmailAsync(datosEmail.EmailsDestinatarios, asunto, cuerpo);
+                await _emailQueue.QueueEmailMultipleAsync(datosEmail.EmailsDestinatarios, asunto, cuerpo);
                 _logger.LogInformation("Notificación enviada para acción {IdAccion}", idAccion);
             }
             catch (Exception ex)
@@ -697,7 +699,7 @@ namespace MatrixNext.Data.Services.Pnc
                     <p>Todas las acciones correctivas han sido completadas exitosamente.</p>
                 ";
 
-                await _emailQueue.EnqueueEmailAsync(emails, asunto, cuerpo);
+                await _emailQueue.QueueEmailMultipleAsync(emails, asunto, cuerpo);
             }
             catch (Exception ex)
             {

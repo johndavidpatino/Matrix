@@ -2,7 +2,7 @@ using Dapper;
 using MatrixNext.Web.Infrastructure.Data;
 using MatrixNext.Web.Services.OP.Models;
 using MatrixNext.Web.Services.Shared;
-using MatrixNext.Web.Services;
+using MatrixNext.Data.Services;
 using Microsoft.Data.SqlClient;
 using System.Data;
 

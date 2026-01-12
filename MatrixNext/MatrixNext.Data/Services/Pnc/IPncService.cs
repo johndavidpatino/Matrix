@@ -1,4 +1,4 @@
-using MatrixNext.ViewModels.Pnc;
+using MatrixNext.Data.Models.ViewModels.Pnc;
 
 namespace MatrixNext.Data.Services.Pnc
 {

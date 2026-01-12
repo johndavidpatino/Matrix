@@ -1,8 +1,53 @@
 using System.Collections.Concurrent;
-using MatrixNext.Data.Services;
+using Microsoft.Extensions.Logging;
+using MatrixNext.Web.Services;
 
-namespace MatrixNext.Web.Services
+namespace MatrixNext.Data.Services
 {
+    /// <summary>
+    /// Email queue service for asynchronous email processing
+    /// Ref: ESPECIFICACION_COMPONENTES_COMPARTIDOS.md § 4.2
+    /// Wraps IEmailService to queue emails for background processing without external dependencies
+    /// </summary>
+    public interface IEmailQueueService
+    {
+        /// <summary>
+        /// Queue a single email for asynchronous sending
+        /// </summary>
+        Task QueueEmailAsync(string destinatario, string asunto, string cuerpo, bool esHtml = true);
+
+        /// <summary>
+        /// Queue multiple emails for asynchronous sending
+        /// </summary>
+        Task QueueEmailMultipleAsync(List<string> destinatarios, string asunto, string cuerpo);
+
+        /// <summary>
+        /// Queue email with attachments for asynchronous sending
+        /// </summary>
+        Task QueueEmailConArchivosAsync(string destinatario, string asunto, string cuerpo, List<string> rutasArchivos);
+
+        /// <summary>
+        /// Get current queue depth
+        /// </summary>
+        int GetQueueDepth();
+
+        /// <summary>
+        /// Get processing statistics
+        /// </summary>
+        EmailQueueStats GetStats();
+    }
+
+    /// <summary>
+    /// Email queue statistics
+    /// </summary>
+    public class EmailQueueStats
+    {
+        public int QueuedCount { get; set; }
+        public int ProcessedCount { get; set; }
+        public int FailedCount { get; set; }
+        public DateTime LastProcessedTime { get; set; }
+    }
+
     /// <summary>
     /// Email queue item for internal processing
     /// </summary>

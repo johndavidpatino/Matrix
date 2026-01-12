@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using MatrixNext.Data.Services.Pnc; // IPncService real
-using MatrixNext.ViewModels.Pnc; // ViewModels reales
+using MatrixNext.Data.Models.ViewModels.Pnc; // ViewModels reales
 
 namespace MatrixNext.Web.Controllers
 {

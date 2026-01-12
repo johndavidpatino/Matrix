@@ -1,8 +1,8 @@
 using System.Data;
 using System.Data.SqlClient;
 using Dapper;
-using MatrixNext.ViewModels.Pnc;
-using MatrixNext.ViewModels.Pnc.DTOs;
+using MatrixNext.Data.Models.ViewModels.Pnc;
+using MatrixNext.Data.Models.ViewModels.Pnc.DTOs;
 using Microsoft.Extensions.Configuration;
 
 namespace MatrixNext.Data.Adapters.Pnc

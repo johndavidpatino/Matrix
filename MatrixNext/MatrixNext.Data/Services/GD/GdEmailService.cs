@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Dapper;
 using MatrixNext.Data.Adapters.GD;
 using MatrixNext.Data.Services.GD.Interfaces;
-using MatrixNext.Web.Services;
+using MatrixNext.Data.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;

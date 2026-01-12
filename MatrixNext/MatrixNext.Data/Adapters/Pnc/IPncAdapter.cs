@@ -1,5 +1,5 @@
-using MatrixNext.ViewModels.Pnc;
-using MatrixNext.ViewModels.Pnc.DTOs;
+using MatrixNext.Data.Models.ViewModels.Pnc;
+using MatrixNext.Data.Models.ViewModels.Pnc.DTOs;
 
 namespace MatrixNext.Data.Adapters.Pnc
 {

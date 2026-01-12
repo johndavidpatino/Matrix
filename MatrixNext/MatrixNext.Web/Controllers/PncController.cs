@@ -1,5 +1,5 @@
 using MatrixNext.Data.Services.Pnc;
-using MatrixNext.ViewModels.Pnc;
+using MatrixNext.Data.Models.ViewModels.Pnc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
