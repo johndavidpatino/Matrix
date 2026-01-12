@@ -1,0 +1,72 @@
+<!-- Contactos de Emergencia Tab -->
+<div class="tab-pane fade" id="contactos" role="tabpanel">
+    <div class="card-body">
+        <div class="d-flex justify-content-between mb-3">
+            <h6 class="mb-0">Contactos de Emergencia</h6>
+            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#contactosModal" onclick="NestedResourcesModule.resetForm()">
+                <i class="bi bi-plus"></i> Agregar
+            </button>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-sm">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre</th>
+                        <th>Parentesco</th>
+                        <th>Teléfono</th>
+                        <th>Email</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="contactosTableBody">
+                    <tr><td colspan="6" class="text-center py-4">Cargando...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Contactos Modal -->
+<div class="modal fade" id="contactosModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Agregar Contacto de Emergencia</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="contactosForm" novalidate>
+                    <div class="mb-3">
+                        <label class="form-label">Nombre</label>
+                        <input type="text" class="form-control" name="nombre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Parentesco</label>
+                        <input type="text" class="form-control" name="parentesco" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Teléfono</label>
+                        <input type="tel" class="form-control" name="telefono" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" name="email">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="NestedResourcesModule.saveItem()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+NestedResourcesModule.init('contactos', '/api/empleados/{id}/contactos', {
+    title: 'Contacto de Emergencia',
+    parentIdParam: 'personaId'
+});
+</script>

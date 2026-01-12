@@ -1,0 +1,72 @@
+<!-- Promociones Tab -->
+<div class="tab-pane fade" id="promociones" role="tabpanel">
+    <div class="card-body">
+        <div class="d-flex justify-content-between mb-3">
+            <h6 class="mb-0">Promociones</h6>
+            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#promocionesModal" onclick="NestedResourcesModule.resetForm()">
+                <i class="bi bi-plus"></i> Agregar
+            </button>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-sm">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Cargo Anterior</th>
+                        <th>Cargo Nuevo</th>
+                        <th>Fecha Promoción</th>
+                        <th>Observación</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="promocionesTableBody">
+                    <tr><td colspan="6" class="text-center py-4">Cargando...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Promociones Modal -->
+<div class="modal fade" id="promocionesModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Agregar Promoción</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="promocionesForm" novalidate>
+                    <div class="mb-3">
+                        <label class="form-label">Cargo Anterior</label>
+                        <input type="text" class="form-control" name="cargoAnterior" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Cargo Nuevo</label>
+                        <input type="text" class="form-control" name="cargoNuevo" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Fecha de Promoción</label>
+                        <input type="date" class="form-control" name="fechaPromocion" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Observación</label>
+                        <textarea class="form-control" name="observacion" rows="2"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="NestedResourcesModule.saveItem()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+NestedResourcesModule.init('promociones', '/api/empleados/{id}/promociones', {
+    title: 'Promoción',
+    parentIdParam: 'empleadoId'
+});
+</script>

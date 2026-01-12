@@ -1,0 +1,77 @@
+<!-- Salarios Tab -->
+<div class="tab-pane fade" id="salarios" role="tabpanel">
+    <div class="card-body">
+        <div class="d-flex justify-content-between mb-3">
+            <h6 class="mb-0">Historial de Salarios</h6>
+            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#salariosModal" onclick="NestedResourcesModule.resetForm()">
+                <i class="bi bi-plus"></i> Agregar
+            </button>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-sm">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Salario Base</th>
+                        <th>Tipo Salario</th>
+                        <th>Fecha Vigencia</th>
+                        <th>Motivo</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="salariosTableBody">
+                    <tr><td colspan="6" class="text-center py-4">Cargando...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Salarios Modal -->
+<div class="modal fade" id="salariosModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Agregar Registro de Salario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="salariosForm" novalidate>
+                    <div class="mb-3">
+                        <label class="form-label">Salario Base</label>
+                        <input type="number" class="form-control" name="salarioBase" step="0.01" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Tipo de Salario</label>
+                        <select class="form-control" name="tipoSalario" required>
+                            <option value="">Seleccione...</option>
+                            <option value="Mensual">Mensual</option>
+                            <option value="Diario">Diario</option>
+                            <option value="Hora">Por Hora</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Fecha de Vigencia</label>
+                        <input type="date" class="form-control" name="fechaVigencia" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Motivo del Cambio</label>
+                        <input type="text" class="form-control" name="motivo">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="NestedResourcesModule.saveItem()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+NestedResourcesModule.init('salarios', '/api/empleados/{id}/salarios', {
+    title: 'Salario',
+    parentIdParam: 'empleadoId'
+});
+</script>

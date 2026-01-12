@@ -1,0 +1,73 @@
+<!-- Experiencias Laborales Tab - Include in EmpleadosDetail/Edit view -->
+<div class="tab-pane fade" id="experiencias" role="tabpanel">
+    <div class="card-body">
+        <div class="d-flex justify-content-between mb-3">
+            <h6 class="mb-0">Experiencias Laborales</h6>
+            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#experienciasModal" onclick="NestedResourcesModule.resetForm()">
+                <i class="bi bi-plus"></i> Agregar
+            </button>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-sm">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Empresa</th>
+                        <th>Cargo</th>
+                        <th>Fecha Inicio</th>
+                        <th>Fecha Fin</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="experienciasTableBody">
+                    <tr><td colspan="6" class="text-center py-4">Cargando...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Experiencias Modal -->
+<div class="modal fade" id="experienciasModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Agregar Experiencia Laboral</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="experienciasForm" novalidate>
+                    <div class="mb-3">
+                        <label class="form-label">Empresa</label>
+                        <input type="text" class="form-control" name="empresa" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Cargo</label>
+                        <input type="text" class="form-control" name="cargo" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Fecha Inicio</label>
+                        <input type="date" class="form-control" name="fechaInicio" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Fecha Fin</label>
+                        <input type="date" class="form-control" name="fechaFin">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="NestedResourcesModule.saveItem()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Initialize for Experiencias when this view loads
+NestedResourcesModule.init('experiencias', '/api/empleados/{id}/experiencias', {
+    title: 'Experiencia Laboral',
+    parentIdParam: 'personaId'
+});
+</script>
