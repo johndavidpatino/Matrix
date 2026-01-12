@@ -4,6 +4,7 @@ Fecha de corte: 2026-01-15
 
 ## Resumen corto
 - **TH_TalentoHumano Sprint 4**: API REST COMPLETADA (21 archivos, 2,750+ LOC, 55 endpoints, 0 errores)
+- **Sprints 5-12 Planificados**: 560h (~3.5 meses) para llevar todos los módulos parciales a 100%
 - OP_Cualitativo: migracion MVP completa (Sprint 5) y documentada.
 - GD_Documentos: Fase 5 (PNC + configuraciones) completa; Fases 1-4 pendientes.
 
@@ -81,3 +82,24 @@ Ultima revision: 2026-01-11
 | Home / RP_Reportes / OP_RO / OP_Trafico / PY_S etc. | Baja | Pendientes | 🔴 |
 
 Usa este semáforo como referencia rápida para los standups; los detalles de cada módulo todavía están en la tabla anterior y en `MatrixNext/MODULOS_MIGRACION.md`.
+
+---
+
+## Timeline de Ejecución (Sprints 5-12 Planificados)
+
+📊 **Ver documento detallado**: [PLAN_EJECUCION_SPRINTS_5_12.md](PLAN_EJECUCION_SPRINTS_5_12.md)
+
+| Sprint | Módulo | Duración | Fechas Estimadas | Esfuerzo | Estado |
+|---|---|---|---|---|---|
+| 5 | TH Views/UI | 2 sem | 2026-01-15 → 2026-01-29 | 80h | 🟡 PLANIFICADO |
+| 6 | OP_Cualitativo Complementos | 2 sem | 2026-02-01 → 2026-02-12 | 75h | 🟡 PLANIFICADO |
+| 7 | CORE Workflow | 2 sem | 2026-02-15 → 2026-02-26 | 85h | 🟡 PLANIFICADO |
+| 8 | EQ_EasyQuote Fase 1 | 2-3 sem | 2026-03-01 → 2026-03-19 | 120h | 🟡 PLANIFICADO |
+| 9 | Home Dashboard | 1-2 sem | 2026-03-22 → 2026-04-02 | 50h | 🔴 PLANIFICADO |
+| 10 | RP_Reportes | 1-2 sem | 2026-04-05 → 2026-04-16 | 60h | 🔴 PLANIFICADO |
+| 11 | OP_RO + OP_Trafico | 2 sem | 2026-04-19 → 2026-05-03 | 90h | 🔴 PLANIFICADO |
+| 12+ | Módulos Baja Prioridad | Variable | 2026-05-05+ | TBD | ⚪️ PENDIENTE |
+
+**Total**: ~560 horas (~3.5 meses de ejecución secuencial)
+
+**🎯 HITO CRÍTICO**: 2026-05-03 = Fin Sprints 5-11 (100% módulos alta/media completados)
