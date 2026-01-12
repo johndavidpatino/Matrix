@@ -145,9 +145,9 @@ namespace MatrixNext.Data.Adapters.PY
             parametros.Add("@TrabajoId", input.TrabajoId);
             parametros.Add("@GrupoObjetivo", input.GrupoObjetivo);
             parametros.Add("@CiudadId", input.CiudadId);
-            parametros.Add("@FechaInicio", input.FechaInicio);
-            parametros.Add("@FechaFin", input.FechaFin);
-            parametros.Add("@Moderador", input.Moderador);
+            parametros.Add("@FechaProgramada", input.FechaProgramada);
+            parametros.Add("@Hora", input.Hora);
+            parametros.Add("@ModeradorId", input.ModeradorId);
             parametros.Add("@Usuario", input.UsuarioId.ToString());
             parametros.Add("@IdDistribucion", dbType: DbType.Int64, direction: ParameterDirection.Output);
 

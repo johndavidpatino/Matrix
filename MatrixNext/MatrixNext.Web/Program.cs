@@ -18,6 +18,9 @@ using MatrixNext.Web.Services.Shared;
 using Microsoft.EntityFrameworkCore;
 using MatrixNext.Data.Services.GD.Interfaces;
 using MatrixNext.Data.Services.GD;
+using MatrixNext.Data.Adapters.PY;
+using MatrixNext.Data.Services.PY.Interfaces;
+using MatrixNext.Data.Services.PY;
 using MatrixNext.Data.Adapters.GD;
 using MatrixNext.Data.Services.Pnc;
 using MatrixNext.Data.Adapters.Pnc;
@@ -200,6 +203,24 @@ builder.Services.AddScoped<IGdAprobacionesAdapter, GdAprobacionesAdapter>();
 // Ref: FASE 5 PARTE A - Sprint 8 (PNC)
 builder.Services.AddScoped<IPncAdapter, PncAdapter>();
 builder.Services.AddScoped<IPncService, PncService>();
+
+// ===== SPRINT 3: PY Proyectos Pendientes Module =====
+// Ref: PLAN_IMPLEMENTACION_SPRINTS.md § Sprint 3
+// PY Adapters
+builder.Services.AddScoped<IPyInHomeVisitAdapter, PyInHomeVisitAdapter>();
+builder.Services.AddScoped<IPyVariablesControlAdapter, PyVariablesControlAdapter>();
+builder.Services.AddScoped<IPyInstructivosAdapter, PyInstructivosAdapter>();
+builder.Services.AddScoped<IPyPlanillasAdapter, PyPlanillasAdapter>();
+builder.Services.AddScoped<IPyDistribucionEntrevistasAdapter, PyDistribucionEntrevistasAdapter>();
+builder.Services.AddScoped<IPyTrabajosAdapter, PyTrabajosAdapter>();
+
+// PY Services
+builder.Services.AddScoped<IPyInHomeVisitService, PyInHomeVisitService>();
+builder.Services.AddScoped<IPyVariablesControlService, PyVariablesControlService>();
+builder.Services.AddScoped<IPyInstructivosService, PyInstructivosService>();
+builder.Services.AddScoped<IPyPlanillasService, PyPlanillasService>();
+builder.Services.AddScoped<IPyDistribucionEntrevistasService, PyDistribucionEntrevistasService>();
+builder.Services.AddScoped<IPyTrabajosService, PyTrabajosService>();
 
 var app = builder.Build();
 
