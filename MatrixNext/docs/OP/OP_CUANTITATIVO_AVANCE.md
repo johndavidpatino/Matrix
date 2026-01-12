@@ -3,7 +3,7 @@
 **Ultima actualizacion**: 2026-01-07
 
 ## Referencias inmediatas
-- MatrixNext/docs/ANALISIS_OP_CUANTITATIVO.md (analisis 100% del modulo y backlog inicial).
+- MatrixNext/docs/OP/ANALISIS_OP_CUANTITATIVO.md (analisis 100% del modulo y backlog inicial).
 - MatrixNext/DIRECTRICES_MIGRACION.md (reglas de nomenclatura, SP y EF Core).
 - WebMatrix/OP_Cuantitativo (WebForms actuales a migrar).
 - CoreProject/Clases/OP_Cuanti (servicios Dapper/EF y helpers de produccion, IPS, activaciones, trafico).
@@ -17,7 +17,7 @@ Mantener un listado unico de todos los avances del modulo OP_Cuantitativo, apunt
 3. Asociar cada flujo a los servicios de datos en CoreProject para respetar las directrices.
 
 ## Fase 0 - Diagnostico (completado)
-- Validacion del analisis tecnico y directorios del modulo (documentado en MatrixNext/docs/ANALISIS_OP_CUANTITATIVO.md).
+- Validacion del analisis tecnico y directorios del modulo (documentado en MatrixNext/docs/OP/ANALISIS_OP_CUANTITATIVO.md).
 - Reglas base confirmadas en DIRECTRICES_MIGRACION.md (nombres de SP, reutilizacion de CoreProject y uso de EF para inserciones simples).
 - Inventario inicial de WebForms y dependencias (trabajos, trafico, planillas, IPS, productividad, presupuestos, encuestas, dashboard, supervisiones).
 
@@ -82,3 +82,4 @@ Cada sprint se documentará aquí y en `ANALISIS_OP_CUANTITATIVO.md` para reflej
 ## Decision points abiertos
 1. Se mantiene un modelo 1:1 o se aplica la consolidacion de vistas optimizadas para productividades, planillas y encuestas (ver seccion de propuestas en ANALISIS_OP_CUANTITATIVO.md)? 
 2. Confirmar si los archivos en ~/Files se deben migrar a Azure Blob o permanecer en los recursos de MatrixNext con un path configurable.
+

@@ -378,7 +378,7 @@ Cliente / Ipsos:              [Nombre]  - [Contacto]
 ### Archivos de Código
 
 - [EasyQuoteViewModel.cs](../../Areas/EQ/Models/EasyQuoteViewModel.cs) - Modelos
-- [EQ_SCHEMA.sql](../../EQ_SCHEMA.sql) - Tablas y seeds
+- [EQ_SCHEMA.sql](EQ_SCHEMA.sql) - Tablas y seeds
 - [QuoteCalculator.cs](../../Areas/EQ/Services/Internal/QuoteCalculator.cs) - Fórmulas
 - [EasyQuoteMasterService.cs](../../Areas/EQ/Services/Masters/EasyQuoteMasterService.cs) - Master service
 - [Index.cshtml](../../Areas/EQ/Views/EasyQuote/Index.cshtml) - UI
@@ -418,3 +418,4 @@ ROI esperado:
 **Próxima Revisión**: Daily durante FASE 1 (Sprint 1.1-1.7)
 
 ✅ Sesión finalizada. Documentación entregada. Sistema listo para testing.
+

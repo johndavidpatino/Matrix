@@ -1366,7 +1366,7 @@ builder.Services.AddHostedService<OpExportCleanupBackgroundService>();
 ### Dashboards y Planificación
 
 - [DASHBOARD_MIGRACION.md](../../DASHBOARD_MIGRACION.md) - Dashboard general del proyecto
-- [ANALISIS_OP_CUANTITATIVO.md](../../ANALISIS_OP_CUANTITATIVO.md) - Análisis técnico original
+- [ANALISIS_OP_CUANTITATIVO.md](ANALISIS_OP_CUANTITATIVO.md) - Análisis técnico original
 
 ### Código Fuente
 
@@ -1381,3 +1381,4 @@ builder.Services.AddHostedService<OpExportCleanupBackgroundService>();
 **Versión Final**: 2.0  
 **Última Actualización**: 2026-01-08 23:59  
 **Estado**: ✅ COMPLETADO AL 100% - CERTIFICADO PARA PRODUCCIÓN
+

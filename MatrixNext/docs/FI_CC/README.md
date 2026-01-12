@@ -141,7 +141,7 @@ Para documentación general de arquitectura y directrices:
 - [MigrationPlan.md](../../MigrationPlan.md) - Plan de migración general
 - [DIRECTRICES_MIGRACION.md](../../MatrixNext/DIRECTRICES_MIGRACION.md) - 15 reglas que rigen todo
 - [DASHBOARD_MIGRACION.md](../../MatrixNext/DASHBOARD_MIGRACION.md) - Status global
-- [INDICE_DOCUMENTOS.md](../INDICE_DOCUMENTOS.md) - Índice de TODOS los documentos
+- [INDICE_DOCUMENTOS.md](../EQ/INDICE_DOCUMENTOS.md) - Índice de TODOS los documentos
 
 ---
 
@@ -262,4 +262,5 @@ Semana 13:    Sprint 6 (Inventario)                       16h
 **Estado**: ✅ Listo para implementación  
 **Versión**: 2.0 (actualizado Enero 6, 2026)  
 **Próxima revisión**: Fin Sprint Pre-1
+
 

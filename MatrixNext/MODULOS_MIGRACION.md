@@ -67,7 +67,7 @@
 - **Páginas**: 31 páginas analizadas (excluye: Borrar.aspx, TraficoEncuestas.aspx)
 - **Dependencias**: Altas (métodos, cálculos, variables)
 - **Status**: ✅ ANÁLISIS COMPLETO
-- **Documento**: [ANALISIS_OP_CUANTITATIVO.md](MatrixNext/docs/ANALISIS_OP_CUANTITATIVO.md) (v1.1)
+- **Documento**: [ANALISIS_OP_CUANTITATIVO.md](MatrixNext/docs/OP/ANALISIS_OP_CUANTITATIVO.md) (v1.1)
 - **Estimación**: 330-435h (1:1) o 260-350h (optimizado)
 - **Timeline**: 11-15 semanas (1:1) o 9-12 semanas (optimizado)
 - **Riesgos identificados**: 14 (Session hardcoded, OleDb incompatibilidad, GridView complejidad)
@@ -277,15 +277,16 @@
 15. **PY_Adquisiciones**
 16. **PNC** (Producto No Conforme)
 17. **SG_Actas** (Seguimiento - Actas)
-18. **ES_Estadistica**
-19. **Centro_Informacion**
-20. **Inventario**
-21. **IT**
-22. **MBO** (Objetivos)
-23. **ResumenProduccion**
-24. **RE_GT**
-25. **PC_PropiedadCliente**
-26. Otros (Account, Controls, etc.)
+18. **SGC_Calidad** (Control de calidad) – Sin doc Legacy; plan en `MatrixNext/docs/GENERAL/SGC_Calidad.md`
+19. **ES_Estadistica**
+20. **Centro_Informacion**
+21. **Inventario**
+22. **IT**
+23. **MBO** (Objetivos)
+24. **ResumenProduccion**
+25. **RE_GT**
+26. **PC_PropiedadCliente**
+27. Otros (Account, Controls, etc.)
 
 ---
 
@@ -378,9 +379,10 @@ mkdir Adapters
 | [DIRECTRICES_MIGRACION.md](DIRECTRICES_MIGRACION.md) | 15 reglas obligatorias para todas las migraciones | **LEER ANTES DE CUALQUIER MÓDULO** |
 | [VERIFICACION_AUSENCIAS_MIGRACION.md](VERIFICACION_AUSENCIAS_MIGRACION.md) | Caso de estudio: verificación completa de TH_Ausencias | Referencia de calidad |
 | [PLAN_MIGRACION_PY_PROYECTOS.md](PLAN_MIGRACION_PY_PROYECTOS.md) | Plan detallado para próximo módulo | Plantilla para futuros módulos |
-| [ANALISIS_OP_CUANTITATIVO.md](MatrixNext/docs/ANALISIS_OP_CUANTITATIVO.md) | Análisis completo de OP_Cuantitativo con optimizaciones | Referencia para módulos grandes |
+| [ANALISIS_OP_CUANTITATIVO.md](MatrixNext/docs/OP/ANALISIS_OP_CUANTITATIVO.md) | Análisis completo de OP_Cuantitativo con optimizaciones | Referencia para módulos grandes |
 | [DASHBOARD_MIGRACION.md](DASHBOARD_MIGRACION.md) | Estado, métricas, timeline de todo el esfuerzo | Actualizar semanalmente |
-| [RESUMEN_MIGRACION_AUSENCIAS.md](RESUMEN_MIGRACION_AUSENCIAS.md) | Resumen ejecutivo de TH_Ausencias | Stakeholders/Gerencia |
+| [RESUMEN_MIGRACION_AUSENCIAS.md](MatrixNext/docs/TH/RESUMEN_MIGRACION_AUSENCIAS.md) | Resumen ejecutivo de TH_Ausencias | Stakeholders/Gerencia |
+| [SGC_Calidad.md](MatrixNext/docs/GENERAL/SGC_Calidad.md) | Roadmap básico y próximos pasos para el módulo SGC_Calidad | Prioridad baja, plan en fases futuras |
 
 ### Cómo Usar Documentación
 
@@ -388,3 +390,4 @@ mkdir Adapters
 2. **Planificando**: Usar PLAN_MIGRACION_PY_PROYECTOS.md como plantilla
 3. **Verificando**: Comparar contra VERIFICACION_AUSENCIAS_MIGRACION.md
 4. **Reportando**: Actualizar DASHBOARD_MIGRACION.md
+
