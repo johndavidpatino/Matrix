@@ -33,6 +33,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+builder.Services.AddSignalR();
 builder.Services.AddHttpClient();
 
 // Add in-memory caching for catalogs (S4-006.3 performance optimization)
@@ -182,6 +183,7 @@ builder.Services.AddScoped<IOpProgramacionService, OpProgramacionService>();
 builder.Services.AddScoped<IOpPlanillasModeracionService, OpPlanillasModeracionService>(); // Sprint 2
 builder.Services.AddScoped<IOpReportService, OpReportService>(); // Sprint 6 - Reportes/Exportes
 builder.Services.AddScoped<IOpAdvancedFiltersService, OpAdvancedFiltersService>(); // Sprint 6 - Filtros avanzados
+builder.Services.AddScoped<IOpNotificationService, OpNotificationService>(); // Sprint 6 - Notificaciones
 // IOpIpsService ya registrado previamente
 
 // Registrar opciones de configuración
@@ -283,5 +285,8 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Login}/{action=Index}/{id?}");
+
+// ===== SPRINT 6: SignalR Hubs para notificaciones =====
+app.MapHub<MatrixNext.Web.Services.OP.Hubs.OpNotificationsHub>("/hubs/op-notifications");
 
 app.Run();
