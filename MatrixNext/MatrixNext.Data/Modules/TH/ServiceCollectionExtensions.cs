@@ -1,9 +1,11 @@
+using MatrixNext.Data.Context;
 using MatrixNext.Data.Modules.TH.Ausencias.Adapters;
 using MatrixNext.Data.Modules.TH.Ausencias.Services;
 using MatrixNext.Data.Modules.TH.Empleados.Adapters;
 using MatrixNext.Data.Modules.TH.Empleados.Services;
 using MatrixNext.Data.Adapters.TH;
 using MatrixNext.Data.Services.TH;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,6 +18,11 @@ namespace MatrixNext.Data.Modules.TH
         /// </summary>
         public static IServiceCollection AddTHModule(this IServiceCollection services, IConfiguration configuration)
         {
+            // Register ApplicationDbContext for Dapper-based TH adapters
+            var connectionString = configuration.GetConnectionString("MatrixDb");
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(connectionString));
+
             // Ausencias services
             services.AddScoped(sp => new AusenciaDataAdapter(configuration));
             services.AddScoped<AusenciaService>();
@@ -27,6 +34,19 @@ namespace MatrixNext.Data.Modules.TH
             // Desvinculaciones services
             services.AddScoped(sp => new DesvinculacionDataAdapter(configuration));
             services.AddScoped<DesvinculacionService>();
+            
+            // Sprint 4 TH API Adapters and Services
+            services.AddScoped<IThEmpleadosAdapter, ThEmpleadosAdapter>();
+            services.AddScoped<IThEmpleadosService, ThEmpleadosService>();
+            
+            services.AddScoped<IThExperienciaLaboralAdapter, ThExperienciaLaboralAdapter>();
+            services.AddScoped<IThEducacionAdapter, ThEducacionAdapter>();
+            services.AddScoped<IThDatosComplementariosAdapter, ThDatosComplementariosAdapter>();
+            services.AddScoped<IThDesvinculacionAdapter, ThDesvinculacionAdapter>();
+            
+            services.AddScoped<IThCatalogosAdapter, ThCatalogosAdapter>();
+            services.AddScoped<IThCatalogosService, ThCatalogosService>();
+            services.AddScoped<IThDesvinculacionService, ThDesvinculacionService>();
             
             return services;
         }

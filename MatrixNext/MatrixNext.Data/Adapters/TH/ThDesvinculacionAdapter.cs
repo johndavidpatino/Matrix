@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Dapper;
 using MatrixNext.Data.Adapters.TH.Models;
 using MatrixNext.Data.Context;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace MatrixNext.Data.Adapters.TH
