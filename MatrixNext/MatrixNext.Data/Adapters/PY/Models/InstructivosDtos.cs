@@ -147,4 +147,30 @@ namespace MatrixNext.Data.Adapters.PY.Models
         public long UsuarioId { get; set; }
         public int NoVersion { get; set; }
     }
+
+    /// <summary>
+    /// Input para guardar ayuda cualitativa
+    /// </summary>
+    public class AyudaCualiInputDto
+    {
+        public int? Id { get; set; }
+        public long TrabajoId { get; set; }
+        public string Descripcion { get; set; } = string.Empty;
+        public string? TipoArchivo { get; set; }
+        public string? RutaArchivo { get; set; }
+        public long UsuarioId { get; set; }
+    }
+
+    /// <summary>
+    /// Input para guardar tipo de reclutamiento cualitativo
+    /// </summary>
+    public class TipoReclutamientoCualiInputDto
+    {
+        public int? Id { get; set; }
+        public long TrabajoId { get; set; }
+        public string TipoReclutamiento { get; set; } = string.Empty;
+        public int? CuotaRequerida { get; set; }
+        public string? Especificaciones { get; set; }
+        public long UsuarioId { get; set; }
+    }
 }

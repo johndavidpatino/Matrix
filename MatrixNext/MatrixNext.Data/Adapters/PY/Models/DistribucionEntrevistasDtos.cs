@@ -83,9 +83,10 @@ namespace MatrixNext.Data.Adapters.PY.Models
         public string GrupoObjetivo { get; set; } = string.Empty;
         public int CiudadId { get; set; }
         public string Cantidad { get; set; } = "1";
-        public string FechaInicio { get; set; } = string.Empty;
-        public string FechaFin { get; set; } = string.Empty;
-        public long Moderador { get; set; }
+        public DateTime FechaProgramada { get; set; }
+        public string? Hora { get; set; }
+        public string? Zona { get; set; }
+        public long ModeradorId { get; set; }
         public long UsuarioId { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace MatrixNext.Data.Adapters.PY.Models
 {
@@ -13,6 +14,21 @@ namespace MatrixNext.Data.Adapters.PY.Models
         public string? Configuracion { get; set; }
         public DateTime? Fecha { get; set; }
         public string? Usuario { get; set; }
+    }
+
+    /// <summary>
+    /// Input para guardar configuración de trabajo
+    /// </summary>
+    public class TrabajoConfiguracionInputDto
+    {
+        public long? Id { get; set; }
+        public long TrabajoId { get; set; }
+        public bool ModalidadCuantitativa { get; set; }
+        public bool ModalidadQualitativa { get; set; }
+        public List<string>? TecnicasActivas { get; set; }
+        public List<string>? LineasActivas { get; set; }
+        public string? Configuracion { get; set; }
+        public long UsuarioId { get; set; }
     }
 
     /// <summary>

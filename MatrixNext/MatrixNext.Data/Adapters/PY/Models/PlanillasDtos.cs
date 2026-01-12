@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace MatrixNext.Data.Adapters.PY.Models
 {
@@ -145,5 +146,21 @@ namespace MatrixNext.Data.Adapters.PY.Models
         public string? BiStatus { get; set; }
         public long IdUsuarioAprueba { get; set; }
         public bool JobEncontradoEnBI { get; set; }
+    }
+
+    /// <summary>
+    /// Input para actualizar planilla de moderación existente
+    /// </summary>
+    public class PlanillaModeracionActualizacionDto
+    {
+        public int IdPlanilla { get; set; }
+        public DateTime? Fecha { get; set; }
+        public string? Hora { get; set; }
+        public int? Tecnica { get; set; }
+        public long? Moderador { get; set; }
+        public string? Rol { get; set; }
+        public string? Observaciones { get; set; }
+        public string? TiempoAsignado { get; set; }
+        public List<ModeradorDto>? Moderadores { get; set; }
     }
 }
