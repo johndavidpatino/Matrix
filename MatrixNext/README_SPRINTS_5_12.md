@@ -22,7 +22,7 @@
 ├── TH_Empleados (API ✅, Views 🔴)
 ├── OP_Cualitativo (MVP ✅, Complementos 🔴)
 ├── CORE Workflow (API + UI ✅ Sprint 7 COMPLETADO)
-└── EQ_EasyQuote (0%, análisis crítico)
+└── EQ_EasyQuote (Análisis + Fase 1, 🔄 Sprint 8 EN PROGRESO)
 
 🔴 NO INICIADO (Sprints 8-12+)
 ├── Home Dashboard
@@ -40,7 +40,7 @@
 | **5** | TH Views/UI | 2w | 80h | 15 Ene | 29 Ene | 🟡 |
 | **6** | OP_Cualitativo Complementos | 2w | 75h | 01 Feb | 12 Feb | 🟡 |
 | **7** | CORE Workflow | 2w | 85h | 15 Feb | 26 Feb | ✅ |
-| **8** | EQ_EasyQuote Análisis + Fase 1 | 2-3w | 120h | 01 Mar | 19 Mar | 🟡 |
+| **8** | EQ_EasyQuote Análisis + Fase 1 | 2-3w | 120h | 01 Mar | 19 Mar | � EN PROGRESO |
 | **9** | Home Dashboard | 1-2w | 50h | 22 Mar | 02 Abr | 🔴 |
 | **10** | RP_Reportes | 1-2w | 60h | 05 Abr | 16 Abr | 🔴 |
 | **11** | OP_RO + OP_Trafico | 2w | 90h | 19 Abr | 03 May | 🔴 |
