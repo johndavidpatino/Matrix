@@ -19,13 +19,13 @@ namespace MatrixNext.Web.Services.EQ.Adapters
     /// - EqStaffSL → EQStaffSL
     /// - EqLogistica → EQLogistica (si existe)
     /// </summary>
-    public static class QuoteHeaderToViewModelAdapter
+    public class QuoteHeaderToViewModelAdapter
     {
         /// <summary>
         /// Convierte una entidad EqQuoteHeader completa a EasyQuoteViewModel para cálculos
         /// Asume que el header fue cargado con todos los Includes requeridos
         /// </summary>
-        public static EasyQuoteViewModel ToViewModel(EqQuoteHeader header)
+        public EasyQuoteViewModel ToViewModel(EqQuoteHeader header)
         {
             if (header == null)
                 return new EasyQuoteViewModel();
@@ -221,6 +221,36 @@ namespace MatrixNext.Web.Services.EQ.Adapters
                 DimensionAnchoCm = null,
                 DimensionAltoCm = null
             };
+        }
+
+        /// <summary>
+        /// Mapea EasyQuoteViewModel → EqQuoteHeader (operación inversa)
+        /// Usado para guardar cambios de la quote
+        /// </summary>
+        public EqQuoteHeader ToEntity(EasyQuoteViewModel vm)
+        {
+            if (vm == null)
+                return new EqQuoteHeader();
+
+            var entity = new EqQuoteHeader
+            {
+                Id = (int)vm.Id,
+                PropuestaNombre = vm.Header?.Nombre ?? string.Empty,
+                GrupoObjetivo = vm.Header?.GrupoObjetivo ?? string.Empty,
+                Cliente = vm.Header?.Cliente ?? string.Empty,
+                ProbabilidadAprobacion = vm.Header?.ProbAprobacion ?? string.Empty,
+                SL = vm.Header?.SL ?? string.Empty,
+                MetodologiaSL = vm.Header?.MetodologiaSL ?? string.Empty,
+                RecordDetail = vm.Header?.RecordDetail ?? string.Empty,
+                CategoriaProducto = vm.Header?.CategoriaProducto ?? string.Empty,
+                ValorProveedorExterno = vm.Header?.ValorProveedorExterno ?? 0m,
+                ValorProveedorInternacional = vm.Header?.ValorProveedorInternacional ?? 0m,
+                ValorGMU = vm.Header?.ValorGMU ?? 0m,
+                FechaAprobacionEstimada = vm.Header?.FechaAprobacionEstimada,
+                FechaCampo = vm.Header?.FechaCampo
+            };
+
+            return entity;
         }
     }
 }

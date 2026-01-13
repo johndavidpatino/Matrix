@@ -155,9 +155,15 @@ Sprint 8: EQ_EasyQuote Análisis + Catálogos
 │   ├── EasyCostService integration ✅
 │   ├── Parity tests (11/11 formulas validated) ✅
 │   └── FORMULAS_MAPPING.md (complete documentation) ✅
-├── FASE 4: Migrar controllers Areas/EQ 🔄 EN PROGRESO
+├── FASE 4: Migrar controllers Areas/EQ ✅ COMPLETADA
+│   ├── EasyQuoteRetrievalService (155 lines, 5 methods) ✅
+│   ├── EasyQuoteController (MVC, migrado a EF Core) ✅
+│   ├── QuotesController (REST API, 7 endpoints) ✅
+│   ├── EasyCostService.SaveQuoteWithCostAsync (async transaction) ✅
+│   ├── QuoteHeaderToViewModelAdapter.ToEntity (reverse mapping) ✅
+│   └── Program.cs DI registration ✅
 ├── FASE 5: Views + QA final 🔴 PENDIENTE
-└── Estado: 🟡 EN PROGRESO (~60% sprint, FASES 1-3 completas, 27/27 tests passing)
+└── Estado: 🟡 EN PROGRESO (~75% sprint, FASES 1-4 completas, 27/27 tests passing)
 
 Sprint 9: Home Dashboard
 ├── Widgets de resumen (PY, OP, CU, TH, FI, GD)

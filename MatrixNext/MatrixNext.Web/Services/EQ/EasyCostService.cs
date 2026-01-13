@@ -8,6 +8,7 @@ using MatrixNext.Web.DTOs;
 using MatrixNext.Web.Infrastructure.Data;
 using MatrixNext.Web.Areas.EQ.Services.Internal;
 using MatrixNext.Web.Services.EQ.Adapters;
+using MatrixNext.Web.Areas.EQ.Models;
 using MatrixNext.Data.Services;
 
 namespace MatrixNext.Web.Services.EQ
@@ -20,11 +21,101 @@ namespace MatrixNext.Web.Services.EQ
     {
         private readonly MatrixDbContext _context;
         private readonly QuoteCalculator _calculator;
+        private readonly ILogger<EasyCostService> _logger;
 
-        public EasyCostService(MatrixDbContext context, QuoteCalculator calculator)
+        public EasyCostService(
+            MatrixDbContext context, 
+            QuoteCalculator calculator,
+            ILogger<EasyCostService> logger)
         {
             _context = context;
             _calculator = calculator;
+            _logger = logger;
+        }
+
+        // ===== MÉTODOS PARA CONTROLLERS (FASE 4) =====
+
+        /// <summary>
+        /// Calcula costos sin persistir (solo cálculo)
+        /// </summary>
+        public EQSummary CalculateCost(EasyQuoteViewModel vm, DateTime? fechaCotizacion = null)
+        {
+            return _calculator.Calcular(vm, fechaCotizacion);
+        }
+
+        /// <summary>
+        /// Guarda quote completa con cálculo de costos
+        /// </summary>
+        public async Task<Controllers.Api.SaveQuoteResult> SaveQuoteWithCostAsync(EasyQuoteViewModel vm, DateTime? fechaCotizacion = null)
+        {
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            
+            try
+            {
+                // PASO 1: Calcular costos
+                var summary = _calculator.Calcular(vm, fechaCotizacion);
+
+                // PASO 2: Mapear ViewModel → Entity
+                var adapter = new QuoteHeaderToViewModelAdapter();
+                var entity = adapter.ToEntity(vm);
+                entity.FechaModificacion = DateTime.Now;
+                
+                if (entity.Id == 0)
+                {
+                    entity.FechaCreacion = DateTime.Now;
+                    _context.EqQuoteHeaders.Add(entity);
+                }
+                else
+                {
+                    _context.EqQuoteHeaders.Update(entity);
+                }
+
+                await _context.SaveChangesAsync();
+
+                // PASO 3: Guardar resultado de costos
+                var costResult = new EqCostResult
+                {
+                    QuoteHeaderId = entity.Id,
+                    Moneda = "COP",
+                    FechaCalculo = DateTime.UtcNow,
+                    FechaModificacion = DateTime.UtcNow,
+                    CostoCampo = summary.CostoCampo,
+                    CostoCalidad = summary.CostoCalidad,
+                    Viaticos = summary.Viaticos,
+                    Incentivos = summary.Incentivos,
+                    Insumos = summary.Insumos,
+                    StaffOps = summary.StaffOps,
+                    CompraProducto = summary.CompraProducto,
+                    Tablets = summary.Tablets,
+                    DirectCostOps = summary.DirectCostOps,
+                    GM = summary.GM,
+                    PB_RMF = summary.PB_RMF,
+                    ProfTime = summary.ProfTime,
+                    OP = summary.OP,
+                    AOTTotal = summary.AOT,
+                    PctOP = summary.PorcOP
+                };
+
+                _context.EqCostResults.Add(costResult);
+                await _context.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+
+                _logger.LogInformation("Quote {QuoteId} guardada exitosamente con costos", entity.Id);
+
+                return new Controllers.Api.SaveQuoteResult
+                {
+                    QuoteId = entity.Id,
+                    Summary = summary,
+                    SavedAt = DateTime.Now
+                };
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                _logger.LogError(ex, "Error guardando quote");
+                throw;
+            }
         }
 
         public async Task<ApiResponse<EasyCostResultDto>> CalculateAsync(int quoteHeaderId)
@@ -50,7 +141,8 @@ namespace MatrixNext.Web.Services.EQ
                 }
 
                 // PASO 1: Convertir EqQuoteHeader → EasyQuoteViewModel usando adapter
-                var vm = QuoteHeaderToViewModelAdapter.ToViewModel(quote);
+                var adapter = new QuoteHeaderToViewModelAdapter();
+                var vm = adapter.ToViewModel(quote);
 
                 // PASO 2: Ejecutar motor de cálculos (26 fórmulas)
                 var summary = _calculator.Calcular(vm);

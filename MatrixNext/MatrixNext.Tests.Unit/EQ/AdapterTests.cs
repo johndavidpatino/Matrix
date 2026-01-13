@@ -65,7 +65,7 @@ namespace MatrixNext.Tests.Unit.EQ
             quoteHeader.StaffSL = new List<EqStaffSL>();
 
             // Act
-            var vm = QuoteHeaderToViewModelAdapter.ToViewModel(quoteHeader);
+            var vm = new QuoteHeaderToViewModelAdapter().ToViewModel(quoteHeader);
 
             // Assert
             Assert.NotNull(vm);
@@ -85,7 +85,7 @@ namespace MatrixNext.Tests.Unit.EQ
         public void Adapter_ConNull_NoThrow()
         {
             // Act
-            var vm = QuoteHeaderToViewModelAdapter.ToViewModel(null);
+            var vm = new QuoteHeaderToViewModelAdapter().ToViewModel(null);
 
             // Assert
             Assert.NotNull(vm);
@@ -134,7 +134,7 @@ namespace MatrixNext.Tests.Unit.EQ
             quoteHeader.StaffSL = new List<EqStaffSL>();
 
             // Act
-            var vm = QuoteHeaderToViewModelAdapter.ToViewModel(quoteHeader);
+            var vm = new QuoteHeaderToViewModelAdapter().ToViewModel(quoteHeader);
 
             // Assert
             Assert.NotNull(vm.MysteryVisits);
@@ -186,7 +186,7 @@ namespace MatrixNext.Tests.Unit.EQ
             quoteHeader.Mysteries = new List<EqMystery>();
 
             // Act
-            var vm = QuoteHeaderToViewModelAdapter.ToViewModel(quoteHeader);
+            var vm = new QuoteHeaderToViewModelAdapter().ToViewModel(quoteHeader);
 
             // Assert
             Assert.NotNull(vm.StaffSL);
@@ -241,7 +241,7 @@ namespace MatrixNext.Tests.Unit.EQ
             quoteHeader.StaffSL = new List<EqStaffSL>();
 
             // Act
-            var vm = QuoteHeaderToViewModelAdapter.ToViewModel(quoteHeader);
+            var vm = new QuoteHeaderToViewModelAdapter().ToViewModel(quoteHeader);
 
             // Assert
             Assert.NotNull(vm.SampleCities);

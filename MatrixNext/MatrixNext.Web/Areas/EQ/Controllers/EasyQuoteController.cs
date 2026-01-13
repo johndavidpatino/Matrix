@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MatrixNext.Web.DTOs;
+using MatrixNext.Web.Services.EQ;
+using MatrixNext.Web.Areas.EQ.Services.Internal;
 using MatrixNext.Web.Areas.EQ.Models;
-using MatrixNext.Web.Areas.EQ.Services;
 
 namespace MatrixNext.Web.Areas.EQ.Controllers
 {
@@ -10,28 +12,60 @@ namespace MatrixNext.Web.Areas.EQ.Controllers
     [Route("EQ/[controller]/[action]")]
     public class EasyQuoteController : Controller
     {
-        private readonly EasyQuoteService _service;
+        private readonly EasyCostService _costService;
+        private readonly EasyQuoteRetrievalService _retrievalService;
 
-        public EasyQuoteController(EasyQuoteService service)
+        public EasyQuoteController(
+            EasyCostService costService,
+            EasyQuoteRetrievalService retrievalService)
         {
-            _service = service ?? throw new ArgumentNullException(nameof(service));
+            _costService = costService ?? throw new ArgumentNullException(nameof(costService));
+            _retrievalService = retrievalService ?? throw new ArgumentNullException(nameof(retrievalService));
         }
 
         [HttpGet]
-        public IActionResult Index(long? id)
+        public async Task<IActionResult> Index(long? id)
         {
             // carga inicial (nuevo o existente)
-            var model = _service.CargarQuote(id);
+            EasyQuoteViewModel model;
+            
+            if (id.HasValue)
+            {
+                model = await _retrievalService.GetQuoteByIdAsync(id.Value);
+                if (model == null)
+                {
+                    TempData["Error"] = $"Quote {id} no encontrada";
+                    model = new EasyQuoteViewModel(); // Nueva quote vacía
+                }
+            }
+            else
+            {
+                model = new EasyQuoteViewModel(); // Nueva quote
+            }
+            
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Guardar([FromBody] EasyQuoteViewModel vm)
+        public async Task<IActionResult> Guardar([FromBody] EasyQuoteViewModel vm)
         {
             if (vm == null) return BadRequest("Modelo vacío");
-            var result = _service.Guardar(vm);
-            return Json(result);
+            
+            try
+            {
+                var result = await _costService.SaveQuoteWithCostAsync(vm);
+                return Json(new 
+                { 
+                    success = true, 
+                    id = result.QuoteId, 
+                    summary = result.Summary 
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, error = ex.Message });
+            }
         }
 
         [HttpPost]
@@ -39,8 +73,16 @@ namespace MatrixNext.Web.Areas.EQ.Controllers
         public IActionResult Calcular([FromBody] EasyQuoteViewModel vm)
         {
             if (vm == null) return BadRequest("Modelo vacío");
-            var result = _service.Calcular(vm);
-            return Json(result);
+            
+            try
+            {
+                var summary = _costService.CalculateCost(vm);
+                return Json(new { success = true, summary });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, error = ex.Message });
+            }
         }
     }
 }

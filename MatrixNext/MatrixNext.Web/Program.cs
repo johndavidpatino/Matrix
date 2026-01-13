@@ -126,11 +126,14 @@ builder.Services.AddScoped<MatrixNext.Web.Services.EQ.IEasyCostService, MatrixNe
 builder.Services.AddScoped<MatrixNext.Web.Services.EQ.IEasyMasterService, MatrixNext.Web.Services.EQ.EasyMasterService>();
 builder.Services.AddScoped<MatrixNext.Web.Services.EQ.EqSeedService>(); // FASE 2: Seed service para maestras
 
+// FASE 3: Adapters + Motor de cálculos
+// QuoteHeaderToViewModelAdapter is instantiated locally in services
+
+// FASE 4: Retrieval service para controllers
+builder.Services.AddScoped<MatrixNext.Web.Services.EQ.EasyQuoteRetrievalService>();
+
 // QuoteCalculator para motor de cálculos (usado por EasyCostService)
 builder.Services.AddScoped<MatrixNext.Web.Areas.EQ.Services.Internal.QuoteCalculator>();
-
-// EqSeedService para cargar datos maestros desde Excel (FASE 2)
-builder.Services.AddScoped<MatrixNext.Web.Services.EQ.EqSeedService>();
 
 // DbContext principal (PY, CORE, OP)
 builder.Services.AddDbContext<MatrixDbContext>(options =>
