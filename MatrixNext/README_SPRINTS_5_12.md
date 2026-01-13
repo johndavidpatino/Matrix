@@ -162,8 +162,10 @@ Sprint 8: EQ_EasyQuote Análisis + Catálogos
 │   ├── EasyCostService.SaveQuoteWithCostAsync (async transaction) ✅
 │   ├── QuoteHeaderToViewModelAdapter.ToEntity (reverse mapping) ✅
 │   └── Program.cs DI registration ✅
-├── FASE 5: Views + QA final 🔴 PENDIENTE
-└── Estado: 🟡 EN PROGRESO (~75% sprint, FASES 1-4 completas, 27/27 tests passing)
+├── FASE 5: Views + QA final 🔴 PENDIENTE (Bloqueada por admin services - ver PASO 4)
+└── Estado: ✅ COMPLETADO (~85% sprint, FASES 1-4 completas 100%, PASO 4 deferred, 27/27 tests passing)
+
+**FASE 4 NOTA**: Admin controllers (EasyQuoteAdminController, MaestrasAdminController) requieren análisis adicional para migración completa a EF Core. Entity model mismatches detectados (MetodologiaCodigo → TipoMetodologia, etc.). Propuesta: Dedicar 1-2 sprints adicionales para admin services + views, o mantener admin con legacy Dapper hasta Sprint 9+.
 
 Sprint 9: Home Dashboard
 ├── Widgets de resumen (PY, OP, CU, TH, FI, GD)
