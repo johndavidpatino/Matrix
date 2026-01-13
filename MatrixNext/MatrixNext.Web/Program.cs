@@ -124,9 +124,13 @@ builder.Services.AddScoped<IAsignacionesProyectosService, AsignacionesProyectosS
 builder.Services.AddScoped<MatrixNext.Web.Services.EQ.IEasyQuoteService, MatrixNext.Web.Services.EQ.EasyQuoteService>();
 builder.Services.AddScoped<MatrixNext.Web.Services.EQ.IEasyCostService, MatrixNext.Web.Services.EQ.EasyCostService>();
 builder.Services.AddScoped<MatrixNext.Web.Services.EQ.IEasyMasterService, MatrixNext.Web.Services.EQ.EasyMasterService>();
+builder.Services.AddScoped<MatrixNext.Web.Services.EQ.EqSeedService>(); // FASE 2: Seed service para maestras
 
 // QuoteCalculator para motor de cálculos (usado por EasyCostService)
 builder.Services.AddScoped<MatrixNext.Web.Areas.EQ.Services.Internal.QuoteCalculator>();
+
+// EqSeedService para cargar datos maestros desde Excel (FASE 2)
+builder.Services.AddScoped<MatrixNext.Web.Services.EQ.EqSeedService>();
 
 // DbContext principal (PY, CORE, OP)
 builder.Services.AddDbContext<MatrixDbContext>(options =>
@@ -260,6 +264,23 @@ builder.Services.AddScoped<ICoreNotificationService, CoreNotificationService>();
 builder.Services.AddScoped<ICoreAuditService, CoreAuditService>();
 
 var app = builder.Build();
+
+// ===== FASE 3: EasyQuote Master Data Seeding =====
+// Ejecutar seed automático de maestras en startup (solo si no existen datos)
+using (var scope = app.Services.CreateScope())
+{
+    var seedService = scope.ServiceProvider.GetRequiredService<MatrixNext.Web.Services.EQ.EqSeedService>();
+    try
+    {
+        await seedService.SeedAllMasterTablesAsync(force: false);
+        System.Console.WriteLine("✅ EasyQuote master data seeding completed successfully");
+    }
+    catch (Exception ex)
+    {
+        System.Console.WriteLine($"⚠️ EasyQuote master data seeding failed (non-critical): {ex.Message}");
+        // No bloquear startup si el seed falla
+    }
+}
 
 // Middleware global de manejo de excepciones
 app.UseMiddleware<GlobalExceptionHandlerMiddleware>();

@@ -1,0 +1,208 @@
+@model MatrixNext.Web.Services.EQ.MasterDataStatus
+@{
+    ViewData["Title"] = "Seed Maestras EasyQuote";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-database me-2"></i>Seed Maestras EasyQuote
+                    </h4>
+                    <small class="text-white-50">Cargar datos maestros desde Excel Ipsos EasyQuote 2025v2</small>
+                </div>
+                <div class="card-body">
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            @TempData["SuccessMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            @TempData["ErrorMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+                    <!-- Estado actual -->
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <h5>Estado Actual de Maestras</h5>
+                            <table class="table table-sm table-bordered">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Tabla</th>
+                                        <th>Registros</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>eq_param_precio</code> - Matriz de precios (F2F/CATI/ONLINE)</td>
+                                        <td><strong>@Model.PreciosCount</strong></td>
+                                        <td>
+                                            @if (Model.PreciosCount > 0)
+                                            {
+                                                <span class="badge bg-success">✅ Poblada</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-warning">⚠️ Vacía</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>eq_param_script_proc</code> - Horas scripting/procesamiento</td>
+                                        <td><strong>@Model.HorasCount</strong></td>
+                                        <td>
+                                            @if (Model.HorasCount > 0)
+                                            {
+                                                <span class="badge bg-success">✅ Poblada</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-warning">⚠️ Vacía</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>eq_valor_hora_ops</code> - Tarifas recursos (L1-L8)</td>
+                                        <td><strong>@Model.TarifasCount</strong></td>
+                                        <td>
+                                            @if (Model.TarifasCount > 0)
+                                            {
+                                                <span class="badge bg-success">✅ Poblada</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-warning">⚠️ Vacía</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>eq_cost_insumos</code> - Costos insumos por NSE</td>
+                                        <td><strong>@Model.CostosCount</strong></td>
+                                        <td>
+                                            @if (Model.CostosCount > 0)
+                                            {
+                                                <span class="badge bg-success">✅ Poblada</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-warning">⚠️ Vacía</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>eq_rate_estadistica</code> - Tarifario estadística</td>
+                                        <td><strong>@Model.RatesCount</strong></td>
+                                        <td>
+                                            @if (Model.RatesCount > 0)
+                                            {
+                                                <span class="badge bg-success">✅ Poblada</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-warning">⚠️ Vacía</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>eq_locaciones</code> - Ciudades y tarifas salas</td>
+                                        <td><strong>@Model.LocacionesCount</strong></td>
+                                        <td>
+                                            @if (Model.LocacionesCount > 0)
+                                            {
+                                                <span class="badge bg-success">✅ Poblada</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-warning">⚠️ Vacía</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            @if (Model.AllTablesPopulated)
+                            {
+                                <div class="alert alert-success">
+                                    <i class="fas fa-check-circle me-2"></i>
+                                    <strong>Todas las maestras están pobladas.</strong> El sistema está listo para cotizar.
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="alert alert-warning">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    <strong>Algunas maestras están vacías.</strong> Ejecute el seed para poblarlas.
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Acciones -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5>Acciones</h5>
+                            <div class="btn-group" role="group">
+                                <form asp-action="SeedAll" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-success" @(Model.AllTablesPopulated ? "disabled" : "")>
+                                        <i class="fas fa-seedling me-2"></i>Seed All (Skip si ya tiene datos)
+                                    </button>
+                                </form>
+
+                                <form asp-action="ForceSeed" method="post" class="d-inline ms-2">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-warning" onclick="return confirm('⚠️ ¿Forzar seed? Esto sobrescribirá datos existentes.');">
+                                        <i class="fas fa-redo me-2"></i>Force Seed (Sobrescribir)
+                                    </button>
+                                </form>
+
+                                <form asp-action="ClearAll" method="post" class="d-inline ms-2">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('⚠️ ¿ELIMINAR todas las maestras? Esta acción no se puede deshacer.');">
+                                        <i class="fas fa-trash-alt me-2"></i>Clear All (Limpiar)
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ayuda -->
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title">ℹ️ Información</h6>
+                                    <ul class="mb-0">
+                                        <li><strong>Seed All:</strong> Carga datos solo si las tablas están vacías (idempotente).</li>
+                                        <li><strong>Force Seed:</strong> Elimina datos existentes y recarga todo desde cero.</li>
+                                        <li><strong>Clear All:</strong> Elimina TODOS los datos de maestras (SOLO DESARROLLO).</li>
+                                        <li><strong>Fuente de datos:</strong> CSV exports de <code>Ipsos EasyQuote 2025v2.xlsm</code></li>
+                                        <li><strong>Cantidad esperada:</strong> ~400 precios, 12 horas, 8 tarifas, 6 costos, 21 rates, 16 locaciones</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Auto-dismiss alerts after 5 seconds
+        setTimeout(function() {
+            $('.alert').fadeOut('slow');
+        }, 5000);
+    </script>
+}

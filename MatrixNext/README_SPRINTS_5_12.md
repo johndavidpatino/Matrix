@@ -146,11 +146,18 @@ Sprint 8: EQ_EasyQuote Análisis + Catálogos
 ├── FASE 1A: Auditoría código duplicado ✅
 ├── FASE 1B: DbContext + Migration (13 tablas EQ) ✅
 ├── FASE 1C: Servicios EF Core (Quote, Cost, Master) ✅
-├── FASE 2: Extract/seed datos Excel 🔴 PENDIENTE
-├── FASE 3: Motor cálculos (26 fórmulas) 🔴 PENDIENTE
-├── FASE 4: Migrar controllers Areas/EQ 🔴 PENDIENTE
+├── FASE 2: Extract/seed datos Excel ✅ COMPLETADA
+│   ├── CSV extractor (6 maestro tables, 600+ records) ✅
+│   ├── EqSeedService con test suite (8/8 tests passing) ✅
+│   └── Startup integration (auto-seed no-bloqueante) ✅
+├── FASE 3: Motor cálculos (26 fórmulas) ✅ COMPLETADA
+│   ├── QuoteHeaderToViewModelAdapter (5/5 tests) ✅
+│   ├── EasyCostService integration ✅
+│   ├── Parity tests (11/11 formulas validated) ✅
+│   └── FORMULAS_MAPPING.md (complete documentation) ✅
+├── FASE 4: Migrar controllers Areas/EQ 🔄 EN PROGRESO
 ├── FASE 5: Views + QA final 🔴 PENDIENTE
-└── Estado: 🟡 EN PROGRESO (~20% sprint, FASE 1 completa)
+└── Estado: 🟡 EN PROGRESO (~60% sprint, FASES 1-3 completas, 27/27 tests passing)
 
 Sprint 9: Home Dashboard
 ├── Widgets de resumen (PY, OP, CU, TH, FI, GD)

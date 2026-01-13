@@ -7,6 +7,7 @@ using MatrixNext.Web.Models.EQ;
 using MatrixNext.Web.DTOs;
 using MatrixNext.Web.Infrastructure.Data;
 using MatrixNext.Web.Areas.EQ.Services.Internal;
+using MatrixNext.Web.Services.EQ.Adapters;
 using MatrixNext.Data.Services;
 
 namespace MatrixNext.Web.Services.EQ
@@ -30,7 +31,7 @@ namespace MatrixNext.Web.Services.EQ
         {
             try
             {
-                // Cargar cotización con todos sus detalles
+                // Cargar cotización con todos sus detalles (requerido por adapter y motor)
                 var quote = await _context.EqQuoteHeaders
                     .Include(q => q.Questionnaires)
                     .Include(q => q.Methodologies)
@@ -48,25 +49,35 @@ namespace MatrixNext.Web.Services.EQ
                     };
                 }
 
-                // TODO FASE 3: Usar el motor de cálculos existente (QuoteCalculator)
-                // Por ahora creamos un resultado vacío
+                // PASO 1: Convertir EqQuoteHeader → EasyQuoteViewModel usando adapter
+                var vm = QuoteHeaderToViewModelAdapter.ToViewModel(quote);
+
+                // PASO 2: Ejecutar motor de cálculos (26 fórmulas)
+                var summary = _calculator.Calcular(vm);
+
+                // PASO 3: Persistir resultado en BD
                 var costResult = new EqCostResult
                 {
                     QuoteHeaderId = quoteHeaderId,
                     Moneda = "COP",
                     FechaCalculo = DateTime.UtcNow,
                     FechaModificacion = DateTime.UtcNow,
-                    // Los costos serán calculados por el motor en FASE 3
-                    CostoCampo = 0m,
-                    CostoCalidad = 0m,
-                    Viaticos = 0m,
-                    Incentivos = 0m,
-                    Insumos = 0m,
-                    StaffOps = 0m,
-                    GM = 0m,
-                    PB_RMF = 0m,
-                    OP = 0m,
-                    AOTTotal = 0m
+                    // Mapeo directo desde EQSummary (resultado del motor)
+                    CostoCampo = summary.CostoCampo,
+                    CostoCalidad = summary.CostoCalidad,
+                    Viaticos = summary.Viaticos,
+                    Incentivos = summary.Incentivos,
+                    Insumos = summary.Insumos,
+                    StaffOps = summary.StaffOps,
+                    CompraProducto = summary.CompraProducto,
+                    Tablets = summary.Tablets,
+                    DirectCostOps = summary.DirectCostOps,
+                    GM = summary.GM,
+                    PB_RMF = summary.PB_RMF,
+                    ProfTime = summary.ProfTime,
+                    OP = summary.OP,
+                    AOTTotal = summary.AOT,
+                    PctOP = summary.PorcOP
                 };
 
                 _context.EqCostResults.Add(costResult);
