@@ -1,8 +1,328 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model MatrixNext.Web.Services.Dashboard.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Home - Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container-fluid py-4">
+    <!-- Header con saludo del usuario -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1 class="display-5">¡Bienvenido de vuelta!</h1>
+            <p class="text-muted">
+                @if (!string.IsNullOrEmpty(ViewData["NombreCompleto"]?.ToString()))
+                {
+                    <span>@ViewData["NombreCompleto"]</span>
+                }
+                - Dashboard actualizado a las @Model.LoadedAt.ToString("HH:mm:ss")
+            </p>
+        </div>
+        <div class="col-md-4 text-end">
+            <button class="btn btn-outline-primary" id="refreshBtn" onclick="refreshDashboard()">
+                <i class="bi bi-arrow-clockwise"></i> Actualizar
+            </button>
+        </div>
+    </div>
+
+    <!-- Mostrar errores si los hay -->
+    @if (Model.HasError)
+    {
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>Advertencia:</strong> @Model.Error
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Fila 1: KPIs principales -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="text-muted mb-1">Cotizaciones este mes</p>
+                            <h3 class="mb-0">@Model.ProductionMetrics.TotalQuotesThisMonth</h3>
+                        </div>
+                        <i class="bi bi-graph-up text-success fs-3"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="text-muted mb-1">Ingresos estimados</p>
+                            <h3 class="mb-0">@Model.ProductionMetrics.TotalRevenueThisMonth.ToString("C0")</h3>
+                        </div>
+                        <i class="bi bi-cash-coin text-info fs-3"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="text-muted mb-1">Valor promedio</p>
+                            <h3 class="mb-0">@Model.ProductionMetrics.AverageQuoteValue.ToString("C0")</h3>
+                        </div>
+                        <i class="bi bi-calculator text-warning fs-3"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="text-muted mb-1">Tareas pendientes</p>
+                            <h3 class="mb-0">@Model.TaskCount</h3>
+                        </div>
+                        <i class="bi bi-list-check text-danger fs-3"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fila 2: Widgets de contenido -->
+    <div class="row mb-4">
+        <!-- Widget: Cotizaciones recientes -->
+        <div class="col-lg-6 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light border-bottom">
+                    <h5 class="mb-0">
+                        <i class="bi bi-file-earmark-text"></i> Cotizaciones Recientes
+                    </h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.RecentQuotes.Count > 0)
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Propuesta</th>
+                                        <th>Cliente</th>
+                                        <th>Estado</th>
+                                        <th class="text-end">Monto</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var quote in Model.RecentQuotes.Take(5))
+                                    {
+                                        <tr>
+                                            <td class="small">
+                                                <a href="#" class="text-decoration-none">
+                                                    @quote.PropuestaNombre
+                                                </a>
+                                            </td>
+                                            <td class="small">@quote.Cliente</td>
+                                            <td>
+                                                <span class="badge bg-info">@quote.Estado</span>
+                                            </td>
+                                            <td class="text-end small">@quote.MontoEstimado.ToString("C0")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <hr class="my-3" />
+                        <a href="@Url.Action("Index", "EasyQuote")" class="btn btn-sm btn-outline-primary">
+                            Ver todas las cotizaciones
+                        </a>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center py-3">
+                            <i class="bi bi-inbox"></i><br />
+                            No hay cotizaciones recientes
+                        </p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Widget: Documentos pendientes -->
+        <div class="col-lg-6 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light border-bottom">
+                    <h5 class="mb-0">
+                        <i class="bi bi-file-check"></i> Estado de Documentos
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-6 border-end">
+                            <h3 class="text-danger">@Model.DocumentStats.PendingApproval</h3>
+                            <p class="text-muted small mb-0">Pendientes aprobación</p>
+                        </div>
+                        <div class="col-6">
+                            <h3 class="text-success">@Model.DocumentStats.ApprovedLastWeek</h3>
+                            <p class="text-muted small mb-0">Aprobados esta semana</p>
+                        </div>
+                    </div>
+                    <hr class="my-3" />
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <h4 class="text-info">@Model.DocumentStats.Total</h4>
+                            <p class="text-muted small mb-0">Total documentos</p>
+                        </div>
+                        <div class="col-6">
+                            <h4 class="text-warning">@Model.DocumentStats.RejectedLastWeek</h4>
+                            <p class="text-muted small mb-0">Rechazados esta semana</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fila 3: Acciones rápidas -->
+    <div class="row mb-4">
+        <div class="col-lg-6 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light border-bottom">
+                    <h5 class="mb-0">
+                        <i class="bi bi-lightning"></i> Acciones Rápidas
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="btn-group-vertical w-100" role="group">
+                        <a href="@Url.Action("Create", "EasyQuote")" class="btn btn-sm btn-light text-start border">
+                            <i class="bi bi-plus-circle"></i> Nueva Cotización
+                        </a>
+                        <a href="#" class="btn btn-sm btn-light text-start border">
+                            <i class="bi bi-plus-circle"></i> Nuevo Proyecto
+                        </a>
+                        <a href="#" class="btn btn-sm btn-light text-start border">
+                            <i class="bi bi-plus-circle"></i> Nueva Tarea
+                        </a>
+                        <a href="#" class="btn btn-sm btn-light text-start border">
+                            <i class="bi bi-file-earmark-arrow-up"></i> Cargar Documento
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Widget: Próximos eventos -->
+        <div class="col-lg-6 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light border-bottom">
+                    <h5 class="mb-0">
+                        <i class="bi bi-calendar-event"></i> Próximos Eventos
+                    </h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.UpcomingAbsences.Count > 0)
+                    {
+                        <ul class="list-unstyled">
+                            @foreach (var absence in Model.UpcomingAbsences.Take(3))
+                            {
+                                <li class="mb-2 pb-2 border-bottom">
+                                    <strong>@absence.Tipo</strong>
+                                    <br />
+                                    <small class="text-muted">
+                                        @absence.FechaInicio.ToString("dd/MM/yyyy") - @absence.FechaFinal.ToString("dd/MM/yyyy")
+                                    </small>
+                                    <br />
+                                    <span class="badge bg-secondary">@absence.Estado</span>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center py-3">
+                            <i class="bi bi-calendar-check"></i><br />
+                            No hay eventos próximos
+                        </p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fila 4: Proyectos activos -->
+    @if (Model.ActiveProjects.Count > 0)
+    {
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light border-bottom">
+                        <h5 class="mb-0">
+                            <i class="bi bi-briefcase"></i> Proyectos Activos (@Model.ProjectCount)
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            @foreach (var project in Model.ActiveProjects.Take(4))
+                            {
+                                <div class="col-md-6 col-lg-3 mb-3">
+                                    <div class="card border">
+                                        <div class="card-body">
+                                            <h6 class="card-title">@project.Nombre</h6>
+                                            <p class="card-text small text-muted mb-2">
+                                                Cliente: <strong>@project.Cliente</strong>
+                                            </p>
+                                            <div class="progress mb-2">
+                                                <div class="progress-bar" style="width: @project.Progreso%">
+                                                    @project.Progreso%
+                                                </div>
+                                            </div>
+                                            <small class="text-muted">
+                                                Inicio: @project.FechaInicio.ToString("dd/MM/yyyy")
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 </div>
+
+@section Scripts {
+    <script>
+        function refreshDashboard() {
+            const btn = document.getElementById('refreshBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Actualizando...';
+
+            fetch('@Url.Action("RefreshDashboard", "Home")', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        alert('Error: ' + data.error);
+                        btn.disabled = false;
+                        btn.innerHTML = '<i class="bi bi-arrow-clockwise"></i> Actualizar';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error al actualizar el dashboard');
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="bi bi-arrow-clockwise"></i> Actualizar';
+                });
+        }
+
+        // Auto-refresh cada 5 minutos
+        setInterval(() => {
+            fetch('@Url.Action("RefreshDashboard", "Home")', { method: 'POST' })
+                .catch(error => console.log('Auto-refresh failed:', error));
+        }, 5 * 60 * 1000);
+    </script>
+}
