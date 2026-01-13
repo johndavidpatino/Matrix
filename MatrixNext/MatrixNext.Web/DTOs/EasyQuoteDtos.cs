@@ -216,4 +216,15 @@ namespace MatrixNext.Web.DTOs
         public string Ciudad { get; set; }
         public decimal TarifaBase { get; set; }
     }
+
+    // ==================== PAGINATION ====================
+
+    public class PaginatedResult<T>
+    {
+        public int TotalCount { get; set; }
+        public int Page { get; set; }
+        public int PageSize { get; set; }
+        public int TotalPages => (TotalCount + PageSize - 1) / PageSize;
+        public List<T> Items { get; set; } = new List<T>();
+    }
 }

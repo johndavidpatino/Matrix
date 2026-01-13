@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using MatrixNext.Web.Models;
 using MatrixNext.Web.Models.PY;
 using MatrixNext.Web.Models.CORE;
+using MatrixNext.Web.Models.EQ;
 
 namespace MatrixNext.Web.Infrastructure.Data
 {
@@ -36,6 +37,23 @@ namespace MatrixNext.Web.Infrastructure.Data
         public DbSet<TareaPrevia> TareasPrevias { get; set; }
         public DbSet<WorkFlowUsuarioAsignado> WorkFlowUsuariosAsignados { get; set; }
         public DbSet<ObservacionTarea> ObservacionesTareas { get; set; }
+
+        // ===== EQ: EASYQUOTE COTIZACIONES =====
+        public DbSet<EqQuoteHeader> EqQuoteHeaders { get; set; }
+        public DbSet<EqQuestionnaire> EqQuestionnaires { get; set; }
+        public DbSet<EqMethodology> EqMethodologies { get; set; }
+        public DbSet<EqSampleCity> EqSampleCities { get; set; }
+        public DbSet<EqMystery> EqMysteries { get; set; }
+        public DbSet<EqStaffSL> EqStaffSLs { get; set; }
+        public DbSet<EqCostResult> EqCostResults { get; set; }
+
+        // ===== EQ: MAESTRAS =====
+        public DbSet<EqParamPrecio> EqParamPrecios { get; set; }
+        public DbSet<EqParamScriptProc> EqParamScriptProcs { get; set; }
+        public DbSet<EqValorHoraOps> EqValorHoraOps { get; set; }
+        public DbSet<EqCostInsumos> EqCostInsumos { get; set; }
+        public DbSet<EqRateEstadistica> EqRateEstadisticas { get; set; }
+        public DbSet<EqLocaciones> EqLocaciones { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -268,7 +286,7 @@ namespace MatrixNext.Web.Infrastructure.Data
                 entity.HasMany(e => e.Muestras)
                     .WithOne(e => e.TrabajoCuali)
                     .HasForeignKey(e => e.IdTrabajoCuali)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.NoAction);
             });
 
             // ===== CONFIGURACIÓN PY: SEGMENTOS CUALI =====
@@ -452,6 +470,179 @@ namespace MatrixNext.Web.Infrastructure.Data
                 entity.HasIndex(e => e.IdSesion).HasDatabaseName("IX_ParticipantesSesion_IdSesion");
                 entity.HasIndex(e => e.IdMuestra).HasDatabaseName("IX_ParticipantesSesion_IdMuestra");
                 entity.HasIndex(e => e.Asistencia).HasDatabaseName("IX_ParticipantesSesion_Asistencia");
+            });
+
+            // ===== CONFIGURACIÓN EQ: QUOTE HEADER =====
+            modelBuilder.Entity<EqQuoteHeader>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.PropuestaNombre)
+                    .IsRequired()
+                    .HasMaxLength(500);
+
+                entity.Property(e => e.GrupoObjetivo)
+                    .IsRequired()
+                    .HasMaxLength(500);
+
+                entity.Property(e => e.Cliente)
+                    .IsRequired()
+                    .HasMaxLength(500);
+
+                entity.Property(e => e.ProbabilidadAprobacion)
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.SL)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.MetodologiaSL)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.FechaCreacion).HasDefaultValueSql("GETUTCDATE()");
+                entity.Property(e => e.FechaModificacion).HasDefaultValueSql("GETUTCDATE()");
+
+                entity.HasIndex(e => e.Cliente).HasDatabaseName("IX_EqQuoteHeader_Cliente");
+                entity.HasIndex(e => e.FechaCreacion).HasDatabaseName("IX_EqQuoteHeader_FechaCreacion");
+
+                // Relaciones
+                entity.HasMany(e => e.Questionnaires)
+                    .WithOne(e => e.QuoteHeader)
+                    .HasForeignKey(e => e.QuoteHeaderId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasMany(e => e.Methodologies)
+                    .WithOne(e => e.QuoteHeader)
+                    .HasForeignKey(e => e.QuoteHeaderId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasMany(e => e.SampleCities)
+                    .WithOne(e => e.QuoteHeader)
+                    .HasForeignKey(e => e.QuoteHeaderId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasMany(e => e.Mysteries)
+                    .WithOne(e => e.QuoteHeader)
+                    .HasForeignKey(e => e.QuoteHeaderId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasMany(e => e.StaffSL)
+                    .WithOne(e => e.QuoteHeader)
+                    .HasForeignKey(e => e.QuoteHeaderId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(e => e.CostResult)
+                    .WithOne(e => e.QuoteHeader)
+                    .HasForeignKey<EqCostResult>(e => e.QuoteHeaderId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // ===== CONFIGURACIÓN EQ: QUESTIONNAIRE =====
+            modelBuilder.Entity<EqQuestionnaire>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.FechaCreacion).HasDefaultValueSql("GETUTCDATE()");
+                entity.Property(e => e.FechaModificacion).HasDefaultValueSql("GETUTCDATE()");
+                entity.HasIndex(e => e.QuoteHeaderId).HasDatabaseName("IX_EqQuestionnaire_QuoteHeaderId");
+            });
+
+            // ===== CONFIGURACIÓN EQ: METHODOLOGY =====
+            modelBuilder.Entity<EqMethodology>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.FechaCreacion).HasDefaultValueSql("GETUTCDATE()");
+                entity.Property(e => e.FechaModificacion).HasDefaultValueSql("GETUTCDATE()");
+                entity.HasIndex(e => e.QuoteHeaderId).HasDatabaseName("IX_EqMethodology_QuoteHeaderId");
+            });
+
+            // ===== CONFIGURACIÓN EQ: SAMPLE CITY =====
+            modelBuilder.Entity<EqSampleCity>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Ciudad).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.FechaCreacion).HasDefaultValueSql("GETUTCDATE()");
+                entity.Property(e => e.FechaModificacion).HasDefaultValueSql("GETUTCDATE()");
+                entity.HasIndex(e => e.QuoteHeaderId).HasDatabaseName("IX_EqSampleCity_QuoteHeaderId");
+                entity.HasIndex(e => e.Ciudad).HasDatabaseName("IX_EqSampleCity_Ciudad");
+            });
+
+            // ===== CONFIGURACIÓN EQ: MYSTERY =====
+            modelBuilder.Entity<EqMystery>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.FechaCreacion).HasDefaultValueSql("GETUTCDATE()");
+                entity.Property(e => e.FechaModificacion).HasDefaultValueSql("GETUTCDATE()");
+                entity.HasIndex(e => e.QuoteHeaderId).HasDatabaseName("IX_EqMystery_QuoteHeaderId");
+            });
+
+            // ===== CONFIGURACIÓN EQ: STAFF SL =====
+            modelBuilder.Entity<EqStaffSL>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Nivel).IsRequired().HasMaxLength(10);
+                entity.Property(e => e.FechaCreacion).HasDefaultValueSql("GETUTCDATE()");
+                entity.Property(e => e.FechaModificacion).HasDefaultValueSql("GETUTCDATE()");
+                entity.HasIndex(e => e.QuoteHeaderId).HasDatabaseName("IX_EqStaffSL_QuoteHeaderId");
+            });
+
+            // ===== CONFIGURACIÓN EQ: COST RESULT =====
+            modelBuilder.Entity<EqCostResult>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.FechaCalculo).HasDefaultValueSql("GETUTCDATE()");
+                entity.Property(e => e.FechaModificacion).HasDefaultValueSql("GETUTCDATE()");
+                entity.HasIndex(e => e.QuoteHeaderId).HasDatabaseName("IX_EqCostResult_QuoteHeaderId");
+            });
+
+            // ===== CONFIGURACIÓN EQ: MAESTRAS =====
+            modelBuilder.Entity<EqParamPrecio>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.TipoMetodologia).IsRequired().HasMaxLength(50);
+                entity.Property(e => e.FechaCreacion).HasDefaultValueSql("GETUTCDATE()");
+                entity.HasIndex(e => new { e.TipoMetodologia, e.DuracionMin, e.PenetracionRango })
+                    .HasDatabaseName("IX_EqParamPrecio_TipoMetodologia_Duracion_Penetracion");
+            });
+
+            modelBuilder.Entity<EqParamScriptProc>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.FechaCreacion).HasDefaultValueSql("GETUTCDATE()");
+                entity.HasIndex(e => e.DuracionMin).HasDatabaseName("IX_EqParamScriptProc_DuracionMin");
+            });
+
+            modelBuilder.Entity<EqValorHoraOps>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Nivel).IsRequired().HasMaxLength(10);
+                entity.Property(e => e.FechaCreacion).HasDefaultValueSql("GETUTCDATE()");
+                entity.HasIndex(e => new { e.Nivel, e.Alternativa })
+                    .HasDatabaseName("IX_EqValorHoraOps_Nivel_Alternativa");
+            });
+
+            modelBuilder.Entity<EqCostInsumos>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.FechaCreacion).HasDefaultValueSql("GETUTCDATE()");
+                entity.HasIndex(e => e.NSE).HasDatabaseName("IX_EqCostInsumos_NSE");
+            });
+
+            modelBuilder.Entity<EqRateEstadistica>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Categoria).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Servicio).IsRequired().HasMaxLength(200);
+                entity.Property(e => e.FechaCreacion).HasDefaultValueSql("GETUTCDATE()");
+                entity.HasIndex(e => e.Categoria).HasDatabaseName("IX_EqRateEstadistica_Categoria");
+            });
+
+            modelBuilder.Entity<EqLocaciones>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Ciudad).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.FechaCreacion).HasDefaultValueSql("GETUTCDATE()");
+                entity.HasIndex(e => e.Ciudad).HasDatabaseName("IX_EqLocaciones_Ciudad");
             });
         }
     }

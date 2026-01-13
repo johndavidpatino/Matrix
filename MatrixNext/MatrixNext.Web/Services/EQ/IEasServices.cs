@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MatrixNext.Web.DTOs;
+using MatrixNext.Data.Services;
 
 namespace MatrixNext.Web.Services.EQ
 {
