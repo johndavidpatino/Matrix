@@ -167,11 +167,14 @@ Sprint 8: EQ_EasyQuote Análisis + Catálogos
 
 **FASE 4 NOTA**: Admin controllers (EasyQuoteAdminController, MaestrasAdminController) requieren análisis adicional para migración completa a EF Core. Entity model mismatches detectados (MetodologiaCodigo → TipoMetodologia, etc.). Propuesta: Dedicar 1-2 sprints adicionales para admin services + views, o mantener admin con legacy Dapper hasta Sprint 9+.
 
-Sprint 9: Home Dashboard
-├── Widgets de resumen (PY, OP, CU, TH, FI, GD)
-├── Gráficos/KPIs
-├── Links contextuales
-├── Performance < 2s
+**SPRINT 9: Home Dashboard** 🚀 75% COMPLETADO
+├── ✅ PASO 1: DashboardService (6 widgets, caching 15min, aggregación paralela)
+├── ✅ PASO 2: HomeController (Index + RefreshDashboard + Widget APIs)
+├── ✅ PASO 3: Dashboard Razor View (KPIs, widgets, acciones rápidas, auto-refresh)
+├── ⏳ PASO 4: Testing + Performance validation (<2s target, unit tests)
+├── Status: 27/27 tests passing, 0 build errors
+├── Widgets activos: Cotizaciones (EQ), Métricas globales ✅
+├── Widgets skeleton: Tareas (CORE), Proyectos (PY), Ausencias (TH), Documentos (GD)
 └── Documento: MIGRACION_HOME_COMPLETADA.md
 
 Sprint 10: RP_Reportes
