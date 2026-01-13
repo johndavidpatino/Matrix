@@ -119,6 +119,15 @@ builder.Services.AddScoped<IEntrevistadorasCualiService, EntrevistadorasCualiSer
 // Ref: PLAN_IMPLEMENTACION_SPRINTS.md § T5 (Asignaciones & Reasignaciones)
 builder.Services.AddScoped<IAsignacionesProyectosService, AsignacionesProyectosService>();
 
+// ===== SPRINT 8: EasyQuote EF Core Services =====
+// Ref: README_SPRINTS_5_12.md § Sprint 8 - FASE 1C
+builder.Services.AddScoped<MatrixNext.Web.Services.EQ.IEasyQuoteService, MatrixNext.Web.Services.EQ.EasyQuoteService>();
+builder.Services.AddScoped<MatrixNext.Web.Services.EQ.IEasyCostService, MatrixNext.Web.Services.EQ.EasyCostService>();
+builder.Services.AddScoped<MatrixNext.Web.Services.EQ.IEasyMasterService, MatrixNext.Web.Services.EQ.EasyMasterService>();
+
+// QuoteCalculator para motor de cálculos (usado por EasyCostService)
+builder.Services.AddScoped<MatrixNext.Web.Areas.EQ.Services.Internal.QuoteCalculator>();
+
 // DbContext principal (PY, CORE, OP)
 builder.Services.AddDbContext<MatrixDbContext>(options =>
     options.UseSqlServer(connectionString));
