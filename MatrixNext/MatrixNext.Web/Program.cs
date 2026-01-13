@@ -135,6 +135,10 @@ builder.Services.AddScoped<MatrixNext.Web.Services.EQ.EasyQuoteRetrievalService>
 // QuoteCalculator para motor de cálculos (usado por EasyCostService)
 builder.Services.AddScoped<MatrixNext.Web.Areas.EQ.Services.Internal.QuoteCalculator>();
 
+// ===== SPRINT 9: Home Dashboard Service =====
+// Ref: README_SPRINTS_5_12.md § Sprint 9 - Home Dashboard
+builder.Services.AddScoped<MatrixNext.Web.Services.Dashboard.IDashboardService, MatrixNext.Web.Services.Dashboard.DashboardService>();
+
 // DbContext principal (PY, CORE, OP)
 builder.Services.AddDbContext<MatrixDbContext>(options =>
     options.UseSqlServer(connectionString));
