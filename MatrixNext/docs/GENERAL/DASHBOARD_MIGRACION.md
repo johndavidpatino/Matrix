@@ -3,10 +3,11 @@
 Fecha de corte: 2026-01-15 (SPRINT 5 KICKOFF INICIADO)
 
 ## Resumen corto
-- **SPRINT 5 INICIADO**: TH_TalentoHumano Views/UI (15-29 enero, 80h)
-- **TH_TalentoHumano Sprint 4**: API REST COMPLETADA (21 archivos, 2,750+ LOC, 55 endpoints, 0 errores)
-- **Sprints 6-12 Planificados**: Roadmap de 3.5 meses para 100% completado el 2026-05-03
-- OP_Cualitativo: migracion MVP completa (Sprint 5) y documentada.
+- **SPRINT 5 INICIADO**: TH_TalentoHumano Views/UI (15-29 enero, 80h) sobre la API Sprint 4 ya establecida.
+- **TH_TalentoHumano Sprint 4**: API REST COMPLETADA (21 archivos, 2,750+ LOC, 55 endpoints, 0 errores) con mapas en `MatrixNext/docs/TH/RESUMEN_MIGRACION_AUSENCIAS.md`.
+- **SPRINT 9 (Home)**: `HomeController`, `DashboardService` y la vista `Views/Home/Index.cshtml` ya entregan widgets de tareas, proyectos, quotes, ausencias, documentos y métricas.
+- **RP_Reportes + OP_RO/OP_Trafico**: Controladores y vistas generados (`Areas/RP/Controllers/ReportesController.cs`, `Areas/OP/Controllers/OP_ROController.cs`, `OP_TraficoController.cs`) listos para integrarse en Sprint 10/11.
+- **EQ + CORE**: `Areas/EQ` y `Areas/CORE` contienen la base de workflows, EasyQuote y catálogos, lo que valida el backend previo a los sprints formales.
 
 ## Estado por modulo (WebMatrix -> MatrixNext)
 
@@ -14,19 +15,19 @@ Fecha de corte: 2026-01-15 (SPRINT 5 KICKOFF INICIADO)
 | --- | --- | --- |
 | US_Usuarios | Completo | `MatrixNext/MatrixNext.Web/Areas/US` |
 | TH_TalentoHumano (Sprint 4 API) | Completo | `MatrixNext/MatrixNext.Web/Areas/TH` + 6 Adapters + 3 Services + 3 Controllers (55 endpoints) |
-| TH_Ausencias (submodulo) | Completo | `MatrixNext/docs/TH/RESUMEN_MIGRACION_AUSENCIAS.md` |
+| TH_Ausencias (submodulo) | Completo | `MatrixNext/MatrixNext.Web/Areas/TH/Controllers/AusenciasController.cs` + vistas `MatrixNext/MatrixNext.Web/Areas/TH/Views/Ausencias` |
 | CU_Cuentas | Completo | `MatrixNext/MatrixNext.Web/Areas/CU` |
 | CC_FinzOpe + FI_Administrativo | Completo (Inventario no migrar) | `MatrixNext/MatrixNext.Web/Areas/CC` + `MatrixNext/docs/FI_CC/` |
-| OP_Cuantitativo | Completo | `MatrixNext/docs/OP/ANALISIS_OP_CUANTITATIVO.md` |
-| OP_Cualitativo | MVP completo; pendientes complementarios Sprint 6 | `MatrixNext/docs/OP/SPRINT_5_CIERRE_MIGRACION_COMPLETA.md` |
-| PY_Proyectos | Parcial | `MatrixNext/MatrixNext.Web/Areas/PY` + `MatrixNext/docs/PY/MIGRACION_PY_PROYECTOS.md` |
-| CORE (workflow/tareas) | Parcial | `MatrixNext/MatrixNext.Web/Areas/CORE` + `MatrixNext/docs/CORE/` |
-| GD_Documentos | Parcial (Fase 5 completa) | `MatrixNext/docs/GD/BACKLOG_MIGRACION_GD_DOCUMENTOS_FASE5_PARTE_A.md` |
-| EQ (EasyQuote) | En progreso | `MatrixNext/docs/EQ/` |
-| Home | Pendiente | `WebMatrix/Home` |
-| RP_Reportes | Pendiente | `WebMatrix/RP_Reportes` |
-| OP_RO | Pendiente | `WebMatrix/OP_RO` |
-| OP_Trafico | Pendiente | `WebMatrix/OP_Trafico` |
+| OP_Cuantitativo | Operativo | `MatrixNext/MatrixNext.Web/Areas/OP/Controllers/FichaCuantitativaController.cs` + `MatrixNext/docs/OP/ANALISIS_OP_CUANTITATIVO.md` |
+| OP_Cualitativo | MVP + complementos | `MatrixNext/MatrixNext.Web/Areas/OP/Controllers/CualitativoPlanillasController.cs`, `CualitativoFiltrosController.cs` |
+| PY_Proyectos | Parcial | `MatrixNext/MatrixNext.Web/Areas/PY/Controllers` + `MatrixNext/docs/PY/MIGRACION_PY_PROYECTOS.md` |
+| CORE (workflow/tareas) | Parcial | `MatrixNext/MatrixNext.Web/Areas/CORE/Controllers` |
+| GD_Documentos | Parcial (Fase 5 completa) | `MatrixNext/MatrixNext.Web/Areas/GD/Controllers` + `MatrixNext/MatrixNext.Web/Areas/GD/Views` |
+| EQ (EasyQuote) | En progreso | `MatrixNext/MatrixNext.Web/Areas/EQ/Controllers` + entrepiezas `MatrixNext/MatrixNext.Web/Areas/EQ/Views` |
+| Home | En desarrollo | `MatrixNext/MatrixNext.Web/Controllers/HomeController.cs`, `MatrixNext/MatrixNext.Web/Services/Dashboard/DashboardService.cs`, `MatrixNext/MatrixNext.Web/Views/Home/Index.cshtml` |
+| RP_Reportes | En desarrollo | `MatrixNext/MatrixNext.Web/Areas/RP/Controllers/ReportesController.cs`, `MatrixNext/MatrixNext.Web/Areas/RP/Views/Reportes` |
+| OP_RO | En desarrollo | `MatrixNext/MatrixNext.Web/Areas/OP/Controllers/OP_ROController.cs`, `MatrixNext/MatrixNext.Web/Areas/OP/Views/OP_RO` |
+| OP_Trafico | En desarrollo | `MatrixNext/MatrixNext.Web/Areas/OP/Controllers/OP_TraficoController.cs`, `MatrixNext/MatrixNext.Web/Areas/OP/Views/OP_Trafico` |
 | PY_ControlCalidad | Pendiente | `WebMatrix/PY_ControlCalidad` |
 | PY_Adquisiciones | Pendiente | `WebMatrix/PY_Adquisiciones` |
 | PNC (legacy) | Cubierto por GD Fase 5 | `MatrixNext/docs/GD/` |
@@ -41,14 +42,18 @@ Fecha de corte: 2026-01-15 (SPRINT 5 KICKOFF INICIADO)
 | RE_GT | Pendiente | `WebMatrix/RE_GT` |
 | PC_PropiedadCliente | Pendiente | `WebMatrix/PC_PropiedadCliente` |
 
+## Módulos catalogados como faltantes
+- La lista completa de módulos que todavía no se han movido del legacy (y que deben seguir la especificación en `MatrixNext/docs/GENERAL/MIGRACION_ESPECIFICACIONES.md`) incluye OP_RO, OP_Trafico, PY_ControlCalidad, PY_Adquisiciones, PNC, SG_Actas, SGC_Calidad, ES_Estadistica, Centro_Informacion, Inventario, IT, MBO (y sus variantes Gerencial/Operaciones), ResumenProduccion, RE_GT, PC_PropiedadCliente y los módulos transversales (Account, Controls, etc.).
+- Cada uno debe recibir una entrada nueva en el backlog, con un plan de mapeo SP + área + menú antes de marcarlo como “en progreso”.
+
 ## Pendientes que deben continuar (Sprints 5-12)
 1. **Sprint 5 (2 sem)**: TH_TalentoHumano Views/UI (Nómina y complementarios sobre API Sprint 4 completa)
 2. **Sprint 6 (2 sem)**: OP_Cualitativo Complementos (reportes, filtros avanzados)
 3. **Sprint 7 (2 sem)**: CORE Workflow (tareas, notificaciones, integraciones)
 4. **Sprint 8 (2-3 sem)**: EQ_EasyQuote Fase 1 (análisis + catálogos + infraestructura)
-5. **Sprint 9 (1-2 sem)**: Home Dashboard (widgets, KPIs, filtros)
-6. **Sprint 10 (1-2 sem)**: RP_Reportes (72 reportes, exportes Excel/PDF) ← **🔴 PRÓXIMO FOCUS**
-7. **Sprint 11 (2 sem)**: OP_RO + OP_Trafico (revisiones + tráfico de datos) ← **🔴 FINAL FOCUS**
+5. **Sprint 9 (1-2 sem)**: Home Dashboard (widgets / servicios ya corriendo; afinando datos de tareas, proyectos, ausencias y documentos)
+6. **Sprint 10 (1-2 sem)**: RP_Reportes (controladores + vistas ya listos; foco en datos y exportes) ← **🔴 PRÓXIMO FOCUS**
+7. **Sprint 11 (2 sem)**: OP_RO + OP_Trafico (controladores + vistas existentes; cerrando integración de revisiones y tráfico) ← **🔴 FINAL FOCUS**
 8. **Sprint 12+ (Variable)**: Módulos baja prioridad (PY_CC, SG_Actas, SGC_Calidad, etc.)
 
 ## Estructura de documentacion (ordenada)
@@ -78,11 +83,11 @@ Ultima revision: 2026-01-11
 | OP_Cualitativo | Alta | MVP terminado; complementos planificados Sprint 6 | 🟡 |
 | PY_Proyectos | Alta | Catálogos/maestros en marcha | 🟡 |
 | CORE (workflow) | Alta | Parcial; completar Sprint 7 | 🟡 |
-| GD_Documentos | Media | Fase 5 cerrada; Fases 1-4 pendientes | 🟡 |
-| EQ (EasyQuote) | Crítica | En progreso Sprint 8 | 🟡 |
-| Home | Alta | Planificado Sprint 9 | 🔴 |
-| **RP_Reportes** | **🔴 Alta** | **72 reportes + exportes → SPRINT 10 (04-05 a 04-16)** | **🔴** |
-| **OP_RO + OP_Trafico** | **🟠 Media-Baja** | **Revisiones + tráfico → SPRINT 11 (04-19 a 05-03, HITO FINAL)** | **🔴** |
+| GD_Documentos | Media | Controladores y vistas live en `MatrixNext.Web/Areas/GD` (Fase 5) | 🟡 |
+| EQ (EasyQuote) | Crítica | Controladores/vistas en `MatrixNext.Web/Areas/EQ`; Sprint 8 cerrando catálogos | 🟡 |
+| Home | Alta | HomeController + DashboardService + `Views/Home/Index` en pruebas (Sprint 9) | 🔴 |
+| **RP_Reportes** | **🔴 Alta** | **ReportesController + vistas listos; foco en datos y exportes S10** | **🔴** |
+| **OP_RO + OP_Trafico** | **🟠 Media-Baja** | **OP_ROController / OP_TraficoController + vistas existen; cerrando integraciones S11** | **🔴** |
 | PY_ControlCalidad | Baja | Sprint 12+ | ⚪️ |
 | SG_Actas | Baja | Sprint 12+ | ⚪️ |
 | SGC_Calidad | Baja | Sprint 12+ | ⚪️ |

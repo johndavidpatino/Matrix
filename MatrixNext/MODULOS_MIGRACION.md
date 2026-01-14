@@ -48,6 +48,8 @@
   - Home.aspx (dashboard principal)
   - Default.aspx (ALT: puede estar en raíz)
   - DefaultOLD.aspx
+- **Status**: En progreso (Sprint 9) con controller HomeController, dashboard widgets y servicio de agregación ejecutándose desde `MatrixNext.Web`.
+- **Evidencia MatrixNext**: `MatrixNext/MatrixNext.Web/Controllers/HomeController.cs`, `MatrixNext/MatrixNext.Web/Views/Home/Index.cshtml`, `MatrixNext/MatrixNext.Web/Services/Dashboard/DashboardService.cs` (carga tareas, proyectos, quotes, ausencias, documentos y métricas).
 - **Dependencias**: ALTA (consume datos de múltiples módulos)
 - **Status**: 🔄 DESPUÉS de US_Usuarios
 
@@ -60,6 +62,8 @@
 - **Contexto**: `PY_Model` (CoreProject)
 - **Dependencias**: Medias (referencia Usuarios, Metodologías)
 - **Volumen**: Grande pero bien estructurado
+- **Status**: Código en marcha dentro del área `Areas/PY`, con controladores para proyectos, segmentación, sesiones y asignaciones en producción parcial.
+- **Evidencia MatrixNext**: `MatrixNext/MatrixNext.Web/Areas/PY/Controllers` + `MatrixNext/MatrixNext.Web/Areas/PY/Views` conservan la estructura MVC y los documentos `MatrixNext/docs/PY/MIGRACION_PY_PROYECTOS.md`.
 
 #### 4. **OP_Cuantitativo** (31 páginas)
 - **Carpeta**: `WebMatrix/OP_Cuantitativo/`
@@ -70,6 +74,8 @@
 - **Documento**: [ANALISIS_OP_CUANTITATIVO.md](MatrixNext/docs/OP/ANALISIS_OP_CUANTITATIVO.md) (v1.1)
 - **Estimación**: 330-435h (1:1) o 260-350h (optimizado)
 - **Timeline**: 11-15 semanas (1:1) o 9-12 semanas (optimizado)
+- **Status actualizado**: Estructura base lista en `MatrixNext.Web/Areas/OP`; controladores como `FichaCuantitativaController` y `ReportesController` ya existen y el backlog es de ajustes y QA por sprint.
+- **Evidencia MatrixNext**: `MatrixNext/MatrixNext.Web/Areas/OP/Controllers/FichaCuantitativaController.cs`, `MatrixNext/MatrixNext.Web/Areas/OP/Views/FichaCuantitativa`, `MatrixNext/docs/OP/ANALISIS_OP_CUANTITATIVO.md`.
 - **Riesgos identificados**: 14 (Session hardcoded, OleDb incompatibilidad, GridView complejidad)
 - **Optimizaciones propuestas**: 7 consolidaciones (31→18 vistas, -42% código, 0% funcionalidad perdida)
 - **Backlog**: 10 épicas definidas con t-shirt sizing
@@ -80,6 +86,8 @@
 - **Contexto**: `OP_Entities` (CoreProject)
 - **Dependencias**: Altas (entrevistas, moderadores, sesiones)
 - **Nota 2026-01-09**: Validación de tablas reales y limpieza de warnings completadas; pendiente continuar migración funcional completa.
+- **Status**: MVP de componentes cualitativos ya en `Areas/OP` (controllers `Cualitativo*`, `Encuestas`, `Planillas`) y se está iterando en Sprint 6 para filtros/reportes.
+- **Evidencia MatrixNext**: `MatrixNext/MatrixNext.Web/Areas/OP/Controllers/CualitativoPlanillasController.cs`, `.../Controllers/CualitativoFiltrosController.cs`, `MatrixNext/MatrixNext.Web/Areas/OP/Views/CualitativoPlanillas`.
 
 #### 6. **FI_AdministrativoFinanciero + CC_FinzOpe** (28 págs FI + infraestructura CC)
 - **Carpeta**: `WebMatrix/FI_AdministrativoFinanciero/` + `CoreProject/CC_FinzOpe`
@@ -87,6 +95,7 @@
 - **Dependencias**: ✅ CU_Cuentas (jobbooks), US_Usuarios, TH; 📋 CAP (costos)
 - **Volumen**: Muy grande
 - **Estado**: 🔄 En curso (CC_FinzOpe completado; FI Grupo 1-3 migrados: Control Presupuestos, Presupuestos Internos, Procesos Internos; análisis COMPLETO)
+- **Evidencia MatrixNext**: `MatrixNext/MatrixNext.Web/Areas/CC/Controllers` y `MatrixNext/MatrixNext.Web/Areas/CC/Views` contienen las pantallas para Control Presupuestos, Presupuestos Internos y Procesos Internos; documentación complementaria en `MatrixNext/docs/FI_CC/`.
 - **Documento**: [MIGRACION_FI_ADMINISTRATIVO.md](MIGRACION_FI_ADMINISTRATIVO.md)
 - **Cambio CRÍTICO**: ✅ **CC_FinzOpe migra en Sprint Pre-1 como infraestructura (80h)**
   - Razón: CC_FinzOpe no es módulo independiente; es data core que FI consume vía SP
@@ -112,10 +121,14 @@
 #### 7. **GD_Documentos**
 - **Contexto**: `GD_Model`
 - **Dependencias**: Medias
+- **Status**: Controladores para documentos, repositorio y aprobaciones ya disponibles en MatrixNext; vistas asociadas generadas en el área `Areas/GD`.
+- **Evidencia MatrixNext**: `MatrixNext/MatrixNext.Web/Areas/GD/Controllers/DocumentosMaestroController.cs`, `RepositorioController.cs`, `SolicitudesController.cs` y `MatrixNext/MatrixNext.Web/Areas/GD/Views/DocumentosMaestro`.
 
 #### 8. **RP_Reportes**
 - **Contexto**: `REP_Model`
 - **Notas**: Consultas complejas → ideal para Dapper
+- **Status**: Controlador `ReportesController` con los endpoints de generación/visualización ya funciona y provee vistas `Index/Generar/Detalle`.
+- **Evidencia MatrixNext**: `MatrixNext/MatrixNext.Web/Areas/RP/Controllers/ReportesController.cs` + `MatrixNext/MatrixNext.Web/Areas/RP/Views/Reportes`.
 
 #### 9. **TH_TalentoHumano** (28 páginas) ✅ SPRINT 4 COMPLETADO
 - **Carpeta**: `WebMatrix/TH_TalentoHumano/`
@@ -135,6 +148,8 @@
     * Documentación: INVENTARIO_MAPEO_TH + CIERRE_SPRINT_4
   - 🔄 **Nómina** (Views/UI - Sprint 5)
   - 🔄 **Otros** (pendiente)
+
+**Evidencia MatrixNext**: `MatrixNext/MatrixNext.Web/Areas/TH/Controllers/AusenciasController.cs`, `DesvinculacionesController.cs`, `EmpleadosController.cs`, `GestionAusenciaController.cs` y las vistas bajo `MatrixNext/MatrixNext.Web/Areas/TH/Views` (Ausencias, GestionAusencia, Empleados).
 
 **Análisis Detallado - GESTIÓN DE AUSENCIAS (4 páginas - Prioridad Alta dentro del módulo)**
 
@@ -259,6 +274,10 @@
 
 **Recomendación**: Migrar Ausencias primero dentro de TH, luego pasar a EmpleadosAdmin (más complejo)
 
+# Verificación adicional de módulos en MatrixNext
+- **CORE (Workflows/tareas)**: Controladores (`WorkFlowController`, `GestionTareasController`, `IndicadoresController` y vistas) listos en `MatrixNext/MatrixNext.Web/Areas/CORE`.
+- **EQ (EasyQuote)**: APIs y pantallas para cotizaciones y administración (`EasyQuoteController`, `MaestrasAdminController`, `EasyQuoteSeedController`) vivas bajo `MatrixNext/MatrixNext.Web/Areas/EQ` y la carpeta `MatrixNext/MatrixNext.Web/Areas/EQ/Views`.
+
 #### 10. **CU_Cuentas** (Clientes)
 - **Contexto**: `CU_Model`
 - **Dependencias**: Medias
@@ -297,7 +316,11 @@
 26. **PC_PropiedadCliente**
 27. Otros (Account, Controls, etc.)
 
----
+### Módulos faltantes documentados
+- El listado oficial de módulos que aún viven exclusivamente en el legacy WebMatrix y requieren un ticket adicional está recogido en `MatrixNext/docs/GENERAL/MIGRACION_ESPECIFICACIONES.md`. Allí se detallan WebMatrix paths, prioridades y pasos requeridos.
+- Antes de trabajar un módulo faltante, leer esa especificación y reflejar los avances en este documento (Regla 15).
+
+--- 
 
 ## Patrón de Migración por Módulo
 
