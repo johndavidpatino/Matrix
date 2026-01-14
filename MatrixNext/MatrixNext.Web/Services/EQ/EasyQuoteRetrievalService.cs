@@ -60,16 +60,16 @@ public class EasyQuoteRetrievalService
             .OrderByDescending(q => q.FechaCreacion)
             .Skip(skip)
             .Take(pageSize)
-            .Select(q => new EQQuoteHeaderSummary
-            {
-                Id = q.Id,
-                PropuestaNombre = q.PropuestaNombre,
-                Cliente = q.Cliente,
-                SL = q.SL,
-                FechaCreacion = q.FechaCreacion,
-                FechaModificacion = q.FechaModificacion,
-                GrupoObjetivo = q.GrupoObjetivo
-            })
+                .Select(q => new EQQuoteHeaderSummary
+                {
+                    Id = q.Id,
+                    PropuestaNombre = q.PropuestaNombre ?? string.Empty,
+                    Cliente = q.Cliente ?? string.Empty,
+                    SL = q.SL ?? string.Empty,
+                    FechaCreacion = q.FechaCreacion,
+                    FechaModificacion = q.FechaModificacion,
+                    GrupoObjetivo = q.GrupoObjetivo ?? string.Empty
+                })
             .ToListAsync();
 
         return summaries;
@@ -88,13 +88,22 @@ public class EasyQuoteRetrievalService
         var query = _context.EqQuoteHeaders.AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(cliente))
-            query = query.Where(q => q.Cliente.Contains(cliente));
+        {
+            var clienteFilter = cliente!;
+            query = query.Where(q => (q.Cliente ?? string.Empty).Contains(clienteFilter));
+        }
 
         if (!string.IsNullOrWhiteSpace(sl))
-            query = query.Where(q => q.SL.Contains(sl));
+        {
+            var slFilter = sl!;
+            query = query.Where(q => (q.SL ?? string.Empty).Contains(slFilter));
+        }
 
         if (!string.IsNullOrWhiteSpace(propuesta))
-            query = query.Where(q => q.PropuestaNombre.Contains(propuesta));
+        {
+            var propuestaFilter = propuesta!;
+            query = query.Where(q => (q.PropuestaNombre ?? string.Empty).Contains(propuestaFilter));
+        }
 
         if (fechaDesde.HasValue)
             query = query.Where(q => q.FechaCreacion >= fechaDesde.Value);
@@ -108,12 +117,12 @@ public class EasyQuoteRetrievalService
             .Select(q => new EQQuoteHeaderSummary
             {
                 Id = q.Id,
-                PropuestaNombre = q.PropuestaNombre,
-                Cliente = q.Cliente,
-                SL = q.SL,
+                PropuestaNombre = q.PropuestaNombre ?? string.Empty,
+                Cliente = q.Cliente ?? string.Empty,
+                SL = q.SL ?? string.Empty,
                 FechaCreacion = q.FechaCreacion,
                 FechaModificacion = q.FechaModificacion,
-                GrupoObjetivo = q.GrupoObjetivo
+                GrupoObjetivo = q.GrupoObjetivo ?? string.Empty
             })
             .ToListAsync();
 

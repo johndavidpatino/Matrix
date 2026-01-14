@@ -24,23 +24,24 @@ public class CoreWorkflowService : ICoreWorkflowService
         _logger = logger;
     }
 
-    public async Task<bool> IsValidStateTransitionAsync(long taskId, string newState)
-    {
-        var workFlow = await _context.WorkFlows.FindAsync(taskId);
-        if (workFlow == null)
-            return false;
-
-        var validTransitions = new Dictionary<string, List<string>>
+        public async Task<bool> IsValidStateTransitionAsync(long taskId, string newState)
         {
-            { "Creada", new List<string> { "EnProgreso", "Anulada" } },
-            { "EnProgreso", new List<string> { "Completada", "Creada", "Anulada" } },
-            { "Completada", new List<string> { } }, // Final state
-            { "Anulada", new List<string> { } } // Final state
-        };
+            var workFlow = await _context.WorkFlows.FindAsync(taskId);
+            if (workFlow == null)
+                return false;
 
-        return validTransitions.ContainsKey(workFlow.Estado) && 
-               validTransitions[workFlow.Estado].Contains(newState);
-    }
+            var validTransitions = new Dictionary<string, List<string>>
+            {
+                { "Creada", new List<string> { "EnProgreso", "Anulada" } },
+                { "EnProgreso", new List<string> { "Completada", "Creada", "Anulada" } },
+                { "Completada", new List<string> { } }, // Final state
+                { "Anulada", new List<string> { } } // Final state
+            };
+
+            var currentState = workFlow.Estado ?? string.Empty;
+            return validTransitions.ContainsKey(currentState) &&
+                   validTransitions[currentState].Contains(newState);
+        }
 
     public async Task<WorkFlowDto?> CompleteTaskAsync(long taskId, string? resultado)
     {

@@ -31,7 +31,7 @@ namespace MatrixNext.Web.Services.EQ
             try
             {
                 string cacheKey = $"eq_precio_matriz_{tipoMetodologia}";
-                if (_cache.TryGetValue(cacheKey, out List<EasyMasterPrecioDto> cached))
+                if (_cache.TryGetValue(cacheKey, out List<EasyMasterPrecioDto>? cached) && cached != null)
                 {
                     return new ApiResponse<List<EasyMasterPrecioDto>>
                     {
@@ -119,7 +119,7 @@ namespace MatrixNext.Web.Services.EQ
             try
             {
                 const string cacheKey = "eq_valor_hora_ops";
-                if (_cache.TryGetValue(cacheKey, out List<EasyMasterValorHoraDto> cached))
+                if (_cache.TryGetValue(cacheKey, out List<EasyMasterValorHoraDto>? cached) && cached != null)
                 {
                     return new ApiResponse<List<EasyMasterValorHoraDto>>
                     {
@@ -205,7 +205,7 @@ namespace MatrixNext.Web.Services.EQ
             try
             {
                 const string cacheKey = "eq_rate_estadistica";
-                if (_cache.TryGetValue(cacheKey, out List<EasyMasterRateEstadisticaDto> cached))
+                if (_cache.TryGetValue(cacheKey, out List<EasyMasterRateEstadisticaDto>? cached) && cached != null)
                 {
                     return new ApiResponse<List<EasyMasterRateEstadisticaDto>>
                     {
@@ -251,7 +251,7 @@ namespace MatrixNext.Web.Services.EQ
             try
             {
                 const string cacheKey = "eq_locaciones";
-                if (_cache.TryGetValue(cacheKey, out List<EasyMasterLocacionesDto> cached))
+                if (_cache.TryGetValue(cacheKey, out List<EasyMasterLocacionesDto>? cached) && cached != null)
                 {
                     return new ApiResponse<List<EasyMasterLocacionesDto>>
                     {

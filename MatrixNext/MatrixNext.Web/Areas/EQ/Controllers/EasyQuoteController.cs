@@ -28,15 +28,13 @@ namespace MatrixNext.Web.Areas.EQ.Controllers
         {
             // carga inicial (nuevo o existente)
             EasyQuoteViewModel model;
-            
+
             if (id.HasValue)
             {
-                model = await _retrievalService.GetQuoteByIdAsync(id.Value);
-                if (model == null)
-                {
+                var retrieved = await _retrievalService.GetQuoteByIdAsync(id.Value);
+                if (retrieved == null)
                     TempData["Error"] = $"Quote {id} no encontrada";
-                    model = new EasyQuoteViewModel(); // Nueva quote vacía
-                }
+                model = retrieved ?? new EasyQuoteViewModel(); // Recuperar existente o crear nueva
             }
             else
             {

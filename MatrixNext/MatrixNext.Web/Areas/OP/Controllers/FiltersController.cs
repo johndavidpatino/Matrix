@@ -240,7 +240,7 @@ namespace MatrixNext.Web.Areas.OP.Controllers
 
     public class FilterByMultipleEstadosRequest
     {
-        public List<string> Estados { get; set; }
+        public List<string> Estados { get; set; } = new();
         public DateTime? FechaDesde { get; set; }
         public DateTime? FechaHasta { get; set; }
         public int PageNumber { get; set; } = 1;

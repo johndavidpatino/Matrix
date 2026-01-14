@@ -75,7 +75,7 @@ namespace MatrixNext.Web.Services.Dashboard
 
                 // Intentar obtener del cache primero
                 var cacheKey = $"{CACHE_KEY_PREFIX}full_{userId}";
-                if (_cache.TryGetValue(cacheKey, out DashboardViewModel cachedDashboard))
+                if (_cache.TryGetValue(cacheKey, out DashboardViewModel? cachedDashboard) && cachedDashboard != null)
                 {
                     _logger.LogDebug("Dashboard obtenido del cache para usuario {UserId}", userId);
                     return cachedDashboard;
@@ -137,7 +137,7 @@ namespace MatrixNext.Web.Services.Dashboard
             try
             {
                 var cacheKey = $"{CACHE_KEY_PREFIX}tasks_{userId}";
-                if (_cache.TryGetValue(cacheKey, out List<TaskSummary> cached))
+                if (_cache.TryGetValue(cacheKey, out List<TaskSummary>? cached) && cached != null)
                     return cached;
 
                 // TODO: Conectar con tabla de Tareas en CORE cuando esté migrada
@@ -162,7 +162,7 @@ namespace MatrixNext.Web.Services.Dashboard
             try
             {
                 var cacheKey = $"{CACHE_KEY_PREFIX}projects_{userId}";
-                if (_cache.TryGetValue(cacheKey, out List<ProjectSummary> cached))
+                if (_cache.TryGetValue(cacheKey, out List<ProjectSummary>? cached) && cached != null)
                     return cached;
 
                 // TODO: Conectar con tabla Proyectos cuando esté migrada
@@ -187,7 +187,7 @@ namespace MatrixNext.Web.Services.Dashboard
             try
             {
                 var cacheKey = $"{CACHE_KEY_PREFIX}quotes_{userId}";
-                if (_cache.TryGetValue(cacheKey, out List<QuoteSummary> cached))
+                if (_cache.TryGetValue(cacheKey, out List<QuoteSummary>? cached) && cached != null)
                     return cached;
 
                 // TODO: Conectar con tabla de usuarios creadores cuando esté disponible
@@ -198,10 +198,10 @@ namespace MatrixNext.Web.Services.Dashboard
                     .Select(q => new QuoteSummary
                     {
                         Id = q.Id,
-                        PropuestaNombre = q.PropuestaNombre,
-                        Cliente = q.Cliente,
+                        PropuestaNombre = q.PropuestaNombre ?? string.Empty,
+                        Cliente = q.Cliente ?? string.Empty,
                         FechaCreacion = q.FechaCreacion,
-                        Estado = q.SL,
+                        Estado = q.SL ?? string.Empty,
                         MontoEstimado = q.ValorGMU ?? q.ValorProveedorExterno ?? q.ValorProveedorInternacional ?? 0
                     })
                     .ToListAsync();
@@ -224,7 +224,7 @@ namespace MatrixNext.Web.Services.Dashboard
             try
             {
                 var cacheKey = $"{CACHE_KEY_PREFIX}absences_{userId}";
-                if (_cache.TryGetValue(cacheKey, out List<AbsenceSummary> cached))
+                if (_cache.TryGetValue(cacheKey, out List<AbsenceSummary>? cached) && cached != null)
                     return cached;
 
                 // TODO: Conectar con tabla de ausencias cuando TH esté migrado
@@ -248,7 +248,7 @@ namespace MatrixNext.Web.Services.Dashboard
             try
             {
                 var cacheKey = $"{CACHE_KEY_PREFIX}docs_{userId}";
-                if (_cache.TryGetValue(cacheKey, out DocumentStatistics cached))
+                if (_cache.TryGetValue(cacheKey, out DocumentStatistics? cached) && cached != null)
                     return cached;
 
                 // TODO: Conectar con tabla de documentos cuando GD esté migrado
@@ -278,7 +278,7 @@ namespace MatrixNext.Web.Services.Dashboard
             try
             {
                 var cacheKey = $"{CACHE_KEY_PREFIX}metrics_global";
-                if (_cache.TryGetValue(cacheKey, out ProductionMetrics cached))
+                if (_cache.TryGetValue(cacheKey, out ProductionMetrics? cached) && cached != null)
                     return cached;
 
                 var thisMonth = DateTime.UtcNow;
@@ -356,41 +356,41 @@ namespace MatrixNext.Web.Services.Dashboard
     public class TaskSummary
     {
         public long Id { get; set; }
-        public string Titulo { get; set; }
-        public string Descripcion { get; set; }
+        public string Titulo { get; set; } = string.Empty;
+        public string Descripcion { get; set; } = string.Empty;
         public DateTime FechaVencimiento { get; set; }
-        public string Prioridad { get; set; } // Alta, Media, Baja
-        public string Estado { get; set; } // Pendiente, En progreso, Completada
+        public string Prioridad { get; set; } = string.Empty; // Alta, Media, Baja
+        public string Estado { get; set; } = string.Empty; // Pendiente, En progreso, Completada
     }
 
     public class ProjectSummary
     {
         public long Id { get; set; }
-        public string Nombre { get; set; }
-        public string Cliente { get; set; }
+        public string Nombre { get; set; } = string.Empty;
+        public string Cliente { get; set; } = string.Empty;
         public DateTime FechaInicio { get; set; }
         public DateTime? FechaFinal { get; set; }
-        public string Estado { get; set; }
+        public string Estado { get; set; } = string.Empty;
         public int Progreso { get; set; } // 0-100
     }
 
     public class QuoteSummary
     {
         public long Id { get; set; }
-        public string PropuestaNombre { get; set; }
-        public string Cliente { get; set; }
+        public string PropuestaNombre { get; set; } = string.Empty;
+        public string Cliente { get; set; } = string.Empty;
         public DateTime FechaCreacion { get; set; }
-        public string Estado { get; set; }
+        public string Estado { get; set; } = string.Empty;
         public decimal MontoEstimado { get; set; }
     }
 
     public class AbsenceSummary
     {
         public long Id { get; set; }
-        public string Tipo { get; set; } // Vacaciones, Incapacidad, Permiso
+        public string Tipo { get; set; } = string.Empty; // Vacaciones, Incapacidad, Permiso
         public DateTime FechaInicio { get; set; }
         public DateTime FechaFinal { get; set; }
-        public string Estado { get; set; } // Aprobada, Pendiente
+        public string Estado { get; set; } = string.Empty; // Aprobada, Pendiente
     }
 
     public class DocumentStatistics

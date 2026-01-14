@@ -237,7 +237,7 @@ namespace MatrixNext.Web.Services.EQ.Adapters
 
             var entity = new EqQuoteHeader
             {
-                Id = (int)vm.Id,
+                Id = (int)(vm.Id ?? 0),
                 PropuestaNombre = vm.Header?.Nombre ?? string.Empty,
                 GrupoObjetivo = vm.Header?.GrupoObjetivo ?? string.Empty,
                 Cliente = vm.Header?.Cliente ?? string.Empty,

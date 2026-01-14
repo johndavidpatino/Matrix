@@ -75,19 +75,19 @@ namespace MatrixNext.Web.Services.OP.Interfaces
     public class StateChangeNotification
     {
         public int EntityId { get; set; }
-        public string EntityType { get; set; } // "Sesion", "Entrevista", "Filtro"
-        public string OldState { get; set; }
-        public string NewState { get; set; }
-        public string ChangedBy { get; set; }
+        public string EntityType { get; set; } = string.Empty; // "Sesion", "Entrevista", "Filtro"
+        public string OldState { get; set; } = string.Empty;
+        public string NewState { get; set; } = string.Empty;
+        public string ChangedBy { get; set; } = string.Empty;
         public DateTime ChangedAt { get; set; }
     }
 
     public class EventNotification
     {
         public int EntityId { get; set; }
-        public string EventType { get; set; } // "SessionCreated", "InterviewCreated", etc.
-        public string Description { get; set; }
-        public Dictionary<string, string> Metadata { get; set; }
+        public string EventType { get; set; } = string.Empty; // "SessionCreated", "InterviewCreated", etc.
+        public string Description { get; set; } = string.Empty;
+        public Dictionary<string, string> Metadata { get; set; } = new();
         public DateTime OccurredAt { get; set; }
     }
 }

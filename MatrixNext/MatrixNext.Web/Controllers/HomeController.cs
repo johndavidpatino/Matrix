@@ -37,16 +37,17 @@ public class HomeController : Controller
         try
         {
             // Obtener información del usuario autenticado desde claims
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var claimUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var userName = User.FindFirst(ClaimTypes.Name)?.Value;
             var nombreCompleto = User.FindFirst("NombreCompleto")?.Value;
 
-            ViewData["UserId"] = userId;
+            ViewData["UserId"] = claimUserId;
             ViewData["UserName"] = userName;
             ViewData["NombreCompleto"] = nombreCompleto;
 
-            // Cargar dashboard agregado (async, con caching)
-            var dashboard = await _dashboardService.GetDashboardAsync(userId ?? userName ?? "Unknown");
+            var resolvedUserId = claimUserId ?? userName ?? "Unknown";
+            var dashboard = await _dashboardService.GetDashboardAsync(resolvedUserId);
+            dashboard ??= new DashboardViewModel();
 
             return View(dashboard);
         }
@@ -68,7 +69,7 @@ public class HomeController : Controller
     [HttpGet]
     public IActionResult NewQuote()
     {
-        _logger.LogInformation("Usuario {UserId} abre formulario de nueva cotización", User.Identity.Name);
+        _logger.LogInformation("Usuario {UserId} abre formulario de nueva cotización", User.Identity?.Name ?? "system");
         return RedirectToAction("Create", "EasyQuote");
     }
 
@@ -96,15 +97,16 @@ public class HomeController : Controller
         try
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
-                ?? User.Identity.Name;
+                ?? User.Identity?.Name
+                ?? "Unknown";
 
             var dashboard = await _dashboardService.GetDashboardAsync(userId);
 
-            return Json(new { 
-                success = true, 
-                data = dashboard,
-                loadedAt = dashboard.LoadedAt
-            });
+                return Json(new {
+                    success = true,
+                    data = dashboard,
+                    loadedAt = dashboard?.LoadedAt ?? DateTime.UtcNow
+                });
         }
         catch (Exception ex)
         {
@@ -127,7 +129,8 @@ public class HomeController : Controller
         try
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
-                ?? User.Identity.Name;
+                ?? User.Identity?.Name
+                ?? "Unknown";
 
             object widgetData = widgetName?.ToLower() switch
             {

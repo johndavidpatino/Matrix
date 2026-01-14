@@ -33,7 +33,7 @@ namespace MatrixNext.Web.Areas.TH.Controllers.Api
         public async Task<ActionResult<ApiResponse<List<DesvinculacionDto>>>> Get(
             [FromQuery] int pageSize = 10,
             [FromQuery] int pageIndex = 1,
-            [FromQuery] string textoBuscado = null)
+            [FromQuery] string? textoBuscado = null)
         {
             try
             {
@@ -130,8 +130,8 @@ namespace MatrixNext.Web.Areas.TH.Controllers.Api
             try
             {
                 var resultado = await _service.GenerarPDFDesvinculacion(id);
-                if (!resultado.Success)
-                    return BadRequest(resultado);
+                if (!resultado.Success || string.IsNullOrEmpty(resultado.Data))
+                    return BadRequest(ApiResponse<string>.Error("No se pudo generar el PDF"));
 
                 var pdfBytes = Convert.FromBase64String(resultado.Data);
                 return File(pdfBytes, "application/pdf", $"desvinculacion_{id}.pdf");

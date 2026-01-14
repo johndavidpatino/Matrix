@@ -35,8 +35,8 @@ namespace MatrixNext.Web.Areas.TH.Controllers.Api
         [HttpGet]
         public async Task<ActionResult<ApiResponse<List<EmpleadoDto>>>> GetEmpleados(
             [FromQuery] long? id = null,
-            [FromQuery] string nombres = null,
-            [FromQuery] string apellidos = null,
+            [FromQuery] string? nombres = null,
+            [FromQuery] string? apellidos = null,
             [FromQuery] bool? activo = null,
             [FromQuery] byte? serviceLive = null,
             [FromQuery] short? cargo = null,

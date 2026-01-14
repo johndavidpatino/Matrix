@@ -191,7 +191,9 @@ namespace MatrixNext.Web.Areas.RP.Controllers
                 if (export.Contenido == null || export.Contenido.Length == 0)
                     return BadRequest(ApiResponse<string>.Error("No hay datos para exportar"));
 
-                return File(export.Contenido, export.ContentType, export.Nombre);
+                var contentType = export.ContentType ?? "application/octet-stream";
+                var fileName = string.IsNullOrWhiteSpace(export.Nombre) ? $"reporte_{id}.xlsx" : export.Nombre;
+                return File(export.Contenido, contentType, fileName);
             }
             catch (Exception ex)
             {
@@ -241,7 +243,9 @@ namespace MatrixNext.Web.Areas.RP.Controllers
                 if (export.Contenido == null || export.Contenido.Length == 0)
                     return BadRequest(ApiResponse<string>.Error("No hay datos para exportar"));
 
-                return File(export.Contenido, export.ContentType, export.Nombre);
+                var contentType = export.ContentType ?? "application/octet-stream";
+                var fileName = string.IsNullOrWhiteSpace(export.Nombre) ? $"reporte_{id}.pdf" : export.Nombre;
+                return File(export.Contenido, contentType, fileName);
             }
             catch (Exception ex)
             {
