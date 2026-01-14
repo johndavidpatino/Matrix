@@ -1,0 +1,201 @@
+@{
+    ViewData["Title"] = "Dashboard - Tráfico de Encuestas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <!-- Tarjetas de resumen -->
+    <div class="row mb-4">
+        <div class="col-lg-3 col-6">
+            <div class="small-box bg-info">
+                <div class="inner">
+                    <h3 id="totalEventos">0</h3>
+                    <p>Total Eventos</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-exchange-alt"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-6">
+            <div class="small-box bg-success">
+                <div class="inner">
+                    <h3 id="completados">0</h3>
+                    <p>Completados</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-check"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-6">
+            <div class="small-box bg-warning">
+                <div class="inner">
+                    <h3 id="enProceso">0</h3>
+                    <p>En Proceso</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-spinner"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-6">
+            <div class="small-box bg-danger">
+                <div class="inner">
+                    <h3 id="pendientes">0</h3>
+                    <p>Pendientes</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráficos -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Eventos por Tipo</h3>
+                </div>
+                <div class="card-body">
+                    <canvas id="chartTipos" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Eventos por Estado</h3>
+                </div>
+                <div class="card-body">
+                    <canvas id="chartEstados" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla de últimos eventos -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Últimos Eventos</h3>
+                    <div class="card-tools">
+                        <a href="@Url.Action("Index", "OP_Trafico")" class="btn btn-sm btn-primary">
+                            Ver Todos
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped table-sm">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Tipo</th>
+                                <th>Cantidad</th>
+                                <th>Fecha</th>
+                                <th>Usuario</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ultimosEventos">
+                            <!-- Cargar via AJAX -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        $(document).ready(function() {
+            cargarDashboard();
+            setInterval(cargarDashboard, 300000); // Actualizar cada 5 minutos
+        });
+
+        function cargarDashboard() {
+            $.get('@Url.Action("GetEstadisticas", "OP_Trafico")', function(data) {
+                if (data.success) {
+                    // Actualizar contadores
+                    $('#totalEventos').text(data.data.totalEventos || 0);
+                    $('#completados').text(data.data.completados || 0);
+                    $('#enProceso').text(data.data.enProceso || 0);
+                    $('#pendientes').text(data.data.pendientes || 0);
+
+                    // Gráfico de tipos
+                    if (window.chartTipos) window.chartTipos.destroy();
+                    var ctxTipos = document.getElementById('chartTipos').getContext('2d');
+                    window.chartTipos = new Chart(ctxTipos, {
+                        type: 'pie',
+                        data: {
+                            labels: data.data.eventosPorTipo.map(x => x.tipo),
+                            datasets: [{
+                                data: data.data.eventosPorTipo.map(x => x.cantidad),
+                                backgroundColor: [
+                                    '#007bff',
+                                    '#28a745',
+                                    '#ffc107',
+                                    '#dc3545'
+                                ]
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false
+                        }
+                    });
+
+                    // Gráfico de estados
+                    if (window.chartEstados) window.chartEstados.destroy();
+                    var ctxEstados = document.getElementById('chartEstados').getContext('2d');
+                    window.chartEstados = new Chart(ctxEstados, {
+                        type: 'bar',
+                        data: {
+                            labels: data.data.eventosPorEstado.map(x => x.estado),
+                            datasets: [{
+                                label: 'Cantidad',
+                                data: data.data.eventosPorEstado.map(x => x.cantidad),
+                                backgroundColor: '#17a2b8'
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+
+                    // Últimos eventos
+                    var html = '';
+                    $.each(data.data.ultimosEventos, function(i, evento) {
+                        var badgeClass = {
+                            'Pendiente': 'secondary',
+                            'EnProceso': 'primary',
+                            'Completado': 'success',
+                            'Anulado': 'danger'
+                        }[evento.estadoActual] || 'secondary';
+
+                        html += `<tr>
+                            <td>${evento.codigo}</td>
+                            <td>${evento.tipo}</td>
+                            <td>${evento.cantidad}</td>
+                            <td>${new Date(evento.fechaEvento).toLocaleDateString()}</td>
+                            <td>${evento.usuarioCapturista}</td>
+                            <td><span class="badge bg-${badgeClass}">${evento.estadoActual}</span></td>
+                        </tr>`;
+                    });
+                    $('#ultimosEventos').html(html || '<tr><td colspan="6" class="text-center">Sin eventos recientes</td></tr>');
+                }
+            });
+        }
+    </script>
+}

@@ -1,0 +1,103 @@
+@model MatrixNext.Data.Models.RP.ReporteResultadoDTO
+
+@{
+    ViewData["Title"] = "Detalle del Reporte";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-file-alt"></i>
+                        Detalle del Reporte
+                    </h3>
+                    <div class="card-tools">
+                        <a href="@Url.Action("Index", "Reportes")" class="btn btn-sm btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Volver
+                        </a>
+                        <button type="button" class="btn btn-sm btn-success" onclick="exportarExcel()">
+                            <i class="fas fa-file-excel"></i> Excel
+                        </button>
+                        <button type="button" class="btn btn-sm btn-danger" onclick="exportarPdf()">
+                            <i class="fas fa-file-pdf"></i> PDF
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-4">Total Registros:</dt>
+                                <dd class="col-sm-8">@Model.TotalRegistros</dd>
+                                
+                                <dt class="col-sm-4">Página Actual:</dt>
+                                <dd class="col-sm-8">@Model.Pagina de @Model.TotalPaginas</dd>
+                                
+                                <dt class="col-sm-4">Por Página:</dt>
+                                <dd class="col-sm-8">@Model.RegistrosPorPagina</dd>
+                            </dl>
+                        </div>
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-4">Mostrando:</dt>
+                                <dd class="col-sm-8">@((Model.Pagina - 1) * Model.RegistrosPorPagina + 1) - @Math.Min(Model.Pagina * Model.RegistrosPorPagina, Model.TotalRegistros)</dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                    @if (Model.Datos != null && Model.Datos.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        @foreach (var column in Model.Datos.First().Keys)
+                                        {
+                                            <th>@column</th>
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var row in Model.Datos)
+                                    {
+                                        <tr>
+                                            @foreach (var value in row.Values)
+                                            {
+                                                <td>@value</td>
+                                            }
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Paginación -->
+                        @if (Model.TotalPaginas > 1)
+                        {
+                            <nav aria-label="Paginación">
+                                <ul class="pagination justify-content-center">
+                                    @for (int i = 1; i <= Model.TotalPaginas; i++)
+                                    {
+                                        <li class="page-item @(i == Model.Pagina ? "active" : "")">
+                                            <a class="page-link" href="#" onclick="cargarPagina(@i); return false;">@i</a>
+                                        </li>
+                                    }
+                                </ul>
+                            </nav>
+                        }
+                    }
+                    else
+                    {
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i>
+                            No se encontraron datos para este reporte.
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

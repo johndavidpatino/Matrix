@@ -26,6 +26,40 @@ namespace MatrixNext.Data.Services
             };
         }
 
+        public static ApiResponse<T> BadRequest(string message, T? data = default, string? errorDetail = null)
+        {
+            return new ApiResponse<T>
+            {
+                Success = false,
+                Message = message,
+                Data = data,
+                StatusCode = 400,
+                ErrorDetail = errorDetail
+            };
+        }
+
+        public static ApiResponse<T> Unauthorized(string message = "Unauthorized", string? errorDetail = null)
+        {
+            return new ApiResponse<T>
+            {
+                Success = false,
+                Message = message,
+                StatusCode = 401,
+                ErrorDetail = errorDetail
+            };
+        }
+
+        public static ApiResponse<T> NotFound(string message = "Not Found", string? errorDetail = null)
+        {
+            return new ApiResponse<T>
+            {
+                Success = false,
+                Message = message,
+                StatusCode = 404,
+                ErrorDetail = errorDetail
+            };
+        }
+
         public static ApiResponse<T> Error(string message, int statusCode = 400, string? errorDetail = null)
         {
             return new ApiResponse<T>

@@ -1,0 +1,295 @@
+@model List<MatrixNext.Data.Models.OP_Trafico.OP_TraficoEventoDTO>
+
+@{
+    ViewData["Title"] = "Tráfico de Encuestas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-exchange-alt"></i>
+                        Tráfico de Encuestas
+                    </h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-primary btn-sm" id="btnNuevoEvento">
+                            <i class="fas fa-plus"></i> Nuevo Evento
+                        </button>
+                        <a href="@Url.Action("Dashboard", "OP_Trafico")" class="btn btn-info btn-sm">
+                            <i class="fas fa-chart-line"></i> Dashboard
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- Filtros -->
+                    <div class="row mb-3">
+                        <div class="col-md-2">
+                            <input type="text" id="filtroCodigo" class="form-control form-control-sm" placeholder="Código">
+                        </div>
+                        <div class="col-md-2">
+                            <select id="filtroTipo" class="form-select form-select-sm">
+                                <option value="">Todos los tipos</option>
+                                <option value="Captura">Captura</option>
+                                <option value="Critica">Crítica</option>
+                                <option value="Verificacion">Verificación</option>
+                                <option value="RMC">RMC</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <select id="filtroEstado" class="form-select form-select-sm">
+                                <option value="">Todos los estados</option>
+                                <option value="Pendiente">Pendiente</option>
+                                <option value="EnProceso">En Proceso</option>
+                                <option value="Completado">Completado</option>
+                                <option value="Anulado">Anulado</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="date" id="filtroFechaDesde" class="form-control form-control-sm">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="date" id="filtroFechaHasta" class="form-control form-control-sm">
+                        </div>
+                    </div>
+
+                    <!-- Tabla principal -->
+                    <table id="tblEventos" class="table table-bordered table-striped table-hover table-sm">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Tipo</th>
+                                <th>Descripción</th>
+                                <th>Cantidad</th>
+                                <th>Fecha Evento</th>
+                                <th>Usuario</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- DataTables via AJAX -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Nuevo Evento -->
+<div class="modal fade" id="modalNuevoEvento" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nuevo Evento de Tráfico</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formNuevoEvento">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="codigoTrabajo" class="form-label">Código de Trabajo *</label>
+                            <input type="text" class="form-control" id="codigoTrabajo" name="codigoTrabajo" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="tipoEvento" class="form-label">Tipo de Evento *</label>
+                            <select class="form-select" id="tipoEvento" name="tipoEvento" required>
+                                <option value="">Seleccione...</option>
+                                <option value="Captura">Captura</option>
+                                <option value="Critica">Crítica</option>
+                                <option value="Verificacion">Verificación</option>
+                                <option value="RMC">RMC</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="cantidad" class="form-label">Cantidad *</label>
+                            <input type="number" class="form-control" id="cantidad" name="cantidad" min="1" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="fechaEvento" class="form-label">Fecha del Evento *</label>
+                            <input type="date" class="form-control" id="fechaEvento" name="fechaEvento" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">Descripción</label>
+                        <textarea class="form-control" id="descripcion" name="descripcion" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="observaciones" class="form-label">Observaciones</label>
+                        <textarea class="form-control" id="observaciones" name="observaciones" rows="2"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="btnGuardarEvento">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            var table = $('#tblEventos').DataTable({
+                ajax: {
+                    url: '@Url.Action("GetEventos", "OP_Trafico")',
+                    type: 'GET',
+                    data: function(d) {
+                        d.codigo = $('#filtroCodigo').val();
+                        d.tipo = $('#filtroTipo').val();
+                        d.estado = $('#filtroEstado').val();
+                        d.fechaDesde = $('#filtroFechaDesde').val();
+                        d.fechaHasta = $('#filtroFechaHasta').val();
+                    },
+                    dataSrc: 'data'
+                },
+                columns: [
+                    { data: 'codigo' },
+                    { data: 'tipo' },
+                    { data: 'descripcion' },
+                    { data: 'cantidad' },
+                    { 
+                        data: 'fechaEvento',
+                        render: function(data) {
+                            return data ? new Date(data).toLocaleDateString() : '';
+                        }
+                    },
+                    { data: 'usuarioCapturista' },
+                    { 
+                        data: 'estadoActual',
+                        render: function(data) {
+                            var badgeClass = {
+                                'Pendiente': 'secondary',
+                                'EnProceso': 'primary',
+                                'Completado': 'success',
+                                'Anulado': 'danger'
+                            }[data] || 'secondary';
+                            return `<span class="badge bg-${badgeClass}">${data}</span>`;
+                        }
+                    },
+                    {
+                        data: null,
+                        render: function(data, type, row) {
+                            var acciones = `
+                                <button class="btn btn-sm btn-info btn-ver" data-id="${row.eventoId}" title="Ver">
+                                    <i class="fas fa-eye"></i>
+                                </button>`;
+                            
+                            if (row.tipo === 'Captura') {
+                                acciones += `
+                                    <button class="btn btn-sm btn-primary btn-captura" data-id="${row.eventoId}" title="Captura">
+                                        <i class="fas fa-keyboard"></i>
+                                    </button>`;
+                            } else if (row.tipo === 'Critica') {
+                                acciones += `
+                                    <button class="btn btn-sm btn-warning btn-critica" data-id="${row.eventoId}" title="Crítica">
+                                        <i class="fas fa-search"></i>
+                                    </button>`;
+                            } else if (row.tipo === 'Verificacion') {
+                                acciones += `
+                                    <button class="btn btn-sm btn-success btn-verificacion" data-id="${row.eventoId}" title="Verificación">
+                                        <i class="fas fa-check-double"></i>
+                                    </button>`;
+                            }
+                            
+                            if (row.estadoActual !== 'Anulado') {
+                                acciones += `
+                                    <button class="btn btn-sm btn-danger btn-anular" data-id="${row.eventoId}" title="Anular">
+                                        <i class="fas fa-ban"></i>
+                                    </button>`;
+                            }
+                            
+                            return acciones;
+                        }
+                    }
+                ],
+                order: [[4, 'desc']],
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json'
+                },
+                pageLength: 25
+            });
+
+            // Filtros
+            $('#filtroCodigo, #filtroTipo, #filtroEstado, #filtroFechaDesde, #filtroFechaHasta').on('change keyup', function() {
+                table.ajax.reload();
+            });
+
+            // Nuevo evento
+            $('#btnNuevoEvento').click(function() {
+                $('#formNuevoEvento')[0].reset();
+                $('#modalNuevoEvento').modal('show');
+            });
+
+            // Guardar evento
+            $('#btnGuardarEvento').click(function() {
+                if (!$('#formNuevoEvento')[0].checkValidity()) {
+                    $('#formNuevoEvento')[0].reportValidity();
+                    return;
+                }
+
+                var formData = $('#formNuevoEvento').serialize();
+                $.post('@Url.Action("CrearEvento", "OP_Trafico")', formData, function(response) {
+                    if (response.success) {
+                        toastr.success('Evento creado exitosamente');
+                        $('#modalNuevoEvento').modal('hide');
+                        table.ajax.reload();
+                    } else {
+                        toastr.error(response.message || 'Error al crear evento');
+                    }
+                }).fail(function() {
+                    toastr.error('Error de conexión');
+                });
+            });
+
+            // Ver detalle
+            $(document).on('click', '.btn-ver', function() {
+                var eventoId = $(this).data('id');
+                window.location.href = '@Url.Action("Detalle", "OP_Trafico")/' + eventoId;
+            });
+
+            // Captura
+            $(document).on('click', '.btn-captura', function() {
+                var eventoId = $(this).data('id');
+                window.location.href = '@Url.Action("Captura", "OP_Trafico")/' + eventoId;
+            });
+
+            // Crítica
+            $(document).on('click', '.btn-critica', function() {
+                var eventoId = $(this).data('id');
+                window.location.href = '@Url.Action("Critica", "OP_Trafico")/' + eventoId;
+            });
+
+            // Verificación
+            $(document).on('click', '.btn-verificacion', function() {
+                var eventoId = $(this).data('id');
+                window.location.href = '@Url.Action("Verificacion", "OP_Trafico")/' + eventoId;
+            });
+
+            // Anular
+            $(document).on('click', '.btn-anular', function() {
+                var eventoId = $(this).data('id');
+                var motivo = prompt('Ingrese el motivo de anulación:');
+                if (motivo) {
+                    $.post('@Url.Action("AnularEvento", "OP_Trafico")', 
+                        { eventoId: eventoId, motivo: motivo }, 
+                        function(response) {
+                            if (response.success) {
+                                toastr.success('Evento anulado');
+                                table.ajax.reload();
+                            } else {
+                                toastr.error(response.message || 'Error al anular');
+                            }
+                        }
+                    );
+                }
+            });
+        });
+    </script>
+}

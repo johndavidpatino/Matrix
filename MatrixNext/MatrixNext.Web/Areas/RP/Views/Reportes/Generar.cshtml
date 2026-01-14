@@ -1,0 +1,163 @@
+@model MatrixNext.Data.Models.RP.ReporteFiltrosDTO
+
+@{
+    ViewData["Title"] = "Generar Reporte";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-file-alt"></i>
+                        Generar Nuevo Reporte
+                    </h3>
+                    <div class="card-tools">
+                        <a href="@Url.Action("Index", "Reportes")" class="btn btn-sm btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Volver
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form id="formGenerar" method="post" asp-action="Generar">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="ReporteId" class="form-label">Tipo de Reporte *</label>
+                                <select asp-for="ReporteId" class="form-select select2" required>
+                                    <option value="">Seleccione un reporte...</option>
+                                </select>
+                                <span asp-validation-for="ReporteId" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="ProyectoId" class="form-label">Proyecto</label>
+                                <select asp-for="ProyectoId" class="form-select select2">
+                                    <option value="">Todos los proyectos</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="FechaDesde" class="form-label">Fecha Desde</label>
+                                <input asp-for="FechaDesde" type="date" class="form-control" />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="FechaHasta" class="form-label">Fecha Hasta</label>
+                                <input asp-for="FechaHasta" type="date" class="form-control" />
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="UsuarioId" class="form-label">Usuario</label>
+                                <select asp-for="UsuarioId" class="form-select select2">
+                                    <option value="">Todos los usuarios</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="AreaId" class="form-label">Área</label>
+                                <select asp-for="AreaId" class="form-select select2">
+                                    <option value="">Todas las áreas</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div id="filtrosAvanzados" class="collapse">
+                            <hr>
+                            <h5>Filtros Avanzados</h5>
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label asp-for="Estado" class="form-label">Estado</label>
+                                    <select asp-for="Estado" class="form-select">
+                                        <option value="">Todos</option>
+                                        <option value="Activo">Activo</option>
+                                        <option value="Inactivo">Inactivo</option>
+                                        <option value="Finalizado">Finalizado</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label asp-for="PageNumber" class="form-label">Página</label>
+                                    <input asp-for="PageNumber" type="number" class="form-control" value="1" min="1" />
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label asp-for="PageSize" class="form-label">Registros por página</label>
+                                    <select asp-for="PageSize" class="form-select">
+                                        <option value="10">10</option>
+                                        <option value="25" selected>25</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <button type="button" class="btn btn-link" data-bs-toggle="collapse" data-bs-target="#filtrosAvanzados">
+                                    <i class="fas fa-sliders-h"></i> Filtros Avanzados
+                                </button>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="row">
+                            <div class="col-12 text-end">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-play"></i> Generar Reporte
+                                </button>
+                                <button type="reset" class="btn btn-secondary">
+                                    <i class="fas fa-undo"></i> Limpiar
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Select2
+            $('.select2').select2({
+                theme: 'bootstrap-5',
+                width: '100%'
+            });
+
+            // Cargar catálogos
+            $.get('@Url.Action("GetReportesDisponibles", "Reportes")', function(data) {
+                var select = $('#ReporteId');
+                $.each(data.data, function(i, item) {
+                    select.append($('<option>', {
+                        value: item.reporteId,
+                        text: item.nombre
+                    }));
+                });
+            });
+
+            // Form submit
+            $('#formGenerar').submit(function(e) {
+                e.preventDefault();
+                var formData = $(this).serialize();
+                
+                $.post('@Url.Action("Generar", "Reportes")', formData, function(response) {
+                    if (response.success) {
+                        toastr.success('Reporte generado exitosamente');
+                        setTimeout(function() {
+                            window.location.href = '@Url.Action("Detalle", "Reportes")/' + response.data.reporteId;
+                        }, 1500);
+                    } else {
+                        toastr.error(response.message || 'Error al generar reporte');
+                    }
+                }).fail(function() {
+                    toastr.error('Error de conexión al servidor');
+                });
+            });
+        });
+    </script>
+}

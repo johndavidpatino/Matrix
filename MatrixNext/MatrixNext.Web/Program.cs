@@ -28,6 +28,15 @@ using MatrixNext.Data.Adapters.Pnc;
 using MatrixNext.Data.Adapters.TH;
 using MatrixNext.Data.Services.TH;
 using MatrixNext.Data.Services.TH.Interfaces;
+using MatrixNext.Data.Adapters.RP;
+using MatrixNext.Data.Services.RP;
+using MatrixNext.Data.Adapters.OP_RO;
+using MatrixNext.Data.Services.OP_RO;
+using MatrixNext.Data.Adapters.OP_Trafico;
+using MatrixNext.Data.Services.OP_Trafico;
+using MatrixNext.Data.Services.Authorization;
+using System.Data;
+using Microsoft.Data.SqlClient;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,6 +79,25 @@ builder.Services.Configure<PresupuestoNotificationOptions>(builder.Configuration
 // Register data services
 var connectionString = builder.Configuration.GetConnectionString("MatrixDb");
 builder.Services.AddScoped(sp => new LogService(connectionString!));
+
+// ===== SPRINT 10-11: RP_Reportes + OP_RO + OP_Trafico =====
+// Dapper connection (shared)
+builder.Services.AddScoped<IDbConnection>(_ => new SqlConnection(connectionString!));
+
+// RP_Reportes (Sprint 10)
+builder.Services.AddScoped<IReportesAdapter, ReportesAdapter>();
+builder.Services.AddScoped<IReportesService, ReportesService>();
+
+// OP_RO (Sprint 11A)
+builder.Services.AddScoped<IOP_ROAdapter, OP_ROAdapter>();
+builder.Services.AddScoped<IOP_ROService, OP_ROService>();
+
+// OP_Trafico (Sprint 11B)
+builder.Services.AddScoped<IOP_TraficoAdapter, OP_TraficoAdapter>();
+builder.Services.AddScoped<IOP_TraficoService, OP_TraficoService>();
+
+// Authorization Service (Sprint 10-11)
+builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
 
 // ===== SPRINT 0: SHARED SERVICES (Infraestructura) =====
 // Ref: PLAN_IMPLEMENTACION_SPRINTS.md § T0.2-T0.6

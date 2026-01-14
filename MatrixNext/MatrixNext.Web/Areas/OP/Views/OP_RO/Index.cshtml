@@ -1,0 +1,238 @@
+@model List<MatrixNext.Data.Models.OP_RO.OP_ROReviewDTO>
+
+@{
+    ViewData["Title"] = "Revisiones Operacionales";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-clipboard-check"></i>
+                        Revisiones Operacionales (RO)
+                    </h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-primary btn-sm" id="btnNuevaRevision">
+                            <i class="fas fa-plus"></i> Nueva Revisión
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- Filtros -->
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <select id="filtroTipoRevision" class="form-select form-select-sm">
+                                <option value="">Todos los tipos</option>
+                                <option value="Cuestionario">Cuestionario</option>
+                                <option value="Instructivo">Instructivo</option>
+                                <option value="Metodologia">Metodología</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select id="filtroEstado" class="form-select form-select-sm">
+                                <option value="">Todos los estados</option>
+                                <option value="Borrador">Borrador</option>
+                                <option value="Revision">En Revisión</option>
+                                <option value="Aprobado">Aprobado</option>
+                                <option value="Rechazado">Rechazado</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="date" id="filtroFechaDesde" class="form-control form-control-sm" placeholder="Fecha desde">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="date" id="filtroFechaHasta" class="form-control form-control-sm" placeholder="Fecha hasta">
+                        </div>
+                    </div>
+
+                    <!-- Tabla -->
+                    <table id="tblRevisiones" class="table table-bordered table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Tipo Revisión</th>
+                                <th>Documento</th>
+                                <th>Descripción</th>
+                                <th>Versión</th>
+                                <th>Estado</th>
+                                <th>Fecha Creación</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- DataTables via AJAX -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Nueva Revisión -->
+<div class="modal fade" id="modalNuevaRevision" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nueva Revisión Operacional</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formNuevaRevision">
+                    <div class="mb-3">
+                        <label for="tipoRevision" class="form-label">Tipo de Revisión *</label>
+                        <select class="form-select" id="tipoRevision" name="tipoRevision" required>
+                            <option value="">Seleccione...</option>
+                            <option value="Cuestionario">Cuestionario</option>
+                            <option value="Instructivo">Instructivo</option>
+                            <option value="Metodologia">Metodología</option>
+                            <option value="MaterialAyuda">Material de Ayuda</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="nombreDocumento" class="form-label">Nombre del Documento *</label>
+                        <input type="text" class="form-control" id="nombreDocumento" name="nombreDocumento" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">Descripción</label>
+                        <textarea class="form-control" id="descripcion" name="descripcion" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="proyectoId" class="form-label">Proyecto Asociado</label>
+                        <select class="form-select" id="proyectoId" name="proyectoId">
+                            <option value="">Sin proyecto</option>
+                            <!-- Cargar via AJAX -->
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="btnGuardarRevision">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            var table = $('#tblRevisiones').DataTable({
+                ajax: {
+                    url: '@Url.Action("GetRevisiones", "OP_RO")',
+                    type: 'GET',
+                    data: function(d) {
+                        d.tipoRevision = $('#filtroTipoRevision').val();
+                        d.estado = $('#filtroEstado').val();
+                        d.fechaDesde = $('#filtroFechaDesde').val();
+                        d.fechaHasta = $('#filtroFechaHasta').val();
+                    },
+                    dataSrc: 'data'
+                },
+                columns: [
+                    { data: 'reviewId' },
+                    { data: 'tipoRevision' },
+                    { data: 'nombreDocumento' },
+                    { data: 'descripcion' },
+                    { data: 'versionId' },
+                    { 
+                        data: 'estado',
+                        render: function(data) {
+                            var badgeClass = {
+                                'Borrador': 'secondary',
+                                'Revision': 'warning',
+                                'Aprobado': 'success',
+                                'Rechazado': 'danger'
+                            }[data] || 'secondary';
+                            return `<span class="badge bg-${badgeClass}">${data}</span>`;
+                        }
+                    },
+                    { 
+                        data: 'fechaCreacion',
+                        render: function(data) {
+                            return data ? new Date(data).toLocaleDateString() : '';
+                        }
+                    },
+                    {
+                        data: null,
+                        render: function(data, type, row) {
+                            return `
+                                <button class="btn btn-sm btn-info btn-ver" data-id="${row.reviewId}">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn btn-sm btn-warning btn-editar" data-id="${row.reviewId}">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger btn-eliminar" data-id="${row.reviewId}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            `;
+                        }
+                    }
+                ],
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json'
+                }
+            });
+
+            // Filtros
+            $('#filtroTipoRevision, #filtroEstado, #filtroFechaDesde, #filtroFechaHasta').change(function() {
+                table.ajax.reload();
+            });
+
+            // Nueva revisión
+            $('#btnNuevaRevision').click(function() {
+                $('#formNuevaRevision')[0].reset();
+                $('#modalNuevaRevision').modal('show');
+            });
+
+            // Guardar revisión
+            $('#btnGuardarRevision').click(function() {
+                var formData = $('#formNuevaRevision').serialize();
+                $.post('@Url.Action("CrearRevision", "OP_RO")', formData, function(response) {
+                    if (response.success) {
+                        toastr.success('Revisión creada exitosamente');
+                        $('#modalNuevaRevision').modal('hide');
+                        table.ajax.reload();
+                    } else {
+                        toastr.error(response.message || 'Error al crear revisión');
+                    }
+                });
+            });
+
+            // Ver detalle
+            $(document).on('click', '.btn-ver', function() {
+                var reviewId = $(this).data('id');
+                window.location.href = '@Url.Action("Detalle", "OP_RO")/' + reviewId;
+            });
+
+            // Editar
+            $(document).on('click', '.btn-editar', function() {
+                var reviewId = $(this).data('id');
+                window.location.href = '@Url.Action("Editar", "OP_RO")/' + reviewId;
+            });
+
+            // Eliminar
+            $(document).on('click', '.btn-eliminar', function() {
+                var reviewId = $(this).data('id');
+                if (confirm('¿Está seguro de eliminar esta revisión?')) {
+                    $.ajax({
+                        url: '@Url.Action("Eliminar", "OP_RO")/' + reviewId,
+                        type: 'DELETE',
+                        success: function(response) {
+                            if (response.success) {
+                                toastr.success('Revisión eliminada');
+                                table.ajax.reload();
+                            } else {
+                                toastr.error(response.message || 'Error al eliminar');
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}

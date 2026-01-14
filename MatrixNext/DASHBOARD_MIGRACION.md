@@ -41,13 +41,15 @@ Fecha de corte: 2026-01-15 (SPRINT 5 KICKOFF INICIADO)
 | RE_GT | Pendiente | `WebMatrix/RE_GT` |
 | PC_PropiedadCliente | Pendiente | `WebMatrix/PC_PropiedadCliente` |
 
-## Pendientes que deben continuar
-1. **TH_TalentoHumano Views/UI** (Sprint 5 - Nómina y complementarios sobre API Sprint 4 completa)
-2. GD_Documentos Fases 1-4 (infraestructura, catalogos, maestro, workflow).
-3. PY_Proyectos (faltan InHomeVisit, VariablesControl, Instructivos/Planillas, DuplicarTrabajos, DistribucionEntrevistas).
-4. Home y RP_Reportes (segun prioridad de negocio).
-5. OP_RO y OP_Trafico.
-6. Resto de modulos legacy de baja prioridad.
+## Pendientes que deben continuar (Sprints 5-12)
+1. **Sprint 5 (2 sem)**: TH_TalentoHumano Views/UI (Nómina y complementarios sobre API Sprint 4 completa)
+2. **Sprint 6 (2 sem)**: OP_Cualitativo Complementos (reportes, filtros avanzados)
+3. **Sprint 7 (2 sem)**: CORE Workflow (tareas, notificaciones, integraciones)
+4. **Sprint 8 (2-3 sem)**: EQ_EasyQuote Fase 1 (análisis + catálogos + infraestructura)
+5. **Sprint 9 (1-2 sem)**: Home Dashboard (widgets, KPIs, filtros)
+6. **Sprint 10 (1-2 sem)**: RP_Reportes (72 reportes, exportes Excel/PDF) ← **🔴 PRÓXIMO FOCUS**
+7. **Sprint 11 (2 sem)**: OP_RO + OP_Trafico (revisiones + tráfico de datos) ← **🔴 FINAL FOCUS**
+8. **Sprint 12+ (Variable)**: Módulos baja prioridad (PY_CC, SG_Actas, SGC_Calidad, etc.)
 
 ## Estructura de documentacion (ordenada)
 - `MatrixNext/docs/CORE/`
@@ -68,26 +70,33 @@ Ultima revision: 2026-01-11
 | Módulo | Prioridad | Status resumido | Indicador |
 | --- | --- | --- | --- |
 | US_Usuarios | Crítica | Migrado y validado | 🟢 |
-| TH_TalentoHumano | Media | API REST Sprint 4 completa (55 endpoints, 0 errores); Views en Sprint 5 | 🟢 |
+| TH_TalentoHumano (API Sprint 4) | Media | API REST completa (55 endpoints, 0 errores); Views pendientes Sprint 5 | 🟢 |
 | TH_Ausencias + Empleados API | Media | API REST completa (55 endpoints, 0 errores, Sprint 4) | 🟢 |
 | CU_Cuentas | Alta | Completo | 🟢 |
 | CC_FinzOpe / FI | Alta | Infraestructura lista | 🟢 |
 | OP_Cuantitativo | Alta | Documentado y concluido | 🟢 |
-| OP_Cualitativo | Alta | MVP terminado; complementos en Sprint 6 | 🟡 |
+| OP_Cualitativo | Alta | MVP terminado; complementos planificados Sprint 6 | 🟡 |
 | PY_Proyectos | Alta | Catálogos/maestros en marcha | 🟡 |
-| CORE (workflow) | Alta | Parcial, requiere más dependencias | 🟡 |
+| CORE (workflow) | Alta | Parcial; completar Sprint 7 | 🟡 |
 | GD_Documentos | Media | Fase 5 cerrada; Fases 1-4 pendientes | 🟡 |
-| EQ (EasyQuote) | Crítica | En progreso | 🟡 |
-| SGC_Calidad | Baja | Planeado (sin ejecución) | ⚪️ |
-| Home / RP_Reportes / OP_RO / OP_Trafico / PY_S etc. | Baja | Pendientes | 🔴 |
+| EQ (EasyQuote) | Crítica | En progreso Sprint 8 | 🟡 |
+| Home | Alta | Planificado Sprint 9 | 🔴 |
+| **RP_Reportes** | **🔴 Alta** | **72 reportes + exportes → SPRINT 10 (04-05 a 04-16)** | **🔴** |
+| **OP_RO + OP_Trafico** | **🟠 Media-Baja** | **Revisiones + tráfico → SPRINT 11 (04-19 a 05-03, HITO FINAL)** | **🔴** |
+| PY_ControlCalidad | Baja | Sprint 12+ | ⚪️ |
+| SG_Actas | Baja | Sprint 12+ | ⚪️ |
+| SGC_Calidad | Baja | Sprint 12+ | ⚪️ |
+| Resto (ES_Estadistica, Centro_Informacion, IT, MBO*, etc.) | Baja | Sprint 12+ | ⚪️ |
 
-Usa este semáforo como referencia rápida para los standups; los detalles de cada módulo todavía están en la tabla anterior y en `MatrixNext/MODULOS_MIGRACION.md`.
+**🎯 HITO CRÍTICO**: 2026-05-03 (Fin Sprint 11) = 100% módulos alta/media completados
 
 ---
 
 ## Timeline de Ejecución (Sprints 5-12 Planificados)
 
 📊 **Ver documento detallado**: [PLAN_EJECUCION_SPRINTS_5_12.md](PLAN_EJECUCION_SPRINTS_5_12.md)
+
+📋 **Ver planes Sprint 10 & 11**: [SPRINT_10_11_PLAN_DETALLADO.md](SPRINT_10_11_PLAN_DETALLADO.md) + [SPRINT_10_11_KICKOFF_GUIDE.md](SPRINT_10_11_KICKOFF_GUIDE.md)
 
 | Sprint | Módulo | Duración | Fechas Estimadas | Esfuerzo | Estado |
 |---|---|---|---|---|---|
@@ -96,8 +105,8 @@ Usa este semáforo como referencia rápida para los standups; los detalles de ca
 | 7 | CORE Workflow | 2 sem | 2026-02-15 → 2026-02-26 | 85h | 🟡 PLANIFICADO |
 | 8 | EQ_EasyQuote Fase 1 | 2-3 sem | 2026-03-01 → 2026-03-19 | 120h | 🟡 PLANIFICADO |
 | 9 | Home Dashboard | 1-2 sem | 2026-03-22 → 2026-04-02 | 50h | 🔴 PLANIFICADO |
-| 10 | RP_Reportes | 1-2 sem | 2026-04-05 → 2026-04-16 | 60h | 🔴 PLANIFICADO |
-| 11 | OP_RO + OP_Trafico | 2 sem | 2026-04-19 → 2026-05-03 | 90h | 🔴 PLANIFICADO |
+| **10** | **RP_Reportes** | **1-2 sem** | **2026-04-05 → 2026-04-16** | **60h** | **🔴 PRÓXIMO FOCUS** |
+| **11** | **OP_RO + OP_Trafico** | **2 sem** | **2026-04-19 → 2026-05-03** | **90h** | **🔴 FINAL FOCUS** |
 | 12+ | Módulos Baja Prioridad | Variable | 2026-05-05+ | TBD | ⚪️ PENDIENTE |
 
 **Total**: ~560 horas (~3.5 meses de ejecución secuencial)
