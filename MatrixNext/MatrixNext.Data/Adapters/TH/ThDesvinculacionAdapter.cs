@@ -27,7 +27,7 @@ namespace MatrixNext.Data.Adapters.TH
         /// <summary>
         /// Obtiene lista de desvinculaciones con paginación
         /// </summary>
-        public async Task<List<DesvinculacionDto>> ObtenerDesvinculaciones(int pageSize, int pageIndex, string textoBuscado)
+        public async Task<List<DesvinculacionDto>> ObtenerDesvinculaciones(int pageSize, int pageIndex, string? textoBuscado)
         {
             try
             {
@@ -119,7 +119,7 @@ namespace MatrixNext.Data.Adapters.TH
         /// <summary>
         /// Guarda evaluación de desvinculación (RRHH o Área)
         /// </summary>
-        public async Task<bool> GuardarEvaluacionDesvinculacion(DesvinculacionEvaluacionInputDto input, string usuario)
+        public async Task<bool> GuardarEvaluacionDesvinculacion(DesvinculacionEvaluacionInputDto input, string? usuario)
         {
             try
             {
@@ -171,7 +171,7 @@ namespace MatrixNext.Data.Adapters.TH
         /// <summary>
         /// Genera PDF del acta de desvinculación
         /// </summary>
-        public async Task<string> GenerarPDFDesvinculacion(long desvinculacionId)
+        public async Task<string?> GenerarPDFDesvinculacion(long desvinculacionId)
         {
             try
             {

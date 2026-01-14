@@ -16,10 +16,10 @@ namespace MatrixNext.Web.Models.EQ
 
         [Required]
         [StringLength(50)]
-        public string TipoMetodologia { get; set; } // F2F, CATI, ONLINE, AUTO
+        public string? TipoMetodologia { get; set; } // F2F, CATI, ONLINE, AUTO
 
         [StringLength(100)]
-        public string PenetracionRango { get; set; } // Mas82, 75-82, 67-74, 55-66, 46-54, 37-45
+        public string? PenetracionRango { get; set; } // Mas82, 75-82, 67-74, 55-66, 46-54, 37-45
 
         [Range(5, 60)]
         public int DuracionMin { get; set; }
@@ -31,7 +31,7 @@ namespace MatrixNext.Web.Models.EQ
         public decimal ValorTotal { get; set; }
 
         [StringLength(50)]
-        public string Version { get; set; }
+        public string? Version { get; set; }
 
         public DateTime VigentDesde { get; set; }
 
@@ -42,3 +42,4 @@ namespace MatrixNext.Web.Models.EQ
         public DateTime FechaModificacion { get; set; } = DateTime.UtcNow;
     }
 }
+

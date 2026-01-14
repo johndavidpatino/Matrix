@@ -17,7 +17,7 @@ namespace MatrixNext.Web.Services.OP.Interfaces
             int? trabajoId = null,
             DateTime? fechaDesde = null,
             DateTime? fechaHasta = null,
-            string estado = null,
+            string? estado = null,
             int pageNumber = 1,
             int pageSize = 50);
 
@@ -41,8 +41,8 @@ namespace MatrixNext.Web.Services.OP.Interfaces
             int? trabajoId = null,
             DateTime? fechaDesde = null,
             DateTime? fechaHasta = null,
-            string estado = null,
-            string entrevistador = null,
+            string? estado = null,
+            string? entrevistador = null,
             int pageNumber = 1,
             int pageSize = 50);
 
@@ -93,45 +93,45 @@ namespace MatrixNext.Web.Services.OP.Interfaces
     {
         public int SesionId { get; set; }
         public int TrabajoId { get; set; }
-        public string TrabajoCodigo { get; set; }
+        public string TrabajoCodigo { get; set; } = string.Empty;
         public DateTime FechaCreacion { get; set; }
         public DateTime FechaInicio { get; set; }
         public DateTime FechaFin { get; set; }
         public int Duracion { get; set; } // minutos
-        public string Ubicacion { get; set; }
-        public string Estado { get; set; }
+        public string Ubicacion { get; set; } = string.Empty;
+        public string Estado { get; set; } = string.Empty;
         public int NumeroParticipantes { get; set; }
-        public string Moderador { get; set; }
-        public string Observaciones { get; set; }
+        public string Moderador { get; set; } = string.Empty;
+        public string Observaciones { get; set; } = string.Empty;
     }
 
     public class ReportInterviewDto
     {
         public int EntrevistaId { get; set; }
         public int TrabajoId { get; set; }
-        public string TrabajoCodigo { get; set; }
+        public string TrabajoCodigo { get; set; } = string.Empty;
         public DateTime FechaCreacion { get; set; }
         public DateTime FechaEjecucion { get; set; }
-        public string Entrevistador { get; set; }
-        public string Encuestado { get; set; }
+        public string Entrevistador { get; set; } = string.Empty;
+        public string Encuestado { get; set; } = string.Empty;
         public int Duracion { get; set; } // minutos
         public int Preguntas { get; set; }
         public int PreguntasRespondidas { get; set; }
-        public string Estado { get; set; }
+        public string Estado { get; set; } = string.Empty;
         public decimal Completitud { get; set; } // %
-        public string Observaciones { get; set; }
+        public string Observaciones { get; set; } = string.Empty;
     }
 
     public class ReportModeratorDto
     {
         public int ModeradorId { get; set; }
-        public string Nombre { get; set; }
+        public string Nombre { get; set; } = string.Empty;
         public int TotalSesiones { get; set; }
         public int SesionesCompletadas { get; set; }
         public int HorasTotal { get; set; }
         public decimal PromedioParticipantes { get; set; }
         public DateTime UltimaSesion { get; set; }
-        public string UltimoTrabajo { get; set; }
+        public string UltimoTrabajo { get; set; } = string.Empty;
     }
 
     public class ConcurrentSessionDto
@@ -139,7 +139,7 @@ namespace MatrixNext.Web.Services.OP.Interfaces
         public int SesionId { get; set; }
         public DateTime FechaInicio { get; set; }
         public DateTime FechaFin { get; set; }
-        public string Ubicacion { get; set; }
-        public string EstadoConflicto { get; set; } // Conflicto/Advertencia/Ok
+        public string Ubicacion { get; set; } = string.Empty;
+        public string EstadoConflicto { get; set; } = string.Empty; // Conflicto/Advertencia/Ok
     }
 }

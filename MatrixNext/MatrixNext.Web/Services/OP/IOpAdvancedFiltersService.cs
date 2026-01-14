@@ -36,7 +36,7 @@ namespace MatrixNext.Web.Services.OP.Interfaces
         Task<FilteredResultDto<SessionFilteredDto>> GetSessionsByDateRangeAsync(
             DateTime fechaDesde,
             DateTime fechaHasta,
-            string estado = null,
+            string? estado = null,
             int moderadorId = 0,
             int pageNumber = 1,
             int pageSize = 50);
@@ -47,8 +47,8 @@ namespace MatrixNext.Web.Services.OP.Interfaces
         Task<FilteredResultDto<InterviewFilteredDto>> GetInterviewsByDateRangeAsync(
             DateTime fechaDesde,
             DateTime fechaHasta,
-            string estado = null,
-            string entrevistador = null,
+            string? estado = null,
+            string? entrevistador = null,
             int pageNumber = 1,
             int pageSize = 50);
 
@@ -86,23 +86,23 @@ namespace MatrixNext.Web.Services.OP.Interfaces
     public class TrabajoAutocompleteDto
     {
         public int TrabajoId { get; set; }
-        public string Codigo { get; set; }
-        public string Descripcion { get; set; }
-        public string Area { get; set; }
+        public string Codigo { get; set; } = string.Empty;
+        public string Descripcion { get; set; } = string.Empty;
+        public string Area { get; set; } = string.Empty;
     }
 
     public class ModeradorAutocompleteDto
     {
         public int ModeradorId { get; set; }
-        public string Nombre { get; set; }
-        public string Email { get; set; }
+        public string Nombre { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
     }
 
     public class EntrevistadorAutocompleteDto
     {
         public int EntrevistadorId { get; set; }
-        public string Nombre { get; set; }
-        public string Especialidad { get; set; }
+        public string Nombre { get; set; } = string.Empty;
+        public string Especialidad { get; set; } = string.Empty;
     }
 
     // ========== DTOs PARA FILTROS ==========
@@ -111,38 +111,38 @@ namespace MatrixNext.Web.Services.OP.Interfaces
     {
         public int SesionId { get; set; }
         public int TrabajoId { get; set; }
-        public string TrabajoCodigo { get; set; }
+        public string TrabajoCodigo { get; set; } = string.Empty;
         public DateTime FechaInicio { get; set; }
         public DateTime FechaFin { get; set; }
-        public string Ubicacion { get; set; }
-        public string Estado { get; set; }
+        public string Ubicacion { get; set; } = string.Empty;
+        public string Estado { get; set; } = string.Empty;
         public int NumeroParticipantes { get; set; }
-        public string Moderador { get; set; }
+        public string Moderador { get; set; } = string.Empty;
     }
 
     public class InterviewFilteredDto
     {
         public int EntrevistaId { get; set; }
         public int TrabajoId { get; set; }
-        public string TrabajoCodigo { get; set; }
+        public string TrabajoCodigo { get; set; } = string.Empty;
         public DateTime FechaEjecucion { get; set; }
-        public string Entrevistador { get; set; }
-        public string Encuestado { get; set; }
+        public string Entrevistador { get; set; } = string.Empty;
+        public string Encuestado { get; set; } = string.Empty;
         public int Duracion { get; set; }
         public decimal Completitud { get; set; }
-        public string Estado { get; set; }
+        public string Estado { get; set; } = string.Empty;
     }
 
     public class EstadoFilterDto
     {
-        public string Codigo { get; set; }
-        public string Nombre { get; set; }
+        public string Codigo { get; set; } = string.Empty;
+        public string Nombre { get; set; } = string.Empty;
         public int Cantidad { get; set; }
     }
 
     public class FilteredResultDto<T>
     {
-        public List<T> Data { get; set; }
+        public List<T> Data { get; set; } = new();
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
         public int TotalRecords { get; set; }

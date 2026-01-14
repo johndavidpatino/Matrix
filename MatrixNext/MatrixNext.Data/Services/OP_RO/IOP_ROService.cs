@@ -246,7 +246,7 @@ namespace MatrixNext.Data.Services.OP_RO
                     return ApiResponse<string>.NotFound("Revisión no encontrada");
 
                 // State Machine: Validar transición
-                if (!await ValidarTransicionEstadoAsync(revision.Estado, EstadosRevision.APROBADO, aprobacion.UsuarioRevisorId))
+                if (!await ValidarTransicionEstadoAsync(revision.Estado ?? string.Empty, EstadosRevision.APROBADO, aprobacion.UsuarioRevisorId))
                     return ApiResponse<string>.BadRequest($"No se puede pasar de {revision.Estado} a {EstadosRevision.APROBADO}");
 
                 // Validar permisos
@@ -285,7 +285,7 @@ namespace MatrixNext.Data.Services.OP_RO
                     return ApiResponse<string>.NotFound("Revisión no encontrada");
 
                 // State Machine: Validar transición
-                if (!await ValidarTransicionEstadoAsync(revision.Estado, EstadosRevision.RECHAZADO, rechazo.UsuarioRevisorId))
+                if (!await ValidarTransicionEstadoAsync(revision.Estado ?? string.Empty, EstadosRevision.RECHAZADO, rechazo.UsuarioRevisorId))
                     return ApiResponse<string>.BadRequest($"No se puede pasar de {revision.Estado} a {EstadosRevision.RECHAZADO}");
 
                 // Validar permisos

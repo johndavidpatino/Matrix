@@ -30,7 +30,7 @@ namespace MatrixNext.Data.Services.TH
 
         #region EMPLEADO PRINCIPAL
 
-        public async Task<ApiResponse<List<EmpleadoDto>>> ObtenerEmpleados(long? id = null, string nombres = null, string apellidos = null, 
+        public async Task<ApiResponse<List<EmpleadoDto>>> ObtenerEmpleados(long? id = null, string? nombres = null, string? apellidos = null, 
             bool? activo = null, byte? serviceLive = null, short? cargo = null, byte? sede = null)
         {
             try
@@ -171,7 +171,7 @@ namespace MatrixNext.Data.Services.TH
             }
         }
 
-        public async Task<ApiResponse<bool>> RetirarEmpleado(long empleadoId, DateTime fechaRetiro, string observacion)
+        public async Task<ApiResponse<bool>> RetirarEmpleado(long empleadoId, DateTime fechaRetiro, string? observacion)
         {
             try
             {

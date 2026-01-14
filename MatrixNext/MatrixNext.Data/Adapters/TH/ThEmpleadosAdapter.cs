@@ -28,7 +28,7 @@ namespace MatrixNext.Data.Adapters.TH
         /// <summary>
         /// Obtiene lista de empleados con filtros opcionales
         /// </summary>
-        public async Task<List<EmpleadoDto>> ObtenerEmpleados(long? id = null, string nombres = null, string apellidos = null, 
+        public async Task<List<EmpleadoDto>> ObtenerEmpleados(long? id = null, string? nombres = null, string? apellidos = null, 
             bool? activo = null, byte? serviceLive = null, short? cargo = null, byte? sede = null)
         {
             try
@@ -69,7 +69,7 @@ namespace MatrixNext.Data.Adapters.TH
         /// <summary>
         /// Obtiene un empleado específico por ID
         /// </summary>
-        public async Task<EmpleadoDto> ObtenerEmpleadoPorId(long id)
+        public async Task<EmpleadoDto?> ObtenerEmpleadoPorId(long id)
         {
             try
             {
@@ -305,7 +305,7 @@ namespace MatrixNext.Data.Adapters.TH
         /// <summary>
         /// Retira un empleado de la empresa
         /// </summary>
-        public async Task<bool> RetirarEmpleado(long empleadoId, DateTime fechaRetiro, string observacion)
+        public async Task<bool> RetirarEmpleado(long empleadoId, DateTime fechaRetiro, string? observacion)
         {
             try
             {
@@ -1006,7 +1006,7 @@ namespace MatrixNext.Data.Adapters.TH
             return await ObtenerCatalogo<TipoSalarioDto>("TiposSalario", "Nombre");
         }
 
-        private async Task<List<T>> ObtenerCatalogo<T>(string tableName, string nombreCampo) where T : new()
+        private async Task<List<T>> ObtenerCatalogo<T>(string? tableName, string? nombreCampo) where T : new()
         {
             try
             {
@@ -1061,3 +1061,4 @@ namespace MatrixNext.Data.Adapters.TH
         #endregion
     }
 }
+

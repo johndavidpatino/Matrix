@@ -13,15 +13,15 @@ namespace MatrixNext.Data.Models.OP_RO
     public class OP_ROReviewDTO
     {
         public int ReviewId { get; set; }
-        public string TipoRevision { get; set; } // Cuestionario, Instructivo, Metodología, Material
-        public string NombreDocumento { get; set; }
-        public string Descripcion { get; set; }
+        public string? TipoRevision { get; set; } // Cuestionario, Instructivo, Metodología, Material
+        public string? NombreDocumento { get; set; }
+        public string? Descripcion { get; set; }
         public int EstudoId { get; set; }
         public int UsuarioCreadorId { get; set; }
-        public string UsuarioCreador { get; set; }
+        public string? UsuarioCreador { get; set; }
         public DateTime FechaCreacion { get; set; }
         public DateTime? FechaUltimaModificacion { get; set; }
-        public string Estado { get; set; } // Pendiente, Aprobado, Rechazado
+        public string? Estado { get; set; } // Pendiente, Aprobado, Rechazado
         public bool Disponible { get; set; }
     }
 
@@ -31,10 +31,10 @@ namespace MatrixNext.Data.Models.OP_RO
     public class OP_ROCuestionarioDTO
     {
         public int CuestionarioId { get; set; }
-        public string Titulo { get; set; }
-        public string Descripcion { get; set; }
+        public string? Titulo { get; set; }
+        public string? Descripcion { get; set; }
         public int NumeroPreguntas { get; set; }
-        public string Estado { get; set; }
+        public string? Estado { get; set; }
         public int VersionId { get; set; }
         public DateTime FechaCreacion { get; set; }
         public List<PreguntaDTO> Preguntas { get; set; } = new();
@@ -46,9 +46,9 @@ namespace MatrixNext.Data.Models.OP_RO
     public class OP_ROInstructivoDTO
     {
         public int InstructivoId { get; set; }
-        public string Titulo { get; set; }
-        public string Contenido { get; set; }
-        public string Estado { get; set; }
+        public string? Titulo { get; set; }
+        public string? Contenido { get; set; }
+        public string? Estado { get; set; }
         public int VersionId { get; set; }
         public DateTime FechaCreacion { get; set; }
         public int OrdenCampo { get; set; } // Secuencia en operación de campo
@@ -61,10 +61,10 @@ namespace MatrixNext.Data.Models.OP_RO
     public class OP_ROMetodologiaDTO
     {
         public int MetodologiaId { get; set; }
-        public string Nombre { get; set; }
-        public string Descripcion { get; set; }
-        public string Alcance { get; set; }
-        public string Estado { get; set; }
+        public string? Nombre { get; set; }
+        public string? Descripcion { get; set; }
+        public string? Alcance { get; set; }
+        public string? Estado { get; set; }
         public int VersionId { get; set; }
         public DateTime FechaCreacion { get; set; }
         public List<FaseMetodologiaDTO> Fases { get; set; } = new();
@@ -76,10 +76,10 @@ namespace MatrixNext.Data.Models.OP_RO
     public class OP_ROMaterialAyudaDTO
     {
         public int MaterialId { get; set; }
-        public string Titulo { get; set; }
-        public string Tipo { get; set; } // Guía, Plantilla, Referencia, Ejemplo
-        public string ContenidoUrl { get; set; } // URL a archivo o contenido
-        public string Estado { get; set; }
+        public string? Titulo { get; set; }
+        public string? Tipo { get; set; } // Guía, Plantilla, Referencia, Ejemplo
+        public string? ContenidoUrl { get; set; } // URL a archivo o contenido
+        public string? Estado { get; set; }
         public int VersionId { get; set; }
         public DateTime FechaCreacion { get; set; }
         public double TamanoMB { get; set; }
@@ -92,8 +92,8 @@ namespace MatrixNext.Data.Models.OP_RO
     public class PreguntaDTO
     {
         public int PreguntaId { get; set; }
-        public string Texto { get; set; }
-        public string Tipo { get; set; } // Abierta, Cerrada, Múltiple
+        public string? Texto { get; set; }
+        public string? Tipo { get; set; } // Abierta, Cerrada, Múltiple
         public List<OpcionDTO> Opciones { get; set; } = new();
         public int Orden { get; set; }
     }
@@ -101,23 +101,23 @@ namespace MatrixNext.Data.Models.OP_RO
     public class OpcionDTO
     {
         public int OpcionId { get; set; }
-        public string Texto { get; set; }
+        public string? Texto { get; set; }
         public int Orden { get; set; }
     }
 
     public class PasoInstructivoDTO
     {
         public int PasoId { get; set; }
-        public string Descripcion { get; set; }
+        public string? Descripcion { get; set; }
         public int Orden { get; set; }
-        public string Imagen { get; set; } // URL a imagen del paso
+        public string? Imagen { get; set; } // URL a imagen del paso
     }
 
     public class FaseMetodologiaDTO
     {
         public int FaseId { get; set; }
-        public string Nombre { get; set; }
-        public string Descripcion { get; set; }
+        public string? Nombre { get; set; }
+        public string? Descripcion { get; set; }
         public int Orden { get; set; }
         public List<ActividadDTO> Actividades { get; set; } = new();
     }
@@ -125,8 +125,8 @@ namespace MatrixNext.Data.Models.OP_RO
     public class ActividadDTO
     {
         public int ActividadId { get; set; }
-        public string Descripcion { get; set; }
-        public string Responsable { get; set; }
+        public string? Descripcion { get; set; }
+        public string? Responsable { get; set; }
         public int Orden { get; set; }
     }
 
@@ -142,16 +142,16 @@ namespace MatrixNext.Data.Models.OP_RO
     {
         public int SolicitudId { get; set; }
         public int ReviewId { get; set; }
-        public string TipoRevision { get; set; }
-        public string NombreDocumento { get; set; }
+        public string? TipoRevision { get; set; }
+        public string? NombreDocumento { get; set; }
         public int UsuarioSolicitanteId { get; set; }
-        public string UsuarioSolicitante { get; set; }
+        public string? UsuarioSolicitante { get; set; }
         public DateTime FechaSolicitud { get; set; }
-        public string EstadoActual { get; set; } // Pendiente, Aprobado, Rechazado
+        public string? EstadoActual { get; set; } // Pendiente, Aprobado, Rechazado
         public int? UsuarioRevisorId { get; set; }
-        public string UsuarioRevisor { get; set; }
+        public string? UsuarioRevisor { get; set; }
         public DateTime? FechaRevision { get; set; }
-        public string Comentarios { get; set; }
+        public string? Comentarios { get; set; }
         public List<HistorialRevisionDTO> Historial { get; set; } = new();
     }
 
@@ -162,11 +162,11 @@ namespace MatrixNext.Data.Models.OP_RO
     {
         public int HistorialId { get; set; }
         public DateTime Fecha { get; set; }
-        public string Usuario { get; set; }
-        public string Accion { get; set; } // CREACIÓN, ENVÍO_REVISIÓN, APROBACIÓN, RECHAZO
-        public string Detalles { get; set; }
-        public string EstadoAnterior { get; set; }
-        public string EstadoNuevo { get; set; }
+        public string? Usuario { get; set; }
+        public string? Accion { get; set; } // CREACIÓN, ENVÍO_REVISIÓN, APROBACIÓN, RECHAZO
+        public string? Detalles { get; set; }
+        public string? EstadoAnterior { get; set; }
+        public string? EstadoNuevo { get; set; }
     }
 
     // ============================================
@@ -178,12 +178,12 @@ namespace MatrixNext.Data.Models.OP_RO
     /// </summary>
     public class OP_ROFiltrosDTO
     {
-        public string TipoRevision { get; set; }
-        public string Estado { get; set; }
+        public string? TipoRevision { get; set; }
+        public string? Estado { get; set; }
         public DateTime? FechaDesde { get; set; }
         public DateTime? FechaHasta { get; set; }
         public int? UsuarioId { get; set; }
-        public string NombreDocumento { get; set; }
+        public string? NombreDocumento { get; set; }
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 50;
     }
@@ -212,7 +212,7 @@ namespace MatrixNext.Data.Models.OP_RO
     {
         public int ReviewId { get; set; }
         public int UsuarioRevisorId { get; set; }
-        public string Comentarios { get; set; }
+        public string? Comentarios { get; set; }
     }
 
     /// <summary>
@@ -222,8 +222,8 @@ namespace MatrixNext.Data.Models.OP_RO
     {
         public int ReviewId { get; set; }
         public int UsuarioRevisorId { get; set; }
-        public string MotivoRechazo { get; set; }
-        public string Comentarios { get; set; }
+        public string? MotivoRechazo { get; set; }
+        public string? Comentarios { get; set; }
     }
 
     // ============================================
@@ -257,3 +257,4 @@ namespace MatrixNext.Data.Models.OP_RO
         public const string CANCELACIÓN = "CANCELACIÓN";
     }
 }
+

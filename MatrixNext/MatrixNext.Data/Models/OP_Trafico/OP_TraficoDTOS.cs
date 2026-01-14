@@ -13,17 +13,17 @@ namespace MatrixNext.Data.Models.OP_Trafico
     public class OP_TraficoEventoDTO
     {
         public int EventoId { get; set; }
-        public string Codigo { get; set; }
-        public string Tipo { get; set; } // Cuantitativo, Cualitativo, Mixto
-        public string Descripcion { get; set; }
+        public string? Codigo { get; set; }
+        public string? Tipo { get; set; } // Cuantitativo, Cualitativo, Mixto
+        public string? Descripcion { get; set; }
         public int EstudioId { get; set; }
         public DateTime FechaCaptura { get; set; }
         public int UsuarioCapturistaId { get; set; }
-        public string UsuarioCapturista { get; set; }
-        public string EstadoActual { get; set; } // Capturado, Criticado, Verificado, Anulado
+        public string? UsuarioCapturista { get; set; }
+        public string? EstadoActual { get; set; } // Capturado, Criticado, Verificado, Anulado
         public int VersionEstado { get; set; }
         public DateTime? FechaUltimaTransicion { get; set; }
-        public string UltimoUsuario { get; set; }
+        public string? UltimoUsuario { get; set; }
         public bool Disponible { get; set; }
     }
 
@@ -35,13 +35,13 @@ namespace MatrixNext.Data.Models.OP_Trafico
     {
         public int CapturadoId { get; set; }
         public int EventoId { get; set; }
-        public string Codigo { get; set; }
+        public string? Codigo { get; set; }
         public int NumeroEncuestas { get; set; }
         public int NumeroTrabajadores { get; set; }
         public DateTime FechaCaptura { get; set; }
         public int UsuarioCapturistaId { get; set; }
-        public string UsuarioCapturista { get; set; }
-        public string Observaciones { get; set; }
+        public string? UsuarioCapturista { get; set; }
+        public string? Observaciones { get; set; }
         public List<DatosCapturaDTO> DatosCapturados { get; set; } = new();
     }
 
@@ -53,16 +53,16 @@ namespace MatrixNext.Data.Models.OP_Trafico
     {
         public int CriticadoId { get; set; }
         public int EventoId { get; set; }
-        public string Codigo { get; set; }
+        public string? Codigo { get; set; }
         public DateTime FechaCritica { get; set; }
         public int UsuarioCriticoId { get; set; }
-        public string UsuarioCritico { get; set; }
-        public string Resultado { get; set; } // Aceptado, ConObservaciones, Rechazado
+        public string? UsuarioCritico { get; set; }
+        public string? Resultado { get; set; } // Aceptado, ConObservaciones, Rechazado
         public int NumeroErrores { get; set; }
         public int NumeroAdvertencias { get; set; }
         public List<ErrorCriticaDTO> Errores { get; set; } = new();
         public List<AdvertenciaCriticaDTO> Advertencias { get; set; } = new();
-        public string Observaciones { get; set; }
+        public string? Observaciones { get; set; }
     }
 
     /// <summary>
@@ -73,14 +73,14 @@ namespace MatrixNext.Data.Models.OP_Trafico
     {
         public int VerificadoId { get; set; }
         public int EventoId { get; set; }
-        public string Codigo { get; set; }
+        public string? Codigo { get; set; }
         public DateTime FechaVerificacion { get; set; }
         public int UsuarioVerificadorId { get; set; }
-        public string UsuarioVerificador { get; set; }
-        public string Resultado { get; set; } // Aprobado, Rechazado
+        public string? UsuarioVerificador { get; set; }
+        public string? Resultado { get; set; } // Aprobado, Rechazado
         public int NumeroInconsistencias { get; set; }
         public List<InconsistenciaDTO> Inconsistencias { get; set; } = new();
-        public string Observaciones { get; set; }
+        public string? Observaciones { get; set; }
         public DateTime? FechaAprobacionFinal { get; set; }
     }
 
@@ -94,10 +94,10 @@ namespace MatrixNext.Data.Models.OP_Trafico
         public int EventoId { get; set; }
         public DateTime FechaAnulacion { get; set; }
         public int UsuarioAnuladorId { get; set; }
-        public string UsuarioAnulador { get; set; }
-        public string MotivoAnulacion { get; set; }
-        public string Observaciones { get; set; }
-        public string EstadoAnterior { get; set; }
+        public string? UsuarioAnulador { get; set; }
+        public string? MotivoAnulacion { get; set; }
+        public string? Observaciones { get; set; }
+        public string? EstadoAnterior { get; set; }
     }
 
     // ============================================
@@ -110,9 +110,9 @@ namespace MatrixNext.Data.Models.OP_Trafico
     public class DatosCapturaDTO
     {
         public int DatoId { get; set; }
-        public string Campo { get; set; }
-        public string Valor { get; set; }
-        public string Tipo { get; set; } // Numérico, Texto, Fecha
+        public string? Campo { get; set; }
+        public string? Valor { get; set; }
+        public string? Tipo { get; set; } // Numérico, Texto, Fecha
         public DateTime FechaCaptura { get; set; }
     }
 
@@ -122,12 +122,12 @@ namespace MatrixNext.Data.Models.OP_Trafico
     public class ErrorCriticaDTO
     {
         public int ErrorId { get; set; }
-        public string Codigo { get; set; }
-        public string Descripcion { get; set; }
-        public string Severidad { get; set; } // Crítica, Alta, Media, Baja
-        public string Campo { get; set; }
-        public string ValorActual { get; set; }
-        public string ValorEsperado { get; set; }
+        public string? Codigo { get; set; }
+        public string? Descripcion { get; set; }
+        public string? Severidad { get; set; } // Crítica, Alta, Media, Baja
+        public string? Campo { get; set; }
+        public string? ValorActual { get; set; }
+        public string? ValorEsperado { get; set; }
     }
 
     /// <summary>
@@ -136,10 +136,10 @@ namespace MatrixNext.Data.Models.OP_Trafico
     public class AdvertenciaCriticaDTO
     {
         public int AdvertenciaId { get; set; }
-        public string Codigo { get; set; }
-        public string Descripcion { get; set; }
-        public string Campo { get; set; }
-        public string Observacion { get; set; }
+        public string? Codigo { get; set; }
+        public string? Descripcion { get; set; }
+        public string? Campo { get; set; }
+        public string? Observacion { get; set; }
     }
 
     /// <summary>
@@ -148,9 +148,9 @@ namespace MatrixNext.Data.Models.OP_Trafico
     public class InconsistenciaDTO
     {
         public int InconsistenciaId { get; set; }
-        public string Tipo { get; set; } // Duplicado, Incoherencia, Falta, Exceso
-        public string Descripcion { get; set; }
-        public string DetallesCampo { get; set; }
+        public string? Tipo { get; set; } // Duplicado, Incoherencia, Falta, Exceso
+        public string? Descripcion { get; set; }
+        public string? DetallesCampo { get; set; }
         public DateTime FechaDeteccion { get; set; }
     }
 
@@ -165,13 +165,13 @@ namespace MatrixNext.Data.Models.OP_Trafico
     public class OP_TraficoCapturarDTO
     {
         public int EstudioId { get; set; }
-        public string Tipo { get; set; }
-        public string Descripcion { get; set; }
+        public string? Tipo { get; set; }
+        public string? Descripcion { get; set; }
         public int UsuarioCapturistaId { get; set; }
         public int NumeroEncuestas { get; set; }
         public int NumeroTrabajadores { get; set; }
         public List<DatosCapturaDTO> Datos { get; set; } = new();
-        public string Observaciones { get; set; }
+        public string? Observaciones { get; set; }
     }
 
     /// <summary>
@@ -182,10 +182,10 @@ namespace MatrixNext.Data.Models.OP_Trafico
     {
         public int EventoId { get; set; }
         public int UsuarioCriticoId { get; set; }
-        public string Resultado { get; set; } // Aceptado, ConObservaciones, Rechazado
+        public string? Resultado { get; set; } // Aceptado, ConObservaciones, Rechazado
         public List<ErrorCriticaDTO> Errores { get; set; } = new();
         public List<AdvertenciaCriticaDTO> Advertencias { get; set; } = new();
-        public string Observaciones { get; set; }
+        public string? Observaciones { get; set; }
     }
 
     /// <summary>
@@ -196,9 +196,9 @@ namespace MatrixNext.Data.Models.OP_Trafico
     {
         public int EventoId { get; set; }
         public int UsuarioVerificadorId { get; set; }
-        public string Resultado { get; set; } // Aprobado, Rechazado
+        public string? Resultado { get; set; } // Aprobado, Rechazado
         public List<InconsistenciaDTO> Inconsistencias { get; set; } = new();
-        public string Observaciones { get; set; }
+        public string? Observaciones { get; set; }
     }
 
     /// <summary>
@@ -209,8 +209,8 @@ namespace MatrixNext.Data.Models.OP_Trafico
     {
         public int EventoId { get; set; }
         public int UsuarioAnuladorId { get; set; }
-        public string MotivoAnulacion { get; set; }
-        public string Observaciones { get; set; }
+        public string? MotivoAnulacion { get; set; }
+        public string? Observaciones { get; set; }
     }
 
     // ============================================
@@ -222,13 +222,13 @@ namespace MatrixNext.Data.Models.OP_Trafico
     /// </summary>
     public class OP_TraficoFiltrosDTO
     {
-        public string Estado { get; set; } // Capturado, Criticado, Verificado, Anulado
-        public string Tipo { get; set; } // Cuantitativo, Cualitativo
+        public string? Estado { get; set; } // Capturado, Criticado, Verificado, Anulado
+        public string? Tipo { get; set; } // Cuantitativo, Cualitativo
         public DateTime? FechaDesde { get; set; }
         public DateTime? FechaHasta { get; set; }
         public int? UsuarioId { get; set; }
         public int? EstudioId { get; set; }
-        public string Codigo { get; set; }
+        public string? Codigo { get; set; }
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 50;
     }
@@ -271,7 +271,7 @@ namespace MatrixNext.Data.Models.OP_Trafico
     /// </summary>
     public class EventoEstadoDTO
     {
-        public string Estado { get; set; }
+        public string? Estado { get; set; }
         public int Cantidad { get; set; }
         public double Porcentaje { get; set; }
     }
@@ -288,11 +288,11 @@ namespace MatrixNext.Data.Models.OP_Trafico
         public int HistorialId { get; set; }
         public int EventoId { get; set; }
         public DateTime Fecha { get; set; }
-        public string Usuario { get; set; }
-        public string EstadoAnterior { get; set; }
-        public string EstadoNuevo { get; set; }
-        public string Accion { get; set; } // CAPTURA, CRÍTICA, VERIFICACIÓN, ANULACIÓN
-        public string Detalles { get; set; }
+        public string? Usuario { get; set; }
+        public string? EstadoAnterior { get; set; }
+        public string? EstadoNuevo { get; set; }
+        public string? Accion { get; set; } // CAPTURA, CRÍTICA, VERIFICACIÓN, ANULACIÓN
+        public string? Detalles { get; set; }
     }
 
     // ============================================
@@ -343,3 +343,4 @@ namespace MatrixNext.Data.Models.OP_Trafico
         public const string ANULACIÓN = "ANULACIÓN";
     }
 }
+

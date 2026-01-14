@@ -332,7 +332,7 @@ namespace MatrixNext.Data.Services.RP
         // AUDITORÍA Y LOGGING
         // ============================================
 
-        public async Task RegistrarAuditoriaAsync(int reporteId, int usuarioId, string accion, string detalles = null)
+        public async Task RegistrarAuditoriaAsync(int reporteId, int usuarioId, string accion, string? detalles = null)
         {
             try
             {

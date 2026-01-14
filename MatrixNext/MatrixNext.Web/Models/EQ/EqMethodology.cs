@@ -18,31 +18,31 @@ namespace MatrixNext.Web.Models.EQ
         public int QuoteHeaderId { get; set; }
 
         [ForeignKey(nameof(QuoteHeaderId))]
-        public virtual EqQuoteHeader QuoteHeader { get; set; }
+        public virtual EqQuoteHeader? QuoteHeader { get; set; }
 
         [StringLength(50)]
-        public string MetodologiaRecoleccion { get; set; } // Hogares, Empresas, etc.
+        public string? MetodologiaRecoleccion { get; set; } // Hogares, Empresas, etc.
 
         [StringLength(50)]
-        public string Tecnica1Tipo { get; set; }
+        public string? Tecnica1Tipo { get; set; }
 
         public bool Tecnica1Flag { get; set; }
 
         [StringLength(50)]
-        public string Tecnica2Tipo { get; set; }
+        public string? Tecnica2Tipo { get; set; }
 
         public bool Tecnica2Flag { get; set; }
 
         [StringLength(50)]
-        public string Tecnica3Tipo { get; set; }
+        public string? Tecnica3Tipo { get; set; }
 
         public bool Tecnica3Flag { get; set; }
 
         [StringLength(50)]
-        public string BaseDatos { get; set; } // No requiere, Comprar, Cliente
+        public string? BaseDatos { get; set; } // No requiere, Comprar, Cliente
 
         [StringLength(100)]
-        public string IncidenciaLabel { get; set; }
+        public string? IncidenciaLabel { get; set; }
 
         public decimal? IncidenciaValor { get; set; }
 
@@ -53,3 +53,4 @@ namespace MatrixNext.Web.Models.EQ
         public DateTime FechaModificacion { get; set; } = DateTime.UtcNow;
     }
 }
+

@@ -25,7 +25,7 @@ namespace MatrixNext.Web.Services.EQ.Adapters
         /// Convierte una entidad EqQuoteHeader completa a EasyQuoteViewModel para cálculos
         /// Asume que el header fue cargado con todos los Includes requeridos
         /// </summary>
-        public EasyQuoteViewModel ToViewModel(EqQuoteHeader header)
+        public EasyQuoteViewModel ToViewModel(EqQuoteHeader? header)
         {
             if (header == null)
                 return new EasyQuoteViewModel();
@@ -48,7 +48,7 @@ namespace MatrixNext.Web.Services.EQ.Adapters
         /// <summary>
         /// Mapea EqQuoteHeader → EQHeader (encabezado propuesta)
         /// </summary>
-        private static EQHeader MapHeader(EqQuoteHeader entity)
+        private static EQHeader MapHeader(EqQuoteHeader? entity)
         {
             if (entity == null)
                 return new EQHeader();
@@ -74,7 +74,7 @@ namespace MatrixNext.Web.Services.EQ.Adapters
         /// <summary>
         /// Mapea EqQuestionnaire → EQQuestionnaire (detalles cuestionario)
         /// </summary>
-        private static EQQuestionnaire MapQuestionnaire(EqQuestionnaire entity)
+        private static EQQuestionnaire MapQuestionnaire(EqQuestionnaire? entity)
         {
             if (entity == null)
                 return new EQQuestionnaire();
@@ -113,7 +113,7 @@ namespace MatrixNext.Web.Services.EQ.Adapters
         /// <summary>
         /// Mapea EqMethodology → EQMethodology (metodologias recolección)
         /// </summary>
-        private static EQMethodology MapMethodology(EqMethodology entity)
+        private static EQMethodology MapMethodology(EqMethodology? entity)
         {
             if (entity == null)
                 return new EQMethodology();
@@ -136,12 +136,13 @@ namespace MatrixNext.Web.Services.EQ.Adapters
         /// <summary>
         /// Mapea colección EqSampleCity → List<EQSampleCity> (ciudades de muestra)
         /// </summary>
-        private static List<EQSampleCity> MapSampleCities(ICollection<EqSampleCity> entities)
+        private static List<EQSampleCity> MapSampleCities(ICollection<EqSampleCity>? entities)
         {
             if (entities == null || entities.Count == 0)
                 return new List<EQSampleCity>();
 
-            return entities.Select(e => new EQSampleCity
+            var sampleCities = entities!;
+            return sampleCities.Select(e => new EQSampleCity
             {
                 Ciudad = e.Ciudad ?? string.Empty,
                 Activa = e.Activa,
@@ -158,12 +159,13 @@ namespace MatrixNext.Web.Services.EQ.Adapters
         /// <summary>
         /// Mapea colección EqMystery → List<EQMysteryVisit> (visitas mystery shopper)
         /// </summary>
-        private static List<EQMysteryVisit> MapMysteryVisits(ICollection<EqMystery> entities)
+        private static List<EQMysteryVisit> MapMysteryVisits(ICollection<EqMystery>? entities)
         {
             if (entities == null || entities.Count == 0)
                 return new List<EQMysteryVisit>();
 
-            return entities.Select(e => new EQMysteryVisit
+            var mysteries = entities!;
+            return mysteries.Select(e => new EQMysteryVisit
             {
                 TipoVisita = e.TipoVisita.ToString() ?? string.Empty, // TipoVisita es int (1,2,3)
                 Complejidad = e.Complejidad ?? string.Empty,
@@ -180,12 +182,13 @@ namespace MatrixNext.Web.Services.EQ.Adapters
         /// <summary>
         /// Mapea colección EqStaffSL → List<EQStaffSL> (staff SL asignado)
         /// </summary>
-        private static List<EQStaffSL> MapStaffSL(ICollection<EqStaffSL> entities)
+        private static List<EQStaffSL> MapStaffSL(ICollection<EqStaffSL>? entities)
         {
             if (entities == null || entities.Count == 0)
                 return new List<EQStaffSL>();
 
-            return entities.Select(e => new EQStaffSL
+            var staffList = entities!;
+            return staffList.Select(e => new EQStaffSL
             {
                 Nivel = e.Nivel ?? string.Empty,
                 HorasMinimas = e.HorasMinimas,
@@ -199,7 +202,7 @@ namespace MatrixNext.Web.Services.EQ.Adapters
         /// NOTA: Estos datos actualmente están dispersos en la entidad principal y requerimientos
         /// Se mapean valores por defecto o desde propiedades disponibles
         /// </summary>
-        private static EQLogistica MapLogistica(EqQuoteHeader header)
+        private static EQLogistica MapLogistica(EqQuoteHeader? header)
         {
             if (header == null)
                 return new EQLogistica();

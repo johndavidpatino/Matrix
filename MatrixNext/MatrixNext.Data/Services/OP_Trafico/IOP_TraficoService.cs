@@ -251,7 +251,7 @@ namespace MatrixNext.Data.Services.OP_Trafico
                     return ApiResponse<string>.NotFound("Evento no encontrado");
 
                 // STATE MACHINE: Validar transición Capturado → Criticado
-                if (!await ValidarTransicionEstadoAsync(evento.EstadoActual, EstadosTrafico.CRITICADO, critica.UsuarioCriticoId))
+                if (!await ValidarTransicionEstadoAsync(evento.EstadoActual ?? string.Empty, EstadosTrafico.CRITICADO, critica.UsuarioCriticoId))
                     return ApiResponse<string>.BadRequest($"No se puede pasar de {evento.EstadoActual} a {EstadosTrafico.CRITICADO}");
 
                 // REGLA 9: Validar permisos
@@ -292,7 +292,7 @@ namespace MatrixNext.Data.Services.OP_Trafico
                     return ApiResponse<string>.NotFound("Evento no encontrado");
 
                 // STATE MACHINE: Validar transición Criticado → Verificado
-                if (!await ValidarTransicionEstadoAsync(evento.EstadoActual, EstadosTrafico.VERIFICADO, verificacion.UsuarioVerificadorId))
+                if (!await ValidarTransicionEstadoAsync(evento.EstadoActual ?? string.Empty, EstadosTrafico.VERIFICADO, verificacion.UsuarioVerificadorId))
                     return ApiResponse<string>.BadRequest($"No se puede pasar de {evento.EstadoActual} a {EstadosTrafico.VERIFICADO}");
 
                 // REGLA 9: Validar permisos
@@ -333,7 +333,7 @@ namespace MatrixNext.Data.Services.OP_Trafico
                     return ApiResponse<string>.NotFound("Evento no encontrado");
 
                 // STATE MACHINE: Validar transición [Cualquier] → Anulado
-                if (!await ValidarTransicionEstadoAsync(evento.EstadoActual, EstadosTrafico.ANULADO, anulacion.UsuarioAnuladorId))
+                if (!await ValidarTransicionEstadoAsync(evento.EstadoActual ?? string.Empty, EstadosTrafico.ANULADO, anulacion.UsuarioAnuladorId))
                     return ApiResponse<string>.BadRequest($"No se puede anular desde estado {evento.EstadoActual}");
 
                 // REGLA 9: Validar permisos

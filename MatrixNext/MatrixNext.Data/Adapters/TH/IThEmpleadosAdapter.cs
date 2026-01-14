@@ -11,15 +11,15 @@ namespace MatrixNext.Data.Adapters.TH
     public interface IThEmpleadosAdapter
     {
         // ========== EMPLEADO PRINCIPAL ==========
-        Task<List<EmpleadoDto>> ObtenerEmpleados(long? id = null, string nombres = null, string apellidos = null, bool? activo = null, byte? serviceLive = null, short? cargo = null, byte? sede = null);
-        Task<EmpleadoDto> ObtenerEmpleadoPorId(long id);
+        Task<List<EmpleadoDto>> ObtenerEmpleados(long? id = null, string? nombres = null, string? apellidos = null, bool? activo = null, byte? serviceLive = null, short? cargo = null, byte? sede = null);
+        Task<EmpleadoDto?> ObtenerEmpleadoPorId(long id);
         Task<long> CrearEmpleado(EmpleadoInputDto input);
         Task<bool> ActualizarDatosGenerales(long id, EmpleadoInputDto input);
         Task<bool> ActualizarDatosLaborales(EmpleadoDatosLaboralesInputDto input);
         Task<bool> ActualizarDatosPersonales(EmpleadoDatosPersonalesInputDto input);
         Task<bool> ActualizarNomina(EmpleadoNominaInputDto input);
         Task<bool> ActualizarSalario(EmpleadoActualizarSalarioInputDto input);
-        Task<bool> RetirarEmpleado(long empleadoId, DateTime fechaRetiro, string observacion);
+        Task<bool> RetirarEmpleado(long empleadoId, DateTime fechaRetiro, string? observacion);
         Task<bool> ReintegrarEmpleado(long empleadoId, DateTime fechaReintegro);
 
         // ========== EXPERIENCIA LABORAL ==========
@@ -93,11 +93,12 @@ namespace MatrixNext.Data.Adapters.TH
     /// </summary>
     public interface IThDesvinculacionAdapter
     {
-        Task<List<DesvinculacionDto>> ObtenerDesvinculaciones(int pageSize, int pageIndex, string textoBuscado);
+        Task<List<DesvinculacionDto>> ObtenerDesvinculaciones(int pageSize, int pageIndex, string? textoBuscado);
         Task<long> IniciarProcesoDesvinculacion(DesvinculacionInputDto input);
         Task<List<dynamic>> ObtenerEvaluacionesDesvinculacion(long desvinculacionId);
-        Task<bool> GuardarEvaluacionDesvinculacion(DesvinculacionEvaluacionInputDto input, string usuario);
+        Task<bool> GuardarEvaluacionDesvinculacion(DesvinculacionEvaluacionInputDto input, string? usuario);
         Task<bool> FinalizarProcesoDesvinculacion(long desvinculacionId);
-        Task<string> GenerarPDFDesvinculacion(long desvinculacionId);
+        Task<string?> GenerarPDFDesvinculacion(long desvinculacionId);
     }
 }
+

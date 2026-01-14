@@ -16,7 +16,7 @@ namespace MatrixNext.Web.Models.EQ
 
         [Required]
         [StringLength(100)]
-        public string Ciudad { get; set; }
+        public string? Ciudad { get; set; }
 
         public decimal TarifaBase { get; set; }
 
@@ -29,3 +29,4 @@ namespace MatrixNext.Web.Models.EQ
         public DateTime FechaModificacion { get; set; } = DateTime.UtcNow;
     }
 }
+

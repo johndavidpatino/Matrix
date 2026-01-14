@@ -12,13 +12,13 @@ namespace MatrixNext.Data.Services.PY
         private readonly IPyInstructivosAdapter _adapter;
         public PyInstructivosService(IPyInstructivosAdapter adapter) => _adapter = adapter;
 
-        public async Task<EspecificacionTecnicaDto> ObtenerEspecificacionCuanti(int trabajoId)
+        public async Task<EspecificacionTecnicaDto?> ObtenerEspecificacionCuanti(int trabajoId)
         {
             if (trabajoId <= 0) throw new ArgumentException("TrabajoId > 0", nameof(trabajoId));
             return await _adapter.ObtenerEspecificacion(trabajoId);
         }
 
-        public async Task<EspecificacionTecnicaCualiDto> ObtenerEspecificacionCuali(int trabajoId)
+        public async Task<EspecificacionTecnicaCualiDto?> ObtenerEspecificacionCuali(int trabajoId)
         {
             if (trabajoId <= 0) throw new ArgumentException("TrabajoId > 0", nameof(trabajoId));
             return await _adapter.ObtenerEspecificacionCuali(trabajoId);

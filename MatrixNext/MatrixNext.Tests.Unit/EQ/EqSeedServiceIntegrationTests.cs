@@ -82,7 +82,7 @@ namespace MatrixNext.Tests.Unit.EQ
                 Assert.True(result1.Success);
                 Assert.True(result2.Success);
                 Assert.Equal(6, result1.TablasSeeded.Count);
-                Assert.Equal(0, result2.TablasSeeded.Count); // Segunda llamada debe skipear
+                Assert.Empty(result2.TablasSeeded); // Segunda llamada debe skipear
                 Assert.Equal(6, result2.TablasSkipped.Count); // Todas las 6 tablas fueron skippeadas
                 Assert.Equal(countAfterFirst, countAfterSecond); // El count es igual
             }

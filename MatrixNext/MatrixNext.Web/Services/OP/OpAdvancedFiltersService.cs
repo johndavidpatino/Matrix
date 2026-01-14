@@ -49,7 +49,7 @@ namespace MatrixNext.Web.Services.OP
         public async Task<FilteredResultDto<SessionFilteredDto>> GetSessionsByDateRangeAsync(
             DateTime fechaDesde,
             DateTime fechaHasta,
-            string estado = null,
+            string? estado = null,
             int moderadorId = 0,
             int pageNumber = 1,
             int pageSize = 50)
@@ -74,8 +74,8 @@ namespace MatrixNext.Web.Services.OP
         public async Task<FilteredResultDto<InterviewFilteredDto>> GetInterviewsByDateRangeAsync(
             DateTime fechaDesde,
             DateTime fechaHasta,
-            string estado = null,
-            string entrevistador = null,
+            string? estado = null,
+            string? entrevistador = null,
             int pageNumber = 1,
             int pageSize = 50)
         {

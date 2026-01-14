@@ -12,7 +12,7 @@ namespace MatrixNext.Data.Services.TH.Interfaces
     public interface IThEmpleadosService
     {
         // ========== EMPLEADO PRINCIPAL ==========
-        Task<ApiResponse<List<EmpleadoDto>>> ObtenerEmpleados(long? id = null, string nombres = null, string apellidos = null, 
+        Task<ApiResponse<List<EmpleadoDto>>> ObtenerEmpleados(long? id = null, string? nombres = null, string? apellidos = null, 
             bool? activo = null, byte? serviceLive = null, short? cargo = null, byte? sede = null);
         Task<ApiResponse<EmpleadoDto>> ObtenerEmpleadoPorId(long id);
         Task<ApiResponse<long>> CrearEmpleado(EmpleadoInputDto input);
@@ -21,7 +21,7 @@ namespace MatrixNext.Data.Services.TH.Interfaces
         Task<ApiResponse<bool>> ActualizarDatosPersonales(EmpleadoDatosPersonalesInputDto input);
         Task<ApiResponse<bool>> ActualizarNomina(EmpleadoNominaInputDto input);
         Task<ApiResponse<bool>> ActualizarSalario(EmpleadoActualizarSalarioInputDto input);
-        Task<ApiResponse<bool>> RetirarEmpleado(long empleadoId, DateTime fechaRetiro, string observacion);
+        Task<ApiResponse<bool>> RetirarEmpleado(long empleadoId, DateTime fechaRetiro, string? observacion);
         Task<ApiResponse<bool>> ReintegrarEmpleado(long empleadoId, DateTime fechaReintegro);
 
         // ========== DATOS COMPLEMENTARIOS (Experiencia, Educación, Hijos, etc) ==========
@@ -70,10 +70,10 @@ namespace MatrixNext.Data.Services.TH.Interfaces
     /// </summary>
     public interface IThDesvinculacionService
     {
-        Task<ApiResponse<List<DesvinculacionDto>>> ObtenerDesvinculaciones(int pageSize, int pageIndex, string textoBuscado);
+        Task<ApiResponse<List<DesvinculacionDto>>> ObtenerDesvinculaciones(int pageSize, int pageIndex, string? textoBuscado);
         Task<ApiResponse<long>> IniciarProcesoDesvinculacion(DesvinculacionInputDto input);
         Task<ApiResponse<List<dynamic>>> ObtenerEvaluacionesDesvinculacion(long desvinculacionId);
-        Task<ApiResponse<bool>> GuardarEvaluacionDesvinculacion(DesvinculacionEvaluacionInputDto input, string usuario);
+        Task<ApiResponse<bool>> GuardarEvaluacionDesvinculacion(DesvinculacionEvaluacionInputDto input, string? usuario);
         Task<ApiResponse<bool>> FinalizarProcesoDesvinculacion(long desvinculacionId);
         Task<ApiResponse<string>> GenerarPDFDesvinculacion(long desvinculacionId);
     }
@@ -98,3 +98,4 @@ namespace MatrixNext.Data.Services.TH.Interfaces
         Task<ApiResponse<List<TipoSalarioDto>>> ObtenerTiposSalario();
     }
 }
+

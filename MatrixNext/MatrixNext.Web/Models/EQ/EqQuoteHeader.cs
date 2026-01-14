@@ -17,37 +17,37 @@ namespace MatrixNext.Web.Models.EQ
 
         [Required]
         [StringLength(500)]
-        public string PropuestaNombre { get; set; }
+        public string? PropuestaNombre { get; set; }
 
         [Required]
         [StringLength(500)]
-        public string GrupoObjetivo { get; set; }
+        public string? GrupoObjetivo { get; set; }
 
         [Required]
         [StringLength(500)]
-        public string Cliente { get; set; }
+        public string? Cliente { get; set; }
 
         public DateTime? FechaAprobacionEstimada { get; set; }
 
         public DateTime? FechaCampo { get; set; }
 
         [StringLength(50)]
-        public string ProbabilidadAprobacion { get; set; } // Alta, Media, Baja
+        public string? ProbabilidadAprobacion { get; set; } // Alta, Media, Baja
 
         [Required]
         [StringLength(50)]
-        public string SL { get; set; } // Nivel de la propuesta
+        public string? SL { get; set; } // Nivel de la propuesta
 
         [Required]
         [StringLength(50)]
-        public string MetodologiaSL { get; set; } // F2F, CATI, ONLINE, AUTO, MYSTERY, SHOPPER
+        public string? MetodologiaSL { get; set; } // F2F, CATI, ONLINE, AUTO, MYSTERY, SHOPPER
 
         [Required]
         [StringLength(50)]
-        public string RecordDetail { get; set; }
+        public string? RecordDetail { get; set; }
 
         [StringLength(100)]
-        public string CategoriaProducto { get; set; } // Otro, Bebidas, etc.
+        public string? CategoriaProducto { get; set; } // Otro, Bebidas, etc.
 
         public decimal? ValorProveedorExterno { get; set; }
 
@@ -56,7 +56,7 @@ namespace MatrixNext.Web.Models.EQ
         public decimal? ValorGMU { get; set; }
 
         [StringLength(1000)]
-        public string Notas { get; set; }
+        public string? Notas { get; set; }
 
         public DateTime FechaCreacion { get; set; } = DateTime.UtcNow;
 
@@ -68,6 +68,7 @@ namespace MatrixNext.Web.Models.EQ
         public virtual ICollection<EqSampleCity> SampleCities { get; set; } = new List<EqSampleCity>();
         public virtual ICollection<EqMystery> Mysteries { get; set; } = new List<EqMystery>();
         public virtual ICollection<EqStaffSL> StaffSL { get; set; } = new List<EqStaffSL>();
-        public virtual EqCostResult CostResult { get; set; }
+        public virtual EqCostResult? CostResult { get; set; }
     }
 }
+

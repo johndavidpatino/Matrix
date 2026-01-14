@@ -18,11 +18,11 @@ namespace MatrixNext.Web.Models.EQ
         public int QuoteHeaderId { get; set; }
 
         [ForeignKey(nameof(QuoteHeaderId))]
-        public virtual EqQuoteHeader QuoteHeader { get; set; }
+        public virtual EqQuoteHeader? QuoteHeader { get; set; }
 
         [Required]
         [StringLength(100)]
-        public string Ciudad { get; set; }
+        public string? Ciudad { get; set; }
 
         public bool Activa { get; set; } = true;
 
@@ -36,7 +36,7 @@ namespace MatrixNext.Web.Models.EQ
         public int NSE6 { get; set; } = 0;
 
         [StringLength(50)]
-        public string MetodologiaTecnicaReferenciada { get; set; }
+        public string? MetodologiaTecnicaReferenciada { get; set; }
 
         public decimal SobreMuestraPct { get; set; } = 0;
 
@@ -49,3 +49,4 @@ namespace MatrixNext.Web.Models.EQ
         public DateTime FechaModificacion { get; set; } = DateTime.UtcNow;
     }
 }
+

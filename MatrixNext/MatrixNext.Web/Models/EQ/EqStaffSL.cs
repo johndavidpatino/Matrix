@@ -18,11 +18,11 @@ namespace MatrixNext.Web.Models.EQ
         public int QuoteHeaderId { get; set; }
 
         [ForeignKey(nameof(QuoteHeaderId))]
-        public virtual EqQuoteHeader QuoteHeader { get; set; }
+        public virtual EqQuoteHeader? QuoteHeader { get; set; }
 
         [Required]
         [StringLength(10)]
-        public string Nivel { get; set; } // L3, L4, L5, L6, L7
+        public string? Nivel { get; set; } // L3, L4, L5, L6, L7
 
         public decimal HorasMinimas { get; set; }
 
@@ -33,10 +33,11 @@ namespace MatrixNext.Web.Models.EQ
         public decimal ValorTotal { get; set; } // Calculado: HorasPresupuestadas * TarifaNivel
 
         [StringLength(100)]
-        public string Fuente { get; set; } // Tabla Horas
+        public string? Fuente { get; set; } // Tabla Horas
 
         public DateTime FechaCreacion { get; set; } = DateTime.UtcNow;
 
         public DateTime FechaModificacion { get; set; } = DateTime.UtcNow;
     }
 }
+

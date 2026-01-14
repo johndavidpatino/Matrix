@@ -111,6 +111,6 @@ namespace MatrixNext.Data.Services.RP
         /// Registra generación de reporte en auditoría
         /// REGLA 8: Trazabilidad
         /// </summary>
-        Task RegistrarAuditoriaAsync(int reporteId, int usuarioId, string accion, string detalles = null);
+        Task RegistrarAuditoriaAsync(int reporteId, int usuarioId, string accion, string? detalles = null);
     }
 }

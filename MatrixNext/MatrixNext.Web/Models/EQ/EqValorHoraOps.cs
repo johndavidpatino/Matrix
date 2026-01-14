@@ -16,10 +16,10 @@ namespace MatrixNext.Web.Models.EQ
 
         [Required]
         [StringLength(10)]
-        public string Nivel { get; set; } // L1, L2, L3, L4, L5, L6, L7, L8
+        public string? Nivel { get; set; } // L1, L2, L3, L4, L5, L6, L7, L8
 
         [StringLength(50)]
-        public string Alternativa { get; set; } // 2022, 2023, 2023_alt1, 2023_alt2
+        public string? Alternativa { get; set; } // 2022, 2023, 2023_alt1, 2023_alt2
 
         public decimal BaseCostRate { get; set; }
 
@@ -38,3 +38,4 @@ namespace MatrixNext.Web.Models.EQ
         public DateTime FechaModificacion { get; set; } = DateTime.UtcNow;
     }
 }
+

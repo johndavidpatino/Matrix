@@ -52,7 +52,7 @@ namespace MatrixNext.Data.Adapters.RP
         /// SP: OP_ReporteInconsistencias_Get
         /// </summary>
         Task<List<Dictionary<string, object>>> GetReporteInconsistenciasAsync(
-            DateTime fechaDesde, DateTime fechaHasta, string tipo = null);
+            DateTime fechaDesde, DateTime fechaHasta, string? tipo = null);
 
         /// <summary>
         /// Obtiene listado de trabajos para reporte
@@ -88,7 +88,7 @@ namespace MatrixNext.Data.Adapters.RP
         /// SP: TH_ListadoEncuestadores_Get
         /// </summary>
         Task<List<Dictionary<string, object>>> GetListadoEncuestadoresAsync(
-            int? areaId = null, string estado = null);
+            int? areaId = null, string? estado = null);
 
         /// <summary>
         /// Obtiene ficha de encuestador detallada

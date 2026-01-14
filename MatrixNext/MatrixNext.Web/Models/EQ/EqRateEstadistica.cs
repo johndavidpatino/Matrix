@@ -16,11 +16,11 @@ namespace MatrixNext.Web.Models.EQ
 
         [Required]
         [StringLength(100)]
-        public string Categoria { get; set; }
+        public string? Categoria { get; set; }
 
         [Required]
         [StringLength(200)]
-        public string Servicio { get; set; }
+        public string? Servicio { get; set; }
 
         public decimal? HorasEstimadas { get; set; }
 
@@ -29,10 +29,10 @@ namespace MatrixNext.Web.Models.EQ
         public decimal? FactorEscala { get; set; }
 
         [StringLength(100)]
-        public string LeadTime { get; set; }
+        public string? LeadTime { get; set; }
 
         [StringLength(500)]
-        public string Ejemplos { get; set; }
+        public string? Ejemplos { get; set; }
 
         public decimal? FactorEconomiaEscala { get; set; }
 
@@ -41,3 +41,4 @@ namespace MatrixNext.Web.Models.EQ
         public DateTime FechaModificacion { get; set; } = DateTime.UtcNow;
     }
 }
+

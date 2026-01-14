@@ -25,7 +25,7 @@ namespace MatrixNext.Data.Services.TH
             _logger = logger;
         }
 
-        public async Task<ApiResponse<List<DesvinculacionDto>>> ObtenerDesvinculaciones(int pageSize, int pageIndex, string textoBuscado)
+        public async Task<ApiResponse<List<DesvinculacionDto>>> ObtenerDesvinculaciones(int pageSize, int pageIndex, string? textoBuscado)
         {
             try
             {
@@ -70,7 +70,7 @@ namespace MatrixNext.Data.Services.TH
             }
         }
 
-        public async Task<ApiResponse<bool>> GuardarEvaluacionDesvinculacion(DesvinculacionEvaluacionInputDto input, string usuario)
+        public async Task<ApiResponse<bool>> GuardarEvaluacionDesvinculacion(DesvinculacionEvaluacionInputDto input, string? usuario)
         {
             try
             {

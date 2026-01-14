@@ -18,13 +18,13 @@ namespace MatrixNext.Web.Models.EQ
         public int QuoteHeaderId { get; set; }
 
         [ForeignKey(nameof(QuoteHeaderId))]
-        public virtual EqQuoteHeader QuoteHeader { get; set; }
+        public virtual EqQuoteHeader? QuoteHeader { get; set; }
 
         [Range(5, 60)]
         public int DuracionMinutos { get; set; }
 
         [StringLength(100)]
-        public string PenetracionLabel { get; set; } // Mas82, 75-82, etc.
+        public string? PenetracionLabel { get; set; } // Mas82, 75-82, etc.
 
         public decimal? PenetracionValor { get; set; }
 
@@ -33,12 +33,12 @@ namespace MatrixNext.Web.Models.EQ
         public int PreguntasAbiertasMultiples { get; set; } = 0;
 
         [StringLength(500)]
-        public string OtrosProcesos { get; set; }
+        public string? OtrosProcesos { get; set; }
 
         public bool TopLine { get; set; }
 
         [StringLength(50)]
-        public string DataCleaning { get; set; } // Total, Parcial, No
+        public string? DataCleaning { get; set; } // Total, Parcial, No
 
         public bool ASCII { get; set; }
 
@@ -47,7 +47,7 @@ namespace MatrixNext.Web.Models.EQ
         public bool Scripting { get; set; }
 
         [StringLength(50)]
-        public string TipoScript { get; set; } // Nuevo, Duplicado, Reutilizacion
+        public string? TipoScript { get; set; } // Nuevo, Duplicado, Reutilizacion
 
         public bool Codificacion { get; set; }
 
@@ -58,14 +58,14 @@ namespace MatrixNext.Web.Models.EQ
         public bool ProcesoEstadistico { get; set; }
 
         [StringLength(50)]
-        public string ClasePrueba { get; set; } // Monodica, Monodica secuencial, No aplica
+        public string? ClasePrueba { get; set; } // Monodica, Monodica secuencial, No aplica
 
         public bool Refrigeracion { get; set; }
 
         public decimal? CompraProducto { get; set; }
 
         [StringLength(100)]
-        public string EtiquetadoTipo { get; set; } // blind, sin blind, etc.
+        public string? EtiquetadoTipo { get; set; } // blind, sin blind, etc.
 
         public bool Embalaje { get; set; }
 
@@ -82,3 +82,4 @@ namespace MatrixNext.Web.Models.EQ
         public DateTime FechaModificacion { get; set; } = DateTime.UtcNow;
     }
 }
+

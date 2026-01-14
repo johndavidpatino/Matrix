@@ -7,24 +7,24 @@ namespace MatrixNext.Web.DTOs
 
     public class EasyQuoteCreateDto
     {
-        public string PropuestaNombre { get; set; }
-        public string GrupoObjetivo { get; set; }
-        public string Cliente { get; set; }
+        public string? PropuestaNombre { get; set; }
+        public string? GrupoObjetivo { get; set; }
+        public string? Cliente { get; set; }
         public DateTime? FechaAprobacionEstimada { get; set; }
         public DateTime? FechaCampo { get; set; }
-        public string ProbabilidadAprobacion { get; set; } = "Alta";
-        public string SL { get; set; }
-        public string MetodologiaSL { get; set; }
-        public string RecordDetail { get; set; }
-        public string CategoriaProducto { get; set; }
+        public string? ProbabilidadAprobacion { get; set; } = "Alta";
+        public string? SL { get; set; }
+        public string? MetodologiaSL { get; set; }
+        public string? RecordDetail { get; set; }
+        public string? CategoriaProducto { get; set; }
         public decimal? ValorProveedorExterno { get; set; }
         public decimal? ValorProveedorInternacional { get; set; }
         public decimal? ValorGMU { get; set; }
-        public string Notas { get; set; }
+        public string? Notas { get; set; }
 
         // Detalles asociados
-        public EasyQuestionnaireDto Questionnaire { get; set; }
-        public EasyMethodologyDto Methodology { get; set; }
+        public EasyQuestionnaireDto Questionnaire { get; set; } = new EasyQuestionnaireDto();
+        public EasyMethodologyDto Methodology { get; set; } = new EasyMethodologyDto();
         public List<EasySampleCityDto> SampleCities { get; set; } = new List<EasySampleCityDto>();
     }
 
@@ -35,24 +35,24 @@ namespace MatrixNext.Web.DTOs
     public class EasyQuestionnaireDto
     {
         public int DuracionMinutos { get; set; }
-        public string PenetracionLabel { get; set; }
+        public string? PenetracionLabel { get; set; }
         public decimal? PenetracionValor { get; set; }
         public int PreguntasAbiertas { get; set; }
         public int PreguntasAbiertasMultiples { get; set; }
         public bool TopLine { get; set; }
-        public string DataCleaning { get; set; } // Total, Parcial, No
+        public string? DataCleaning { get; set; } // Total, Parcial, No
         public bool ASCII { get; set; }
         public bool ScriptReclutamiento { get; set; }
         public bool Scripting { get; set; }
-        public string TipoScript { get; set; } // Nuevo, Duplicado, Reutilizacion
+        public string? TipoScript { get; set; } // Nuevo, Duplicado, Reutilizacion
         public bool Codificacion { get; set; }
         public bool Procesamiento { get; set; }
         public int NumProcesamientos { get; set; } = 1;
         public bool ProcesoEstadistico { get; set; }
-        public string ClasePrueba { get; set; }
+        public string? ClasePrueba { get; set; }
         public bool Refrigeracion { get; set; }
         public decimal? CompraProducto { get; set; }
-        public string EtiquetadoTipo { get; set; }
+        public string? EtiquetadoTipo { get; set; }
         public bool Embalaje { get; set; }
         public int ProductosATestear { get; set; } = 1;
         public int ProductosPorRespondiente { get; set; } = 1;
@@ -60,19 +60,19 @@ namespace MatrixNext.Web.DTOs
 
     public class EasyMethodologyDto
     {
-        public string MetodologiaRecoleccion { get; set; }
-        public string Tecnica1Tipo { get; set; }
+        public string? MetodologiaRecoleccion { get; set; }
+        public string? Tecnica1Tipo { get; set; }
         public bool Tecnica1Flag { get; set; }
-        public string Tecnica2Tipo { get; set; }
+        public string? Tecnica2Tipo { get; set; }
         public bool Tecnica2Flag { get; set; }
-        public string BaseDatos { get; set; }
-        public string IncidenciaLabel { get; set; }
+        public string? BaseDatos { get; set; }
+        public string? IncidenciaLabel { get; set; }
         public decimal? IncidenciaValor { get; set; }
     }
 
     public class EasySampleCityDto
     {
-        public string Ciudad { get; set; }
+        public string? Ciudad { get; set; }
         public bool Activa { get; set; } = true;
         public int MuestraTotal { get; set; }
         public int NSE1 { get; set; }
@@ -91,9 +91,9 @@ namespace MatrixNext.Web.DTOs
     public class EasyQuoteHeaderDto
     {
         public int Id { get; set; }
-        public string PropuestaNombre { get; set; }
-        public string Cliente { get; set; }
-        public string SL { get; set; }
+        public string? PropuestaNombre { get; set; }
+        public string? Cliente { get; set; }
+        public string? SL { get; set; }
         public DateTime FechaCreacion { get; set; }
         public DateTime FechaModificacion { get; set; }
     }
@@ -101,32 +101,32 @@ namespace MatrixNext.Web.DTOs
     public class EasyQuoteDetailDto
     {
         public int Id { get; set; }
-        public string PropuestaNombre { get; set; }
-        public string GrupoObjetivo { get; set; }
-        public string Cliente { get; set; }
-        public string SL { get; set; }
-        public string MetodologiaSL { get; set; }
-        public string RecordDetail { get; set; }
+        public string? PropuestaNombre { get; set; }
+        public string? GrupoObjetivo { get; set; }
+        public string? Cliente { get; set; }
+        public string? SL { get; set; }
+        public string? MetodologiaSL { get; set; }
+        public string? RecordDetail { get; set; }
         public DateTime? FechaAprobacionEstimada { get; set; }
         public DateTime? FechaCampo { get; set; }
-        public string ProbabilidadAprobacion { get; set; }
-        public string Notas { get; set; }
+        public string? ProbabilidadAprobacion { get; set; }
+        public string? Notas { get; set; }
         public DateTime FechaCreacion { get; set; }
         public DateTime FechaModificacion { get; set; }
 
         // Detalles
-        public EasyQuestionnaireDto Questionnaire { get; set; }
-        public EasyMethodologyDto Methodology { get; set; }
-        public List<EasySampleCityDto> SampleCities { get; set; }
+        public EasyQuestionnaireDto Questionnaire { get; set; } = new EasyQuestionnaireDto();
+        public EasyMethodologyDto Methodology { get; set; } = new EasyMethodologyDto();
+        public List<EasySampleCityDto> SampleCities { get; set; } = new List<EasySampleCityDto>();
     }
 
     public class EasyQuoteListDto
     {
         public int Id { get; set; }
-        public string PropuestaNombre { get; set; }
-        public string Cliente { get; set; }
-        public string SL { get; set; }
-        public string Estado { get; set; }
+        public string? PropuestaNombre { get; set; }
+        public string? Cliente { get; set; }
+        public string? SL { get; set; }
+        public string? Estado { get; set; }
         public DateTime FechaCreacion { get; set; }
     }
 
@@ -136,7 +136,7 @@ namespace MatrixNext.Web.DTOs
     {
         public int Id { get; set; }
         public int QuoteHeaderId { get; set; }
-        public string Moneda { get; set; } = "COP";
+        public string? Moneda { get; set; } = "COP";
 
         // Rubros
         public decimal CostoCampo { get; set; }
@@ -169,8 +169,8 @@ namespace MatrixNext.Web.DTOs
     public class EasyMasterPrecioDto
     {
         public int Id { get; set; }
-        public string TipoMetodologia { get; set; }
-        public string PenetracionRango { get; set; }
+        public string? TipoMetodologia { get; set; }
+        public string? PenetracionRango { get; set; }
         public int DuracionMin { get; set; }
         public decimal ValorTotal { get; set; }
     }
@@ -186,8 +186,8 @@ namespace MatrixNext.Web.DTOs
 
     public class EasyMasterValorHoraDto
     {
-        public string Nivel { get; set; }
-        public string Alternativa { get; set; }
+        public string? Nivel { get; set; }
+        public string? Alternativa { get; set; }
         public decimal BaseCostRate { get; set; }
         public decimal LoadedCostRate { get; set; }
         public decimal BillingRate { get; set; }
@@ -205,15 +205,15 @@ namespace MatrixNext.Web.DTOs
     public class EasyMasterRateEstadisticaDto
     {
         public int Id { get; set; }
-        public string Categoria { get; set; }
-        public string Servicio { get; set; }
+        public string? Categoria { get; set; }
+        public string? Servicio { get; set; }
         public decimal PrecioRef2024 { get; set; }
     }
 
     public class EasyMasterLocacionesDto
     {
         public int Id { get; set; }
-        public string Ciudad { get; set; }
+        public string? Ciudad { get; set; }
         public decimal TarifaBase { get; set; }
     }
 
@@ -228,3 +228,4 @@ namespace MatrixNext.Web.DTOs
         public List<T> Items { get; set; } = new List<T>();
     }
 }
+

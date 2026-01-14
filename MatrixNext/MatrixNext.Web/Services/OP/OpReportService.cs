@@ -27,7 +27,7 @@ namespace MatrixNext.Web.Services.OP
             int? trabajoId = null,
             DateTime? fechaDesde = null,
             DateTime? fechaHasta = null,
-            string estado = null,
+            string? estado = null,
             int pageNumber = 1,
             int pageSize = 50)
         {
@@ -100,8 +100,8 @@ namespace MatrixNext.Web.Services.OP
             int? trabajoId = null,
             DateTime? fechaDesde = null,
             DateTime? fechaHasta = null,
-            string estado = null,
-            string entrevistador = null,
+            string? estado = null,
+            string? entrevistador = null,
             int pageNumber = 1,
             int pageSize = 50)
         {

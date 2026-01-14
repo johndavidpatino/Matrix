@@ -66,62 +66,53 @@ public class EncryptionService
         };
     }
 
-#pragma warning disable SYSLIB0021, SYSLIB0022
     private static ICryptoTransform ObtenerTransformacionDES(int modo, byte[] key, byte[] iv)
     {
-        using (var des = new DESCryptoServiceProvider())
-        {
-            des.Mode = CipherMode.CBC;
-            return modo == ENCRYPT_MODE
-                ? des.CreateEncryptor(key, iv)
-                : des.CreateDecryptor(key, iv);
-        }
+        using var des = DES.Create() ?? throw new InvalidOperationException("DES no disponible");
+        des.Mode = CipherMode.CBC;
+        return modo == ENCRYPT_MODE
+            ? des.CreateEncryptor(key, iv)
+            : des.CreateDecryptor(key, iv);
     }
 
     private static ICryptoTransform ObtenerTransformacionTripleDES(int modo, byte[] key, byte[] iv)
     {
-        using (var des3 = new TripleDESCryptoServiceProvider())
-        {
-            des3.Mode = CipherMode.CBC;
-            return modo == ENCRYPT_MODE
-                ? des3.CreateEncryptor(key, iv)
-                : des3.CreateDecryptor(key, iv);
-        }
+        using var des3 = TripleDES.Create() ?? throw new InvalidOperationException("TripleDES no disponible");
+        des3.Mode = CipherMode.CBC;
+        return modo == ENCRYPT_MODE
+            ? des3.CreateEncryptor(key, iv)
+            : des3.CreateDecryptor(key, iv);
     }
 
     private static ICryptoTransform ObtenerTransformacionRC2(int modo, byte[] key, byte[] iv)
     {
-        using (var rc2 = new RC2CryptoServiceProvider())
-        {
-            rc2.Mode = CipherMode.CBC;
-            return modo == ENCRYPT_MODE
-                ? rc2.CreateEncryptor(key, iv)
-                : rc2.CreateDecryptor(key, iv);
-        }
+        using var rc2 = RC2.Create() ?? throw new InvalidOperationException("RC2 no disponible");
+        rc2.Mode = CipherMode.CBC;
+        return modo == ENCRYPT_MODE
+            ? rc2.CreateEncryptor(key, iv)
+            : rc2.CreateDecryptor(key, iv);
     }
 
+    #pragma warning disable SYSLIB0022
     private static ICryptoTransform ObtenerTransformacionRijndael(int modo, byte[] key, byte[] iv)
     {
-        using (var rj = new RijndaelManaged())
-        {
-            rj.Mode = CipherMode.CBC;
-            return modo == ENCRYPT_MODE
-                ? rj.CreateEncryptor(key, iv)
-                : rj.CreateDecryptor(key, iv);
-        }
+        using var rj = Rijndael.Create() ?? throw new InvalidOperationException("Rijndael no disponible");
+        rj.Mode = CipherMode.CBC;
+        return modo == ENCRYPT_MODE
+            ? rj.CreateEncryptor(key, iv)
+            : rj.CreateDecryptor(key, iv);
     }
+    #pragma warning restore SYSLIB0022
 
     private static ICryptoTransform ObtenerTransformacionAES(int modo, byte[] key)
     {
-        using (var aes = new AesCryptoServiceProvider())
-        {
-            aes.Mode = CipherMode.ECB;
-            return modo == ENCRYPT_MODE
-                ? aes.CreateEncryptor(key, null!)
-                : aes.CreateDecryptor(key, null!);
-        }
+        using var aes = Aes.Create() ?? throw new InvalidOperationException("AES no disponible");
+        aes.Mode = CipherMode.ECB;
+        byte[] iv = new byte[aes.BlockSize / 8];
+        return modo == ENCRYPT_MODE
+            ? aes.CreateEncryptor(key, iv)
+            : aes.CreateDecryptor(key, iv);
     }
-#pragma warning restore SYSLIB0021, SYSLIB0022
 
     /// <summary>
     /// Encripta una contrasena del usuario usando TripleDES (algoritmo 2).

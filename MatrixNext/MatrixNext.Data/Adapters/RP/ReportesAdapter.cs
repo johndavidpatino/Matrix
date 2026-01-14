@@ -160,7 +160,7 @@ namespace MatrixNext.Data.Adapters.RP
         }
 
         public async Task<List<Dictionary<string, object>>> GetReporteInconsistenciasAsync(
-            DateTime fechaDesde, DateTime fechaHasta, string tipo = null)
+            DateTime fechaDesde, DateTime fechaHasta, string? tipo = null)
         {
             try
             {
@@ -282,7 +282,7 @@ namespace MatrixNext.Data.Adapters.RP
         // ============================================
 
         public async Task<List<Dictionary<string, object>>> GetListadoEncuestadoresAsync(
-            int? areaId = null, string estado = null)
+            int? areaId = null, string? estado = null)
         {
             try
             {

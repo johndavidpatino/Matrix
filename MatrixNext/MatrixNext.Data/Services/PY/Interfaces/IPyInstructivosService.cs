@@ -14,12 +14,12 @@ namespace MatrixNext.Data.Services.PY.Interfaces
         /// <summary>
         /// Obtiene especificación técnica cuantitativa para un trabajo.
         /// </summary>
-        Task<EspecificacionTecnicaDto> ObtenerEspecificacionCuanti(int trabajoId);
+        Task<EspecificacionTecnicaDto?> ObtenerEspecificacionCuanti(int trabajoId);
 
         /// <summary>
         /// Obtiene especificación técnica cualitativa para un trabajo.
         /// </summary>
-        Task<EspecificacionTecnicaCualiDto> ObtenerEspecificacionCuali(int trabajoId);
+        Task<EspecificacionTecnicaCualiDto?> ObtenerEspecificacionCuali(int trabajoId);
 
         /// <summary>
         /// Guarda nueva especificación cuantitativa (crea versión inicial).

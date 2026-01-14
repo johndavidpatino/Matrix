@@ -1,3 +1,5 @@
+using System;
+
 namespace MatrixNext.Data.Models.RP
 {
     /// <summary>
@@ -6,9 +8,9 @@ namespace MatrixNext.Data.Models.RP
     public class ReporteDTO
     {
         public int ReporteId { get; set; }
-        public string Nombre { get; set; }
-        public string Descripcion { get; set; }
-        public string Categoria { get; set; }
+        public string? Nombre { get; set; }
+        public string? Descripcion { get; set; }
+        public string? Categoria { get; set; }
         public DateTime? UltimaGeneracion { get; set; }
         public bool Disponible { get; set; }
     }
@@ -21,9 +23,9 @@ namespace MatrixNext.Data.Models.RP
         public DateTime? FechaDesde { get; set; }
         public DateTime? FechaHasta { get; set; }
         public int? UsuarioId { get; set; }
-        public string NombreUsuario { get; set; }
-        public string Estado { get; set; }
-        public string Proyecto { get; set; }
+        public string? NombreUsuario { get; set; }
+        public string? Estado { get; set; }
+        public string? Proyecto { get; set; }
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 20;
     }
@@ -46,11 +48,11 @@ namespace MatrixNext.Data.Models.RP
     /// </summary>
     public class ReporteExportDTO
     {
-        public string Nombre { get; set; }
+        public string? Nombre { get; set; }
         public DateTime FechaGeneracion { get; set; }
-        public string Usuario { get; set; }
-        public byte[] Contenido { get; set; }
-        public string ContentType { get; set; }
+        public string? Usuario { get; set; }
+        public byte[] Contenido { get; set; } = Array.Empty<byte>();
+        public string? ContentType { get; set; }
     }
 
     /// <summary>
@@ -75,3 +77,4 @@ namespace MatrixNext.Data.Models.RP
         public const string ERROR = "Error";
     }
 }
+

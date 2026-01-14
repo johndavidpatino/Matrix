@@ -18,13 +18,13 @@ namespace MatrixNext.Web.Models.EQ
         public int QuoteHeaderId { get; set; }
 
         [ForeignKey(nameof(QuoteHeaderId))]
-        public virtual EqQuoteHeader QuoteHeader { get; set; }
+        public virtual EqQuoteHeader? QuoteHeader { get; set; }
 
         [Range(1, 3)]
         public int TipoVisita { get; set; } // 1, 2, 3
 
         [StringLength(100)]
-        public string Complejidad { get; set; }
+        public string? Complejidad { get; set; }
 
         public int NumOlas { get; set; } = 1;
 
@@ -47,3 +47,4 @@ namespace MatrixNext.Web.Models.EQ
         public DateTime FechaModificacion { get; set; } = DateTime.UtcNow;
     }
 }
+

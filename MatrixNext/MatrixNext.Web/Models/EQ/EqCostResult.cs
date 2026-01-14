@@ -18,10 +18,10 @@ namespace MatrixNext.Web.Models.EQ
         public int QuoteHeaderId { get; set; }
 
         [ForeignKey(nameof(QuoteHeaderId))]
-        public virtual EqQuoteHeader QuoteHeader { get; set; }
+        public virtual EqQuoteHeader? QuoteHeader { get; set; }
 
         [StringLength(10)]
-        public string Moneda { get; set; } = "COP";
+        public string? Moneda { get; set; } = "COP";
 
         // Rubros principales
         public decimal CostoCampo { get; set; }
@@ -84,3 +84,4 @@ namespace MatrixNext.Web.Models.EQ
         public DateTime FechaModificacion { get; set; } = DateTime.UtcNow;
     }
 }
+
