@@ -4,7 +4,8 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using Dapper;
-using MatrixNext.Data.Entities;
+using MatrixNext.Data.Context;
+using MatrixNext.Data.Modules.CU.Entities;
 using MatrixNext.Data.Modules.CU.Models;
 using Microsoft.Extensions.Configuration;
 

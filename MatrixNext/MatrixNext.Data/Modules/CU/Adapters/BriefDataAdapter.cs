@@ -3,7 +3,8 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using Dapper;
-using MatrixNext.Data.Entities;
+using MatrixNext.Data.Context;
+using MatrixNext.Data.Modules.CU.Entities;
 using Microsoft.Extensions.Configuration;
 
 namespace MatrixNext.Data.Adapters.CU

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using MatrixNext.Data.Adapters.PY.Models;
-using MatrixNext.Data.Entities;
+using MatrixNext.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 

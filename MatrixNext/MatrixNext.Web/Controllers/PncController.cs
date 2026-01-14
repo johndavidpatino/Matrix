@@ -661,13 +661,4 @@ namespace MatrixNext.Web.Controllers
         }
     }
 
-    /// <summary>
-    /// Response genérico para todas las API
-    /// </summary>
-    public class ApiResponse<T>
-    {
-        public bool Success { get; set; }
-        public T? Data { get; set; }
-        public string Message { get; set; } = string.Empty;
-    }
 }

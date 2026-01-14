@@ -1,5 +1,6 @@
 using MatrixNext.Data.Adapters.CU;
-using MatrixNext.Data.Entities;
+using MatrixNext.Data.Context;
+using MatrixNext.Data.Modules.CU.Entities;
 using MatrixNext.Data.Services.CU;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

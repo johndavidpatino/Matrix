@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using MatrixNext.Data.Adapters.CU;
-using MatrixNext.Data.Entities;
+using MatrixNext.Data.Modules.CU.Entities;
 using MatrixNext.Data.Modules.CU.Models;
 using MatrixNext.Data.Modules.US.Usuarios.Adapters;
 using Microsoft.Extensions.Configuration;

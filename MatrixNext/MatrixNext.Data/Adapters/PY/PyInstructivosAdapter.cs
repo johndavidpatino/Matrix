@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MatrixNext.Data.Adapters.PY.Models;
-using MatrixNext.Data.Entities;
+using MatrixNext.Data.Context;
 
 namespace MatrixNext.Data.Adapters.PY
 {

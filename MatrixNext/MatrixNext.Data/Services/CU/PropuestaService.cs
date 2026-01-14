@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MatrixNext.Data.Adapters.CU;
-using MatrixNext.Data.Entities;
+using MatrixNext.Data.Modules.CU.Entities;
 using MatrixNext.Data.Modules.CU.Models;
 using Microsoft.Extensions.Logging;
 

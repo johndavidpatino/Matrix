@@ -6,10 +6,11 @@ using Microsoft.EntityFrameworkCore;
 using MatrixNext.Web.Models.EQ;
 using MatrixNext.Web.DTOs;
 using MatrixNext.Web.Infrastructure.Data;
-using MatrixNext.Web.Areas.EQ.Services.Internal;
 using MatrixNext.Web.Services.EQ.Adapters;
 using MatrixNext.Web.Areas.EQ.Models;
+using MatrixNext.Web.Areas.EQ.Services.Internal;
 using MatrixNext.Data.Services;
+using MatrixNext.Web.Areas.EQ.Controllers.Api;
 
 namespace MatrixNext.Web.Services.EQ
 {
@@ -46,7 +47,7 @@ namespace MatrixNext.Web.Services.EQ
         /// <summary>
         /// Guarda quote completa con cálculo de costos
         /// </summary>
-        public async Task<Controllers.Api.SaveQuoteResult> SaveQuoteWithCostAsync(EasyQuoteViewModel vm, DateTime? fechaCotizacion = null)
+        public async Task<SaveQuoteResult> SaveQuoteWithCostAsync(EasyQuoteViewModel vm, DateTime? fechaCotizacion = null)
         {
             using var transaction = await _context.Database.BeginTransactionAsync();
             
@@ -103,7 +104,7 @@ namespace MatrixNext.Web.Services.EQ
 
                 _logger.LogInformation("Quote {QuoteId} guardada exitosamente con costos", entity.Id);
 
-                return new Controllers.Api.SaveQuoteResult
+                return new SaveQuoteResult
                 {
                     QuoteId = entity.Id,
                     Summary = summary,

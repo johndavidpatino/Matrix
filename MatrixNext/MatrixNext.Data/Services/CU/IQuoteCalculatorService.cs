@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
-using MatrixNext.Data.Entities;
+using MatrixNext.Data.Context;
+using MatrixNext.Data.Modules.CU.Entities;
+using MatrixNext.Data.Modules.IQ.Entities;
 using Microsoft.Extensions.Logging;
 
 namespace MatrixNext.Data.Services.CU
