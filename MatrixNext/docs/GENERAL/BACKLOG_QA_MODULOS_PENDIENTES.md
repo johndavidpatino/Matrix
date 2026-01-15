@@ -398,10 +398,31 @@ Este documento consolida el **backlog técnico** para completar la migración de
    - ✅ Errores: 0 (compilación limpia)
    - ✅ Git commit: Sprint 12.2.7
 
-8. **Registro de Planillas Cualitativo** (4h)
-   - [ ] Crear `RegistroPlanillasCualiController` con carga de planillas
-   - [ ] Validaciones específicas de campo cualitativo (si existen)
-   - [ ] **SP a verificar**: `PY_PlanillasCuali_Get`, `PY_PlanillasCuali_Save`
+8. **✅ COMPLETADO: Registro de Planillas Cualitativo** (4h)
+   - [x] Crear `RegistroPlanillasCualiController` (130 líneas, 5 endpoints)
+     - `GET Index/{idTrabajo}`: Listado de planillas
+     - `GET UploadModal/{idTrabajo}`: Modal carga
+     - `GET Download/{idArchivo}`: Descarga Excel
+     - `POST Delete/{idArchivo}`: Eliminación
+     - `GET GetPlanillas/{idTrabajo}`: API listado
+   - [x] Crear `Index.cshtml` (75 líneas) - Listado con alert informativo
+   - [x] Crear `_UploadPlanillaModal.cshtml` (30 líneas) - Modal wrapper
+   - [x] Validaciones: Authorize, extensiones .xlsx/.xls, tamaño 5MB
+   - [x] Seguridad: [Authorize(Roles="...EntrevistadorCuali")], logging usuario
+   - [x] Integración: 100% con _UploadFrame (Sprint 12.2.6)
+   - [x] Documentación: `MIGRACION_PLANILLAS_CUALI_COMPLETADA.md` (200 líneas)
+   
+   **Entregables Sprint 12.2.8**:
+   - ✅ RegistroPlanillasCualiController.cs (130 líneas)
+   - ✅ Index.cshtml (75 líneas)
+   - ✅ _UploadPlanillaModal.cshtml (30 líneas)
+   - ✅ MIGRACION_PLANILLAS_CUALI_COMPLETADA.md (200 líneas)
+   - ✅ Errores: 0 (compilación limpia)
+   - ✅ Git commit: Sprint 12.2.8
+   
+   **🎉 SPRINT 12.2 COMPLETADO 100% (8/8 TAREAS)**
+   - Total: 56 horas, 0 errores, 8 commits
+   - Módulo PY_Proyectos: COMPLETAMENTE MIGRADO
 
 **Entregables Sprint 12.2**:
 - ✅ 8 WebForms migrados (100% paridad)

@@ -1,0 +1,36 @@
+@using MatrixNext.Web.ViewModels
+@model UploadFrameModel
+
+<!-- Modal para Upload de Planillas Cualitativo -->
+<div class="modal fade" id="planillaModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-upload"></i> @Model.TituloSeccion
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                @await Html.PartialAsync("_UploadFrame", Model)
+            </div>
+
+            <div class="modal-footer">
+                <small class="text-muted">
+                    <i class="fas fa-check"></i> Se permitirá únicamente archivos Excel
+                </small>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times"></i> Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        // Auto-mostrar modal cuando se carga desde AJAX
+        $('#planillaModal').modal('show');
+    });
+</script>
