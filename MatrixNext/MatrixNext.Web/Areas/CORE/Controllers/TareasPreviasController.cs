@@ -1,10 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using MatrixNext.Web.Infrastructure.Data;
 using MatrixNext.Web.Models.CORE;
-using MatrixNext.Web.Services;
 using MatrixNext.Web.Services.CORE;
+using System.Linq;
 
 namespace MatrixNext.Web.Areas.CORE.Controllers
 {
@@ -13,34 +11,29 @@ namespace MatrixNext.Web.Areas.CORE.Controllers
     [Route("CORE/[controller]/[action]")]
     public class TareasPreviasController : Controller
     {
-        private readonly MatrixDbContext _db;
         private readonly ITareasPreviasService _service;
 
         public TareasPreviasController(
-            MatrixDbContext db, 
             ITareasPreviasService service)
         {
-            _db = db;
             _service = service;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var list = await _db.TareasPrevias
-                .AsNoTracking()
+            var list = (await _service.ObtenerTodasAsync())
                 .OrderByDescending(x => x.Id)
-                .ToListAsync();
+                .ToList();
             return View(list);
         }
 
         [HttpGet]
         public async Task<IActionResult> Grid()
         {
-            var list = await _db.TareasPrevias
-                .AsNoTracking()
+            var list = (await _service.ObtenerTodasAsync())
                 .OrderByDescending(x => x.Id)
-                .ToListAsync();
+                .ToList();
             return PartialView("_GridTable", list);
         }
 

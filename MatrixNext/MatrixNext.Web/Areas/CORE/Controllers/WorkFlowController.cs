@@ -14,33 +14,25 @@ namespace MatrixNext.Web.Areas.CORE.Controllers
     [Route("CORE/[controller]/[action]")]
     public class WorkFlowController : Controller
     {
-        private readonly MatrixDbContext _db;
-        private readonly IGridService _grid;
         private readonly IWorkFlowService _service;
 
         public WorkFlowController(
-            MatrixDbContext db, 
-            IGridService grid,
             IWorkFlowService service)
         {
-            _db = db;
-            _grid = grid;
             _service = service;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index(int page = 1, int size = 10, string sortBy = "Id", bool desc = true)
         {
-            var query = _db.WorkFlows.AsNoTracking();
-            var result = await _grid.PaginarAsync(query, page, size, sortBy, desc);
+            var result = await _service.ObtenerPaginadoAsync(page, size, sortBy, desc);
             return View(result);
         }
 
         [HttpGet]
         public async Task<IActionResult> Grid(int page = 1, int size = 10, string sortBy = "Id", bool desc = true)
         {
-            var query = _db.WorkFlows.AsNoTracking();
-            var result = await _grid.PaginarAsync(query, page, size, sortBy, desc);
+            var result = await _service.ObtenerPaginadoAsync(page, size, sortBy, desc);
             return PartialView("_GridTable", result);
         }
 

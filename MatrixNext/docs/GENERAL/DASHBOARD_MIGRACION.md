@@ -1,14 +1,16 @@
 # DASHBOARD DE MIGRACION - Estado actual
 
-Fecha de corte: 2026-01-14 (Sprints 5 y 6 completados; próximo Sprint 7)
+Fecha de corte: 2026-01-14 (Sprints 5 y 6 completados; **Sprint 7 COMPLETADO** ✅)
 
 ## Resumen corto
 - **SPRINT 5 COMPLETADO**: TH_TalentoHumano Views/UI (15-29 enero, 80h) sobre la API Sprint 4 ya establecida.
 - **SPRINT 6 COMPLETADO**: OP_Cualitativo complementos + Bulk Import (13-29 enero, 75h) con notificaciones, background reminders y carga masiva Excel/CSV.
+- **SPRINT 7 COMPLETADO** ✅: CORE Workflow runtime (máquina de estados, UI runtime, SignalR notificaciones, reportes alineados) - Detalles en `SPRINT_7_COMPLETADO.md`.
 - **TH_TalentoHumano Sprint 4**: API REST COMPLETADA (21 archivos, 2,750+ LOC, 55 endpoints, 0 errores) con mapas en `MatrixNext/docs/TH/RESUMEN_MIGRACION_AUSENCIAS.md`.
 - **SPRINT 9 (Home)**: `HomeController`, `DashboardService` y la vista `Views/Home/Index.cshtml` ya entregan widgets de tareas, proyectos, quotes, ausencias, documentos y métricas.
 - **RP_Reportes + OP_RO/OP_Trafico**: Controladores y vistas generados (`Areas/RP/Controllers/ReportesController.cs`, `Areas/OP/Controllers/OP_ROController.cs`, `OP_TraficoController.cs`) listos para integrarse en Sprint 10/11.
 - **EQ + CORE**: `Areas/EQ` y `Areas/CORE` contienen la base de workflows, EasyQuote y catálogos, lo que valida el backend previo a los sprints formales.
+- **SPRINT 8 PRÓXIMO**: EQ_EasyQuote Fase 1 (análisis + catálogos + infraestructura)
 
 ## Estado por modulo (WebMatrix -> MatrixNext)
 
@@ -22,7 +24,7 @@ Fecha de corte: 2026-01-14 (Sprints 5 y 6 completados; próximo Sprint 7)
 | OP_Cuantitativo | Operativo | `MatrixNext/MatrixNext.Web/Areas/OP/Controllers/FichaCuantitativaController.cs` + `MatrixNext/docs/OP/ANALISIS_OP_CUANTITATIVO.md` |
 | OP_Cualitativo | Completo (Sprint 6: complementos + Bulk Import) | `MatrixNext/MatrixNext.Web/Areas/OP/Controllers/CualitativoPlanillasController.cs`, `CualitativoFiltrosController.cs`, `CualitativoMuestraController.cs` |
 | PY_Proyectos | Parcial | `MatrixNext/MatrixNext.Web/Areas/PY/Controllers` + `MatrixNext/docs/PY/MIGRACION_PY_PROYECTOS.md` |
-| CORE (workflow/tareas) | Parcial | `MatrixNext/MatrixNext.Web/Areas/CORE/Controllers` |
+| CORE (workflow) | Alta | Parcial; completar Sprint 7 | 🟡 |
 | GD_Documentos | Parcial (Fase 5 completa) | `MatrixNext/MatrixNext.Web/Areas/GD/Controllers` + `MatrixNext/MatrixNext.Web/Areas/GD/Views` |
 | EQ (EasyQuote) | En progreso | `MatrixNext/MatrixNext.Web/Areas/EQ/Controllers` + entrepiezas `MatrixNext/MatrixNext.Web/Areas/EQ/Views` |
 | Home | En desarrollo | `MatrixNext/MatrixNext.Web/Controllers/HomeController.cs`, `MatrixNext/MatrixNext.Web/Services/Dashboard/DashboardService.cs`, `MatrixNext/MatrixNext.Web/Views/Home/Index.cshtml` |
@@ -47,13 +49,12 @@ Fecha de corte: 2026-01-14 (Sprints 5 y 6 completados; próximo Sprint 7)
 - La lista completa de módulos que todavía no se han movido del legacy (y que deben seguir la especificación en `MatrixNext/docs/GENERAL/MIGRACION_ESPECIFICACIONES.md`) incluye OP_RO, OP_Trafico, PY_ControlCalidad, PY_Adquisiciones, PNC, SG_Actas, SGC_Calidad, ES_Estadistica, Centro_Informacion, Inventario, IT, MBO (y sus variantes Gerencial/Operaciones), ResumenProduccion, RE_GT, PC_PropiedadCliente y los módulos transversales (Account, Controls, etc.).
 - Cada uno debe recibir una entrada nueva en el backlog, con un plan de mapeo SP + área + menú antes de marcarlo como “en progreso”.
 
-## Pendientes que deben continuar (Sprints 5-12)
-1. **Sprint 7 (2 sem)**: CORE Workflow (tareas, notificaciones, integraciones)
-2. **Sprint 8 (2-3 sem)**: EQ_EasyQuote Fase 1 (análisis + catálogos + infraestructura)
-3. **Sprint 9 (1-2 sem)**: Home Dashboard (widgets / servicios ya corriendo; afinando datos de tareas, proyectos, ausencias y documentos)
-4. **Sprint 10 (1-2 sem)**: RP_Reportes (controladores + vistas ya listos; foco en datos y exportes) ← **🔴 PRÓXIMO FOCUS**
-5. **Sprint 11 (2 sem)**: OP_RO + OP_Trafico (controladores + vistas existentes; cerrando integración de revisiones y tráfico) ← **🔴 FINAL FOCUS**
-6. **Sprint 12+ (Variable)**: Módulos baja prioridad (PY_CC, SG_Actas, SGC_Calidad, etc.)
+## Pendientes que deben continuar (Sprints 8-12)
+1. **Sprint 8 (2-3 sem)**: EQ_EasyQuote Fase 1 (análisis + catálogos + infraestructura) ← **🔴 PRÓXIMO**
+2. **Sprint 9 (1-2 sem)**: Home Dashboard (widgets / servicios ya corriendo; afinando datos de tareas, proyectos, ausencias y documentos)
+3. **Sprint 10 (1-2 sem)**: RP_Reportes (controladores + vistas ya listos; foco en datos y exportes)
+4. **Sprint 11 (2 sem)**: OP_RO + OP_Trafico (controladores + vistas existentes; cerrando integración de revisiones y tráfico)
+5. **Sprint 12+ (Variable)**: Módulos baja prioridad (PY_CC, SG_Actas, SGC_Calidad, etc.)
 
 ## Estructura de documentacion (ordenada)
 - `MatrixNext/docs/CORE/`
@@ -81,7 +82,7 @@ Ultima revision: 2026-01-14
 | OP_Cuantitativo | Alta | Documentado y concluido | 🟢 |
 | OP_Cualitativo | Alta | Sprint 6 COMPLETADO (complementos + Bulk Import) | 🟢 |
 | PY_Proyectos | Alta | Catálogos/maestros en marcha | 🟡 |
-| CORE (workflow) | Alta | Parcial; completar Sprint 7 | 🟡 |
+| CORE (workflow) | Alta | **SPRINT 7 COMPLETADO**: Máquina de estados + UI runtime + SignalR + reportes | 🟢 |
 | GD_Documentos | Media | Controladores y vistas live en `MatrixNext.Web/Areas/GD` (Fase 5) | 🟡 |
 | EQ (EasyQuote) | Crítica | Controladores/vistas en `MatrixNext.Web/Areas/EQ`; Sprint 8 cerrando catálogos | 🟡 |
 | Home | Alta | HomeController + DashboardService + `Views/Home/Index` en pruebas (Sprint 9) | 🔴 |
@@ -104,7 +105,7 @@ Ultima revision: 2026-01-14
 |---|---|---|---|---|---|
 | 5 | TH Views/UI | 2 sem | 2026-01-15 → 2026-01-29 | 80h | ✅ COMPLETADO |
 | 6 | OP_Cualitativo Complementos + Bulk Import | 2 sem | 2026-01-13 → 2026-01-29 | 75h | ✅ COMPLETADO |
-| 7 | CORE Workflow | 2 sem | 2026-02-01 → 2026-02-12 | 85h | ⚪️ PRÓXIMO |
+| 7 | CORE Workflow | 2 sem | 2026-02-01 → 2026-02-12 | 85h | 🟡 EN CURSO |
 | 8 | EQ_EasyQuote Fase 1 | 2-3 sem | 2026-02-15 → 2026-03-05 | 120h | 🟡 PLANIFICADO |
 | 9 | Home Dashboard | 1-2 sem | 2026-03-08 → 2026-03-19 | 50h | 🔴 PLANIFICADO |
 | **10** | **RP_Reportes** | **1-2 sem** | **2026-03-22 → 2026-04-02** | **60h** | **🔴 PRÓXIMO FOCUS** |

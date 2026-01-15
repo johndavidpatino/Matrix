@@ -1,0 +1,189 @@
+@{
+    ViewData["Title"] = "Configuración: Documentos por Tarea";
+}
+
+<div class="container-fluid py-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h4 class="mb-1">Documentos requeridos por tarea</h4>
+            <p class="text-muted mb-0">Usa el SP legacy CORE_Configuracion_DocumentosXTarea_Get para asignar o quitar documentos.</p>
+        </div>
+        <div class="text-end">
+            <small class="text-muted">Sprint 7 · Configuración</small>
+        </div>
+    </div>
+
+    <form id="filtroDocsForm" class="row gy-2 gx-3 align-items-end mb-3">
+        @Html.AntiForgeryToken()
+        <div class="col-sm-3">
+            <label class="form-label" for="tareaId">Tarea (Id)</label>
+            <input type="number" class="form-control" id="tareaId" name="tareaId" min="1" required>
+        </div>
+        <div class="col-sm-3">
+            <label class="form-label" for="tipoDocumentoTareaId">Tipo Documento Tarea (Id)</label>
+            <input type="number" class="form-control" id="tipoDocumentoTareaId" name="tipoDocumentoTareaId" min="1" required>
+        </div>
+        <div class="col-sm-2">
+            <label class="form-label" for="asignado">Asignado</label>
+            <select class="form-select" id="asignado" name="asignado">
+                <option value="">Todos</option>
+                <option value="true">Asignados</option>
+                <option value="false">No asignados</option>
+            </select>
+        </div>
+        <div class="col-sm-2">
+            <label class="form-label" for="esOpcional">¿Opcional al asignar?</label>
+            <select class="form-select" id="esOpcional" name="esOpcional">
+                <option value="false">No</option>
+                <option value="true">Sí</option>
+            </select>
+        </div>
+        <div class="col-sm-2">
+            <button type="button" class="btn btn-primary" id="btnBuscarDocs">Buscar</button>
+        </div>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-striped align-middle" id="gridDocs">
+            <thead>
+                <tr>
+                    <th style="width: 8%">Id</th>
+                    <th style="width: 32%">Documento</th>
+                    <th style="width: 12%">Código</th>
+                    <th style="width: 12%">Proceso</th>
+                    <th style="width: 12%">Opcional</th>
+                    <th style="width: 12%">Controlado</th>
+                    <th style="width: 12%" class="text-end">Acciones</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            const gridBody = document.querySelector('#gridDocs tbody');
+            const btnBuscar = document.getElementById('btnBuscarDocs');
+            const form = document.getElementById('filtroDocsForm');
+            const token = form.querySelector('input[name="__RequestVerificationToken"]').value;
+            const toastEl = document.getElementById('appToast');
+            const toastBody = document.getElementById('appToastBody');
+            const toast = toastEl ? bootstrap.Toast.getOrCreateInstance(toastEl) : null;
+
+            const notify = (message) => {
+                if (typeof window.showToast === 'function') {
+                    window.showToast(message);
+                    return;
+                }
+                if (toastBody) toastBody.textContent = message;
+                if (toast) {
+                    toastEl.classList.remove('bg-primary', 'bg-success', 'bg-danger');
+                    toastEl.classList.add('bg-primary');
+                    toast.show();
+                } else {
+                    alert(message);
+                }
+            };
+
+            function renderRows(items) {
+                gridBody.innerHTML = '';
+                if (!items || items.length === 0) {
+                    gridBody.innerHTML = `<tr><td colspan="7" class="text-center text-muted py-3">Sin resultados</td></tr>`;
+                    return;
+                }
+
+                items.forEach(x => {
+                    const opcional = x.esOpcional === true ? '<span class="badge bg-info">Sí</span>' : '<span class="badge bg-secondary">No</span>';
+                    const controlado = x.controlado === true ? '<span class="badge bg-success">Controlado</span>' : '<span class="badge bg-light text-muted">No</span>';
+                    const btn = x.asignado
+                        ? `<button class="btn btn-sm btn-outline-danger" data-action="desasignar" data-doc="${x.idDocumento}">Quitar</button>`
+                        : `<button class="btn btn-sm btn-outline-primary" data-action="asignar" data-doc="${x.idDocumento}">Asignar</button>`;
+
+                    gridBody.insertAdjacentHTML('beforeend', `
+                        <tr>
+                            <td>${x.id}</td>
+                            <td>${x.documento}</td>
+                            <td>${x.codigo ?? '-'}</td>
+                            <td>${x.idProceso ?? '-'}</td>
+                            <td>${opcional}</td>
+                            <td>${controlado}</td>
+                            <td class="text-end">${btn}</td>
+                        </tr>`);
+                });
+            }
+
+            async function cargar() {
+                const tareaId = Number(document.getElementById('tareaId').value);
+                const tipoDocumentoTareaId = Number(document.getElementById('tipoDocumentoTareaId').value);
+                if (!tareaId || !tipoDocumentoTareaId) {
+                    notify('Ingrese TareaId y TipoDocumentoTareaId');
+                    return;
+                }
+                const asignado = document.getElementById('asignado').value;
+                const params = new URLSearchParams({ tareaId, tipoDocumentoTareaId });
+                if (asignado !== '') params.append('asignado', asignado);
+
+                try {
+                    const resp = await fetch(`/CORE/TareasDocumentos/List?${params.toString()}`);
+                    const data = await resp.json();
+                    if (!data.success) {
+                        notify(data.message || 'Error al obtener datos');
+                        return;
+                    }
+                    renderRows(data.data);
+                } catch (err) {
+                    notify('Error de red al consultar documentos');
+                    console.error(err);
+                }
+            }
+
+            async function cambiarAsignacion(documentoId, asignar) {
+                const tareaId = Number(document.getElementById('tareaId').value);
+                const tipoDocumentoTareaId = Number(document.getElementById('tipoDocumentoTareaId').value);
+                const esOpcional = document.getElementById('esOpcional').value === 'true';
+                if (!tareaId || !tipoDocumentoTareaId) {
+                    notify('Ingrese TareaId y TipoDocumentoTareaId');
+                    return;
+                }
+
+                const url = asignar ? '/CORE/TareasDocumentos/Asignar' : '/CORE/TareasDocumentos/Desasignar';
+                const formData = new FormData();
+                formData.append('tareaId', tareaId);
+                formData.append('documentoId', documentoId);
+                formData.append('tipoDocumentoTareaId', tipoDocumentoTareaId);
+                if (asignar) formData.append('esOpcional', esOpcional);
+                formData.append('__RequestVerificationToken', token);
+
+                try {
+                    const resp = await fetch(url, {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const data = await resp.json();
+                    notify(data.message || (asignar ? 'Asignación realizada' : 'Desasignación realizada'));
+                    if (data.success) {
+                        cargar();
+                    }
+                } catch (err) {
+                    notify('Error de red al cambiar asignación');
+                    console.error(err);
+                }
+            }
+
+            gridBody.addEventListener('click', (e) => {
+                const btn = e.target.closest('button[data-action]');
+                if (!btn) return;
+                const docId = btn.getAttribute('data-doc');
+                const action = btn.getAttribute('data-action');
+                cambiarAsignacion(docId, action === 'asignar');
+            });
+
+            btnBuscar.addEventListener('click', (e) => {
+                e.preventDefault();
+                cargar();
+            });
+        })();
+    </script>
+}

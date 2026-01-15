@@ -1,0 +1,171 @@
+@{
+    ViewData["Title"] = "Configuración: Tareas por Tipo de Hilo";
+}
+
+<div class="container-fluid py-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h4 class="mb-1">Tareas por Tipo de Hilo</h4>
+            <p class="text-muted mb-0">Asigna o quita tareas de un tipo de hilo usando el SP legacy CORE_Configuracion_TareasXTipoHilo_Get.</p>
+        </div>
+        <div class="text-end">
+            <small class="text-muted">Sprint 7 · Configuración</small>
+        </div>
+    </div>
+
+    <form id="filtroForm" class="row gy-2 gx-3 align-items-end mb-3">
+        @Html.AntiForgeryToken()
+        <div class="col-sm-3">
+            <label class="form-label" for="tipoHiloId">Tipo de Hilo (Id)</label>
+            <input type="number" class="form-control" id="tipoHiloId" name="tipoHiloId" min="1" required>
+        </div>
+        <div class="col-sm-3">
+            <label class="form-label" for="asignada">Asignada</label>
+            <select class="form-select" id="asignada" name="asignada">
+                <option value="">Todas</option>
+                <option value="true">Solo asignadas</option>
+                <option value="false">No asignadas</option>
+            </select>
+        </div>
+        <div class="col-sm-3">
+            <button type="button" class="btn btn-primary" id="btnBuscar">Buscar</button>
+        </div>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-striped align-middle" id="gridTareas">
+            <thead>
+                <tr>
+                    <th style="width: 8%">Id</th>
+                    <th style="width: 28%">Tarea</th>
+                    <th style="width: 12%">Orden</th>
+                    <th style="width: 12%">Visible</th>
+                    <th style="width: 12%">Rol Ejecuta</th>
+                    <th style="width: 12%">Unidad Ejecuta</th>
+                    <th style="width: 16%" class="text-end">Acciones</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            const gridBody = document.querySelector('#gridTareas tbody');
+            const btnBuscar = document.getElementById('btnBuscar');
+            const form = document.getElementById('filtroForm');
+            const token = form.querySelector('input[name="__RequestVerificationToken"]').value;
+            const toastEl = document.getElementById('appToast');
+            const toastBody = document.getElementById('appToastBody');
+            const toast = toastEl ? bootstrap.Toast.getOrCreateInstance(toastEl) : null;
+
+            const notify = (message) => {
+                if (typeof window.showToast === 'function') {
+                    window.showToast(message);
+                    return;
+                }
+                if (toastBody) toastBody.textContent = message;
+                if (toast) {
+                    toastEl.classList.remove('bg-primary', 'bg-success', 'bg-danger');
+                    toastEl.classList.add('bg-primary');
+                    toast.show();
+                } else {
+                    alert(message);
+                }
+            };
+
+            function renderRows(items) {
+                gridBody.innerHTML = '';
+                if (!items || items.length === 0) {
+                    gridBody.innerHTML = `<tr><td colspan="7" class="text-center text-muted py-3">Sin resultados</td></tr>`;
+                    return;
+                }
+
+                items.forEach(x => {
+                    const visible = x.visible === true ? '<span class="badge bg-success">Sí</span>' : '<span class="badge bg-secondary">No</span>';
+                    const btn = x.asignada
+                        ? `<button class="btn btn-sm btn-outline-danger" data-action="desasignar" data-tarea="${x.id}">Quitar</button>`
+                        : `<button class="btn btn-sm btn-outline-primary" data-action="asignar" data-tarea="${x.id}">Asignar</button>`;
+
+                    gridBody.insertAdjacentHTML('beforeend', `
+                        <tr>
+                            <td>${x.id}</td>
+                            <td>${x.tarea}</td>
+                            <td>${x.orden ?? ''}</td>
+                            <td>${visible}</td>
+                            <td>${x.textoRolEjecuta ?? '-'}</td>
+                            <td>${x.textoUnidadEjecuta ?? '-'}</td>
+                            <td class="text-end">${btn}</td>
+                        </tr>`);
+                });
+            }
+
+            async function cargar() {
+                const tipoHiloId = Number(document.getElementById('tipoHiloId').value);
+                if (!tipoHiloId) {
+                    notify('Ingrese un Id de tipo de hilo');
+                    return;
+                }
+                const asignada = document.getElementById('asignada').value;
+                const params = new URLSearchParams({ tipoHiloId });
+                if (asignada !== '') params.append('asignada', asignada);
+
+                try {
+                    const resp = await fetch(`/CORE/TareasXHilo/List?${params.toString()}`);
+                    const data = await resp.json();
+                    if (!data.success) {
+                        notify(data.message || 'Error al obtener datos');
+                        return;
+                    }
+                    renderRows(data.data);
+                } catch (err) {
+                    notify('Error de red al consultar tareas');
+                    console.error(err);
+                }
+            }
+
+            async function cambiarAsignacion(tareaId, asignar) {
+                const tipoHiloId = Number(document.getElementById('tipoHiloId').value);
+                if (!tipoHiloId) {
+                    notify('Ingrese un Id de tipo de hilo');
+                    return;
+                }
+                const url = asignar ? '/CORE/TareasXHilo/Asignar' : '/CORE/TareasXHilo/Desasignar';
+                const formData = new FormData();
+                formData.append('tipoHiloId', tipoHiloId);
+                formData.append('tareaId', tareaId);
+                formData.append('__RequestVerificationToken', token);
+
+                try {
+                    const resp = await fetch(url, {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const data = await resp.json();
+                    notify(data.message || (asignar ? 'Asignación realizada' : 'Desasignación realizada'));
+                    if (data.success) {
+                        cargar();
+                    }
+                } catch (err) {
+                    notify('Error de red al cambiar asignación');
+                    console.error(err);
+                }
+            }
+
+            gridBody.addEventListener('click', (e) => {
+                const btn = e.target.closest('button[data-action]');
+                if (!btn) return;
+                const tareaId = btn.getAttribute('data-tarea');
+                const action = btn.getAttribute('data-action');
+                cambiarAsignacion(tareaId, action === 'asignar');
+            });
+
+            btnBuscar.addEventListener('click', (e) => {
+                e.preventDefault();
+                cargar();
+            });
+        })();
+    </script>
+}

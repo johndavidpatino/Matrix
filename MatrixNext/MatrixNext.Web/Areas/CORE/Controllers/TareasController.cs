@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using MatrixNext.Web.Infrastructure.Data;
-using MatrixNext.Web.Models.CORE;
-using MatrixNext.Web.Services;
+using MatrixNext.Web.Services.CORE;
+using System.Linq;
 
 namespace MatrixNext.Web.Areas.CORE.Controllers
 {
@@ -16,13 +14,11 @@ namespace MatrixNext.Web.Areas.CORE.Controllers
     [Route("CORE/[controller]/[action]")]
     public class TareasController : Controller
     {
-        private readonly MatrixDbContext _db;
-        private readonly IGridService _grid;
+        private readonly ITareasService _tareasService;
 
-        public TareasController(MatrixDbContext db, IGridService grid)
+        public TareasController(ITareasService tareasService)
         {
-            _db = db;
-            _grid = grid;
+            _tareasService = tareasService;
         }
 
         /// <summary>
@@ -31,35 +27,10 @@ namespace MatrixNext.Web.Areas.CORE.Controllers
         [HttpGet]
         public async Task<IActionResult> Lookup(string q = "", int limit = 20)
         {
-            var query = _db.Tareas
-                .AsNoTracking()
-                .Where(t => t.Visible == true);
+            var items = await _tareasService.BuscarLookupAsync(q, limit);
+            var response = items.Select(t => new { id = t.Id, text = t.Nombre });
 
-            if (!string.IsNullOrWhiteSpace(q))
-            {
-                // Buscar por ID o por nombre
-                if (long.TryParse(q, out var id))
-                {
-                    query = query.Where(t => t.Id == id || t.Nombre.Contains(q));
-                }
-                else
-                {
-                    query = query.Where(t => t.Nombre.Contains(q));
-                }
-            }
-
-            var items = await query
-                .OrderBy(t => t.Orden)
-                .ThenBy(t => t.Nombre)
-                .Take(limit)
-                .Select(t => new
-                {
-                    id = t.Id,
-                    text = t.Nombre
-                })
-                .ToListAsync();
-
-            return Json(items);
+            return Json(response);
         }
 
         /// <summary>
@@ -68,18 +39,14 @@ namespace MatrixNext.Web.Areas.CORE.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(long id)
         {
-            var tarea = await _db.Tareas
-                .AsNoTracking()
-                .Where(t => t.Id == id)
-                .Select(t => new { id = t.Id, text = t.Nombre })
-                .FirstOrDefaultAsync();
+            var tarea = await _tareasService.ObtenerPorIdAsync(id);
 
             if (tarea == null)
             {
                 return NotFound();
             }
 
-            return Json(tarea);
+            return Json(new { id = tarea.Id, text = tarea.Nombre });
         }
     }
 }

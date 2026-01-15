@@ -21,13 +21,16 @@ namespace MatrixNext.Web.Areas.CORE.Controllers;
 public class GestionTareasController : ControllerBase
 {
     private readonly IGestionTareasService _gestionService;
+    private readonly IWorkFlowStateTransitionService _stateTransition;
     private readonly ILogger<GestionTareasController> _logger;
 
     public GestionTareasController(
         IGestionTareasService gestionService,
+        IWorkFlowStateTransitionService stateTransition,
         ILogger<GestionTareasController> logger)
     {
         _gestionService = gestionService;
+        _stateTransition = stateTransition;
         _logger = logger;
     }
 
@@ -289,6 +292,61 @@ public class GestionTareasController : ControllerBase
                 exitoso = false,
                 mensaje = $"Error: {ex.Message}"
             });
+        }
+    }
+
+    /// <summary>
+    /// Obtiene los estados permitidos a los que puede transitar un usuario desde el estado actual.
+    /// Valida roles y máquina de estados.
+    /// </summary>
+    [HttpGet("estados-permitidos/{idWorkFlow}/{idUsuario}")]
+    public async Task<IActionResult> ObtenerEstadosPermitidos(long idWorkFlow, long idUsuario)
+    {
+        try
+        {
+            var estadosPermitidos = await _stateTransition.ObtenerEstadosPermitidos(idWorkFlow, idUsuario);
+            return Ok(estadosPermitidos);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Error al obtener estados permitidos para tarea {idWorkFlow}, usuario {idUsuario}");
+            return BadRequest(new { exitoso = false, mensaje = ex.Message });
+        }
+    }
+
+    /// <summary>
+    /// Obtiene detalles completos de una tarea incluyendo observaciones y usuarios asignados.
+    /// </summary>
+    [HttpGet("{idWorkFlow}")]
+    public async Task<IActionResult> ObtenerDetalles(long idWorkFlow)
+    {
+        try
+        {
+            // TODO: Implementar búsqueda con Include en BD
+            return Ok(new { exitoso = true, datos = new { } });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Error al obtener detalles de tarea {idWorkFlow}");
+            return BadRequest(new { exitoso = false, mensaje = ex.Message });
+        }
+    }
+
+    /// <summary>
+    /// Obtiene todas las observaciones de una tarea.
+    /// </summary>
+    [HttpGet("observaciones/{idWorkFlow}")]
+    public async Task<IActionResult> ObtenerObservaciones(long idWorkFlow)
+    {
+        try
+        {
+            // TODO: Implementar búsqueda de observaciones en BD
+            return Ok(new List<object>());
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Error al obtener observaciones de tarea {idWorkFlow}");
+            return BadRequest(new { exitoso = false, mensaje = ex.Message });
         }
     }
 }

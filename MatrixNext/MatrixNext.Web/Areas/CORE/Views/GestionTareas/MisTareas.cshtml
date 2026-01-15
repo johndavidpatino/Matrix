@@ -1,0 +1,467 @@
+@model List<MatrixNext.Web.Models.CORE.WorkFlow>
+
+@{
+    ViewData["Title"] = "Mis Tareas de WorkFlow";
+    var userId = User.FindFirst("sub")?.Value ?? "0";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-3">
+        <div class="col-md-8">
+            <h2><i class="fas fa-tasks"></i> Mis Tareas de WorkFlow</h2>
+            <small class="text-muted">Gestión centralizada de tareas asignadas</small>
+        </div>
+        <div class="col-md-4 text-end">
+            <button class="btn btn-sm btn-outline-secondary" onclick="recargarTareas()">
+                <i class="fas fa-sync-alt"></i> Actualizar
+            </button>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="row g-2">
+                <div class="col-md-3">
+                    <select id="filtroEstado" class="form-select form-select-sm" onchange="filtrarPorEstado(this.value)">
+                        <option value="">Todos los estados</option>
+                        <option value="Creada">Creada</option>
+                        <option value="EnProgreso">En Progreso</option>
+                        <option value="Completada">Completada</option>
+                        <option value="Anulada">Anulada</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select id="filtroPrioridad" class="form-select form-select-sm" onchange="filtrarPorPrioridad(this.value)">
+                        <option value="">Todas las prioridades</option>
+                        <option value="1">Normal</option>
+                        <option value="2">Alta</option>
+                        <option value="3">Baja</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" id="busqueda" class="form-control form-control-sm" placeholder="Buscar por tarea o trabajo..." onkeyup="buscarTareas(this.value)">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grid de Tareas -->
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table table-hover table-sm mb-0" id="tablaTareas">
+                <thead class="table-light sticky-top">
+                    <tr>
+                        <th style="width: 10%">ID Tarea</th>
+                        <th style="width: 20%">Trabajo</th>
+                        <th style="width: 15%">Estado</th>
+                        <th style="width: 10%">Prioridad</th>
+                        <th style="width: 15%">Vencimiento</th>
+                        <th style="width: 20%">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaTareasBody">
+                    @if (Model?.Count > 0)
+                    {
+                        @foreach (var tarea in Model)
+                        {
+                            <tr data-id="@tarea.Id" data-estado="@tarea.Estado" data-prioridad="@tarea.Prioridad">
+                                <td>
+                                    <code>@tarea.IdTarea</code>
+                                </td>
+                                <td>
+                                    <strong>@tarea.IdTrabajo</strong>
+                                    <br>
+                                    <small class="text-muted">Tipo: @tarea.IdTipoHilo</small>
+                                </td>
+                                <td>
+                                    <span class="badge badge-@(tarea.Estado == "Creada" ? "warning" : tarea.Estado == "EnProgreso" ? "info" : tarea.Estado == "Completada" ? "success" : "danger")">
+                                        @tarea.Estado
+                                    </span>
+                                </td>
+                                <td>
+                                    @{
+                                        var prioridadClass = tarea.Prioridad == 2 ? "danger" : tarea.Prioridad == 1 ? "warning" : "secondary";
+                                        var prioridadTexto = tarea.Prioridad == 2 ? "Alta" : tarea.Prioridad == 1 ? "Normal" : "Baja";
+                                    }
+                                    <span class="badge badge-@prioridadClass">@prioridadTexto</span>
+                                </td>
+                                <td>
+                                    @if (tarea.FechaVencimiento.HasValue)
+                                    {
+                                        <small>@tarea.FechaVencimiento.Value.ToString("dd/MM/yyyy")</small>
+                                        @if (tarea.FechaVencimiento.Value < DateTime.UtcNow && tarea.Estado != "Completada")
+                                        {
+                                            <br><span class="badge bg-danger">Vencida</span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <small class="text-muted">Sin fecha</small>
+                                    }
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="abrirDetallesTarea(@tarea.Id, '@User.Identity?.Name')">
+                                        <i class="fas fa-eye"></i> Detalles
+                                    </button>
+                                    @if (tarea.Estado != "Completada" && tarea.Estado != "Anulada")
+                                    {
+                                        <button class="btn btn-sm btn-outline-success" onclick="abrirCambiarEstado(@tarea.Id, '@tarea.Estado')">
+                                            <i class="fas fa-arrow-right"></i> Avanzar
+                                        </button>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center py-4">
+                                <i class="fas fa-inbox" style="font-size: 2rem; color: #ccc;"></i>
+                                <p class="text-muted mt-2">No tienes tareas asignadas</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Detalles de Tarea -->
+<div class="modal fade" id="modalDetallesTarea" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-tasks"></i> Detalles de Tarea
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="detallesTareaContent">
+                <!-- Cargado dinámicamente -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Cambiar Estado -->
+<div class="modal fade" id="modalCambiarEstado" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-arrow-right"></i> Cambiar Estado de Tarea
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="formCambiarEstado" onsubmit="cambiarEstadoTarea(event)">
+                <input type="hidden" id="idWorkFlowEstado" name="idWorkFlow">
+                
+                <div class="modal-body">
+                    <div class="alert alert-info" id="validacionPrecedencias" style="display: none;"></div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Nuevo Estado</label>
+                        <div id="estadosDisponibles">
+                            <!-- Cargado dinámicamente -->
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="observacionEstado" class="form-label">
+                            Comentario (opcional)
+                        </label>
+                        <textarea id="observacionEstado" name="observacion" class="form-control" rows="3" placeholder="Describe el cambio de estado..."></textarea>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-check"></i> Confirmar Cambio
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Agregar Observación -->
+<div class="modal fade" id="modalObservacion" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-comment"></i> Agregar Observación
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="formObservacion" onsubmit="agregarObservacion(event)">
+                <input type="hidden" id="idWorkFlowObs" name="idWorkFlow">
+                
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="observacionTexto" class="form-label">Comentario</label>
+                        <textarea id="observacionTexto" name="observacion" class="form-control" rows="4" required placeholder="Ingresa tu comentario..."></textarea>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-check"></i> Agregar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const userId = @userId;
+
+        // Abre modal de detalles con información de la tarea y observaciones
+        async function abrirDetallesTarea(idWorkFlow, usuario) {
+            try {
+                // Obtener detalles y observaciones en paralelo
+                const [detallesRes, obsRes] = await Promise.all([
+                    fetch(`/api/core/gestionar-tareas/${idWorkFlow}`),
+                    fetch(`/api/core/gestionar-tareas/observaciones/${idWorkFlow}`)
+                ]);
+
+                if (!detallesRes.ok || !obsRes.ok) throw new Error('Error al cargar datos');
+
+                const detalles = await detallesRes.json();
+                const observaciones = await obsRes.json();
+
+                // Renderizar HTML con detalles y observaciones
+                const html = `
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <h6>ID Tarea</h6>
+                            <p><code>${detalles.idTarea}</code></p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>ID Trabajo</h6>
+                            <p><code>${detalles.idTrabajo}</code></p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <h6>Estado</h6>
+                            <p>
+                                <span class="badge badge-${detalles.estado === 'Creada' ? 'warning' : detalles.estado === 'EnProgreso' ? 'info' : detalles.estado === 'Completada' ? 'success' : 'danger'}">
+                                    ${detalles.estado}
+                                </span>
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Prioridad</h6>
+                            <p>
+                                ${detalles.prioridad === 2 ? '<span class="badge bg-danger">Alta</span>' : detalles.prioridad === 1 ? '<span class="badge bg-warning">Normal</span>' : '<span class="badge bg-secondary">Baja</span>'}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <h6>Vencimiento</h6>
+                        <p>${detalles.fechaVencimiento ? new Date(detalles.fechaVencimiento).toLocaleDateString() : 'Sin fecha'}</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <h6>Observaciones</h6>
+                        <div id="observacionesList" class="list-group list-group-flush" style="max-height: 300px; overflow-y: auto;">
+                            ${observaciones.length > 0 ? observaciones.map(o => `
+                                <div class="list-group-item py-2">
+                                    <div class="d-flex justify-content-between">
+                                        <strong>${o.usuario}</strong>
+                                        <small class="text-muted">${new Date(o.fechaCreacion).toLocaleString()}</small>
+                                    </div>
+                                    <p class="mb-0 small">${o.observacion}</p>
+                                </div>
+                            `).join('') : '<p class="text-muted text-center py-3">Sin observaciones</p>'}
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-primary mt-2" onclick="abrirAgregarObservacion(${idWorkFlow})">
+                            <i class="fas fa-plus"></i> Agregar Comentario
+                        </button>
+                    </div>
+
+                    <div class="alert alert-info mb-0">
+                        <strong>Asignados:</strong><br>
+                        ${detalles.usuariosAsignados?.length > 0 ? detalles.usuariosAsignados.map(u => 
+                            `<span class="badge bg-primary">${u.rol}: ${u.usuario}</span>`
+                        ).join(' ') : 'Sin asignados'}
+                    </div>
+                `;
+
+                document.getElementById('detallesTareaContent').innerHTML = html;
+                const modal = new bootstrap.Modal(document.getElementById('modalDetallesTarea'));
+                modal.show();
+            } catch (error) {
+                showToast('Error al cargar detalles de la tarea', 'error');
+                console.error(error);
+            }
+        }
+
+        // Abre modal para cambiar estado y obtiene estados permitidos
+        async function abrirCambiarEstado(idWorkFlow, estadoActual) {
+            try {
+                // Obtener estados permitidos según la máquina de estados
+                const res = await fetch(`/api/core/gestionar-tareas/estados-permitidos/${idWorkFlow}/${userId}`);
+                if (!res.ok) throw new Error('Error al obtener estados permitidos');
+
+                const estados = await res.json();
+
+                // Renderizar radio buttons para estados disponibles
+                const html = estados.length > 0 
+                    ? estados.map(est => `
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="nuevoEstado" id="estado_${est}" value="${est}">
+                            <label class="form-check-label" for="estado_${est}">
+                                ${est}
+                            </label>
+                        </div>
+                    `).join('')
+                    : '<p class="text-muted">No hay cambios de estado disponibles desde <strong>' + estadoActual + '</strong></p>';
+
+                document.getElementById('estadosDisponibles').innerHTML = html;
+                document.getElementById('idWorkFlowEstado').value = idWorkFlow;
+
+                const modal = new bootstrap.Modal(document.getElementById('modalCambiarEstado'));
+                modal.show();
+            } catch (error) {
+                showToast('Error al cargar estados disponibles', 'error');
+                console.error(error);
+            }
+        }
+
+        // Envía cambio de estado al servidor
+        async function cambiarEstadoTarea(event) {
+            event.preventDefault();
+            
+            const idWorkFlow = document.getElementById('idWorkFlowEstado').value;
+            const nuevoEstado = document.querySelector('input[name="nuevoEstado"]:checked')?.value;
+            const observacion = document.getElementById('observacionEstado').value;
+
+            if (!nuevoEstado) {
+                showToast('Debes seleccionar un nuevo estado', 'warning');
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/core/gestionar-tareas/cambiar-estado', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        idWorkFlow: parseInt(idWorkFlow),
+                        nuevoEstado,
+                        idUsuario: userId,
+                        observacion
+                    })
+                });
+
+                const data = await res.json();
+                if (data.isSuccess) {
+                    showToast(data.message, 'success');
+                    bootstrap.Modal.getInstance(document.getElementById('modalCambiarEstado')).hide();
+                    recargarTareas();
+                } else {
+                    showToast(data.message, 'error');
+                }
+            } catch (error) {
+                showToast('Error al cambiar estado', 'error');
+                console.error(error);
+            }
+        }
+
+        // Abre modal para agregar observación
+        function abrirAgregarObservacion(idWorkFlow) {
+            document.getElementById('idWorkFlowObs').value = idWorkFlow;
+            const modal = new bootstrap.Modal(document.getElementById('modalObservacion'));
+            modal.show();
+        }
+
+        // Agrega observación a la tarea
+        async function agregarObservacion(event) {
+            event.preventDefault();
+
+            const idWorkFlow = document.getElementById('idWorkFlowObs').value;
+            const observacion = document.getElementById('observacionTexto').value;
+
+            try {
+                const res = await fetch('/api/core/gestionar-tareas/agregar-observacion', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        idWorkFlow: parseInt(idWorkFlow),
+                        idUsuario: userId,
+                        observacion
+                    })
+                });
+
+                const data = await res.json();
+                if (data.isSuccess) {
+                    showToast('Observación agregada', 'success');
+                    bootstrap.Modal.getInstance(document.getElementById('modalObservacion')).hide();
+                    document.getElementById('formObservacion').reset();
+                } else {
+                    showToast(data.message, 'error');
+                }
+            } catch (error) {
+                showToast('Error al agregar observación', 'error');
+                console.error(error);
+            }
+        }
+
+        // Filtrar tareas
+        function filtrarPorEstado(estado) {
+            const filas = document.querySelectorAll('#tablaTareasBody tr[data-estado]');
+            filas.forEach(fila => {
+                fila.style.display = estado === '' || fila.getAttribute('data-estado') === estado ? '' : 'none';
+            });
+        }
+
+        function filtrarPorPrioridad(prioridad) {
+            const filas = document.querySelectorAll('#tablaTareasBody tr[data-prioridad]');
+            filas.forEach(fila => {
+                fila.style.display = prioridad === '' || fila.getAttribute('data-prioridad') === prioridad ? '' : 'none';
+            });
+        }
+
+        function buscarTareas(termino) {
+            const filas = document.querySelectorAll('#tablaTareasBody tr[data-id]');
+            const regex = new RegExp(termino, 'i');
+            filas.forEach(fila => {
+                const texto = fila.textContent;
+                fila.style.display = regex.test(texto) ? '' : 'none';
+            });
+        }
+
+        // Recargar tareas desde el servidor
+        async function recargarTareas() {
+            try {
+                const res = await fetch(`/api/core/gestionar-tareas/mis-tareas/${userId}`);
+                const data = await res.json();
+                
+                if (data.exitoso && data.datos.length > 0) {
+                    // Recargar página para mostrar cambios
+                    location.reload();
+                } else {
+                    showToast('No hay tareas', 'info');
+                }
+            } catch (error) {
+                showToast('Error al recargar tareas', 'error');
+            }
+        }
+
+        // Helper: Mostrar toast
+        function showToast(mensaje, tipo) {
+            console.log(`[${tipo.toUpperCase()}] ${mensaje}`);
+            // TODO: Integrar con toast component existente
+        }
+    </script>
+}

@@ -126,6 +126,11 @@ builder.Services.AddScoped<MatrixNext.Web.Services.CORE.WorkFlowDataAdapter>();
 builder.Services.AddScoped<MatrixNext.Web.Services.CORE.TareasPreviasDataAdapter>();
 builder.Services.AddScoped<MatrixNext.Web.Services.CORE.IWorkFlowService, MatrixNext.Web.Services.CORE.WorkFlowService>();
 builder.Services.AddScoped<MatrixNext.Web.Services.CORE.ITareasPreviasService, MatrixNext.Web.Services.CORE.TareasPreviasService>();
+builder.Services.AddScoped<MatrixNext.Web.Services.CORE.ITareasService, MatrixNext.Web.Services.CORE.TareasService>();
+builder.Services.AddScoped<MatrixNext.Web.Services.CORE.TareasPorTipoHiloDataAdapter>();
+builder.Services.AddScoped<MatrixNext.Web.Services.CORE.ITareasPorTipoHiloService, MatrixNext.Web.Services.CORE.TareasPorTipoHiloService>();
+builder.Services.AddScoped<MatrixNext.Web.Services.CORE.TareasDocumentosDataAdapter>();
+builder.Services.AddScoped<MatrixNext.Web.Services.CORE.ITareasDocumentosService, MatrixNext.Web.Services.CORE.TareasDocumentosService>();
 
 // ===== SPRINT 2: PY Maestros =====
 // Ref: PLAN_IMPLEMENTACION_SPRINTS.md § T2 (PY Maestros)
@@ -137,7 +142,9 @@ builder.Services.AddScoped<IMetodologiasLookupService, MetodologiasLookupService
 // ===== SPRINT 3: CORE Operación =====
 // Ref: PLAN_IMPLEMENTACION_SPRINTS.md § T3 (CORE Operación)
 builder.Services.AddScoped<MatrixNext.Web.Services.CORE.IAsignacionesService, MatrixNext.Web.Services.CORE.AsignacionesService>();
+builder.Services.AddScoped<MatrixNext.Web.Services.CORE.IWorkFlowStateTransitionService, MatrixNext.Web.Services.CORE.WorkFlowStateTransitionService>();
 builder.Services.AddScoped<MatrixNext.Web.Services.CORE.IGestionTareasService, MatrixNext.Web.Services.CORE.GestionTareasService>();
+builder.Services.AddScoped<MatrixNext.Web.Services.CORE.IWorkFlowReportesService, MatrixNext.Web.Services.CORE.WorkFlowReportesService>();
 
 // ===== SPRINT 4: PY Cualitativos =====
 // Ref: PLAN_IMPLEMENTACION_SPRINTS.md § T4 (Trabajos Cualitativos)
@@ -368,5 +375,8 @@ app.MapControllerRoute(
 // ===== SPRINT 6: SignalR Hubs para notificaciones =====
 app.MapHub<MatrixNext.Web.Services.OP.Hubs.OpNotificationsHub>("/hubs/op-notifications");
 app.MapHub<MatrixNext.Web.Services.CORE.CoreNotificationsHub>("/hubs/core-notifications");
+
+// ===== SPRINT 7: SignalR Hub para WorkFlow =====
+app.MapHub<MatrixNext.Web.Hubs.WorkFlowHub>("/workflowHub");
 
 app.Run();

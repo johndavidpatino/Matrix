@@ -1,11 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using MatrixNext.Web.Infrastructure.Data;
 using System.Security.Claims;
 using MatrixNext.Web.Models.CORE;
 using MatrixNext.Web.ViewModels;
-using MatrixNext.Web.Services;
+using MatrixNext.Web.Services.CORE;
 
 namespace MatrixNext.Web.Areas.CORE.Controllers
 {
@@ -19,18 +17,12 @@ namespace MatrixNext.Web.Areas.CORE.Controllers
     [Route("CORE/Configuracion/[controller]/[action]")]
     public class TareasConfigController : Controller
     {
-        private readonly MatrixDbContext _db;
-        private readonly IGridService _grid;
-        private readonly IAuditoriaService _auditoria;
+        private readonly ITareasService _tareasService;
 
         public TareasConfigController(
-            MatrixDbContext db, 
-            IGridService grid,
-            IAuditoriaService auditoria)
+            ITareasService tareasService)
         {
-            _db = db;
-            _grid = grid;
-            _auditoria = auditoria;
+            _tareasService = tareasService;
         }
 
         private long ObtenerUsuarioActualId()
@@ -45,21 +37,8 @@ namespace MatrixNext.Web.Areas.CORE.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(FiltrosVM? filtros)
         {
-            var query = _db.Tareas.AsNoTracking();
-
-            // Filtro por búsqueda
-            if (!string.IsNullOrWhiteSpace(filtros?.Busqueda))
-            {
-                query = query.Where(t => t.Nombre.Contains(filtros.Busqueda));
-            }
-
-            // Ordenar por Orden, luego por Nombre
-            query = query.OrderBy(t => t.Orden).ThenBy(t => t.Nombre);
-
-            var resultado = await _grid.PaginarAsync(
-                query,
-                filtros?.PageNumber ?? 1,
-                filtros?.PageSize ?? 20
+            var resultado = await _tareasService.ObtenerPaginadoAsync(
+                filtros ?? new FiltrosVM { PageSize = 20, PageNumber = 1 }
             );
 
             return View(resultado);
@@ -71,19 +50,8 @@ namespace MatrixNext.Web.Areas.CORE.Controllers
         [HttpGet]
         public async Task<IActionResult> Grid(FiltrosVM? filtros)
         {
-            var query = _db.Tareas.AsNoTracking();
-
-            if (!string.IsNullOrWhiteSpace(filtros?.Busqueda))
-            {
-                query = query.Where(t => t.Nombre.Contains(filtros.Busqueda));
-            }
-
-            query = query.OrderBy(t => t.Orden).ThenBy(t => t.Nombre);
-
-            var resultado = await _grid.PaginarAsync(
-                query,
-                filtros?.PageNumber ?? 1,
-                filtros?.PageSize ?? 20
+            var resultado = await _tareasService.ObtenerPaginadoAsync(
+                filtros ?? new FiltrosVM { PageSize = 20, PageNumber = 1 }
             );
 
             return PartialView("_GridTable", resultado);
@@ -110,38 +78,15 @@ namespace MatrixNext.Web.Areas.CORE.Controllers
                 return PartialView("_CreateEdit", model);
             }
 
-            try
+            var resultado = await _tareasService.CrearAsync(model, ObtenerUsuarioActualId());
+
+            if (!resultado.IsSuccess)
             {
-                // Validar nombre único
-                var existe = await _db.Tareas.AnyAsync(t => t.Nombre == model.Nombre);
-                if (existe)
-                {
-                    ModelState.AddModelError("Nombre", "Ya existe una tarea con este nombre");
-                    return PartialView("_CreateEdit", model);
-                }
-
-                model.FechaCreacion = DateTime.Now;
-                model.UsuarioCreacion = ObtenerUsuarioActualId();
-
-                _db.Tareas.Add(model);
-                await _db.SaveChangesAsync();
-
-                // Auditoría
-                await _auditoria.LogearAsync(new AuditoriaVM
-                {
-                    Entidad = "CORE_Tareas",
-                    EntidadId = model.Id,
-                    Accion = "CREATE",
-                    Detalles = $"Tarea creada: {model.Nombre}",
-                    RutaArchivo = ""
-                });
-
-                return Json(new { success = true, message = "Tarea creada exitosamente" });
+                ModelState.AddModelError(string.Empty, resultado.Message);
+                return PartialView("_CreateEdit", model);
             }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, message = $"Error al crear tarea: {ex.Message}" });
-            }
+
+            return Json(new { success = true, message = resultado.Message });
         }
 
         /// <summary>
@@ -150,7 +95,7 @@ namespace MatrixNext.Web.Areas.CORE.Controllers
         [HttpGet]
         public async Task<IActionResult> EditModal(long id)
         {
-            var tarea = await _db.Tareas.FindAsync(id);
+            var tarea = await _tareasService.ObtenerPorIdAsync(id);
             if (tarea == null)
             {
                 return NotFound();
@@ -176,55 +121,15 @@ namespace MatrixNext.Web.Areas.CORE.Controllers
                 return PartialView("_CreateEdit", model);
             }
 
-            try
+            var resultado = await _tareasService.ActualizarAsync(id, model, ObtenerUsuarioActualId());
+
+            if (!resultado.IsSuccess)
             {
-                var tarea = await _db.Tareas.FindAsync(id);
-                if (tarea == null)
-                {
-                    return Json(new { success = false, message = "Tarea no encontrada" });
-                }
-
-                // Validar nombre único (excepto el actual)
-                var existe = await _db.Tareas.AnyAsync(t => t.Nombre == model.Nombre && t.Id != id);
-                if (existe)
-                {
-                    ModelState.AddModelError("Nombre", "Ya existe una tarea con este nombre");
-                    return PartialView("_CreateEdit", model);
-                }
-
-                // Actualizar campos
-                tarea.Nombre = model.Nombre;
-                tarea.NoEmpiezaAntesDe = model.NoEmpiezaAntesDe;
-                tarea.NoTerminaAntesDe = model.NoTerminaAntesDe;
-                tarea.TiempoPromedioDias = model.TiempoPromedioDias;
-                tarea.RequiereEstimacion = model.RequiereEstimacion;
-                tarea.RolEstima = model.RolEstima;
-                tarea.UnidadEjecuta = model.UnidadEjecuta;
-                tarea.UnidadRecibe = model.UnidadRecibe;
-                tarea.RolEjecuta = model.RolEjecuta;
-                tarea.Visible = model.Visible;
-                tarea.Orden = model.Orden;
-                tarea.FechaModificacion = DateTime.Now;
-                tarea.UsuarioModificacion = ObtenerUsuarioActualId();
-
-                await _db.SaveChangesAsync();
-
-                // Auditoría
-                await _auditoria.LogearAsync(new AuditoriaVM
-                {
-                    Entidad = "CORE_Tareas",
-                    EntidadId = tarea.Id,
-                    Accion = "UPDATE",
-                    Detalles = $"Tarea actualizada: {tarea.Nombre}",
-                    RutaArchivo = ""
-                });
-
-                return Json(new { success = true, message = "Tarea actualizada exitosamente" });
+                ModelState.AddModelError(string.Empty, resultado.Message);
+                return PartialView("_CreateEdit", model);
             }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, message = $"Error al actualizar tarea: {ex.Message}" });
-            }
+
+            return Json(new { success = true, message = resultado.Message });
         }
 
         /// <summary>
@@ -234,40 +139,8 @@ namespace MatrixNext.Web.Areas.CORE.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(long id)
         {
-            try
-            {
-                var tarea = await _db.Tareas.FindAsync(id);
-                if (tarea == null)
-                {
-                    return Json(new { success = false, message = "Tarea no encontrada" });
-                }
-
-                // Validar que no esté siendo usada en WorkFlows
-                var enUso = await _db.WorkFlows.AnyAsync(w => w.IdTarea == id);
-                if (enUso)
-                {
-                    return Json(new { success = false, message = "No se puede eliminar la tarea porque está siendo usada en WorkFlows" });
-                }
-
-                _db.Tareas.Remove(tarea);
-                await _db.SaveChangesAsync();
-
-                // Auditoría
-                await _auditoria.LogearAsync(new AuditoriaVM
-                {
-                    Entidad = "CORE_Tareas",
-                    EntidadId = id,
-                    Accion = "DELETE",
-                    Detalles = $"Tarea eliminada: {tarea.Nombre}",
-                    RutaArchivo = ""
-                });
-
-                return Json(new { success = true, message = "Tarea eliminada exitosamente" });
-            }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, message = $"Error al eliminar tarea: {ex.Message}" });
-            }
+            var resultado = await _tareasService.EliminarAsync(id, ObtenerUsuarioActualId());
+            return Json(new { success = resultado.IsSuccess, message = resultado.Message });
         }
     }
 }

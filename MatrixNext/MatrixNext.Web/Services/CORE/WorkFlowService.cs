@@ -11,6 +11,7 @@ namespace MatrixNext.Web.Services.CORE
     /// </summary>
     public interface IWorkFlowService
     {
+        Task<PaginationResultVM<WorkFlow>> ObtenerPaginadoAsync(int page, int size, string sortBy, bool desc, long? idTrabajo = null, long? idTarea = null, int? estado = null);
         Task<ResultVM<bool>> CrearHiloInicialAsync(long idTrabajo, long idProyecto);
         Task<ResultVM<WorkFlow>> CrearAsync(WorkFlow entity);
         Task<ResultVM<WorkFlow>> ActualizarAsync(WorkFlow entity);
@@ -24,15 +25,37 @@ namespace MatrixNext.Web.Services.CORE
         private readonly MatrixDbContext _db;
         private readonly WorkFlowDataAdapter _adapter;
         private readonly IAuditoriaService _auditoria;
+        private readonly IGridService _grid;
 
         public WorkFlowService(
             MatrixDbContext db, 
             WorkFlowDataAdapter adapter,
-            IAuditoriaService auditoria)
+            IAuditoriaService auditoria,
+            IGridService grid)
         {
             _db = db;
             _adapter = adapter;
             _auditoria = auditoria;
+            _grid = grid;
+        }
+
+        public async Task<PaginationResultVM<WorkFlow>> ObtenerPaginadoAsync(int page, int size, string sortBy, bool desc, long? idTrabajo = null, long? idTarea = null, int? estado = null)
+        {
+            var query = _db.WorkFlows.AsNoTracking();
+
+            if (idTrabajo.HasValue)
+                query = query.Where(x => x.IdTrabajo == idTrabajo.Value);
+
+            if (idTarea.HasValue)
+                query = query.Where(x => x.IdTarea == idTarea.Value);
+
+            if (estado.HasValue)
+            {
+                var estadoTexto = estado.Value.ToString();
+                query = query.Where(x => x.Estado == estadoTexto);
+            }
+
+            return await _grid.PaginarAsync(query, page, size, sortBy, desc);
         }
 
         public async Task<ResultVM<bool>> CrearHiloInicialAsync(long idTrabajo, long idProyecto)

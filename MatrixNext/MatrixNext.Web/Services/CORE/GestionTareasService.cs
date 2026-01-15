@@ -51,20 +51,24 @@ public class GestionTareasService : IGestionTareasService
 {
     private readonly MatrixDbContext _db;
     private readonly IAuditoriaService _auditoria;
+    private readonly IWorkFlowStateTransitionService _stateTransition;
 
     public GestionTareasService(
         MatrixDbContext db,
-        IAuditoriaService auditoria)
+        IAuditoriaService auditoria,
+        IWorkFlowStateTransitionService stateTransition)
     {
         _db = db;
         _auditoria = auditoria;
+        _stateTransition = stateTransition;
     }
 
     /// <summary>
     /// Cambia el estado de una tarea validando:
     /// 1. Que todas las tareas previas estén completadas
     /// 2. Que el usuario esté asignado a la tarea
-    /// 3. Que el cambio de estado sea válido
+    /// 3. Que el cambio de estado sea válido según la máquina de estados
+    /// 4. Que el usuario tenga el rol requerido
     /// </summary>
     public async Task<ResultVM<bool>> CambiarEstado(long idWorkFlow, string nuevoEstado, long idUsuario, string? observacion = null)
     {
@@ -87,16 +91,16 @@ public class GestionTareasService : IGestionTareasService
                 return ResultVM<bool>.Fail("No tienes permiso para cambiar el estado de esta tarea");
             }
 
-            // 3. Validar precedencias
-            var validPrecedencias = await ValidarPrecedenciasCompletadas(idWorkFlow);
-            if (!validPrecedencias && nuevoEstado != "Anulada")
+            // 3. Validar transición de estado usando máquina de estados
+            var validacionTransicion = await _stateTransition.ValidarTransicion(
+                idWorkFlow, 
+                workFlow.Estado ?? "Creada", 
+                nuevoEstado, 
+                idUsuario);
+            
+            if (!validacionTransicion.IsSuccess)
             {
-                var tareasPrevias = await ObtenerTareasPrevias(idWorkFlow);
-                var tareasPendientes = tareasPrevias
-                    .Where(t => t.Estado != "Completada" && t.Estado != "Anulada")
-                    .ToList();
-                
-                return ResultVM<bool>.Fail($"No puedes cambiar el estado. Tienes {tareasPendientes.Count} tarea(s) previa(s) pendiente(s)");
+                return ResultVM<bool>.Fail(validacionTransicion.Message);
             }
 
             // 4. Cambiar estado

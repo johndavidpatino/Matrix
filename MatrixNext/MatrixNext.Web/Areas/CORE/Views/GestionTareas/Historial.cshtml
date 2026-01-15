@@ -1,0 +1,259 @@
+@model MatrixNext.Web.Models.CORE.WorkFlow
+
+@{
+    ViewData["Title"] = $"Historial de Tarea {Model?.IdTarea}";
+}
+
+<div class="container-fluid mt-4">
+    <h2>
+        <i class="fas fa-history"></i> Historial y Observaciones
+        <small class="text-muted">Tarea @Model?.IdTarea - Trabajo @Model?.IdTrabajo</small>
+    </h2>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Línea de tiempo de cambios de estado -->
+            <div class="card mb-4">
+                <div class="card-header bg-light">
+                    <h6 class="mb-0">
+                        <i class="fas fa-arrow-right"></i> Cambios de Estado
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="timeline">
+                        @{
+                            var cambios = Model?.Observaciones_Log?
+                                .Where(o => o.TipoOperacion == "CambioEstado")
+                                .OrderByDescending(o => o.FechaCreacion)
+                                .ToList() ?? new List<MatrixNext.Web.Models.CORE.ObservacionTarea>();
+
+                            if (cambios.Count == 0)
+                            {
+                                <p class="text-muted text-center py-4">Sin cambios de estado registrados</p>
+                            }
+                            else
+                            {
+                                foreach (var cambio in cambios)
+                                {
+                                    <div class="timeline-item mb-3">
+                                        <div class="timeline-badge bg-info"></div>
+                                        <div class="timeline-content">
+                                            <h6>@cambio.Observacion</h6>
+                                            <small class="text-muted">
+                                                Por: <strong>@cambio.IdUsuario</strong> | 
+                                                Fecha: <strong>@cambio.FechaCreacion.ToString("dd/MM/yyyy HH:mm")</strong>
+                                            </small>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comentarios y Observaciones -->
+            <div class="card">
+                <div class="card-header bg-light">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">
+                            <i class="fas fa-comments"></i> Comentarios y Observaciones
+                        </h6>
+                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarObservacion">
+                            <i class="fas fa-plus"></i> Agregar
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body" style="max-height: 500px; overflow-y: auto;">
+                    @{
+                        var observaciones = Model?.Observaciones_Log?
+                            .Where(o => o.TipoOperacion == "Comentario")
+                            .OrderByDescending(o => o.FechaCreacion)
+                            .ToList() ?? new List<MatrixNext.Web.Models.CORE.ObservacionTarea>();
+
+                        if (observaciones.Count == 0)
+                        {
+                            <p class="text-muted text-center py-4">Sin comentarios</p>
+                        }
+                        else
+                        {
+                            @foreach (var obs in observaciones)
+                            {
+                                <div class="comment mb-3 pb-3 border-bottom">
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <strong>@obs.IdUsuario</strong>
+                                        <small class="text-muted">@obs.FechaCreacion.ToString("dd/MM/yyyy HH:mm")</small>
+                                    </div>
+                                    <p class="mb-0 text-break">@obs.Observacion</p>
+                                </div>
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel derecho: Información resumida -->
+        <div class="col-lg-4">
+            <div class="card mb-3">
+                <div class="card-header bg-light">
+                    <h6 class="mb-0">Estado Actual</h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <p class="mb-0 text-muted">Estado</p>
+                            <h5 class="mb-0">
+                                <span class="badge badge-@(Model?.Estado == "Creada" ? "warning" : Model?.Estado == "EnProgreso" ? "info" : Model?.Estado == "Completada" ? "success" : "danger")">
+                                    @Model?.Estado
+                                </span>
+                            </h5>
+                        </div>
+                        <div class="text-end">
+                            <p class="mb-0 text-muted">Prioridad</p>
+                            <h5 class="mb-0">
+                                @{
+                                    var prioridadBadge = Model?.Prioridad == 2 ? "danger" : Model?.Prioridad == 1 ? "warning" : "secondary";
+                                    var prioridadTexto = Model?.Prioridad == 2 ? "Alta" : Model?.Prioridad == 1 ? "Normal" : "Baja";
+                                }
+                                <span class="badge badge-@prioridadBadge">@prioridadTexto</span>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header bg-light">
+                    <h6 class="mb-0">Fechas</h6>
+                </div>
+                <div class="card-body">
+                    <p class="mb-2">
+                        <strong>Vencimiento:</strong><br>
+                        @if (Model?.FechaVencimiento.HasValue ?? false)
+                        {
+                            <span>@Model!.FechaVencimiento!.Value.ToString("dd/MM/yyyy")</span>
+                            @if (Model.FechaVencimiento < DateTime.UtcNow && Model.Estado != "Completada")
+                            {
+                                <span class="badge bg-danger ms-2">Vencida</span>
+                            }
+                        }
+                        else
+                        {
+                            <span class="text-muted">Sin fecha</span>
+                        }
+                    </p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h6 class="mb-0">Usuarios Asignados</h6>
+                </div>
+                <div class="card-body">
+                    @{
+                        var asignados = Model?.UsuariosAsignados ?? new List<MatrixNext.Web.Models.CORE.WorkFlowUsuarioAsignado>();
+                        if (asignados.Count > 0)
+                        {
+                            @foreach (var asignado in asignados)
+                            {
+                                <div class="mb-2">
+                                    <span class="badge bg-primary">@asignado.Rol</span>
+                                    <small class="text-muted">ID: @asignado.IdUsuario</small>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <p class="text-muted small">Sin usuarios asignados</p>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Agregar Observación -->
+<div class="modal fade" id="modalAgregarObservacion" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Agregar Observación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="formAgregarObs" onsubmit="guardarObservacion(event)">
+                <div class="modal-body">
+                    <textarea id="textObs" name="observacion" class="form-control" rows="4" placeholder="Ingresa tu observación..." required></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .timeline {
+        position: relative;
+        padding: 0;
+    }
+
+    .timeline-item {
+        display: flex;
+        margin-left: 30px;
+        position: relative;
+    }
+
+    .timeline-badge {
+        position: absolute;
+        left: -35px;
+        top: 0;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2px solid #fff;
+        background-color: #007bff;
+    }
+
+    .timeline-content {
+        padding: 10px;
+        background: #f8f9fa;
+        border-radius: 5px;
+        flex-grow: 1;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        const workflowId = @Model?.Id;
+
+        async function guardarObservacion(event) {
+            event.preventDefault();
+            const observacion = document.getElementById('textObs').value;
+
+            try {
+                const res = await fetch('/api/core/gestionar-tareas/agregar-observacion', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        idWorkFlow: workflowId,
+                        idUsuario: @User.FindFirst("sub")?.Value ?? 0,
+                        observacion
+                    })
+                });
+
+                if (res.ok) {
+                    location.reload();
+                } else {
+                    alert('Error al guardar');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('Error al guardar observación');
+            }
+        }
+    </script>
+}
