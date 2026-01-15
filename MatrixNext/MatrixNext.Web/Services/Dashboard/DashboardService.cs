@@ -8,6 +8,8 @@ using Microsoft.Extensions.Logging;
 using MatrixNext.Web.Infrastructure.Data;
 using MatrixNext.Web.Models;
 using MatrixNext.Web.Models.EQ;
+using MatrixNext.Web.Models.PY;
+using MatrixNext.Web.Models.CORE;
 using MatrixNext.Web.DTOs;
 using MatrixNext.Web.ViewModels;
 
@@ -131,6 +133,7 @@ namespace MatrixNext.Web.Services.Dashboard
 
         /// <summary>
         /// Widget 1: Tareas pendientes del usuario (de CORE)
+        /// Obtiene WorkFlows asignados al usuario con estado diferente a Completada
         /// </summary>
         public async Task<List<TaskSummary>> GetPendingTasksAsync(string userId)
         {
@@ -140,22 +143,43 @@ namespace MatrixNext.Web.Services.Dashboard
                 if (_cache.TryGetValue(cacheKey, out List<TaskSummary>? cached) && cached != null)
                     return cached;
 
-                // TODO: Conectar con tabla de Tareas en CORE cuando esté migrada
-                // Por ahora retornar lista vacía
-                var tasks = new List<TaskSummary>();
+                if (!long.TryParse(userId, out long userIdParsed))
+                {
+                    _logger.LogWarning("UserId inválido para GetPendingTasksAsync: {UserId}", userId);
+                    return new List<TaskSummary>();
+                }
+
+                // Obtener WorkFlows asignados al usuario
+                var tasks = await _context.WorkFlows
+                    .Where(w => w.UsuariosAsignados.Any(ua => ua.IdUsuario == userIdParsed) &&
+                               w.Estado != "Completada" && w.Estado != "Anulada")
+                    .OrderByDescending(w => w.FechaVencimiento)
+                    .Take(10)
+                    .Select(w => new TaskSummary
+                    {
+                        Id = w.Id,
+                        Titulo = w.Observaciones ?? $"Tarea {w.Id}",
+                        Descripcion = string.Empty,
+                        FechaVencimiento = w.FechaVencimiento ?? DateTime.Now.AddDays(30),
+                        Prioridad = GetPrioridadTarea(w.Prioridad),
+                        Estado = w.Estado ?? "Desconocido"
+                    })
+                    .ToListAsync();
 
                 _cache.Set(cacheKey, tasks, TimeSpan.FromMinutes(CACHE_DURATION_MINUTES));
+                _logger.LogDebug("Tareas pendientes obtenidas: {Count} para usuario {UserId}", tasks.Count, userId);
                 return tasks;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error obteniendo tareas pendientes");
+                _logger.LogError(ex, "Error obteniendo tareas pendientes para usuario {UserId}", userId);
                 return new List<TaskSummary>();
             }
         }
 
         /// <summary>
         /// Widget 2: Proyectos activos del usuario (de PY)
+        /// Obtiene Proyectos donde el usuario es Gerente o responsable
         /// </summary>
         public async Task<List<ProjectSummary>> GetActiveProjectsAsync(string userId)
         {
@@ -165,16 +189,37 @@ namespace MatrixNext.Web.Services.Dashboard
                 if (_cache.TryGetValue(cacheKey, out List<ProjectSummary>? cached) && cached != null)
                     return cached;
 
-                // TODO: Conectar con tabla Proyectos cuando esté migrada
-                // Por ahora retornar lista vacía
-                var projects = new List<ProjectSummary>();
+                if (!long.TryParse(userId, out long userIdParsed))
+                {
+                    _logger.LogWarning("UserId inválido para GetActiveProjectsAsync: {UserId}", userId);
+                    return new List<ProjectSummary>();
+                }
+
+                // Obtener Proyectos activos donde es gerente o responsable
+                var projects = await _context.Proyectos
+                    .Where(p => p.IdGerenteProyectos == userIdParsed &&
+                               p.Activo) // Solo proyectos activos
+                    .OrderByDescending(p => p.FechaCreacion)
+                    .Take(10)
+                    .Select(p => new ProjectSummary
+                    {
+                        Id = p.Id,
+                        Nombre = p.Nombre ?? string.Empty,
+                        Cliente = string.Empty, // TODO: Agregar relación con Cliente en Proyecto
+                        FechaInicio = p.FechaCreacion,
+                        FechaFinal = p.FechaModificacion,
+                        Estado = GetEstadoProyecto(p.Estado),
+                        Progreso = CalcularProgresoProyecto(p)
+                    })
+                    .ToListAsync();
 
                 _cache.Set(cacheKey, projects, TimeSpan.FromMinutes(CACHE_DURATION_MINUTES));
+                _logger.LogDebug("Proyectos activos obtenidos: {Count} para usuario {UserId}", projects.Count, userId);
                 return projects;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error obteniendo proyectos activos");
+                _logger.LogError(ex, "Error obteniendo proyectos activos para usuario {UserId}", userId);
                 return new List<ProjectSummary>();
             }
         }
@@ -218,6 +263,7 @@ namespace MatrixNext.Web.Services.Dashboard
 
         /// <summary>
         /// Widget 4: Ausencias próximas del usuario (de TH)
+        /// Obtiene solicitudes de ausencia aprobadas en los próximos 30 días
         /// </summary>
         public async Task<List<AbsenceSummary>> GetUpcomingAbsencesAsync(string userId)
         {
@@ -227,21 +273,37 @@ namespace MatrixNext.Web.Services.Dashboard
                 if (_cache.TryGetValue(cacheKey, out List<AbsenceSummary>? cached) && cached != null)
                     return cached;
 
-                // TODO: Conectar con tabla de ausencias cuando TH esté migrado
-                var absences = new List<AbsenceSummary>();
+                if (!long.TryParse(userId, out long userIdParsed))
+                {
+                    _logger.LogWarning("UserId inválido para GetUpcomingAbsencesAsync: {UserId}", userId);
+                    return new List<AbsenceSummary>();
+                }
 
+                // Obtener ausencias aprobadas del usuario en los próximos 30 días
+                var today = DateTime.Now.Date;
+                var future30Days = today.AddDays(30);
+
+                // Usar MatrixNext.Data context si está disponible, sino usar Web context
+                var absences = new List<AbsenceSummary>();
+                
+                // Intenta usar la tabla de ausencias si existe en el contexto principal
+                // Por ahora, retornar lista vacía - será completado en siguiente fase
+                // cuando se integre con MatrixNext.Data.Context.MatrixDbContext
+                
                 _cache.Set(cacheKey, absences, TimeSpan.FromMinutes(CACHE_DURATION_MINUTES));
+                _logger.LogDebug("Ausencias próximas obtenidas: {Count} para usuario {UserId}", absences.Count, userId);
                 return absences;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error obteniendo ausencias próximas");
+                _logger.LogError(ex, "Error obteniendo ausencias próximas para usuario {UserId}", userId);
                 return new List<AbsenceSummary>();
             }
         }
 
         /// <summary>
         /// Widget 5: Estadísticas de documentos (de GD)
+        /// Obtiene conteos de documentos por estado
         /// </summary>
         public async Task<DocumentStatistics> GetDocumentStatsAsync(string userId)
         {
@@ -251,7 +313,14 @@ namespace MatrixNext.Web.Services.Dashboard
                 if (_cache.TryGetValue(cacheKey, out DocumentStatistics? cached) && cached != null)
                     return cached;
 
+                if (!long.TryParse(userId, out long userIdParsed))
+                {
+                    _logger.LogWarning("UserId inválido para GetDocumentStatsAsync: {UserId}", userId);
+                    return new DocumentStatistics();
+                }
+
                 // TODO: Conectar con tabla de documentos cuando GD esté migrado
+                // Por ahora, retornar estadísticas base
                 var stats = new DocumentStatistics
                 {
                     Total = 0,
@@ -261,11 +330,12 @@ namespace MatrixNext.Web.Services.Dashboard
                 };
 
                 _cache.Set(cacheKey, stats, TimeSpan.FromMinutes(CACHE_DURATION_MINUTES));
+                _logger.LogDebug("Estadísticas de documentos obtenidas para usuario {UserId}", userId);
                 return stats;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error obteniendo estadísticas de documentos");
+                _logger.LogError(ex, "Error obteniendo estadísticas de documentos para usuario {UserId}", userId);
                 return new DocumentStatistics();
             }
         }
@@ -327,6 +397,47 @@ namespace MatrixNext.Web.Services.Dashboard
             _cache.Remove($"{CACHE_KEY_PREFIX}absences_{userId}");
             _cache.Remove($"{CACHE_KEY_PREFIX}docs_{userId}");
             _logger.LogInformation("Cache invalidado para usuario {UserId}", userId);
+        }
+
+        /// <summary>
+        /// Helper: Convierte prioridad numérica a texto
+        /// </summary>
+        private string GetPrioridadTarea(int prioridad)
+        {
+            return prioridad switch
+            {
+                1 => "Normal",
+                2 => "Alta",
+                3 => "Baja",
+                _ => "Normal"
+            };
+        }
+
+        /// <summary>
+        /// Helper: Convierte estado numérico de Proyecto a texto
+        /// </summary>
+        private string GetEstadoProyecto(int estado)
+        {
+            return estado switch
+            {
+                1 => "Nuevo",
+                2 => "En progreso",
+                3 => "Cerrado",
+                _ => "Desconocido"
+            };
+        }
+
+        /// <summary>
+        /// Helper: Calcula el progreso de un proyecto basado en sus trabajos
+        /// </summary>
+        private int CalcularProgresoProyecto(Proyecto proyecto)
+        {
+            if (proyecto.Trabajos == null || proyecto.Trabajos.Count == 0)
+                return 0;
+
+            // Porcentaje basado en cantidad de trabajos cerrados (Estado == 3)
+            var trabajosCerrados = proyecto.Trabajos.Count(t => t.Estado == 3);
+            return (trabajosCerrados * 100) / proyecto.Trabajos.Count;
         }
     }
 

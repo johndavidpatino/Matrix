@@ -4,7 +4,11 @@
     ViewData["Title"] = "Home - Dashboard";
 }
 
-<div class="container-fluid py-4">
+@section Styles {
+    <link href="@Url.Content("~/css/dashboard.css")" rel="stylesheet" />
+}
+
+<div class="dashboard-container">
     <!-- Header con saludo del usuario -->
     <div class="row mb-4">
         <div class="col-md-8">
@@ -294,6 +298,7 @@
 </div>
 
 @section Scripts {
+    <script src="@Url.Content("~/js/dashboard.js")"></script>
     <script>
         function refreshDashboard() {
             const btn = document.getElementById('refreshBtn');
