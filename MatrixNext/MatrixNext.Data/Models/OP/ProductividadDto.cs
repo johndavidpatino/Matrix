@@ -54,18 +54,6 @@ public class FiltrosProductividadDto
 }
 
 /// <summary>
-/// Datos para aprobación/rechazo de planilla
-/// </summary>
-public class AprobacionPlanillaDto
-{
-    public long IdPlanilla { get; set; }
-    public decimal MontoAutorizado { get; set; }
-    public string? Observaciones { get; set; }
-    public long AprobadoPor { get; set; }
-    public string Accion { get; set; } // "Aprobar" o "Rechazar"
-}
-
-/// <summary>
 /// Resumen de productividad por corte/mes
 /// </summary>
 public class ResumenProductividadDto
