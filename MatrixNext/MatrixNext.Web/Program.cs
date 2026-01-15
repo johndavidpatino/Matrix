@@ -122,9 +122,13 @@ builder.Services.AddScoped<IITSyncAdapter, ITSyncAdapter>();
 builder.Services.AddScoped<IITSyncService, ITSyncService>();
 
 // ===== SPRINT 16: MBO (Management By Objectives) =====
-// Adapter and Service for MBO - AOT (Achievement of Tasks)
+// MBO Fase 1: AOT (Achievement of Tasks)
 builder.Services.AddScoped<MatrixNext.Data.Adapters.MBO.IAOTAdapter, MatrixNext.Data.Adapters.MBO.AOTAdapter>();
 builder.Services.AddScoped<MatrixNext.Data.Services.MBO.IAOTService, MatrixNext.Data.Services.MBO.AOTService>();
+
+// MBO Fase 2: Campo (Field Quality Management)
+builder.Services.AddScoped<MatrixNext.Data.Adapters.MBO.ICampoAdapter, MatrixNext.Data.Adapters.MBO.CampoAdapter>();
+builder.Services.AddScoped<MatrixNext.Data.Services.MBO.ICampoService, MatrixNext.Data.Services.MBO.CampoService>();
 
 // Authorization Service (Sprint 10-11)
 builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
