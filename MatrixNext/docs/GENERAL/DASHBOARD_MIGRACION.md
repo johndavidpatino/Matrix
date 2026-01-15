@@ -1,6 +1,6 @@
 # DASHBOARD DE MIGRACION - Estado actual
 
-Fecha de corte: 2026-01-14 (Sprints 5, 6, 7, 8 COMPLETADOS; **Sprint 9 PRÓXIMO** 🟡)
+Fecha de corte: 2026-01-15 (Sprints 5, 6, 7, 8 COMPLETADOS; **Sprint 9 EN CURSO** 🟡)
 
 ## Resumen corto
 - **SPRINT 5 COMPLETADO**: TH_TalentoHumano Views/UI (15-29 enero, 80h) sobre la API Sprint 4 ya establecida.
@@ -84,7 +84,7 @@ Ultima revision: 2026-01-14
 | CORE (workflow) | Alta | **SPRINT 7 COMPLETADO**: Máquina de estados + UI runtime + SignalR + reportes | 🟢 |
 | GD_Documentos | Media | Controladores y vistas live en `MatrixNext.Web/Areas/GD` (Fase 5) | 🟡 |
 | EQ (EasyQuote) | Crítica | **SPRINT 8 COMPLETADO**: Motor de cálculos (26 fórmulas), Seeds (600+ records), EasyCostService completo | 🟢 |
-| Home | Alta | HomeController + DashboardService + `Views/Home/Index` en pruebas (Sprint 9) | 🟡 |
+| Home | Alta | HomeController + DashboardService + `Views/Home/Index` en desarrollo (Sprint 9 EN CURSO) | 🟡 |
 | **RP_Reportes** | **🔴 Alta** | **ReportesController + vistas listos; foco en datos y exportes S10** | **🔴** |
 | **OP_RO + OP_Trafico** | **🟠 Media-Baja** | **OP_ROController / OP_TraficoController + vistas existen; cerrando integraciones S11** | **🔴** |
 | PY_ControlCalidad | Baja | Sprint 12+ | ⚪️ |
@@ -106,7 +106,7 @@ Ultima revision: 2026-01-14
 | 6 | OP_Cualitativo Complementos + Bulk Import | 2 sem | 2026-01-13 → 2026-01-29 | 75h | ✅ COMPLETADO |
 | 7 | CORE Workflow | 2 sem | 2026-02-01 → 2026-02-12 | 85h | ✅ COMPLETADO |
 | 8 | EQ_EasyQuote Fase 1 | 1 sem | 2026-02-15 → 2026-02-19 | 35h (85h ya existían) | ✅ COMPLETADO |
-| **9** | **Home Dashboard** | **1-2 sem** | **2026-02-22 → 2026-03-05** | **50h** | **🟡 PRÓXIMO** |
+| **9** | **Home Dashboard** | **1-2 sem** | **2026-02-22 → 2026-03-05** | **50h** | **🟡 EN CURSO** |
 | **10** | **RP_Reportes** | **1-2 sem** | **2026-03-08 → 2026-03-19** | **60h** | **🔴 PLANIFICADO** |
 | **11** | **OP_RO + OP_Trafico** | **2 sem** | **2026-03-22 → 2026-04-02** | **90h** | **🔴 PLANIFICADO** |
 | 12+ | Módulos Baja Prioridad | Variable | 2026-04-05+ | TBD | ⚪️ PENDIENTE |
