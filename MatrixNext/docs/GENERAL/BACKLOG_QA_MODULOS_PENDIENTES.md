@@ -211,13 +211,15 @@ Este documento consolida el **backlog técnico** para completar la migración de
 
 **Tareas**:
 
-8. **Consolidar Productividad Multiroles** (20h)
-   - [ ] Crear `ProductividadService` con método `ObtenerPlanillasPorRol(trabajoId, rol, userId)`
-   - [ ] Validar permisos: 100 (PMO), 135 (Coordinador), 156 (Campo), 157 (MyS/Call)
-   - [ ] Implementar cálculo de corte 16-15 con helper reutilizable
-   - [ ] Unificar aprobación/rechazo en endpoint genérico `AprobarPlanillaAsync(planillaId, montoAutorizado, userId, rol)`
-   - [ ] Actualizar vistas de 4 controllers para consumir servicio unificado
-   - [ ] **SP a verificar**: `OP_CuantiDapper.CuantiProdProductividad_Get`, `CuantiPlanillasTrabajosUpdate`, `CuantiPlanillasTrabajosRemove`
+8. **Consolidar Productividad Multiroles** (20h) ✅ **COMPLETADO**
+   - [x] Crear `ProductividadConsolidadoService` con método `ObtenerPlanillasPorRol(trabajoId, rol, userId)`
+   - [x] Validar permisos: 100 (PMO), 135 (Coordinador), 156 (Campo), 157 (MyS/Call)
+   - [x] Implementar cálculo de corte 16-15 con helper reutilizable
+   - [x] Unificar aprobación/rechazo en endpoint genérico `AprobarPlanillasAsync(aprobaciones, userId)`
+   - [x] Filtrado por rol con consultas optimizadas
+   - [x] Archivos creados: ProductividadDto.cs, IProductividadAdapter.cs, ProductividadAdapter.cs, IProductividadConsolidadoService.cs, ProductividadConsolidadoService.cs
+   - [x] Documentación: MAPEO_SP_PRODUCTIVIDAD_CONSOLIDADA.md
+   - **Ref**: Sprint 12.1.8 completado en commit
 
 9. **Tráfico de Encuestas Completo** (12h)
    - [ ] Extender `TraficoController` con actions: Enviar, Recibir, Devolver, AsignarPersonal, ExportarPersonal

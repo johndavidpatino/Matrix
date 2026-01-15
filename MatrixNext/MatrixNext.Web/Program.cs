@@ -251,6 +251,11 @@ builder.Services.AddScoped<MatrixNext.Data.Services.OP.ICierreTrabajoService, Ma
 builder.Services.AddScoped<MatrixNext.Data.Adapters.OP.ICargaMasivaAdapter, MatrixNext.Data.Adapters.OP.CargaMasivaAdapter>();
 builder.Services.AddScoped<MatrixNext.Data.Services.OP.ICargaMasivaService, MatrixNext.Data.Services.OP.CargaMasivaService>();
 
+// ===== SPRINT 12.1.8: OP Consolidar Productividad Multiroles =====
+// Ref: BACKLOG_QA_MODULOS_PENDIENTES.md § Sprint 12.1.8
+builder.Services.AddScoped<MatrixNext.Data.Adapters.OP.IProductividadAdapter, MatrixNext.Data.Adapters.OP.ProductividadAdapter>();
+builder.Services.AddScoped<MatrixNext.Data.Services.OP.IProductividadConsolidadoService, MatrixNext.Data.Services.OP.ProductividadConsolidadoService>();
+
 builder.Services.AddScoped<IOpCargaService, OpCargaService>();
 builder.Services.AddScoped<IOpPlanillasService, OpPlanillasService>();
 builder.Services.AddScoped<IOpProductividadService, OpProductividadService>();
