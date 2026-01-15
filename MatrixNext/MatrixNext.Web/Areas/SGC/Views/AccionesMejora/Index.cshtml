@@ -1,0 +1,309 @@
+@{
+    ViewData["Title"] = "Acciones de Mejora";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <!-- Encabezado -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-1">Acciones de Mejora</h2>
+            <p class="text-muted">Sistema de Gestión de Calidad - Acciones Correctivas y Preventivas</p>
+        </div>
+        <button class="btn btn-primary" 
+                id="btnNuevaAccion"
+                data-bs-toggle="modal" 
+                data-bs-target="#modalAccionMejora">
+            <i class="fas fa-plus me-2"></i>Nueva Acción
+        </button>
+    </div>
+
+    <!-- Filtros -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label for="filtroProceso" class="form-label">Proceso</label>
+                    <select id="filtroProceso" class="form-select">
+                        <option value="">Todos los procesos</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="filtroResponsable" class="form-label">Responsable</label>
+                    <select id="filtroResponsable" class="form-select">
+                        <option value="">Todos los responsables</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label d-block">&nbsp;</label>
+                    <button id="btnFiltrar" class="btn btn-secondary w-100">
+                        <i class="fas fa-search me-2"></i>Buscar
+                    </button>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label d-block">&nbsp;</label>
+                    <button id="btnLimpiarFiltros" class="btn btn-outline-secondary w-100">
+                        <i class="fas fa-times me-2"></i>Limpiar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alerta: Planes Vencidos -->
+    <div id="alertaPlanesVencidos" class="alert alert-warning alert-dismissible fade show" role="alert" style="display: none;">
+        <div class="d-flex align-items-center">
+            <i class="fas fa-exclamation-triangle me-3 fa-2x"></i>
+            <div>
+                <h5 class="mb-1">Planes de Acción Vencidos</h5>
+                <p class="mb-0">Hay <strong id="countPlanesVencidos">0</strong> planes de acción vencidos o próximos a vencer.</p>
+            </div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </div>
+
+    <!-- Grid de Acciones -->
+    <div class="card">
+        <div class="card-body">
+            <div id="loadingSpinner" class="text-center py-5" style="display: none;">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+                <p class="mt-2 text-muted">Cargando acciones de mejora...</p>
+            </div>
+
+            <div class="table-responsive" id="tablaAcciones">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Descripción</th>
+                            <th>Proceso</th>
+                            <th>Responsable</th>
+                            <th>Fecha Incidente</th>
+                            <th>Fuente</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyAcciones">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Paginación -->
+            <nav aria-label="Paginación de acciones">
+                <ul class="pagination justify-content-center mb-0" id="paginacion">
+                    <!-- Populated by JavaScript -->
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Nueva/Editar Acción de Mejora -->
+<div class="modal fade" id="modalAccionMejora" tabindex="-1" aria-labelledby="modalAccionLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAccionLabel">Nueva Acción de Mejora</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <form id="formAccionMejora">
+                <input type="hidden" id="accionMejoraId" name="AccionMejoraId">
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <!-- Descripción Acción -->
+                        <div class="col-md-12">
+                            <label for="descripcionAccion" class="form-label">
+                                Descripción Acción <span class="text-danger">*</span>
+                            </label>
+                            <textarea id="descripcionAccion" 
+                                      name="DescripcionAccion" 
+                                      class="form-control" 
+                                      rows="3" 
+                                      maxlength="500"
+                                      required></textarea>
+                            <div class="invalid-feedback">
+                                La descripción es requerida (máximo 500 caracteres)
+                            </div>
+                        </div>
+
+                        <!-- Fecha Incidente -->
+                        <div class="col-md-6">
+                            <label for="fechaIncidente" class="form-label">
+                                Fecha Incidente <span class="text-danger">*</span>
+                            </label>
+                            <input type="date" 
+                                   id="fechaIncidente" 
+                                   name="FechaIncidente" 
+                                   class="form-control" 
+                                   required>
+                            <div class="invalid-feedback">
+                                La fecha del incidente es requerida
+                            </div>
+                        </div>
+
+                        <!-- Usuario Reporta -->
+                        <div class="col-md-6">
+                            <label for="usuarioReporta" class="form-label">
+                                Usuario que Reporta <span class="text-danger">*</span>
+                            </label>
+                            <select id="usuarioReporta" name="UsuarioReporta" class="form-select" required>
+                                <option value="">Seleccione...</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                El usuario que reporta es requerido
+                            </div>
+                        </div>
+
+                        <!-- Proceso -->
+                        <div class="col-md-6">
+                            <label for="procesoId" class="form-label">
+                                Proceso <span class="text-danger">*</span>
+                            </label>
+                            <select id="procesoId" name="ProcesoId" class="form-select" required>
+                                <option value="">Seleccione...</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                El proceso es requerido
+                            </div>
+                        </div>
+
+                        <!-- Usuario Responsable -->
+                        <div class="col-md-6">
+                            <label for="usuarioResponsable" class="form-label">
+                                Responsable <span class="text-danger">*</span>
+                            </label>
+                            <select id="usuarioResponsable" name="UsuarioResponsable" class="form-select" required>
+                                <option value="">Seleccione...</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                El responsable es requerido
+                            </div>
+                        </div>
+
+                        <!-- Descripción -->
+                        <div class="col-md-12">
+                            <label for="descripcion" class="form-label">Descripción Detallada</label>
+                            <textarea id="descripcion" 
+                                      name="Descripcion" 
+                                      class="form-control" 
+                                      rows="3" 
+                                      maxlength="1000"></textarea>
+                            <small class="text-muted">Máximo 1000 caracteres</small>
+                        </div>
+
+                        <!-- Corrección -->
+                        <div class="col-md-12">
+                            <label for="correccion" class="form-label">Corrección</label>
+                            <textarea id="correccion" 
+                                      name="Correccion" 
+                                      class="form-control" 
+                                      rows="3" 
+                                      maxlength="1000"></textarea>
+                            <small class="text-muted">Máximo 1000 caracteres</small>
+                        </div>
+
+                        <!-- Fuente de No Conformidad -->
+                        <div class="col-md-6">
+                            <label for="fuenteNoConformidadId" class="form-label">Fuente No Conformidad</label>
+                            <select id="fuenteNoConformidadId" name="FuenteNoConformidadId" class="form-select">
+                                <option value="">Seleccione...</option>
+                            </select>
+                        </div>
+
+                        <!-- Fuente Específica -->
+                        <div class="col-md-6">
+                            <label for="fuenteId" class="form-label">Fuente Específica</label>
+                            <select id="fuenteId" name="FuenteId" class="form-select" disabled>
+                                <option value="">Seleccione primero fuente no conformidad...</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" id="btnGuardarAccion">
+                        <i class="fas fa-save me-2"></i>Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Detalles -->
+<div class="modal fade" id="modalDetalles" tabindex="-1" aria-labelledby="modalDetallesLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalDetallesLabel">Detalles de Acción de Mejora</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Tabs -->
+                <ul class="nav nav-tabs mb-3" id="tabsDetalles" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="tab-info" data-bs-toggle="tab" data-bs-target="#info" type="button" role="tab">
+                            Información General
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="tab-causas" data-bs-toggle="tab" data-bs-target="#causas" type="button" role="tab">
+                            Causas Raíz
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="tab-planes" data-bs-toggle="tab" data-bs-target="#planes" type="button" role="tab">
+                            Planes de Acción
+                        </button>
+                    </li>
+                </ul>
+
+                <!-- Tab Content -->
+                <div class="tab-content" id="tabsDetallesContent">
+                    <!-- Info General -->
+                    <div class="tab-pane fade show active" id="info" role="tabpanel">
+                        <div id="infoGeneral">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Causas -->
+                    <div class="tab-pane fade" id="causas" role="tabpanel">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6>Causas Raíz Identificadas</h6>
+                            <button class="btn btn-sm btn-primary" id="btnAgregarCausa">
+                                <i class="fas fa-plus me-1"></i>Agregar Causa
+                            </button>
+                        </div>
+                        <div id="listaCausas">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Planes de Acción -->
+                    <div class="tab-pane fade" id="planes" role="tabpanel">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6>Planes de Acción</h6>
+                            <button class="btn btn-sm btn-primary" id="btnAgregarPlan">
+                                <i class="fas fa-plus me-1"></i>Agregar Plan
+                            </button>
+                        </div>
+                        <div id="listaPlanes">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/sgc/acciones-mejora.js"></script>
+}

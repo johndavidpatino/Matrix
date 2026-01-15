@@ -1,0 +1,268 @@
+@{
+    ViewData["Title"] = "Auditorías Internas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <!-- Encabezado -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-1">Auditorías Internas</h2>
+            <p class="text-muted">Sistema de Gestión de Calidad - Auditorías ISO</p>
+        </div>
+        <button class="btn btn-primary" 
+                id="btnNuevaAuditoria"
+                data-bs-toggle="modal" 
+                data-bs-target="#modalAuditoria">
+            <i class="fas fa-plus me-2"></i>Nueva Auditoría
+        </button>
+    </div>
+
+    <!-- Filtros -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label for="filtroEstado" class="form-label">Estado</label>
+                    <select id="filtroEstado" class="form-select">
+                        <option value="">Todos los estados</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="filtroAno" class="form-label">Año Auditoría</label>
+                    <input type="number" 
+                           id="filtroAno" 
+                           class="form-control" 
+                           placeholder="2024" 
+                           min="2020" 
+                           max="2030">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label d-block">&nbsp;</label>
+                    <button id="btnFiltrar" class="btn btn-secondary w-100">
+                        <i class="fas fa-search me-2"></i>Buscar
+                    </button>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label d-block">&nbsp;</label>
+                    <button id="btnLimpiarFiltros" class="btn btn-outline-secondary w-100">
+                        <i class="fas fa-times me-2"></i>Limpiar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grid de Auditorías -->
+    <div class="card">
+        <div class="card-body">
+            <div id="loadingSpinner" class="text-center py-5" style="display: none;">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+                <p class="mt-2 text-muted">Cargando auditorías...</p>
+            </div>
+
+            <div class="table-responsive" id="tablaAuditorias">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Normativa</th>
+                            <th>Tipo</th>
+                            <th>Fecha Límite</th>
+                            <th>Auditor</th>
+                            <th>Año</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyAuditorias">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Paginación -->
+            <nav aria-label="Paginación de auditorías">
+                <ul class="pagination justify-content-center mb-0" id="paginacion">
+                    <!-- Populated by JavaScript -->
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Nueva/Editar Auditoría -->
+<div class="modal fade" id="modalAuditoria" tabindex="-1" aria-labelledby="modalAuditoriaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAuditoriaLabel">Nueva Auditoría Interna</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <form id="formAuditoria">
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <!-- Normativa -->
+                        <div class="col-md-6">
+                            <label for="normativaId" class="form-label">
+                                Normativa <span class="text-danger">*</span>
+                            </label>
+                            <select id="normativaId" name="NormativaId" class="form-select" required>
+                                <option value="">Seleccione...</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                La normativa es requerida
+                            </div>
+                        </div>
+
+                        <!-- Tipo Auditoría -->
+                        <div class="col-md-6">
+                            <label for="tipoAuditoriaId" class="form-label">
+                                Tipo de Auditoría <span class="text-danger">*</span>
+                            </label>
+                            <select id="tipoAuditoriaId" name="TipoAuditoriaId" class="form-select" required>
+                                <option value="">Seleccione...</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                El tipo es requerido
+                            </div>
+                        </div>
+
+                        <!-- Fecha Límite -->
+                        <div class="col-md-6">
+                            <label for="fechaLimite" class="form-label">
+                                Fecha Límite <span class="text-danger">*</span>
+                            </label>
+                            <input type="date" 
+                                   id="fechaLimite" 
+                                   name="FechaLimite" 
+                                   class="form-control" 
+                                   required>
+                            <div class="invalid-feedback">
+                                La fecha límite es requerida y debe ser mayor a hoy
+                            </div>
+                        </div>
+
+                        <!-- Auditor -->
+                        <div class="col-md-6">
+                            <label for="auditorId" class="form-label">
+                                Auditor <span class="text-danger">*</span>
+                            </label>
+                            <select id="auditorId" name="AuditorId" class="form-select" required>
+                                <option value="">Seleccione...</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                El auditor es requerido
+                            </div>
+                        </div>
+
+                        <!-- Año Auditoría -->
+                        <div class="col-md-12">
+                            <label for="anoAuditoria" class="form-label">
+                                Año Auditoría <span class="text-danger">*</span>
+                            </label>
+                            <input type="number" 
+                                   id="anoAuditoria" 
+                                   name="AnoAuditoria" 
+                                   class="form-control" 
+                                   min="2020" 
+                                   max="2030"
+                                   required>
+                            <div class="invalid-feedback">
+                                El año es requerido
+                            </div>
+                        </div>
+
+                        <!-- Auditados (multi-select) -->
+                        <div class="col-md-12">
+                            <label for="auditados" class="form-label">
+                                Auditados <span class="text-danger">*</span>
+                            </label>
+                            <div id="auditadosContainer" class="border rounded p-3">
+                                <div class="mb-2">
+                                    <button type="button" class="btn btn-sm btn-outline-primary" id="btnAgregarAuditado">
+                                        <i class="fas fa-plus me-1"></i>Agregar Auditado
+                                    </button>
+                                </div>
+                                <div id="listaAuditados">
+                                    <!-- Populated by JavaScript -->
+                                </div>
+                            </div>
+                            <small class="text-muted">Debe agregar al menos un auditado</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" id="btnGuardarAuditoria">
+                        <i class="fas fa-save me-2"></i>Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Informe Auditor -->
+<div class="modal fade" id="modalInformeAuditor" tabindex="-1" aria-labelledby="modalInformeLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalInformeLabel">Informe de Auditoría</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <form id="formInforme">
+                <input type="hidden" id="informeAuditoriaId" name="AuditoriaId">
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <!-- Conclusiones -->
+                        <div class="col-md-12">
+                            <label for="conclusiones" class="form-label">
+                                Conclusiones <span class="text-danger">*</span>
+                            </label>
+                            <textarea id="conclusiones" 
+                                      name="Conclusiones" 
+                                      class="form-control" 
+                                      rows="4" 
+                                      maxlength="2000"
+                                      required></textarea>
+                            <div class="invalid-feedback">
+                                Las conclusiones son requeridas (máximo 2000 caracteres)
+                            </div>
+                        </div>
+
+                        <!-- Hallazgos -->
+                        <div class="col-md-12">
+                            <label class="form-label">
+                                Hallazgos <span class="text-danger">*</span>
+                            </label>
+                            <div class="border rounded p-3">
+                                <div class="mb-2">
+                                    <button type="button" class="btn btn-sm btn-outline-primary" id="btnAgregarHallazgo">
+                                        <i class="fas fa-plus me-1"></i>Agregar Hallazgo
+                                    </button>
+                                </div>
+                                <div id="listaHallazgos">
+                                    <!-- Populated by JavaScript -->
+                                </div>
+                            </div>
+                            <small class="text-muted">Debe agregar al menos un hallazgo</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success" id="btnGuardarInforme">
+                        <i class="fas fa-check me-2"></i>Guardar Informe
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/sgc/auditorias.js"></script>
+}
