@@ -134,6 +134,13 @@ public class CualitativoProgramacionController : Controller
                 return View("Edit", programacion);
             }
 
+            // Notificar programación creada (fire and forget, no bloquea respuesta)
+            if (programacion.Id == 0) // Solo si es nueva
+            {
+                _ = _notificacionService.NotificarProgramacionCreadaAsync(programacionId)
+                    .ConfigureAwait(false);
+            }
+
             TempData["Success"] = "Programación guardada exitosamente";
             return RedirectToAction("Index", new { trabajoId = programacion.TrabajoId });
         }
@@ -165,6 +172,11 @@ public class CualitativoProgramacionController : Controller
                 return Json(new { success = false, message = error });
             }
 
+            // Notificar cambio de estado (fire and forget)
+            var estadoNuevo = MapearEstadoNumeroATexto(estado);
+            _ = _notificacionService.NotificarCambioEstadoProgramacionAsync(id, "Anterior", estadoNuevo)
+                .ConfigureAwait(false);
+
             return Json(new { success = true, message = "Estado actualizado exitosamente" });
         }
         catch (Exception ex)
@@ -173,6 +185,19 @@ public class CualitativoProgramacionController : Controller
             return Json(new { success = false, message = "Error cambiando estado" });
         }
     }
+
+    /// <summary>
+    /// Mapear número de estado a texto descriptivo
+    /// </summary>
+    private string MapearEstadoNumeroATexto(int estado) => estado switch
+    {
+        1 => "Confirmado",
+        2 => "Cancelado",
+        3 => "Reprogramado",
+        4 => "Completado",
+        5 => "No presentado",
+        _ => "Pendiente"
+    };
 
     /// <summary>
     /// Exportar programaciones a Excel
