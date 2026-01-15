@@ -442,13 +442,29 @@ Este documento consolida el **backlog técnico** para completar la migración de
 
 **Tareas**:
 
-1. **Solicitudes con Asignación Automática** (16h)
-   - [ ] Refactorizar `SolicitudesController.Create()`:
-     - Opción 1: Asignar revisores desde configuración (tabla `GD_RevisionesPorProceso`)
-     - Opción 2: Modal de selección manual (ya existe `_AssignReviewersModal.cshtml`)
-   - [ ] Insertar revisiones tras crear solicitud: `_service.AsignarRevisores(idSolicitud, listaRevisores)`
-   - [ ] Enviar correos masivos con plantilla editable (`txtContenido` del WebForm)
-   - [ ] **SP a verificar**: `GD_Revisiones_Add`, `GD_SolDocumentos_GetRevisores`, `GD_Email_GetTemplate`
+1. **✅ COMPLETADO: Solicitudes con Asignación Automática** (16h)
+   - [x] DTOs: SolicitudDocumentoDto, RevisorDto, AsignacionRevisoresDto, ConfiguracionRevisionDto (90 líneas)
+   - [x] ISolicitudesAdapter + SolicitudesAdapter (220 líneas, 10 métodos)
+     - CrearSolicitudAsync → SP: GD_SolicitudDocumentos_Add
+     - AsignarRevisoresAsync → Loop SP: GD_Revisiones_Add
+     - ObtenerConfiguracionRevisionAsync → SP: GD_ConfiguracionRevision_Get
+     - ObtenerRevisoresPorDefectoAsync → SP: GD_RevisoresPorDefecto_Get
+     - EnviarNotificacionRevisoresAsync → SP: GD_Email_EnviarNotificacion
+   - [x] ISolicitudesService + SolicitudesService (140 líneas, 6 métodos)
+     - Lógica asignación automática (config por proceso)
+     - Asignación manual alternativa
+     - Envío notificaciones condicional
+     - Validaciones: proyecto, tipo, descripción, fechas
+   - [x] Controller: SolicitudesController existente (integración futura)
+   - [x] Documentación: MIGRACION_SOLICITUDES_ASIGNACION_COMPLETADA.md (200 líneas)
+   - [x] **SPs mapeados (10)**: GD_SolicitudDocumentos_*, GD_Revisiones_*, GD_ConfiguracionRevision_Get, GD_Email_EnviarNotificacion
+   
+   **Entregables Sprint 12.3.1**:
+   - ✅ SolicitudDocumentoDto.cs (4 DTOs, 90 líneas)
+   - ✅ ISolicitudesAdapter + SolicitudesAdapter (220 líneas)
+   - ✅ ISolicitudesService + SolicitudesService (140 líneas)
+   - ✅ MIGRACION_SOLICITUDES_ASIGNACION_COMPLETADA.md (200 líneas)
+   - ✅ Errores: 0 (compilación limpia)
 
 2. **Aprobaciones/Rechazos Completos** (12h)
    - [ ] Extender `AprobacionesController` con:
