@@ -16,5 +16,30 @@ namespace MatrixNext.Core.Services.GD
         Task<(bool exitoso, string mensaje)> ActualizarSolicitudAsync(SolicitudDocumentoDto solicitud);
         Task<(bool exitoso, string mensaje)> AsignarRevisoresAsync(AsignacionRevisoresDto asignacion, long usuarioId);
         Task<ConfiguracionRevisionDto> ObtenerConfiguracionRevisionAsync(long idProceso);
+
+        /// <summary>
+        /// Aprobar una revisión y cambiar estado de solicitud automáticamente si todos aprobaron
+        /// </summary>
+        Task<(bool exitoso, string mensaje)> AprobarRevisionAsync(AprobacionRevisionDto aprobacion);
+
+        /// <summary>
+        /// Rechazar una revisión y cambiar estado de solicitud a Rechazado automáticamente
+        /// </summary>
+        Task<(bool exitoso, string mensaje)> RechazarRevisionAsync(AprobacionRevisionDto rechazo);
+
+        /// <summary>
+        /// Obtener resumen de aprobaciones de una solicitud
+        /// </summary>
+        Task<ResumenAprobacionDto> ObtenerResumenAprobacionAsync(long idSolicitud);
+
+        /// <summary>
+        /// Obtener historial de revisiones (Audit Trail) de una solicitud
+        /// </summary>
+        Task<IEnumerable<HistorialRevisionDto>> ObtenerHistorialRevisionesAsync(long idSolicitud);
+
+        /// <summary>
+        /// Obtener timeline completo de una solicitud
+        /// </summary>
+        Task<TimelineSolicitudDto> ObtenerTimelineSolicitudAsync(long idSolicitud);
     }
 }

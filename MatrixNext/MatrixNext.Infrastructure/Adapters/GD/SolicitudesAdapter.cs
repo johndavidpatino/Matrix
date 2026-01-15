@@ -434,5 +434,101 @@ namespace MatrixNext.Infrastructure.Adapters.GD
                 throw;
             }
         }
+
+        public async Task<IEnumerable<HistorialRevisionDto>> ObtenerHistorialRevisionesAsync(long idSolicitud)
+        {
+            try
+            {
+                var query = @"
+                    SELECT 
+                        r.IdRevision,
+                        r.IdSolicitud,
+                        r.IdRevisor,
+                        e.NombreCompleto as NombreRevisor,
+                        e.Email as EmailRevisor,
+                        r.OrdenRevision,
+                        r.TipoRevision,
+                        CASE r.TipoRevision
+                            WHEN 1 THEN 'Pendiente'
+                            WHEN 2 THEN 'Aprobado'
+                            WHEN 3 THEN 'Rechazado'
+                            ELSE 'Desconocido'
+                        END as TipoRevisionTexto,
+                        r.FechaAsignacion,
+                        r.FechaRevision,
+                        r.ComentarioRevision,
+                        CASE 
+                            WHEN r.TipoRevision = 1 THEN 'Asignado'
+                            WHEN r.TipoRevision = 2 THEN 'Aprobado'
+                            WHEN r.TipoRevision = 3 THEN 'Rechazado'
+                            ELSE 'Asignado'
+                        END as Accion,
+                        CASE 
+                            WHEN r.TipoRevision = 1 THEN 'info'
+                            WHEN r.TipoRevision = 2 THEN 'success'
+                            WHEN r.TipoRevision = 3 THEN 'danger'
+                            ELSE 'secondary'
+                        END as AccionClass,
+                        CASE 
+                            WHEN r.TipoRevision = 1 THEN 'fa-clock'
+                            WHEN r.TipoRevision = 2 THEN 'fa-check-circle'
+                            WHEN r.TipoRevision = 3 THEN 'fa-times-circle'
+                            ELSE 'fa-user'
+                        END as AccionIcon,
+                        DATEDIFF(DAY, r.FechaAsignacion, ISNULL(r.FechaRevision, GETDATE())) as DiasTranscurridos
+                    FROM GD_Revisiones r
+                    LEFT JOIN TH_Empleado e ON e.IdEmpleado = r.IdRevisor
+                    WHERE r.IdSolicitud = @IdSolicitud
+                    ORDER BY r.OrdenRevision, r.FechaAsignacion";
+
+                var historial = await _connection.QueryAsync<HistorialRevisionDto>(query, new { IdSolicitud = idSolicitud });
+
+                _logger.LogInformation("Historial obtenido. IdSolicitud: {IdSolicitud}, Eventos: {Count}", 
+                    idSolicitud, historial.Count());
+
+                return historial;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error obteniendo historial de revisiones. IdSolicitud: {IdSolicitud}", idSolicitud);
+                throw;
+            }
+        }
+
+        public async Task<TimelineSolicitudDto> ObtenerTimelineSolicitudAsync(long idSolicitud)
+        {
+            try
+            {
+                // Obtener datos de la solicitud
+                var solicitud = await ObtenerSolicitudAsync(idSolicitud);
+                if (solicitud == null)
+                {
+                    _logger.LogWarning("Solicitud no encontrada. IdSolicitud: {IdSolicitud}", idSolicitud);
+                    return null;
+                }
+
+                // Obtener historial de revisiones
+                var eventos = await ObtenerHistorialRevisionesAsync(idSolicitud);
+
+                var timeline = new TimelineSolicitudDto
+                {
+                    IdSolicitud = idSolicitud,
+                    NumeroSolicitud = solicitud.NumeroSolicitud,
+                    FechaSolicitud = solicitud.FechaSolicitud,
+                    EstadoActual = solicitud.Estado,
+                    Eventos = eventos.ToList()
+                };
+
+                _logger.LogInformation("Timeline obtenido. IdSolicitud: {IdSolicitud}, Eventos: {Count}", 
+                    idSolicitud, timeline.TotalEventos);
+
+                return timeline;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error obteniendo timeline de solicitud. IdSolicitud: {IdSolicitud}", idSolicitud);
+                throw;
+            }
+        }
     }
 }

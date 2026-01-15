@@ -325,5 +325,47 @@ namespace MatrixNext.Core.Services.GD
         {
             return await _adapter.ObtenerResumenAprobacionAsync(idSolicitud);
         }
+
+        public async Task<IEnumerable<HistorialRevisionDto>> ObtenerHistorialRevisionesAsync(long idSolicitud)
+        {
+            try
+            {
+                var historial = await _adapter.ObtenerHistorialRevisionesAsync(idSolicitud);
+                
+                _logger.LogInformation("Historial de revisiones obtenido. IdSolicitud: {IdSolicitud}, Eventos: {Count}", 
+                    idSolicitud, historial.Count());
+                
+                return historial;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error obteniendo historial de revisiones. IdSolicitud: {IdSolicitud}", idSolicitud);
+                throw;
+            }
+        }
+
+        public async Task<TimelineSolicitudDto> ObtenerTimelineSolicitudAsync(long idSolicitud)
+        {
+            try
+            {
+                var timeline = await _adapter.ObtenerTimelineSolicitudAsync(idSolicitud);
+                
+                if (timeline == null)
+                {
+                    _logger.LogWarning("Timeline no encontrado. IdSolicitud: {IdSolicitud}", idSolicitud);
+                    return null;
+                }
+
+                _logger.LogInformation("Timeline obtenido. IdSolicitud: {IdSolicitud}, Eventos: {Count}, Última actividad: {UltimaActividad}", 
+                    idSolicitud, timeline.TotalEventos, timeline.UltimaActividad);
+                
+                return timeline;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error obteniendo timeline. IdSolicitud: {IdSolicitud}", idSolicitud);
+                throw;
+            }
+        }
     }
 }

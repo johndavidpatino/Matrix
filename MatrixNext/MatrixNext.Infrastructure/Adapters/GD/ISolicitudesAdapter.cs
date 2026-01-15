@@ -35,5 +35,15 @@ namespace MatrixNext.Infrastructure.Adapters.GD
         /// Obtener resumen de aprobaciones de una solicitud
         /// </summary>
         Task<ResumenAprobacionDto> ObtenerResumenAprobacionAsync(long idSolicitud);
+
+        /// <summary>
+        /// Obtener historial de revisiones (Audit Trail) de una solicitud
+        /// </summary>
+        Task<IEnumerable<HistorialRevisionDto>> ObtenerHistorialRevisionesAsync(long idSolicitud);
+
+        /// <summary>
+        /// Obtener timeline completo de una solicitud (solicitud + revisiones)
+        /// </summary>
+        Task<TimelineSolicitudDto> ObtenerTimelineSolicitudAsync(long idSolicitud);
     }
 }

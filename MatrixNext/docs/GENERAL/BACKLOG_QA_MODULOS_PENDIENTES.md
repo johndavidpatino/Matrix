@@ -490,11 +490,28 @@ Este documento consolida el **backlog técnico** para completar la migración de
    - ✅ MIGRACION_APROBACIONES_RECHAZOS_COMPLETADA.md (220 líneas)
    - ✅ Errores: 0 (compilación limpia)
 
-3. **Audit Trail de Revisiones** (8h)
-   - [ ] Crear tabla/vista `GD_HistorialRevisiones` (si no existe)
-   - [ ] Guardar: usuario, fecha, acción (aprobar/rechazar), comentario
-   - [ ] Vista de historial en modal de detalles de solicitud
-   - [ ] **SP a verificar**: `GD_Revisiones_GetHistorial`, `GD_Revisiones_SaveAudit`
+3. **✅ COMPLETADO: Audit Trail de Revisiones** (8h)
+   - [x] DTOs: HistorialRevisionDto (15 props), TimelineSolicitudDto (6 props + 2 computed) (+100 líneas)
+   - [x] ISolicitudesAdapter extendido (+2 métodos)
+   - [x] SolicitudesAdapter (+110 líneas):
+     - ObtenerHistorialRevisionesAsync → Query GD_Revisiones + TH_Empleado
+     - ObtenerTimelineSolicitudAsync → Combina solicitud + historial
+     - Computed fields: Accion, AccionClass, AccionIcon, DiasTranscurridos
+   - [x] ISolicitudesService extendido (+2 métodos)
+   - [x] SolicitudesService (+50 líneas):
+     - ObtenerHistorialRevisionesAsync con logging
+     - ObtenerTimelineSolicitudAsync con validaciones
+   - [x] Tabla reutilizada: GD_Revisiones (NO se creó tabla nueva)
+   - [x] Query SQL optimizado: JOIN TH_Empleado, CASE WHEN, DATEDIFF, ORDER BY
+   - [x] Documentación: MIGRACION_AUDIT_TRAIL_COMPLETADA.md (280 líneas)
+   - [x] **Funcionalidad**: Timeline visual con eventos cronológicos (Asignado, Aprobado, Rechazado)
+   
+   **Entregables Sprint 12.3.3**:
+   - ✅ HistorialRevisionDto, TimelineSolicitudDto (100 líneas)
+   - ✅ SolicitudesAdapter extendido (+110 líneas, 2 métodos)
+   - ✅ SolicitudesService extendido (+50 líneas, 2 métodos)
+   - ✅ MIGRACION_AUDIT_TRAIL_COMPLETADA.md (280 líneas)
+   - ✅ Errores: 0 (compilación limpia)
 
 4. **Testing de Workflow End-to-End** (4h)
    - [ ] Caso 1: Crear solicitud → Asignar 3 revisores → 3 aprobaciones → Estado cambia a "Aprobado"

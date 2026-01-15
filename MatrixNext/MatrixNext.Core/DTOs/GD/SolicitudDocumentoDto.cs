@@ -101,4 +101,41 @@ namespace MatrixNext.Core.DTOs.GD
         public long EstadoFinal { get; set; } // 2=Aprobado, 3=Rechazado, 1=Pendiente
         public string MensajeFinal { get; set; }
     }
+
+    /// <summary>
+    /// DTO para historial de revisiones (Audit Trail)
+    /// Ref: Sprint 12.3.3 - Audit Trail de Revisiones
+    /// </summary>
+    public class HistorialRevisionDto
+    {
+        public long IdRevision { get; set; }
+        public long IdSolicitud { get; set; }
+        public long IdRevisor { get; set; }
+        public string NombreRevisor { get; set; }
+        public string EmailRevisor { get; set; }
+        public int OrdenRevision { get; set; }
+        public int TipoRevision { get; set; } // 1=Pendiente, 2=Aprobado, 3=Rechazado
+        public string TipoRevisionTexto { get; set; }
+        public DateTime? FechaAsignacion { get; set; }
+        public DateTime? FechaRevision { get; set; }
+        public string ComentarioRevision { get; set; }
+        public string Accion { get; set; } // "Asignado", "Aprobado", "Rechazado"
+        public string AccionClass { get; set; } // CSS class: "info", "success", "danger"
+        public string AccionIcon { get; set; } // Font Awesome icon
+        public int DiasTranscurridos { get; set; }
+    }
+
+    /// <summary>
+    /// DTO para timeline completo de una solicitud
+    /// </summary>
+    public class TimelineSolicitudDto
+    {
+        public long IdSolicitud { get; set; }
+        public string NumeroSolicitud { get; set; }
+        public DateTime FechaSolicitud { get; set; }
+        public string EstadoActual { get; set; }
+        public List<HistorialRevisionDto> Eventos { get; set; } = new();
+        public int TotalEventos => Eventos.Count;
+        public DateTime? UltimaActividad => Eventos.OrderByDescending(e => e.FechaRevision ?? e.FechaAsignacion).FirstOrDefault()?.FechaRevision;
+    }
 }
