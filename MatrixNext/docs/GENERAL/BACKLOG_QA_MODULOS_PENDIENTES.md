@@ -261,23 +261,35 @@ Este documento consolida el **backlog técnico** para completar la migración de
 
 **Tareas**:
 
-1. **Distribución de Entrevistas** (12h)
-   - [ ] Crear `DistribucionEntrevistasController` con endpoints Index, DistribuirPorUnidad, DistribuirPorCiudad
-   - [ ] Vista con grid de distribución por metodología y cuotas
-   - [ ] Validaciones: suma de distribución = total muestra
-   - [ ] **SP a verificar**: `PY_DistribucionEntrevistas_Get`, `PY_DistribucionEntrevistas_Save`, `PY_Cuotas_Calcular`
+1. **Distribución de Entrevistas** (12h) ✅ COMPLETADO (Data Layer)
+   - ✅ DistribucionDto.cs: DistribucionEntrevistaDto, CuotaDistribucionDto, ResumenDistribucionDto
+   - ✅ IDistribucionAdapter + DistribucionAdapter: 5 métodos data access (ObtenerDistribuciones, ObtenerResumen, DistribuirPorUnidad, ObtenerCuotas, ValidarSuma)
+   - ✅ IDistribucionService + DistribucionService: 4 métodos business logic con validaciones
+   - ✅ Validaciones: suma total coincide con muestra, cantidades > 0, ciudad para RMC
+   - ✅ DI registrado en Program.cs
+   - ✅ Documentación: MAPEO_SP_DISTRIBUCION_VARIABLES_INHOME.md
+   - ⏳ UI pendiente: Controller + Views (Sprint UI)
+   - **SP a verificar**: `PY_DistribucionEntrevistas_Get`, `PY_DistribucionEntrevistas_Save`, `PY_Cuotas_Calcular`
 
-2. **Variables de Control** (8h)
-   - [ ] Crear `VariablesControlController` con CRUD completo
-   - [ ] Vista con grid de variables y rangos permitidos
-   - [ ] Integración con reportes (`PY_Variables_Control*`)
-   - [ ] **SP a verificar**: `PY_VariablesControl_Get`, `PY_VariablesControl_Add`, `PY_VariablesControl_Update`
+2. **Variables de Control** (8h) ✅ COMPLETADO (Data Layer)
+   - ✅ VariableControlDto con TipoDato (Numérico, Texto, Rango, Lista)
+   - ✅ IDistribucionAdapter + DistribucionAdapter: 4 métodos CRUD variables
+   - ✅ IDistribucionService + DistribucionService: Validaciones (nombre, tipo, rango)
+   - ✅ Validaciones: ValorMinimo <= ValorMaximo, TipoDato válido, Lista requiere ValoresPermitidos
+   - ✅ DI registrado en Program.cs
+   - ✅ Documentación: MAPEO_SP_DISTRIBUCION_VARIABLES_INHOME.md
+   - ⏳ UI pendiente: Controller + Views (Sprint UI)
+   - **SP a verificar**: `PY_VariablesControl_Get`, `PY_VariablesControl_Add`, `PY_VariablesControl_Update`, `PY_VariablesControl_Delete`
 
-3. **InHome Visit** (10h)
-   - [ ] Crear `InHomeVisitController` con gestión de visitas
-   - [ ] Vista con calendario de programación y seguimiento
-   - [ ] Validar campos: lugar, fecha, estado, recursos
-   - [ ] **SP a verificar**: `PY_InHomeVisit_Get`, `PY_InHomeVisit_Save`, `PY_InHomeVisit_UpdateEstado`
+3. **InHome Visit** (10h) ✅ COMPLETADO (Data Layer)
+   - ✅ InHomeVisitDto con Estados (Programada, Realizada, Cancelada, Reprogramada)
+   - ✅ IDistribucionAdapter + DistribucionAdapter: 4 métodos CRUD visitas
+   - ✅ IDistribucionService + DistribucionService: Validaciones (lugar, fecha futura, participantes > 0)
+   - ✅ Cambio de estado automático: Realizada → FechaRealizada = GETDATE()
+   - ✅ DI registrado en Program.cs
+   - ✅ Documentación: MAPEO_SP_DISTRIBUCION_VARIABLES_INHOME.md
+   - ⏳ UI pendiente: Controller + Views (Sprint UI)
+   - **SP a verificar**: `PY_InHomeVisit_Get`, `PY_InHomeVisit_Save`, `PY_InHomeVisit_UpdateEstado`
 
 4. **Mapeo y Documentación SP** (10h)
    - [ ] Auditar todos los servicios existentes (`IProyectosService`, `ITrabajosService`, `ITrabajosCualiService`, etc.)

@@ -266,6 +266,11 @@ builder.Services.AddScoped<MatrixNext.Data.Services.OP.ITraficoService, MatrixNe
 builder.Services.AddScoped<MatrixNext.Data.Adapters.OP.ISupervisionAdapter, MatrixNext.Data.Adapters.OP.SupervisionAdapter>();
 builder.Services.AddScoped<MatrixNext.Data.Services.OP.ISupervisionService, MatrixNext.Data.Services.OP.SupervisionService>();
 
+// ===== SPRINT 12.2: PY Distribución Entrevistas, Variables Control, InHome Visits =====
+// Ref: BACKLOG_QA_MODULOS_PENDIENTES.md § Sprint 12.2.1-12.2.3
+builder.Services.AddScoped<MatrixNext.Data.Adapters.PY.IDistribucionAdapter, MatrixNext.Data.Adapters.PY.DistribucionAdapter>();
+builder.Services.AddScoped<MatrixNext.Data.Services.PY.IDistribucionService, MatrixNext.Data.Services.PY.DistribucionService>();
+
 builder.Services.AddScoped<IOpCargaService, OpCargaService>();
 builder.Services.AddScoped<IOpPlanillasService, OpPlanillasService>();
 builder.Services.AddScoped<IOpProductividadService, OpProductividadService>();
