@@ -1,6 +1,6 @@
 # DASHBOARD DE MIGRACION - Estado actual
 
-Fecha de corte: 2026-01-15 (Sprints 5, 6, 7, 8 COMPLETADOS; **Sprint 9 EN CURSO** 🟡)
+Fecha de corte: 2026-01-15 (Sprints 5, 6, 7, 8, 9 COMPLETADOS; **Sprint 10 PRÓXIMO** 🟡)
 
 ## Resumen corto
 - **SPRINT 5 COMPLETADO**: TH_TalentoHumano Views/UI (15-29 enero, 80h) sobre la API Sprint 4 ya establecida.
@@ -8,7 +8,7 @@ Fecha de corte: 2026-01-15 (Sprints 5, 6, 7, 8 COMPLETADOS; **Sprint 9 EN CURSO*
 - **SPRINT 7 COMPLETADO** ✅: CORE Workflow runtime (máquina de estados, UI runtime, SignalR notificaciones, reportes alineados) - Detalles en `SPRINT_7_COMPLETADO.md`.
 - **SPRINT 8 COMPLETADO** ✅: EQ_EasyQuote Gap Analysis + Documentación (35h reales vs 120h estimadas; 85h ya existían). Detalles en `docs/EQ/SPRINT_8_COMPLETADO.md`.
 - **TH_TalentoHumano Sprint 4**: API REST COMPLETADA (21 archivos, 2,750+ LOC, 55 endpoints, 0 errores) con mapas en `MatrixNext/docs/TH/RESUMEN_MIGRACION_AUSENCIAS.md`.
-- **SPRINT 9 (Home)**: `HomeController`, `DashboardService` y la vista `Views/Home/Index.cshtml` ya entregan widgets de tareas, proyectos, quotes, ausencias, documentos y métricas. ← **🟡 PRÓXIMO**
+- **SPRINT 9 COMPLETADO** ✅: Home Dashboard - `HomeController`, `DashboardService` (7/7 métodos), `dashboard.js` (412 líneas), `dashboard.css` (450+ líneas), widgets de tareas, proyectos, quotes, ausencias, documentos y métricas. Build: 0 errores. Detalles en `docs/GENERAL/SPRINT_9_COMPLETADO.md`.
 - **RP_Reportes + OP_RO/OP_Trafico**: Controladores y vistas generados (`Areas/RP/Controllers/ReportesController.cs`, `Areas/OP/Controllers/OP_ROController.cs`, `OP_TraficoController.cs`) listos para integrarse en Sprint 10/11.
 - **EQ + CORE**: `Areas/EQ` y `Areas/CORE` contienen la base de workflows, EasyQuote y catálogos, lo que valida el backend previo a los sprints formales.
 
@@ -27,7 +27,7 @@ Fecha de corte: 2026-01-15 (Sprints 5, 6, 7, 8 COMPLETADOS; **Sprint 9 EN CURSO*
 | CORE (workflow) | Completo (Sprint 7) | **SPRINT 7 COMPLETADO**: Máquina de estados + UI runtime + SignalR + reportes (Ver `SPRINT_7_COMPLETADO.md`) |
 | GD_Documentos | Parcial (Fase 5 completa) | `MatrixNext/MatrixNext.Web/Areas/GD/Controllers` + `MatrixNext/MatrixNext.Web/Areas/GD/Views` |
 | EQ (EasyQuote) | En progreso | `MatrixNext/MatrixNext.Web/Areas/EQ/Controllers` + entrepiezas `MatrixNext/MatrixNext.Web/Areas/EQ/Views` |
-| Home | En desarrollo | `MatrixNext/MatrixNext.Web/Controllers/HomeController.cs`, `MatrixNext/MatrixNext.Web/Services/Dashboard/DashboardService.cs`, `MatrixNext/MatrixNext.Web/Views/Home/Index.cshtml` |
+| Home | Completo (Sprint 9) | `MatrixNext/MatrixNext.Web/Controllers/HomeController.cs`, `MatrixNext/MatrixNext.Web/Services/Dashboard/DashboardService.cs`, `MatrixNext/MatrixNext.Web/Views/Home/Index.cshtml`, `dashboard.js`, `dashboard.css` |
 | RP_Reportes | En desarrollo | `MatrixNext/MatrixNext.Web/Areas/RP/Controllers/ReportesController.cs`, `MatrixNext/MatrixNext.Web/Areas/RP/Views/Reportes` |
 | OP_RO | En desarrollo | `MatrixNext/MatrixNext.Web/Areas/OP/Controllers/OP_ROController.cs`, `MatrixNext/MatrixNext.Web/Areas/OP/Views/OP_RO` |
 | OP_Trafico | En desarrollo | `MatrixNext/MatrixNext.Web/Areas/OP/Controllers/OP_TraficoController.cs`, `MatrixNext/MatrixNext.Web/Areas/OP/Views/OP_Trafico` |
@@ -84,7 +84,7 @@ Ultima revision: 2026-01-14
 | CORE (workflow) | Alta | **SPRINT 7 COMPLETADO**: Máquina de estados + UI runtime + SignalR + reportes | 🟢 |
 | GD_Documentos | Media | Controladores y vistas live en `MatrixNext.Web/Areas/GD` (Fase 5) | 🟡 |
 | EQ (EasyQuote) | Crítica | **SPRINT 8 COMPLETADO**: Motor de cálculos (26 fórmulas), Seeds (600+ records), EasyCostService completo | 🟢 |
-| Home | Alta | HomeController + DashboardService + `Views/Home/Index` en desarrollo (Sprint 9 EN CURSO) | 🟡 |
+| Home | Alta | **SPRINT 9 COMPLETADO**: HomeController + DashboardService (7/7 métodos) + dashboard.js + dashboard.css | 🟢 |
 | **RP_Reportes** | **🔴 Alta** | **ReportesController + vistas listos; foco en datos y exportes S10** | **🔴** |
 | **OP_RO + OP_Trafico** | **🟠 Media-Baja** | **OP_ROController / OP_TraficoController + vistas existen; cerrando integraciones S11** | **🔴** |
 | PY_ControlCalidad | Baja | Sprint 12+ | ⚪️ |
@@ -106,8 +106,8 @@ Ultima revision: 2026-01-14
 | 6 | OP_Cualitativo Complementos + Bulk Import | 2 sem | 2026-01-13 → 2026-01-29 | 75h | ✅ COMPLETADO |
 | 7 | CORE Workflow | 2 sem | 2026-02-01 → 2026-02-12 | 85h | ✅ COMPLETADO |
 | 8 | EQ_EasyQuote Fase 1 | 1 sem | 2026-02-15 → 2026-02-19 | 35h (85h ya existían) | ✅ COMPLETADO |
-| **9** | **Home Dashboard** | **1-2 sem** | **2026-02-22 → 2026-03-05** | **50h** | **🟡 EN CURSO** |
-| **10** | **RP_Reportes** | **1-2 sem** | **2026-03-08 → 2026-03-19** | **60h** | **🔴 PLANIFICADO** |
+| 9 | Home Dashboard | 1 sem | 2026-01-15 (COMPLETADO) | 12h | ✅ COMPLETADO |
+| **10** | **RP_Reportes** | **1-2 sem** | **2026-01-15 → 2026-01-29** | **60h** | **🟡 EN CURSO** |
 | **11** | **OP_RO + OP_Trafico** | **2 sem** | **2026-03-22 → 2026-04-02** | **90h** | **🔴 PLANIFICADO** |
 | 12+ | Módulos Baja Prioridad | Variable | 2026-04-05+ | TBD | ⚪️ PENDIENTE |
 
