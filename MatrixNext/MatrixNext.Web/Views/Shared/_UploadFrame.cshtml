@@ -1,0 +1,336 @@
+@{
+    /// <summary>
+    /// Componente reutilizable para upload de archivos con validaciones
+    /// Ref: BACKLOG_QA_MODULOS_PENDIENTES.md § Sprint 12.2.6
+    /// Uso: @await Html.PartialAsync("_UploadFrame", new UploadFrameModel { ... })
+    /// </summary>
+}
+
+@model MatrixNext.Web.ViewModels.UploadFrameModel
+
+<div class="upload-frame-container mb-3">
+    <div class="card">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0">
+                <i class="fas fa-upload"></i> @Model.TituloSeccion
+            </h5>
+        </div>
+
+        <div class="card-body">
+            <!-- Zona de Drop & Upload -->
+            <div class="upload-zone" id="uploadZone_@Model.IdComponente"
+                 data-accepted-types="@Model.ExtensionesPermitidas"
+                 data-max-size="@Model.TamanoMaximoBytess"
+                 data-container-id="@Model.IdContenedor"
+                 data-container-type="@Model.TipoContenedor">
+
+                <div class="drop-area text-center py-5 border-2 border-dashed rounded"
+                     id="dropArea_@Model.IdComponente"
+                     style="cursor: pointer; background-color: #f8f9fa; border-color: #dee2e6;">
+
+                    <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                    <h6 class="mb-2">Arrastra archivos aquí</h6>
+                    <p class="text-muted small">o haz clic para seleccionar</p>
+
+                    <div class="small text-secondary mt-2">
+                        <strong>Extensiones permitidas:</strong> @Model.ExtensionesPermitidas<br />
+                        <strong>Tamaño máximo:</strong> @(Model.TamanoMaximoBytess / (1024 * 1024)) MB
+                    </div>
+
+                    <input type="file"
+                           id="fileInput_@Model.IdComponente"
+                           multiple="@(Model.PermitirMultiple ? "multiple" : "")"
+                           style="display: none;"
+                           accept="@Model.ExtensionesPermitidas.Replace(", ", ",")">
+                </div>
+
+                <!-- Barra de Progreso -->
+                <div id="progressBar_@Model.IdComponente" class="mt-3" style="display: none;">
+                    <div class="progress" style="height: 25px;">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                             role="progressbar" 
+                             style="width: 0%"
+                             id="progressFill_@Model.IdComponente">
+                            <span id="progressText_@Model.IdComponente">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Listado de Archivos a Cargar -->
+                <div id="filesList_@Model.IdComponente" class="mt-3">
+                    @if (@Model.ArchivosActuales?.Count > 0)
+                    {
+                        <div class="alert alert-info">
+                            <h6><i class="fas fa-check-circle"></i> Archivos actuales:</h6>
+                            <ul class="mb-0">
+                                @foreach (var archivo in Model.ArchivosActuales)
+                                {
+                                    <li>
+                                        <strong>@archivo.Nombre</strong>
+                                        <span class="badge badge-secondary">@(Math.Round(archivo.TamanoBytess / 1024.0, 2)) KB</span>
+                                        @if (Model.PermitirEliminar)
+                                        {
+                                            <button type="button" 
+                                                    class="btn btn-sm btn-outline-danger btn-delete-file"
+                                                    data-file-id="@archivo.IdArchivo"
+                                                    data-container-id="@Model.IdContenedor">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        }
+                                        <small class="text-muted">@archivo.FechaSubida.ToString("dd/MM/yyyy HH:mm")</small>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                </div>
+
+                <!-- Listado de Archivos Pendientes -->
+                <div id="pendingFiles_@Model.IdComponente" class="mt-3" style="display: none;">
+                    <div class="alert alert-warning">
+                        <h6><i class="fas fa-hourglass"></i> Pendientes de cargar:</h6>
+                        <ul id="pendingList_@Model.IdComponente" class="mb-0"></ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botones de Acción -->
+            <div class="mt-4 d-flex gap-2">
+                <button type="button" 
+                        class="btn btn-primary"
+                        id="btnSelectFiles_@Model.IdComponente"
+                        onclick="document.getElementById('fileInput_@Model.IdComponente').click();">
+                    <i class="fas fa-folder-open"></i> Seleccionar Archivos
+                </button>
+
+                <button type="button" 
+                        class="btn btn-success"
+                        id="btnUpload_@Model.IdComponente"
+                        style="display: none;">
+                    <i class="fas fa-arrow-up"></i> Cargar Archivos
+                </button>
+
+                <button type="button" 
+                        class="btn btn-secondary"
+                        id="btnCancel_@Model.IdComponente"
+                        style="display: none;">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+            </div>
+
+            @if (Model.MostrarRestricciones)
+            {
+                <div class="alert alert-secondary mt-3 small">
+                    <i class="fas fa-exclamation-triangle"></i> 
+                    <strong>Restricciones:</strong>
+                    <ul class="mb-0">
+                        <li>Máximo @Model.TamanoMaximoBytess / (1024 * 1024) MB por archivo</li>
+                        <li>Extensiones permitidas: @Model.ExtensionesPermitidas</li>
+                        <li>No permitir duplicados: @(Model.NoPermitirDuplicados ? "Sí" : "No")</li>
+                        <li>Validar antivirus: @(Model.ValidarAntivirus ? "Sí" : "No")</li>
+                    </ul>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Scripts del Componente -->
+<script>
+    $(document).ready(function () {
+        var componentId = '@Model.IdComponente';
+        var uploadZone = document.getElementById('uploadZone_' + componentId);
+        var dropArea = document.getElementById('dropArea_' + componentId);
+        var fileInput = document.getElementById('fileInput_' + componentId);
+        var progressBar = document.getElementById('progressBar_' + componentId);
+        var pendingFiles = document.getElementById('pendingFiles_' + componentId);
+        var pendingList = document.getElementById('pendingList_' + componentId);
+        var btnUpload = document.getElementById('btnUpload_' + componentId);
+        var btnCancel = document.getElementById('btnCancel_' + componentId);
+
+        var filesToUpload = [];
+
+        // Drag & Drop Events
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropArea.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight(e) {
+            dropArea.style.borderColor = '#007bff';
+            dropArea.style.backgroundColor = '#e7f3ff';
+        }
+
+        function unhighlight(e) {
+            dropArea.style.borderColor = '#dee2e6';
+            dropArea.style.backgroundColor = '#f8f9fa';
+        }
+
+        // Handle drop
+        dropArea.addEventListener('drop', handleDrop, false);
+        dropArea.addEventListener('click', () => fileInput.click());
+
+        fileInput.addEventListener('change', handleFiles);
+
+        function handleDrop(e) {
+            var dt = e.dataTransfer;
+            var files = dt.files;
+            handleFiles({ target: { files: files } });
+        }
+
+        function handleFiles(e) {
+            var files = e.target.files;
+            filesToUpload = Array.from(files);
+
+            if (filesToUpload.length > 0) {
+                displayPendingFiles();
+                btnUpload.style.display = 'inline-block';
+                btnCancel.style.display = 'inline-block';
+            }
+        }
+
+        function displayPendingFiles() {
+            pendingList.innerHTML = '';
+            filesToUpload.forEach((file, index) => {
+                var item = `<li>
+                    <i class="fas fa-file"></i> ${file.name} 
+                    <span class="badge badge-info">${(file.size / 1024).toFixed(2)} KB</span>
+                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="removePendingFile(${index})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </li>`;
+                pendingList.innerHTML += item;
+            });
+            pendingFiles.style.display = 'block';
+        }
+
+        window.removePendingFile = function (index) {
+            filesToUpload.splice(index, 1);
+            if (filesToUpload.length === 0) {
+                pendingFiles.style.display = 'none';
+                btnUpload.style.display = 'none';
+                btnCancel.style.display = 'none';
+            } else {
+                displayPendingFiles();
+            }
+        };
+
+        // Upload
+        btnUpload.addEventListener('click', function () {
+            uploadFiles();
+        });
+
+        btnCancel.addEventListener('click', function () {
+            filesToUpload = [];
+            fileInput.value = '';
+            pendingFiles.style.display = 'none';
+            btnUpload.style.display = 'none';
+            btnCancel.style.display = 'none';
+        });
+
+        function uploadFiles() {
+            var formData = new FormData();
+            filesToUpload.forEach((file, index) => {
+                formData.append('files', file);
+            });
+            formData.append('containerId', '@Model.IdContenedor');
+            formData.append('containerType', '@Model.TipoContenedor');
+
+            progressBar.style.display = 'block';
+
+            $.ajax({
+                url: '@Model.UrlUpload',
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                xhr: function () {
+                    var xhr = new XMLHttpRequest();
+                    xhr.upload.addEventListener('progress', function (e) {
+                        if (e.lengthComputable) {
+                            var percentComplete = (e.loaded / e.total) * 100;
+                            document.getElementById('progressFill_' + componentId).style.width = percentComplete + '%';
+                            document.getElementById('progressText_' + componentId).innerText = Math.round(percentComplete) + '%';
+                        }
+                    }, false);
+                    return xhr;
+                },
+                success: function (response) {
+                    progressBar.style.display = 'none';
+                    filesToUpload = [];
+                    fileInput.value = '';
+                    pendingFiles.style.display = 'none';
+                    btnUpload.style.display = 'none';
+                    btnCancel.style.display = 'none';
+
+                    showToast('Archivos cargados exitosamente', 'success');
+                    
+                    // Callback si se especifica
+                    @if (!string.IsNullOrEmpty(Model.CallbackJs))
+                    {
+                        @Html.Raw(Model.CallbackJs);
+                    }
+                },
+                error: function (xhr) {
+                    progressBar.style.display = 'none';
+                    showToast('Error al cargar archivos: ' + (xhr.responseJSON?.mensaje || 'Error desconocido'), 'error');
+                }
+            });
+        }
+
+        function showToast(message, type) {
+            var alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+            var alert = $('<div class="alert ' + alertClass + ' alert-dismissible fade show" role="alert">' +
+                message +
+                '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>' +
+                '</div>');
+            $('.upload-frame-container').before(alert);
+            setTimeout(() => alert.remove(), 5000);
+        }
+
+        // Eliminar archivo
+        $(document).on('click', '.btn-delete-file', function () {
+            var fileId = $(this).data('file-id');
+            var containerId = $(this).data('container-id');
+
+            if (confirm('¿Está seguro de que desea eliminar este archivo?')) {
+                $.post('@Model.UrlDelete', { fileId: fileId, containerId: containerId }, function (response) {
+                    if (response.exitoso) {
+                        showToast('Archivo eliminado exitosamente', 'success');
+                        location.reload();
+                    } else {
+                        showToast(response.mensaje, 'error');
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+<style>
+    .upload-frame-container .drop-area:hover {
+        background-color: #f0f0f0;
+        border-color: #0056b3 !important;
+    }
+
+    .upload-frame-container .progress-bar-striped {
+        background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+        background-size: 1rem 1rem;
+    }
+
+    .gap-2 {
+        gap: 0.5rem;
+    }
+</style>

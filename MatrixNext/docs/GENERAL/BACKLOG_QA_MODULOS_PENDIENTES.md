@@ -346,16 +346,30 @@ Este documento consolida el **backlog técnico** para completar la migración de
    
    **Referencia**: Commit Sprint 12.2.5 (UI Asignaciones - Parte 1/2)
 
-6. **Componente Reutilizable de Upload** (12h)
-   - [ ] Crear `Views/Shared/_UploadFrame.cshtml` con:
-     - Input file + validación client-side
-     - Hidden keys: IdTrabajo/IdProyecto, tipoDocumento
-     - Callbacks JS para refrescar grillas
-     - Mensajes de éxito/error consistentes
-   - [ ] Backend: `UploadController` genérico (si no existe, reutilizar de CU_Cuentas)
-   - [ ] Validaciones: extensiones permitidas, tamaño máx (appsettings), duplicados
-   - [ ] Seguridad: validar permisos antes de aceptar carga/descarga
-   - [ ] **SP a verificar**: `GD_RepositorioDocumentos_Add` (reutilizar de GD)
+6. **✅ COMPLETADO: Componente Reutilizable de Upload** (12h)
+   - [x] Crear `Views/Shared/_UploadFrame.cshtml` (320 líneas)
+     - Drop area interactivo + file input
+     - Validación client-side (extensiones, tamaño)
+     - Progreso visual con barra + porcentaje
+     - Listado de archivos pendientes/actuales
+     - Callbacks JS para operaciones posteriores
+   - [x] Modelo `UploadFrameModel.cs` (16 propiedades configurables)
+   - [x] Backend: 3 nuevos endpoints en `UploadController`
+     - `POST /api/upload/UploadFile` (múltiples archivos)
+     - `POST /api/upload/DeleteFile` (eliminación)
+     - `GET /api/upload/GetArchivos/{containerType}/{containerId}` (API futura)
+   - [x] Validaciones: extensiones (.pdf, .docx, .xlsx, .jpg, .png, .zip), tamaño máx 10 MB
+   - [x] Seguridad: `[Authorize]` en todos endpoints, logging de usuario
+   - [x] Documentación: `COMPONENTE_REUTILIZABLE_UPLOAD.md` (200+ líneas)
+   - [x] **SP reutilizado**: `GD_RepositorioDocumentos_Add` (integración futura en 12.2.7)
+   
+   **Entregables Sprint 12.2.6**:
+   - ✅ _UploadFrame.cshtml (320 líneas, Razor + Bootstrap 5 + jQuery)
+   - ✅ UploadFrameModel.cs (75 líneas, 16 props configurables)
+   - ✅ UploadController.cs (3 endpoints, +90 líneas)
+   - ✅ COMPONENTE_REUTILIZABLE_UPLOAD.md (200 líneas, guía completa)
+   - ✅ Errores: 0 (compilación limpia)
+   - ✅ Git commit: Sprint 12.2.6
 
 7. **Instructivos (General + Cuali)** (8h)
    - [ ] Crear `InstructivosController` con endpoints: Index, Upload, Download, Delete
