@@ -233,6 +233,7 @@ builder.Services.AddScoped<IOpFiltrosService, OpFiltrosService>();
 builder.Services.AddScoped<IOpFichasTecnicasService, OpFichasTecnicasService>();
 builder.Services.AddScoped<IOpProgramacionService, OpProgramacionService>();
 builder.Services.AddScoped<IOpNotificacionService, OpNotificacionService>(); // Sprint 6 - Email Notifications
+builder.Services.AddScoped<IOpBulkImportService, OpBulkImportService>(); // Sprint 6 - Bulk Import
 builder.Services.AddScoped<IOpPlanillasModeracionService, OpPlanillasModeracionService>(); // Sprint 2
 builder.Services.AddScoped<IOpReportService, OpReportService>(); // Sprint 6 - Reportes/Exportes
 builder.Services.AddScoped<IOpAdvancedFiltersService, OpAdvancedFiltersService>(); // Sprint 6 - Filtros avanzados

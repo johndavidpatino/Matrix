@@ -18,15 +18,18 @@ namespace MatrixNext.Web.Areas.OP.Controllers;
 public class CualitativoMuestraController : Controller
 {
     private readonly IOpMuestraService _muestraService;
+    private readonly IOpBulkImportService _bulkImportService;
     private readonly IEmailQueueService _emailQueueService;
     private readonly ILogger<CualitativoMuestraController> _logger;
 
     public CualitativoMuestraController(
         IOpMuestraService muestraService,
+        IOpBulkImportService bulkImportService,
         IEmailQueueService emailQueueService,
         ILogger<CualitativoMuestraController> logger)
     {
         _muestraService = muestraService;
+        _bulkImportService = bulkImportService;
         _emailQueueService = emailQueueService;
         _logger = logger;
     }
@@ -255,6 +258,87 @@ public class CualitativoMuestraController : Controller
             _logger.LogError(ex, "Error importando CSV de muestra trabajo {TrabajoId}", trabajoId);
             TempData["Error"] = "Error importando CSV";
             return RedirectToAction("Index", new { trabajoId });
+        }
+    }
+
+    /// <summary>
+    /// Mostrar modal de Bulk Import
+    /// Sprint 6 Fase 6: Bulk Import
+    /// </summary>
+    [HttpGet("BulkImport")]
+    public async Task<IActionResult> BulkImport(long trabajoId)
+    {
+        ViewBag.TrabajoId = trabajoId;
+        return PartialView("_BulkImportModal");
+    }
+
+    /// <summary>
+    /// Descargar plantilla Excel para import
+    /// </summary>
+    [HttpGet("DescargarPlantilla")]
+    public async Task<IActionResult> DescargarPlantilla()
+    {
+        try
+        {
+            var datos = await _bulkImportService.GenerarPlantillaExcelAsync();
+            return File(datos, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                $"Plantilla_Muestras_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error descargando plantilla");
+            return BadRequest("Error descargando plantilla");
+        }
+    }
+
+    /// <summary>
+    /// Procesar upload bulk de muestras (Excel/CSV)
+    /// </summary>
+    [HttpPost("ProcesarBulkImport")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ProcesarBulkImport(long trabajoId, IFormFile archivo)
+    {
+        try
+        {
+            if (archivo == null || archivo.Length == 0)
+                return Json(new { success = false, message = "Debe seleccionar un archivo" });
+
+            var usuarioId = long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            using var stream = archivo.OpenReadStream();
+            var (success, insertados, errores, mensajes) = await _bulkImportService.ImportarMuestrasAsync(
+                stream, archivo.FileName, trabajoId, usuarioId);
+
+            return Json(new
+            {
+                success = success,
+                insertados,
+                errores,
+                mensajes = string.Join("<br>", mensajes)
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error procesando bulk import trabajo {TrabajoId}", trabajoId);
+            return Json(new { success = false, message = "Error procesando archivo" });
+        }
+    }
+
+    /// <summary>
+    /// Obtener historial de imports del trabajo
+    /// </summary>
+    [HttpGet("HistorialImports")]
+    public async Task<IActionResult> HistorialImports(long trabajoId)
+    {
+        try
+        {
+            var historial = await _bulkImportService.ObtenerHistorialImportsAsync(trabajoId);
+            return PartialView("_ImportHistorial", historial);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error obteniendo historial imports {TrabajoId}", trabajoId);
+            return BadRequest("Error obteniendo historial");
         }
     }
 }
