@@ -1,0 +1,118 @@
+@{
+    ViewData["Title"] = "Instructivos Cualitativos - " + ViewBag.NombreTrabajo;
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2>
+                <i class="fas fa-video"></i> Instructivos Cualitativos
+            </h2>
+            <small class="text-muted">Trabajo: <strong>@ViewBag.NombreTrabajo</strong></small>
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-primary" 
+                    data-ajax-modal 
+                    data-url="@Url.Action("UploadCualiModal", "Instructivos", new { idTrabajo = ViewBag.IdTrabajo })">
+                <i class="fas fa-upload"></i> Cargar Instructivo
+            </button>
+            <a href="@Url.Action("Index", "Instructivos", new { idTrabajo = ViewBag.IdTrabajo })" 
+               class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Volver a General
+            </a>
+        </div>
+    </div>
+
+    @if (Model?.Count > 0)
+    {
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th><i class="fas fa-file"></i> Archivo</th>
+                        <th>Tipo</th>
+                        <th>Versión</th>
+                        <th>Fecha Carga</th>
+                        <th>Usuario</th>
+                        <th>Tamaño</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var archivo in Model.OrderByDescending(a => a.FechaSubida))
+                    {
+                        <tr>
+                            <td>
+                                @{
+                                    var ext = System.IO.Path.GetExtension(archivo.Nombre).ToLower();
+                                    var icon = ext switch
+                                    {
+                                        ".pdf" => "fa-file-pdf text-danger",
+                                        ".docx" => "fa-file-word text-primary",
+                                        ".pptx" => "fa-file-powerpoint text-warning",
+                                        _ => "fa-file text-secondary"
+                                    };
+                                }
+                                <i class="fas @icon"></i>
+                                <strong>@archivo.Nombre</strong>
+                            </td>
+                            <td>
+                                <span class="badge badge-info">@ext</span>
+                            </td>
+                            <td>
+                                <span class="badge badge-secondary">v@(archivo.Version ?? "1.0")</span>
+                            </td>
+                            <td>@archivo.FechaSubida.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>
+                                <small>@archivo.UsuarioSubida</small>
+                            </td>
+                            <td>
+                                <small class="text-muted">@(Math.Round(archivo.TamanoBytess / 1024.0, 2)) KB</small>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("Download", "Instructivos", new { idArchivo = archivo.IdArchivo })" 
+                                   class="btn btn-sm btn-info" 
+                                   title="Descargar">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                                <button type="button" 
+                                        class="btn btn-sm btn-outline-danger"
+                                        onclick="if (confirm('¿Eliminar este instructivo?')) { window.location = '@Url.Action("Delete", "Instructivos", new { idArchivo = archivo.IdArchivo })'; }">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> No hay instructivos cualitativos cargados aún.
+            <button class="btn btn-sm btn-primary ms-2" 
+                    data-ajax-modal 
+                    data-url="@Url.Action("UploadCualiModal", "Instructivos", new { idTrabajo = ViewBag.IdTrabajo })">
+                Cargar Ahora
+            </button>
+        </div>
+    }
+</div>
+
+<div id="modalContainer"></div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $(document).on('click', '[data-ajax-modal]', function (e) {
+                e.preventDefault();
+                var url = $(this).data('url');
+                $.get(url, function (html) {
+                    $('#modalContainer').html(html);
+                    $('#instructivoModal').modal('show');
+                });
+            });
+        });
+    </script>
+}

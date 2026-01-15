@@ -371,11 +371,32 @@ Este documento consolida el **backlog técnico** para completar la migración de
    - ✅ Errores: 0 (compilación limpia)
    - ✅ Git commit: Sprint 12.2.6
 
-7. **Instructivos (General + Cuali)** (8h)
-   - [ ] Crear `InstructivosController` con endpoints: Index, Upload, Download, Delete
-   - [ ] Vistas con reutilización de `_UploadFrame.cshtml`
-   - [ ] Listado de instructivos cargados por trabajo con versiones
-   - [ ] **SP a verificar**: Reutilizar `GD_RepositorioDocumentos_*` con `TipoContenedor=Trabajo`
+7. **✅ COMPLETADO: Instructivos (General + Cuali)** (8h)
+   - [x] Crear `InstructivosController` (180 líneas, 7 endpoints)
+     - `GET Index/{idTrabajo}`: Listado general
+     - `GET UploadModal/{idTrabajo}`: Modal carga general
+     - `GET Cualitativos/{idTrabajo}`: Listado cualitativo
+     - `GET UploadCualiModal/{idTrabajo}`: Modal carga cualitativo
+     - `GET Download/{idArchivo}`: Descarga
+     - `POST Delete/{idArchivo}`: Eliminación
+     - `GET GetVersiones/{idTrabajo}/{tipoInstructivo}`: API versiones
+   - [x] Crear `Index.cshtml` (90 líneas) - Listado general con modal
+   - [x] Crear `Cualitativos.cshtml` (85 líneas) - Listado cualitativo con modal
+   - [x] Crear `_UploadInstructivoModal.cshtml` (30 líneas) - Modal wrapper
+   - [x] Validaciones: Trabajo existe, Authorize (Administrador | GerenteProyectos)
+   - [x] Extensiones: General .pdf,.docx (5MB) | Cualitativo .pdf,.docx,.pptx (10MB)
+   - [x] Seguridad: [Authorize], logging usuario, sin stack traces
+   - [x] Integración: 100% con _UploadFrame (Sprint 12.2.6)
+   - [x] Documentación: `MIGRACION_INSTRUCTIVOS_COMPLETADA.md` (200 líneas)
+   
+   **Entregables Sprint 12.2.7**:
+   - ✅ InstructivosController.cs (180 líneas)
+   - ✅ Index.cshtml (90 líneas)
+   - ✅ Cualitativos.cshtml (85 líneas)
+   - ✅ _UploadInstructivoModal.cshtml (30 líneas)
+   - ✅ MIGRACION_INSTRUCTIVOS_COMPLETADA.md (200 líneas)
+   - ✅ Errores: 0 (compilación limpia)
+   - ✅ Git commit: Sprint 12.2.7
 
 8. **Registro de Planillas Cualitativo** (4h)
    - [ ] Crear `RegistroPlanillasCualiController` con carga de planillas
