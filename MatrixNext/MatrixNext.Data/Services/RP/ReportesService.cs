@@ -55,8 +55,8 @@ namespace MatrixNext.Data.Services.RP
                 // REGLA 7: Transformación
                 var resultado = AplicarPaginacion(datos, filtros.PageNumber, filtros.PageSize);
 
-                // Registrar auditoría
-                await RegistrarAuditoriaAsync(reporteId, filtros.UsuarioId ?? 0, "GENERACIÓN", $"Registros: {resultado.TotalRegistros}");
+                // Auditoría no-op (fuera de scope Sprint 10)
+                // await RegistrarAuditoriaAsync(reporteId, filtros.UsuarioId ?? 0, "GENERACIÓN", $"Registros: {resultado.TotalRegistros}");
 
                 return ApiResponse<ReporteResultadoDTO>.Ok(resultado, "Reporte generado correctamente");
             }
@@ -224,7 +224,8 @@ namespace MatrixNext.Data.Services.RP
                     ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                 };
 
-                await RegistrarAuditoriaAsync(reporteId, usuarioId, "EXPORT_EXCEL", export.Nombre);
+                // Auditoría no-op (fuera de scope Sprint 10)
+                // await RegistrarAuditoriaAsync(reporteId, usuarioId, "EXPORT_EXCEL", export.Nombre);
 
                 return export;
             }
@@ -235,39 +236,17 @@ namespace MatrixNext.Data.Services.RP
             }
         }
 
+        /// <summary>
+        /// Exportación a PDF no disponible en esta versión
+        /// REGLA 6: Sprint 10 solo replica paridad WebMatrix (Excel export solamente)
+        /// </summary>
+        [Obsolete("PDF export no implementado - fuera de scope Sprint 10", true)]
         public async Task<ReporteExportDTO> PrepararExportPdfAsync(
             int reporteId,
             ReporteFiltrosDTO filtros,
             int usuarioId)
         {
-            try
-            {
-                _logger.LogInformation($"[ReportesService] Preparando export PDF reporte {reporteId}");
-
-                // Obtener datos
-                var datos = await ObtenerDatosReporteAsync(reporteId, filtros);
-
-                // REGLA 7: Transformación para PDF
-                var contenido = ConvertirAPdfBytes(datos);
-
-                var export = new ReporteExportDTO
-                {
-                    Nombre = $"Reporte_{reporteId}_{DateTime.Now:yyyyMMdd_HHmmss}.pdf",
-                    FechaGeneracion = DateTime.Now,
-                    Usuario = $"Usuario_{usuarioId}",
-                    Contenido = contenido,
-                    ContentType = "application/pdf"
-                };
-
-                await RegistrarAuditoriaAsync(reporteId, usuarioId, "EXPORT_PDF", export.Nombre);
-
-                return export;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "[ReportesService] Error preparando export PDF");
-                throw;
-            }
+            throw new NotImplementedException("PDF export no está disponible. Use PrepararExportExcelAsync.");
         }
 
         // ============================================
@@ -332,20 +311,17 @@ namespace MatrixNext.Data.Services.RP
         // AUDITORÍA Y LOGGING
         // ============================================
 
+        /// <summary>
+        /// Auditoría de reportes no implementada en esta versión
+        /// REGLA 6: No existe en WebMatrix legacy - auditoría no se graba para reportes
+        /// </summary>
         public async Task RegistrarAuditoriaAsync(int reporteId, int usuarioId, string accion, string? detalles = null)
         {
-            try
-            {
-                _logger.LogInformation(
-                    $"[Auditoría] ReporteId={reporteId}, Usuario={usuarioId}, Acción={accion}, Detalles={detalles}");
+            // Placeholder: Auditoría genérica podría agregarse en futuro
+            _logger.LogInformation(
+                $"[Auditoría] ReporteId={reporteId}, Usuario={usuarioId}, Acción={accion}, Detalles={detalles}");
 
-                // TODO: Integrar con servicio de auditoría
-                await Task.CompletedTask;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "[ReportesService] Error registrando auditoría");
-            }
+            await Task.CompletedTask;
         }
 
         // ============================================
@@ -434,12 +410,14 @@ namespace MatrixNext.Data.Services.RP
             }
         }
 
+        /// <summary>
+        /// PDF conversion no disponible - fuera de scope Sprint 10
+        /// REGLA 6: Solo paridad WebMatrix (Excel export)
+        /// </summary>
+        [Obsolete("PDF conversion no implementada - usar Excel export", true)]
         private byte[] ConvertirAPdfBytes(List<Dictionary<string, object>> datos)
         {
-            // TODO: Implementar con iText/QuestPDF
-            // Por ahora retornar array vacío
-            _logger.LogInformation("[ReportesService] Convirtiendo datos a PDF");
-            return new byte[] { };
+            throw new NotImplementedException("PDF conversion no disponible.");
         }
 
         private Dictionary<string, object> TransformarIndicadores(List<Dictionary<string, object>> datos)

@@ -112,7 +112,6 @@
                         }
                     },
                     { data: 'proyecto' },
-                    {
                         data: null,
                         render: function(data, type, row) {
                             return `
@@ -122,12 +121,8 @@
                                 <button class="btn btn-sm btn-success btn-excel" data-id="${row.reporteId}">
                                     <i class="fas fa-file-excel"></i>
                                 </button>
-                                <button class="btn btn-sm btn-danger btn-pdf" data-id="${row.reporteId}">
-                                    <i class="fas fa-file-pdf"></i>
-                                </button>
                             `;
                         }
-                    }
                 ],
                 language: {
                     url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json'
@@ -165,11 +160,7 @@
                 window.location.href = '@Url.Action("ExportarExcel", "Reportes")/' + reporteId;
             });
 
-            // Exportar PDF
-            $(document).on('click', '.btn-pdf', function() {
-                var reporteId = $(this).data('id');
-                window.location.href = '@Url.Action("ExportarPdf", "Reportes")/' + reporteId;
-            });
+            // Nota: Exportar PDF no disponible en esta versión (fuera de scope Sprint 10)
         });
     </script>
 }
