@@ -1,0 +1,108 @@
+@model MatrixNext.Core.DTOs.GD.PncDto
+
+@{
+    var causas = ViewBag.Causas as IEnumerable<MatrixNext.Core.DTOs.GD.PncCausaDto> ?? new List<MatrixNext.Core.DTOs.GD.PncCausaDto>();
+}
+
+<div class="modal fade" id="modalForm" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detalles PNC #@Model.IdPnc</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <!-- Info General -->
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h6 class="mb-0">Información General</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Estado:</strong> <span class="badge bg-@Model.EstadoClass">@Model.NombreEstado</span></p>
+                                <p><strong>Proyecto:</strong> @Model.ProyectoTrabajo</p>
+                                <p><strong>Proceso:</strong> @Model.NombreProceso</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Registrado por:</strong> @Model.UsuarioRegistro</p>
+                                <p><strong>Fecha:</strong> @Model.FechaRegistro?.ToString("dd/MM/yyyy HH:mm")</p>
+                                <p><strong>Fuente:</strong> @Model.NombreFuente</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Descripción -->
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h6 class="mb-0">Descripción del Problema</h6>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">@Model.Descripcion</p>
+                        @if (!string.IsNullOrEmpty(Model.Observaciones))
+                        {
+                            <p><strong>Observaciones:</strong> @Model.Observaciones</p>
+                        }
+                    </div>
+                </div>
+
+                <!-- Causas Registradas -->
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <h6 class="mb-0">Causas Registradas</h6>
+                        @if (Model.PuedeRegistrarCausa)
+                        {
+                            <button class="btn btn-sm btn-success">+ Agregar Causa</button>
+                        }
+                    </div>
+                    <div class="card-body">
+                        @if (causas.Any())
+                        {
+                            <div class="accordion" id="accordionCausas">
+                                @{
+                                    int index = 0;
+                                    foreach (var causa in causas)
+                                    {
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header">
+                                                <button class="accordion-button @(index > 0 ? "collapsed" : "")" type="button" data-bs-toggle="collapse" data-bs-target="#causa@index">
+                                                    <span class="badge bg-@causa.EstadoClass me-2">@causa.NombreEstado</span>
+                                                    @causa.DescripcionCausa
+                                                </button>
+                                            </h2>
+                                            <div id="causa@index" class="accordion-collapse collapse @(index == 0 ? "show" : "")" data-bs-parent="#accordionCausas">
+                                                <div class="accordion-body">
+                                                    <p><strong>Acción Correctiva:</strong> @causa.AccionCorrectiva</p>
+                                                    <p><strong>Responsable:</strong> @causa.PersonaResponsable</p>
+                                                    <p><strong>Fecha Vencimiento:</strong> @causa.FechaVencimiento?.ToString("dd/MM/yyyy")</p>
+                                                    @if (causa.Observaciones != null)
+                                                    {
+                                                        <p><strong>Observaciones:</strong> @causa.Observaciones</p>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                        index++;
+                                    }
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <p class="text-muted text-center py-3">
+                                <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
+                                No hay causas registradas aún
+                            </p>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

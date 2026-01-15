@@ -1,0 +1,99 @@
+@model MatrixNext.Core.DTOs.GD.PncDto
+
+<div class="modal fade" id="modalForm" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Registrar PNC</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <form asp-action="Create" method="post" data-ajax-form>
+                <div class="modal-body">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="AsociadoA" class="form-label">Tipo de Asociación *</label>
+                                <select asp-for="AsociadoA" class="form-select">
+                                    <option value="">Seleccione...</option>
+                                    <option value="1">Trabajo (JBE)</option>
+                                    <option value="2">JBI</option>
+                                    <option value="3">Actividad</option>
+                                </select>
+                                <span asp-validation-for="AsociadoA" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="IdReferencia" class="form-label">ID Referencia *</label>
+                                <input asp-for="IdReferencia" type="number" class="form-control" />
+                                <span asp-validation-for="IdReferencia" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="IdProceso" class="form-label">Proceso *</label>
+                                <input asp-for="IdProceso" type="number" class="form-control" />
+                                <span asp-validation-for="IdProceso" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="FechaReclamo" class="form-label">Fecha del Reclamo</label>
+                                <input asp-for="FechaReclamo" type="date" class="form-control" />
+                                <span asp-validation-for="FechaReclamo" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Descripcion" class="form-label">Descripción del Problema *</label>
+                        <textarea asp-for="Descripcion" class="form-control" rows="4"></textarea>
+                        <span asp-validation-for="Descripcion" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Observaciones" class="form-label">Observaciones</label>
+                        <textarea asp-for="Observaciones" class="form-control" rows="2"></textarea>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Registrar PNC</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).on('submit', '[data-ajax-form]', function (e) {
+            e.preventDefault();
+            const form = $(this);
+            
+            $.ajax({
+                url: form.attr('action'),
+                type: form.attr('method'),
+                data: form.serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        $('#modalForm').modal('hide');
+                        location.reload();
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function () {
+                    alert('Error al procesar la solicitud');
+                }
+            });
+        });
+    </script>
+}

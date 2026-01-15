@@ -1,0 +1,141 @@
+@model MatrixNext.Core.DTOs.GD.PncDto
+
+@{
+    var seguimiento = ViewBag.Seguimiento as IEnumerable<MatrixNext.Core.DTOs.GD.PncSeguimientoDto> ?? new List<MatrixNext.Core.DTOs.GD.PncSeguimientoDto>();
+    var log = ViewBag.Log as IEnumerable<MatrixNext.Core.DTOs.GD.PncLogDto> ?? new List<MatrixNext.Core.DTOs.GD.PncLogDto>();
+}
+
+<div class="modal fade" id="modalForm" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Seguimiento PNC #@Model.IdPnc</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <!-- Resumen -->
+                <div class="alert alert-info">
+                    <strong>@Model.ProyectoTrabajo</strong> - @Model.NombreProceso
+                    <br>
+                    <small>@Model.Descripcion</small>
+                </div>
+
+                <!-- Seguimiento de Causas -->
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h6 class="mb-0">Seguimiento de Causas</h6>
+                    </div>
+                    <div class="card-body">
+                        @if (seguimiento.Any())
+                        {
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Causa</th>
+                                            <th>Responsable</th>
+                                            <th>Vencimiento</th>
+                                            <th>Días Restantes</th>
+                                            <th>Estado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var seg in seguimiento)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <small>@(seg.DescripcionCausa?.Length > 40 ? seg.DescripcionCausa.Substring(0, 40) + "..." : seg.DescripcionCausa)</small>
+                                                </td>
+                                                <td><small>@seg.Responsable</small></td>
+                                                <td><small>@seg.FechaVencimiento?.ToString("dd/MM/yyyy")</small></td>
+                                                <td>
+                                                    <span class="badge bg-@seg.DiasClass">
+                                                        @seg.DiasRestantes días
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span class="badge bg-@seg.EstadoCausa">@seg.EstadoCausa</span>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                        else
+                        {
+                            <p class="text-muted text-center py-3">No hay causas en seguimiento</p>
+                        }
+                    </div>
+                </div>
+
+                <!-- Timeline de Cambios -->
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="mb-0">Historial de Cambios</h6>
+                    </div>
+                    <div class="card-body">
+                        @if (log.Any())
+                        {
+                            <div class="timeline">
+                                @foreach (var item in log.OrderByDescending(x => x.FechaCambio))
+                                {
+                                    <div class="timeline-item mb-3">
+                                        <div class="timeline-marker badge bg-secondary">
+                                            <i class="fas fa-arrow-right"></i>
+                                        </div>
+                                        <div class="timeline-content">
+                                            <p class="mb-0">
+                                                <strong>@item.Accion</strong>
+                                                <br>
+                                                <small class="text-muted">@item.MotivoCambio</small>
+                                                <br>
+                                                <small class="text-muted">Por: @item.NombreUsuario - @item.FechaCambio?.ToString("dd/MM/yyyy HH:mm")</small>
+                                            </p>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <p class="text-muted text-center py-3">No hay historial</p>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .timeline {
+        position: relative;
+        padding-left: 30px;
+    }
+
+    .timeline-item {
+        position: relative;
+    }
+
+    .timeline-marker {
+        position: absolute;
+        left: -30px;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .timeline-content {
+        padding-left: 10px;
+        border-left: 2px solid #dee2e6;
+        padding-bottom: 10px;
+    }
+</style>
