@@ -1,9 +1,9 @@
 # DASHBOARD DE MIGRACION - Estado actual
 
-Fecha de corte: 2026-01-14 (Sprint 6 completado; Sprint 5 UI en curso)
+Fecha de corte: 2026-01-14 (Sprints 5 y 6 completados; próximo Sprint 7)
 
 ## Resumen corto
-- **SPRINT 5 INICIADO**: TH_TalentoHumano Views/UI (15-29 enero, 80h) sobre la API Sprint 4 ya establecida.
+- **SPRINT 5 COMPLETADO**: TH_TalentoHumano Views/UI (15-29 enero, 80h) sobre la API Sprint 4 ya establecida.
 - **SPRINT 6 COMPLETADO**: OP_Cualitativo complementos + Bulk Import (13-29 enero, 75h) con notificaciones, background reminders y carga masiva Excel/CSV.
 - **TH_TalentoHumano Sprint 4**: API REST COMPLETADA (21 archivos, 2,750+ LOC, 55 endpoints, 0 errores) con mapas en `MatrixNext/docs/TH/RESUMEN_MIGRACION_AUSENCIAS.md`.
 - **SPRINT 9 (Home)**: `HomeController`, `DashboardService` y la vista `Views/Home/Index.cshtml` ya entregan widgets de tareas, proyectos, quotes, ausencias, documentos y métricas.
@@ -48,13 +48,12 @@ Fecha de corte: 2026-01-14 (Sprint 6 completado; Sprint 5 UI en curso)
 - Cada uno debe recibir una entrada nueva en el backlog, con un plan de mapeo SP + área + menú antes de marcarlo como “en progreso”.
 
 ## Pendientes que deben continuar (Sprints 5-12)
-1. **Sprint 5 (2 sem)**: TH_TalentoHumano Views/UI (Nómina y complementarios sobre API Sprint 4 completa)
-2. **Sprint 7 (2 sem)**: CORE Workflow (tareas, notificaciones, integraciones)
-3. **Sprint 8 (2-3 sem)**: EQ_EasyQuote Fase 1 (análisis + catálogos + infraestructura)
-4. **Sprint 9 (1-2 sem)**: Home Dashboard (widgets / servicios ya corriendo; afinando datos de tareas, proyectos, ausencias y documentos)
-5. **Sprint 10 (1-2 sem)**: RP_Reportes (controladores + vistas ya listos; foco en datos y exportes) ← **🔴 PRÓXIMO FOCUS**
-6. **Sprint 11 (2 sem)**: OP_RO + OP_Trafico (controladores + vistas existentes; cerrando integración de revisiones y tráfico) ← **🔴 FINAL FOCUS**
-7. **Sprint 12+ (Variable)**: Módulos baja prioridad (PY_CC, SG_Actas, SGC_Calidad, etc.)
+1. **Sprint 7 (2 sem)**: CORE Workflow (tareas, notificaciones, integraciones)
+2. **Sprint 8 (2-3 sem)**: EQ_EasyQuote Fase 1 (análisis + catálogos + infraestructura)
+3. **Sprint 9 (1-2 sem)**: Home Dashboard (widgets / servicios ya corriendo; afinando datos de tareas, proyectos, ausencias y documentos)
+4. **Sprint 10 (1-2 sem)**: RP_Reportes (controladores + vistas ya listos; foco en datos y exportes) ← **🔴 PRÓXIMO FOCUS**
+5. **Sprint 11 (2 sem)**: OP_RO + OP_Trafico (controladores + vistas existentes; cerrando integración de revisiones y tráfico) ← **🔴 FINAL FOCUS**
+6. **Sprint 12+ (Variable)**: Módulos baja prioridad (PY_CC, SG_Actas, SGC_Calidad, etc.)
 
 ## Estructura de documentacion (ordenada)
 - `MatrixNext/docs/CORE/`
@@ -103,7 +102,7 @@ Ultima revision: 2026-01-14
 
 | Sprint | Módulo | Duración | Fechas Estimadas | Esfuerzo | Estado |
 |---|---|---|---|---|---|
-| 5 | TH Views/UI | 2 sem | 2026-01-15 → 2026-01-29 | 80h | 🟡 **IN PROGRESS** ⏱️ |
+| 5 | TH Views/UI | 2 sem | 2026-01-15 → 2026-01-29 | 80h | ✅ COMPLETADO |
 | 6 | OP_Cualitativo Complementos + Bulk Import | 2 sem | 2026-01-13 → 2026-01-29 | 75h | ✅ COMPLETADO |
 | 7 | CORE Workflow | 2 sem | 2026-02-01 → 2026-02-12 | 85h | ⚪️ PRÓXIMO |
 | 8 | EQ_EasyQuote Fase 1 | 2-3 sem | 2026-02-15 → 2026-03-05 | 120h | 🟡 PLANIFICADO |
