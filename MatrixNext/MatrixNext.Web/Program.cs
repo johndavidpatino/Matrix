@@ -37,6 +37,8 @@ using MatrixNext.Data.Services.OP_Trafico;
 using MatrixNext.Data.Services.Authorization;
 using MatrixNext.Data.Adapters.SGC;
 using MatrixNext.Data.Services.SGC;
+using MatrixNext.Data.Adapters.IT;
+using MatrixNext.Data.Services.IT;
 using System.Data;
 using Microsoft.Data.SqlClient;
 
@@ -104,6 +106,20 @@ builder.Services.AddScoped<ISGCAuditoriaAdapter, SGCAuditoriaAdapter>();
 builder.Services.AddScoped<ISGCAccionMejoraAdapter, SGCAccionMejoraAdapter>();
 builder.Services.AddScoped<ISGCAuditoriaService, SGCAuditoriaService>();
 builder.Services.AddScoped<ISGCAccionMejoraService, SGCAccionMejoraService>();
+
+// ===== SPRINT 14: ES_Estadistica (Brief, Diseño, Metodología) =====
+// Adapters and Services for ES (Estadística)
+builder.Services.AddScoped<MatrixNext.Data.Adapters.ES.IESBriefDisenoMuestralAdapter, MatrixNext.Data.Adapters.ES.ESBriefDisenoMuestralAdapter>();
+builder.Services.AddScoped<MatrixNext.Data.Adapters.ES.IESDisenoMuestralAdapter, MatrixNext.Data.Adapters.ES.ESDisenoMuestralAdapter>();
+builder.Services.AddScoped<MatrixNext.Data.Adapters.ES.IESMetodologiaCampoAdapter, MatrixNext.Data.Adapters.ES.ESMetodologiaCampoAdapter>();
+builder.Services.AddScoped<MatrixNext.Data.Services.ES.IESBriefDisenoMuestralService, MatrixNext.Data.Services.ES.ESBriefDisenoMuestralService>();
+builder.Services.AddScoped<MatrixNext.Data.Services.ES.IESDisenoMuestralService, MatrixNext.Data.Services.ES.ESDisenoMuestralService>();
+builder.Services.AddScoped<MatrixNext.Data.Services.ES.IESMetodologiaCampoService, MatrixNext.Data.Services.ES.ESMetodologiaCampoService>();
+
+// ===== SPRINT 15: IT (Infraestructura Tecnológica - Sincronización) =====
+// Adapter and Service for IT (Sync issues, trabajos, encuestas piloto)
+builder.Services.AddScoped<IITSyncAdapter, ITSyncAdapter>();
+builder.Services.AddScoped<IITSyncService, ITSyncService>();
 
 // Authorization Service (Sprint 10-11)
 builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();

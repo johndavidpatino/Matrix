@@ -1,0 +1,166 @@
+@model MatrixNext.Data.DTOs.ES.ESMetodologiaCampoInputDto
+
+@{
+    var esEdicion = ViewBag.Id != null;
+    var action = esEdicion ? "Edit" : "Create";
+    var titulo = esEdicion ? "Editar Metodología de Campo" : "Nueva Metodología de Campo";
+}
+
+<form id="formMetodologia" asp-action="@action" method="post">
+    @if (esEdicion)
+    {
+        <input type="hidden" name="id" value="@ViewBag.Id" />
+    }
+    
+    <div class="modal-header">
+        <h5 class="modal-title">@titulo</h5>
+        <button type="button" class="close" data-dismiss="modal">
+            <span>&times;</span>
+        </button>
+    </div>
+    
+    <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+        <input type="hidden" asp-for="TrabajoId" />
+        
+        <div class="form-group">
+            <label asp-for="NombreEstudio">Nombre del Estudio</label>
+            <input asp-for="NombreEstudio" class="form-control" />
+        </div>
+
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#espanol">Español</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#ingles">Inglés</a>
+            </li>
+        </ul>
+
+        <div class="tab-content mt-3">
+            <div id="espanol" class="tab-pane fade show active">
+                <div class="form-group">
+                    <label asp-for="Objetivo">Objetivo</label>
+                    <textarea asp-for="Objetivo" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Mercado">Mercado</label>
+                    <textarea asp-for="Mercado" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Marco">Marco</label>
+                    <textarea asp-for="Marco" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Tecnica">Técnica</label>
+                    <textarea asp-for="Tecnica" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Diseno">Diseño</label>
+                    <textarea asp-for="Diseno" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Instrucciones">Instrucciones</label>
+                    <textarea asp-for="Instrucciones" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Distribucion">Distribución</label>
+                    <textarea asp-for="Distribucion" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label asp-for="NivelConfianza">Nivel de Confianza</label>
+                    <textarea asp-for="NivelConfianza" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MargenError">Margen de Error</label>
+                    <textarea asp-for="MargenError" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Desagregacion">Desagregación</label>
+                    <textarea asp-for="Desagregacion" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Fuente">Fuente</label>
+                    <textarea asp-for="Fuente" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Variables">Variables</label>
+                    <textarea asp-for="Variables" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Tasa">Tasa</label>
+                    <textarea asp-for="Tasa" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Procedimiento">Procedimiento</label>
+                    <textarea asp-for="Procedimiento" class="form-control" rows="3"></textarea>
+                </div>
+            </div>
+
+            <div id="ingles" class="tab-pane fade">
+                <div class="form-group">
+                    <label asp-for="ObjetivoT">Objective</label>
+                    <textarea asp-for="ObjetivoT" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MercadoT">Market</label>
+                    <textarea asp-for="MercadoT" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MarcoT">Framework</label>
+                    <textarea asp-for="MarcoT" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label asp-for="TecnicaT">Technique</label>
+                    <textarea asp-for="TecnicaT" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DisenoT">Design</label>
+                    <textarea asp-for="DisenoT" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label asp-for="InstruccionesT">Instructions</label>
+                    <textarea asp-for="InstruccionesT" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DistribucionT">Distribution</label>
+                    <textarea asp-for="DistribucionT" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label asp-for="NivelConfianzaT">Confidence Level</label>
+                    <textarea asp-for="NivelConfianzaT" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MargenErrorT">Margin of Error</label>
+                    <textarea asp-for="MargenErrorT" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DesagregacionT">Disaggregation</label>
+                    <textarea asp-for="DesagregacionT" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label asp-for="FuenteT">Source</label>
+                    <textarea asp-for="FuenteT" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label asp-for="VariablesT">Variables</label>
+                    <textarea asp-for="VariablesT" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label asp-for="TasaT">Rate</label>
+                    <textarea asp-for="TasaT" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ProcedimientoT">Procedure</label>
+                    <textarea asp-for="ProcedimientoT" class="form-control" rows="3"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+    </div>
+    
+    @Html.AntiForgeryToken()
+</form>

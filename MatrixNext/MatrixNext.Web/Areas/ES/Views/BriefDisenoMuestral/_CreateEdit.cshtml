@@ -1,0 +1,42 @@
+@model MatrixNext.Data.DTOs.ES.ESBriefDisenoMuestralInputDto
+
+@{
+    var esEdicion = ViewBag.Id != null;
+    var action = esEdicion ? "Edit" : "Create";
+    var titulo = esEdicion ? "Editar Brief" : "Nuevo Brief";
+}
+
+<form id="formBrief" asp-action="@action" method="post">
+    @if (esEdicion)
+    {
+        <input type="hidden" name="id" value="@ViewBag.Id" />
+    }
+    
+    <div class="modal-header">
+        <h5 class="modal-title">@titulo</h5>
+        <button type="button" class="close" data-dismiss="modal">
+            <span>&times;</span>
+        </button>
+    </div>
+    
+    <div class="modal-body">
+        <input type="hidden" asp-for="IdPropuesta" value="@ViewBag.PropuestaId" />
+        
+        <div class="form-group">
+            <label asp-for="IdPropuesta">ID Propuesta</label>
+            <input asp-for="IdPropuesta" class="form-control" readonly />
+        </div>
+
+        <div class="form-check">
+            <input asp-for="Aprobado" class="form-check-input" type="checkbox" />
+            <label asp-for="Aprobado" class="form-check-label">Aprobado</label>
+        </div>
+    </div>
+    
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+    </div>
+    
+    @Html.AntiForgeryToken()
+</form>

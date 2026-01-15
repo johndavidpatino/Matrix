@@ -1,0 +1,42 @@
+@{
+    ViewData["Title"] = "Módulo de Estadística";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>@ViewData["Title"]</h2>
+            <p>Bienvenido al módulo de Estadística</p>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Brief Diseño Muestral</h5>
+                    <p class="card-text">Gestión de briefs para diseños muestrales</p>
+                    <a asp-controller="BriefDisenoMuestral" asp-action="Index" class="btn btn-primary">Acceder</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Diseños Muestrales</h5>
+                    <p class="card-text">Gestión de diseños muestrales</p>
+                    <a asp-controller="DisenoMuestral" asp-action="Index" class="btn btn-primary">Acceder</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Metodología de Campo</h5>
+                    <p class="card-text">Gestión de metodologías de campo</p>
+                    <a asp-controller="MetodologiaCampo" asp-action="Index" class="btn btn-primary">Acceder</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

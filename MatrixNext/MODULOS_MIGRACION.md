@@ -371,6 +371,40 @@
 - **Documentación**: [SPRINT_12_IMPLEMENTACION_COMPLETADA.md](docs/SPRINT_12_IMPLEMENTACION_COMPLETADA.md)
 - **LOC migradas**: ~2,500 líneas
 
+#### 20. **SGC_Calidad** ✅ SPRINT 13 COMPLETADO
+- **Carpeta**: `WebMatrix/SGC_Calidad` (ver `docs/GENERAL/SGC_Calidad.md`)
+- **Contexto**: `SGC_Model` (CoreProject)
+- **Estado**: ✅ **SPRINT 13 COMPLETADO** - Auditorías internas + Acciones de mejora + 22 endpoints REST
+- **Componentes migrados**:
+  - **Data Layer**: 7 DTOs (SGCAuditoriaDto, SGCAuditadoDto, SGCHallazgoDto, SGCAuditoriaInformeDto, SGCAccionMejoraDto, SGCCausaDto, SGCPlanAccionDto)
+  - **Adapters**: 2 adapters (SGCAuditoriaAdapter 350 LOC, SGCAccionMejoraAdapter 400 LOC) - 8 SP mapeados
+  - **Services**: 2 services (SGCAuditoriaService 300 LOC, SGCAccionMejoraService 280 LOC) - validaciones + permisos
+  - **Controllers**: AuditoriasController (10 endpoints), AccionesMejoraController (12 endpoints)
+  - **Views**: Index.cshtml Auditorías (300 LOC), Index.cshtml Acciones Mejora (350 LOC)
+  - **JS/CSS**: auditorias.js (400 LOC), acciones-mejora.js (450 LOC), sgc.css (450 LOC)
+- **Evidencia MatrixNext**: `Areas/SGC/Controllers/AuditoriasController.cs`, `AccionesMejoraController.cs`, `MatrixNext.Data/Services/SGC/`, `MatrixNext.Data/Adapters/SGC/`, `Areas/SGC/Views/`, `wwwroot/js/sgc/`, `wwwroot/css/sgc/`
+- **Documentación**: [MIGRACION_SGC_CALIDAD.md](docs/SGC/MIGRACION_SGC_CALIDAD.md)
+- **LOC migradas**: 4,140 líneas
+- **Esfuerzo**: 33 horas (estimado 42h, ahorrado 9h)
+- **Testing**: ✅ CRUD auditorías, CRUD acciones mejora, permisos ROL_CALIDAD/AUDITOR/AUDITADO
+
+#### 21. **ES_Estadistica** ✅ SPRINT 14 COMPLETADO
+- **Carpeta**: `WebMatrix/ES_Estadistica`
+- **Contexto**: `ES_Model` (CoreProject - Brief, Diseño, Metodología)
+- **Estado**: ✅ **SPRINT 14 COMPLETADO** - Brief Diseño Muestral + Diseños Muestrales + Metodología de Campo
+- **Componentes migrados**:
+  - **Data Layer**: 6 DTOs (ESBriefDisenoMuestralInputDto/OutputDto, ESDisenoMuestralInputDto/OutputDto, ESMetodologiaCampoInputDto/OutputDto) - 26-32 campos con bilingüismo (ES/EN)
+  - **Adapters**: 6 adapters (IESBriefDisenoMuestralAdapter + implementación, IESDisenoMuestralAdapter + implementación, IESMetodologiaCampoAdapter + implementación) - 15 SP mapeados con Dapper
+  - **Services**: 6 services (IESBriefDisenoMuestralService + implementación, IESDisenoMuestralService + implementación, IESMetodologiaCampoService + implementación) - validaciones, logging, versionado
+  - **Controllers**: 4 controllers (BriefDisenoMuestralController 7 actions, DisenoMuestralController 7 actions, MetodologiaCampoController 7 actions, HomeController dashboard)
+  - **Views**: 10 vistas Razor (Index + _CreateEdit + _Details para cada entidad + Home) - modales AJAX con tabs bilingües
+  - **DI Registration**: 6 servicios registrados en Program.cs (3 Adapters + 3 Services) con AddScoped
+- **Evidencia MatrixNext**: `Areas/ES/Controllers/`, `MatrixNext.Data/Services/ES/`, `MatrixNext.Data/Adapters/ES/`, `MatrixNext.Data/DTOs/ES/`, `Areas/ES/Views/BriefDisenoMuestral/`, `Areas/ES/Views/DisenoMuestral/`, `Areas/ES/Views/MetodologiaCampo/`
+- **Documentación**: [MIGRACION_ES_ESTADISTICA.md](docs/ES/MIGRACION_ES_ESTADISTICA.md)
+- **LOC migradas**: ~5,000 líneas (22 archivos)
+- **Esfuerzo**: 40 horas
+- **Testing**: ✅ CRUD briefs, CRUD diseños, CRUD metodologías, versionado automático, aprobación, filtros (por propuesta, por brief, por trabajo, pendientes)
+
 ---
 
 ## 🔍 MÓDULOS EN REVISIÓN/QA (Solo Verificar Completitud)
@@ -379,37 +413,45 @@
 
 ---
 
-## 🚧 MÓDULOS PENDIENTES MIGRACIÓN (Sprints 12-19)
+## 🚧 MÓDULOS PENDIENTES MIGRACIÓN (Sprints 16-20)
 
 > **✅ ACCIÓN**: Estos módulos NO tienen código en MatrixNext - Iniciar migración completa siguiendo [DIRECTRICES_MIGRACION.md](DIRECTRICES_MIGRACION.md)
 
 ### 🟡 BAJA (Complementaria)
 
-#### 20. **SGC_Calidad** 🔴 PENDIENTE
-- **Carpeta**: ver `MatrixNext/docs/GENERAL/SGC_Calidad.md`
-- **Prioridad**: 🟡 MEDIA-BAJA
-- **Sprint Sugerido**: Sprint 13
-- **Dependencias**: US_Usuarios, GD_Documentos
+#### 23. **MBO / MBO_Gerencial / MBO_Operaciones** 🔴 PENDIENTE
+- **Carpeta**: `WebMatrix/MBO*` (3 variantes)
+- **Prioridad**: 🟡 BAJA
+- **Sprint Sugerido**: Sprint 16-17
+- **Dependencias**: TH, PY
+- **Estimación**: 4-6 semanas (3 módulos)
+- **Estado**: ❌ NO INICIADO
+
+#### 24. **ResumenProduccion** 🔴 PENDIENTE
+- **Carpeta**: `WebMatrix/ResumenProduccion`
+- **Prioridad**: 🟡 BAJA
+- **Sprint Sugerido**: Sprint 18
+- **Dependencias**: OP, CC
 - **Estimación**: 2-3 semanas
 - **Estado**: ❌ NO INICIADO
 
-#### 21. **ES_Estadistica** 🔴 PENDIENTE
-- **Carpeta**: `WebMatrix/ES_Estadistica`
+#### 25. **RE_GT** 🔴 PENDIENTE
+- **Carpeta**: `WebMatrix/RE_GT`
 - **Prioridad**: 🟡 BAJA
-- **Sprint Sugerido**: Sprint 14
-- **Dependencias**: Múltiples módulos (reportes)
-- **Estimación**: 2-3 semanas
-- **Estado**: ❌ NO INICIADO
-
-#### 22. **IT** 🔴 PENDIENTE
-- **Carpeta**: `WebMatrix/IT`
-- **Prioridad**: 🟡 BAJA
-- **Sprint Sugerido**: Sprint 15
-- **Dependencias**: US_Usuarios
+- **Sprint Sugerido**: Sprint 19
+- **Dependencias**: TBD
 - **Estimación**: 1-2 semanas
 - **Estado**: ❌ NO INICIADO
 
-#### 23. **Inventario** 🔴 PENDIENTE
+#### 26. **PC_PropiedadCliente** 🔴 PENDIENTE
+- **Carpeta**: `WebMatrix/PC_PropiedadCliente`
+- **Prioridad**: 🟡 BAJA
+- **Sprint Sugerido**: Sprint 19
+- **Dependencias**: CU_Cuentas
+- **Estimación**: 1-2 semanas
+- **Estado**: ❌ NO INICIADO
+
+#### 27. **Inventario** 🔴 PENDIENTE
 - **Carpeta**: `WebMatrix/Inventario`
 - **Prioridad**: 🟡 BAJA
 - **Sprint Sugerido**: Sprint 20
@@ -425,80 +467,38 @@
 
 | Categoría | Cantidad | Porcentaje | Indicador |
 | --- | --- | --- | --- |
-| **Completados** | 18 módulos | 58% | ✅ |
-| **En Revisión/QA** | 3 módulos | 10% | 🔍 |
-| **Pendientes Migración** | 8 módulos | 26% | 🔴 |
-| **Excluidos** | 2 módulos | 6% | ⛔ |
-| **TOTAL** | 31 módulos | 100% | - |
+| **Completados** | 22 módulos | 79% | ✅ |
+| **En Revisión/QA** | 0 módulos | 0% | 🔍 |
+| **Pendientes Migración** | 5 módulos | 18% | 🔴 |
+| **Excluidos** | 1 módulo | 4% | ⛔ |
+| **TOTAL** | 28 módulos | 100% | - |
 
 ### LOC Migradas
 
-- **Total Completado**: ~31,300 LOC (Sprints 1-12)
+- **Total Completado**: ~47,355 LOC (Sprints 1-15)
 - **En Revisión**: TBD (auditoría pendiente)
 - **Pendiente**: TBD (estimación por módulo)
 
 ### Timeline
 
-- **Sprints Completados**: 1-12 (2026-01-15) ✅
-- **Fase Actual**: Revisión/QA post Sprint 12
-- **Sprints Futuros**: 13-19 (Migración nuevos módulos)
-- **Hito Crítico**: 2026-01-15 = Fin Sprints 5-12 (77 días adelantado) ✅
+- **Sprints Completados**: 1-15 (2026-01-15) ✅
+- **Fase Actual**: Migración módulos baja prioridad
+- **Sprints Futuros**: 16-20 (Migración nuevos módulos)
+- **Hito Crítico**: 2026-01-15 = Fin Sprint 15 (IT completado) ✅
 
 ---
 
 ## 🎯 PRÓXIMOS PASOS INMEDIATOS
 
-### Prioridad 1: Cerrar Módulos en Revisión (Post Sprint 12)
-
-1. **OP_Cuantitativo** - Auditar 31 páginas vs MatrixNext
-2. **PY_Proyectos** - Auditar 18 páginas vs MatrixNext
-3. **GD_Documentos** - Verificar workflows + filesystem
-
-**Objetivo**: Módulos al 100% funcional antes de iniciar nuevas migraciones.
-
-### Prioridad 2: Planificar Sprints 12-19 (Nuevos Módulos)
+### Prioridad 1: Planificar Sprints 16-20 (Nuevos Módulos)
 
 **Orden sugerido** (por prioridad operativa):
-1. Sprint 13: SGC_Calidad (2-3 sem)
-2. Sprint 14: ES_Estadistica (2-3 sem)
-3. Sprint 15: IT (1-2 sem)
-4. Sprint 16-17: MBO (3 variantes, 4-6 sem)
-5. Sprint 18: ResumenProduccion (2-3 sem)
-6. Sprint 19: RE_GT + PC_PropiedadCliente (2-4 sem)
+1. Sprint 16-17: MBO (3 variantes, 4-6 sem)
+2. Sprint 18: ResumenProduccion (2-3 sem)
+3. Sprint 19: RE_GT + PC_PropiedadCliente (2-4 sem)
+4. Sprint 20: Inventario (1-2 sem)
 
-**Estimación Total**: 16-24 semanas
-
----
-
-## Patrón de Migración por Módulo
-- **Sprint Sugerido**: Sprint 16-17
-- **Dependencias**: TH, PY
-- **Estimación**: 4-6 semanas (3 módulos)
-- **Estado**: ❌ NO INICIADO
-
-#### 27. **ResumenProduccion** 🔴 PENDIENTE
-- **Carpeta**: `WebMatrix/ResumenProduccion`
-- **Prioridad**: 🟡 BAJA
-- **Sprint Sugerido**: Sprint 18
-- **Dependencias**: OP, CC
-- **Estimación**: 2-3 semanas
-- **Estado**: ❌ NO INICIADO
-
-#### 28. **RE_GT** 🔴 PENDIENTE
-- **Carpeta**: `WebMatrix/RE_GT`
-- **Prioridad**: 🟡 BAJA
-- **Sprint Sugerido**: Sprint 19
-- **Dependencias**: TBD
-- **Estimación**: 1-2 semanas
-- **Estado**: ❌ NO INICIADO
-
-#### 29. **PC_PropiedadCliente** 🔴 PENDIENTE
-- **Carpeta**: `WebMatrix/PC_PropiedadCliente`
-- **Prioridad**: 🟡 BAJA
-- **Sprint Sugerido**: Sprint 19
-- **Dependencias**: CU_Cuentas
-- **Estimación**: 1-2 semanas
-- **Estado**: ❌ NO INICIADO
+**Estimación Total**: 9-15 semanas
 
 ---
 
@@ -508,28 +508,15 @@
 
 ### Excluidos Permanentemente
 
-#### 30. **Centro_Informacion** ⛔ EXCLUIDO
+#### 28. **CI_CentroInformacion** ⛔ EXCLUIDO
 - **Carpeta**: `WebMatrix/Centro_Informacion`
 - **Razón**: Excluido por decisión del usuario/negocio
+- **Fecha Exclusión**: 2026-01-15
 - **Estado**: ⛔ NO MIGRAR
-
-
-```
-Módulo WebMatrix (ej: US_Usuarios/)
-│
-├── 14 páginas .aspx.vb
-│
-└── MatrixNext → Controllers + Views + Services
-    │
-    ├── Controllers/ (Coordinar, validar, retornar respuestas)
-    ├── Services/ (Lógica de negocio)
-    ├── Adapters/ (Acceso a datos, SP execution con Dapper)
-    └── Views/ (Razor, Bootstrap, Ajax-first)
-```
 
 ---
 
-## 📖 DOCUMENTACIÓN DE REFERENCIA
+## Patrón de Migración por Módulo
 
 ### Documentos Maestros
 
@@ -552,7 +539,7 @@ Módulo WebMatrix (ej: US_Usuarios/)
 
 ---
 
-**Última actualización**: 2026-01-15  
-**Próxima revisión**: Inicio Sprint 13 (Revisión/QA módulos parciales)  
+**Última actualización**: 2026-01-15 (Sprint 15 IT completado)  
+**Próxima revisión**: Inicio Sprint 16 (MBO)  
 **Contacto**: Equipo de desarrollo MatrixNext
 

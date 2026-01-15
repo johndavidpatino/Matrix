@@ -1,0 +1,147 @@
+@model IEnumerable<MatrixNext.Data.DTOs.ES.ESMetodologiaCampoOutputDto>
+
+@{
+    ViewData["Title"] = "Metodologías de Campo";
+    var trabajoId = ViewBag.TrabajoId;
+    var titulo = ViewBag.Titulo ?? "Metodologías de Campo";
+}
+
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <h2>@titulo</h2>
+        </div>
+    </div>
+
+    @if (trabajoId != null)
+    {
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <button class="btn btn-primary" onclick="abrirModalCrear(@trabajoId)">
+                    <i class="fas fa-plus"></i> Nueva Metodología
+                </button>
+            </div>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Trabajo ID</th>
+                        <th>Nombre Estudio</th>
+                        <th>Versión</th>
+                        <th>Aprobado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.TrabajoId</td>
+                                <td>@item.NombreEstudio</td>
+                                <td>@item.NumVersion</td>
+                                <td>
+                                    @if (item.Aprobado == true)
+                                    {
+                                        <span class="badge badge-success">Sí</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-warning">No</span>
+                                    }
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-info" onclick="verDetalles(@item.Id)">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-warning" onclick="abrirModalEditar(@item.Id)">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" onclick="eliminar(@item.Id)">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center">No hay metodologías registradas</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalMetodologia" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content" id="contenidoModal"></div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function abrirModalCrear(trabajoId) {
+            $.get('@Url.Action("Create")?trabajoId=' + trabajoId, function (data) {
+                $('#contenidoModal').html(data);
+                $('#modalMetodologia').modal('show');
+            });
+        }
+
+        function abrirModalEditar(id) {
+            $.get('@Url.Action("Edit")/' + id, function (data) {
+                $('#contenidoModal').html(data);
+                $('#modalMetodologia').modal('show');
+            });
+        }
+
+        function verDetalles(id) {
+            $.get('@Url.Action("Details")/' + id, function (data) {
+                $('#contenidoModal').html(data);
+                $('#modalMetodologia').modal('show');
+            });
+        }
+
+        function eliminar(id) {
+            if (confirm('¿Está seguro de eliminar esta metodología?')) {
+                $.post('@Url.Action("Delete")/' + id, {
+                    __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                }, function (response) {
+                    if (response.success) {
+                        alert(response.message);
+                        location.reload();
+                    } else {
+                        alert(response.message);
+                    }
+                });
+            }
+        }
+
+        $(document).on('submit', '#formMetodologia', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: form.attr('action'),
+                type: form.attr('method'),
+                data: form.serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.message);
+                        $('#modalMetodologia').modal('hide');
+                        location.reload();
+                    } else {
+                        $('#contenidoModal').html(response);
+                    }
+                }
+            });
+        });
+    </script>
+}

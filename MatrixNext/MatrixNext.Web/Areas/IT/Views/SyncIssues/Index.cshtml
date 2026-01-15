@@ -1,0 +1,388 @@
+@{
+    ViewData["Title"] = "Synchronization Issues";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="mb-3">
+                <i class="fas fa-tools me-2"></i>
+                Synchronization Issues
+            </h2>
+            <p class="text-muted">Resolución de problemas de sincronización iField</p>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
+        <div id="toast" class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body" id="toastMessage"></div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="accordion" id="accordionSync">
+        
+        <!-- Acordeón 0: Ajustar trabajos -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTrabajo">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTrabajo">
+                    <i class="fas fa-briefcase me-2"></i>
+                    Ajustar trabajos
+                </button>
+            </h2>
+            <div id="collapseTrabajo" class="accordion-collapse collapse show" data-bs-parent="#accordionSync">
+                <div class="accordion-body">
+                    <h5>Trabajos</h5>
+                    <form id="formTrabajo" class="row g-3">
+                        <div class="col-md-6">
+                            <label for="txtNumeroTrabajo" class="form-label">Trabajo Id</label>
+                            <input type="number" class="form-control" id="txtNumeroTrabajo" name="trabajoId" required>
+                        </div>
+                        <div class="col-12">
+                            <button type="button" class="btn btn-warning me-2" onclick="quitarEntrenamiento()">
+                                <i class="fas fa-graduation-cap me-1"></i>
+                                Quitar Preguntas Entrenamiento
+                            </button>
+                            <button type="button" class="btn btn-danger me-2" onclick="quitarSupervision()">
+                                <i class="fas fa-user-times me-1"></i>
+                                Quitar Supervisión Estudio Especializado
+                            </button>
+                            <button type="button" class="btn btn-success" onclick="habilitarSincronizacion()">
+                                <i class="fas fa-sync me-1"></i>
+                                Habilitar Sincronización
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Acordeón 1: Actualizar preguntas -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingPreguntas">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePreguntas">
+                    <i class="fas fa-edit me-2"></i>
+                    Actualizar preguntas
+                </button>
+            </h2>
+            <div id="collapsePreguntas" class="accordion-collapse collapse" data-bs-parent="#accordionSync">
+                <div class="accordion-body">
+                    <h5>Seleccionar Trabajo</h5>
+                    <form id="formPreguntas" class="row g-3">
+                        <div class="col-md-4">
+                            <label for="txtTrabajoId" class="form-label">Trabajo Id</label>
+                            <input type="number" class="form-control" id="txtTrabajoId" name="trabajoId" required>
+                        </div>
+                        <div class="col-md-4 align-self-end">
+                            <button type="button" class="btn btn-primary" onclick="buscarPreguntas()">
+                                <i class="fas fa-search me-1"></i>
+                                Mostrar preguntas
+                            </button>
+                        </div>
+                    </form>
+
+                    <hr class="my-4">
+
+                    <form id="formActualizar" class="row g-3">
+                        <div class="col-md-3">
+                            <label for="ddlPreguntas" class="form-label">Preguntas</label>
+                            <select class="form-select" id="ddlPreguntas" name="dcp">
+                                <option value="">Seleccione...</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="txtSbjNum" class="form-label">SbjNum</label>
+                            <input type="number" step="0.01" class="form-control" id="txtSbjNum" name="sbjNum" placeholder="Digite el SbjNum">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="txtNewValor" class="form-label">Nuevo valor</label>
+                            <input type="text" class="form-control" id="txtNewValor" name="nuevoValor" placeholder="Digite el nuevo valor">
+                        </div>
+                        <div class="col-md-3 align-self-end">
+                            <button type="button" class="btn btn-success" onclick="actualizarRespuesta()">
+                                <i class="fas fa-save me-1"></i>
+                                Actualizar respuesta
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Acordeón 2: Habilitar encuesta piloto -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingHabilitarPiloto">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHabilitarPiloto">
+                    <i class="fas fa-toggle-on me-2"></i>
+                    Habilitar encuesta piloto
+                </button>
+            </h2>
+            <div id="collapseHabilitarPiloto" class="accordion-collapse collapse" data-bs-parent="#accordionSync">
+                <div class="accordion-body">
+                    <form id="formHabilitarPiloto" class="row g-3">
+                        <div class="col-md-6">
+                            <label for="txtSbjNumPiloto" class="form-label">SbjNum</label>
+                            <input type="number" step="0.01" class="form-control" id="txtSbjNumPiloto" name="sbjNum" placeholder="Digite el SbjNum">
+                        </div>
+                        <div class="col-md-6 align-self-end">
+                            <button type="button" class="btn btn-primary" onclick="habilitarPiloto()">
+                                <i class="fas fa-check me-1"></i>
+                                Habilitar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Acordeón 3: Encuesta piloto -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingEncuestaPiloto">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEncuestaPiloto">
+                    <i class="fas fa-vial me-2"></i>
+                    Encuesta piloto
+                </button>
+            </h2>
+            <div id="collapseEncuestaPiloto" class="accordion-collapse collapse" data-bs-parent="#accordionSync">
+                <div class="accordion-body">
+                    <form id="formEncuestaPiloto" class="row g-3">
+                        <div class="col-md-6">
+                            <label for="txtSbjNumPiloto2" class="form-label">SbjNum</label>
+                            <input type="number" step="0.01" class="form-control" id="txtSbjNumPiloto2" name="sbjNum" placeholder="Digite el SbjNum">
+                        </div>
+                        <div class="col-md-6 align-self-end">
+                            <button type="button" class="btn btn-warning" onclick="marcarEncuestaPiloto()">
+                                <i class="fas fa-tag me-1"></i>
+                                Encuesta Piloto
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Variables globales
+        const urlBase = '@Url.Action("", "SyncIssues", new { area = "IT" })';
+
+        // Toast helper
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            const bsToast = new bootstrap.Toast(toast);
+
+            toast.classList.remove('bg-success', 'bg-danger', 'bg-warning', 'bg-info', 'text-white');
+            
+            if (type === 'success') {
+                toast.classList.add('bg-success', 'text-white');
+            } else if (type === 'error') {
+                toast.classList.add('bg-danger', 'text-white');
+            } else if (type === 'warning') {
+                toast.classList.add('bg-warning');
+            } else {
+                toast.classList.add('bg-info', 'text-white');
+            }
+
+            toastMessage.textContent = message;
+            bsToast.show();
+        }
+
+        // Acordeón 0: Ajustar trabajos
+        function quitarEntrenamiento() {
+            if (!confirm('¿Está seguro de quitar las encuestas de entrenamiento?')) return;
+
+            const trabajoId = document.getElementById('txtNumeroTrabajo').value;
+            if (!trabajoId) {
+                showToast('Digite el ID del trabajo', 'error');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('trabajoId', trabajoId);
+            formData.append('__RequestVerificationToken', document.querySelector('input[name="__RequestVerificationToken"]').value);
+
+            fetch(`${urlBase}/QuitarEntrenamiento`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(r => r.json())
+            .then(data => {
+                showToast(data.message, data.success ? 'success' : 'error');
+            })
+            .catch(() => showToast('Error al procesar la solicitud', 'error'));
+        }
+
+        function quitarSupervision() {
+            if (!confirm('¿Está seguro de quitar la supervisión a este trabajo?')) return;
+
+            const trabajoId = document.getElementById('txtNumeroTrabajo').value;
+            if (!trabajoId) {
+                showToast('Digite el ID del trabajo', 'error');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('trabajoId', trabajoId);
+            formData.append('__RequestVerificationToken', document.querySelector('input[name="__RequestVerificationToken"]').value);
+
+            fetch(`${urlBase}/QuitarSupervision`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(r => r.json())
+            .then(data => {
+                showToast(data.message, data.success ? 'success' : 'error');
+            })
+            .catch(() => showToast('Error al procesar la solicitud', 'error'));
+        }
+
+        function habilitarSincronizacion() {
+            if (!confirm('¿Está seguro de habilitar la sincronización para este trabajo?')) return;
+
+            const trabajoId = document.getElementById('txtNumeroTrabajo').value;
+            if (!trabajoId) {
+                showToast('Digite el ID del trabajo', 'error');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('trabajoId', trabajoId);
+            formData.append('__RequestVerificationToken', document.querySelector('input[name="__RequestVerificationToken"]').value);
+
+            fetch(`${urlBase}/HabilitarSincronizacion`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(r => r.json())
+            .then(data => {
+                showToast(data.message, data.success ? 'success' : 'error');
+            })
+            .catch(() => showToast('Error al procesar la solicitud', 'error'));
+        }
+
+        // Acordeón 1: Actualizar preguntas
+        function buscarPreguntas() {
+            const trabajoId = document.getElementById('txtTrabajoId').value;
+            if (!trabajoId) {
+                showToast('Digite el ID del trabajo', 'error');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('trabajoId', trabajoId);
+
+            fetch(`${urlBase}/BuscarPreguntas`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(r => r.json())
+            .then(data => {
+                const select = document.getElementById('ddlPreguntas');
+                select.innerHTML = '<option value="">Seleccione...</option>';
+
+                if (data.success && data.preguntas && data.preguntas.length > 0) {
+                    data.preguntas.forEach(p => {
+                        const option = document.createElement('option');
+                        option.value = p.value;
+                        option.textContent = p.text;
+                        select.appendChild(option);
+                    });
+                    showToast('Preguntas cargadas correctamente', 'success');
+                } else {
+                    showToast(data.message || 'No se encontraron preguntas', 'warning');
+                }
+            })
+            .catch(() => showToast('Error al buscar preguntas', 'error'));
+        }
+
+        function actualizarRespuesta() {
+            if (!confirm('¿Está seguro de realizar la actualización?')) return;
+
+            const trabajoId = document.getElementById('txtTrabajoId').value;
+            const sbjNum = document.getElementById('txtSbjNum').value;
+            const dcp = document.getElementById('ddlPreguntas').value;
+            const nuevoValor = document.getElementById('txtNewValor').value;
+
+            if (!trabajoId || !sbjNum || !dcp || !nuevoValor) {
+                showToast('Complete todos los campos', 'error');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('trabajoId', trabajoId);
+            formData.append('sbjNum', sbjNum);
+            formData.append('dcp', dcp);
+            formData.append('nuevoValor', nuevoValor);
+            formData.append('__RequestVerificationToken', document.querySelector('input[name="__RequestVerificationToken"]').value);
+
+            fetch(`${urlBase}/ActualizarRespuesta`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(r => r.json())
+            .then(data => {
+                showToast(data.message, data.success ? 'success' : 'error');
+                if (data.success) {
+                    document.getElementById('txtNewValor').value = '';
+                }
+            })
+            .catch(() => showToast('Error al actualizar respuesta', 'error'));
+        }
+
+        // Acordeón 2: Habilitar piloto
+        function habilitarPiloto() {
+            if (!confirm('¿Está seguro de habilitar la encuesta nuevamente?')) return;
+
+            const sbjNum = document.getElementById('txtSbjNumPiloto').value;
+            if (!sbjNum) {
+                showToast('Digite el SbjNum', 'error');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('sbjNum', sbjNum);
+            formData.append('__RequestVerificationToken', document.querySelector('input[name="__RequestVerificationToken"]').value);
+
+            fetch(`${urlBase}/HabilitarPiloto`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(r => r.json())
+            .then(data => {
+                showToast(data.message, data.success ? 'success' : 'error');
+            })
+            .catch(() => showToast('Error al habilitar piloto', 'error'));
+        }
+
+        // Acordeón 3: Encuesta piloto
+        function marcarEncuestaPiloto() {
+            const sbjNum = document.getElementById('txtSbjNumPiloto2').value;
+            if (!sbjNum) {
+                showToast('Digite el SbjNum', 'error');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('sbjNum', sbjNum);
+            formData.append('__RequestVerificationToken', document.querySelector('input[name="__RequestVerificationToken"]').value);
+
+            fetch(`${urlBase}/EncuestaPiloto`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(r => r.json())
+            .then(data => {
+                showToast(data.message, data.success ? 'success' : 'error');
+            })
+            .catch(() => showToast('Error al marcar encuesta piloto', 'error'));
+        }
+    </script>
+}
