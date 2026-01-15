@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MatrixNext.Web.Infrastructure.Data;
@@ -11,6 +12,7 @@ namespace MatrixNext.Web.Areas.CORE.Controllers
     /// Ref: MIGRACION_CORE.md Fase 1 – Configuración
     /// </summary>
     [Area("CORE")]
+    [Authorize]
     [Route("CORE/[controller]/[action]")]
     public class TareasController : Controller
     {

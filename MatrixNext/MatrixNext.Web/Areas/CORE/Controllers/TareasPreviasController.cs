@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MatrixNext.Web.Infrastructure.Data;
@@ -8,6 +9,7 @@ using MatrixNext.Web.Services.CORE;
 namespace MatrixNext.Web.Areas.CORE.Controllers
 {
     [Area("CORE")]
+    [Authorize]
     [Route("CORE/[controller]/[action]")]
     public class TareasPreviasController : Controller
     {

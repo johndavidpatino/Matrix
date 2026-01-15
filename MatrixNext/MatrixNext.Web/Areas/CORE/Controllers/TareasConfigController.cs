@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MatrixNext.Web.Infrastructure.Data;
@@ -14,6 +15,7 @@ namespace MatrixNext.Web.Areas.CORE.Controllers
     /// Ref: PLAN_IMPLEMENTACION_SPRINTS.md § T1.3
     /// </summary>
     [Area("CORE")]
+    [Authorize]
     [Route("CORE/Configuracion/[controller]/[action]")]
     public class TareasConfigController : Controller
     {
