@@ -1,0 +1,371 @@
+@model MatrixNext.Data.ViewModels.MBO.AOTDireccionViewModel
+@{
+    ViewData["Title"] = "AOT Dirección - Dashboard";
+}
+
+<div class="container-fluid mt-4">
+    <!-- Header con filtros -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2 class="text-primary">
+                <i class="fas fa-bullseye me-2"></i>AOT Dirección - Dashboard
+            </h2>
+            <p class="text-muted">Achievement of Tasks - Seguimiento de Metas y Ejecución</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <a href="@Url.Action("Index", "Home", new { area = "MBO" })" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Volver al Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="card mb-4 border-0 shadow-sm">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-3">
+                    <label for="año" class="form-label">Año</label>
+                    <select id="año" name="año" class="form-select">
+                        @for (int i = DateTime.Now.Year; i >= DateTime.Now.Year - 3; i--)
+                        {
+                            <option value="@i" selected="@(i == Model.AñoSeleccionado)">@i</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="mes" class="form-label">Mes</label>
+                    <select id="mes" name="mes" class="form-select">
+                        @{
+                            var meses = new[] { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", 
+                                              "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" };
+                            for (int i = 1; i <= 12; i++)
+                            {
+                                <option value="@i" selected="@(i == Model.MesSeleccionado)">@meses[i-1]</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="sigla" class="form-label">Unidad</label>
+                    <select id="sigla" name="sigla" class="form-select">
+                        @foreach (var unidad in Model.UnidadesDisponibles)
+                        {
+                            <option value="@unidad.Sigla" selected="@(unidad.Sigla == Model.SiglaSeleccionada)">
+                                @unidad.NombreUnidad (@unidad.Sigla)
+                            </option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-filter me-2"></i>Filtrar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (!Model.TieneDatos)
+    {
+        <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            No hay datos disponibles para los filtros seleccionados.
+        </div>
+    }
+    else
+    {
+        <!-- Métricas Principales -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm bg-primary text-white">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 opacity-75">Budget Total</h6>
+                        <h3 class="mb-0">@(Model.BudgetEjecucion?.BudgetTotal.ToString("N0") ?? "0")</h3>
+                        <small class="opacity-75">Meta Mensual</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm bg-success text-white">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 opacity-75">Meta Total</h6>
+                        <h3 class="mb-0">@(Model.BudgetEjecucion?.MetaTotal.ToString("N0") ?? "0")</h3>
+                        <small class="opacity-75">Objetivo del Mes</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm bg-info text-white">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 opacity-75">AOT Actual</h6>
+                        <h3 class="mb-0">@(Model.BudgetEjecucion?.AOTTotal.ToString("N0") ?? "0")</h3>
+                        <small class="opacity-75">Logro a la Fecha</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm @(Model.BudgetEjecucion?.PorcentajeLogro >= 100 ? "bg-success" : Model.BudgetEjecucion?.PorcentajeLogro >= 80 ? "bg-warning" : "bg-danger") text-white">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 opacity-75">% Logro</h6>
+                        <h3 class="mb-0">@(Model.BudgetEjecucion?.PorcentajeLogro.ToString("F1") ?? "0")%</h3>
+                        <small class="opacity-75">vs Meta</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gráficos -->
+        <div class="row g-4">
+            <!-- Gráfico: Gauge Principal -->
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="fas fa-tachometer-alt me-2 text-primary"></i>
+                            Porcentaje de Logro Total
+                        </h5>
+                        <canvas id="gaugeChart" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráfico: Budget vs Meta vs AOT por Categoría -->
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="fas fa-chart-bar me-2 text-primary"></i>
+                            Budget vs Meta vs AOT por Categoría
+                        </h5>
+                        <canvas id="categoriaChart" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráfico: Ejecución por Unidad -->
+            <div class="col-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="fas fa-chart-column me-2 text-primary"></i>
+                            Ejecución AOT por Unidad
+                        </h5>
+                        <canvas id="unidadesChart" height="100"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabla de Detalle por Unidad -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="fas fa-table me-2 text-primary"></i>
+                            Detalle por Unidad
+                        </h5>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Unidad</th>
+                                        <th class="text-end">Budget</th>
+                                        <th class="text-end">Meta</th>
+                                        <th class="text-end">Actual</th>
+                                        <th class="text-end">% Logro</th>
+                                        <th class="text-center">Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var unidad in Model.UnidadesDetalle)
+                                    {
+                                        <tr>
+                                            <td><strong>@unidad.NombreUnidad</strong></td>
+                                            <td class="text-end">@unidad.BudgetUnidad.ToString("N0")</td>
+                                            <td class="text-end">@unidad.MetaUnidad.ToString("N0")</td>
+                                            <td class="text-end">@unidad.ActualUnidad.ToString("N0")</td>
+                                            <td class="text-end"><strong>@unidad.PorcentajeLogro.ToString("F1")%</strong></td>
+                                            <td class="text-center">
+                                                @if (unidad.PorcentajeLogro >= 100)
+                                                {
+                                                    <span class="badge bg-success">Cumplido</span>
+                                                }
+                                                else if (unidad.PorcentajeLogro >= 80)
+                                                {
+                                                    <span class="badge bg-warning">En Progreso</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-danger">Rezagado</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script>
+        @if (Model.TieneDatos)
+        {
+            <text>
+            // Datos del modelo
+            const porcentajeLogro = @(Model.BudgetEjecucion?.PorcentajeLogro ?? 0);
+            const budgetAction = @(Model.BudgetEjecucion?.BudgetAction ?? 0);
+            const metaAction = @(Model.BudgetEjecucion?.MetaAction ?? 0);
+            const budgetWatch = @(Model.BudgetEjecucion?.BudgetWatch ?? 0);
+            const metaWatch = @(Model.BudgetEjecucion?.MetaWatch ?? 0);
+            const budgetBooster = @(Model.BudgetEjecucion?.BudgetBooster ?? 0);
+            const metaBooster = @(Model.BudgetEjecucion?.MetaBooster ?? 0);
+
+            // Gráfico Gauge (Doughnut semicircular)
+            const gaugeCtx = document.getElementById('gaugeChart').getContext('2d');
+            new Chart(gaugeCtx, {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        data: [porcentajeLogro, 100 - porcentajeLogro],
+                        backgroundColor: [
+                            porcentajeLogro >= 100 ? '#198754' : porcentajeLogro >= 80 ? '#ffc107' : '#dc3545',
+                            '#e9ecef'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    circumference: 180,
+                    rotation: 270,
+                    cutout: '70%',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: false },
+                        title: {
+                            display: true,
+                            text: porcentajeLogro.toFixed(1) + '%',
+                            font: { size: 32, weight: 'bold' },
+                            color: '#333',
+                            padding: { top: 30 }
+                        }
+                    }
+                }
+            });
+
+            // Gráfico Budget vs Meta por Categoría
+            const categoriaCtx = document.getElementById('categoriaChart').getContext('2d');
+            new Chart(categoriaCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Action', 'Watch', 'Booster'],
+                    datasets: [
+                        {
+                            label: 'Budget',
+                            data: [budgetAction, budgetWatch, budgetBooster],
+                            backgroundColor: '#0d6efd',
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'Meta',
+                            data: [metaAction, metaWatch, metaBooster],
+                            backgroundColor: '#198754',
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.parsed.y.toLocaleString();
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Gráfico Ejecución por Unidad
+            const unidadesLabels = [@Html.Raw(string.Join(",", Model.UnidadesDetalle.Select(u => $"'{u.NombreUnidad}'")))];
+            const unidadesBudget = [@Html.Raw(string.Join(",", Model.UnidadesDetalle.Select(u => u.BudgetUnidad)))];
+            const unidadesMeta = [@Html.Raw(string.Join(",", Model.UnidadesDetalle.Select(u => u.MetaUnidad)))];
+            const unidadesActual = [@Html.Raw(string.Join(",", Model.UnidadesDetalle.Select(u => u.ActualUnidad)))];
+
+            const unidadesCtx = document.getElementById('unidadesChart').getContext('2d');
+            new Chart(unidadesCtx, {
+                type: 'bar',
+                data: {
+                    labels: unidadesLabels,
+                    datasets: [
+                        {
+                            label: 'Budget',
+                            data: unidadesBudget,
+                            backgroundColor: '#0d6efd',
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'Meta',
+                            data: unidadesMeta,
+                            backgroundColor: '#198754',
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'Actual',
+                            data: unidadesActual,
+                            backgroundColor: '#17a2b8',
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.parsed.y.toLocaleString();
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            </text>
+        }
+    </script>
+}

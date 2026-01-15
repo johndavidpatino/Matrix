@@ -1,0 +1,173 @@
+@{
+    ViewData["Title"] = "MBO - Management By Objectives";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="text-primary">
+                <i class="fas fa-chart-line me-2"></i>MBO - Management By Objectives
+            </h2>
+            <p class="text-muted">Gestión por Objetivos - Dashboards Gerenciales y Operacionales</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Card: AOT (Achievement of Tasks) -->
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-primary bg-opacity-10 rounded-circle p-3 me-3">
+                            <i class="fas fa-bullseye fa-2x text-primary"></i>
+                        </div>
+                        <div>
+                            <h5 class="card-title mb-0">AOT - Achievement of Tasks</h5>
+                            <small class="text-muted">Gestión por Objetivos</small>
+                        </div>
+                    </div>
+                    <p class="card-text">
+                        Dashboards de seguimiento a metas y ejecución de AOT (Achievement of Tasks) por unidad, gerencia y gerentes de cuenta.
+                    </p>
+                    <div class="d-grid gap-2">
+                        <a href="@Url.Action("Direccion", "AOT", new { area = "MBO" })" class="btn btn-outline-primary">
+                            <i class="fas fa-chart-area me-2"></i>Dashboard Dirección
+                        </a>
+                        <a href="@Url.Action("Gerencia", "AOT", new { area = "MBO" })" class="btn btn-outline-primary">
+                            <i class="fas fa-chart-bar me-2"></i>Dashboard Gerencia
+                        </a>
+                        <a href="@Url.Action("PorGerentes", "AOT", new { area = "MBO" })" class="btn btn-outline-primary">
+                            <i class="fas fa-users me-2"></i>Por Gerentes
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card: Campo (Operaciones) -->
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-success bg-opacity-10 rounded-circle p-3 me-3">
+                            <i class="fas fa-clipboard-check fa-2x text-success"></i>
+                        </div>
+                        <div>
+                            <h5 class="card-title mb-0">Campo - Operaciones</h5>
+                            <small class="text-muted">Producción y Calidad</small>
+                        </div>
+                    </div>
+                    <p class="card-text">
+                        Indicadores de operaciones de campo: producción de encuestas, calidad, rendimiento de encuestadores y gestión de errores.
+                    </p>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-outline-secondary" disabled>
+                            <i class="fas fa-chart-pie me-2"></i>Producción
+                        </button>
+                        <button class="btn btn-outline-secondary" disabled>
+                            <i class="fas fa-tachometer-alt me-2"></i>Calidad Total
+                        </button>
+                        <button class="btn btn-outline-secondary" disabled>
+                            <i class="fas fa-user-check me-2"></i>Encuestadores
+                        </button>
+                    </div>
+                    <small class="text-muted"><em>Disponible en Fase 2</em></small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card: Propuestas y Gestión -->
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-warning bg-opacity-10 rounded-circle p-3 me-3">
+                            <i class="fas fa-file-invoice fa-2x text-warning"></i>
+                        </div>
+                        <div>
+                            <h5 class="card-title mb-0">Propuestas y Gestión</h5>
+                            <small class="text-muted">Pipeline Comercial</small>
+                        </div>
+                    </div>
+                    <p class="card-text">
+                        Gestión de propuestas, estado de pipeline comercial y transacciones Matrix (Briefs → Trabajos).
+                    </p>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-outline-secondary" disabled>
+                            <i class="fas fa-funnel-dollar me-2"></i>Estado Propuestas
+                        </button>
+                        <button class="btn btn-outline-secondary" disabled>
+                            <i class="fas fa-project-diagram me-2"></i>Gestión Matrix
+                        </button>
+                        <button class="btn btn-outline-secondary" disabled>
+                            <i class="fas fa-exclamation-triangle me-2"></i>Sin Trabajo
+                        </button>
+                    </div>
+                    <small class="text-muted"><em>Disponible en Fase 3</em></small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Estadísticas Rápidas -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <h5 class="text-secondary mb-3">Accesos Rápidos</h5>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 bg-light">
+                <div class="card-body text-center">
+                    <i class="fas fa-upload fa-2x text-info mb-2"></i>
+                    <h6 class="card-subtitle text-muted">Carga de Datos</h6>
+                    <button class="btn btn-sm btn-outline-secondary mt-2" disabled>
+                        Cargar Errores Excel
+                    </button>
+                    <small class="text-muted d-block mt-1"><em>Fase 2</em></small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 bg-light">
+                <div class="card-body text-center">
+                    <i class="fas fa-book fa-2x text-info mb-2"></i>
+                    <h6 class="card-subtitle text-muted">Índices y Manuales</h6>
+                    <button class="btn btn-sm btn-outline-secondary mt-2" disabled>
+                        Ver Índices
+                    </button>
+                    <small class="text-muted d-block mt-1"><em>Fase 3</em></small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 bg-light">
+                <div class="card-body text-center">
+                    <i class="fas fa-times-circle fa-2x text-danger mb-2"></i>
+                    <h6 class="card-subtitle text-muted">No Conforme</h6>
+                    <button class="btn btn-sm btn-outline-secondary mt-2" disabled>
+                        Registrar Producto
+                    </button>
+                    <small class="text-muted d-block mt-1"><em>Fase 3</em></small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 bg-light">
+                <div class="card-body text-center">
+                    <i class="fas fa-city fa-2x text-success mb-2"></i>
+                    <h6 class="card-subtitle text-muted">Calidad por Ciudad</h6>
+                    <button class="btn btn-sm btn-outline-secondary mt-2" disabled>
+                        Ver Dashboard
+                    </button>
+                    <small class="text-muted d-block mt-1"><em>Fase 2</em></small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Log acceso al módulo MBO
+        console.log('MBO Dashboard cargado:', new Date().toISOString());
+    </script>
+}

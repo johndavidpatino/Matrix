@@ -1,0 +1,126 @@
+@model MatrixNext.Data.ViewModels.MBO.AOTUnidadViewModel
+@{
+    ViewData["Title"] = $"AOT {Model.UnidadInfo?.NombreUnidad ?? Model.SiglaSeleccionada}";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2 class="text-primary">
+                <i class="fas fa-building me-2"></i>AOT - @(Model.UnidadInfo?.NombreUnidad ?? Model.SiglaSeleccionada)
+            </h2>
+            <p class="text-muted">Dashboard de Unidad Específica</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <a href="@Url.Action("Direccion", "AOT", new { area = "MBO" })" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Volver a Dirección
+            </a>
+        </div>
+    </div>
+
+    @if (!Model.TieneDatos)
+    {
+        <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            No hay datos disponibles para esta unidad en el período seleccionado.
+        </div>
+    }
+    else
+    {
+        <!-- Métricas -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm bg-primary text-white">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 opacity-75">Budget</h6>
+                        <h3 class="mb-0">@(Model.BudgetEjecucion?.BudgetTotal.ToString("N0") ?? "0")</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm bg-success text-white">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 opacity-75">Meta</h6>
+                        <h3 class="mb-0">@(Model.BudgetEjecucion?.MetaTotal.ToString("N0") ?? "0")</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm bg-info text-white">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 opacity-75">AOT</h6>
+                        <h3 class="mb-0">@(Model.BudgetEjecucion?.AOTTotal.ToString("N0") ?? "0")</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm @(Model.BudgetEjecucion?.PorcentajeLogro >= 100 ? "bg-success" : "bg-warning") text-white">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 opacity-75">% Logro</h6>
+                        <h3 class="mb-0">@(Model.BudgetEjecucion?.PorcentajeLogro.ToString("F1") ?? "0")%</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gráfico Gauge -->
+        <div class="row">
+            <div class="col-md-6 mx-auto">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">
+                            <i class="fas fa-tachometer-alt me-2 text-primary"></i>
+                            Porcentaje de Logro
+                        </h5>
+                        <canvas id="gaugeChart" height="250"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script>
+        @if (Model.TieneDatos)
+        {
+            <text>
+            const porcentajeLogro = @(Model.BudgetEjecucion?.PorcentajeLogro ?? 0);
+            
+            const gaugeCtx = document.getElementById('gaugeChart').getContext('2d');
+            new Chart(gaugeCtx, {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        data: [porcentajeLogro, 100 - porcentajeLogro],
+                        backgroundColor: [
+                            porcentajeLogro >= 100 ? '#198754' : porcentajeLogro >= 80 ? '#ffc107' : '#dc3545',
+                            '#e9ecef'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    circumference: 180,
+                    rotation: 270,
+                    cutout: '70%',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: false },
+                        title: {
+                            display: true,
+                            text: porcentajeLogro.toFixed(1) + '%',
+                            font: { size: 48, weight: 'bold' },
+                            color: '#333',
+                            padding: { top: 50 }
+                        }
+                    }
+                }
+            });
+            </text>
+        }
+    </script>
+}
