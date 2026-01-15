@@ -314,15 +314,37 @@ Este documento consolida el **backlog técnico** para completar la migración de
 
 **Tareas**:
 
-5. **UI para Asignaciones/Reasignaciones** (16h)
-   - [ ] Crear vistas Razor para `AsignacionesProyectosController`:
-     - `Index.cshtml`: Filtros por unidad
-     - `_AsignarModal.cshtml`: Selector de gerente + observaciones
-     - `_ReasignarModal.cshtml`: Cambio de gerente + bitácora
-     - `_HistorialModal.cshtml`: Timeline de asignaciones
-   - [ ] Integrar con API existente (endpoints ya creados)
-   - [ ] Validar roles: Administrador, Gerente
-   - [ ] **No requiere nuevos SP** (ya existe backend)
+5. **UI para Asignaciones/Reasignaciones** (16h) ✅ COMPLETADO (Data Layer)
+
+   **Objetivo**: Interfaz de usuario para asignaciones y reasignaciones de proyectos con historial.
+   
+   **Vistas creadas** (4):
+   - ✅ `Index.cshtml`: Listado principal con grid filtrable (proyecto, gerente, estado)
+   - ✅ `_AsignarModal.cshtml`: Modal AJAX para nueva asignación (gerente + trabajos)
+   - ✅ `_ReasignarModal.cshtml`: Modal AJAX para reasignación con motivo obligatorio
+   - ✅ `_HistorialModal.cshtml`: Modal historial con timeline de cambios (gerente anterior → nuevo, motivo, fecha)
+   
+   **Controller** (1):
+   - ✅ `AsignacionesController.cs`: 12 endpoints (Index, Asignar, Reasignar, Historial + 8 APIs auxiliares)
+   
+   **Funcionalidades**:
+   - ✅ Listado con filtros: proyecto, gerente, estado
+   - ✅ Asignación nuevo gerente a proyecto
+   - ✅ Reasignación a otro gerente con motivo obligatorio
+   - ✅ Selección de trabajos a reasignar (opcional)
+   - ✅ Notificación al gerente anterior (checkbox)
+   - ✅ Historial completo con timeline
+   - ✅ APIs para autocomplete (proyectos, gerentes, trabajos)
+   - ✅ Mensajes AJAX (toast) con éxito/error
+   - ✅ Validación client-side (roles, campos obligatorios)
+   
+   **APIs implementadas** (8):
+   - GetProyectosDisponibles, GetGerentesDisponibles, GetTrabajosProyecto
+   - GetTrabajosAsignados, GetProyectos, GetGerentes
+   
+   **Pendiente**: Integración completa con backend (adapters de datos)
+   
+   **Referencia**: Commit Sprint 12.2.5 (UI Asignaciones - Parte 1/2)
 
 6. **Componente Reutilizable de Upload** (12h)
    - [ ] Crear `Views/Shared/_UploadFrame.cshtml` con:

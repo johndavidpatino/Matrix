@@ -1,0 +1,128 @@
+@model MatrixNext.Web.Models.PY.BitacoraAsignacion
+@{
+    Layout = "";
+}
+
+<div class="modal-header bg-info text-white">
+    <h5 class="modal-title">
+        <i class="fas fa-history"></i> Historial de Asignaciones
+    </h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+</div>
+
+<div class="modal-body">
+    <div class="timeline">
+        @if (Model != null && Model.Registros?.Count > 0)
+        {
+            @foreach (var registro in Model.Registros.OrderByDescending(r => r.FechaRegistro))
+            {
+                <div class="timeline-item">
+                    <div class="timeline-marker 
+                        @(registro.TipoOperacion == "Asignación" ? "bg-success" : 
+                          registro.TipoOperacion == "Reasignación" ? "bg-warning" : "bg-danger")">
+                        @if (registro.TipoOperacion == "Asignación")
+                        {
+                            <i class="fas fa-plus"></i>
+                        }
+                        else if (registro.TipoOperacion == "Reasignación")
+                        {
+                            <i class="fas fa-exchange-alt"></i>
+                        }
+                        else
+                        {
+                            <i class="fas fa-trash"></i>
+                        }
+                    </div>
+                    <div class="timeline-content">
+                        <h6>@registro.TipoOperacion</h6>
+                        <p class="mb-1">
+                            <strong>Fecha:</strong> @registro.FechaRegistro.ToString("dd/MM/yyyy HH:mm")
+                        </p>
+                        @if (registro.TipoOperacion == "Reasignación")
+                        {
+                            <p class="mb-1">
+                                <strong>De:</strong> @registro.GerenteAnterior
+                                <br />
+                                <strong>Para:</strong> @registro.GerenteNuevo
+                            </p>
+                        }
+                        else
+                        {
+                            <p class="mb-1">
+                                <strong>Gerente:</strong> @registro.GerenteNuevo
+                            </p>
+                        }
+                        @if (!string.IsNullOrEmpty(registro.Motivo))
+                        {
+                            <p class="mb-0 text-muted">
+                                <strong>Motivo:</strong> @registro.Motivo
+                            </p>
+                        }
+                        <p class="mb-0 small text-secondary">
+                            <strong>Registrado por:</strong> @registro.RegistradoPor
+                        </p>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i> No hay historial de cambios
+            </div>
+        }
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        <i class="fas fa-times"></i> Cerrar
+    </button>
+</div>
+
+<style>
+    .timeline {
+        position: relative;
+        padding: 20px 0;
+    }
+
+    .timeline-item {
+        display: flex;
+        margin-bottom: 30px;
+        position: relative;
+    }
+
+    .timeline-item:not(:last-child)::before {
+        content: '';
+        position: absolute;
+        left: 20px;
+        top: 60px;
+        width: 2px;
+        height: 30px;
+        background-color: #ddd;
+    }
+
+    .timeline-marker {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        margin-right: 20px;
+        flex-shrink: 0;
+    }
+
+    .timeline-content {
+        padding: 10px 15px;
+        background-color: #f8f9fa;
+        border-radius: 4px;
+        flex-grow: 1;
+    }
+
+    .timeline-content h6 {
+        margin-bottom: 5px;
+        font-weight: 600;
+    }
+</style>

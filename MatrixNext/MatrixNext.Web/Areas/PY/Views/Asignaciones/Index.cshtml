@@ -1,0 +1,224 @@
+@model List<MatrixNext.Web.Models.PY.AsignacionProyecto>
+@{
+    ViewData["Title"] = "Asignaciones de Proyectos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>
+            <i class="fas fa-tasks"></i> Gestión de Asignaciones de Proyectos
+        </h2>
+        <button class="btn btn-primary" data-ajax-modal data-url="@Url.Action("AsignarModal", "Asignaciones", new { area = "PY" })">
+            <i class="fas fa-plus"></i> Nueva Asignación
+        </button>
+    </div>
+
+    <!-- Filtros -->
+    <div class="card mb-4">
+        <div class="card-header bg-light">
+            <h5 class="mb-0">
+                <i class="fas fa-filter"></i> Filtros de Búsqueda
+            </h5>
+        </div>
+        <div class="card-body">
+            <form id="frmFiltros" class="row">
+                <div class="col-md-3">
+                    <label>Proyecto</label>
+                    <select id="filtroProyecto" name="idProyecto" class="form-control">
+                        <option value="">-- Todos --</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label>Gerente</label>
+                    <select id="filtroGerente" name="idGerente" class="form-control">
+                        <option value="">-- Todos --</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label>Estado</label>
+                    <select id="filtroEstado" name="estado" class="form-control">
+                        <option value="">-- Todos --</option>
+                        <option value="Activa">Activa</option>
+                        <option value="Reasignada">Reasignada</option>
+                        <option value="Cancelada">Cancelada</option>
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button type="submit" class="btn btn-info w-100">
+                        <i class="fas fa-search"></i> Buscar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Grid de Asignaciones -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">
+                <i class="fas fa-table"></i> Listado de Asignaciones
+            </h5>
+        </div>
+        <div class="card-body">
+            <div id="gridAsignaciones" class="table-responsive">
+                @if (Model?.Count > 0)
+                {
+                    <table class="table table-hover table-striped">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Proyecto</th>
+                                <th>Gerente Asignado</th>
+                                <th>Fecha Asignación</th>
+                                <th>Estado</th>
+                                <th>Trabajos</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <span class="badge badge-primary">@item.IdAsignacion</span>
+                                    </td>
+                                    <td>@item.NombreProyecto</td>
+                                    <td>
+                                        <strong>@item.NombreGerentePrincipal</strong>
+                                        <br />
+                                        <small class="text-muted">@item.EmailGerentePrincipal</small>
+                                    </td>
+                                    <td>@item.FechaAsignacion.ToString("dd/MM/yyyy")</td>
+                                    <td>
+                                        @if (item.Estado == "Activa")
+                                        {
+                                            <span class="badge badge-success">Activa</span>
+                                        }
+                                        else if (item.Estado == "Reasignada")
+                                        {
+                                            <span class="badge badge-warning">Reasignada</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-danger">@item.Estado</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-info">@item.CantidadTrabajosAsignados</span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info" 
+                                                data-ajax-modal 
+                                                data-url="@Url.Action("VerDetalles", "Asignaciones", new { area = "PY", id = item.IdAsignacion })">
+                                            <i class="fas fa-eye"></i> Detalles
+                                        </button>
+                                        <button class="btn btn-sm btn-warning" 
+                                                data-ajax-modal 
+                                                data-url="@Url.Action("ReasignarModal", "Asignaciones", new { area = "PY", id = item.IdAsignacion })">
+                                            <i class="fas fa-exchange-alt"></i> Reasignar
+                                        </button>
+                                        <button class="btn btn-sm btn-primary" 
+                                                data-ajax-modal 
+                                                data-url="@Url.Action("HistorialModal", "Asignaciones", new { area = "PY", id = item.IdAsignacion })">
+                                            <i class="fas fa-history"></i> Historial
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> No hay asignaciones registradas.
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Container -->
+<div id="modalContainer"></div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Cargar proyectos en filtro
+            $.get('@Url.Action("GetProyectos", "Asignaciones", new { area = "PY" })', function (data) {
+                $.each(data.datos, function (i, item) {
+                    $('#filtroProyecto').append(
+                        $('<option></option>')
+                            .attr('value', item.idProyecto)
+                            .text(item.nombreProyecto)
+                    );
+                });
+            });
+
+            // Cargar gerentes en filtro
+            $.get('@Url.Action("GetGerentes", "Asignaciones", new { area = "PY" })', function (data) {
+                $.each(data.datos, function (i, item) {
+                    $('#filtroGerente').append(
+                        $('<option></option>')
+                            .attr('value', item.idEmpleado)
+                            .text(item.nomCompleto)
+                    );
+                });
+            });
+
+            // Enviar formulario de filtros
+            $('#frmFiltros').on('submit', function (e) {
+                e.preventDefault();
+                var filtros = $(this).serialize();
+                $.get('@Url.Action("Index", "Asignaciones", new { area = "PY" })?@Html.Raw(HttpUtility.UrlEncode(""))' + '&' + filtros, function (html) {
+                    $('#gridAsignaciones').html($(html).find('#gridAsignaciones').html());
+                });
+            });
+
+            // Modal AJAX
+            $(document).on('click', '[data-ajax-modal]', function (e) {
+                e.preventDefault();
+                var url = $(this).data('url');
+                $.get(url, function (html) {
+                    $('#modalContainer').html(html);
+                    $('#modalForm').modal('show');
+                });
+            });
+
+            // Submit modal
+            $(document).on('submit', '[data-ajax-form]', function (e) {
+                e.preventDefault();
+                var form = $(this);
+                $.ajax({
+                    url: form.attr('action'),
+                    type: form.attr('method'),
+                    data: form.serialize(),
+                    success: function (response) {
+                        if (response.exitoso) {
+                            showToast(response.mensaje, 'success');
+                            $('#modalForm').modal('hide');
+                            location.reload();
+                        } else {
+                            showToast(response.mensaje, 'error');
+                        }
+                    },
+                    error: function (xhr) {
+                        showToast('Error al procesar la solicitud', 'error');
+                    }
+                });
+            });
+        });
+
+        function showToast(message, type) {
+            var alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+            var alertHtml = `<div class="alert ${alertClass} alert-dismissible fade show" role="alert">
+                                ${message}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>`;
+            $('.container-fluid').prepend(alertHtml);
+            setTimeout(() => $('.alert').fadeOut(), 5000);
+        }
+    </script>
+}

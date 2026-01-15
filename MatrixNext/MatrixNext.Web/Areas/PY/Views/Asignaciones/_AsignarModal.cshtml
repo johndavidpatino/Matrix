@@ -1,0 +1,107 @@
+@model MatrixNext.Web.Models.PY.AsignacionProyecto
+@{
+    Layout = "";
+}
+
+<div class="modal-header bg-primary text-white">
+    <h5 class="modal-title">Asignar Gerente de Proyecto</h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+</div>
+
+<form asp-action="Asignar" method="post" data-ajax-form>
+    <div class="modal-body">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-group mb-3">
+            <label asp-for="IdProyecto" class="form-label">Proyecto *</label>
+            <select asp-for="IdProyecto" class="form-control" required>
+                <option value="">-- Seleccione un proyecto --</option>
+            </select>
+            <span asp-validation-for="IdProyecto" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="IdGerentePrincipal" class="form-label">Gerente Principal *</label>
+            <select asp-for="IdGerentePrincipal" class="form-control" required>
+                <option value="">-- Seleccione un gerente --</option>
+            </select>
+            <span asp-validation-for="IdGerentePrincipal" class="text-danger"></span>
+            <small class="form-text text-muted">
+                <i class="fas fa-info-circle"></i> El gerente debe tener rol "GerenteProyectos"
+            </small>
+        </div>
+
+        <div class="form-group mb-3">
+            <label>Trabajos a Asignar (opcional)</label>
+            <div id="listaTrabajosAsignar" style="max-height: 300px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; border-radius: 4px;">
+                <p class="text-muted">Cargando trabajos...</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ObservacionesAsignacion" class="form-label">Observaciones</label>
+            <textarea asp-for="ObservacionesAsignacion" class="form-control" rows="3" 
+                      placeholder="Motivo, notas o contexto de la asignación..."></textarea>
+            <span asp-validation-for="ObservacionesAsignacion" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="fas fa-times"></i> Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-check"></i> Asignar
+        </button>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Cargar proyectos sin asignación
+            $.get('@Url.Action("GetProyectosDisponibles", "Asignaciones", new { area = "PY" })', function (data) {
+                $.each(data.datos, function (i, item) {
+                    $('[name="IdProyecto"]').append(
+                        $('<option></option>')
+                            .attr('value', item.idProyecto)
+                            .text(item.nombreProyecto)
+                    );
+                });
+            });
+
+            // Cargar gerentes disponibles
+            $.get('@Url.Action("GetGerentesDisponibles", "Asignaciones", new { area = "PY" })', function (data) {
+                $.each(data.datos, function (i, item) {
+                    $('[name="IdGerentePrincipal"]').append(
+                        $('<option></option>')
+                            .attr('value', item.idEmpleado)
+                            .text(item.nomCompleto + ' (' + item.email + ')')
+                    );
+                });
+            });
+
+            // Cargar trabajos cuando se selecciona proyecto
+            $('[name="IdProyecto"]').on('change', function () {
+                var idProyecto = $(this).val();
+                if (idProyecto) {
+                    $.get('@Url.Action("GetTrabajosProyecto", "Asignaciones", new { area = "PY" })', 
+                        { id: idProyecto }, 
+                        function (data) {
+                            var html = '';
+                            $.each(data.datos, function (i, item) {
+                                html += `<div class="form-check">
+                                    <input class="form-check-input trabajoCheck" type="checkbox" value="${item.idTrabajo}" id="trabajo_${item.idTrabajo}" name="IdsTrabajos">
+                                    <label class="form-check-label" for="trabajo_${item.idTrabajo}">
+                                        ${item.numeroTrabajo} - ${item.nombreTrabajo}
+                                        <span class="badge badge-secondary">${item.estado}</span>
+                                    </label>
+                                </div>`;
+                            });
+                            $('#listaTrabajosAsignar').html(html || '<p class="text-muted">No hay trabajos disponibles</p>');
+                        });
+                }
+            });
+        });
+    </script>
+}
