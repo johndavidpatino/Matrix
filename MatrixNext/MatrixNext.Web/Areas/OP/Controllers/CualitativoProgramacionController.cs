@@ -17,13 +17,16 @@ namespace MatrixNext.Web.Areas.OP.Controllers;
 public class CualitativoProgramacionController : Controller
 {
     private readonly IOpProgramacionService _programacionService;
+    private readonly IOpNotificacionService _notificacionService;
     private readonly ILogger<CualitativoProgramacionController> _logger;
 
     public CualitativoProgramacionController(
         IOpProgramacionService programacionService,
+        IOpNotificacionService notificacionService,
         ILogger<CualitativoProgramacionController> logger)
     {
         _programacionService = programacionService;
+        _notificacionService = notificacionService;
         _logger = logger;
     }
 
