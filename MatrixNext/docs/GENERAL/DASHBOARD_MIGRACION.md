@@ -1,6 +1,6 @@
 # DASHBOARD DE MIGRACION - Estado actual
 
-Fecha de corte: 2026-01-14 (Sprints 5 y 6 completados; **Sprint 7 COMPLETADO** ✅)
+Fecha de corte: 2026-01-14 (Sprints 5, 6, 7 COMPLETADOS; **Sprint 8 EN CURSO** 🔴)
 
 ## Resumen corto
 - **SPRINT 5 COMPLETADO**: TH_TalentoHumano Views/UI (15-29 enero, 80h) sobre la API Sprint 4 ya establecida.
@@ -24,7 +24,7 @@ Fecha de corte: 2026-01-14 (Sprints 5 y 6 completados; **Sprint 7 COMPLETADO** �
 | OP_Cuantitativo | Operativo | `MatrixNext/MatrixNext.Web/Areas/OP/Controllers/FichaCuantitativaController.cs` + `MatrixNext/docs/OP/ANALISIS_OP_CUANTITATIVO.md` |
 | OP_Cualitativo | Completo (Sprint 6: complementos + Bulk Import) | `MatrixNext/MatrixNext.Web/Areas/OP/Controllers/CualitativoPlanillasController.cs`, `CualitativoFiltrosController.cs`, `CualitativoMuestraController.cs` |
 | PY_Proyectos | Parcial | `MatrixNext/MatrixNext.Web/Areas/PY/Controllers` + `MatrixNext/docs/PY/MIGRACION_PY_PROYECTOS.md` |
-| CORE (workflow) | Alta | Parcial; completar Sprint 7 | 🟡 |
+| CORE (workflow) | Completo (Sprint 7) | **SPRINT 7 COMPLETADO**: Máquina de estados + UI runtime + SignalR + reportes (Ver `SPRINT_7_COMPLETADO.md`) |
 | GD_Documentos | Parcial (Fase 5 completa) | `MatrixNext/MatrixNext.Web/Areas/GD/Controllers` + `MatrixNext/MatrixNext.Web/Areas/GD/Views` |
 | EQ (EasyQuote) | En progreso | `MatrixNext/MatrixNext.Web/Areas/EQ/Controllers` + entrepiezas `MatrixNext/MatrixNext.Web/Areas/EQ/Views` |
 | Home | En desarrollo | `MatrixNext/MatrixNext.Web/Controllers/HomeController.cs`, `MatrixNext/MatrixNext.Web/Services/Dashboard/DashboardService.cs`, `MatrixNext/MatrixNext.Web/Views/Home/Index.cshtml` |
@@ -105,8 +105,8 @@ Ultima revision: 2026-01-14
 |---|---|---|---|---|---|
 | 5 | TH Views/UI | 2 sem | 2026-01-15 → 2026-01-29 | 80h | ✅ COMPLETADO |
 | 6 | OP_Cualitativo Complementos + Bulk Import | 2 sem | 2026-01-13 → 2026-01-29 | 75h | ✅ COMPLETADO |
-| 7 | CORE Workflow | 2 sem | 2026-02-01 → 2026-02-12 | 85h | 🟡 EN CURSO |
-| 8 | EQ_EasyQuote Fase 1 | 2-3 sem | 2026-02-15 → 2026-03-05 | 120h | 🟡 PLANIFICADO |
+| 7 | CORE Workflow | 2 sem | 2026-02-01 → 2026-02-12 | 85h | ✅ COMPLETADO |
+| **8** | **EQ_EasyQuote Fase 1** | **2-3 sem** | **2026-02-15 → 2026-03-05** | **120h** | **🔴 EN CURSO** |
 | 9 | Home Dashboard | 1-2 sem | 2026-03-08 → 2026-03-19 | 50h | 🔴 PLANIFICADO |
 | **10** | **RP_Reportes** | **1-2 sem** | **2026-03-22 → 2026-04-02** | **60h** | **🔴 PRÓXIMO FOCUS** |
 | **11** | **OP_RO + OP_Trafico** | **2 sem** | **2026-04-05 → 2026-04-16** | **90h** | **🔴 FINAL FOCUS** |
