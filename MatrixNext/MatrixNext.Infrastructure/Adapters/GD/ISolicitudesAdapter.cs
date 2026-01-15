@@ -20,5 +20,20 @@ namespace MatrixNext.Infrastructure.Adapters.GD
         Task<ConfiguracionRevisionDto> ObtenerConfiguracionRevisionAsync(long idProceso);
         Task<List<long>> ObtenerRevisoresPorDefectoAsync(long idProceso);
         Task<bool> EnviarNotificacionRevisoresAsync(long idSolicitud, string contenido);
+
+        /// <summary>
+        /// Aprobar una revisión (TipoRevision = 2)
+        /// </summary>
+        Task<bool> AprobarRevisionAsync(AprobacionRevisionDto aprobacion);
+
+        /// <summary>
+        /// Rechazar una revisión (TipoRevision = 3)
+        /// </summary>
+        Task<bool> RechazarRevisionAsync(AprobacionRevisionDto rechazo);
+
+        /// <summary>
+        /// Obtener resumen de aprobaciones de una solicitud
+        /// </summary>
+        Task<ResumenAprobacionDto> ObtenerResumenAprobacionAsync(long idSolicitud);
     }
 }

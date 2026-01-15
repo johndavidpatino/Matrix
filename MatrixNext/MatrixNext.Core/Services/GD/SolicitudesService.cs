@@ -214,5 +214,116 @@ namespace MatrixNext.Core.Services.GD
                 return null;
             }
         }
+
+        public async Task<(bool exitoso, string mensaje)> AprobarRevisionAsync(AprobacionRevisionDto aprobacion)
+        {
+            try
+            {
+                // Validaciones
+                if (aprobacion.IdRevision <= 0)
+                    return (false, "Id de revisión inválido");
+
+                if (aprobacion.IdRevisor <= 0)
+                    return (false, "Revisor inválido");
+
+                // Aprobar revisión
+                aprobacion.TipoRevision = 2; // Aprobado
+                aprobacion.FechaRevision = DateTime.Now;
+                await _adapter.AprobarRevisionAsync(aprobacion);
+
+                _logger.LogInformation("Revisión {IdRevision} aprobada por usuario {IdRevisor}", 
+                    aprobacion.IdRevision, aprobacion.IdRevisor);
+
+                // Obtener resumen de aprobaciones
+                var resumen = await _adapter.ObtenerResumenAprobacionAsync(aprobacion.IdSolicitud);
+
+                // Cambiar estado de solicitud si todos aprobaron o se alcanzó mayoría
+                if (resumen.EstadoFinal == 2) // Aprobado
+                {
+                    await _adapter.CambiarEstadoSolicitudAsync(
+                        aprobacion.IdSolicitud, 
+                        2, // Estado Aprobado
+                        aprobacion.IdRevisor, 
+                        resumen.MensajeFinal
+                    );
+
+                    // Enviar notificación al solicitante
+                    if (aprobacion.EnviarNotificacion)
+                    {
+                        await _adapter.EnviarNotificacionRevisoresAsync(
+                            aprobacion.IdSolicitud, 
+                            $"Su solicitud ha sido APROBADA. {resumen.MensajeFinal}"
+                        );
+                    }
+
+                    _logger.LogInformation("Solicitud {IdSolicitud} aprobada automáticamente: {Mensaje}", 
+                        aprobacion.IdSolicitud, resumen.MensajeFinal);
+                    
+                    return (true, $"Aprobación registrada. {resumen.MensajeFinal}");
+                }
+
+                return (true, $"Aprobación registrada. Pendiente: {resumen.RevisoresPendientes} revisor(es)");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error aprobando revisión {IdRevision}", aprobacion.IdRevision);
+                return (false, "Error al aprobar la revisión");
+            }
+        }
+
+        public async Task<(bool exitoso, string mensaje)> RechazarRevisionAsync(AprobacionRevisionDto rechazo)
+        {
+            try
+            {
+                // Validaciones
+                if (rechazo.IdRevision <= 0)
+                    return (false, "Id de revisión inválido");
+
+                if (rechazo.IdRevisor <= 0)
+                    return (false, "Revisor inválido");
+
+                if (string.IsNullOrWhiteSpace(rechazo.ComentarioRevision))
+                    return (false, "El comentario es obligatorio para rechazos");
+
+                // Rechazar revisión
+                rechazo.TipoRevision = 3; // Rechazado
+                rechazo.FechaRevision = DateTime.Now;
+                await _adapter.RechazarRevisionAsync(rechazo);
+
+                _logger.LogInformation("Revisión {IdRevision} rechazada por usuario {IdRevisor}", 
+                    rechazo.IdRevision, rechazo.IdRevisor);
+
+                // Cambiar estado de solicitud a Rechazado automáticamente
+                await _adapter.CambiarEstadoSolicitudAsync(
+                    rechazo.IdSolicitud, 
+                    3, // Estado Rechazado
+                    rechazo.IdRevisor, 
+                    $"Rechazado por revisor: {rechazo.ComentarioRevision}"
+                );
+
+                // Enviar notificación al solicitante
+                if (rechazo.EnviarNotificacion)
+                {
+                    await _adapter.EnviarNotificacionRevisoresAsync(
+                        rechazo.IdSolicitud, 
+                        $"Su solicitud ha sido RECHAZADA. Motivo: {rechazo.ComentarioRevision}"
+                    );
+                }
+
+                _logger.LogInformation("Solicitud {IdSolicitud} rechazada automáticamente", rechazo.IdSolicitud);
+                
+                return (true, "Rechazo registrado. Solicitud marcada como Rechazada y solicitante notificado");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error rechazando revisión {IdRevision}", rechazo.IdRevision);
+                return (false, "Error al rechazar la revisión");
+            }
+        }
+
+        public async Task<ResumenAprobacionDto> ObtenerResumenAprobacionAsync(long idSolicitud)
+        {
+            return await _adapter.ObtenerResumenAprobacionAsync(idSolicitud);
+        }
     }
 }

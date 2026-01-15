@@ -295,5 +295,144 @@ namespace MatrixNext.Infrastructure.Adapters.GD
                 return false;
             }
         }
+
+        public async Task<bool> AprobarRevisionAsync(AprobacionRevisionDto aprobacion)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@IdRevision", aprobacion.IdRevision);
+                parameters.Add("@DocumentoId", 0); // Mantener compatibilidad con SP legacy
+                parameters.Add("@UsuarioId", aprobacion.IdRevisor);
+                parameters.Add("@FechaAprobacion", aprobacion.FechaRevision);
+                parameters.Add("@TipoRevision", 2); // 2 = Aprobado
+
+                await _connection.ExecuteAsync(
+                    "GD_Revisiones_Edit",
+                    parameters,
+                    commandType: CommandType.StoredProcedure
+                );
+
+                // Actualizar comentario si existe
+                if (!string.IsNullOrWhiteSpace(aprobacion.ComentarioRevision))
+                {
+                    await _connection.ExecuteAsync(
+                        @"UPDATE GD_Revisiones 
+                          SET ComentarioRevision = @Comentario 
+                          WHERE IdRevision = @IdRevision",
+                        new { aprobacion.IdRevision, Comentario = aprobacion.ComentarioRevision }
+                    );
+                }
+
+                _logger.LogInformation("Revisión {IdRevision} aprobada por usuario {IdRevisor}", 
+                    aprobacion.IdRevision, aprobacion.IdRevisor);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error aprobando revisión {IdRevision}", aprobacion.IdRevision);
+                throw;
+            }
+        }
+
+        public async Task<bool> RechazarRevisionAsync(AprobacionRevisionDto rechazo)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@IdRevision", rechazo.IdRevision);
+                parameters.Add("@DocumentoId", 0);
+                parameters.Add("@UsuarioId", rechazo.IdRevisor);
+                parameters.Add("@FechaAprobacion", rechazo.FechaRevision);
+                parameters.Add("@TipoRevision", 3); // 3 = Rechazado
+
+                await _connection.ExecuteAsync(
+                    "GD_Revisiones_Edit",
+                    parameters,
+                    commandType: CommandType.StoredProcedure
+                );
+
+                // Actualizar comentario (obligatorio para rechazos)
+                await _connection.ExecuteAsync(
+                    @"UPDATE GD_Revisiones 
+                      SET ComentarioRevision = @Comentario 
+                      WHERE IdRevision = @IdRevision",
+                    new { rechazo.IdRevision, Comentario = rechazo.ComentarioRevision ?? "Rechazado" }
+                );
+
+                _logger.LogInformation("Revisión {IdRevision} rechazada por usuario {IdRevisor}", 
+                    rechazo.IdRevision, rechazo.IdRevisor);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error rechazando revisión {IdRevision}", rechazo.IdRevision);
+                throw;
+            }
+        }
+
+        public async Task<ResumenAprobacionDto> ObtenerResumenAprobacionAsync(long idSolicitud)
+        {
+            try
+            {
+                var revisores = await ObtenerRevisoresAsync(idSolicitud);
+                var config = await _connection.QueryFirstOrDefaultAsync<ConfiguracionRevisionDto>(
+                    @"SELECT c.IdConfiguracion, c.IdProceso, c.RequiereAprobacionUnanimidad
+                      FROM GD_ConfiguracionRevision c
+                      INNER JOIN GD_SolicitudDocumentos s ON s.IdProceso = c.IdProceso
+                      WHERE s.IdSolicitud = @IdSolicitud",
+                    new { IdSolicitud = idSolicitud }
+                );
+
+                var resumen = new ResumenAprobacionDto
+                {
+                    IdSolicitud = idSolicitud,
+                    TotalRevisores = revisores.Count(),
+                    RevisoresAprobados = revisores.Count(r => r.IdEstadoRevision == 2),
+                    RevisoresRechazados = revisores.Count(r => r.IdEstadoRevision == 3),
+                    RevisoresPendientes = revisores.Count(r => r.IdEstadoRevision == 1),
+                    RequiereUnanimidad = config?.RequiereAprobacionUnanimidad ?? false
+                };
+
+                // Determinar estado final
+                if (resumen.AlgunoRechazo)
+                {
+                    resumen.EstadoFinal = 3; // Rechazado
+                    resumen.MensajeFinal = $"Solicitud rechazada ({resumen.RevisoresRechazados} revisor(es) rechazó)";
+                }
+                else if (resumen.TodosAprobados)
+                {
+                    resumen.EstadoFinal = 2; // Aprobado
+                    resumen.MensajeFinal = "Solicitud aprobada por todos los revisores";
+                }
+                else if (resumen.RequiereUnanimidad)
+                {
+                    resumen.EstadoFinal = 1; // Pendiente
+                    resumen.MensajeFinal = $"Pendiente: {resumen.RevisoresPendientes} revisor(es) faltante(s) - Requiere unanimidad";
+                }
+                else
+                {
+                    // Mayoría simple: 50% + 1
+                    var aprobacionesNecesarias = (resumen.TotalRevisores / 2) + 1;
+                    if (resumen.RevisoresAprobados >= aprobacionesNecesarias)
+                    {
+                        resumen.EstadoFinal = 2; // Aprobado
+                        resumen.MensajeFinal = $"Solicitud aprobada por mayoría ({resumen.RevisoresAprobados}/{resumen.TotalRevisores})";
+                    }
+                    else
+                    {
+                        resumen.EstadoFinal = 1; // Pendiente
+                        resumen.MensajeFinal = $"Pendiente: {resumen.RevisoresPendientes} revisor(es) faltante(s)";
+                    }
+                }
+
+                return resumen;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error obteniendo resumen de aprobación para solicitud {IdSolicitud}", idSolicitud);
+                throw;
+            }
+        }
     }
 }

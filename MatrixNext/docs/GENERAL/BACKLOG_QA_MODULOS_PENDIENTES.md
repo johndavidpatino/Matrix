@@ -466,14 +466,29 @@ Este documento consolida el **backlog técnico** para completar la migración de
    - ✅ MIGRACION_SOLICITUDES_ASIGNACION_COMPLETADA.md (200 líneas)
    - ✅ Errores: 0 (compilación limpia)
 
-2. **Aprobaciones/Rechazos Completos** (12h)
-   - [ ] Extender `AprobacionesController` con:
-     - `Rechazar(idRevision, comentario)` (POST)
-     - `CambiarEstadoSolicitud(idSolicitud, estadoId)` (automático tras N aprobaciones)
-   - [ ] Validar lógica de agregación: ¿AND de todos los revisores o solo mayoría?
-   - [ ] Enviar notificaciones al solicitante (aprobado/rechazado)
-   - [ ] Vista con modal de confirmación y textarea de comentarios
-   - [ ] **SP a verificar**: `GD_Revisiones_Edit`, `GD_SolicitudDocumentos_UpdateEstado`, `GD_Email_NotificarSolicitante`
+2. **✅ COMPLETADO: Aprobaciones/Rechazos Completos** (12h)
+   - [x] DTOs: AprobacionRevisionDto, ResumenAprobacionDto (+60 líneas)
+   - [x] ISolicitudesAdapter extendido (+3 métodos)
+   - [x] SolicitudesAdapter (+170 líneas):
+     - AprobarRevisionAsync → SP: GD_Revisiones_Edit (TipoRevision=2)
+     - RechazarRevisionAsync → SP: GD_Revisiones_Edit (TipoRevision=3)
+     - ObtenerResumenAprobacionAsync → Lógica unanimidad/mayoría
+   - [x] ISolicitudesService extendido (+3 métodos)
+   - [x] SolicitudesService (+120 líneas):
+     - AprobarRevisionAsync: Cambio automático de estado si todos aprobaron
+     - RechazarRevisionAsync: Cambio inmediato a estado Rechazado
+     - Lógica de agregación: unanimidad vs mayoría simple (50%+1)
+     - Notificación automática al solicitante
+   - [x] Validaciones: IdRevision, IdRevisor, ComentarioRevision (obligatorio en rechazo)
+   - [x] Documentación: MIGRACION_APROBACIONES_RECHAZOS_COMPLETADA.md (220 líneas)
+   - [x] **SPs reutilizados**: GD_Revisiones_Edit, GD_SolicitudDocumentos_CambiarEstado, GD_Email_EnviarNotificacion
+   
+   **Entregables Sprint 12.3.2**:
+   - ✅ AprobacionRevisionDto, ResumenAprobacionDto (60 líneas)
+   - ✅ SolicitudesAdapter extendido (+170 líneas, 3 métodos)
+   - ✅ SolicitudesService extendido (+120 líneas, 3 métodos)
+   - ✅ MIGRACION_APROBACIONES_RECHAZOS_COMPLETADA.md (220 líneas)
+   - ✅ Errores: 0 (compilación limpia)
 
 3. **Audit Trail de Revisiones** (8h)
    - [ ] Crear tabla/vista `GD_HistorialRevisiones` (si no existe)

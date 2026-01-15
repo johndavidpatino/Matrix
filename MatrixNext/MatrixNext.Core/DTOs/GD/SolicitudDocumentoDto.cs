@@ -69,4 +69,36 @@ namespace MatrixNext.Core.DTOs.GD
         public int CantidadMinima { get; set; } = 1;
         public bool RequiereAprobacionUnanimidad { get; set; } = false;
     }
+
+    /// <summary>
+    /// DTO para aprobar o rechazar una revisión
+    /// Ref: Sprint 12.3.2 - Aprobaciones/Rechazos
+    /// </summary>
+    public class AprobacionRevisionDto
+    {
+        public long IdRevision { get; set; }
+        public long IdSolicitud { get; set; }
+        public long IdRevisor { get; set; }
+        public int TipoRevision { get; set; } // 1=Pendiente, 2=Aprobado, 3=Rechazado
+        public string ComentarioRevision { get; set; }
+        public DateTime FechaRevision { get; set; } = DateTime.Now;
+        public bool EnviarNotificacion { get; set; } = true;
+    }
+
+    /// <summary>
+    /// DTO para resumen de aprobaciones de una solicitud
+    /// </summary>
+    public class ResumenAprobacionDto
+    {
+        public long IdSolicitud { get; set; }
+        public int TotalRevisores { get; set; }
+        public int RevisoresAprobados { get; set; }
+        public int RevisoresRechazados { get; set; }
+        public int RevisoresPendientes { get; set; }
+        public bool RequiereUnanimidad { get; set; }
+        public bool TodosAprobados => RevisoresAprobados == TotalRevisores;
+        public bool AlgunoRechazo => RevisoresRechazados > 0;
+        public long EstadoFinal { get; set; } // 2=Aprobado, 3=Rechazado, 1=Pendiente
+        public string MensajeFinal { get; set; }
+    }
 }
