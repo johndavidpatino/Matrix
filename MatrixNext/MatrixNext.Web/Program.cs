@@ -116,6 +116,10 @@ builder.Services.AddScoped<GrafoAciclicoService>();
 builder.Services.AddScoped<IOpExportesAuditoriaService, OpExportesAuditoriaService>();
 builder.Services.AddHostedService<ExportAuditoriaCleanupBackgroundService>(); // Cleanup runs every hour
 
+// ===== SPRINT 6: OP_CUALITATIVO Background Services =====
+// Ref: SPRINT 6 Fase 5 - Email/Notifications
+builder.Services.AddHostedService<OpReminderBackgroundService>(); // Recordatorios cada 6 horas
+
 // ===== SPRINT 1: CORE Services & Adapters =====
 // Ref: PLAN_IMPLEMENTACION_SPRINTS.md § T1 (CORE Catálogos)
 builder.Services.AddScoped<MatrixNext.Web.Services.CORE.WorkFlowDataAdapter>();
