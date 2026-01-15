@@ -195,14 +195,17 @@ Este documento consolida el **backlog técnico** para completar la migración de
    - [x] Documentación: MAPEO_SP_CIERRE_TRABAJO.md
    - **Ref**: Sprint 12.1.6 completado en commit
 
-7. **Carga Masiva: Dividir CATI vs Planillas** (16h)
-   - [ ] Separar `ImportacionMasivaController` en `ImportarDatosController` (CATI RMC) e `ImportarPlanillasController`
-   - [ ] Reemplazar OleDb con ClosedXML para lectura Excel
-   - [ ] Implementar validaciones:
-     - CATI: estructura 9 columnas, `TipoActividad` enum
+7. **Carga Masiva: Dividir CATI vs Planillas** (16h) ✅ **COMPLETADO**
+   - [x] Separar procesamiento en `CargaMasivaService` (CATI RMC vs Planillas)
+   - [x] Reemplazar OleDb con ClosedXML para lectura Excel
+   - [x] Implementar validaciones:
+     - CATI: estructura 9 columnas, `TipoActividad` enum, trabajo existe
      - Planillas: headers exactos, corte 16-15, festivos, índice único
-   - [ ] Mapear SP: `CatiRMC_BorrarDatosRespuestasCatiRMCtmp`, `CatiRMC_ValidarDatos*`, `CatiRMC_InsertarDatosEnRespuestas`
-   - [ ] **SP a verificar**: Lista completa en `ANALISIS_OP_CUANTITATIVO.md` § 4
+   - [x] Mapear SP: `CatiRMC_BorrarDatosRespuestasCatiRMCtmp`, `CatiRMC_ValidarDatos*`, `CatiRMC_InsertarDatosEnRespuestas`
+   - [x] Validaciones implementadas con queries directas y fallback
+   - [x] Archivos creados: CargaMasivaDto.cs, ICargaMasivaAdapter.cs, CargaMasivaAdapter.cs, ICargaMasivaService.cs, CargaMasivaService.cs
+   - [x] Documentación: MAPEO_SP_CARGA_MASIVA.md
+   - **Ref**: Sprint 12.1.7 completado en commit
 
 #### Semana 3: Productividad y Tráfico (40h)
 

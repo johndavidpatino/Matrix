@@ -246,6 +246,11 @@ builder.Services.AddScoped<MatrixNext.Data.Services.OP.IOpNotificacionService, M
 builder.Services.AddScoped<MatrixNext.Data.Adapters.OP.ICierreTrabajoAdapter, MatrixNext.Data.Adapters.OP.CierreTrabajoAdapter>();
 builder.Services.AddScoped<MatrixNext.Data.Services.OP.ICierreTrabajoService, MatrixNext.Data.Services.OP.CierreTrabajoService>();
 
+// ===== SPRINT 12.1.7: OP Carga Masiva CATI vs Planillas =====
+// Ref: BACKLOG_QA_MODULOS_PENDIENTES.md § Sprint 12.1.7
+builder.Services.AddScoped<MatrixNext.Data.Adapters.OP.ICargaMasivaAdapter, MatrixNext.Data.Adapters.OP.CargaMasivaAdapter>();
+builder.Services.AddScoped<MatrixNext.Data.Services.OP.ICargaMasivaService, MatrixNext.Data.Services.OP.CargaMasivaService>();
+
 builder.Services.AddScoped<IOpCargaService, OpCargaService>();
 builder.Services.AddScoped<IOpPlanillasService, OpPlanillasService>();
 builder.Services.AddScoped<IOpProductividadService, OpProductividadService>();
