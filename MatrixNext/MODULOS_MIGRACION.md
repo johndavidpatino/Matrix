@@ -375,48 +375,7 @@
 
 ## 🔍 MÓDULOS EN REVISIÓN/QA (Solo Verificar Completitud)
 
-> **⚠️ ADVERTENCIA**: Estos módulos tienen código existente en MatrixNext pero requieren verificación al 100% contra WebMatrix.  
-> **NO iniciar migración desde cero** - Auditar y completar features faltantes solamente.
-
-### 🟠 ALTA (Revisar Primero)
-
-#### 19. **OP_Cuantitativo** (31 páginas) 🔍 EN REVISIÓN
-- **Carpeta**: `WebMatrix/OP_Cuantitativo/`
-- **Contexto**: `OP_Cuanti_Model` (CoreProject)
-- **Estado Actual**: Estructura base existe, verificar completitud
-- **Evidencia MatrixNext**: `Areas/OP/Controllers/FichaCuantitativaController.cs`, `Areas/OP/Views/FichaCuantitativa`
-- **Documento Análisis**: [ANALISIS_OP_CUANTITATIVO.md](MatrixNext/docs/OP/ANALISIS_OP_CUANTITATIVO.md) (v1.1)
-- **Tareas Revisión**:
-  - [ ] Auditar 31 páginas WebMatrix vs código MatrixNext
-  - [ ] Verificar SP mapeados (ver análisis para lista completa)
-  - [ ] Completar controllers/services faltantes
-  - [ ] QA funcional completo
-- **Estimación Completitud**: TBD (requiere auditoría)
-
-#### 20. **PY_Proyectos** (18 páginas) 🔍 EN REVISIÓN
-- **Carpeta**: `WebMatrix/PY_Proyectos/`
-- **Contexto**: `PY_Model` (CoreProject)
-- **Estado Actual**: Controllers parciales (proyectos, segmentación, sesiones)
-- **Evidencia MatrixNext**: `Areas/PY/Controllers`, `Areas/PY/Views`, `docs/PY/MIGRACION_PY_PROYECTOS.md`
-- **Tareas Revisión**:
-  - [ ] Auditar 18 páginas WebMatrix vs MatrixNext
-  - [ ] Completar módulos: Asignaciones, Reportes
-  - [ ] Validar integraciones con TH, OP
-  - [ ] QA funcional completo
-- **Estimación Completitud**: TBD (requiere auditoría)
-
-### 🟡 MEDIA (Revisar Después)
-
-#### 21. **GD_Documentos** 🔍 EN REVISIÓN
-- **Contexto**: `GD_Model`
-- **Estado Actual**: Controllers (DocumentosMaestro, Repositorio, Solicitudes) + Views
-- **Evidencia MatrixNext**: `Areas/GD/Controllers`, `Areas/GD/Views`
-- **Tareas Revisión**:
-  - [ ] Verificar workflows aprobación (estados, transiciones)
-  - [ ] Validar integración filesystem (upload/download)
-  - [ ] Completar vistas faltantes (si existen)
-  - [ ] QA funcional completo
-- **Estimación Completitud**: TBD (requiere auditoría)
+> **Estado al 2026-01-15**: No hay módulos en revisión/QA; todos los módulos auditados fueron promovidos a **COMPLETADOS**.
 
 ---
 
@@ -426,7 +385,7 @@
 
 ### 🟡 BAJA (Complementaria)
 
-#### 22. **SGC_Calidad** 🔴 PENDIENTE
+#### 20. **SGC_Calidad** 🔴 PENDIENTE
 - **Carpeta**: ver `MatrixNext/docs/GENERAL/SGC_Calidad.md`
 - **Prioridad**: 🟡 MEDIA-BAJA
 - **Sprint Sugerido**: Sprint 13
@@ -434,7 +393,7 @@
 - **Estimación**: 2-3 semanas
 - **Estado**: ❌ NO INICIADO
 
-#### 23. **ES_Estadistica** 🔴 PENDIENTE
+#### 21. **ES_Estadistica** 🔴 PENDIENTE
 - **Carpeta**: `WebMatrix/ES_Estadistica`
 - **Prioridad**: 🟡 BAJA
 - **Sprint Sugerido**: Sprint 14
@@ -442,7 +401,7 @@
 - **Estimación**: 2-3 semanas
 - **Estado**: ❌ NO INICIADO
 
-#### 24. **IT** 🔴 PENDIENTE
+#### 22. **IT** 🔴 PENDIENTE
 - **Carpeta**: `WebMatrix/IT`
 - **Prioridad**: 🟡 BAJA
 - **Sprint Sugerido**: Sprint 15
@@ -450,7 +409,7 @@
 - **Estimación**: 1-2 semanas
 - **Estado**: ❌ NO INICIADO
 
-#### 25. **Inventario** 🔴 PENDIENTE
+#### 23. **Inventario** 🔴 PENDIENTE
 - **Carpeta**: `WebMatrix/Inventario`
 - **Prioridad**: 🟡 BAJA
 - **Sprint Sugerido**: Sprint 20

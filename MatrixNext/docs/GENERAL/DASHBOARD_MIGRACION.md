@@ -218,11 +218,7 @@ Ultima revision: 2026-01-15 (Sprints 10, 11 y 12.1-3 COMPLETADOS ✅) - **AHORA:
 
 ### 🔍 Módulos en Revisión/QA
 
-| Módulo | Prioridad | Acción Requerida | Indicador |
-| --- | --- | --- | --- |
-| OP_Cuantitativo | Alta | Verificar 31 páginas WebMatrix vs MatrixNext, completar missing | 🟡 |
-| GD_Documentos | Media | Verificar workflows aprobación, filesystem integration | 🟡 |
-| PY_Proyectos | Alta | Verificar 18 páginas, completar asignaciones/reportes | 🟡 |
+Actualmente no hay módulos en revisión/QA; todo lo identificado fue promovido a **Completados**.
 
 ### 🚧 Módulos Pendientes Migración
 

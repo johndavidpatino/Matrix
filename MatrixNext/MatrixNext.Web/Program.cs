@@ -35,6 +35,8 @@ using MatrixNext.Data.Services.OP_RO;
 using MatrixNext.Data.Adapters.OP_Trafico;
 using MatrixNext.Data.Services.OP_Trafico;
 using MatrixNext.Data.Services.Authorization;
+using MatrixNext.Infrastructure.Adapters.SGC;
+using MatrixNext.Core.Services.SGC;
 using System.Data;
 using Microsoft.Data.SqlClient;
 
@@ -95,6 +97,13 @@ builder.Services.AddScoped<IOP_ROService, OP_ROService>();
 // OP_Trafico (Sprint 11B)
 builder.Services.AddScoped<IOP_TraficoAdapter, OP_TraficoAdapter>();
 builder.Services.AddScoped<IOP_TraficoService, OP_TraficoService>();
+
+// ===== SPRINT 13: SGC_Calidad (Auditorías + Acciones Mejora) =====
+// Adapters and Services for SGC (Sistema de Gestión de Calidad)
+builder.Services.AddScoped<ISGCAuditoriaAdapter, SGCAuditoriaAdapter>();
+builder.Services.AddScoped<ISGCAccionMejoraAdapter, SGCAccionMejoraAdapter>();
+builder.Services.AddScoped<ISGCAuditoriaService, SGCAuditoriaService>();
+builder.Services.AddScoped<ISGCAccionMejoraService, SGCAccionMejoraService>();
 
 // Authorization Service (Sprint 10-11)
 builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
