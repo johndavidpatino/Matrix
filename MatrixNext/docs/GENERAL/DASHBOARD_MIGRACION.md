@@ -1,16 +1,16 @@
 # DASHBOARD DE MIGRACION - Estado actual
 
-Fecha de corte: 2026-01-14 (Sprints 5, 6, 7 COMPLETADOS; **Sprint 8 EN CURSO** 🔴)
+Fecha de corte: 2026-01-14 (Sprints 5, 6, 7, 8 COMPLETADOS; **Sprint 9 PRÓXIMO** 🟡)
 
 ## Resumen corto
 - **SPRINT 5 COMPLETADO**: TH_TalentoHumano Views/UI (15-29 enero, 80h) sobre la API Sprint 4 ya establecida.
 - **SPRINT 6 COMPLETADO**: OP_Cualitativo complementos + Bulk Import (13-29 enero, 75h) con notificaciones, background reminders y carga masiva Excel/CSV.
 - **SPRINT 7 COMPLETADO** ✅: CORE Workflow runtime (máquina de estados, UI runtime, SignalR notificaciones, reportes alineados) - Detalles en `SPRINT_7_COMPLETADO.md`.
+- **SPRINT 8 COMPLETADO** ✅: EQ_EasyQuote Gap Analysis + Documentación (35h reales vs 120h estimadas; 85h ya existían). Detalles en `docs/EQ/SPRINT_8_COMPLETADO.md`.
 - **TH_TalentoHumano Sprint 4**: API REST COMPLETADA (21 archivos, 2,750+ LOC, 55 endpoints, 0 errores) con mapas en `MatrixNext/docs/TH/RESUMEN_MIGRACION_AUSENCIAS.md`.
-- **SPRINT 9 (Home)**: `HomeController`, `DashboardService` y la vista `Views/Home/Index.cshtml` ya entregan widgets de tareas, proyectos, quotes, ausencias, documentos y métricas.
+- **SPRINT 9 (Home)**: `HomeController`, `DashboardService` y la vista `Views/Home/Index.cshtml` ya entregan widgets de tareas, proyectos, quotes, ausencias, documentos y métricas. ← **🟡 PRÓXIMO**
 - **RP_Reportes + OP_RO/OP_Trafico**: Controladores y vistas generados (`Areas/RP/Controllers/ReportesController.cs`, `Areas/OP/Controllers/OP_ROController.cs`, `OP_TraficoController.cs`) listos para integrarse en Sprint 10/11.
 - **EQ + CORE**: `Areas/EQ` y `Areas/CORE` contienen la base de workflows, EasyQuote y catálogos, lo que valida el backend previo a los sprints formales.
-- **SPRINT 8 PRÓXIMO**: EQ_EasyQuote Fase 1 (análisis + catálogos + infraestructura)
 
 ## Estado por modulo (WebMatrix -> MatrixNext)
 
@@ -49,12 +49,11 @@ Fecha de corte: 2026-01-14 (Sprints 5, 6, 7 COMPLETADOS; **Sprint 8 EN CURSO** �
 - La lista completa de módulos que todavía no se han movido del legacy (y que deben seguir la especificación en `MatrixNext/docs/GENERAL/MIGRACION_ESPECIFICACIONES.md`) incluye OP_RO, OP_Trafico, PY_ControlCalidad, PY_Adquisiciones, PNC, SG_Actas, SGC_Calidad, ES_Estadistica, Centro_Informacion, Inventario, IT, MBO (y sus variantes Gerencial/Operaciones), ResumenProduccion, RE_GT, PC_PropiedadCliente y los módulos transversales (Account, Controls, etc.).
 - Cada uno debe recibir una entrada nueva en el backlog, con un plan de mapeo SP + área + menú antes de marcarlo como “en progreso”.
 
-## Pendientes que deben continuar (Sprints 8-12)
-1. **Sprint 8 (2-3 sem)**: EQ_EasyQuote Fase 1 (análisis + catálogos + infraestructura) ← **🔴 PRÓXIMO**
-2. **Sprint 9 (1-2 sem)**: Home Dashboard (widgets / servicios ya corriendo; afinando datos de tareas, proyectos, ausencias y documentos)
-3. **Sprint 10 (1-2 sem)**: RP_Reportes (controladores + vistas ya listos; foco en datos y exportes)
-4. **Sprint 11 (2 sem)**: OP_RO + OP_Trafico (controladores + vistas existentes; cerrando integración de revisiones y tráfico)
-5. **Sprint 12+ (Variable)**: Módulos baja prioridad (PY_CC, SG_Actas, SGC_Calidad, etc.)
+## Pendientes que deben continuar (Sprints 9-12)
+1. **Sprint 9 (1-2 sem)**: Home Dashboard (widgets / servicios ya corriendo; afinando datos de tareas, proyectos, ausencias y documentos) ← **🟡 PRÓXIMO**
+2. **Sprint 10 (1-2 sem)**: RP_Reportes (controladores + vistas ya listos; foco en datos y exportes)
+3. **Sprint 11 (2 sem)**: OP_RO + OP_Trafico (controladores + vistas existentes; cerrando integración de revisiones y tráfico)
+4. **Sprint 12+ (Variable)**: Módulos baja prioridad (PY_CC, SG_Actas, SGC_Calidad, etc.)
 
 ## Estructura de documentacion (ordenada)
 - `MatrixNext/docs/CORE/`
@@ -84,8 +83,8 @@ Ultima revision: 2026-01-14
 | PY_Proyectos | Alta | Catálogos/maestros en marcha | 🟡 |
 | CORE (workflow) | Alta | **SPRINT 7 COMPLETADO**: Máquina de estados + UI runtime + SignalR + reportes | 🟢 |
 | GD_Documentos | Media | Controladores y vistas live en `MatrixNext.Web/Areas/GD` (Fase 5) | 🟡 |
-| EQ (EasyQuote) | Crítica | Controladores/vistas en `MatrixNext.Web/Areas/EQ`; Sprint 8 cerrando catálogos | 🟡 |
-| Home | Alta | HomeController + DashboardService + `Views/Home/Index` en pruebas (Sprint 9) | 🔴 |
+| EQ (EasyQuote) | Crítica | **SPRINT 8 COMPLETADO**: Motor de cálculos (26 fórmulas), Seeds (600+ records), EasyCostService completo | 🟢 |
+| Home | Alta | HomeController + DashboardService + `Views/Home/Index` en pruebas (Sprint 9) | 🟡 |
 | **RP_Reportes** | **🔴 Alta** | **ReportesController + vistas listos; foco en datos y exportes S10** | **🔴** |
 | **OP_RO + OP_Trafico** | **🟠 Media-Baja** | **OP_ROController / OP_TraficoController + vistas existen; cerrando integraciones S11** | **🔴** |
 | PY_ControlCalidad | Baja | Sprint 12+ | ⚪️ |
@@ -106,12 +105,12 @@ Ultima revision: 2026-01-14
 | 5 | TH Views/UI | 2 sem | 2026-01-15 → 2026-01-29 | 80h | ✅ COMPLETADO |
 | 6 | OP_Cualitativo Complementos + Bulk Import | 2 sem | 2026-01-13 → 2026-01-29 | 75h | ✅ COMPLETADO |
 | 7 | CORE Workflow | 2 sem | 2026-02-01 → 2026-02-12 | 85h | ✅ COMPLETADO |
-| **8** | **EQ_EasyQuote Fase 1** | **2-3 sem** | **2026-02-15 → 2026-03-05** | **120h** | **🔴 EN CURSO** |
-| 9 | Home Dashboard | 1-2 sem | 2026-03-08 → 2026-03-19 | 50h | 🔴 PLANIFICADO |
-| **10** | **RP_Reportes** | **1-2 sem** | **2026-03-22 → 2026-04-02** | **60h** | **🔴 PRÓXIMO FOCUS** |
-| **11** | **OP_RO + OP_Trafico** | **2 sem** | **2026-04-05 → 2026-04-16** | **90h** | **🔴 FINAL FOCUS** |
-| 12+ | Módulos Baja Prioridad | Variable | 2026-04-19+ | TBD | ⚪️ PENDIENTE |
+| 8 | EQ_EasyQuote Fase 1 | 1 sem | 2026-02-15 → 2026-02-19 | 35h (85h ya existían) | ✅ COMPLETADO |
+| **9** | **Home Dashboard** | **1-2 sem** | **2026-02-22 → 2026-03-05** | **50h** | **🟡 PRÓXIMO** |
+| **10** | **RP_Reportes** | **1-2 sem** | **2026-03-08 → 2026-03-19** | **60h** | **🔴 PLANIFICADO** |
+| **11** | **OP_RO + OP_Trafico** | **2 sem** | **2026-03-22 → 2026-04-02** | **90h** | **🔴 PLANIFICADO** |
+| 12+ | Módulos Baja Prioridad | Variable | 2026-04-05+ | TBD | ⚪️ PENDIENTE |
 
-**Total**: ~560 horas (~2.5 meses de ejecución secuencial - acelerado por Sprint 6 exitoso)
+**Total**: ~475 horas (reducido de 560h gracias a trabajo previo en EQ)
 
-**🎯 HITO CRÍTICO**: 2026-04-16 = Fin Sprints 5-11 (100% módulos alta/media completados) ← **ADELANTADO 17 DÍAS**
+**🎯 HITO CRÍTICO**: 2026-04-02 = Fin Sprints 5-11 (100% módulos alta/media completados) ← **ADELANTADO 31 DÍAS**
