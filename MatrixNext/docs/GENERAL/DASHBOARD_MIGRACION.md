@@ -1,9 +1,10 @@
 # DASHBOARD DE MIGRACION - Estado actual
 
-Fecha de corte: 2026-01-15 (SPRINT 5 KICKOFF INICIADO)
+Fecha de corte: 2026-01-14 (Sprint 6 completado; Sprint 5 UI en curso)
 
 ## Resumen corto
 - **SPRINT 5 INICIADO**: TH_TalentoHumano Views/UI (15-29 enero, 80h) sobre la API Sprint 4 ya establecida.
+- **SPRINT 6 COMPLETADO**: OP_Cualitativo complementos + Bulk Import (13-29 enero, 75h) con notificaciones, background reminders y carga masiva Excel/CSV.
 - **TH_TalentoHumano Sprint 4**: API REST COMPLETADA (21 archivos, 2,750+ LOC, 55 endpoints, 0 errores) con mapas en `MatrixNext/docs/TH/RESUMEN_MIGRACION_AUSENCIAS.md`.
 - **SPRINT 9 (Home)**: `HomeController`, `DashboardService` y la vista `Views/Home/Index.cshtml` ya entregan widgets de tareas, proyectos, quotes, ausencias, documentos y métricas.
 - **RP_Reportes + OP_RO/OP_Trafico**: Controladores y vistas generados (`Areas/RP/Controllers/ReportesController.cs`, `Areas/OP/Controllers/OP_ROController.cs`, `OP_TraficoController.cs`) listos para integrarse en Sprint 10/11.
@@ -19,7 +20,7 @@ Fecha de corte: 2026-01-15 (SPRINT 5 KICKOFF INICIADO)
 | CU_Cuentas | Completo | `MatrixNext/MatrixNext.Web/Areas/CU` |
 | CC_FinzOpe + FI_Administrativo | Completo (Inventario no migrar) | `MatrixNext/MatrixNext.Web/Areas/CC` + `MatrixNext/docs/FI_CC/` |
 | OP_Cuantitativo | Operativo | `MatrixNext/MatrixNext.Web/Areas/OP/Controllers/FichaCuantitativaController.cs` + `MatrixNext/docs/OP/ANALISIS_OP_CUANTITATIVO.md` |
-| OP_Cualitativo | MVP + complementos | `MatrixNext/MatrixNext.Web/Areas/OP/Controllers/CualitativoPlanillasController.cs`, `CualitativoFiltrosController.cs` |
+| OP_Cualitativo | Completo (Sprint 6: complementos + Bulk Import) | `MatrixNext/MatrixNext.Web/Areas/OP/Controllers/CualitativoPlanillasController.cs`, `CualitativoFiltrosController.cs`, `CualitativoMuestraController.cs` |
 | PY_Proyectos | Parcial | `MatrixNext/MatrixNext.Web/Areas/PY/Controllers` + `MatrixNext/docs/PY/MIGRACION_PY_PROYECTOS.md` |
 | CORE (workflow/tareas) | Parcial | `MatrixNext/MatrixNext.Web/Areas/CORE/Controllers` |
 | GD_Documentos | Parcial (Fase 5 completa) | `MatrixNext/MatrixNext.Web/Areas/GD/Controllers` + `MatrixNext/MatrixNext.Web/Areas/GD/Views` |
@@ -48,13 +49,12 @@ Fecha de corte: 2026-01-15 (SPRINT 5 KICKOFF INICIADO)
 
 ## Pendientes que deben continuar (Sprints 5-12)
 1. **Sprint 5 (2 sem)**: TH_TalentoHumano Views/UI (Nómina y complementarios sobre API Sprint 4 completa)
-2. **Sprint 6 (2 sem)**: OP_Cualitativo Complementos (reportes, filtros avanzados)
-3. **Sprint 7 (2 sem)**: CORE Workflow (tareas, notificaciones, integraciones) ← **🔴 FINAL FOCUS**
-4. **Sprint 8 (2-3 sem)**: EQ_EasyQuote Fase 1 (análisis + catálogos + infraestructura)
-5. **Sprint 9 (1-2 sem)**: Home Dashboard (widgets / servicios ya corriendo; afinando datos de tareas, proyectos, ausencias y documentos)
-6. **Sprint 10 (1-2 sem)**: RP_Reportes (controladores + vistas ya listos; foco en datos y exportes) ← **🔴 PRÓXIMO FOCUS**
-7. **Sprint 11 (2 sem)**: OP_RO + OP_Trafico (controladores + vistas existentes; cerrando integración de revisiones y tráfico) ← **🔴 FINAL FOCUS**
-8. **Sprint 12+ (Variable)**: Módulos baja prioridad (PY_CC, SG_Actas, SGC_Calidad, etc.)
+2. **Sprint 7 (2 sem)**: CORE Workflow (tareas, notificaciones, integraciones)
+3. **Sprint 8 (2-3 sem)**: EQ_EasyQuote Fase 1 (análisis + catálogos + infraestructura)
+4. **Sprint 9 (1-2 sem)**: Home Dashboard (widgets / servicios ya corriendo; afinando datos de tareas, proyectos, ausencias y documentos)
+5. **Sprint 10 (1-2 sem)**: RP_Reportes (controladores + vistas ya listos; foco en datos y exportes) ← **🔴 PRÓXIMO FOCUS**
+6. **Sprint 11 (2 sem)**: OP_RO + OP_Trafico (controladores + vistas existentes; cerrando integración de revisiones y tráfico) ← **🔴 FINAL FOCUS**
+7. **Sprint 12+ (Variable)**: Módulos baja prioridad (PY_CC, SG_Actas, SGC_Calidad, etc.)
 
 ## Estructura de documentacion (ordenada)
 - `MatrixNext/docs/CORE/`
@@ -68,7 +68,7 @@ Fecha de corte: 2026-01-15 (SPRINT 5 KICKOFF INICIADO)
 - `MatrixNext/docs/SQL/`
 - `MatrixNext/docs/TH/`
 
-Ultima revision: 2026-01-11
+Ultima revision: 2026-01-14
 
 ## Semáforo de progreso por modulo
 
@@ -80,8 +80,7 @@ Ultima revision: 2026-01-11
 | CU_Cuentas | Alta | Completo | 🟢 |
 | CC_FinzOpe / FI | Alta | Infraestructura lista | 🟢 |
 | OP_Cuantitativo | Alta | Documentado y concluido | 🟢 |
-| OP_Cualitativo | Alta | MVP terminado; complementos planificados Sprint 6 | 🟡 |
-| OP_Cualitativo | Alta | MVP + Bulk Import completado; Sprint 6 100% ✅ | 🟢 |
+| OP_Cualitativo | Alta | Sprint 6 COMPLETADO (complementos + Bulk Import) | 🟢 |
 | PY_Proyectos | Alta | Catálogos/maestros en marcha | 🟡 |
 | CORE (workflow) | Alta | Parcial; completar Sprint 7 | 🟡 |
 | GD_Documentos | Media | Controladores y vistas live en `MatrixNext.Web/Areas/GD` (Fase 5) | 🟡 |
@@ -94,8 +93,6 @@ Ultima revision: 2026-01-11
 | SGC_Calidad | Baja | Sprint 12+ | ⚪️ |
 | Resto (ES_Estadistica, Centro_Informacion, IT, MBO*, etc.) | Baja | Sprint 12+ | ⚪️ |
 
-**🎯 HITO CRÍTICO**: 2026-05-03 (Fin Sprint 11) = 100% módulos alta/media completados
-
 ---
 
 ## Timeline de Ejecución (Sprints 5-12 Planificados)
@@ -107,18 +104,14 @@ Ultima revision: 2026-01-11
 | Sprint | Módulo | Duración | Fechas Estimadas | Esfuerzo | Estado |
 |---|---|---|---|---|---|
 | 5 | TH Views/UI | 2 sem | 2026-01-15 → 2026-01-29 | 80h | 🟡 **IN PROGRESS** ⏱️ |
-| 6 | OP_Cualitativo Complementos | 2 sem | 2026-02-01 → 2026-02-12 | 75h | ⚪️ PRÓXIMO |
-| 6 | OP_Cualitativo Complementos + Bulk Import | 2 sem | 2026-01-13 → 2026-01-29 | 75h | **✅ COMPLETADO** |
-| 7 | CORE Workflow | 2 sem | 2026-02-15 → 2026-02-26 | 85h | 🟡 PLANIFICADO |
-| 8 | EQ_EasyQuote Fase 1 | 2-3 sem | 2026-03-01 → 2026-03-19 | 120h | 🟡 PLANIFICADO |
-| 9 | Home Dashboard | 1-2 sem | 2026-03-22 → 2026-04-02 | 50h | 🔴 PLANIFICADO |
-| **10** | **RP_Reportes** | **1-2 sem** | **2026-04-05 → 2026-04-16** | **60h** | **🔴 PRÓXIMO FOCUS** |
-| **11** | **OP_RO + OP_Trafico** | **2 sem** | **2026-04-19 → 2026-05-03** | **90h** | **🔴 FINAL FOCUS** |
-| 12+ | Módulos Baja Prioridad | Variable | 2026-05-05+ | TBD | ⚪️ PENDIENTE |
+| 6 | OP_Cualitativo Complementos + Bulk Import | 2 sem | 2026-01-13 → 2026-01-29 | 75h | ✅ COMPLETADO |
+| 7 | CORE Workflow | 2 sem | 2026-02-01 → 2026-02-12 | 85h | ⚪️ PRÓXIMO |
+| 8 | EQ_EasyQuote Fase 1 | 2-3 sem | 2026-02-15 → 2026-03-05 | 120h | 🟡 PLANIFICADO |
+| 9 | Home Dashboard | 1-2 sem | 2026-03-08 → 2026-03-19 | 50h | 🔴 PLANIFICADO |
+| **10** | **RP_Reportes** | **1-2 sem** | **2026-03-22 → 2026-04-02** | **60h** | **🔴 PRÓXIMO FOCUS** |
+| **11** | **OP_RO + OP_Trafico** | **2 sem** | **2026-04-05 → 2026-04-16** | **90h** | **🔴 FINAL FOCUS** |
+| 12+ | Módulos Baja Prioridad | Variable | 2026-04-19+ | TBD | ⚪️ PENDIENTE |
 
-**Total**: ~560 horas (~3.5 meses de ejecución secuencial)
-
-**🎯 HITO CRÍTICO**: 2026-05-03 = Fin Sprints 5-11 (100% módulos alta/media completados)
 **Total**: ~560 horas (~2.5 meses de ejecución secuencial - acelerado por Sprint 6 exitoso)
 
 **🎯 HITO CRÍTICO**: 2026-04-16 = Fin Sprints 5-11 (100% módulos alta/media completados) ← **ADELANTADO 17 DÍAS**
