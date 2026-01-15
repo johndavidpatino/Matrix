@@ -26,7 +26,7 @@ Fecha de corte: 2026-01-15 (Sprints 5, 6, 7, 8, 9 COMPLETADOS; **Sprint 10 PRÓX
 | PY_Proyectos | Parcial | `MatrixNext/MatrixNext.Web/Areas/PY/Controllers` + `MatrixNext/docs/PY/MIGRACION_PY_PROYECTOS.md` |
 | CORE (workflow) | Completo (Sprint 7) | **SPRINT 7 COMPLETADO**: Máquina de estados + UI runtime + SignalR + reportes (Ver `SPRINT_7_COMPLETADO.md`) |
 | GD_Documentos | Parcial (Fase 5 completa) | `MatrixNext/MatrixNext.Web/Areas/GD/Controllers` + `MatrixNext/MatrixNext.Web/Areas/GD/Views` |
-| EQ (EasyQuote) | En progreso | `MatrixNext/MatrixNext.Web/Areas/EQ/Controllers` + entrepiezas `MatrixNext/MatrixNext.Web/Areas/EQ/Views` |
+| EQ (EasyQuote) | Completo (Sprint 8) | **SPRINT 8 COMPLETADO**: Motor de cálculos (26 fórmulas), Seeds (600+ registros), EasyCostService completo. Ver `docs/EQ/SPRINT_8_COMPLETADO.md` |
 | Home | Completo (Sprint 9) | `MatrixNext/MatrixNext.Web/Controllers/HomeController.cs`, `MatrixNext/MatrixNext.Web/Services/Dashboard/DashboardService.cs`, `MatrixNext/MatrixNext.Web/Views/Home/Index.cshtml`, `dashboard.js`, `dashboard.css` |
 | RP_Reportes | Completo (Sprint 10) | `MatrixNext/MatrixNext.Web/Areas/RP/Controllers/ReportesController.cs` (334 LOC), ReportesService (436 LOC), ReportesAdapter (449 LOC), 3 Vistas |
 | OP_RO | En desarrollo | `MatrixNext/MatrixNext.Web/Areas/OP/Controllers/OP_ROController.cs`, `MatrixNext/MatrixNext.Web/Areas/OP/Views/OP_RO` |
