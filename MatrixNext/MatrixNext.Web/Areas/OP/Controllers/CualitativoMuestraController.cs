@@ -50,7 +50,11 @@ public class CualitativoMuestraController : Controller
         try
         {
             var muestras = await _muestraService.ObtenerMuestraPorTrabajoAsync(trabajoId);
+            var historial = await _bulkImportService.ObtenerHistorialImportsAsync(trabajoId);
+            
             ViewBag.TrabajoId = trabajoId;
+            ViewBag.Historial = historial;
+            
             return View(muestras);
         }
         catch (Exception ex)

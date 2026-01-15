@@ -1,0 +1,137 @@
+@* Modal para Bulk Import de Muestras *@
+<div class="modal fade" id="modalBulkImport" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-cloud-upload-alt"></i> Importar Muestras en Bulk
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formBulkImport" enctype="multipart/form-data">
+                    <div class="alert alert-info" role="alert">
+                        <strong>Instrucciones:</strong>
+                        <ul class="mb-0 mt-2">
+                            <li>Descarga la plantilla Excel haciendo clic en <strong>"Descargar Plantilla"</strong></li>
+                            <li>Completa los datos de tus muestras siguiendo la estructura</li>
+                            <li>Sube el archivo Excel (.xlsx) o CSV</li>
+                            <li>Sistema procesará hasta 1000 registros por lote</li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Archivo (Excel o CSV)</label>
+                        <input type="file" id="archivoMuestras" name="archivo" 
+                               accept=".xlsx,.csv" class="form-control" required>
+                        <small class="form-text text-muted">Máximo 50MB. Formatos: .xlsx, .csv</small>
+                    </div>
+
+                    <div id="progressContainer" style="display: none;">
+                        <div class="progress" style="height: 25px;">
+                            <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" 
+                                 role="progressbar" style="width: 0%">Procesando...</div>
+                        </div>
+                        <p class="mt-2 text-muted"><small id="progressText">Preparando importación...</small></p>
+                    </div>
+
+                    <div id="resultContainer" style="display: none;">
+                        <div class="alert alert-success" id="resultSuccess" style="display: none;">
+                            <h6>✅ Importación Exitosa</h6>
+                            <p id="resultMessage"></p>
+                            <hr>
+                            <small id="resultStats"></small>
+                        </div>
+                        <div class="alert alert-danger" id="resultError" style="display: none;">
+                            <h6>❌ Error en Importación</h6>
+                            <p id="errorMessage"></p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-info" id="btnDescargarPlantilla">
+                    <i class="fas fa-download"></i> Descargar Plantilla
+                </button>
+                <button type="button" class="btn btn-primary" id="btnProcesarImport">
+                    <i class="fas fa-upload"></i> Procesar Upload
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function() {
+    const trabajoId = @ViewBag.TrabajoId;
+
+    // Descargar plantilla
+    $('#btnDescargarPlantilla').on('click', function() {
+        window.location.href = '@Url.Action("DescargarPlantilla", "CualitativoMuestra", new { area = "OP" })';
+    });
+
+    // Procesar import
+    $('#btnProcesarImport').on('click', function() {
+        const archivo = document.getElementById('archivoMuestras').files[0];
+        if (!archivo) {
+            alert('Seleccione un archivo');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('archivo', archivo);
+        formData.append('trabajoId', trabajoId);
+
+        // Mostrar progreso
+        $('#progressContainer').show();
+        $('#resultContainer').hide();
+        $(this).prop('disabled', true);
+
+        $.ajax({
+            url: '@Url.Action("ProcesarBulkImport", "CualitativoMuestra", new { area = "OP" })',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                $('#progressContainer').hide();
+                $('#resultContainer').show();
+
+                if (response.success) {
+                    $('#resultSuccess').show();
+                    $('#resultError').hide();
+                    $('#resultMessage').html(response.mensajes);
+                    $('#resultStats').html(`<strong>Insertados:</strong> ${response.insertados} | <strong>Errores:</strong> ${response.errores}`);
+                    
+                    // Refresco la tabla de muestras
+                    setTimeout(function() {
+                        location.reload();
+                    }, 2000);
+                } else {
+                    $('#resultSuccess').hide();
+                    $('#resultError').show();
+                    $('#errorMessage').html(response.mensajes);
+                }
+            },
+            error: function() {
+                $('#progressContainer').hide();
+                $('#resultContainer').show();
+                $('#resultSuccess').hide();
+                $('#resultError').show();
+                $('#errorMessage').html('Error procesando el archivo. Intente nuevamente.');
+            },
+            complete: function() {
+                $('#btnProcesarImport').prop('disabled', false);
+            }
+        });
+    });
+
+    // Limpiar al cerrar
+    $('#modalBulkImport').on('hide.bs.modal', function() {
+        document.getElementById('archivoMuestras').value = '';
+        $('#progressContainer').hide();
+        $('#resultContainer').hide();
+    });
+});
+</script>

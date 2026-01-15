@@ -10,6 +10,9 @@
             <a asp-action="Index" asp-controller="CualitativoTrabajos" asp-route-id="@ViewBag.TrabajoId" class="btn btn-secondary">
                 <i class="bi bi-arrow-left"></i> Volver a Trabajos
             </a>
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalBulkImport">
+                <i class="fas fa-cloud-upload-alt"></i> Importar Bulk
+            </button>
         </div>
     </div>
 
@@ -118,7 +121,18 @@
     {
         <div class="alert alert-info">No hay muestra registrada para este trabajo.</div>
     }
+
+    <!-- Sección Historial de Importaciones -->
+    <div id="historialContainer" class="mt-4">
+        @if (ViewBag.Historial != null)
+        {
+            @await Html.PartialAsync("_ImportHistorial", (IEnumerable<MatrixNext.Web.Services.OP.ImportHistorialVm>)ViewBag.Historial)
+        }
+    </div>
 </div>
+
+<!-- Modal de Bulk Import -->
+@await Html.PartialAsync("_BulkImportModal")
 
 <!-- Edit Modal -->
 <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
