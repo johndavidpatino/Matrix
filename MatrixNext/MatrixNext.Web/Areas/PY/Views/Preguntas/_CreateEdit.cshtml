@@ -1,0 +1,67 @@
+@using MatrixNext.Web.DTOs.PY.ControlCalidad
+@model PreguntaInputDto
+
+@{
+    bool isEdit = Model?.Id > 0;
+    var tiposProc = new Dictionary<int, string> { 
+        { 1, "Control de Campo" }, 
+        { 2, "Evaluación Moderadora" }, 
+        { 3, "Evaluación Entrevistadora" },
+        { 4, "Control de Transcripciones" },
+        { 5, "Control de Informe" }
+    };
+}
+
+<form asp-action="@(isEdit ? "Edit" : "Create")" 
+      asp-route-id="@(isEdit ? Model.Id : "")"
+      method="post" 
+      id="formPregunta">
+    
+    <input type="hidden" asp-for="Id" />
+    
+    <div class="form-group">
+        <label asp-for="Pregunta">Pregunta <span class="text-danger">*</span></label>
+        <textarea asp-for="Pregunta" class="form-control" rows="4" placeholder="Escriba la pregunta..." required></textarea>
+        <small class="form-text text-muted">Máximo 500 caracteres</small>
+        <span asp-validation-for="Pregunta" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="TipoProceso">Tipo de Proceso <span class="text-danger">*</span></label>
+        <select asp-for="TipoProceso" class="form-control" required>
+            <option value="">-- Seleccione --</option>
+            @foreach (var tipo in tiposProc)
+            {
+                <option value="@tipo.Key">@tipo.Value</option>
+            }
+        </select>
+        <span asp-validation-for="TipoProceso" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Estado</label>
+        <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="esActiva" checked />
+            <label class="custom-control-label" for="esActiva">
+                Pregunta Activa
+            </label>
+        </div>
+        <small class="form-text text-muted">Si está marcada, la pregunta estará disponible para los formularios de control de calidad.</small>
+    </div>
+
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Configurar validación
+            $.validator.unobtrusive.parse($('#formPregunta'));
+
+            // Sincronizar checkbox con input hidden
+            $('#esActiva').on('change', function () {
+                var value = $(this).is(':checked') ? 'true' : 'false';
+                // El valor se enviará en el formulario
+            });
+        });
+    </script>
+}

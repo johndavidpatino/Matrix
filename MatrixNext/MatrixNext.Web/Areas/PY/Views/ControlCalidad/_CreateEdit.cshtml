@@ -1,0 +1,131 @@
+@using MatrixNext.Web.DTOs.PY.ControlCalidad
+@model ControlCalidadInputDto
+
+@{
+    bool isEdit = Model?.Id > 0;
+    var tiposProc = new Dictionary<int, string> { 
+        { 1, "Control de Campo" }, 
+        { 2, "Evaluación Moderadora" }, 
+        { 3, "Evaluación Entrevistadora" },
+        { 4, "Control de Transcripciones" },
+        { 5, "Control de Informe" }
+    };
+}
+
+<form asp-action="@(isEdit ? "Edit" : "Create")" 
+      asp-route-id="@(isEdit ? Model.Id : "")"
+      method="post" 
+      id="formControl">
+    
+    <input type="hidden" asp-for="Id" />
+    
+    <div class="form-group">
+        <label asp-for="TrabajoProcesoId">Trabajo <span class="text-danger">*</span></label>
+        <input asp-for="TrabajoProcesoId" type="hidden" />
+        <select id="trabajoSelect" class="form-control" required>
+            <option value="">-- Seleccione un trabajo --</option>
+        </select>
+        <span asp-validation-for="TrabajoProcesoId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Evaluador">Evaluador <span class="text-danger">*</span></label>
+        <input asp-for="Evaluador" class="form-control" placeholder="Nombre del evaluador" required />
+        <span asp-validation-for="Evaluador" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="RolEvaluador">Rol del Evaluador <span class="text-danger">*</span></label>
+        <select asp-for="RolEvaluador" class="form-control" required>
+            <option value="">-- Seleccione rol --</option>
+            <option value="Supervisor">Supervisor</option>
+            <option value="Moderador">Moderador</option>
+            <option value="Auditor">Auditor</option>
+            <option value="Revisor">Revisor</option>
+        </select>
+        <span asp-validation-for="RolEvaluador" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PersonaId">Persona Evaluada <span class="text-danger">*</span></label>
+        <input asp-for="PersonaId" type="hidden" />
+        <select id="personaSelect" class="form-control" required>
+            <option value="">-- Seleccione persona --</option>
+        </select>
+        <span asp-validation-for="PersonaId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="FechaControl">Fecha del Control <span class="text-danger">*</span></label>
+        <input asp-for="FechaControl" type="date" class="form-control" required />
+        <span asp-validation-for="FechaControl" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Observaciones">Observaciones</label>
+        <textarea asp-for="Observaciones" class="form-control" rows="3" placeholder="Escriba sus observaciones..."></textarea>
+        <span asp-validation-for="Observaciones" class="text-danger"></span>
+    </div>
+
+    <!-- Sección de Respuestas a Preguntas -->
+    <div class="card mt-4 mb-3">
+        <div class="card-header">
+            <h5>Respuestas de Control</h5>
+        </div>
+        <div class="card-body">
+            <div id="preguntasContainer">
+                <!-- Las preguntas se cargarán aquí dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var tipoProceso = @ViewBag.TipoProceso;
+            
+            if (tipoProceso) {
+                cargarPreguntas(tipoProceso);
+            }
+
+            // Configurar validación
+            $.validator.unobtrusive.parse($('#formControl'));
+        });
+
+        function cargarPreguntas(tipoProceso) {
+            $.ajax({
+                url: '/api/py/controlcalidad/preguntas/' + tipoProceso,
+                type: 'GET',
+                success: function (response) {
+                    if (response.success) {
+                        var html = '';
+                        $.each(response.data, function (idx, pregunta) {
+                            var respuestaName = 'Detalles_' + idx + '__Respuesta';
+                            var calificacionName = 'Detalles_' + idx + '__Calificacion';
+                            
+                            html += '<div class="form-group border-bottom pb-3 mb-3">';
+                            html += '<label class="font-weight-bold">' + (idx + 1) + '. ' + pregunta.pregunta + '</label>';
+                            html += '<input type="hidden" name="Detalles[' + idx + '].PreguntaId" value="' + pregunta.id + '" />';
+                            
+                            // Campo de respuesta
+                            html += '<textarea name="Detalles[' + idx + '].Respuesta" class="form-control mb-2" rows="2" placeholder="Escriba su respuesta..."></textarea>';
+                            
+                            // Calificación
+                            html += '<label>Calificación (0-100):</label>';
+                            html += '<input type="number" name="Detalles[' + idx + '].Calificacion" class="form-control" min="0" max="100" step="5" />';
+                            
+                            html += '</div>';
+                        });
+                        
+                        $('#preguntasContainer').html(html);
+                    }
+                },
+                error: function () {
+                    $('#preguntasContainer').html('<div class="alert alert-danger">Error al cargar las preguntas</div>');
+                }
+            });
+        }
+    </script>
+}

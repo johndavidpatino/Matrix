@@ -1,0 +1,233 @@
+@using MatrixNext.Web.DTOs.PY.ControlCalidad
+@model IEnumerable<PreguntaListDto>
+
+@{
+    ViewData["Title"] = "Gestión de Preguntas de Control de Calidad";
+    var tiposProc = new Dictionary<int, string> { 
+        { 1, "Control de Campo" }, 
+        { 2, "Evaluación Moderadora" }, 
+        { 3, "Evaluación Entrevistadora" },
+        { 4, "Control de Transcripciones" },
+        { 5, "Control de Informe" }
+    };
+}
+
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>@ViewData["Title"]</h2>
+        <button class="btn btn-primary" id="btnNuevaPregunta">
+            <i class="fas fa-plus"></i> Nueva Pregunta
+        </button>
+    </div>
+
+    <!-- Selector de Tipo de Proceso -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="form-group">
+                <label for="tipoProceso">Filtrar por Tipo de Proceso:</label>
+                <select id="tipoProceso" class="form-control" style="max-width: 300px;">
+                    <option value="">-- Todos --</option>
+                    @foreach (var tipo in tiposProc)
+                    {
+                        <option value="@tipo.Key">@tipo.Value</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grid de Preguntas -->
+    <div class="card">
+        <div class="card-body">
+            <table id="gridPreguntas" class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Pregunta</th>
+                        <th>Tipo de Proceso</th>
+                        <th>Registrado Por</th>
+                        <th>Fecha</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para crear/editar pregunta -->
+<div class="modal fade" id="modalPregunta" tabindex="-1" role="dialog" aria-labelledby="modalPreguntaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalPreguntaLabel">Nueva Pregunta</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalPreguntaBody">
+                <!-- Contenido del formulario será cargado aquí -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="btnGuardarPregunta">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast para notificaciones -->
+<div id="toastContainer" style="position: fixed; top: 20px; right: 20px; z-index: 9999;">
+</div>
+
+@section Scripts {
+    <script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables/js/dataTables.bootstrap4.min.js"></script>
+    <link rel="stylesheet" href="~/lib/datatables/css/dataTables.bootstrap4.min.css" />
+    
+    <script>
+        var tiposProcesoMap = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(tiposProc));
+
+        $(document).ready(function () {
+            // Inicializar DataTable
+            var table = $('#gridPreguntas').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'
+                },
+                pageLength: 15,
+                processing: true
+            });
+
+            // Cargar todas las preguntas inicialmente
+            cargarPreguntas('', table);
+
+            // Evento cambio de filtro
+            $('#tipoProceso').on('change', function () {
+                var tipoProceso = $(this).val();
+                cargarPreguntas(tipoProceso, table);
+            });
+
+            // Nueva pregunta
+            $('#btnNuevaPregunta').on('click', function () {
+                abrirModalPregunta(null);
+            });
+
+            // Guardar pregunta
+            $('#btnGuardarPregunta').on('click', function () {
+                guardarPregunta();
+            });
+        });
+
+        function cargarPreguntas(tipoProceso, table) {
+            var url = tipoProceso ? '/api/py/preguntas/' + tipoProceso : '/api/py/preguntas/0';
+            
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function (response) {
+                    if (response.success) {
+                        table.clear();
+                        $.each(response.data, function (idx, pregunta) {
+                            var estado = pregunta.esActiva ? 
+                                '<span class="badge badge-success">Activa</span>' : 
+                                '<span class="badge badge-secondary">Inactiva</span>';
+                            
+                            table.row.add([
+                                pregunta.pregunta || '',
+                                tiposProcesoMap[pregunta.tipoProceso] || 'N/A',
+                                pregunta.registradoPor || '',
+                                moment(pregunta.fechaRegistro).format('DD/MM/YYYY'),
+                                estado,
+                                '<button class="btn btn-sm btn-warning" onclick="editarPregunta(' + pregunta.id + ')"><i class="fas fa-edit"></i></button> ' +
+                                '<button class="btn btn-sm btn-' + (pregunta.esActiva ? 'danger' : 'success') + '" onclick="togglePregunta(' + pregunta.id + ')">' +
+                                '<i class="fas fa-' + (pregunta.esActiva ? 'ban' : 'check') + '"></i></button>'
+                            ]).draw();
+                        });
+                    } else {
+                        mostrarToast(response.message || 'Error al cargar las preguntas', 'error');
+                    }
+                },
+                error: function () {
+                    mostrarToast('Error al cargar las preguntas', 'error');
+                }
+            });
+        }
+
+        function abrirModalPregunta(preguntaId) {
+            var url = preguntaId ? '/py/preguntas/edit/' + preguntaId : '/py/preguntas/create';
+            $.get(url, function (html) {
+                $('#modalPreguntaBody').html(html);
+                $('#modalPregunta').modal('show');
+            }).fail(function () {
+                mostrarToast('Error al abrir el formulario', 'error');
+            });
+        }
+
+        function guardarPregunta() {
+            var form = $('form', '#modalPreguntaBody');
+            if (!form.length) return;
+
+            var formData = new FormData(form[0]);
+            var url = form.attr('action');
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                processData: false,
+                contentType: false,
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        mostrarToast(response.message || 'Operación exitosa', 'success');
+                        $('#modalPregunta').modal('hide');
+                        var tipoProceso = $('#tipoProceso').val();
+                        cargarPreguntas(tipoProceso, $('#gridPreguntas').DataTable());
+                    } else {
+                        mostrarToast(response.message || 'Error al guardar', 'error');
+                    }
+                },
+                error: function () {
+                    mostrarToast('Error al guardar la pregunta', 'error');
+                }
+            });
+        }
+
+        function editarPregunta(preguntaId) {
+            abrirModalPregunta(preguntaId);
+        }
+
+        function togglePregunta(preguntaId) {
+            $.ajax({
+                url: '/api/py/preguntas/toggle/' + preguntaId,
+                type: 'POST',
+                success: function (response) {
+                    if (response.success) {
+                        mostrarToast(response.message || 'Estado actualizado', 'success');
+                        var tipoProceso = $('#tipoProceso').val();
+                        cargarPreguntas(tipoProceso, $('#gridPreguntas').DataTable());
+                    } else {
+                        mostrarToast(response.message || 'Error al actualizar', 'error');
+                    }
+                },
+                error: function () {
+                    mostrarToast('Error al actualizar el estado', 'error');
+                }
+            });
+        }
+
+        function mostrarToast(mensaje, tipo) {
+            var tipoClase = 'alert-' + (tipo === 'error' ? 'danger' : tipo === 'warning' ? 'warning' : 'success');
+            var html = '<div class="alert ' + tipoClase + ' alert-dismissible fade show" role="alert">' +
+                mensaje +
+                '<button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>' +
+                '</div>';
+            $('#toastContainer').html(html);
+            
+            setTimeout(function () {
+                $('#toastContainer').fadeOut(function () { $(this).html(''); });
+            }, 4000);
+        }
+    </script>
+}

@@ -363,6 +363,14 @@
 - **Evidencia MatrixNext**: `Areas/OP/Controllers/OP_TraficoController.cs` (437 LOC), OP_TraficoService (526 LOC), OP_TraficoAdapter (536 LOC)
 - **LOC migradas**: 1,499 líneas
 
+#### 19. **PY_ControlCalidad** ✅ SPRINT 12 COMPLETADO
+- **Carpeta**: `WebMatrix/PY_ControlCalidad`
+- **Contexto**: `PY_Model` (CoreProject)
+- **Estado**: ✅ **SPRINT 12 COMPLETADO** – Controllers + Services + Adapters + Vistas + JS/CSS con auditoría y modales
+- **Evidencia MatrixNext**: `Areas/PY/Controllers/ControlCalidadController.cs`, `Areas/PY/Controllers/PreguntasController.cs`, `Areas/PY/Views/ControlCalidad`, `Areas/PY/Views/Preguntas`, `wwwroot/js/controlcalidad-utilities.js`, `wwwroot/css/controlcalidad.css`
+- **Documentación**: [SPRINT_12_IMPLEMENTACION_COMPLETADA.md](docs/SPRINT_12_IMPLEMENTACION_COMPLETADA.md)
+- **LOC migradas**: ~2,500 líneas
+
 ---
 
 ## 🔍 MÓDULOS EN REVISIÓN/QA (Solo Verificar Completitud)
@@ -418,15 +426,7 @@
 
 ### 🟡 BAJA (Complementaria)
 
-#### 22. **PY_ControlCalidad** 🔴 PENDIENTE
-- **Carpeta**: `WebMatrix/PY_ControlCalidad`
-- **Prioridad**: 🟡 MEDIA-BAJA
-- **Sprint Sugerido**: Sprint 12
-- **Dependencias**: PY_Proyectos (100%)
-- **Estimación**: 3-4 semanas
-- **Estado**: ❌ NO INICIADO
-
-#### 23. **SGC_Calidad** 🔴 PENDIENTE
+#### 22. **SGC_Calidad** 🔴 PENDIENTE
 - **Carpeta**: ver `MatrixNext/docs/GENERAL/SGC_Calidad.md`
 - **Prioridad**: 🟡 MEDIA-BAJA
 - **Sprint Sugerido**: Sprint 13
@@ -434,7 +434,7 @@
 - **Estimación**: 2-3 semanas
 - **Estado**: ❌ NO INICIADO
 
-#### 24. **ES_Estadistica** 🔴 PENDIENTE
+#### 23. **ES_Estadistica** 🔴 PENDIENTE
 - **Carpeta**: `WebMatrix/ES_Estadistica`
 - **Prioridad**: 🟡 BAJA
 - **Sprint Sugerido**: Sprint 14
@@ -442,7 +442,7 @@
 - **Estimación**: 2-3 semanas
 - **Estado**: ❌ NO INICIADO
 
-#### 25. **IT** 🔴 PENDIENTE
+#### 24. **IT** 🔴 PENDIENTE
 - **Carpeta**: `WebMatrix/IT`
 - **Prioridad**: 🟡 BAJA
 - **Sprint Sugerido**: Sprint 15
@@ -450,7 +450,7 @@
 - **Estimación**: 1-2 semanas
 - **Estado**: ❌ NO INICIADO
 
-#### 26. **Inventario** 🔴 PENDIENTE
+#### 25. **Inventario** 🔴 PENDIENTE
 - **Carpeta**: `WebMatrix/Inventario`
 - **Prioridad**: 🟡 BAJA
 - **Sprint Sugerido**: Sprint 20
@@ -474,22 +474,22 @@
 
 ### LOC Migradas
 
-- **Total Completado**: ~28,810 LOC (Sprints 1-11)
+- **Total Completado**: ~31,300 LOC (Sprints 1-12)
 - **En Revisión**: TBD (auditoría pendiente)
 - **Pendiente**: TBD (estimación por módulo)
 
 ### Timeline
 
-- **Sprints Completados**: 1-11 (2026-01-15) ✅
-- **Fase Actual**: Revisión/QA (Sprint 12 Parte 1)
-- **Sprints Futuros**: 12-19 (Migración nuevos módulos)
-- **Hito Crítico**: 2026-01-15 = Fin Sprints 5-11 (77 días adelantado) ✅
+- **Sprints Completados**: 1-12 (2026-01-15) ✅
+- **Fase Actual**: Revisión/QA post Sprint 12
+- **Sprints Futuros**: 13-19 (Migración nuevos módulos)
+- **Hito Crítico**: 2026-01-15 = Fin Sprints 5-12 (77 días adelantado) ✅
 
 ---
 
 ## 🎯 PRÓXIMOS PASOS INMEDIATOS
 
-### Prioridad 1: Cerrar Módulos en Revisión (Sprint 12 Parte 1)
+### Prioridad 1: Cerrar Módulos en Revisión (Post Sprint 12)
 
 1. **OP_Cuantitativo** - Auditar 31 páginas vs MatrixNext
 2. **PY_Proyectos** - Auditar 18 páginas vs MatrixNext
@@ -500,13 +500,12 @@
 ### Prioridad 2: Planificar Sprints 12-19 (Nuevos Módulos)
 
 **Orden sugerido** (por prioridad operativa):
-1. Sprint 12: PY_ControlCalidad (3-4 sem)
-2. Sprint 13: SGC_Calidad (2-3 sem)
-3. Sprint 14: ES_Estadistica (2-3 sem)
-4. Sprint 15: IT (1-2 sem)
-5. Sprint 16-17: MBO (3 variantes, 4-6 sem)
-6. Sprint 18: ResumenProduccion (2-3 sem)
-7. Sprint 19: RE_GT + PC_PropiedadCliente (2-4 sem)
+1. Sprint 13: SGC_Calidad (2-3 sem)
+2. Sprint 14: ES_Estadistica (2-3 sem)
+3. Sprint 15: IT (1-2 sem)
+4. Sprint 16-17: MBO (3 variantes, 4-6 sem)
+5. Sprint 18: ResumenProduccion (2-3 sem)
+6. Sprint 19: RE_GT + PC_PropiedadCliente (2-4 sem)
 
 **Estimación Total**: 16-24 semanas
 
@@ -595,6 +594,6 @@ Módulo WebMatrix (ej: US_Usuarios/)
 ---
 
 **Última actualización**: 2026-01-15  
-**Próxima revisión**: Fin Sprint 12 Parte 1 (Revisión/QA módulos parciales)  
+**Próxima revisión**: Inicio Sprint 13 (Revisión/QA módulos parciales)  
 **Contacto**: Equipo de desarrollo MatrixNext
 

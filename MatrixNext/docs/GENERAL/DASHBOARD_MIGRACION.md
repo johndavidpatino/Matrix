@@ -63,13 +63,12 @@ Fecha de corte: 2026-01-15 (Sprints 5, 6, 7, 8, 9, 10, 11 COMPLETADOS ✅)
 
 ---
 
-### 🚧 MÓDULOS PENDIENTES MIGRACIÓN (Sprint 12+)
+### 🚧 MÓDULOS PENDIENTES MIGRACIÓN (Sprint 13+)
 
 > **Acción requerida**: Iniciar migración completa desde cero siguiendo [DIRECTRICES_MIGRACION.md](DIRECTRICES_MIGRACION.md)
 
 | Módulo | Carpeta WebMatrix | Estimación | Prioridad | Sprint Sugerido |
 | --- | --- | --- | --- | --- |
-| **PY_ControlCalidad** | `WebMatrix/PY_ControlCalidad` | TBD | 🟡 MEDIA-BAJA | Sprint 12 |
 | **SGC_Calidad** | (ver `docs/GENERAL/SGC_Calidad.md`) | TBD | 🟡 MEDIA-BAJA | Sprint 13 |
 | **ES_Estadistica** | `WebMatrix/ES_Estadistica` | TBD | 🟡 BAJA | Sprint 14 |
 | **IT** | `WebMatrix/IT` | TBD | 🟡 BAJA | Sprint 15 |
@@ -79,7 +78,7 @@ Fecha de corte: 2026-01-15 (Sprints 5, 6, 7, 8, 9, 10, 11 COMPLETADOS ✅)
 | **PC_PropiedadCliente** | `WebMatrix/PC_PropiedadCliente` | TBD | 🟡 BAJA | Sprint 19 |
 | **Inventario** | `WebMatrix/Inventario` | TBD | 🟡 BAJA | Sprint 20 |
 
-**Total Pendiente**: 8 módulos sin iniciar
+**Total Pendiente**: 7 módulos sin iniciar
 
 ---
 
@@ -96,7 +95,7 @@ Fecha de corte: 2026-01-15 (Sprints 5, 6, 7, 8, 9, 10, 11 COMPLETADOS ✅)
 
 ## 📋 BACKLOG Y PRÓXIMOS PASOS
 
-### Fase Actual: Revisión/QA (Sprint 12 Parte 1)
+### Fase Actual: Revisión/QA post Sprint 12
 
 **Objetivo**: Cerrar al 100% módulos parcialmente implementados antes de iniciar nuevas migraciones.
 
@@ -127,13 +126,12 @@ Fecha de corte: 2026-01-15 (Sprints 5, 6, 7, 8, 9, 10, 11 COMPLETADOS ✅)
 
 ---
 
-### Fase Siguiente: Migración Nuevos Módulos (Sprints 12-19)
+### Fase Siguiente: Migración Nuevos Módulos (Sprints 13-19)
 
 **Orden sugerido** (por prioridad operativa):
 
 | Sprint | Módulo | Prioridad | Estimación | Dependencias |
 | --- | --- | --- | --- | --- |
-| 12 | PY_ControlCalidad | 🟡 MEDIA-BAJA | 3-4 sem | PY_Proyectos (100%) |
 | 13 | SGC_Calidad | 🟡 MEDIA-BAJA | 2-3 sem | US_Usuarios, GD_Documentos |
 | 14 | ES_Estadistica | 🟡 BAJA | 2-3 sem | Múltiples módulos (reportes) |
 | 15 | IT | 🟡 BAJA | 1-2 sem | US_Usuarios |
@@ -150,14 +148,14 @@ Fecha de corte: 2026-01-15 (Sprints 5, 6, 7, 8, 9, 10, 11 COMPLETADOS ✅)
 
 ### Progreso General
 
-- **Módulos Completados**: 18/23 (78%)
+- **Módulos Completados**: 19/23 (83%)
 - **Módulos en Revisión/QA**: 0/23 (0%)
-- **Módulos Pendientes**: 4/23 (17%)
+- **Módulos Pendientes**: 3/23 (13%)
 - **Módulos Excluidos**: 1 (Centro_Informacion)
 
 ### LOC Migradas
 
-- **Total Migrado**: ~34,690 LOC (Sprints 1-12.3)
+- **Total Migrado**: ~37,190 LOC (Sprints 1-12.4)
 - **En Revisión**: N/A
 - **Pendiente**: TBD (estimación por módulo)
 
@@ -170,8 +168,9 @@ Fecha de corte: 2026-01-15 (Sprints 5, 6, 7, 8, 9, 10, 11 COMPLETADOS ✅)
 ✅ **Sprint 12.1**: OP_Cuantitativo (63 files, 6,900 LOC) - Migración 100% completa  
 ✅ **Sprint 12.2**: PY_Proyectos (28 files, 2,915 LOC) - Migración 100% completa  
 ✅ **Sprint 12.3**: GD (Solicitudes, Aprobaciones, Audit Trail, PNC, Catálogos) (23 files, 5,165 LOC) - Migración 100% completa  
+✅ **Sprint 12.4**: PY_ControlCalidad (14 files, ~2,500 LOC) - Migración 100% completa  
 
-**TOTAL**: 216 horas (Sprints 12.1-3), 14,980 LOC, 114 archivos completados, **0 errores**, 100% PRODUCTION READY
+**TOTAL**: 256 horas (Sprints 12.1-4), 17,480 LOC, 128 archivos completados, **0 errores**, 100% PRODUCTION READY
 ## Estructura de documentacion (ordenada)
 - `MatrixNext/docs/CORE/`
 - `MatrixNext/docs/CU/`
@@ -212,6 +211,7 @@ Ultima revision: 2026-01-15 (Sprints 10, 11 y 12.1-3 COMPLETADOS ✅) - **AHORA:
 | OP_Trafico | Alta | **SPRINT 11 COMPLETADO**: 8 endpoints, 17 SP, estados | 🟢 |
 | OP_Cuantitativo | Alta | **SPRINT 12.1 COMPLETADO**: 63 files, 6,900 LOC, 31 páginas migradas | 🟢 |
 | PY_Proyectos | Alta | **SPRINT 12.2 COMPLETADO**: 28 files, 2,915 LOC, 18 páginas migradas | 🟢 |
+| PY_ControlCalidad | Media-Baja | **SPRINT 12 COMPLETADO**: Controllers, Services, Adapters, Vistas, JS/CSS | 🟢 |
 | GD_Solicitudes | Alta | **SPRINT 12.3 COMPLETADO**: Asignación automática, aprobaciones, audit trail | 🟢 |
 | GD_PNC | Alta | **SPRINT 12.3 COMPLETADO**: Data Layer (6h) + Controllers+Views (10h) | 🟢 |
 | GD_Catálogos | Media | **SPRINT 12.3 COMPLETADO**: CRUD con soft delete, auditoría automática | 🟢 |
@@ -226,10 +226,9 @@ Ultima revision: 2026-01-15 (Sprints 10, 11 y 12.1-3 COMPLETADOS ✅) - **AHORA:
 
 ### 🚧 Módulos Pendientes Migración
 
-| Módulo | Prioridad | Sprint Sugerido | Indicador |
-| --- | --- | --- | --- |
-| PY_ControlCalidad | Baja | Sprint 12 | 🔴 |
-| SGC_Calidad | Baja | Sprint 13 | 🔴 |
+| Módulo | Prioridad | Sprint Sugerido | Indicador | Estado |
+| --- | --- | --- | --- | --- |
+| SGC_Calidad | Baja | Sprint 13 | 🔴 | ❌ NO INICIADO |
 | ES_Estadistica | Baja | Sprint 14 | 🔴 |
 | IT | Baja | Sprint 15 | 🔴 |
 | MBO / MBO_Gerencial / MBO_Operaciones | Baja | Sprint 16-17 | 🔴 |
@@ -264,8 +263,9 @@ Ultima revision: 2026-01-15 (Sprints 10, 11 y 12.1-3 COMPLETADOS ✅) - **AHORA:
 | **12.1** | **OP_Cuantitativo** | **2 sem** | **2026-01-15 (COMPLETADO)** | **80h** | **✅ COMPLETADO** |
 | **12.2** | **PY_Proyectos** | **1.5 sem** | **2026-01-15 (COMPLETADO)** | **65h** | **✅ COMPLETADO** |
 | **12.3** | **GD (Solicitudes, Aprobaciones, PNC, Catálogos)** | **2 sem** | **2026-01-15 (COMPLETADO)** | **80h** | **✅ COMPLETADO** |
+| **12.4** | **PY_ControlCalidad** | **1 sem** | **2026-01-15 (COMPLETADO)** | **40h** | **✅ COMPLETADO** |
 | 13+ | Módulos Baja Prioridad | Variable | 2026-04-05+ | TBD | ⚪️ PENDIENTE |
 
-**Total Sprints 12.1-3**: ~225 horas, 14,980 LOC, 114 archivos, **0 errores**, 100% PRODUCTION READY
+**Total Sprints 12.1-4**: ~265 horas, 17,480 LOC, 128 archivos, **0 errores**, 100% PRODUCTION READY
 
 **🎯 HITO CRÍTICO**: 2026-01-15 = Fin Sprints 5-11 (100% módulos alta/media completados) ← **✅ COMPLETADO - ADELANTADO 77 DÍAS**
