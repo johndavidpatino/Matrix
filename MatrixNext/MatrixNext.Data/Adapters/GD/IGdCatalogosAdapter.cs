@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using MatrixNext.Data.Models.GD;
 
@@ -22,3 +22,4 @@ namespace MatrixNext.Data.Adapters.GD
         Task<bool> EliminarProceso(int id);
     }
 }
+

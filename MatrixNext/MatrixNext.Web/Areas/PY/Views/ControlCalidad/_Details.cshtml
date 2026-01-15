@@ -1,4 +1,4 @@
-@using MatrixNext.Web.DTOs.PY.ControlCalidad
+﻿@using MatrixNext.Data.DTOs.PY.ControlCalidad
 @model ControlCalidadDetailDto
 
 @{
@@ -14,7 +14,7 @@
         </h5>
     </div>
     <div class="card-body">
-        <!-- Información Principal -->
+        <!-- InformaciÃ³n Principal -->
         <div class="row mb-3">
             <div class="col-md-6">
                 <div class="form-group">
@@ -54,9 +54,9 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label><strong>Calificación Promedio:</strong></label>
+                    <label><strong>CalificaciÃ³n Promedio:</strong></label>
                     <p>
-                        <strong>@(Model.Detalles != null && Model.Detalles.Count > 0 ? Model.Detalles.Average(d => d.Calificacion).ToString("F2") + "%" : "N/A")</strong>
+                        <strong>@(Model.Detalles != null && Model.Detalles.Count > 0 ? Model.Detalles.Average(d => d.Calificacion ?? 0).ToString("F2") + "%" : "N/A")</strong>
                     </p>
                 </div>
             </div>
@@ -71,7 +71,7 @@
             </div>
         </div>
 
-        <!-- Auditoría -->
+        <!-- AuditorÃ­a -->
         <div class="row mb-3 text-muted small">
             <div class="col-md-6">
                 <p><strong>Registrado por:</strong> @Model.RegistradoPor<br />
@@ -99,8 +99,8 @@
                             <tr>
                                 <th style="width: 40%">Pregunta</th>
                                 <th style="width: 40%">Respuesta</th>
-                                <th style="width: 10%; text-align: center">Calificación</th>
-                                <th style="width: 10%; text-align: center">Observación</th>
+                                <th style="width: 10%; text-align: center">CalificaciÃ³n</th>
+                                <th style="width: 10%; text-align: center">ObservaciÃ³n</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -129,3 +129,4 @@
         }
     </div>
 </div>
+

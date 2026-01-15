@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using MatrixNext.Data.Adapters.GD.Models;
 using TipoSolicitudDtoGD = MatrixNext.Data.Models.GD.TipoSolicitudDto;
@@ -12,7 +12,7 @@ namespace MatrixNext.Data.Adapters.GD
         Task<List<SolicitudListDto>> ObtenerSolicitudes();
         Task<SolicitudDocumentoDto?> ObtenerSolicitudById(int id);
 
-        // Creación
+        // CreaciÃ³n
         Task<int> CrearSolicitud(SolicitudDocumentoDto dto);
 
         // Revisores
@@ -28,3 +28,4 @@ namespace MatrixNext.Data.Adapters.GD
         Task<List<TipoSolicitudDto>> ObtenerTiposSolicitud();
     }
 }
+

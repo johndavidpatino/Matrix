@@ -56,6 +56,28 @@ namespace MatrixNext.Web.Services.PY
             }
         }
 
+        public async Task<List<AsignacionProyecto>> ObtenerAsignacionesAsync(long? idProyecto)
+        {
+            try
+            {
+                var query = _context.AsignacionesProyectos.AsQueryable();
+
+                if (idProyecto.HasValue && idProyecto.Value > 0)
+                {
+                    query = query.Where(a => a.IdProyecto == idProyecto.Value);
+                }
+
+                return await query
+                    .OrderByDescending(a => a.FechaAsignacion)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "[AsignacionProyectos] Error al obtener asignaciones");
+                return new List<AsignacionProyecto>();
+            }
+        }
+
         public async Task<ResultVM<List<dynamic>>> ObtenerProyectosXReasignarAsync(int idUnidad, string? filtroNombre, long idUsuario)
         {
             try

@@ -1,19 +1,20 @@
-@using MatrixNext.Web.DTOs.PY.ControlCalidad
+﻿@using MatrixNext.Data.DTOs.PY.ControlCalidad
 @model PreguntaInputDto
 
 @{
     bool isEdit = Model?.Id > 0;
+    var modelId = Model?.Id ?? 0;
     var tiposProc = new Dictionary<int, string> { 
         { 1, "Control de Campo" }, 
-        { 2, "Evaluación Moderadora" }, 
-        { 3, "Evaluación Entrevistadora" },
+        { 2, "EvaluaciÃ³n Moderadora" }, 
+        { 3, "EvaluaciÃ³n Entrevistadora" },
         { 4, "Control de Transcripciones" },
         { 5, "Control de Informe" }
     };
 }
 
 <form asp-action="@(isEdit ? "Edit" : "Create")" 
-      asp-route-id="@(isEdit ? Model.Id : "")"
+      asp-route-id="@(isEdit ? modelId : "")"
       method="post" 
       id="formPregunta">
     
@@ -22,7 +23,7 @@
     <div class="form-group">
         <label asp-for="Pregunta">Pregunta <span class="text-danger">*</span></label>
         <textarea asp-for="Pregunta" class="form-control" rows="4" placeholder="Escriba la pregunta..." required></textarea>
-        <small class="form-text text-muted">Máximo 500 caracteres</small>
+        <small class="form-text text-muted">MÃ¡ximo 500 caracteres</small>
         <span asp-validation-for="Pregunta" class="text-danger"></span>
     </div>
 
@@ -46,7 +47,7 @@
                 Pregunta Activa
             </label>
         </div>
-        <small class="form-text text-muted">Si está marcada, la pregunta estará disponible para los formularios de control de calidad.</small>
+        <small class="form-text text-muted">Si estÃ¡ marcada, la pregunta estarÃ¡ disponible para los formularios de control de calidad.</small>
     </div>
 
 </form>
@@ -54,14 +55,15 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            // Configurar validación
+            // Configurar validaciÃ³n
             $.validator.unobtrusive.parse($('#formPregunta'));
 
             // Sincronizar checkbox con input hidden
             $('#esActiva').on('change', function () {
                 var value = $(this).is(':checked') ? 'true' : 'false';
-                // El valor se enviará en el formulario
+                // El valor se enviarÃ¡ en el formulario
             });
         });
     </script>
 }
+

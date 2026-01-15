@@ -335,8 +335,8 @@ builder.Services.AddScoped<IGdAprobacionesAdapter, GdAprobacionesAdapter>();
 
 // ===== PNC module (Producto No Conforme) =====
 // Ref: FASE 5 PARTE A - Sprint 8 (PNC)
-builder.Services.AddScoped<IPncAdapter, PncAdapter>();
-builder.Services.AddScoped<IPncService, PncService>();
+builder.Services.AddScoped<MatrixNext.Data.Adapters.Pnc.IPncAdapter, MatrixNext.Data.Adapters.Pnc.PncAdapter>();
+builder.Services.AddScoped<MatrixNext.Data.Services.Pnc.IPncService, MatrixNext.Data.Services.Pnc.PncService>();
 
 // ===== SPRINT 3: PY Proyectos Pendientes Module =====
 // Ref: PLAN_IMPLEMENTACION_SPRINTS.md § Sprint 3

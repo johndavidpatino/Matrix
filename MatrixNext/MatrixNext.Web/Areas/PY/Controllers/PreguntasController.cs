@@ -1,5 +1,5 @@
-using MatrixNext.Core.DTOs.PY.ControlCalidad;
-using MatrixNext.Core.Interfaces.PY.ControlCalidad;
+﻿using MatrixNext.Data.DTOs.PY.ControlCalidad;
+using MatrixNext.Data.Services.PY.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -7,7 +7,7 @@ using System.Security.Claims;
 namespace MatrixNext.Web.Areas.PY.Controllers;
 
 /// <summary>
-/// Controlador para gestión de Preguntas de Control de Calidad.
+/// Controlador para gestiÃ³n de Preguntas de Control de Calidad.
 /// Responsable de recibir requests, validar datos y coordinar con el servicio de preguntas.
 /// </summary>
 [Area("PY")]
@@ -26,13 +26,13 @@ public class PreguntasController : ControllerBase
     }
 
     /// <summary>
-    /// Obtiene todas las preguntas activas para un tipo de proceso específico.
+    /// Obtiene todas las preguntas activas para un tipo de proceso especÃ­fico.
     /// GET: /api/py/preguntas/{tipoProceso}
     /// </summary>
     /// <param name="tipoProceso">Tipo de proceso (1=Campo, 2=Moderadora, 3=Entrevistadora, 4=Transcripciones, 5=Informe)</param>
     /// <returns>Lista de preguntas activas filtrads por tipo</returns>
     [HttpGet("{tipoProceso}")]
-    [AllowAnonymous]  // Preguntas públicas para cargar en formularios
+    [AllowAnonymous]  // Preguntas pÃºblicas para cargar en formularios
     public async Task<IActionResult> ObtenerPorTipo(int tipoProceso)
     {
         try
@@ -41,7 +41,7 @@ public class PreguntasController : ControllerBase
 
             // Validar tipo de proceso
             if (tipoProceso < 1 || tipoProceso > 5)
-                return BadRequest(new { success = false, message = "Tipo de proceso inválido" });
+                return BadRequest(new { success = false, message = "Tipo de proceso invÃ¡lido" });
 
             var preguntas = await _service.ObtenerPorTipoProcesoAsync(tipoProceso);
 
@@ -66,7 +66,7 @@ public class PreguntasController : ControllerBase
         try
         {
             if (!ModelState.IsValid)
-                return BadRequest(new { success = false, message = "Datos inválidos", errors = ModelState.Values.SelectMany(v => v.Errors) });
+                return BadRequest(new { success = false, message = "Datos invÃ¡lidos", errors = ModelState.Values.SelectMany(v => v.Errors) });
 
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
             if (userId == 0)
@@ -96,14 +96,14 @@ public class PreguntasController : ControllerBase
     /// </summary>
     /// <param name="id">ID de la pregunta a editar</param>
     /// <param name="dto">Datos actualizados de la pregunta</param>
-    /// <returns>Confirmación de éxito o error</returns>
+    /// <returns>ConfirmaciÃ³n de Ã©xito o error</returns>
     [HttpPost("edit/{id}")]
     public async Task<IActionResult> Editar(long id, [FromBody] PreguntaInputDto dto)
     {
         try
         {
             if (!ModelState.IsValid)
-                return BadRequest(new { success = false, message = "Datos inválidos" });
+                return BadRequest(new { success = false, message = "Datos invÃ¡lidos" });
 
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
             if (userId == 0)
@@ -131,7 +131,7 @@ public class PreguntasController : ControllerBase
     /// POST: /api/py/preguntas/toggle/{id}
     /// </summary>
     /// <param name="id">ID de la pregunta a activar/desactivar</param>
-    /// <returns>Nuevo estado y confirmación de éxito</returns>
+    /// <returns>Nuevo estado y confirmaciÃ³n de Ã©xito</returns>
     [HttpPost("toggle/{id}")]
     public async Task<IActionResult> Toggle(long id)
     {
@@ -158,3 +158,4 @@ public class PreguntasController : ControllerBase
         }
     }
 }
+

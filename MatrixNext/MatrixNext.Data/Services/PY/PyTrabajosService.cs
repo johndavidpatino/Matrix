@@ -12,6 +12,19 @@ namespace MatrixNext.Data.Services.PY
         private readonly IPyTrabajosAdapter _adapter;
         public PyTrabajosService(IPyTrabajosAdapter adapter) => _adapter = adapter;
 
+        public Task<TrabajoBasicoDto?> ObtenerAsync(long trabajoId)
+        {
+            if (trabajoId <= 0) throw new ArgumentException("TrabajoId > 0", nameof(trabajoId));
+
+            // TODO: Implementar en adapter con acceso a datos real
+            return Task.FromResult<TrabajoBasicoDto?>(new TrabajoBasicoDto
+            {
+                Id = trabajoId,
+                NombreTrabajoPresupuesto = $"Trabajo {trabajoId}",
+                TipoTrabajo = string.Empty
+            });
+        }
+
         public async Task<DuplicarTrabajoResultDto> DuplicarTrabajoCompleto(DuplicarTrabajoInputDto input, string usuario)
         {
             if (input == null) throw new ArgumentNullException(nameof(input));

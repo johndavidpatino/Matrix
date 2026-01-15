@@ -67,4 +67,14 @@ namespace MatrixNext.Data.Adapters.PY.Models
         public bool DocumentosCopiadosResult { get; set; }
         public string? ErrorMessage { get; set; }
     }
+
+    /// <summary>
+    /// DTO bÃ¡sico para identificar un trabajo
+    /// </summary>
+    public class TrabajoBasicoDto
+    {
+        public long Id { get; set; }
+        public string? NombreTrabajoPresupuesto { get; set; }
+        public string? TipoTrabajo { get; set; }
+    }
 }

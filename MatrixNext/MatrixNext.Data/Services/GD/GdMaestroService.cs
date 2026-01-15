@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MatrixNext.Data.Adapters.GD;
@@ -137,7 +137,7 @@ namespace MatrixNext.Data.Services.GD
 
         private static (bool valid, string message) ValidarPorTipo(MaestroDocumentoDto dto)
         {
-            // 1 = Construcción, 2 = Actualización, 3 = Anulación (solo controlador de Delete)
+            // 1 = ConstrucciÃ³n, 2 = ActualizaciÃ³n, 3 = AnulaciÃ³n (solo controlador de Delete)
             if (dto.TipoSolicitud == 1)
             {
                 var ctrl = dto.ControlledDoc;
@@ -148,22 +148,22 @@ namespace MatrixNext.Data.Services.GD
 
                 if (string.IsNullOrWhiteSpace(ctrl.Ubicacion))
                 {
-                    return (false, "La ubicación del documento controlado es requerida");
+                    return (false, "La ubicaciÃ³n del documento controlado es requerida");
                 }
 
                 if (string.IsNullOrWhiteSpace(ctrl.MetodoRecuperacion))
                 {
-                    return (false, "El método de recuperación es requerido");
+                    return (false, "El mÃ©todo de recuperaciÃ³n es requerido");
                 }
 
                 if (ctrl.TiempoRetencion <= 0)
                 {
-                    return (false, "El tiempo de retención debe ser mayor a 0");
+                    return (false, "El tiempo de retenciÃ³n debe ser mayor a 0");
                 }
 
                 if (string.IsNullOrWhiteSpace(ctrl.DisposicionFinal))
                 {
-                    return (false, "La disposición final es requerida");
+                    return (false, "La disposiciÃ³n final es requerida");
                 }
             }
 
@@ -172,3 +172,4 @@ namespace MatrixNext.Data.Services.GD
         }
     }
 }
+

@@ -4,6 +4,8 @@
     var isNew = Model.Id == 0;
     var title = isNew ? "Nueva Revisión IPS" : "Editar Revisión IPS";
     var action = isNew ? "CrearRevision" : "ActualizarRevision";
+    var preguntaHasError = ViewData.ModelState.TryGetValue("Pregunta", out var preguntaState)
+        && preguntaState.Errors.Any();
 }
 
 <div class="modal-header bg-primary text-white">
@@ -39,7 +41,7 @@
                 Pregunta
             </label>
             <textarea asp-for="Pregunta" 
-                      class="form-control @(ViewData.ModelState.ContainsKey("Pregunta") && ViewData.ModelState["Pregunta"].Errors.Any() ? "is-invalid" : "")" 
+                      class="form-control @(preguntaHasError ? "is-invalid" : "")" 
                       rows="3" 
                       placeholder="Ingrese la pregunta de IPS"
                       required>

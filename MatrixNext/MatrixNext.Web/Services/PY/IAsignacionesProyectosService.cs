@@ -6,6 +6,11 @@ namespace MatrixNext.Web.Services.PY
     public interface IAsignacionesProyectosService
     {
         /// <summary>
+        /// Obtiene asignaciones existentes con filtro opcional por proyecto
+        /// </summary>
+        Task<List<AsignacionProyecto>> ObtenerAsignacionesAsync(long? idProyecto);
+
+        /// <summary>
         /// Obtiene proyectos sin gerente asignado o para reasignación
         /// </summary>
         Task<ResultVM<List<dynamic>>> ObtenerProyectosXAsignarAsync(int idUnidad, long idUsuario);

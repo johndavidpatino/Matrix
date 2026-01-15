@@ -1,12 +1,12 @@
-@using MatrixNext.Web.DTOs.PY.ControlCalidad
+﻿@using MatrixNext.Data.DTOs.PY.ControlCalidad
 @model IEnumerable<PreguntaListDto>
 
 @{
-    ViewData["Title"] = "Gestión de Preguntas de Control de Calidad";
+    ViewData["Title"] = "GestiÃ³n de Preguntas de Control de Calidad";
     var tiposProc = new Dictionary<int, string> { 
         { 1, "Control de Campo" }, 
-        { 2, "Evaluación Moderadora" }, 
-        { 3, "Evaluación Entrevistadora" },
+        { 2, "EvaluaciÃ³n Moderadora" }, 
+        { 3, "EvaluaciÃ³n Entrevistadora" },
         { 4, "Control de Transcripciones" },
         { 5, "Control de Informe" }
     };
@@ -68,7 +68,7 @@
                 </button>
             </div>
             <div class="modal-body" id="modalPreguntaBody">
-                <!-- Contenido del formulario será cargado aquí -->
+                <!-- Contenido del formulario serÃ¡ cargado aquÃ­ -->
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -88,7 +88,7 @@
     <link rel="stylesheet" href="~/lib/datatables/css/dataTables.bootstrap4.min.css" />
     
     <script>
-        var tiposProcesoMap = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(tiposProc));
+        var tiposProcesoMap = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(tiposProc));
 
         $(document).ready(function () {
             // Inicializar DataTable
@@ -180,7 +180,7 @@
                 data: formData,
                 success: function (response) {
                     if (response.success) {
-                        mostrarToast(response.message || 'Operación exitosa', 'success');
+                        mostrarToast(response.message || 'OperaciÃ³n exitosa', 'success');
                         $('#modalPregunta').modal('hide');
                         var tipoProceso = $('#tipoProceso').val();
                         cargarPreguntas(tipoProceso, $('#gridPreguntas').DataTable());
@@ -231,3 +231,4 @@
         }
     </script>
 }
+

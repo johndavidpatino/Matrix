@@ -63,6 +63,11 @@ public class OpIpsService : IOpIpsService
         };
     }
 
+    public Task<IpsRevisionViewModel> ObtenerPlanillasAsync(long? trabajoId = null, CancellationToken cancellationToken = default)
+    {
+        return ObtenerRevisionesAsync(trabajoId, cancellationToken);
+    }
+
     public async Task<bool> GuardarRevisionAsync(IpsRevisionUpdateModel model, CancellationToken cancellationToken = default)
     {
         await using var connection = _dbContext.Database.GetDbConnection();

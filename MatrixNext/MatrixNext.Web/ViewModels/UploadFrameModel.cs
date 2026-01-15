@@ -77,7 +77,7 @@ namespace MatrixNext.Web.ViewModels
         /// <summary>
         /// Callback JavaScript a ejecutar tras upload exitoso
         /// </summary>
-        public string CallbackJs { get; set; }
+        public string CallbackJs { get; set; } = string.Empty;
 
         /// <summary>
         /// Archivos actuales cargados
@@ -88,9 +88,9 @@ namespace MatrixNext.Web.ViewModels
     public class UploadedFileModel
     {
         public long IdArchivo { get; set; }
-        public string Nombre { get; set; }
+        public string Nombre { get; set; } = string.Empty;
         public long TamanoBytess { get; set; }
         public DateTime FechaSubida { get; set; }
-        public string UrlDescarga { get; set; }
+        public string UrlDescarga { get; set; } = string.Empty;
     }
 }

@@ -35,11 +35,13 @@ namespace MatrixNext.Web.Services
 
     public class UploadResultVM
     {
+        public long Id { get; set; }
         public string? RutaRelativa { get; set; }
         public string? RutaAbsoluta { get; set; }
         public string? NombreArchivo { get; set; }
         public long TamañoBytes { get; set; }
         public DateTime FechaSubida { get; set; }
+        public string? UrlDescarga { get; set; }
     }
 
     public class ArchivoVM

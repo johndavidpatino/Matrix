@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
@@ -15,8 +15,8 @@ using Microsoft.Extensions.Logging;
 namespace MatrixNext.Data.Services.GD
 {
     /// <summary>
-    /// Servicio de notificaciones por email para Gestión Documental
-    /// Usa IEmailQueueService para envío asíncrono sin bloquear request HTTP
+    /// Servicio de notificaciones por email para GestiÃ³n Documental
+    /// Usa IEmailQueueService para envÃ­o asÃ­ncrono sin bloquear request HTTP
     /// </summary>
     public class GdEmailService : IGdEmailService
     {
@@ -44,14 +44,14 @@ namespace MatrixNext.Data.Services.GD
         }
 
         /// <summary>
-        /// Envía notificación a revisores cuando se crea una solicitud
+        /// EnvÃ­a notificaciÃ³n a revisores cuando se crea una solicitud
         /// REGLA 14: Async/await
         /// </summary>
         public async Task<(bool success, string message)> EnviarNotificacionSolicitud(int solicitudId)
         {
             try
             {
-                _logger.LogInformation("Iniciando envío de notificación para solicitud {SolicitudId}", solicitudId);
+                _logger.LogInformation("Iniciando envÃ­o de notificaciÃ³n para solicitud {SolicitudId}", solicitudId);
 
                 // 1. Obtener datos de solicitud
                 var solicitud = await _solicitudesAdapter.ObtenerSolicitudById(solicitudId);
@@ -116,7 +116,7 @@ namespace MatrixNext.Data.Services.GD
                         // Encolar email (NO bloquea request)
                         await _emailQueueService.QueueEmailAsync(
                             destinatario: emailRevisor,
-                            asunto: $"📋 Nueva Solicitud de Documento - {solicitud.IdDocumento}",
+                            asunto: $"ðŸ“‹ Nueva Solicitud de Documento - {solicitud.IdDocumento}",
                             cuerpo: htmlBody,
                             esHtml: true
                         );
@@ -134,7 +134,7 @@ namespace MatrixNext.Data.Services.GD
                 // 6. Resultado final
                 if (emailsEnviados == 0)
                 {
-                    var mensajeError = errores.Any() ? string.Join("; ", errores) : "No se pudo enviar ningún email";
+                    var mensajeError = errores.Any() ? string.Join("; ", errores) : "No se pudo enviar ningÃºn email";
                     _logger.LogError("No se encolaron emails para solicitud {SolicitudId}: {Errores}", solicitudId, mensajeError);
                     return (false, mensajeError);
                 }
@@ -154,7 +154,7 @@ namespace MatrixNext.Data.Services.GD
         }
 
         /// <summary>
-        /// Envía notificación de aprobación (EXCLUIDO - no existe en legacy)
+        /// EnvÃ­a notificaciÃ³n de aprobaciÃ³n (EXCLUIDO - no existe en legacy)
         /// Placeholder para futuro
         /// </summary>
         public Task<(bool success, string message)> EnviarNotificacionAprobacion(int solicitudId)
@@ -164,7 +164,7 @@ namespace MatrixNext.Data.Services.GD
         }
 
         /// <summary>
-        /// Envía notificación de rechazo (EXCLUIDO - no existe en legacy)
+        /// EnvÃ­a notificaciÃ³n de rechazo (EXCLUIDO - no existe en legacy)
         /// Placeholder para futuro
         /// </summary>
         public Task<(bool success, string message)> EnviarNotificacionRechazo(int solicitudId)
@@ -206,7 +206,7 @@ namespace MatrixNext.Data.Services.GD
 
         /// <summary>
         /// Renderiza template HTML reemplazando variables {{Variable}}
-        /// Método simple sin dependencias externas (NO usa RazorEngine completo)
+        /// MÃ©todo simple sin dependencias externas (NO usa RazorEngine completo)
         /// </summary>
         private string RenderTemplate(string template, object model)
         {
@@ -224,3 +224,4 @@ namespace MatrixNext.Data.Services.GD
         }
     }
 }
+

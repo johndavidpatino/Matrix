@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -55,15 +55,16 @@ namespace MatrixNext.Data.Services.GD
                     DocumentoId = documentoId,
                     UsuarioId = usuarioId,
                     FechaAprobacion = DateTime.UtcNow.AddHours(-5),
-                    TipoRevision = 3 // 3 = aprobado (según flujo legacy)
+                    TipoRevision = 3 // 3 = aprobado (segÃºn flujo legacy)
                 });
                 return (ok, ok ? "Aprobado" : "No aprobado");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error aprobando revisión");
-                return (false, "Error aprobando la revisión");
+                _logger.LogError(ex, "Error aprobando revisiÃ³n");
+                return (false, "Error aprobando la revisiÃ³n");
             }
         }
     }
 }
+

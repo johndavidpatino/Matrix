@@ -1,19 +1,20 @@
-@using MatrixNext.Web.DTOs.PY.ControlCalidad
+﻿@using MatrixNext.Data.DTOs.PY.ControlCalidad
 @model ControlCalidadInputDto
 
 @{
     bool isEdit = Model?.Id > 0;
+    var modelId = Model?.Id ?? 0;
     var tiposProc = new Dictionary<int, string> { 
         { 1, "Control de Campo" }, 
-        { 2, "Evaluación Moderadora" }, 
-        { 3, "Evaluación Entrevistadora" },
+        { 2, "EvaluaciÃ³n Moderadora" }, 
+        { 3, "EvaluaciÃ³n Entrevistadora" },
         { 4, "Control de Transcripciones" },
         { 5, "Control de Informe" }
     };
 }
 
 <form asp-action="@(isEdit ? "Edit" : "Create")" 
-      asp-route-id="@(isEdit ? Model.Id : "")"
+      asp-route-id="@(isEdit ? modelId : "")"
       method="post" 
       id="formControl">
     
@@ -67,14 +68,14 @@
         <span asp-validation-for="Observaciones" class="text-danger"></span>
     </div>
 
-    <!-- Sección de Respuestas a Preguntas -->
+    <!-- SecciÃ³n de Respuestas a Preguntas -->
     <div class="card mt-4 mb-3">
         <div class="card-header">
             <h5>Respuestas de Control</h5>
         </div>
         <div class="card-body">
             <div id="preguntasContainer">
-                <!-- Las preguntas se cargarán aquí dinámicamente -->
+                <!-- Las preguntas se cargarÃ¡n aquÃ­ dinÃ¡micamente -->
             </div>
         </div>
     </div>
@@ -90,7 +91,7 @@
                 cargarPreguntas(tipoProceso);
             }
 
-            // Configurar validación
+            // Configurar validaciÃ³n
             $.validator.unobtrusive.parse($('#formControl'));
         });
 
@@ -112,8 +113,8 @@
                             // Campo de respuesta
                             html += '<textarea name="Detalles[' + idx + '].Respuesta" class="form-control mb-2" rows="2" placeholder="Escriba su respuesta..."></textarea>';
                             
-                            // Calificación
-                            html += '<label>Calificación (0-100):</label>';
+                            // CalificaciÃ³n
+                            html += '<label>CalificaciÃ³n (0-100):</label>';
                             html += '<input type="number" name="Detalles[' + idx + '].Calificacion" class="form-control" min="0" max="100" step="5" />';
                             
                             html += '</div>';
@@ -129,3 +130,4 @@
         }
     </script>
 }
+

@@ -172,7 +172,7 @@
             $('#frmFiltros').on('submit', function (e) {
                 e.preventDefault();
                 var filtros = $(this).serialize();
-                $.get('@Url.Action("Index", "Asignaciones", new { area = "PY" })?@Html.Raw(HttpUtility.UrlEncode(""))' + '&' + filtros, function (html) {
+                $.get('@Url.Action("Index", "Asignaciones", new { area = "PY" })?@Html.Raw(System.Net.WebUtility.UrlEncode(string.Empty))' + '&' + filtros, function (html) {
                     $('#gridAsignaciones').html($(html).find('#gridAsignaciones').html());
                 });
             });

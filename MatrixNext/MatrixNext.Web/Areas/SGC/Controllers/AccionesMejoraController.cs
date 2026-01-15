@@ -228,7 +228,7 @@ namespace MatrixNext.Web.Areas.SGC.Controllers
                     return Unauthorized(new { success = false, message = "Usuario no identificado" });
                 }
 
-                var (success, message) = await _accionMejoraService.AddCausasAsync(id, causas);
+                var (success, message) = await _accionMejoraService.AddCausasAsync(id, causas, userId);
 
                 if (!success)
                 {
@@ -267,7 +267,7 @@ namespace MatrixNext.Web.Areas.SGC.Controllers
                     return Unauthorized(new { success = false, message = "Usuario no identificado" });
                 }
 
-                var (success, message) = await _accionMejoraService.AddPlanesAccionAsync(id, planes);
+                var (success, message) = await _accionMejoraService.AddPlanesAccionAsync(id, planes, userId);
 
                 if (!success)
                 {

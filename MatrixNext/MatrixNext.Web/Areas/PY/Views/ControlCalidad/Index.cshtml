@@ -1,12 +1,12 @@
-@using MatrixNext.Web.DTOs.PY.ControlCalidad
+﻿@using MatrixNext.Data.DTOs.PY.ControlCalidad
 @model IEnumerable<ControlCalidadListDto>
 
 @{
     ViewData["Title"] = "Control de Calidad";
     var tiposProc = new Dictionary<int, string> { 
         { 1, "Control de Campo" }, 
-        { 2, "Evaluación Moderadora" }, 
-        { 3, "Evaluación Entrevistadora" },
+        { 2, "EvaluaciÃ³n Moderadora" }, 
+        { 3, "EvaluaciÃ³n Entrevistadora" },
         { 4, "Control de Transcripciones" },
         { 5, "Control de Informe" }
     };
@@ -47,7 +47,7 @@
                         <th>Rol</th>
                         <th>Fecha</th>
                         <th>Preguntas</th>
-                        <th>Calificación</th>
+                        <th>CalificaciÃ³n</th>
                         <th>Estado</th>
                         <th>Acciones</th>
                     </tr>
@@ -70,7 +70,7 @@
                 </button>
             </div>
             <div class="modal-body" id="modalControlBody">
-                <!-- Contenido del formulario será cargado aquí -->
+                <!-- Contenido del formulario serÃ¡ cargado aquÃ­ -->
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -181,7 +181,7 @@
                 data: formData,
                 success: function (response) {
                     if (response.success) {
-                        mostrarToast(response.message || 'Operación exitosa', 'success');
+                        mostrarToast(response.message || 'OperaciÃ³n exitosa', 'success');
                         $('#modalControl').modal('hide');
                         var tipoProceso = $('#tipoProceso').val();
                         if (tipoProceso) {
@@ -214,7 +214,7 @@
         }
 
         function eliminarControl(controlId) {
-            if (confirm('¿Está seguro de que desea eliminar este control?')) {
+            if (confirm('Â¿EstÃ¡ seguro de que desea eliminar este control?')) {
                 $.ajax({
                     url: '/api/py/controlcalidad/delete/' + controlId,
                     type: 'POST',
@@ -250,3 +250,4 @@
         }
     </script>
 }
+

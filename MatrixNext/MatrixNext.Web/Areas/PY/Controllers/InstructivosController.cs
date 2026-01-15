@@ -1,13 +1,14 @@
-/// <summary>
-/// Controller para gestión de Instructivos (General y Cualitativo)
-/// Ref: BACKLOG_QA_MODULOS_PENDIENTES.md § Sprint 12.2.7
+﻿/// <summary>
+/// Controller para gestiÃ³n de Instructivos (General y Cualitativo)
+/// Ref: BACKLOG_QA_MODULOS_PENDIENTES.md Â§ Sprint 12.2.7
 /// Webforms: InstructivoGeneral.aspx, InstructivoGeneralCuali.aspx
 /// </summary>
 namespace MatrixNext.Web.Areas.PY.Controllers
 {
-    using MatrixNext.Infrastructure.Adapters;
-    using MatrixNext.Infrastructure.Services;
+    using MatrixNext.Data.Adapters;
+    using MatrixNext.Data.Services.PY.Interfaces;
     using MatrixNext.Web.ViewModels;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
@@ -59,7 +60,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers
                 var usuarioId = ObtenerIdUsuarioActual();
                 if (!User.IsInRole("Administrador") && !User.IsInRole("GerenteProyectos"))
                 {
-                    _logger.LogWarning("Usuario {UserId} intentó acceder a instructivos de trabajo {TrabajoId} sin permisos",
+                    _logger.LogWarning("Usuario {UserId} intentÃ³ acceder a instructivos de trabajo {TrabajoId} sin permisos",
                         usuarioId, idTrabajo);
                     return Forbid();
                 }
@@ -128,7 +129,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers
         }
 
         /// <summary>
-        /// Listado de instructivos cualitativos (por segmento/sesión)
+        /// Listado de instructivos cualitativos (por segmento/sesiÃ³n)
         /// GET /PY/Instructivos/Cualitativos/{idTrabajo}
         /// </summary>
         [HttpGet("Cualitativos/{idTrabajo}")]
@@ -317,3 +318,4 @@ namespace MatrixNext.Web.Areas.PY.Controllers
         }
     }
 }
+

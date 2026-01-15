@@ -1,5 +1,5 @@
-using MatrixNext.Core.DTOs.PY.ControlCalidad;
-using MatrixNext.Core.Interfaces.PY.ControlCalidad;
+﻿using MatrixNext.Data.DTOs.PY.ControlCalidad;
+using MatrixNext.Data.Services.PY.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -7,7 +7,7 @@ using System.Security.Claims;
 namespace MatrixNext.Web.Areas.PY.Controllers;
 
 /// <summary>
-/// Controlador para gestión de Control de Calidad.
+/// Controlador para gestiÃ³n de Control de Calidad.
 /// Responsable de recibir requests, validar datos y coordinar con el servicio de negocio.
 /// </summary>
 [Area("PY")]
@@ -30,7 +30,7 @@ public class ControlCalidadController : ControllerBase
     /// GET: /api/py/controlcalidad/{tipoProceso}
     /// </summary>
     /// <param name="tipoProceso">Tipo de proceso (1=Campo, 2=Moderadora, 3=Entrevistadora, 4=Transcripciones, 5=Informe)</param>
-    /// <returns>Lista de controles de calidad con detalles básicos</returns>
+    /// <returns>Lista de controles de calidad con detalles bÃ¡sicos</returns>
     [HttpGet("{tipoProceso}")]
     public async Task<IActionResult> ObtenerPorTipo(int tipoProceso)
     {
@@ -41,7 +41,7 @@ public class ControlCalidadController : ControllerBase
 
             // Validar tipo de proceso
             if (tipoProceso < 1 || tipoProceso > 5)
-                return BadRequest(new { success = false, message = "Tipo de proceso inválido" });
+                return BadRequest(new { success = false, message = "Tipo de proceso invÃ¡lido" });
 
             var controles = await _service.ObtenerTodosAsync(tipoProceso);
 
@@ -93,7 +93,7 @@ public class ControlCalidadController : ControllerBase
         try
         {
             if (!ModelState.IsValid)
-                return BadRequest(new { success = false, message = "Datos inválidos", errors = ModelState.Values.SelectMany(v => v.Errors) });
+                return BadRequest(new { success = false, message = "Datos invÃ¡lidos", errors = ModelState.Values.SelectMany(v => v.Errors) });
 
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
             if (userId == 0)
@@ -123,14 +123,14 @@ public class ControlCalidadController : ControllerBase
     /// </summary>
     /// <param name="id">ID del control de calidad a editar</param>
     /// <param name="dto">Datos actualizados del control</param>
-    /// <returns>Confirmación de éxito o error</returns>
+    /// <returns>ConfirmaciÃ³n de Ã©xito o error</returns>
     [HttpPost("edit/{id}")]
     public async Task<IActionResult> Editar(long id, [FromBody] ControlCalidadInputDto dto)
     {
         try
         {
             if (!ModelState.IsValid)
-                return BadRequest(new { success = false, message = "Datos inválidos" });
+                return BadRequest(new { success = false, message = "Datos invÃ¡lidos" });
 
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
             if (userId == 0)
@@ -158,7 +158,7 @@ public class ControlCalidadController : ControllerBase
     /// POST: /api/py/controlcalidad/delete/{id}
     /// </summary>
     /// <param name="id">ID del control de calidad a eliminar</param>
-    /// <returns>Confirmación de éxito o error</returns>
+    /// <returns>ConfirmaciÃ³n de Ã©xito o error</returns>
     [HttpPost("delete/{id}")]
     public async Task<IActionResult> Eliminar(long id)
     {
@@ -186,7 +186,7 @@ public class ControlCalidadController : ControllerBase
     }
 
     /// <summary>
-    /// Obtiene las preguntas activas para un tipo de proceso específico.
+    /// Obtiene las preguntas activas para un tipo de proceso especÃ­fico.
     /// GET: /api/py/controlcalidad/preguntas/{tipoProceso}
     /// </summary>
     /// <param name="tipoProceso">Tipo de proceso (1=Campo, 2=Moderadora, 3=Entrevistadora, 4=Transcripciones, 5=Informe)</param>
@@ -200,7 +200,7 @@ public class ControlCalidadController : ControllerBase
 
             // Validar tipo de proceso
             if (tipoProceso < 1 || tipoProceso > 5)
-                return BadRequest(new { success = false, message = "Tipo de proceso inválido" });
+                return BadRequest(new { success = false, message = "Tipo de proceso invÃ¡lido" });
 
             var preguntas = await _service.ObtenerPreguntasActivasAsync(tipoProceso);
 
@@ -213,3 +213,4 @@ public class ControlCalidadController : ControllerBase
         }
     }
 }
+

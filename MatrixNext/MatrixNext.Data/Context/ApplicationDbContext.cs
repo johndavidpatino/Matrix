@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace MatrixNext.Data.Context
 {
@@ -12,6 +13,8 @@ namespace MatrixNext.Data.Context
             : base(options)
         {
         }
+
+        public IDbConnection CreateConnection() => Database.GetDbConnection();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

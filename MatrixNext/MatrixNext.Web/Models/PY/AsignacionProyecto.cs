@@ -10,6 +10,13 @@ namespace MatrixNext.Web.Models.PY
     [Table("PY_AsignacionProyectos", Schema = "dbo")]
     public class AsignacionProyecto : BaseEntity
     {
+        [NotMapped]
+        public long IdAsignacion
+        {
+            get => Id;
+            set => Id = value;
+        }
+
         /// <summary>
         /// Proyecto siendo asignado
         /// </summary>
@@ -22,11 +29,25 @@ namespace MatrixNext.Web.Models.PY
         [Required]
         public long IdGerenteProyecto { get; set; }
 
+        [NotMapped]
+        public long IdGerentePrincipal
+        {
+            get => IdGerenteProyecto;
+            set => IdGerenteProyecto = value;
+        }
+
         /// <summary>
         /// Nombre del gerente para auditoría
         /// </summary>
         [MaxLength(200)]
         public string? NombreGerenteProyecto { get; set; }
+
+        [NotMapped]
+        public string? NombreGerentePrincipal
+        {
+            get => NombreGerenteProyecto;
+            set => NombreGerenteProyecto = value;
+        }
 
         /// <summary>
         /// Fecha de la asignación
@@ -43,6 +64,25 @@ namespace MatrixNext.Web.Models.PY
         /// Observaciones sobre la asignación
         /// </summary>
         public string? Observaciones { get; set; }
+
+        [NotMapped]
+        public string? ObservacionesAsignacion
+        {
+            get => Observaciones;
+            set => Observaciones = value;
+        }
+
+        [NotMapped]
+        public int CantidadTrabajosAsignados { get; set; }
+
+        [NotMapped]
+        public string? Estado { get; set; }
+
+        [NotMapped]
+        public string? NombreProyecto { get; set; }
+
+        [NotMapped]
+        public string? EmailGerentePrincipal { get; set; }
 
         /// <summary>
         /// Gerente anterior (si es reasignación)

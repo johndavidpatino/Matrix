@@ -1,13 +1,14 @@
-/// <summary>
+﻿/// <summary>
 /// Controller para Registro de Planillas Cualitativo
-/// Ref: BACKLOG_QA_MODULOS_PENDIENTES.md § Sprint 12.2.8
+/// Ref: BACKLOG_QA_MODULOS_PENDIENTES.md Â§ Sprint 12.2.8
 /// Webform: RegistroPlanillasCualitativo.aspx
 /// </summary>
 namespace MatrixNext.Web.Areas.PY.Controllers
 {
-    using MatrixNext.Infrastructure.Adapters;
-    using MatrixNext.Infrastructure.Services;
+    using MatrixNext.Data.Adapters;
+    using MatrixNext.Data.Services.PY.Interfaces;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using System;
@@ -227,3 +228,4 @@ namespace MatrixNext.Web.Areas.PY.Controllers
         }
     }
 }
+

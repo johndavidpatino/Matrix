@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -79,7 +79,7 @@ namespace MatrixNext.Data.Adapters.GD
         }
 
         /// <summary>
-        /// Crea registro de revisión para un revisor
+        /// Crea registro de revisiÃ³n para un revisor
         /// </summary>
         public async Task<bool> CrearRevision(int idSolicitud, int idDocumentoControlado, int idRevisor)
         {
@@ -88,7 +88,7 @@ namespace MatrixNext.Data.Adapters.GD
             parametros.Add("@SolicitudId", idSolicitud);
             parametros.Add("@DocumentoId", idDocumentoControlado);
             parametros.Add("@UsuarioId", idRevisor);
-            parametros.Add("@TipoRevision", 1); // 1 = revisión normal
+            parametros.Add("@TipoRevision", 1); // 1 = revisiÃ³n normal
 
             var resultado = await connection.ExecuteAsync(
                 "GD_Revisiones_Add",
@@ -194,3 +194,4 @@ namespace MatrixNext.Data.Adapters.GD
         }
     }
 }
+

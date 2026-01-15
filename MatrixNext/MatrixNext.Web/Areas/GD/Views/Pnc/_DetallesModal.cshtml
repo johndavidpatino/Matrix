@@ -1,7 +1,7 @@
-@model MatrixNext.Core.DTOs.GD.PncDto
+﻿@model MatrixNext.Data.DTOs.GD.PncDto
 
 @{
-    var causas = ViewBag.Causas as IEnumerable<MatrixNext.Core.DTOs.GD.PncCausaDto> ?? new List<MatrixNext.Core.DTOs.GD.PncCausaDto>();
+    var causas = ViewBag.Causas as IEnumerable<MatrixNext.Data.DTOs.GD.PncCausaDto> ?? new List<MatrixNext.Data.DTOs.GD.PncCausaDto>();
 }
 
 <div class="modal fade" id="modalForm" tabindex="-1">
@@ -16,7 +16,7 @@
                 <!-- Info General -->
                 <div class="card mb-3">
                     <div class="card-header">
-                        <h6 class="mb-0">Información General</h6>
+                        <h6 class="mb-0">InformaciÃ³n General</h6>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -34,10 +34,10 @@
                     </div>
                 </div>
 
-                <!-- Descripción -->
+                <!-- DescripciÃ³n -->
                 <div class="card mb-3">
                     <div class="card-header">
-                        <h6 class="mb-0">Descripción del Problema</h6>
+                        <h6 class="mb-0">DescripciÃ³n del Problema</h6>
                     </div>
                     <div class="card-body">
                         <p class="text-muted">@Model.Descripcion</p>
@@ -74,7 +74,7 @@
                                             </h2>
                                             <div id="causa@index" class="accordion-collapse collapse @(index == 0 ? "show" : "")" data-bs-parent="#accordionCausas">
                                                 <div class="accordion-body">
-                                                    <p><strong>Acción Correctiva:</strong> @causa.AccionCorrectiva</p>
+                                                    <p><strong>AcciÃ³n Correctiva:</strong> @causa.AccionCorrectiva</p>
                                                     <p><strong>Responsable:</strong> @causa.PersonaResponsable</p>
                                                     <p><strong>Fecha Vencimiento:</strong> @causa.FechaVencimiento?.ToString("dd/MM/yyyy")</p>
                                                     @if (causa.Observaciones != null)
@@ -93,7 +93,7 @@
                         {
                             <p class="text-muted text-center py-3">
                                 <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
-                                No hay causas registradas aún
+                                No hay causas registradas aÃºn
                             </p>
                         }
                     </div>
@@ -106,3 +106,4 @@
         </div>
     </div>
 </div>
+

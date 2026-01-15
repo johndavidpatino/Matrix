@@ -59,11 +59,13 @@ namespace MatrixNext.Web.Services
 
                 return new UploadResultVM
                 {
+                    Id = 0,
                     RutaRelativa = rutaRelativa,
                     RutaAbsoluta = Path.Combine(_basePath, rutaRelativa),
                     NombreArchivo = file.FileName,
                     TamañoBytes = file.Length,
-                    FechaSubida = DateTime.UtcNow
+                    FechaSubida = DateTime.UtcNow,
+                    UrlDescarga = $"/api/Upload/download?rutaRelativa={Uri.EscapeDataString(rutaRelativa)}"
                 };
             }
             catch (Exception ex)

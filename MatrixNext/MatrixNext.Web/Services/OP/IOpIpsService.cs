@@ -8,6 +8,7 @@ public sealed record IpsExportResult(string PhysicalPath, string PublicRelativeP
 public interface IOpIpsService
 {
     // Métodos legacy (mantener por compatibilidad)
+    Task<IpsRevisionViewModel> ObtenerPlanillasAsync(long? trabajoId = null, CancellationToken cancellationToken = default);
     Task<IpsRevisionViewModel> ObtenerRevisionesAsync(long? trabajoId, CancellationToken cancellationToken = default);
     Task<bool> GuardarRevisionAsync(IpsRevisionUpdateModel model, CancellationToken cancellationToken = default);
     Task<IpsExportResult> ExportarRevisionesAsync(long? trabajoId, CancellationToken cancellationToken = default);

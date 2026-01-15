@@ -1,8 +1,8 @@
-@model MatrixNext.Core.DTOs.GD.PncDto
+﻿@model MatrixNext.Data.DTOs.GD.PncDto
 
 @{
-    var seguimiento = ViewBag.Seguimiento as IEnumerable<MatrixNext.Core.DTOs.GD.PncSeguimientoDto> ?? new List<MatrixNext.Core.DTOs.GD.PncSeguimientoDto>();
-    var log = ViewBag.Log as IEnumerable<MatrixNext.Core.DTOs.GD.PncLogDto> ?? new List<MatrixNext.Core.DTOs.GD.PncLogDto>();
+    var seguimiento = ViewBag.Seguimiento as IEnumerable<MatrixNext.Data.DTOs.GD.PncSeguimientoDto> ?? new List<MatrixNext.Data.DTOs.GD.PncSeguimientoDto>();
+    var log = ViewBag.Log as IEnumerable<MatrixNext.Data.DTOs.GD.PncLogDto> ?? new List<MatrixNext.Data.DTOs.GD.PncLogDto>();
 }
 
 <div class="modal fade" id="modalForm" tabindex="-1">
@@ -36,7 +36,7 @@
                                             <th>Causa</th>
                                             <th>Responsable</th>
                                             <th>Vencimiento</th>
-                                            <th>Días Restantes</th>
+                                            <th>DÃ­as Restantes</th>
                                             <th>Estado</th>
                                         </tr>
                                     </thead>
@@ -51,7 +51,7 @@
                                                 <td><small>@seg.FechaVencimiento?.ToString("dd/MM/yyyy")</small></td>
                                                 <td>
                                                     <span class="badge bg-@seg.DiasClass">
-                                                        @seg.DiasRestantes días
+                                                        @seg.DiasRestantes dÃ­as
                                                     </span>
                                                 </td>
                                                 <td>
@@ -139,3 +139,4 @@
         padding-bottom: 10px;
     }
 </style>
+

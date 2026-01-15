@@ -79,11 +79,19 @@ namespace MatrixNext.Data.Models.OP
         [Required(ErrorMessage = "El ID de la planilla es requerido")]
         public long PlanillaId { get; set; }
 
+        public long IdPlanilla
+        {
+            get => PlanillaId;
+            set => PlanillaId = value;
+        }
+
         [Required(ErrorMessage = "El monto autorizado es requerido")]
         [Range(0.01, double.MaxValue, ErrorMessage = "El monto debe ser mayor a 0")]
         [Display(Name = "Monto Autorizado")]
         [DataType(DataType.Currency)]
         public decimal MontoAutorizado { get; set; }
+
+        public long AprobadoPor { get; set; }
 
         [StringLength(500, ErrorMessage = "Las observaciones no pueden exceder 500 caracteres")]
         [Display(Name = "Observaciones")]

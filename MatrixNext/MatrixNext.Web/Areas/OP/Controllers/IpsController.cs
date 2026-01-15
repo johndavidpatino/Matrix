@@ -33,7 +33,7 @@ public class IpsController : Controller
     [HttpGet]
     public async Task<IActionResult> Index(long? trabajoId)
     {
-        var model = await _ipsService.ObtenerPlanillasAsync();
+        var model = await _ipsService.ObtenerPlanillasAsync(trabajoId);
         return View(model);
     }
 

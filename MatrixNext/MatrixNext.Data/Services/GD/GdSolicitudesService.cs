@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -50,7 +50,7 @@ namespace MatrixNext.Data.Services.GD
             try
             {
                 if (id <= 0)
-                    return (false, null, "ID de solicitud inválido");
+                    return (false, null, "ID de solicitud invÃ¡lido");
 
                 var solicitud = await _adapter.ObtenerSolicitudById(id);
                 if (solicitud == null)
@@ -74,7 +74,7 @@ namespace MatrixNext.Data.Services.GD
             {
                 // REGLA 12: Validaciones de entrada
                 if (dto == null)
-                    return (false, 0, "Datos de solicitud inválidos");
+                    return (false, 0, "Datos de solicitud invÃ¡lidos");
 
                 if (dto.TipoSolicitud <= 0)
                     return (false, 0, "Tipo de solicitud no especificado");
@@ -86,16 +86,16 @@ namespace MatrixNext.Data.Services.GD
                     return (false, 0, "Solicitante no especificado");
 
                 if (string.IsNullOrWhiteSpace(dto.Area))
-                    return (false, 0, "Área es requerida");
+                    return (false, 0, "Ãrea es requerida");
 
                 if (string.IsNullOrWhiteSpace(dto.Cargo))
                     return (false, 0, "Cargo es requerido");
 
                 if (string.IsNullOrWhiteSpace(dto.Razon))
-                    return (false, 0, "Razón de solicitud es requerida");
+                    return (false, 0, "RazÃ³n de solicitud es requerida");
 
                 if (string.IsNullOrWhiteSpace(dto.Descripcion))
-                    return (false, 0, "Descripción es requerida");
+                    return (false, 0, "DescripciÃ³n es requerida");
 
                 // Mapear InputDto a DTO
                 var documento = new SolicitudDocumentoDto
@@ -116,7 +116,7 @@ namespace MatrixNext.Data.Services.GD
                     Codigo = dto.Codigo ?? string.Empty
                 };
 
-                // REGLA 4: Ejecución exacta del SP
+                // REGLA 4: EjecuciÃ³n exacta del SP
                 var id = await _adapter.CrearSolicitud(documento);
                 
                 if (id <= 0)
@@ -142,7 +142,7 @@ namespace MatrixNext.Data.Services.GD
             {
                 // Validar entrada
                 if (idSolicitud <= 0)
-                    return (false, "ID de solicitud inválido");
+                    return (false, "ID de solicitud invÃ¡lido");
 
                 if (idRevisores == null || idRevisores.Count == 0)
                     return (false, "Debe seleccionar al menos un revisor");
@@ -155,7 +155,7 @@ namespace MatrixNext.Data.Services.GD
                 // Obtener ID documento controlado (asumiendo que coincide con IdDocumento)
                 var idDocumentoControlado = solicitud.IdDocumento;
 
-                // Crear revisión para cada revisor
+                // Crear revisiÃ³n para cada revisor
                 var exitosas = 0;
                 var errores = new List<string>();
 
@@ -199,7 +199,7 @@ namespace MatrixNext.Data.Services.GD
                     }
                     catch (Exception exEmail)
                     {
-                        _logger.LogError(exEmail, "Excepción al enviar notificaciones para solicitud {Id}", idSolicitud);
+                        _logger.LogError(exEmail, "ExcepciÃ³n al enviar notificaciones para solicitud {Id}", idSolicitud);
                     }
                 });
 
@@ -213,7 +213,7 @@ namespace MatrixNext.Data.Services.GD
         }
 
         /// <summary>
-        /// Obtiene datos para el formulario de creación (dropdowns, etc)
+        /// Obtiene datos para el formulario de creaciÃ³n (dropdowns, etc)
         /// </summary>
         public async Task<(bool success, SolicitudFormDataDto formData)> ObtenerFormData()
         {
@@ -255,3 +255,4 @@ namespace MatrixNext.Data.Services.GD
         }
     }
 }
+

@@ -13,6 +13,7 @@ namespace MatrixNext.Data.Services.PY.Interfaces
         /// Duplica un trabajo completo incluyendo especificaciones, muestras, hilo de cuotas e información.
         /// Orquesta las fases: DuplicarEspecificaciones → DuplicarMuestra → DuplicarHilo → CopiarDocumentos.
         /// </summary>
+        Task<TrabajoBasicoDto?> ObtenerAsync(long trabajoId);
         Task<DuplicarTrabajoResultDto> DuplicarTrabajoCompleto(DuplicarTrabajoInputDto input, string usuario);
 
         /// <summary>
