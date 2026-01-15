@@ -28,7 +28,7 @@ Fecha de corte: 2026-01-15 (Sprints 5, 6, 7, 8, 9 COMPLETADOS; **Sprint 10 PRÓX
 | GD_Documentos | Parcial (Fase 5 completa) | `MatrixNext/MatrixNext.Web/Areas/GD/Controllers` + `MatrixNext/MatrixNext.Web/Areas/GD/Views` |
 | EQ (EasyQuote) | En progreso | `MatrixNext/MatrixNext.Web/Areas/EQ/Controllers` + entrepiezas `MatrixNext/MatrixNext.Web/Areas/EQ/Views` |
 | Home | Completo (Sprint 9) | `MatrixNext/MatrixNext.Web/Controllers/HomeController.cs`, `MatrixNext/MatrixNext.Web/Services/Dashboard/DashboardService.cs`, `MatrixNext/MatrixNext.Web/Views/Home/Index.cshtml`, `dashboard.js`, `dashboard.css` |
-| RP_Reportes | En desarrollo | `MatrixNext/MatrixNext.Web/Areas/RP/Controllers/ReportesController.cs`, `MatrixNext/MatrixNext.Web/Areas/RP/Views/Reportes` |
+| RP_Reportes | Completo (Sprint 10) | `MatrixNext/MatrixNext.Web/Areas/RP/Controllers/ReportesController.cs` (334 LOC), ReportesService (436 LOC), ReportesAdapter (449 LOC), 3 Vistas |
 | OP_RO | En desarrollo | `MatrixNext/MatrixNext.Web/Areas/OP/Controllers/OP_ROController.cs`, `MatrixNext/MatrixNext.Web/Areas/OP/Views/OP_RO` |
 | OP_Trafico | En desarrollo | `MatrixNext/MatrixNext.Web/Areas/OP/Controllers/OP_TraficoController.cs`, `MatrixNext/MatrixNext.Web/Areas/OP/Views/OP_Trafico` |
 | PY_ControlCalidad | Pendiente | `WebMatrix/PY_ControlCalidad` |
@@ -85,7 +85,7 @@ Ultima revision: 2026-01-14
 | GD_Documentos | Media | Controladores y vistas live en `MatrixNext.Web/Areas/GD` (Fase 5) | 🟡 |
 | EQ (EasyQuote) | Crítica | **SPRINT 8 COMPLETADO**: Motor de cálculos (26 fórmulas), Seeds (600+ records), EasyCostService completo | 🟢 |
 | Home | Alta | **SPRINT 9 COMPLETADO**: HomeController + DashboardService (7/7 métodos) + dashboard.js + dashboard.css | 🟢 |
-| **RP_Reportes** | **🔴 Alta** | **ReportesController + vistas listos; foco en datos y exportes S10** | **🔴** |
+| **RP_Reportes** | **Alta** | **SPRINT 10 COMPLETADO**: ReportesController + ReportesService (436 LOC) + ReportesAdapter (12/12 métodos) + Excel export (paridad WebMatrix) | **🟢** |
 | **OP_RO + OP_Trafico** | **🟠 Media-Baja** | **OP_ROController / OP_TraficoController + vistas existen; cerrando integraciones S11** | **🔴** |
 | PY_ControlCalidad | Baja | Sprint 12+ | ⚪️ |
 | SG_Actas | Baja | Sprint 12+ | ⚪️ |
