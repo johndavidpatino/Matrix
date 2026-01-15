@@ -1,0 +1,211 @@
+@model IEnumerable<MatrixNext.Data.Models.OP.PlanillaAprobacionDto>
+
+@{
+    ViewData["Title"] = "Planillas Aprobadas";
+    var ventanaInicio = ViewBag.VentanaInicio as DateTime?;
+    var ventanaFin = ViewBag.VentanaFin as DateTime?;
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2>
+                <i class="fas fa-check-square"></i>
+                Planillas Aprobadas
+            </h2>
+            @if (ventanaInicio.HasValue && ventanaFin.HasValue)
+            {
+                <small class="text-muted">
+                    Ventana de nómina (corte 16-15): @ventanaInicio.Value.ToString("dd/MM/yyyy") - @ventanaFin.Value.ToString("dd/MM/yyyy")
+                </small>
+            }
+        </div>
+        <a href="@Url.Action("RechazadosIndex")" class="btn btn-outline-danger">
+            <i class="fas fa-ban"></i> Ver Rechazadas
+        </a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Success"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title mb-0">Listado de Planillas</h5>
+        </div>
+        <div class="card-body">
+            @if (!Model.Any())
+            {
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    No hay planillas aprobadas en este período.
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Fecha Ingreso</th>
+                                <th>Trabajo</th>
+                                <th>Monto</th>
+                                <th>Monto Planilla</th>
+                                <th>Monto Autorizado</th>
+                                <th>Estado</th>
+                                <th>Coordinador</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.FechaIngreso.ToString("dd/MM/yyyy")</td>
+                                    <td>
+                                        <strong>@item.NombreTrabajo</strong>
+                                        <small class="d-block text-muted">ID: @item.TrabajoId</small>
+                                    </td>
+                                    <td class="text-right">
+                                        @item.Monto.ToString("N2") @item.Moneda
+                                    </td>
+                                    <td class="text-right">
+                                        @item.MontoPlanilla.ToString("N2") @item.MonedaPlanilla
+                                    </td>
+                                    <td class="text-right">
+                                        <strong>@item.MontoAutorizado.ToString("N2")</strong>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-success">@item.Estado</span>
+                                    </td>
+                                    <td>@item.NombreCoordinador</td>
+                                    <td>
+                                        <button type="button" 
+                                                class="btn btn-sm btn-warning btn-rechazar"
+                                                data-planilla-id="@item.Id"
+                                                data-nombre-trabajo="@item.NombreTrabajo"
+                                                title="Cambiar a rechazada">
+                                            <i class="fas fa-times"></i> Rechazar
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Modal para rechazar planilla -->
+<div class="modal fade" id="modalRechazar" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="formRechazar" method="post" asp-action="Rechazar">
+                @Html.AntiForgeryToken()
+                
+                <div class="modal-header">
+                    <h5 class="modal-title">Rechazar Planilla</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                
+                <div class="modal-body">
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong id="trabajoNombre"></strong>
+                    </div>
+
+                    <input type="hidden" name="PlanillaId" id="planillaId" />
+                    
+                    <div class="form-group">
+                        <label for="motivo">Motivo del Rechazo *</label>
+                        <textarea class="form-control" 
+                                  name="Motivo" 
+                                  id="motivo" 
+                                  rows="4" 
+                                  required 
+                                  maxlength="500"
+                                  placeholder="Describa el motivo del rechazo..."></textarea>
+                        <small class="form-text text-muted">Máximo 500 caracteres</small>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-check"></i> Rechazar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('.btn-rechazar').on('click', function() {
+                var planillaId = $(this).data('planilla-id');
+                var nombreTrabajo = $(this).data('nombre-trabajo');
+                
+                $('#planillaId').val(planillaId);
+                $('#trabajoNombre').text(nombreTrabajo);
+                $('#motivo').val('');
+                
+                $('#modalRechazar').modal('show');
+            });
+
+            $('#formRechazar').on('submit', function(e) {
+                e.preventDefault();
+                
+                var form = $(this);
+                $.ajax({
+                    url: form.attr('action'),
+                    type: form.attr('method'),
+                    data: form.serialize(),
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            $('#modalRechazar').modal('hide');
+                            
+                            $('<div class="alert alert-success alert-dismissible fade show" role="alert">' +
+                              response.message +
+                              '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                              '</div>').prependTo('.container-fluid').delay(5000).fadeOut();
+                            
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1500);
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function() {
+                        alert('Error al procesar la solicitud. Por favor intente nuevamente.');
+                    }
+                });
+            });
+        });
+    </script>
+}

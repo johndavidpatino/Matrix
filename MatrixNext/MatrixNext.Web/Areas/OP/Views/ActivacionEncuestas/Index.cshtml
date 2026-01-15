@@ -1,0 +1,194 @@
+@model IEnumerable<MatrixNext.Data.Models.OP.EncuestaAnuladaDto>
+
+@{
+    ViewData["Title"] = "Activación de Encuestas";
+    var trabajoId = ViewBag.TrabajoId as long?;
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>
+            <i class="fas fa-check-circle"></i>
+            Activación de Encuestas
+        </h2>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Success"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title mb-0">Encuestas Anuladas</h5>
+        </div>
+        <div class="card-body">
+            @if (!trabajoId.HasValue)
+            {
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    Seleccione un trabajo para ver las encuestas anuladas.
+                </div>
+            }
+            else if (!Model.Any())
+            {
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    No hay encuestas anuladas para este trabajo.
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive" data-grid-url="@Url.Action("Index", new { trabajoId = trabajoId })">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Número de Encuesta</th>
+                                <th>Fecha Anulación</th>
+                                <th>Observación</th>
+                                <th>Usuario</th>
+                                <th>Unidad</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.NumeroEncuesta</td>
+                                    <td>@item.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td>@item.Observacion</td>
+                                    <td>@item.NombreUsuario</td>
+                                    <td>@item.NombreUnidad</td>
+                                    <td>
+                                        <button type="button" 
+                                                class="btn btn-sm btn-success btn-activar"
+                                                data-trabajo-id="@item.TrabajoId"
+                                                data-numero-encuesta="@item.NumeroEncuesta"
+                                                title="Activar encuesta">
+                                            <i class="fas fa-check"></i> Activar
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Modal para activación -->
+<div class="modal fade" id="modalActivacion" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="formActivacion" method="post" asp-action="Activar">
+                <div class="modal-header">
+                    <h5 class="modal-title">Activar Encuesta</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="TrabajoId" id="activarTrabajoId" />
+                    <input type="hidden" name="NumeroEncuesta" id="activarNumeroEncuesta" />
+                    
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        ¿Está seguro de activar esta encuesta? Esta acción eliminará el registro de anulación.
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="activarObservacion">Observación</label>
+                        <textarea class="form-control" 
+                                  name="Observacion" 
+                                  id="activarObservacion" 
+                                  rows="3" 
+                                  required
+                                  maxlength="500"></textarea>
+                        <small class="form-text text-muted">Ingrese el motivo de la activación</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-check"></i> Activar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Abrir modal de activación
+            $('.btn-activar').on('click', function() {
+                var trabajoId = $(this).data('trabajo-id');
+                var numeroEncuesta = $(this).data('numero-encuesta');
+                
+                $('#activarTrabajoId').val(trabajoId);
+                $('#activarNumeroEncuesta').val(numeroEncuesta);
+                $('#activarObservacion').val('');
+                
+                $('#modalActivacion').modal('show');
+            });
+
+            // Submit del formulario de activación
+            $('#formActivacion').on('submit', function(e) {
+                e.preventDefault();
+                
+                var form = $(this);
+                var url = form.attr('action');
+                var data = form.serialize();
+                
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: data,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            $('#modalActivacion').modal('hide');
+                            
+                            // Mostrar mensaje de éxito
+                            $('<div class="alert alert-success alert-dismissible fade show" role="alert">' +
+                              response.message +
+                              '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                              '</div>').prependTo('.container-fluid').delay(5000).fadeOut();
+                            
+                            // Refrescar grid
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000);
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function() {
+                        alert('Error al activar la encuesta. Por favor intente nuevamente.');
+                    }
+                });
+            });
+        });
+    </script>
+}

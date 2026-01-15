@@ -1,0 +1,151 @@
+@model MatrixNext.Data.Models.OP.IpsRevisionCreateUpdateDto
+
+@{
+    var isNew = Model.Id == 0;
+    var title = isNew ? "Nueva Revisión IPS" : "Editar Revisión IPS";
+    var action = isNew ? "CrearRevision" : "ActualizarRevision";
+}
+
+<div class="modal-header bg-primary text-white">
+    <h5 class="modal-title">
+        <i class="fas fa-@(isNew ? "plus" : "edit")"></i>
+        @title
+    </h5>
+    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Cerrar">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<form asp-action="@action" method="post" id="frmRevisionIps" class="ajax-form">
+    <input type="hidden" asp-for="TrabajoId" />
+    @if (!isNew)
+    {
+        <input type="hidden" asp-for="Id" />
+    }
+
+    <div class="modal-body">
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert">
+            <ul class="mb-0">
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <li>@error.ErrorMessage</li>
+                }
+            </ul>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Pregunta" class="form-label">
+                <span class="text-danger">*</span>
+                Pregunta
+            </label>
+            <textarea asp-for="Pregunta" 
+                      class="form-control @(ViewData.ModelState.ContainsKey("Pregunta") && ViewData.ModelState["Pregunta"].Errors.Any() ? "is-invalid" : "")" 
+                      rows="3" 
+                      placeholder="Ingrese la pregunta de IPS"
+                      required>
+            </textarea>
+            <span asp-validation-for="Pregunta" class="text-danger small"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Observacion" class="form-label">Observación</label>
+            <textarea asp-for="Observacion" 
+                      class="form-control" 
+                      rows="2" 
+                      placeholder="Ingrese observación (opcional)">
+            </textarea>
+            <span asp-validation-for="Observacion" class="text-danger small"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="DescripcionObservacion" class="form-label">Descripción de Observación</label>
+            <textarea asp-for="DescripcionObservacion" 
+                      class="form-control" 
+                      rows="2" 
+                      placeholder="Ingrese descripción de observación (opcional)">
+            </textarea>
+            <span asp-validation-for="DescripcionObservacion" class="text-danger small"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="RespuestaProgramador" class="form-label">Respuesta del Programador</label>
+            <textarea asp-for="RespuestaProgramador" 
+                      class="form-control" 
+                      rows="2" 
+                      placeholder="Ingrese respuesta del programador (opcional)">
+            </textarea>
+            <span asp-validation-for="RespuestaProgramador" class="text-danger small"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="TipoTarea" class="form-label">Tipo de Tarea</label>
+            <input asp-for="TipoTarea" 
+                   type="text" 
+                   class="form-control" 
+                   placeholder="Ingrese tipo de tarea (opcional)" />
+            <span asp-validation-for="TipoTarea" class="text-danger small"></span>
+        </div>
+
+        <div class="alert alert-info" role="alert">
+            <i class="fas fa-info-circle"></i>
+            <strong>Nota:</strong> Los campos marcados con <span class="text-danger">*</span> son obligatorios.
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            <i class="fas fa-times"></i>
+            Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i>
+            @(isNew ? "Crear" : "Actualizar")
+        </button>
+    </div>
+</form>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Configurar submit del formulario AJAX
+            $('#frmRevisionIps').on('submit', function (e) {
+                e.preventDefault();
+                
+                var form = $(this);
+                var url = form.attr('action');
+                var formData = new FormData(this);
+                
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            // Mostrar toast de éxito
+                            showToast(response.message, 'success');
+                            
+                            // Cerrar modal
+                            $('#frmRevisionIps').closest('.modal').modal('hide');
+                            
+                            // Refrescar grid
+                            setTimeout(function () {
+                                location.reload();
+                            }, 500);
+                        } else {
+                            showToast(response.message, 'error');
+                        }
+                    },
+                    error: function (xhr) {
+                        var message = xhr.statusText || 'Error al procesar la solicitud';
+                        showToast(message, 'error');
+                    }
+                });
+            });
+        });
+    </script>
+}

@@ -1,0 +1,150 @@
+@model IEnumerable<MatrixNext.Data.Models.OP.EncuestaAnuladaDto>
+
+@{
+    ViewData["Title"] = "Anulación de Encuestas";
+    var trabajoId = ViewBag.TrabajoId as long?;
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>
+            <i class="fas fa-ban"></i>
+            Anulación de Encuestas
+        </h2>
+        @if (trabajoId.HasValue)
+        {
+            <button class="btn btn-primary" 
+                    data-ajax-modal 
+                    data-url="@Url.Action("Create", new { trabajoId = trabajoId })">
+                <i class="fas fa-plus"></i> Anular Encuesta
+            </button>
+        }
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Success"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title mb-0">Encuestas Anuladas</h5>
+        </div>
+        <div class="card-body">
+            @if (!trabajoId.HasValue)
+            {
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    Seleccione un trabajo para ver y gestionar las encuestas anuladas.
+                </div>
+            }
+            else if (!Model.Any())
+            {
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    No hay encuestas anuladas para este trabajo.
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive" data-grid-url="@Url.Action("Index", new { trabajoId = trabajoId })">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Número de Encuesta</th>
+                                <th>Fecha Anulación</th>
+                                <th>Observación</th>
+                                <th>Usuario</th>
+                                <th>Unidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.NumeroEncuesta</td>
+                                    <td>@item.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td>@item.Observacion</td>
+                                    <td>@item.NombreUsuario</td>
+                                    <td>@item.NombreUnidad</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Container para modales AJAX -->
+<div id="modalContainer"></div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Abrir modal de creación via AJAX
+            $('[data-ajax-modal]').on('click', function(e) {
+                e.preventDefault();
+                var url = $(this).data('url');
+                
+                $.get(url, function(html) {
+                    $('#modalContainer').html(html);
+                    $('#modalForm').modal('show');
+                });
+            });
+
+            // Submit de formulario via AJAX
+            $(document).on('submit', '[data-ajax-form]', function(e) {
+                e.preventDefault();
+                var form = $(this);
+                
+                $.ajax({
+                    url: form.attr('action'),
+                    type: form.attr('method'),
+                    data: form.serialize(),
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // Mostrar mensaje de éxito
+                            $('<div class="alert alert-success alert-dismissible fade show" role="alert">' +
+                              response.message +
+                              '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                              '</div>').prependTo('.container-fluid').delay(5000).fadeOut();
+                            
+                            // Cerrar modal
+                            $('#modalForm').modal('hide');
+                            
+                            // Refrescar grid
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000);
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function() {
+                        alert('Error al procesar la solicitud. Por favor intente nuevamente.');
+                    }
+                });
+            });
+        });
+    </script>
+}

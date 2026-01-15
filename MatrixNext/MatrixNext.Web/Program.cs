@@ -215,6 +215,37 @@ builder.Services.AddScoped<IOpTraficoDataAdapter, OpTraficoDataAdapter>();
 builder.Services.AddScoped<IOpTraficoService, OpTraficoService>();
 builder.Services.AddScoped<IOpPermisosService, OpPermisosService>();
 builder.Services.AddScoped<IOpEncuestasService, OpEncuestasService>();
+
+// ===== SPRINT 12.1: OP Encuestas (Activación/Anulación) =====
+// Ref: BACKLOG_QA_MODULOS_PENDIENTES.md § Sprint 12.1.1
+builder.Services.AddScoped<MatrixNext.Data.Adapters.OP.IEncuestasAdapter, MatrixNext.Data.Adapters.OP.EncuestasAdapter>();
+builder.Services.AddScoped<MatrixNext.Data.Services.OP.IEncuestasService, MatrixNext.Data.Services.OP.EncuestasService>();
+
+// ===== SPRINT 12.1.2: OP Planillas Aprobadas/Rechazadas =====
+// Ref: BACKLOG_QA_MODULOS_PENDIENTES.md § Sprint 12.1.2
+builder.Services.AddScoped<MatrixNext.Data.Adapters.OP.IPlanillasAprobacionAdapter, MatrixNext.Data.Adapters.OP.PlanillasAprobacionAdapter>();
+builder.Services.AddScoped<MatrixNext.Data.Services.OP.IPlanillasAprobacionService, MatrixNext.Data.Services.OP.PlanillasAprobacionService>();
+
+// ===== SPRINT 12.1.3: OP IPS Detallado por Tarea =====
+// Ref: BACKLOG_QA_MODULOS_PENDIENTES.md § Sprint 12.1.3
+builder.Services.AddScoped<MatrixNext.Data.Adapters.OP.IIpsRevisionAdapter, MatrixNext.Data.Adapters.OP.IpsRevisionAdapter>();
+builder.Services.AddScoped<MatrixNext.Data.Services.OP.IIpsRevisionService, MatrixNext.Data.Services.OP.IpsRevisionService>();
+
+// ===== SPRINT 12.1.4: OP Dashboard HomeRecoleccion =====
+// Ref: BACKLOG_QA_MODULOS_PENDIENTES.md § Sprint 12.1.4
+builder.Services.AddScoped<MatrixNext.Data.Adapters.OP.IHomeRecoleccionDashboardAdapter, MatrixNext.Data.Adapters.OP.HomeRecoleccionDashboardAdapter>();
+builder.Services.AddScoped<MatrixNext.Data.Services.OP.IHomeRecoleccionDashboardService, MatrixNext.Data.Services.OP.HomeRecoleccionDashboardService>();
+
+// ===== SPRINT 12.1.5: OP Correos en FichaCuantitativa =====
+// Ref: BACKLOG_QA_MODULOS_PENDIENTES.md § Sprint 12.1.5
+builder.Services.AddScoped<MatrixNext.Data.Adapters.OP.INotificacionesOpAdapter, MatrixNext.Data.Adapters.OP.NotificacionesOpAdapter>();
+builder.Services.AddScoped<MatrixNext.Data.Services.OP.IOpNotificacionService, MatrixNext.Data.Services.OP.OpNotificacionService>();
+
+// ===== SPRINT 12.1.6: OP Cierre de Trabajo con GD =====
+// Ref: BACKLOG_QA_MODULOS_PENDIENTES.md § Sprint 12.1.6
+builder.Services.AddScoped<MatrixNext.Data.Adapters.OP.ICierreTrabajoAdapter, MatrixNext.Data.Adapters.OP.CierreTrabajoAdapter>();
+builder.Services.AddScoped<MatrixNext.Data.Services.OP.ICierreTrabajoService, MatrixNext.Data.Services.OP.CierreTrabajoService>();
+
 builder.Services.AddScoped<IOpCargaService, OpCargaService>();
 builder.Services.AddScoped<IOpPlanillasService, OpPlanillasService>();
 builder.Services.AddScoped<IOpProductividadService, OpProductividadService>();

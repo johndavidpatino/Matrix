@@ -1,0 +1,59 @@
+@model MatrixNext.Data.Models.OP.EncuestaAnuladaDto
+
+<div class="modal fade" id="modalForm" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form asp-action="Create" method="post" data-ajax-form>
+                @Html.AntiForgeryToken()
+                
+                <div class="modal-header">
+                    <h5 class="modal-title">Anular Encuesta</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                
+                <div class="modal-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    
+                    <input type="hidden" asp-for="TrabajoId" />
+                    <input type="hidden" asp-for="Fecha" />
+                    
+                    <div class="form-group">
+                        <label asp-for="NumeroEncuesta"></label>
+                        <input asp-for="NumeroEncuesta" 
+                               class="form-control" 
+                               type="number" 
+                               required 
+                               min="1" />
+                        <span asp-validation-for="NumeroEncuesta" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label asp-for="Observacion"></label>
+                        <textarea asp-for="Observacion" 
+                                  class="form-control" 
+                                  rows="4" 
+                                  required 
+                                  maxlength="500"></textarea>
+                        <span asp-validation-for="Observacion" class="text-danger"></span>
+                        <small class="form-text text-muted">
+                            Describa el motivo de la anulación de la encuesta
+                        </small>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
