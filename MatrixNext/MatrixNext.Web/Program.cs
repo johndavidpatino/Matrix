@@ -256,6 +256,16 @@ builder.Services.AddScoped<MatrixNext.Data.Services.OP.ICargaMasivaService, Matr
 builder.Services.AddScoped<MatrixNext.Data.Adapters.OP.IProductividadAdapter, MatrixNext.Data.Adapters.OP.ProductividadAdapter>();
 builder.Services.AddScoped<MatrixNext.Data.Services.OP.IProductividadConsolidadoService, MatrixNext.Data.Services.OP.ProductividadConsolidadoService>();
 
+// ===== SPRINT 12.1.9: OP Tráfico de Encuestas Completo =====
+// Ref: BACKLOG_QA_MODULOS_PENDIENTES.md § Sprint 12.1.9
+builder.Services.AddScoped<MatrixNext.Data.Adapters.OP.ITraficoAdapter, MatrixNext.Data.Adapters.OP.TraficoAdapter>();
+builder.Services.AddScoped<MatrixNext.Data.Services.OP.ITraficoService, MatrixNext.Data.Services.OP.TraficoService>();
+
+// ===== SPRINT 12.1.10: OP Supervisión Telefónica =====
+// Ref: BACKLOG_QA_MODULOS_PENDIENTES.md § Sprint 12.1.10
+builder.Services.AddScoped<MatrixNext.Data.Adapters.OP.ISupervisionAdapter, MatrixNext.Data.Adapters.OP.SupervisionAdapter>();
+builder.Services.AddScoped<MatrixNext.Data.Services.OP.ISupervisionService, MatrixNext.Data.Services.OP.SupervisionService>();
+
 builder.Services.AddScoped<IOpCargaService, OpCargaService>();
 builder.Services.AddScoped<IOpPlanillasService, OpPlanillasService>();
 builder.Services.AddScoped<IOpProductividadService, OpProductividadService>();
