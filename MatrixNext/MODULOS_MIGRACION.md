@@ -82,12 +82,27 @@
 - **Próximo paso**: Decisión stakeholder sobre enfoque (1:1 vs optimizado vs híbrido)
 
 #### 5. **OP_Cualitativo** (múltiples)
+#### 5. **OP_Cualitativo** (múltiples) ✅ SPRINT 6 COMPLETADO
 - **Carpeta**: `WebMatrix/OP_Cualitativo/`
 - **Contexto**: `OP_Entities` (CoreProject)
 - **Dependencias**: Altas (entrevistas, moderadores, sesiones)
-- **Nota 2026-01-09**: Validación de tablas reales y limpieza de warnings completadas; pendiente continuar migración funcional completa.
-- **Status**: MVP de componentes cualitativos ya en `Areas/OP` (controllers `Cualitativo*`, `Encuestas`, `Planillas`) y se está iterando en Sprint 6 para filtros/reportes.
-- **Evidencia MatrixNext**: `MatrixNext/MatrixNext.Web/Areas/OP/Controllers/CualitativoPlanillasController.cs`, `.../Controllers/CualitativoFiltrosController.cs`, `MatrixNext/MatrixNext.Web/Areas/OP/Views/CualitativoPlanillas`.
+- **Status Actual**: ✅ **SPRINT 6 COMPLETADO (100%)** - Sprint 6 entregó 6 fases:
+  * Fase 1: Transcription (234 LOC)
+  * Fase 2: Scheduling (456 LOC)  
+  * Fase 3: Sample Management (312 LOC)
+  * Fase 4: Calendar/Gantt (518 LOC)
+  * Fase 5: Email/Notifications (703 LOC - IOpNotificacionService, OpNotificacionService, OpReminderBackgroundService)
+  * Fase 6: Bulk Import (1,074 LOC - Excel/CSV validation, template generation, import history tracking)
+- **LOC Total Sprint 6**: 3,297 líneas en 12 commits
+- **Componentes Clave Entregados**:
+  * `IOpNotificacionService` (39 LOC) - Interface con 6 métodos de notificación
+  * `OpNotificacionService` (572 LOC) - Implementación con 6 templates HTML inline + Dapper queries
+  * `OpReminderBackgroundService` (103 LOC) - Background service ejecutando cada 6 horas
+  * `IOpBulkImportService` (34 LOC) - Interface para importación bulk
+  * `OpBulkImportService` (365 LOC) - Validación Excel/CSV, Dapper insert, historial
+  * Controllers: `CualitativoProgramacionController` (notificaciones), `CualitativoMuestraController` (bulk import)
+  * Views: `_BulkImportModal.cshtml` (169 LOC), `_ImportHistorial.cshtml` (51 LOC), Index.cshtml actualizado
+- **Evidencia MatrixNext**: `MatrixNext/MatrixNext.Web/Areas/OP/Controllers/`, `MatrixNext/MatrixNext.Web/Services/OP/`, `MatrixNext/MatrixNext.Web/Areas/OP/Views/CualitativoMuestra/`
 
 #### 6. **FI_AdministrativoFinanciero + CC_FinzOpe** (28 págs FI + infraestructura CC)
 - **Carpeta**: `WebMatrix/FI_AdministrativoFinanciero/` + `CoreProject/CC_FinzOpe`
@@ -371,6 +386,16 @@ Módulo WebMatrix (ej: US_Usuarios/)
 | 5 | 10-11 | OP_Cualitativo | Operaciones cualitativos |
 | 6 | 12-15 | FI_Administrativo | 21 páginas finanzas |
 | 7+ | 16+ | Módulos restantes | Por prioridad operativa |
+| Fase | Semana | Módulo | Entregables | Status |
+|------|--------|--------|-------------|--------|
+| 0 | 1 | Login | LoginController, autenticación | ✅ |
+| 1 | 2-3 | US_Usuarios | 14 páginas migradas, adaptador CoreProject | ✅ |
+| 2 | 4 | Home | Dashboard funcional | ✅ |
+| 3 | 5-7 | PY_Proyectos | 18 páginas, gestión completa | ✅ |
+| 4 | 8-9 | OP_Cuantitativo | Operaciones cuantitativos | ✅ |
+| **5** | **10-11** | **OP_Cualitativo (Sprint 6)** | **6 fases: Transcription, Scheduling, Sampling, Calendar, Email, Bulk Import** | **✅** |
+| 6 | 12-15 | FI_Administrativo | 21 páginas finanzas | ⚪️ |
+| 7+ | 16+ | Módulos restantes | Por prioridad operativa | ⚪️ |
 
 ---
 

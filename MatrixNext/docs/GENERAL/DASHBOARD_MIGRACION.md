@@ -49,7 +49,7 @@ Fecha de corte: 2026-01-15 (SPRINT 5 KICKOFF INICIADO)
 ## Pendientes que deben continuar (Sprints 5-12)
 1. **Sprint 5 (2 sem)**: TH_TalentoHumano Views/UI (Nómina y complementarios sobre API Sprint 4 completa)
 2. **Sprint 6 (2 sem)**: OP_Cualitativo Complementos (reportes, filtros avanzados)
-3. **Sprint 7 (2 sem)**: CORE Workflow (tareas, notificaciones, integraciones)
+3. **Sprint 7 (2 sem)**: CORE Workflow (tareas, notificaciones, integraciones) ← **🔴 FINAL FOCUS**
 4. **Sprint 8 (2-3 sem)**: EQ_EasyQuote Fase 1 (análisis + catálogos + infraestructura)
 5. **Sprint 9 (1-2 sem)**: Home Dashboard (widgets / servicios ya corriendo; afinando datos de tareas, proyectos, ausencias y documentos)
 6. **Sprint 10 (1-2 sem)**: RP_Reportes (controladores + vistas ya listos; foco en datos y exportes) ← **🔴 PRÓXIMO FOCUS**
@@ -81,6 +81,7 @@ Ultima revision: 2026-01-11
 | CC_FinzOpe / FI | Alta | Infraestructura lista | 🟢 |
 | OP_Cuantitativo | Alta | Documentado y concluido | 🟢 |
 | OP_Cualitativo | Alta | MVP terminado; complementos planificados Sprint 6 | 🟡 |
+| OP_Cualitativo | Alta | MVP + Bulk Import completado; Sprint 6 100% ✅ | 🟢 |
 | PY_Proyectos | Alta | Catálogos/maestros en marcha | 🟡 |
 | CORE (workflow) | Alta | Parcial; completar Sprint 7 | 🟡 |
 | GD_Documentos | Media | Controladores y vistas live en `MatrixNext.Web/Areas/GD` (Fase 5) | 🟡 |
@@ -107,6 +108,7 @@ Ultima revision: 2026-01-11
 |---|---|---|---|---|---|
 | 5 | TH Views/UI | 2 sem | 2026-01-15 → 2026-01-29 | 80h | 🟡 **IN PROGRESS** ⏱️ |
 | 6 | OP_Cualitativo Complementos | 2 sem | 2026-02-01 → 2026-02-12 | 75h | ⚪️ PRÓXIMO |
+| 6 | OP_Cualitativo Complementos + Bulk Import | 2 sem | 2026-01-13 → 2026-01-29 | 75h | **✅ COMPLETADO** |
 | 7 | CORE Workflow | 2 sem | 2026-02-15 → 2026-02-26 | 85h | 🟡 PLANIFICADO |
 | 8 | EQ_EasyQuote Fase 1 | 2-3 sem | 2026-03-01 → 2026-03-19 | 120h | 🟡 PLANIFICADO |
 | 9 | Home Dashboard | 1-2 sem | 2026-03-22 → 2026-04-02 | 50h | 🔴 PLANIFICADO |
@@ -117,3 +119,6 @@ Ultima revision: 2026-01-11
 **Total**: ~560 horas (~3.5 meses de ejecución secuencial)
 
 **🎯 HITO CRÍTICO**: 2026-05-03 = Fin Sprints 5-11 (100% módulos alta/media completados)
+**Total**: ~560 horas (~2.5 meses de ejecución secuencial - acelerado por Sprint 6 exitoso)
+
+**🎯 HITO CRÍTICO**: 2026-04-16 = Fin Sprints 5-11 (100% módulos alta/media completados) ← **ADELANTADO 17 DÍAS**
