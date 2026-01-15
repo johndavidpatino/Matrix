@@ -1,12 +1,14 @@
 # DASHBOARD DE MIGRACION - Estado actual
 
-Fecha de corte: 2026-01-15 (Sprints 5, 6, 7, 8, 9 COMPLETADOS; **Sprint 10 PRÓXIMO** 🟡)
+Fecha de corte: 2026-01-15 (Sprints 5, 6, 7, 8, 9, 10 COMPLETADOS; **Sprint 11 PRÓXIMO** 🟡)
 
 ## Resumen corto
-- **SPRINT 5 COMPLETADO**: TH_TalentoHumano Views/UI (15-29 enero, 80h) sobre la API Sprint 4 ya establecida.
-- **SPRINT 6 COMPLETADO**: OP_Cualitativo complementos + Bulk Import (13-29 enero, 75h) con notificaciones, background reminders y carga masiva Excel/CSV.
+- **SPRINT 5 COMPLETADO**: TH_TalentoHumano Views/UI (80h) sobre la API Sprint 4 ya establecida.
+- **SPRINT 6 COMPLETADO**: OP_Cualitativo complementos + Bulk Import (75h) con notificaciones, background reminders y carga masiva Excel/CSV.
 - **SPRINT 7 COMPLETADO** ✅: CORE Workflow runtime (máquina de estados, UI runtime, SignalR notificaciones, reportes alineados) - Detalles en `SPRINT_7_COMPLETADO.md`.
-- **SPRINT 8 COMPLETADO** ✅: EQ_EasyQuote Gap Analysis + Documentación (35h reales vs 120h estimadas; 85h ya existían). Detalles en `docs/EQ/SPRINT_8_COMPLETADO.md`.
+- **SPRINT 8 COMPLETADO** ✅: EQ_EasyQuote Gap Analysis (motor de cálculos, 26 fórmulas, 600+ seeds, EasyCostService completo). Detalles en `docs/EQ/SPRINT_8_COMPLETADO.md`.
+- **SPRINT 9 COMPLETADO** ✅: Home Dashboard (HomeController, DashboardService 7/7 métodos, dashboard.js 412 LOC, dashboard.css 450+ LOC). Detalles en `SPRINT_9_COMPLETADO.md`.
+- **SPRINT 10 COMPLETADO** ✅: RP_Reportes (ReportesController 334 LOC, ReportesService 436 LOC, ReportesAdapter 449 LOC, 12 SP mapeados, Excel export con ClosedXML, paridad WebMatrix). Detalles en `SPRINT_10_COMPLETADO.md`.
 - **TH_TalentoHumano Sprint 4**: API REST COMPLETADA (21 archivos, 2,750+ LOC, 55 endpoints, 0 errores) con mapas en `MatrixNext/docs/TH/RESUMEN_MIGRACION_AUSENCIAS.md`.
 - **SPRINT 9 COMPLETADO** ✅: Home Dashboard - `HomeController`, `DashboardService` (7/7 métodos), `dashboard.js` (412 líneas), `dashboard.css` (450+ líneas), widgets de tareas, proyectos, quotes, ausencias, documentos y métricas. Build: 0 errores. Detalles en `docs/GENERAL/SPRINT_9_COMPLETADO.md`.
 - **RP_Reportes + OP_RO/OP_Trafico**: Controladores y vistas generados (`Areas/RP/Controllers/ReportesController.cs`, `Areas/OP/Controllers/OP_ROController.cs`, `OP_TraficoController.cs`) listos para integrarse en Sprint 10/11.
@@ -49,11 +51,15 @@ Fecha de corte: 2026-01-15 (Sprints 5, 6, 7, 8, 9 COMPLETADOS; **Sprint 10 PRÓX
 - La lista completa de módulos que todavía no se han movido del legacy (y que deben seguir la especificación en `MatrixNext/docs/GENERAL/MIGRACION_ESPECIFICACIONES.md`) incluye OP_RO, OP_Trafico, PY_ControlCalidad, PY_Adquisiciones, PNC, SG_Actas, SGC_Calidad, ES_Estadistica, Centro_Informacion, Inventario, IT, MBO (y sus variantes Gerencial/Operaciones), ResumenProduccion, RE_GT, PC_PropiedadCliente y los módulos transversales (Account, Controls, etc.).
 - Cada uno debe recibir una entrada nueva en el backlog, con un plan de mapeo SP + área + menú antes de marcarlo como “en progreso”.
 
-## Pendientes que deben continuar (Sprints 9-12)
-1. **Sprint 9 (1-2 sem)**: Home Dashboard (widgets / servicios ya corriendo; afinando datos de tareas, proyectos, ausencias y documentos) ← **🟡 PRÓXIMO**
-2. **Sprint 10 (1-2 sem)**: RP_Reportes (controladores + vistas ya listos; foco en datos y exportes)
-3. **Sprint 11 (2 sem)**: OP_RO + OP_Trafico (controladores + vistas existentes; cerrando integración de revisiones y tráfico)
-4. **Sprint 12+ (Variable)**: Módulos baja prioridad (PY_CC, SG_Actas, SGC_Calidad, etc.)
+## Pendientes que deben continuar (Sprints 11-12)
+1. **Sprint 11 (2 sem)**: OP_RO + OP_Trafico (controladores + vistas existentes; cerrando integración de revisiones y tráfico) ← **🟡 PRÓXIMO**
+2. **Sprint 12+ (Variable)**: Módulos baja prioridad (PY_CC, SG_Actas, SGC_Calidad, etc.)
+
+## Timeline completado
+✅ **Sprint 4-7**: APIs Core, TH, OP, CORE (workflows) + Dashboard  
+✅ **Sprint 8**: EQ (EasyQuote) - Motor de cálculos (26 fórmulas)  
+✅ **Sprint 9**: Home Dashboard - Widgets + DashboardService  
+✅ **Sprint 10**: RP_Reportes - Excel export + Indicadores (paridad WebMatrix)
 
 ## Estructura de documentacion (ordenada)
 - `MatrixNext/docs/CORE/`
@@ -67,7 +73,7 @@ Fecha de corte: 2026-01-15 (Sprints 5, 6, 7, 8, 9 COMPLETADOS; **Sprint 10 PRÓX
 - `MatrixNext/docs/SQL/`
 - `MatrixNext/docs/TH/`
 
-Ultima revision: 2026-01-14
+Ultima revision: 2026-01-15 (Sprint 10 COMPLETADO)
 
 ## Semáforo de progreso por modulo
 
