@@ -35,8 +35,8 @@ using MatrixNext.Data.Services.OP_RO;
 using MatrixNext.Data.Adapters.OP_Trafico;
 using MatrixNext.Data.Services.OP_Trafico;
 using MatrixNext.Data.Services.Authorization;
-using MatrixNext.Infrastructure.Adapters.SGC;
-using MatrixNext.Core.Services.SGC;
+using MatrixNext.Data.Adapters.SGC;
+using MatrixNext.Data.Services.SGC;
 using System.Data;
 using Microsoft.Data.SqlClient;
 

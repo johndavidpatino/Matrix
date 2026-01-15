@@ -1,6 +1,6 @@
-using MatrixNext.Infrastructure.DTOs.SGC;
+using MatrixNext.Data.DTOs.SGC;
 
-namespace MatrixNext.Core.Services.SGC
+namespace MatrixNext.Data.Services.SGC
 {
     /// <summary>
     /// Interface de servicio para Acciones de Mejora

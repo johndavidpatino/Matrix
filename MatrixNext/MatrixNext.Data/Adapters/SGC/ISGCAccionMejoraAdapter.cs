@@ -1,6 +1,6 @@
-using MatrixNext.Infrastructure.DTOs.SGC;
+using MatrixNext.Data.DTOs.SGC;
 
-namespace MatrixNext.Infrastructure.Adapters.SGC
+namespace MatrixNext.Data.Adapters.SGC
 {
     /// <summary>
     /// Interface para acceso a datos de Acciones de Mejora
@@ -30,33 +30,5 @@ namespace MatrixNext.Infrastructure.Adapters.SGC
         Task<List<SGCProcesoDto>> GetProcesosAsync();
         Task<List<SGCFuenteNoConformidadDto>> GetFuentesNoConformidadAsync();
         Task<List<SGCFuenteDto>> GetFuentesByTypeAsync(int fuenteNoConformidadId);
-    }
-
-    /// <summary>
-    /// DTO para Proceso
-    /// </summary>
-    public class SGCProcesoDto
-    {
-        public int ProcesoId { get; set; }
-        public string NombreProceso { get; set; }
-    }
-
-    /// <summary>
-    /// DTO para Fuente de No Conformidad
-    /// </summary>
-    public class SGCFuenteNoConformidadDto
-    {
-        public int FuenteNoConformidadId { get; set; }
-        public string NombreFuente { get; set; }
-    }
-
-    /// <summary>
-    /// DTO para Fuente específica
-    /// </summary>
-    public class SGCFuenteDto
-    {
-        public int FuenteId { get; set; }
-        public int FuenteNoConformidadId { get; set; }
-        public string NombreFuente { get; set; }
     }
 }

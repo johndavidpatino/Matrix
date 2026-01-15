@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MatrixNext.Core.Services.SGC;
-using MatrixNext.Infrastructure.DTOs.SGC;
+using MatrixNext.Data.Services.SGC;
+using MatrixNext.Data.DTOs.SGC;
 
 namespace MatrixNext.Web.Areas.SGC.Controllers
 {

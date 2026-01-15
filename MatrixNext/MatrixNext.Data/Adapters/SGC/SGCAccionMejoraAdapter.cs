@@ -1,9 +1,9 @@
 using System.Data;
 using Dapper;
 using Microsoft.Data.SqlClient;
-using MatrixNext.Infrastructure.DTOs.SGC;
+using MatrixNext.Data.DTOs.SGC;
 
-namespace MatrixNext.Infrastructure.Adapters.SGC
+namespace MatrixNext.Data.Adapters.SGC
 {
     /// <summary>
     /// Adapter para Acciones de Mejora

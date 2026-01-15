@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace MatrixNext.Infrastructure.DTOs.SGC
+namespace MatrixNext.Data.DTOs.SGC
 {
     /// <summary>
     /// DTO para Hallazgo en Auditoría

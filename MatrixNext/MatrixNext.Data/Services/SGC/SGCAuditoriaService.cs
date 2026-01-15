@@ -1,8 +1,8 @@
 using Microsoft.Extensions.Logging;
-using MatrixNext.Infrastructure.Adapters.SGC;
-using MatrixNext.Infrastructure.DTOs.SGC;
+using MatrixNext.Data.Adapters.SGC;
+using MatrixNext.Data.DTOs.SGC;
 
-namespace MatrixNext.Core.Services.SGC
+namespace MatrixNext.Data.Services.SGC
 {
     /// <summary>
     /// Implementación de servicio para Auditorías Internas
