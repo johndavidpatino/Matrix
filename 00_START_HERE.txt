@@ -14,27 +14,27 @@ DOCUMENTATION FILES (6 files):
 1. README_ANALYSIS_COMPLETE.md
    → Executive summary (FOR YOU TO READ FIRST)
    → Problem, findings, solution in plain language
-   → Location: /Matrix/README_ANALYSIS_COMPLETE.md
+   → Location: MatrixNext/docs/GENERAL/README_ANALYSIS_COMPLETE.md
    → Read time: 5 minutes
 
 2. INDEX_AND_GUIDE.md
    → Master index to all documents
    → Quick lookup by role (PM, Architect, Developer, DBA, QA)
-   → Location: /Matrix/INDEX_AND_GUIDE.md
+   → Location: MatrixNext/docs/GENERAL/INDEX_AND_GUIDE.md
    → Read time: 10 minutes
 
 3. DELIVERABLES_SUMMARY.md
    → Overview of all findings
    → 5 critical mismatches summary
    → 10 missing entities list
-   → Location: /Matrix/DELIVERABLES_SUMMARY.md
+   → Location: MatrixNext/docs/GENERAL/DELIVERABLES_SUMMARY.md
    → Read time: 10 minutes
 
 4. ENTITY_ANALYSIS_MAPPING.md
    → Comprehensive technical analysis
    → Detailed mapping table: Entity | DbSet | Properties | Keys
    → All 5 mismatches explained with code examples
-   → Location: /Matrix/ENTITY_ANALYSIS_MAPPING.md
+   → Location: MatrixNext/docs/GENERAL/ENTITY_ANALYSIS_MAPPING.md
    → Read time: 20 minutes
 
 5. QUICK_REFERENCE_MISMATCHES.md
@@ -42,7 +42,7 @@ DOCUMENTATION FILES (6 files):
    → Fast lookup tables for each mismatch
    → Before/after code examples
    → Validation SQL queries
-   → Location: /Matrix/QUICK_REFERENCE_MISMATCHES.md
+   → Location: MatrixNext/docs/GENERAL/QUICK_REFERENCE_MISMATCHES.md
    → Read time: 10 minutes
 
 6. EASYQUOTE_ADMIN_SERVICE_IMPLEMENTATION_GUIDE.md
@@ -51,7 +51,7 @@ DOCUMENTATION FILES (6 files):
    → Complete API reference
    → Testing examples
    → Deployment checklist
-   → Location: /Matrix/EASYQUOTE_ADMIN_SERVICE_IMPLEMENTATION_GUIDE.md
+   → Location: MatrixNext/docs/GENERAL/EASYQUOTE_ADMIN_SERVICE_IMPLEMENTATION_GUIDE.md
    → Read time: 15 minutes
 
 7. MISSING_ENTITY_MODELS_TEMPLATE.md
@@ -59,7 +59,7 @@ DOCUMENTATION FILES (6 files):
    → Copy-paste ready
    → Step-by-step creation instructions
    → Validation queries
-   → Location: /Matrix/MISSING_ENTITY_MODELS_TEMPLATE.md
+   → Location: MatrixNext/docs/GENERAL/MISSING_ENTITY_MODELS_TEMPLATE.md
    → Read time: 10 minutes + 1 hour execution
 
 

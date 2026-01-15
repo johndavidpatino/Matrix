@@ -4,19 +4,24 @@
 
 ---
 
-## Actualización (2026-01-07)
+## ⚠️ CLASIFICACIÓN DE MÓDULOS - EVITAR TRABAJO DUPLICADO
 
-- ✅ Cierre componente compartido: Uploads
-  - Alcance: Subida, listado, descarga y eliminación de archivos con almacenamiento en filesystem por módulo/entidad.
-  - UI: Parcial compartido `Views/Shared/_Upload.cshtml` alineado con API y `ResultVM<T>`.
-  - API/Servicios: `UploadController` + `UploadService` + contratos (`UploadResultVM`, `ArchivoVM`).
-  - Notas: Cliente aprueba cierre sin ejecutar smoke tests adicionales en esta fase.
+> **CRÍTICO**: Este documento clasifica módulos en 4 categorías para evitar que el equipo de desarrollo itere sobre módulos ya completados:
+> 
+> - ✅ **COMPLETADOS (100%)**: NO TOCAR - Migración finalizada en Sprints 1-11
+> - 🔍 **EN REVISIÓN/QA**: Solo verificar completitud, QA funcional, ajustes menores
+> - 🚧 **PENDIENTES MIGRACIÓN**: Trabajo completo por iniciar (Sprints 12-19)
+> - ⛔ **EXCLUIDOS**: NO migrar por decisión de negocio
 
-## Módulos Identificados y Clasificados por Prioridad
+**Dashboard Ejecutivo**: Ver [DASHBOARD_MIGRACION.md](MatrixNext/docs/GENERAL/DASHBOARD_MIGRACION.md) para métricas actualizadas.
 
-### 🔴 CRÍTICA (Implementar primero)
+---
 
-#### 1. **US_Usuarios** (14 páginas)
+## ✅ MÓDULOS COMPLETADOS (NO TOCAR - Sprints 1-11)
+
+### 🔴 CRÍTICA (Ya Migrados 100%)
+
+#### 1. **US_Usuarios** (14 páginas) ✅ SPRINT 1 COMPLETADO
 - **Carpeta**: `WebMatrix/US_Usuarios/`
 - **Contexto**: `US_Model` (CoreProject)
 - **Páginas**:
@@ -123,7 +128,6 @@
   - Grupo 3: Procesos Internos (6 páginas) - 132h ✅
   - Grupo 4: Reportes (4 páginas) - 72h ✅
   - Grupo 5: Producción (9 páginas) - 232h ✅
-  - Grupo 6: Inventario (1 página) - 16h ⛔ **NO MIGAR** (decisión del cliente)
 - **Esfuerzo completado**: 80 (CC Pre-1) + 596 (FI Grupos 1-5) = **676 horas** ✅
 - **Total original**: 80 (CC Pre-1) + 612 (FI) + 92 (buffer) = 784 horas
 - **Status FI**: 📊 **100% COMPLETO (5/5 grupos migrados, 28/29 páginas)**
@@ -289,11 +293,7 @@
 
 **Recomendación**: Migrar Ausencias primero dentro de TH, luego pasar a EmpleadosAdmin (más complejo)
 
-# Verificación adicional de módulos en MatrixNext
-- **CORE (Workflows/tareas)**: Controladores (`WorkFlowController`, `GestionTareasController`, `IndicadoresController` y vistas) listos en `MatrixNext/MatrixNext.Web/Areas/CORE`.
-- **EQ (EasyQuote)**: APIs y pantallas para cotizaciones y administración (`EasyQuoteController`, `MaestrasAdminController`, `EasyQuoteSeedController`) vivas bajo `MatrixNext/MatrixNext.Web/Areas/EQ` y la carpeta `MatrixNext/MatrixNext.Web/Areas/EQ/Views`.
-
-#### 10. **CU_Cuentas** (Clientes)
+#### 10. **CU_Cuentas** (Clientes) ✅ SPRINT 2 COMPLETADO
 - **Contexto**: `CU_Model`
 - **Dependencias**: Medias
 - **Estado**: ✅ COMPLETADO
@@ -301,43 +301,260 @@
   - ✅ Fase 2: Presupuesto.aspx completo (IQuote, alternativas, muestra, JBI/JBE, simulador, autorización GM)
 - **Componentes migrados**:
   - Controllers: CuentasController, BriefController, PropuestasController, EstudiosController, PresupuestoController
-  - Services: CuentaService, BriefService, PropuestaService, EstudioService, PresupuestoService, IQuoteCalculatorService
-  - DataAdapters: CuentaDataAdapter, BriefDataAdapter, PropuestaDataAdapter, EstudioDataAdapter, PresupuestoDataAdapter
+  - Services: CuentasService, BriefService, PropuestasService (lógica de negocio)
+  - Adapters: CuentasAdapter (Dapper, SP execution)
   - Views: 22 vistas Razor (Index, modales, grids, paneles)
 - **LOC migradas**: ~3,500+ líneas
 
-#### 11. **CC_FinzOpe** (Financiera - Operacional)
-- **Contexto**: `CC_FinzOpe`
-- **Volumen**: Grande
+#### 11. **CC_FinzOpe + FI_Administrativo** ✅ SPRINT PRE-1 + 1-5 COMPLETADO
+- **Carpeta**: `WebMatrix/FI_AdministrativoFinanciero/` + `CoreProject/CC_FinzOpe`
+- **Contexto**: `FI_Model` + `CC_FinzOpe` + `CAP` (CoreProject)
+- **Estado**: ✅ **100% COMPLETO (5/5 grupos migrados, 28/29 páginas)**
+- **Evidencia MatrixNext**: `MatrixNext/MatrixNext.Web/Areas/CC/Controllers` y `MatrixNext/MatrixNext.Web/Areas/CC/Views`
+- **Grupos Completados**:
+  - Grupo 1: Control Presupuestos (4 páginas) - 92h ✅
+  - Grupo 2: Presupuestos Internos (4 páginas) - 68h ✅
+  - Grupo 3: Procesos Internos (6 páginas) - 132h ✅
+  - Grupo 4: Reportes (4 páginas) - 72h ✅
+  - Grupo 5: Producción (9 páginas) - 232h ✅
+- **Esfuerzo completado**: 80 (CC Pre-1) + 596 (FI Grupos 1-5) = **676 horas** ✅
+- **LOC migradas**: ~5,000 líneas
+
+#### 12. **OP_Cualitativo** ✅ SPRINT 6 COMPLETADO
+- **Carpeta**: `WebMatrix/OP_Cualitativo/`
+- **Contexto**: `OP_Entities` (CoreProject)
+- **Estado**: ✅ **SPRINT 6 COMPLETADO (100%)** - 6 fases entregadas
+- **Componentes**: Transcription, Scheduling, Sample Management, Calendar/Gantt, Email/Notifications, Bulk Import
+- **LOC Total**: 3,297 líneas en 12 commits
+- **Evidencia MatrixNext**: `Areas/OP/Controllers/Cualitativo*`, `Services/OP/`, `Areas/OP/Views/CualitativoMuestra/`
+
+#### 13. **CORE (Workflow)** ✅ SPRINT 7 COMPLETADO
+- **Contexto**: `CORE_Model`
+- **Estado**: ✅ **SPRINT 7 COMPLETADO** - Máquina de estados + UI runtime + SignalR + reportes
+- **Evidencia MatrixNext**: `Areas/CORE/Controllers` (`WorkFlowController`, `GestionTareasController`, `IndicadoresController`)
+- **LOC migradas**: ~4,000 líneas
+
+#### 14. **EQ (EasyQuote)** ✅ SPRINT 8 COMPLETADO
+- **Contexto**: `EQ_Model`
+- **Estado**: ✅ **SPRINT 8 COMPLETADO** - Motor de cálculos (26 fórmulas), Seeds (600+ registros), EasyCostService completo
+- **Evidencia MatrixNext**: `Areas/EQ/Controllers` (`EasyQuoteController`, `MaestrasAdminController`, `EasyQuoteSeedController`)
+- **LOC migradas**: ~3,500 líneas
+
+#### 15. **Home Dashboard** ✅ SPRINT 9 COMPLETADO
+- **Carpeta**: `WebMatrix/Home/`
+- **Contexto**: `CORE_Model` + múltiples
+- **Estado**: ✅ **SPRINT 9 COMPLETADO** - HomeController + DashboardService (7/7 métodos) + dashboard.js + dashboard.css
+- **Evidencia MatrixNext**: `Controllers/HomeController.cs`, `Services/Dashboard/DashboardService.cs`, `Views/Home/Index.cshtml`
+- **LOC migradas**: ~1,500 líneas
+
+#### 16. **RP_Reportes** ✅ SPRINT 10 COMPLETADO
+- **Contexto**: `REP_Model`
+- **Estado**: ✅ **SPRINT 10 COMPLETADO** - 12 SP mapeados, Excel export con ClosedXML, paridad WebMatrix
+- **Evidencia MatrixNext**: `Areas/RP/Controllers/ReportesController.cs` (334 LOC), ReportesService (436 LOC), ReportesAdapter (449 LOC)
+- **LOC migradas**: 1,219 líneas
+
+#### 17. **OP_RO** (Revisión Operacional) ✅ SPRINT 11 COMPLETADO
+- **Estado**: ✅ **SPRINT 11 COMPLETADO** - 11 endpoints REST, 20 SP mapeados, máquina de estados
+- **Evidencia MatrixNext**: `Areas/OP/Controllers/OP_ROController.cs` (479 LOC), OP_ROService (644 LOC), OP_ROAdapter (622 LOC)
+- **LOC migradas**: 1,745 líneas
+
+#### 18. **OP_Trafico** ✅ SPRINT 11 COMPLETADO
+- **Estado**: ✅ **SPRINT 11 COMPLETADO** - 8 endpoints REST, 17 SP mapeados, máquina de estados (4 estados)
+- **Evidencia MatrixNext**: `Areas/OP/Controllers/OP_TraficoController.cs` (437 LOC), OP_TraficoService (526 LOC), OP_TraficoAdapter (536 LOC)
+- **LOC migradas**: 1,499 líneas
 
 ---
 
-### 🟢 BAJA (Complementaria)
+## 🔍 MÓDULOS EN REVISIÓN/QA (Solo Verificar Completitud)
 
-12. **OP_RO** (Revisión Operacional)
-13. **OP_Trafico**
-14. **PY_ControlCalidad**
-15. **PY_Adquisiciones**
-16. **PNC** (Producto No Conforme)
-17. **SG_Actas** (Seguimiento - Actas)
-18. **SGC_Calidad** (Control de calidad) – Sin doc Legacy; plan en `MatrixNext/docs/GENERAL/SGC_Calidad.md`
-19. **ES_Estadistica**
-20. **Centro_Informacion**
-21. **Inventario**
-22. **IT**
-23. **MBO** (Objetivos)
-24. **ResumenProduccion**
-25. **RE_GT**
-26. **PC_PropiedadCliente**
-27. Otros (Account, Controls, etc.)
+> **⚠️ ADVERTENCIA**: Estos módulos tienen código existente en MatrixNext pero requieren verificación al 100% contra WebMatrix.  
+> **NO iniciar migración desde cero** - Auditar y completar features faltantes solamente.
 
-### Módulos faltantes documentados
-- El listado oficial de módulos que aún viven exclusivamente en el legacy WebMatrix y requieren un ticket adicional está recogido en `MatrixNext/docs/GENERAL/MIGRACION_ESPECIFICACIONES.md`. Allí se detallan WebMatrix paths, prioridades y pasos requeridos.
-- Antes de trabajar un módulo faltante, leer esa especificación y reflejar los avances en este documento (Regla 15).
+### 🟠 ALTA (Revisar Primero)
 
---- 
+#### 19. **OP_Cuantitativo** (31 páginas) 🔍 EN REVISIÓN
+- **Carpeta**: `WebMatrix/OP_Cuantitativo/`
+- **Contexto**: `OP_Cuanti_Model` (CoreProject)
+- **Estado Actual**: Estructura base existe, verificar completitud
+- **Evidencia MatrixNext**: `Areas/OP/Controllers/FichaCuantitativaController.cs`, `Areas/OP/Views/FichaCuantitativa`
+- **Documento Análisis**: [ANALISIS_OP_CUANTITATIVO.md](MatrixNext/docs/OP/ANALISIS_OP_CUANTITATIVO.md) (v1.1)
+- **Tareas Revisión**:
+  - [ ] Auditar 31 páginas WebMatrix vs código MatrixNext
+  - [ ] Verificar SP mapeados (ver análisis para lista completa)
+  - [ ] Completar controllers/services faltantes
+  - [ ] QA funcional completo
+- **Estimación Completitud**: TBD (requiere auditoría)
+
+#### 20. **PY_Proyectos** (18 páginas) 🔍 EN REVISIÓN
+- **Carpeta**: `WebMatrix/PY_Proyectos/`
+- **Contexto**: `PY_Model` (CoreProject)
+- **Estado Actual**: Controllers parciales (proyectos, segmentación, sesiones)
+- **Evidencia MatrixNext**: `Areas/PY/Controllers`, `Areas/PY/Views`, `docs/PY/MIGRACION_PY_PROYECTOS.md`
+- **Tareas Revisión**:
+  - [ ] Auditar 18 páginas WebMatrix vs MatrixNext
+  - [ ] Completar módulos: Asignaciones, Reportes
+  - [ ] Validar integraciones con TH, OP
+  - [ ] QA funcional completo
+- **Estimación Completitud**: TBD (requiere auditoría)
+
+### 🟡 MEDIA (Revisar Después)
+
+#### 21. **GD_Documentos** 🔍 EN REVISIÓN
+- **Contexto**: `GD_Model`
+- **Estado Actual**: Controllers (DocumentosMaestro, Repositorio, Solicitudes) + Views
+- **Evidencia MatrixNext**: `Areas/GD/Controllers`, `Areas/GD/Views`
+- **Tareas Revisión**:
+  - [ ] Verificar workflows aprobación (estados, transiciones)
+  - [ ] Validar integración filesystem (upload/download)
+  - [ ] Completar vistas faltantes (si existen)
+  - [ ] QA funcional completo
+- **Estimación Completitud**: TBD (requiere auditoría)
+
+---
+
+## 🚧 MÓDULOS PENDIENTES MIGRACIÓN (Sprints 12-19)
+
+> **✅ ACCIÓN**: Estos módulos NO tienen código en MatrixNext - Iniciar migración completa siguiendo [DIRECTRICES_MIGRACION.md](DIRECTRICES_MIGRACION.md)
+
+### 🟡 BAJA (Complementaria)
+
+#### 22. **PY_ControlCalidad** 🔴 PENDIENTE
+- **Carpeta**: `WebMatrix/PY_ControlCalidad`
+- **Prioridad**: 🟡 MEDIA-BAJA
+- **Sprint Sugerido**: Sprint 12
+- **Dependencias**: PY_Proyectos (100%)
+- **Estimación**: 3-4 semanas
+- **Estado**: ❌ NO INICIADO
+
+#### 23. **SGC_Calidad** 🔴 PENDIENTE
+- **Carpeta**: ver `MatrixNext/docs/GENERAL/SGC_Calidad.md`
+- **Prioridad**: 🟡 MEDIA-BAJA
+- **Sprint Sugerido**: Sprint 13
+- **Dependencias**: US_Usuarios, GD_Documentos
+- **Estimación**: 2-3 semanas
+- **Estado**: ❌ NO INICIADO
+
+#### 24. **ES_Estadistica** 🔴 PENDIENTE
+- **Carpeta**: `WebMatrix/ES_Estadistica`
+- **Prioridad**: 🟡 BAJA
+- **Sprint Sugerido**: Sprint 14
+- **Dependencias**: Múltiples módulos (reportes)
+- **Estimación**: 2-3 semanas
+- **Estado**: ❌ NO INICIADO
+
+#### 25. **IT** 🔴 PENDIENTE
+- **Carpeta**: `WebMatrix/IT`
+- **Prioridad**: 🟡 BAJA
+- **Sprint Sugerido**: Sprint 15
+- **Dependencias**: US_Usuarios
+- **Estimación**: 1-2 semanas
+- **Estado**: ❌ NO INICIADO
+
+#### 26. **Inventario** 🔴 PENDIENTE
+- **Carpeta**: `WebMatrix/Inventario`
+- **Prioridad**: 🟡 BAJA
+- **Sprint Sugerido**: Sprint 20
+- **Dependencias**: Verificar
+- **Estimación**: 1-2 semanas
+- **Estado**: ❌ NO INICIADO
+
+---
+
+## 📊 RESUMEN EJECUTIVO
+
+### Progreso General
+
+| Categoría | Cantidad | Porcentaje | Indicador |
+| --- | --- | --- | --- |
+| **Completados** | 18 módulos | 58% | ✅ |
+| **En Revisión/QA** | 3 módulos | 10% | 🔍 |
+| **Pendientes Migración** | 8 módulos | 26% | 🔴 |
+| **Excluidos** | 2 módulos | 6% | ⛔ |
+| **TOTAL** | 31 módulos | 100% | - |
+
+### LOC Migradas
+
+- **Total Completado**: ~28,810 LOC (Sprints 1-11)
+- **En Revisión**: TBD (auditoría pendiente)
+- **Pendiente**: TBD (estimación por módulo)
+
+### Timeline
+
+- **Sprints Completados**: 1-11 (2026-01-15) ✅
+- **Fase Actual**: Revisión/QA (Sprint 12 Parte 1)
+- **Sprints Futuros**: 12-19 (Migración nuevos módulos)
+- **Hito Crítico**: 2026-01-15 = Fin Sprints 5-11 (77 días adelantado) ✅
+
+---
+
+## 🎯 PRÓXIMOS PASOS INMEDIATOS
+
+### Prioridad 1: Cerrar Módulos en Revisión (Sprint 12 Parte 1)
+
+1. **OP_Cuantitativo** - Auditar 31 páginas vs MatrixNext
+2. **PY_Proyectos** - Auditar 18 páginas vs MatrixNext
+3. **GD_Documentos** - Verificar workflows + filesystem
+
+**Objetivo**: Módulos al 100% funcional antes de iniciar nuevas migraciones.
+
+### Prioridad 2: Planificar Sprints 12-19 (Nuevos Módulos)
+
+**Orden sugerido** (por prioridad operativa):
+1. Sprint 12: PY_ControlCalidad (3-4 sem)
+2. Sprint 13: SGC_Calidad (2-3 sem)
+3. Sprint 14: ES_Estadistica (2-3 sem)
+4. Sprint 15: IT (1-2 sem)
+5. Sprint 16-17: MBO (3 variantes, 4-6 sem)
+6. Sprint 18: ResumenProduccion (2-3 sem)
+7. Sprint 19: RE_GT + PC_PropiedadCliente (2-4 sem)
+
+**Estimación Total**: 16-24 semanas
+
+---
 
 ## Patrón de Migración por Módulo
+- **Sprint Sugerido**: Sprint 16-17
+- **Dependencias**: TH, PY
+- **Estimación**: 4-6 semanas (3 módulos)
+- **Estado**: ❌ NO INICIADO
+
+#### 27. **ResumenProduccion** 🔴 PENDIENTE
+- **Carpeta**: `WebMatrix/ResumenProduccion`
+- **Prioridad**: 🟡 BAJA
+- **Sprint Sugerido**: Sprint 18
+- **Dependencias**: OP, CC
+- **Estimación**: 2-3 semanas
+- **Estado**: ❌ NO INICIADO
+
+#### 28. **RE_GT** 🔴 PENDIENTE
+- **Carpeta**: `WebMatrix/RE_GT`
+- **Prioridad**: 🟡 BAJA
+- **Sprint Sugerido**: Sprint 19
+- **Dependencias**: TBD
+- **Estimación**: 1-2 semanas
+- **Estado**: ❌ NO INICIADO
+
+#### 29. **PC_PropiedadCliente** 🔴 PENDIENTE
+- **Carpeta**: `WebMatrix/PC_PropiedadCliente`
+- **Prioridad**: 🟡 BAJA
+- **Sprint Sugerido**: Sprint 19
+- **Dependencias**: CU_Cuentas
+- **Estimación**: 1-2 semanas
+- **Estado**: ❌ NO INICIADO
+
+---
+
+## ⛔ MÓDULOS EXCLUIDOS (NO MIGRAR)
+
+> **DECISIÓN DE NEGOCIO**: Los siguientes módulos NO se migrarán por razones operativas/estratégicas.
+
+### Excluidos Permanentemente
+
+#### 30. **Centro_Informacion** ⛔ EXCLUIDO
+- **Carpeta**: `WebMatrix/Centro_Informacion`
+- **Razón**: Excluido por decisión del usuario/negocio
+- **Estado**: ⛔ NO MIGRAR
+
 
 ```
 Módulo WebMatrix (ej: US_Usuarios/)
@@ -346,105 +563,38 @@ Módulo WebMatrix (ej: US_Usuarios/)
 │
 └── MatrixNext → Controllers + Views + Services
     │
-    ├── Controllers/
-    │   ├── UsuariosController.cs
-    │   ├── RolesController.cs
-    │   ├── PermisosController.cs
-    │   └── GrupoUnidadController.cs
-    │
-    ├── Views/
-    │   ├── Usuarios/
-    │   │   ├── Index.cshtml
-    │   │   ├── Create.cshtml
-    │   │   ├── Edit.cshtml
-    │   │   └── Delete.cshtml
-    │   ├── Roles/
-    │   │   └── [idem estructura]
-    │   ├── Permisos/
-    │   │   └── [idem estructura]
-    │   └── GrupoUnidad/
-    │       └── [idem estructura]
-    │
-    └── Data/Services/
-        ├── UsuarioService.cs
-        ├── RolService.cs
-        ├── PermisosService.cs
-        └── GrupoUnidadService.cs
+    ├── Controllers/ (Coordinar, validar, retornar respuestas)
+    ├── Services/ (Lógica de negocio)
+    ├── Adapters/ (Acceso a datos, SP execution con Dapper)
+    └── Views/ (Razor, Bootstrap, Ajax-first)
 ```
 
----
-
-## Cronología Recomendada
-
-| Fase | Semana | Módulo | Entregables |
-|------|--------|--------|-------------|
-| 0 | 1 | Login (✅ HECHO) | LoginController, autenticación |
-| 1 | 2-3 | US_Usuarios | 14 páginas migradas, adaptador CoreProject |
-| 2 | 4 | Home | Dashboard funcional |
-| 3 | 5-7 | PY_Proyectos | 18 páginas, gestión completa |
-| 4 | 8-9 | OP_Cuantitativo | Operaciones cuantitativos |
-| 5 | 10-11 | OP_Cualitativo | Operaciones cualitativos |
-| 6 | 12-15 | FI_Administrativo | 21 páginas finanzas |
-| 7+ | 16+ | Módulos restantes | Por prioridad operativa |
-| Fase | Semana | Módulo | Entregables | Status |
-|------|--------|--------|-------------|--------|
-| 0 | 1 | Login | LoginController, autenticación | ✅ |
-| 1 | 2-3 | US_Usuarios | 14 páginas migradas, adaptador CoreProject | ✅ |
-| 2 | 4 | Home | Dashboard funcional | ✅ |
-| 3 | 5-7 | PY_Proyectos | 18 páginas, gestión completa | ✅ |
-| 4 | 8-9 | OP_Cuantitativo | Operaciones cuantitativos | ✅ |
-| **5** | **10-11** | **OP_Cualitativo (Sprint 6)** | **6 fases: Transcription, Scheduling, Sampling, Calendar, Email, Bulk Import** | **✅** |
-| 6 | 12-15 | FI_Administrativo | 21 páginas finanzas | ⚪️ |
-| 7+ | 16+ | Módulos restantes | Por prioridad operativa | ⚪️ |
-
----
-
-## Decisiones Clave
-
-✅ **SIN coexistencia**: Eliminar WebMatrix completamente al terminar cada módulo  
-✅ **Adaptar CoreProject**: Crear wrappers que encapsulen contextos EF6  
-✅ **Testing exhaustivo**: Validar funcionalidad antes de eliminar legacy  
-✅ **Migraciones EF Core**: Solo para nuevas features, no for legacy  
-✅ **Dapper para consultas**: Mantener para SP complejas  
-
----
-
-## Próximo Paso Concreto
-
-**Crear estructura base para US_Usuarios:**
-
-```bash
-# En MatrixNext.Web
-mkdir Controllers/US
-mkdir Views/US
-
-# En MatrixNext.Data
-mkdir Models/US
-mkdir Services/US
-mkdir Adapters
-```
-
-**Luego**: Migrar primera página (Usuarios.aspx) como demo del patrón
 ---
 
 ## 📖 DOCUMENTACIÓN DE REFERENCIA
 
 ### Documentos Maestros
 
-| Documento | Propósito | Aplicable |
-|-----------|-----------|-----------|
-| [DIRECTRICES_MIGRACION.md](DIRECTRICES_MIGRACION.md) | 15 reglas obligatorias para todas las migraciones | **LEER ANTES DE CUALQUIER MÓDULO** |
-| [VERIFICACION_AUSENCIAS_MIGRACION.md](VERIFICACION_AUSENCIAS_MIGRACION.md) | Caso de estudio: verificación completa de TH_Ausencias | Referencia de calidad |
-| [PLAN_MIGRACION_PY_PROYECTOS.md](PLAN_MIGRACION_PY_PROYECTOS.md) | Plan detallado para próximo módulo | Plantilla para futuros módulos |
-| [ANALISIS_OP_CUANTITATIVO.md](MatrixNext/docs/OP/ANALISIS_OP_CUANTITATIVO.md) | Análisis completo de OP_Cuantitativo con optimizaciones | Referencia para módulos grandes |
-| [DASHBOARD_MIGRACION.md](DASHBOARD_MIGRACION.md) | Estado, métricas, timeline de todo el esfuerzo | Actualizar semanalmente |
-| [RESUMEN_MIGRACION_AUSENCIAS.md](MatrixNext/docs/TH/RESUMEN_MIGRACION_AUSENCIAS.md) | Resumen ejecutivo de TH_Ausencias | Stakeholders/Gerencia |
-| [SGC_Calidad.md](MatrixNext/docs/GENERAL/SGC_Calidad.md) | Roadmap básico y próximos pasos para el módulo SGC_Calidad | Prioridad baja, plan en fases futuras |
+| Documento | Propósito | Cuándo Usar |
+|-----------|-----------|-------------|
+| [DIRECTRICES_MIGRACION.md](DIRECTRICES_MIGRACION.md) | 15 reglas obligatorias | **LEER ANTES DE CUALQUIER MIGRACIÓN** |
+| [DASHBOARD_MIGRACION.md](MatrixNext/docs/GENERAL/DASHBOARD_MIGRACION.md) | Estado actual, métricas, clasificación módulos | Referencia ejecutiva diaria |
+| [PLAN_MIGRACION_PY_PROYECTOS.md](PLAN_MIGRACION_PY_PROYECTOS.md) | Plan detallado módulo PY | Plantilla para nuevos módulos |
+| [ANALISIS_OP_CUANTITATIVO.md](MatrixNext/docs/OP/ANALISIS_OP_CUANTITATIVO.md) | Análisis completo con optimizaciones | Referencia módulos grandes |
+| [VERIFICACION_AUSENCIAS_MIGRACION.md](VERIFICACION_AUSENCIAS_MIGRACION.md) | Caso de estudio: verificación TH_Ausencias | Referencia de calidad |
+| [RESUMEN_MIGRACION_AUSENCIAS.md](MatrixNext/docs/TH/RESUMEN_MIGRACION_AUSENCIAS.md) | Resumen ejecutivo TH_Ausencias | Stakeholders/Gerencia |
+| [SGC_Calidad.md](MatrixNext/docs/GENERAL/SGC_Calidad.md) | Roadmap SGC_Calidad | Sprint 13 (futuro) |
 
 ### Cómo Usar Documentación
 
-1. **Iniciando módulo**: Leer DIRECTRICES_MIGRACION.md completo
+1. **Iniciando módulo**: Leer [DIRECTRICES_MIGRACION.md](DIRECTRICES_MIGRACION.md) completo
 2. **Planificando**: Usar PLAN_MIGRACION_PY_PROYECTOS.md como plantilla
 3. **Verificando**: Comparar contra VERIFICACION_AUSENCIAS_MIGRACION.md
-4. **Reportando**: Actualizar DASHBOARD_MIGRACION.md
+4. **Reportando**: Actualizar [DASHBOARD_MIGRACION.md](MatrixNext/docs/GENERAL/DASHBOARD_MIGRACION.md)
+
+---
+
+**Última actualización**: 2026-01-15  
+**Próxima revisión**: Fin Sprint 12 Parte 1 (Revisión/QA módulos parciales)  
+**Contacto**: Equipo de desarrollo MatrixNext
 

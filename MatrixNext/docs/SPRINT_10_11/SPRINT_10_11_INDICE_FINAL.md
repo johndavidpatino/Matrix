@@ -3,8 +3,8 @@
 ## 📚 Documentos de Referencia Principales
 
 ### Documentación Estratégica
-1. **[00_START_HERE.txt](00_START_HERE.txt)** - Punto de partida del proyecto
-2. **[README_ANALYSIS_COMPLETE.md](README_ANALYSIS_COMPLETE.md)** - Análisis completado
+1. **[00_START_HERE.txt](../../00_START_HERE.txt)** - Punto de partida del proyecto
+2. **[README_ANALYSIS_COMPLETE.md](../GENERAL/README_ANALYSIS_COMPLETE.md)** - Análisis completado
 
 ### Documentación de Sprint 10 & 11
 1. **[SPRINT_10_11_IMPLEMENTACION_COMPLETADA.md](SPRINT_10_11_IMPLEMENTACION_COMPLETADA.md)** ⭐
