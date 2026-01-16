@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MatrixNext.Data\MatrixNext.Data.csproj" />
+    <ProjectReference Include="..\MatrixNext.Core\MatrixNext.Core.csproj" />
   </ItemGroup>
 
 </Project>

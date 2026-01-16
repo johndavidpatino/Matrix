@@ -9,7 +9,7 @@ namespace MatrixNext.Web.Services.CORE
     /// Adapter para acceso a datos de WorkFlow
     /// Patrón: SP para lecturas complejas, EF para escrituras (via service)
     /// </summary>
-    public class WorkFlowDataAdapter
+    public partial class WorkFlowDataAdapter
     {
         private readonly string _connectionString;
         private const string _spGetPorTrabajoYTarea = "CORE_WorkFlow_GetXTrabajoXTarea";

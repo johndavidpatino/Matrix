@@ -2,21 +2,18 @@
 
 // Agregar este método action a WorkFlowController existente:
 
-using MatrixNext.Web.DTOs.CORE;
+using MatrixNext.Core.DTOs.CORE;
 using MatrixNext.Web.ViewModels.CORE;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
 namespace MatrixNext.Web.Areas.CORE.Controllers
 {
-    [Area("CORE")]
-    [Authorize]
-    [Route("CORE/[controller]/[action]")]
+    /// <summary>
+    /// Clase parcial: Métodos de extensión para TraficoTareas (Sprint 17)
+    /// </summary>
     public partial class WorkFlowController : Controller
     {
-        private readonly IWorkFlowService _service;
-        private readonly ILogger<WorkFlowController> _logger;
-
         /// <summary>
         /// GET /CORE/Workflow/TraficoTareas
         /// Vista consolidada de tráfico de tareas por unidad OP
@@ -58,9 +55,14 @@ namespace MatrixNext.Web.Areas.CORE.Controllers
                 // VALIDAR PERMISOS POR UNIDAD
                 // TODO: Implementar validación de permisos según UnidadPermisosMap
                 // Verificar que el usuario tenga permiso para esta unidad
-                var tienePermiso = await ValidarPermisoUnidadAsync(
-                    (long)User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value, 
-                    unidadSeleccionada.PermId);
+                var userIdStr = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                if (!long.TryParse(userIdStr, out var userId))
+                {
+                    _logger.LogError("[TraficoTareas] No se pudo parsear UserId del usuario");
+                    return Forbid();
+                }
+
+                var tienePermiso = await ValidarPermisoUnidadAsync(userId, unidadSeleccionada.PermId);
 
                 if (!tienePermiso)
                 {

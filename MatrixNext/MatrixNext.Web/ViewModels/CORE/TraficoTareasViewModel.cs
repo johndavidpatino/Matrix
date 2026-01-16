@@ -1,5 +1,7 @@
 // MatrixNext.Web/ViewModels/TraficoTareasViewModel.cs
 
+using MatrixNext.Core.DTOs.CORE;
+
 namespace MatrixNext.Web.ViewModels.CORE
 {
     /// <summary>
@@ -73,29 +75,9 @@ namespace MatrixNext.Web.ViewModels.CORE
 
     /// <summary>
     /// DTO para unidades OP disponibles (dropdown de filtro)
+    /// Ya definida en MatrixNext.Core.DTOs.CORE.UnidadTraficoDto
+    /// Se reutiliza desde Core
     /// </summary>
-    public class UnidadTraficoDto
-    {
-        public int Id { get; set; }
-        public string Nombre { get; set; } = string.Empty;
-        public int PermId { get; set; }
-        public string GrupoOrigen { get; set; } = "Gestión"; // "Gestión" o "Recolección"
-
-        // Unidades conocidas
-        public static List<UnidadTraficoDto> ObtenerUnidadesTrafico() => new()
-        {
-            new() { Id = 5, Nombre = "Crítica", PermId = 107, GrupoOrigen = "Gestión" },
-            new() { Id = 6, Nombre = "Verificación", PermId = 109, GrupoOrigen = "Gestión" },
-            new() { Id = 7, Nombre = "Captura", PermId = 111, GrupoOrigen = "Gestión" },
-            new() { Id = 8, Nombre = "Codificación", PermId = 108, GrupoOrigen = "Gestión" },
-            new() { Id = 9, Nombre = "Data Cleaning", PermId = 110, GrupoOrigen = "Gestión" },
-            new() { Id = 10, Nombre = "Procesamiento", PermId = 112, GrupoOrigen = "Gestión" },
-            new() { Id = 11, Nombre = "Scripting", PermId = 115, GrupoOrigen = "Recolección" },
-            new() { Id = 12, Nombre = "Pilotos", PermId = 116, GrupoOrigen = "Recolección" },
-            new() { Id = 13, Nombre = "Estadística", PermId = 121, GrupoOrigen = "Estadística" },
-            new() { Id = 14, Nombre = "Call Center", PermId = 129, GrupoOrigen = "Recolección" }
-        };
-    }
 
     /// <summary>
     /// Enum para URLRetorno (mapeo a navegación de retorno)

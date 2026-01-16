@@ -6,20 +6,24 @@ using MatrixNext.Web.Models.CORE;
 using MatrixNext.Web.Services;
 using MatrixNext.Web.Services.CORE;
 using MatrixNext.Web.ViewModels;
+using Microsoft.Extensions.Logging;
 
 namespace MatrixNext.Web.Areas.CORE.Controllers
 {
     [Area("CORE")]
     [Authorize]
     [Route("CORE/[controller]/[action]")]
-    public class WorkFlowController : Controller
+    public partial class WorkFlowController : Controller
     {
         private readonly IWorkFlowService _service;
+        private readonly ILogger<WorkFlowController> _logger;
 
         public WorkFlowController(
-            IWorkFlowService service)
+            IWorkFlowService service,
+            ILogger<WorkFlowController> logger)
         {
             _service = service;
+            _logger = logger;
         }
 
         [HttpGet]

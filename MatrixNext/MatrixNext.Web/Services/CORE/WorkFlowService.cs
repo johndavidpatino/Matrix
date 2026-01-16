@@ -1,6 +1,7 @@
 using MatrixNext.Web.Infrastructure.Data;
 using MatrixNext.Web.Models.CORE;
 using MatrixNext.Web.ViewModels;
+using MatrixNext.Core.DTOs.CORE;
 using Microsoft.EntityFrameworkCore;
 
 namespace MatrixNext.Web.Services.CORE
@@ -18,9 +19,22 @@ namespace MatrixNext.Web.Services.CORE
         Task<ResultVM<bool>> EliminarAsync(long id);
         Task<WorkFlow?> ObtenerPorIdAsync(long id);
         Task<IEnumerable<WorkFlow>> ObtenerPorTrabajoAsync(long idTrabajo);
+
+        // Sprint 17 - TraficoTareas
+        Task<(List<TareasPorUnidadDto> Tareas, int Total)> ObtenerTareasPorUnidadAsync(
+            int idUnidad,
+            string? estado = null,
+            int? prioridad = null,
+            string? busqueda = null,
+            int page = 1,
+            int pageSize = 20);
+
+        Task<List<UnidadTraficoDto>> ObtenerUnidadesTraficoAsync();
+
+        Task<TrabajoTraficoInfoDto?> ObtenerInformacionTrabajoAsync(long idTrabajo);
     }
 
-    public class WorkFlowService : IWorkFlowService
+    public partial class WorkFlowService : IWorkFlowService
     {
         private readonly MatrixDbContext _db;
         private readonly WorkFlowDataAdapter _adapter;

@@ -1,6 +1,6 @@
 // MatrixNext.Web/Services/CORE/WorkFlowService.cs - MÉTODOS DE EXTENSIÓN
 
-using MatrixNext.Web.DTOs.CORE;
+using MatrixNext.Core.DTOs.CORE;
 using MatrixNext.Web.ViewModels.CORE;
 using MatrixNext.Web.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;

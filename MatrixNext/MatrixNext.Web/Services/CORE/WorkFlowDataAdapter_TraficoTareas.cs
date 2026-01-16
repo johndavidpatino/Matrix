@@ -1,20 +1,18 @@
-// MatrixNext.Data/Adapters/CORE/WorkFlowAdapter.cs - MÉTODOS DE EXTENSIÓN
+// MatrixNext.Web/Services/CORE/WorkFlowDataAdapter_TraficoTareas.cs
 
-using MatrixNext.Web.DTOs.CORE;
-using MatrixNext.Web.ViewModels.CORE;
-using Dapper;
 using System.Data;
+using Dapper;
+using Microsoft.Data.SqlClient;
+using MatrixNext.Core.DTOs.CORE;
 
-namespace MatrixNext.Data.Adapters.CORE
+namespace MatrixNext.Web.Services.CORE
 {
     /// <summary>
-    /// EXTENSIÓN: Métodos Adapter para TraficoTareas (Sprint 17)
+    /// Extensión: Métodos de adapter para TraficoTareas (Sprint 17)
+    /// Acceso a datos para listado de tareas consolidadas por unidad
     /// </summary>
     public partial class WorkFlowDataAdapter
     {
-        private readonly IDbConnection _connection;
-        private readonly ILogger<WorkFlowDataAdapter> _logger;
-
         /// <summary>
         /// Obtiene tareas de WorkFlow por unidad OP desde SP legacy
         /// SP: WorkFlow.obtenerTrabajosWorkFlow (@IdUnidad, @TextoBusqueda)
@@ -30,21 +28,21 @@ namespace MatrixNext.Data.Adapters.CORE
         {
             try
             {
-                _logger.LogInformation(
-                    "[WorkFlowAdapter] Llamando SP obtenerTrabajosWorkFlow: Unidad={IdUnidad}", 
-                    idUnidad);
+                using var connection = new SqlConnection(_connectionString);
+                await connection.OpenAsync();
 
                 // Llamar SP legacy con búsqueda
-                var allData = await _connection.QueryAsync<TareasPorUnidadDto>(
+                var allData = await connection.QueryAsync<TareasPorUnidadDto>(
                     "WorkFlow.obtenerTrabajosWorkFlow",
                     new 
                     { 
                         IdUnidad = idUnidad, 
                         TextoBusqueda = string.IsNullOrEmpty(busqueda) ? (object?)DBNull.Value : busqueda 
                     },
-                    commandType: CommandType.StoredProcedure);
+                    commandType: CommandType.StoredProcedure,
+                    commandTimeout: 60);
 
-                // Aplicar filtros en memoria si es necesario
+                // Aplicar filtros en memoria
                 var query = allData.AsQueryable();
 
                 if (!string.IsNullOrEmpty(estado))
@@ -62,18 +60,12 @@ namespace MatrixNext.Data.Adapters.CORE
                     .Take(pageSize)
                     .ToList();
 
-                _logger.LogInformation(
-                    "[WorkFlowAdapter] SP retornó {Count} tareas, Total={Total}, Page={Page}", 
-                    tareas.Count, total, page);
-
                 return (tareas, total);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, 
-                    "[WorkFlowAdapter] Error en ObtenerTareasPorUnidadAsync: Unidad={IdUnidad}", 
-                    idUnidad);
-                throw;
+                throw new InvalidOperationException(
+                    $"Error en ObtenerTareasPorUnidadAsync para unidad {idUnidad}", ex);
             }
         }
 
@@ -85,9 +77,10 @@ namespace MatrixNext.Data.Adapters.CORE
         {
             try
             {
-                _logger.LogInformation("[WorkFlowAdapter] Obteniendo info trabajo {IdTrabajo}", idTrabajo);
+                using var connection = new SqlConnection(_connectionString);
+                await connection.OpenAsync();
 
-                // Ejecutar query directa (puede ser SP o query EF)
+                // Ejecutar query directa
                 const string sql = @"
                     SELECT 
                         t.Id AS IdTrabajo,
@@ -101,23 +94,17 @@ namespace MatrixNext.Data.Adapters.CORE
                     INNER JOIN TipoProyecto tp ON p.TipoProyectoId = tp.id
                     WHERE t.Id = @IdTrabajo";
 
-                var resultado = await _connection.QuerySingleOrDefaultAsync<TrabajoTraficoInfoDto>(
+                var resultado = await connection.QuerySingleOrDefaultAsync<TrabajoTraficoInfoDto>(
                     sql,
-                    new { IdTrabajo = idTrabajo });
-
-                if (resultado == null)
-                {
-                    _logger.LogWarning("[WorkFlowAdapter] Trabajo no encontrado: {IdTrabajo}", idTrabajo);
-                }
+                    new { IdTrabajo = idTrabajo },
+                    commandTimeout: 60);
 
                 return resultado;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, 
-                    "[WorkFlowAdapter] Error obteniendo info trabajo {IdTrabajo}", 
-                    idTrabajo);
-                throw;
+                throw new InvalidOperationException(
+                    $"Error obteniendo información del trabajo {idTrabajo}", ex);
             }
         }
     }
