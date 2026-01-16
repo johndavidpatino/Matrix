@@ -1,8 +1,10 @@
-// MatrixNext.Core/Services/CORE/IWorkFlowService_Extension.cs
+// MatrixNext.Data/Services/CORE/IWorkFlowService_TraficoTareas.cs
 
-using MatrixNext.Core.DTOs.CORE;
+using MatrixNext.Data.DTOs.CORE;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace MatrixNext.Core.Services.CORE
+namespace MatrixNext.Data.Services.CORE
 {
     /// <summary>
     /// Extensión de IWorkFlowService para TraficoTareas

@@ -1,6 +1,8 @@
-// MatrixNext.Core/DTOs/CORE/UnidadTraficoDto.cs
+// MatrixNext.Data/DTOs/CORE/UnidadTraficoDto.cs
 
-namespace MatrixNext.Core.DTOs.CORE
+using System.Collections.Generic;
+
+namespace MatrixNext.Data.DTOs.CORE
 {
     /// <summary>
     /// DTO para unidades OP en TraficoTareas

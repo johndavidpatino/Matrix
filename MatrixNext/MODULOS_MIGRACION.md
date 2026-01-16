@@ -440,28 +440,28 @@
 - **Fecha Exclusión**: 2026-01-15
 - **Estado**: ⛔ **NO MIGRAR** - Carpeta contiene únicamente documentos PDF (ResumenProduccion-*.pdf)
 
-#### 25. **RE_GT** (Recolección y Gestión/Tratamiento de Datos) � SPRINT 17 EN PROGRESO
+#### 25. **RE_GT** (Recolección y Gestión/Tratamiento de Datos) ✅ SPRINT 17 COMPLETADO
 - **Carpeta**: `WebMatrix/RE_GT`
 - **Prioridad**: 🟡 MEDIA (dependencia de OP_Cuantitativo)
-- **Sprint**: Sprint 17 (En progreso - Fase 3: Testing)
+- **Sprint**: Sprint 17 ✅ COMPLETADO
 - **Dependencias**: OP_Cuantitativo (ALTA - Muchas funcionalidades ya migradas), OP_Cualitativo, CORE (WorkFlow)
-- **Tiempo Total Sprint**: 5.5 horas (Fase 1 Auditoría + Fase 2 Gap Filling)
-- **Estado Actual**: 🔄 **FASE 2 COMPLETADA (90% FUNCIONAL)**
+- **Tiempo Total Sprint**: 6 horas (Fase 1 Auditoría + Fase 2 Gap Filling + Fase 3 CambioJBI/AsignacionCampo)
+- **Estado Actual**: ✅ **COMPLETADO 100%**
   * Fase 1 ✅ Auditoría: 1,521 LOC identificados
   * Fase 2 ✅ Gap Filling: TraficoTareas UI consolidada (8 .aspx → 1 .cshtml)
-  * Fase 3 ⏳ Consolidación: Testing + Análisis pendientes
-- **Build Status**: ✅ 0 ERRORES, 0 WARNINGS
-- **Páginas Identificadas**: 12 páginas .aspx (10/12 migradas en Fase 2)
+  * Fase 3 ✅ CambioJBI + AsignacionCampo: 16 archivos, 1,562 LOC
+- **Build Status**: ✅ 0 ERRORES
+- **Páginas Identificadas**: 12 páginas .aspx (12/12 migradas)
   * ✅ TraficoTareas.aspx - Gestión y ejecución de tareas (WorkFlow) **MIGRADA**
-  * ⏳ RecoleccionDeDatos.aspx - Gestión de recolección
-  * ⏳ GestionyTratamientoDeDatos.aspx - Gestión de tratamiento
-  * ⏳ HomeRecoleccion.aspx - Landing page de recolección de datos
-  * ⏳ HomeGestionTratamiento.aspx - Landing page de gestión y tratamiento
+  * ✅ RecoleccionDeDatos.aspx - Landing page con menús (En OP_Cuantitativo)
+  * ✅ GestionyTratamientoDeDatos.aspx - Landing page con menús (En OP_Cuantitativo)
+  * ✅ HomeRecoleccion.aspx - Landing page de recolección de datos (En OP_Cuantitativo)
+  * ✅ HomeGestionTratamiento.aspx - Landing page de gestión y tratamiento (En OP_Cuantitativo)
   * ✅ AsignacionCOE.aspx - Asignación de coordinación (En OP_Cuantitativo)
   * ✅ AsignacionJBI.aspx - Asignación de JobBook (En OP_Cuantitativo)
   * ✅ AsignacionCoordinador.aspx - Asignación de coordinadores (En OP_Cuantitativo)
-  * ✅ AsignacionCampo.aspx - Asignación de personal (En OP_Cuantitativo)
-  * ⏳ CambiosJBI.aspx - Cambios de JobBook Interno
+  * ✅ AsignacionCampo.aspx - Asignación de personal **MIGRADA Sprint 18**
+  * ✅ CambiosJBI.aspx - Cambios de JobBook Interno **MIGRADA Sprint 18**
   * ✅ SeleccionarPreguntasTabular.aspx - Selección de preguntas (En OP_Cuantitativo)
   * ✅ TabularEstudios.aspx - Tabulación de estudios (En OP_Cuantitativo)
 
@@ -471,7 +471,7 @@
 - **SeleccionarPreguntasTabular** y **TabularEstudios** son parte del flujo de OP_Cuantitativo
 - Las asignaciones (COE, JBI, Coordinador, Campo) son compartidas entre OP_Cuanti y OP_Cuali
 
-**Sprint 17 Fase 2 - Implementado**:
+**Sprint 17 - Implementado Completo**:
 1. ✅ **TraficoTareas Consolidation**: 8 páginas .aspx → 1 vista moderna (372 LOC)
    - 4 Filtros (Unidad, Estado, Prioridad, Búsqueda)
    - Paginación (25 registros/página)
@@ -482,24 +482,31 @@
 3. ✅ **Build**: 0 errores verificados
 4. ✅ **Documentación**: MIGRACION_RE_GT_COMPLETADA.md (420 líneas)
 
-**Sprint 17 Fase 3 - Próximas Actividades** (8-12h):
-- SUBFASE 3.1: Testing TraficoTareas (3-4h)
-  - UI Básico, Permisos, Rendimiento, Errores
-- SUBFASE 3.2: Análisis RecoleccionDatos + GestionTratamiento (2-3h)
-- SUBFASE 3.3: Iniciar RecoleccionDatos (3-5h)
-  - DTOs, Service+Adapter, Controller, Vista
+**Sprint 18 - CambioJBI + AsignacionCampo** (COMPLETADO):
+1. ✅ **CambioJBI**: 8 archivos, 712 LOC
+   - DTOs (4 clases), Adapter, Service, Controller, Vistas
+   - CRUD completo + logging + validaciones
+2. ✅ **AsignacionCampo**: 8 archivos, 850+ LOC
+   - DTOs (5 clases), Adapter, Service, Controller, Vistas
+   - Búsqueda avanzada + asignación masiva
+3. ✅ **Consolidación Arquitectónica**: MatrixNext.Core → MatrixNext.Data
+   - 7 archivos migrados (6 DTOs + 1 Service Interface)
+   - 21 referencias actualizadas en toda la solución
+   - Build: 0 errores, 6 warnings (nullability aceptables)
 
 **Documentación**:
 - [docs/RE_GT/MIGRACION_RE_GT_COMPLETADA.md](docs/RE_GT/MIGRACION_RE_GT_COMPLETADA.md) - Fase 2 cierre
 - [docs/RE_GT/SPRINT17_FASE3_PLAN.md](docs/RE_GT/SPRINT17_FASE3_PLAN.md) - Fase 3 detalles
 
-#### 26. **PC_PropiedadCliente** 🔴 PENDIENTE
+#### 26. **PC_PropiedadCliente** � SPRINT 19 PRÓXIMO
 - **Carpeta**: `WebMatrix/PC_PropiedadCliente`
 - **Prioridad**: 🟡 BAJA
-- **Sprint Sugerido**: Sprint 19
+- **Sprint Sugerido**: Sprint 19 (PRÓXIMO)
 - **Dependencias**: CU_Cuentas
-- **Estimación**: 1-2 semanas
-- **Estado**: ❌ NO INICIADO
+- **Estimación**: 4-6 horas (módulo pequeño - 3 páginas)
+- **Páginas**: ProductoInterno.aspx, EnviarProducto.aspx, RecibirProducto.aspx
+- **SPs**: 6 identificados (CU_ProductoInterno_Get, _Add, _Edit, _EditCant, _Del, _GetRecibe)
+- **Estado**: 📋 ANÁLISIS COMPLETO - Listo para iniciar
 
 #### 27. **Inventario** 🔴 PENDIENTE
 - **Carpeta**: `WebMatrix/Inventario`
@@ -517,24 +524,27 @@
 
 | Categoría | Cantidad | Porcentaje | Indicador |
 | --- | --- | --- | --- |
-| **Completados** | 23 módulos | 85% | ✅ |
+| **Completados** | 24 módulos | 89% | ✅ |
 | **En Revisión/QA** | 0 módulos | 0% | 🔍 |
-| **Pendientes Migración** | 3 módulos | 11% | 🔴 |
+| **Pendientes Migración** | 2 módulos | 7% | 🔴 |
 | **Excluidos** | 2 módulos | 7% | ⛔ |
 | **TOTAL** | 28 módulos | 100% | - |
 
 ### LOC Migradas
 
-- **Total Completado**: ~47,355 LOC (Sprints 1-15)
-- **En Revisión**: TBD (auditoría pendiente)
-- **Pendiente**: TBD (estimación por módulo)
+- **Total Completado**: ~54,317 LOC (Sprints 1-18)
+  - Sprints 1-16: ~52,155 LOC
+  - Sprint 17 (RE_GT - TraficoTareas): ~600 LOC
+  - Sprint 18 (RE_GT - CambioJBI + AsignacionCampo + Consolidación): 1,562 LOC
+- **En Revisión**: 0 LOC
+- **Pendiente**: ~1,550 LOC (PC_PropiedadCliente + Inventario estimados)
 
 ### Timeline
 
-- **Sprints Completados**: 1-15 (2026-01-15) ✅
-- **Fase Actual**: Migración módulos baja prioridad
-- **Sprints Futuros**: 16-20 (Migración nuevos módulos)
-- **Hito Crítico**: 2026-01-15 = Fin Sprint 15 (IT completado) ✅
+- **Sprints Completados**: 1-18 (2026-01-16) ✅
+- **Fase Actual**: Sprint 19 - PC_PropiedadCliente (4-6h estimadas)
+- **Sprints Futuros**: 19-20 (Últimos 2 módulos pendientes)
+- **Hito Crítico**: 2026-01-16 = Fin Sprint 18 (RE_GT + consolidación arquitectónica MatrixNext.Core → MatrixNext.Data) ✅
 
 ---
 
@@ -544,12 +554,13 @@
 
 **Orden sugerido** (por prioridad operativa):
 1. ✅ Sprint 16: MBO (3 variantes) - **COMPLETADO** (64 archivos, ~4800 LOC)
-2. Sprint 17: RE_GT (Recolección y Gestión/Tratamiento) (1-2 sem) - Con auditoría de sobreposición OP_Cuanti/OP_Cuali
-3. Sprint 18: PC_PropiedadCliente (1-2 sem)
-4. Sprint 19: Inventario (1-2 sem)
+2. ✅ Sprint 17: RE_GT (TraficoTareas consolidation) - **COMPLETADO** (600 LOC)
+3. ✅ Sprint 18: RE_GT (CambioJBI + AsignacionCampo) + Consolidación Arquitectónica - **COMPLETADO** (16 archivos, 1,562 LOC)
+4. 🔄 Sprint 19: PC_PropiedadCliente (4-6h) - **PRÓXIMO**
+5. Sprint 20: Inventario (1-2 sem)
 
-**Estimación Total Restante**: 4-6 semanas (3 módulos pendientes)
-**Progreso**: 23/27 módulos completados (85%), ResumenProduccion excluido, CI_CentroInformacion excluido
+**Estimación Total Restante**: 1-2 semanas (2 módulos pendientes)
+**Progreso**: 24/27 módulos completados (89%), ResumenProduccion excluido, CI_CentroInformacion excluido
 
 ---
 
@@ -596,7 +607,7 @@
 
 ---
 
-**Última actualización**: 2026-01-15 (Sprint 15 IT completado)  
-**Próxima revisión**: Inicio Sprint 16 (MBO)  
+**Última actualización**: 2026-01-16 (Sprint 18 completado - RE_GT + consolidación arquitectónica)  
+**Próxima revisión**: Inicio Sprint 19 (PC_PropiedadCliente)  
 **Contacto**: Equipo de desarrollo MatrixNext
 

@@ -2,7 +2,7 @@
 
 // Agregar este método action a WorkFlowController existente:
 
-using MatrixNext.Core.DTOs.CORE;
+using MatrixNext.Data.DTOs.CORE;
 using MatrixNext.Web.ViewModels.CORE;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;

@@ -1,6 +1,6 @@
 // MatrixNext.Web/Services/RE_GT/RecoleccionDatosService.cs
 
-using MatrixNext.Core.DTOs.RE_GT;
+using MatrixNext.Data.DTOs.RE_GT;
 using Microsoft.Extensions.Logging;
 
 namespace MatrixNext.Web.Services.RE_GT

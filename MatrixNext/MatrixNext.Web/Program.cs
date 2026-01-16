@@ -134,6 +134,11 @@ builder.Services.AddScoped<MatrixNext.Data.Services.MBO.ICampoService, MatrixNex
 builder.Services.AddScoped<MatrixNext.Data.Adapters.MBO.IPropuestasAdapter, MatrixNext.Data.Adapters.MBO.PropuestasAdapter>();
 builder.Services.AddScoped<MatrixNext.Data.Services.MBO.IPropuestasService, MatrixNext.Data.Services.MBO.PropuestasService>();
 
+// ===== SPRINT 19: PC_PropiedadCliente (Inventario Productos Internos) =====
+// Adapter and Service for PC (Productos internos entre unidades)
+builder.Services.AddScoped<MatrixNext.Data.Adapters.PC.IProductoInternoAdapter, MatrixNext.Data.Adapters.PC.ProductoInternoAdapter>();
+builder.Services.AddScoped<MatrixNext.Data.Services.PC.IProductoInternoService, MatrixNext.Data.Services.PC.ProductoInternoService>();
+
 // Authorization Service (Sprint 10-11)
 builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
 

@@ -1,7 +1,7 @@
 using MatrixNext.Web.Infrastructure.Data;
 using MatrixNext.Web.Models.CORE;
 using MatrixNext.Web.ViewModels;
-using MatrixNext.Core.DTOs.CORE;
+using MatrixNext.Data.DTOs.CORE;
 using Microsoft.EntityFrameworkCore;
 
 namespace MatrixNext.Web.Services.CORE

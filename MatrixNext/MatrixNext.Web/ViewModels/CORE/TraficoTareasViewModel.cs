@@ -1,6 +1,6 @@
 // MatrixNext.Web/ViewModels/TraficoTareasViewModel.cs
 
-using MatrixNext.Core.DTOs.CORE;
+using MatrixNext.Data.DTOs.CORE;
 
 namespace MatrixNext.Web.ViewModels.CORE
 {

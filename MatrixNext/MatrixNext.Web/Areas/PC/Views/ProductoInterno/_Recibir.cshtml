@@ -1,0 +1,85 @@
+@model MatrixNext.Data.DTOs.PC.EnvioRecepcionDto
+
+<div class="modal-header bg-success text-white">
+    <h5 class="modal-title">
+        <i class="fas fa-check-circle"></i> Recibir Producto
+    </h5>
+    <button type="button" class="close text-white" data-dismiss="modal">
+        <span>&times;</span>
+    </button>
+</div>
+
+<form asp-action="Recibir" method="post" id="formRecibir">
+    <div class="modal-body">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="RecibeUsuarioId" />
+
+        <div class="alert alert-info" role="alert">
+            <i class="fas fa-info-circle"></i>
+            <strong>Confirme la recepción del siguiente producto:</strong>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <dl class="row">
+                    <dt class="col-sm-5">Producto:</dt>
+                    <dd class="col-sm-7"><strong>@Model.Producto</strong></dd>
+
+                    <dt class="col-sm-5">Descripción:</dt>
+                    <dd class="col-sm-7">@(Model.Descripcion ?? "N/A")</dd>
+
+                    <dt class="col-sm-5">Cantidad:</dt>
+                    <dd class="col-sm-7">
+                        <span class="badge badge-info badge-lg">@Model.Cantidad.ToString("N2")</span>
+                    </dd>
+                </dl>
+            </div>
+
+            <div class="col-md-6">
+                <dl class="row">
+                    <dt class="col-sm-6">Unidad Origen:</dt>
+                    <dd class="col-sm-6">@Model.UnidadOrigen</dd>
+
+                    <dt class="col-sm-6">Unidad Destino:</dt>
+                    <dd class="col-sm-6">@Model.UnidadDestino</dd>
+
+                    <dt class="col-sm-6">Fecha Envío:</dt>
+                    <dd class="col-sm-6">
+                        @if (Model.FechaEnvio.HasValue)
+                        {
+                            @Model.FechaEnvio.Value.ToString("dd/MM/yyyy")
+                        }
+                    </dd>
+
+                    <dt class="col-sm-6">Fecha Recepción:</dt>
+                    <dd class="col-sm-6">
+                        <input type="date" asp-for="FechaRecepcion" class="form-control form-control-sm" readonly />
+                    </dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="form-group mt-3">
+            <label asp-for="Observaciones" class="control-label">
+                <i class="fas fa-comment"></i> Observaciones de Recepción *
+            </label>
+            <textarea asp-for="Observaciones" class="form-control" rows="4" 
+                      placeholder="Ingrese observaciones sobre el estado del producto recibido..." required></textarea>
+            <span asp-validation-for="Observaciones" class="text-danger"></span>
+            <small class="form-text text-muted">
+                Indique si el producto llegó en buen estado, cantidades correctas, etc.
+            </small>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            <i class="fas fa-times"></i> Cancelar
+        </button>
+        <button type="submit" class="btn btn-success">
+            <i class="fas fa-check"></i> Confirmar Recepción
+        </button>
+    </div>
+</form>

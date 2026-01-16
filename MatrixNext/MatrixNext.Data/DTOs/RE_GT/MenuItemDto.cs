@@ -1,7 +1,9 @@
-// MatrixNext.Core/DTOs/RE_GT/MenuItemDto.cs
+// MatrixNext.Data/DTOs/RE_GT/MenuItemDto.cs
 // DTO genérico para items de menú de navegación (reutilizable para landing pages)
 
-namespace MatrixNext.Core.DTOs.RE_GT
+using System.Collections.Generic;
+
+namespace MatrixNext.Data.DTOs.RE_GT
 {
     /// <summary>
     /// DTO para items de menú en páginas de navegación

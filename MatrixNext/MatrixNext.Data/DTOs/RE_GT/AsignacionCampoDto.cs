@@ -1,4 +1,6 @@
-namespace MatrixNext.Core.DTOs.RE_GT
+using System;
+
+namespace MatrixNext.Data.DTOs.RE_GT
 {
     /// <summary>
     /// DTO para asignación de trabajo a coordinador de campo

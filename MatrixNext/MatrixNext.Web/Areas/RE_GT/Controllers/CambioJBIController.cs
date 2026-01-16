@@ -1,4 +1,4 @@
-using MatrixNext.Core.DTOs.RE_GT;
+using MatrixNext.Data.DTOs.RE_GT;
 using MatrixNext.Web.Services.RE_GT;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

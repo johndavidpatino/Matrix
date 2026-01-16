@@ -1,0 +1,104 @@
+@model MatrixNext.Data.DTOs.PC.ProductoInternoListDto
+
+<div class="modal-header">
+    <h5 class="modal-title">
+        <i class="fas fa-info-circle"></i> Detalles del Producto
+    </h5>
+    <button type="button" class="close" data-dismiss="modal">
+        <span>&times;</span>
+    </button>
+</div>
+
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-6">
+            <dl class="row">
+                <dt class="col-sm-5">Proyecto:</dt>
+                <dd class="col-sm-7">@Model.ProyectoNombre</dd>
+
+                <dt class="col-sm-5">Producto:</dt>
+                <dd class="col-sm-7"><strong>@Model.Producto</strong></dd>
+
+                <dt class="col-sm-5">Descripción:</dt>
+                <dd class="col-sm-7">@(Model.Descripcion ?? "N/A")</dd>
+
+                <dt class="col-sm-5">Cantidad:</dt>
+                <dd class="col-sm-7">
+                    <span class="badge badge-info badge-lg">@Model.Cantidad.ToString("N2")</span>
+                </dd>
+
+                <dt class="col-sm-5">Tipo:</dt>
+                <dd class="col-sm-7">@Model.TipoNombre</dd>
+            </dl>
+        </div>
+
+        <div class="col-md-6">
+            <dl class="row">
+                <dt class="col-sm-5">Unidad Envía:</dt>
+                <dd class="col-sm-7">@Model.UnidadEnviaNombre</dd>
+
+                <dt class="col-sm-5">Enviado por:</dt>
+                <dd class="col-sm-7">@Model.EnviaNombre</dd>
+
+                <dt class="col-sm-5">Fecha Envío:</dt>
+                <dd class="col-sm-7">
+                    @if (Model.FechaEnvio.HasValue)
+                    {
+                        @Model.FechaEnvio.Value.ToString("dd/MM/yyyy HH:mm")
+                    }
+                    else
+                    {
+                        <span class="text-muted">N/A</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-5">Unidad Recibe:</dt>
+                <dd class="col-sm-7">@Model.UnidadRecibeNombre</dd>
+
+                <dt class="col-sm-5">Recibido por:</dt>
+                <dd class="col-sm-7">@(Model.RecibeNombre ?? "Pendiente")</dd>
+
+                <dt class="col-sm-5">Fecha Recepción:</dt>
+                <dd class="col-sm-7">
+                    @if (Model.FechaRecepcion.HasValue)
+                    {
+                        @Model.FechaRecepcion.Value.ToString("dd/MM/yyyy HH:mm")
+                    }
+                    else
+                    {
+                        <span class="badge badge-warning">Pendiente</span>
+                    }
+                </dd>
+            </dl>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.Observaciones))
+    {
+        <div class="row mt-3">
+            <div class="col-12">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <h6 class="card-title"><i class="fas fa-comment"></i> Observaciones:</h6>
+                        <p class="card-text">@Model.Observaciones</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="row mt-3">
+        <div class="col-12">
+            <div class="alert alert-@Model.EstadoClass" role="alert">
+                <i class="fas fa-@(Model.Estado == "Recibido" ? "check-circle" : "clock")"></i>
+                <strong>Estado:</strong> @Model.Estado
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+        <i class="fas fa-times"></i> Cerrar
+    </button>
+</div>

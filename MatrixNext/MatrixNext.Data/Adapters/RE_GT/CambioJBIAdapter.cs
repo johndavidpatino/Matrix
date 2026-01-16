@@ -1,5 +1,5 @@
 using Dapper;
-using MatrixNext.Core.DTOs.RE_GT;
+using MatrixNext.Data.DTOs.RE_GT;
 using System;
 using System.Collections.Generic;
 using System.Data;

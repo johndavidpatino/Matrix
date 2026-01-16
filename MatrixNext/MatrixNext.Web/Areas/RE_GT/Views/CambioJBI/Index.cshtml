@@ -56,7 +56,7 @@
                                     data-toggle="tooltip" 
                                     title="Seleccione la fase para modificar">
                                 <option value="">-- Seleccione --</option>
-                                @foreach (var fase in (IEnumerable<MatrixNext.Core.DTOs.RE_GT.FaseDto>)ViewBag.Fases ?? new List<MatrixNext.Core.DTOs.RE_GT.FaseDto>())
+                                @foreach (var fase in (IEnumerable<MatrixNext.Data.DTOs.RE_GT.FaseDto>)ViewBag.Fases ?? new List<MatrixNext.Data.DTOs.RE_GT.FaseDto>())
                                 {
                                     <option value="@fase.IdFase">@fase.DescFase</option>
                                 }

@@ -1,6 +1,8 @@
-// MatrixNext.Core/DTOs/CORE/TareasPorUnidadDto.cs
+// MatrixNext.Data/DTOs/CORE/TareasPorUnidadDto.cs
 
-namespace MatrixNext.Core.DTOs.CORE
+using System;
+
+namespace MatrixNext.Data.DTOs.CORE
 {
     /// <summary>
     /// DTO para listado de tareas en TraficoTareas (por unidad OP)

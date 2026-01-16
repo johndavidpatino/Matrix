@@ -1,4 +1,4 @@
-using MatrixNext.Core.DTOs.RE_GT;
+using MatrixNext.Data.DTOs.RE_GT;
 using MatrixNext.Data.Adapters.RE_GT;
 using Microsoft.Extensions.Logging;
 using System;

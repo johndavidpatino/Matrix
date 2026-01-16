@@ -1,6 +1,6 @@
 using System;
 
-namespace MatrixNext.Core.DTOs.RE_GT
+namespace MatrixNext.Data.DTOs.RE_GT
 {
     /// <summary>
     /// DTO para cambio de JobBook Interno

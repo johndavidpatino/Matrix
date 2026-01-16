@@ -3,7 +3,7 @@
 using System.Data;
 using Dapper;
 using Microsoft.Data.SqlClient;
-using MatrixNext.Core.DTOs.CORE;
+using MatrixNext.Data.DTOs.CORE;
 
 namespace MatrixNext.Web.Services.CORE
 {

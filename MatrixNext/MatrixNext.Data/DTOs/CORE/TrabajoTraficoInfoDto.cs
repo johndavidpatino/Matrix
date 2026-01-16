@@ -1,6 +1,6 @@
-// MatrixNext.Core/DTOs/CORE/TrabajoTraficoInfoDto.cs
+// MatrixNext.Data/DTOs/CORE/TrabajoTraficoInfoDto.cs
 
-namespace MatrixNext.Core.DTOs.CORE
+namespace MatrixNext.Data.DTOs.CORE
 {
     /// <summary>
     /// DTO para información detallada de un trabajo en TraficoTareas
