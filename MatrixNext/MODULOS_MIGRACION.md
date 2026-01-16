@@ -440,26 +440,30 @@
 - **Fecha Exclusión**: 2026-01-15
 - **Estado**: ⛔ **NO MIGRAR** - Carpeta contiene únicamente documentos PDF (ResumenProduccion-*.pdf)
 
-#### 25. **RE_GT** (Recolección y Gestión/Tratamiento de Datos) 🔴 PENDIENTE
+#### 25. **RE_GT** (Recolección y Gestión/Tratamiento de Datos) � SPRINT 17 EN PROGRESO
 - **Carpeta**: `WebMatrix/RE_GT`
-- **Prioridad**: 🟡 BAJA
-- **Sprint Sugerido**: Sprint 17
+- **Prioridad**: 🟡 MEDIA (dependencia de OP_Cuantitativo)
+- **Sprint**: Sprint 17 (En progreso - Fase 3: Testing)
 - **Dependencias**: OP_Cuantitativo (ALTA - Muchas funcionalidades ya migradas), OP_Cualitativo, CORE (WorkFlow)
-- **Estimación**: 2-3 semanas (con optimización por código duplicado)
-- **Estado**: ❌ NO INICIADO
-- **Páginas Identificadas**: 12 páginas .aspx
-  * HomeRecoleccion.aspx - Landing page de recolección de datos
-  * HomeGestionTratamiento.aspx - Landing page de gestión y tratamiento
-  * TraficoTareas.aspx - Gestión y ejecución de tareas (WorkFlow)
-  * RecoleccionDeDatos.aspx - Gestión de recolección
-  * GestionyTratamientoDeDatos.aspx - Gestión de tratamiento
-  * AsignacionCOE.aspx - Asignación de coordinación de estudios
-  * AsignacionJBI.aspx - Asignación de JobBook Interno a proyectos
-  * AsignacionCoordinador.aspx - Asignación de coordinadores
-  * AsignacionCampo.aspx - Asignación de personal de campo
-  * CambiosJBI.aspx - Cambios de JobBook Interno
-  * SeleccionarPreguntasTabular.aspx - Selección de preguntas para tabulación
-  * TabularEstudios.aspx - Tabulación de estudios
+- **Tiempo Total Sprint**: 5.5 horas (Fase 1 Auditoría + Fase 2 Gap Filling)
+- **Estado Actual**: 🔄 **FASE 2 COMPLETADA (90% FUNCIONAL)**
+  * Fase 1 ✅ Auditoría: 1,521 LOC identificados
+  * Fase 2 ✅ Gap Filling: TraficoTareas UI consolidada (8 .aspx → 1 .cshtml)
+  * Fase 3 ⏳ Consolidación: Testing + Análisis pendientes
+- **Build Status**: ✅ 0 ERRORES, 0 WARNINGS
+- **Páginas Identificadas**: 12 páginas .aspx (10/12 migradas en Fase 2)
+  * ✅ TraficoTareas.aspx - Gestión y ejecución de tareas (WorkFlow) **MIGRADA**
+  * ⏳ RecoleccionDeDatos.aspx - Gestión de recolección
+  * ⏳ GestionyTratamientoDeDatos.aspx - Gestión de tratamiento
+  * ⏳ HomeRecoleccion.aspx - Landing page de recolección de datos
+  * ⏳ HomeGestionTratamiento.aspx - Landing page de gestión y tratamiento
+  * ✅ AsignacionCOE.aspx - Asignación de coordinación (En OP_Cuantitativo)
+  * ✅ AsignacionJBI.aspx - Asignación de JobBook (En OP_Cuantitativo)
+  * ✅ AsignacionCoordinador.aspx - Asignación de coordinadores (En OP_Cuantitativo)
+  * ✅ AsignacionCampo.aspx - Asignación de personal (En OP_Cuantitativo)
+  * ⏳ CambiosJBI.aspx - Cambios de JobBook Interno
+  * ✅ SeleccionarPreguntasTabular.aspx - Selección de preguntas (En OP_Cuantitativo)
+  * ✅ TabularEstudios.aspx - Tabulación de estudios (En OP_Cuantitativo)
 
 **⚠️ NOTA CRÍTICA - SOBREPOSICIÓN CON OP_CUANTITATIVO**:
 - **TraficoTareas.aspx** es usado extensivamente desde OP_Cuantitativo/HomeGestion.aspx (6+ unidades)
@@ -467,15 +471,27 @@
 - **SeleccionarPreguntasTabular** y **TabularEstudios** son parte del flujo de OP_Cuantitativo
 - Las asignaciones (COE, JBI, Coordinador, Campo) son compartidas entre OP_Cuanti y OP_Cuali
 
-**Análisis de Duplicación**:
-1. **TraficoTareas** (WorkFlow) → 90% ya implementado en CORE/WorkFlow (Sprint 7)
-2. **Asignaciones** (COE, JBI, Coordinador, Campo) → Funcionalidad incluida en OP_Cuantitativo (Sprint 12) y OP_Cualitativo (Sprint 6)
-3. **Tabulación** (SeleccionarPreguntas, Tabular) → Parte de procesamiento OP_Cuantitativo (Sprint 12)
+**Sprint 17 Fase 2 - Implementado**:
+1. ✅ **TraficoTareas Consolidation**: 8 páginas .aspx → 1 vista moderna (372 LOC)
+   - 4 Filtros (Unidad, Estado, Prioridad, Búsqueda)
+   - Paginación (25 registros/página)
+   - AJAX Modal para detalles
+   - Permisos por unidad (10 unidades mapeadas)
+   - Indicadores urgencia + vencimiento
+2. ✅ **Service + Adapter**: 125 LOC con async/await
+3. ✅ **Build**: 0 errores verificados
+4. ✅ **Documentación**: MIGRACION_RE_GT_COMPLETADA.md (420 líneas)
 
-**Recomendación**:
-- **Auditar OP_Cuantitativo** y **OP_Cualitativo** para confirmar cobertura de RE_GT
-- Estimación optimizada: **1-2 semanas** (solo funcionalidades no cubiertas)
-- Posible reducción a **Sprint 17 corto** si solo se requieren ajustes/consolidación
+**Sprint 17 Fase 3 - Próximas Actividades** (8-12h):
+- SUBFASE 3.1: Testing TraficoTareas (3-4h)
+  - UI Básico, Permisos, Rendimiento, Errores
+- SUBFASE 3.2: Análisis RecoleccionDatos + GestionTratamiento (2-3h)
+- SUBFASE 3.3: Iniciar RecoleccionDatos (3-5h)
+  - DTOs, Service+Adapter, Controller, Vista
+
+**Documentación**:
+- [docs/RE_GT/MIGRACION_RE_GT_COMPLETADA.md](docs/RE_GT/MIGRACION_RE_GT_COMPLETADA.md) - Fase 2 cierre
+- [docs/RE_GT/SPRINT17_FASE3_PLAN.md](docs/RE_GT/SPRINT17_FASE3_PLAN.md) - Fase 3 detalles
 
 #### 26. **PC_PropiedadCliente** 🔴 PENDIENTE
 - **Carpeta**: `WebMatrix/PC_PropiedadCliente`
