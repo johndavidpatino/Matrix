@@ -1,0 +1,370 @@
+@model TraficoTareasViewModel
+
+@{
+    ViewData["Title"] = "Tráfico de Tareas - " + Model.NombreUnidadActual;
+    Layout = "_Layout";
+}
+
+<div class="container-fluid mt-4">
+    <!-- HEADER -->
+    <div class="row mb-3">
+        <div class="col-md-8">
+            <h2>
+                <i class="fas fa-tasks"></i> 
+                Tráfico de Tareas - @Model.NombreUnidadActual
+            </h2>
+            <small class="text-muted">
+                Total: @Model.TotalRegistros registros | 
+                En Progreso: @Model.TareasEnProgreso | 
+                Completadas: @Model.TareasCompletadas
+                @if (Model.TareasUrgentes > 0)
+                {
+                    <span class="badge badge-warning ms-2">⚠️ @Model.TareasUrgentes Urgentes</span>
+                }
+                @if (Model.TareasVencidas > 0)
+                {
+                    <span class="badge badge-danger ms-2">❌ @Model.TareasVencidas Vencidas</span>
+                }
+            </small>
+        </div>
+        <div class="col-md-4 text-end">
+            <a href="@Url.Action("Create", "WorkFlow")" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Nueva Tarea
+            </a>
+        </div>
+    </div>
+
+    <!-- FILTROS CARD -->
+    <div class="card mb-4">
+        <div class="card-header bg-light">
+            <h5 class="mb-0">
+                <i class="fas fa-filter"></i> Filtros
+            </h5>
+        </div>
+        <div class="card-body">
+            <form method="get" action="@Url.Action("TraficoTareas", "WorkFlow")" class="row g-3">
+                
+                <!-- Unidad -->
+                <div class="col-md-3">
+                    <label for="unidad" class="form-label">Unidad OP</label>
+                    <select id="unidad" name="unidad" class="form-select"
+                            onchange="this.form.submit()">
+                        <option value="">-- Seleccionar --</option>
+                        @foreach (var u in Model.UnidadesDisponibles)
+                        {
+                            <option value="@u.Id" 
+                                    selected="@(Model.FiltroUnidad == u.Id || Model.IdUnidadActual == u.Id)">
+                                @u.Nombre (@u.GrupoOrigen)
+                            </option>
+                        }
+                    </select>
+                </div>
+
+                <!-- Estado -->
+                <div class="col-md-3">
+                    <label for="estado" class="form-label">Estado</label>
+                    <select id="estado" name="estado" class="form-select"
+                            onchange="this.form.submit()">
+                        <option value="">-- Todos --</option>
+                        <option value="Creada" selected="@(Model.FiltroEstado == "Creada")">
+                            🆕 Creada
+                        </option>
+                        <option value="EnProgreso" selected="@(Model.FiltroEstado == "EnProgreso")">
+                            ▶️ En Progreso
+                        </option>
+                        <option value="Completada" selected="@(Model.FiltroEstado == "Completada")">
+                            ✅ Completada
+                        </option>
+                        <option value="Anulada" selected="@(Model.FiltroEstado == "Anulada")">
+                            ❌ Anulada
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Prioridad -->
+                <div class="col-md-2">
+                    <label for="prioridad" class="form-label">Prioridad</label>
+                    <select id="prioridad" name="prioridad" class="form-select"
+                            onchange="this.form.submit()">
+                        <option value="">-- Todos --</option>
+                        <option value="2" selected="@(Model.FiltroPrioridad == 2)">
+                            🔴 Alta
+                        </option>
+                        <option value="1" selected="@(Model.FiltroPrioridad == 1)">
+                            🟡 Normal
+                        </option>
+                        <option value="3" selected="@(Model.FiltroPrioridad == 3)">
+                            🟢 Baja
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Búsqueda -->
+                <div class="col-md-4">
+                    <label for="busqueda" class="form-label">Búsqueda</label>
+                    <div class="input-group">
+                        <input type="text" id="busqueda" name="busqueda" 
+                               class="form-control" 
+                               placeholder="Nombre trabajo, JobBook..."
+                               value="@Model.FiltroBusqueda">
+                        <button type="submit" class="btn btn-outline-secondary">
+                            <i class="fas fa-search"></i> Buscar
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TABLA TAREAS -->
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th style="width: 8%">ID Trabajo</th>
+                        <th style="width: 15%">JobBook</th>
+                        <th style="width: 20%">Descripción</th>
+                        <th style="width: 12%">Metodología</th>
+                        <th style="width: 10%">Estado</th>
+                        <th style="width: 8%">Prioridad</th>
+                        <th style="width: 10%">Vencimiento</th>
+                        <th style="width: 7%" class="text-center">Asignados</th>
+                        <th style="width: 10%" class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.HayRegistros)
+                    {
+                        @foreach (var tarea in Model.Tareas)
+                        {
+                            <tr class="@(tarea.EsVencida ? "table-danger" : (tarea.EsUrgente ? "table-warning" : ""))">
+                                <!-- ID Trabajo -->
+                                <td>
+                                    <strong class="text-primary">#@tarea.IdTrabajo</strong>
+                                </td>
+
+                                <!-- JobBook -->
+                                <td>
+                                    <small class="text-monospace">@tarea.JobBook</small>
+                                </td>
+
+                                <!-- Descripción -->
+                                <td>
+                                    <span title="@tarea.NombreTrabajo">
+                                        @if (tarea.NombreTrabajo.Length > 40)
+                                        {
+                                            @(tarea.NombreTrabajo.Substring(0, 40) + "...")
+                                        }
+                                        else
+                                        {
+                                            @tarea.NombreTrabajo
+                                        }
+                                    </span>
+                                </td>
+
+                                <!-- Metodología -->
+                                <td>
+                                    <small class="badge bg-info">@tarea.NombreMetodologia</small>
+                                </td>
+
+                                <!-- Estado -->
+                                <td>
+                                    <span class="badge bg-@tarea.EstadoCssClass">
+                                        @tarea.EstadoDisplay
+                                    </span>
+                                </td>
+
+                                <!-- Prioridad -->
+                                <td>
+                                    <span class="badge bg-@tarea.PrioridadCssClass">
+                                        @tarea.PrioridadDisplay
+                                    </span>
+                                </td>
+
+                                <!-- Vencimiento -->
+                                <td>
+                                    @if (tarea.FechaVencimiento.HasValue)
+                                    {
+                                        <small>@tarea.FechaVencimiento.Value.ToString("dd/MM/yyyy")</small>
+                                        @if (tarea.EsVencida)
+                                        {
+                                            <span class="badge badge-danger ms-1">Vencida</span>
+                                        }
+                                        else if (tarea.EsUrgente)
+                                        {
+                                            <span class="badge badge-warning ms-1">Urgente</span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <small class="text-muted">-</small>
+                                    }
+                                </td>
+
+                                <!-- Asignados -->
+                                <td class="text-center">
+                                    <span class="badge bg-primary" title="Usuarios asignados">
+                                        @tarea.UsuariosAsignados
+                                    </span>
+                                </td>
+
+                                <!-- Acciones -->
+                                <td class="text-center">
+                                    <!-- Editar -->
+                                    <a href="@Url.Action("Edit", "WorkFlow", new { id = tarea.IdWorkFlow })" 
+                                       class="btn btn-sm btn-primary" title="Editar tarea" data-bs-toggle="tooltip">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+
+                                    <!-- Ver Detalles -->
+                                    <button type="button" class="btn btn-sm btn-info" 
+                                            onclick="cargarDetalles(@tarea.IdTrabajo)" 
+                                            title="Ver detalles" data-bs-toggle="tooltip">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+
+                                    <!-- Dropdown menú -->
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" 
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li>
+                                                <a class="dropdown-item" 
+                                                   href="@Url.Action("Edit", "WorkFlow", new { id = tarea.IdWorkFlow })">
+                                                    <i class="fas fa-edit"></i> Editar
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="#">
+                                                    <i class="fas fa-trash"></i> Eliminar
+                                                </a>
+                                            </li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li>
+                                                <a class="dropdown-item" href="#">
+                                                    <i class="fas fa-file"></i> Documentos
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="9" class="text-center text-muted py-4">
+                                <i class="fas fa-inbox"></i>
+                                <p>No hay tareas registradas con los filtros aplicados</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- PAGINACIÓN -->
+        @if (Model.TotalPaginas > 1)
+        {
+            <div class="card-footer">
+                <nav aria-label="Paginación">
+                    <ul class="pagination justify-content-center mb-0">
+                        @* Primera página *@
+                        <li class="page-item @(Model.PaginaActual <= 1 ? "disabled" : "")">
+                            <a class="page-link" 
+                               href="@Url.Action("TraficoTareas", "WorkFlow", new { page = 1, unidad = Model.FiltroUnidad, estado = Model.FiltroEstado, prioridad = Model.FiltroPrioridad, busqueda = Model.FiltroBusqueda })">
+                                « Primera
+                            </a>
+                        </li>
+
+                        @* Anterior *@
+                        <li class="page-item @(Model.PaginaActual <= 1 ? "disabled" : "")">
+                            <a class="page-link" 
+                               href="@Url.Action("TraficoTareas", "WorkFlow", new { page = Model.PaginaActual - 1, unidad = Model.FiltroUnidad, estado = Model.FiltroEstado, prioridad = Model.FiltroPrioridad, busqueda = Model.FiltroBusqueda })">
+                                ‹ Anterior
+                            </a>
+                        </li>
+
+                        @* Números de página *@
+                        @for (int i = Math.Max(1, Model.PaginaActual - 2); i <= Math.Min(Model.TotalPaginas, Model.PaginaActual + 2); i++)
+                        {
+                            <li class="page-item @(i == Model.PaginaActual ? "active" : "")">
+                                <a class="page-link" 
+                                   href="@Url.Action("TraficoTareas", "WorkFlow", new { page = i, unidad = Model.FiltroUnidad, estado = Model.FiltroEstado, prioridad = Model.FiltroPrioridad, busqueda = Model.FiltroBusqueda })">
+                                    @i
+                                </a>
+                            </li>
+                        }
+
+                        @* Siguiente *@
+                        <li class="page-item @(Model.PaginaActual >= Model.TotalPaginas ? "disabled" : "")">
+                            <a class="page-link" 
+                               href="@Url.Action("TraficoTareas", "WorkFlow", new { page = Model.PaginaActual + 1, unidad = Model.FiltroUnidad, estado = Model.FiltroEstado, prioridad = Model.FiltroPrioridad, busqueda = Model.FiltroBusqueda })">
+                                Siguiente ›
+                            </a>
+                        </li>
+
+                        @* Última página *@
+                        <li class="page-item @(Model.PaginaActual >= Model.TotalPaginas ? "disabled" : "")">
+                            <a class="page-link" 
+                               href="@Url.Action("TraficoTareas", "WorkFlow", new { page = Model.TotalPaginas, unidad = Model.FiltroUnidad, estado = Model.FiltroEstado, prioridad = Model.FiltroPrioridad, busqueda = Model.FiltroBusqueda })">
+                                Última »
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="text-center">
+                    <small class="text-muted">
+                        Página @Model.PaginaActual de @Model.TotalPaginas | 
+                        Total: @Model.TotalRegistros registros
+                    </small>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- MODAL para detalles -->
+<div class="modal fade" id="modalDetalles" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detalles del Trabajo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="detallesContent">
+                <!-- Cargado dinámicamente -->
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function cargarDetalles(idTrabajo) {
+            $.ajax({
+                url: '@Url.Action("TraficoTareasDetails", "WorkFlow")/' + idTrabajo,
+                type: 'GET',
+                success: function(html) {
+                    $('#detallesContent').html(html);
+                    new bootstrap.Modal(document.getElementById('modalDetalles')).show();
+                },
+                error: function() {
+                    alert('Error al cargar detalles');
+                }
+            });
+        }
+
+        // Inicializar tooltips
+        document.addEventListener('DOMContentLoaded', function() {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+    </script>
+}
