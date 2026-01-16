@@ -1,0 +1,196 @@
+@model MatrixNext.Data.ViewModels.GestionMatrixViewModel
+@{
+    ViewData["Title"] = "Gestión Matrix";
+}
+
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-project-diagram"></i> Transacciones Matrix
+                    </h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.GestionMatrix != null)
+    {
+        <!-- Tarjetas de métricas -->
+        <div class="row mb-4">
+            <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+                <div class="card shadow-sm border-left-success">
+                    <div class="card-body">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Briefs</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.GestionMatrix.Brief</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+                <div class="card shadow-sm border-left-warning">
+                    <div class="card-body">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Propuestas</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.GestionMatrix.Propuestas</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+                <div class="card shadow-sm border-left-danger">
+                    <div class="card-body">
+                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Presupuestos</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.GestionMatrix.Presupuestos</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+                <div class="card shadow-sm border-left-danger">
+                    <div class="card-body">
+                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Estudios</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.GestionMatrix.Estudios</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+                <div class="card shadow-sm border-left-success">
+                    <div class="card-body">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Proyectos</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.GestionMatrix.Proyectos</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+                <div class="card shadow-sm border-left-warning">
+                    <div class="card-body">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Trabajos</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.GestionMatrix.Trabajos</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gráfico de embudo (funnel) -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Pipeline de Gestión</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="chartGestionMatrix" style="max-height: 500px;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i> No hay datos de gestión Matrix disponibles
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @if (Model.GestionMatrix != null)
+    {
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+        <script>
+            // Datos del servidor
+            const gestionData = @Html.Raw(Json.Serialize(Model.GestionMatrix));
+
+            // Gráfico de columnas para mostrar el pipeline
+            const ctx = document.getElementById('chartGestionMatrix').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Briefs', 'Propuestas', 'Presupuestos', 'Estudios', 'Proyectos', 'Trabajos'],
+                    datasets: [{
+                        label: 'Cantidad',
+                        data: [
+                            gestionData.brief,
+                            gestionData.propuestas,
+                            gestionData.presupuestos,
+                            gestionData.estudios,
+                            gestionData.proyectos,
+                            gestionData.trabajos
+                        ],
+                        backgroundColor: [
+                            '#28a745', // Verde - Briefs
+                            '#ffc107', // Amarillo - Propuestas
+                            '#dc3545', // Rojo - Presupuestos
+                            '#dc3545', // Rojo - Estudios
+                            '#28a745', // Verde - Proyectos
+                            '#ffc107'  // Amarillo - Trabajos
+                        ],
+                        borderColor: [
+                            '#28a745',
+                            '#ffc107',
+                            '#dc3545',
+                            '#dc3545',
+                            '#28a745',
+                            '#ffc107'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Cantidad'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Etapas del Pipeline'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: ${context.parsed.y}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        </script>
+    }
+}
+
+<style>
+    .border-left-success {
+        border-left: 4px solid #28a745 !important;
+    }
+    .border-left-warning {
+        border-left: 4px solid #ffc107 !important;
+    }
+    .border-left-danger {
+        border-left: 4px solid #dc3545 !important;
+    }
+    .text-xs {
+        font-size: 0.75rem;
+    }
+</style>

@@ -18,6 +18,7 @@
 6. ✅ **Implementa async/await** en todas las operaciones I/O
 7. ✅ **Valida permisos** con `[Authorize]` en todos los controllers
 8. ✅ **Maneja errores** sin exponer stack traces (retorna mensajes amigables)
+9. ? **Usa MatrixNext.Data para la capa de datos y MatrixNext.Web para la capa Web (vistas, controllers, etc). Solo puedes agregar archivos o carpetas dentro de estas dos rutas**
 
 ### Cuando revises código:
 

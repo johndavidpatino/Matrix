@@ -130,6 +130,10 @@ builder.Services.AddScoped<MatrixNext.Data.Services.MBO.IAOTService, MatrixNext.
 builder.Services.AddScoped<MatrixNext.Data.Adapters.MBO.ICampoAdapter, MatrixNext.Data.Adapters.MBO.CampoAdapter>();
 builder.Services.AddScoped<MatrixNext.Data.Services.MBO.ICampoService, MatrixNext.Data.Services.MBO.CampoService>();
 
+// MBO Fase 3: Propuestas y Gestión (Proposals & Management)
+builder.Services.AddScoped<MatrixNext.Data.Adapters.MBO.IPropuestasAdapter, MatrixNext.Data.Adapters.MBO.PropuestasAdapter>();
+builder.Services.AddScoped<MatrixNext.Data.Services.MBO.IPropuestasService, MatrixNext.Data.Services.MBO.PropuestasService>();
+
 // Authorization Service (Sprint 10-11)
 builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
 

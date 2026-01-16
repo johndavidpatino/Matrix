@@ -1,0 +1,289 @@
+@model MatrixNext.Data.ViewModels.PropuestasEstadoViewModel
+@{
+    ViewData["Title"] = "Propuestas - Estado Total";
+}
+
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-chart-line"></i> Estado de Propuestas
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="get" asp-action="EstadoTotal" class="row g-3">
+                        <div class="col-md-3">
+                            <label for="sigla" class="form-label">Unidad de Negocio</label>
+                            <select name="sigla" id="sigla" class="form-select" onchange="this.form.submit()">
+                                <option value="9" selected="@(Model.Sigla == "9" ? "selected" : null)">Todas las Unidades</option>
+                                @foreach (var unidad in Model.UnidadesDisponibles)
+                                {
+                                    <option value="@unidad.Sigla" selected="@(Model.Sigla == unidad.Sigla ? "selected" : null)">
+                                        @unidad.NombreUnidad
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fila 1: Propuestas Creadas/Enviadas y Alta Probabilidad -->
+    <div class="row mb-3">
+        <!-- Gráfico: Propuestas Creadas/Enviadas -->
+        <div class="col-lg-6 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Propuestas Creadas / Enviadas</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="chartCreadasEnviadas" style="max-height: 400px;"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gráfico: Alta Probabilidad -->
+        <div class="col-lg-6 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">Propuestas ALTA PROBABILIDAD</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="chartAltaProbabilidad" style="max-height: 400px;"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fila 2: Propuestas por Gerente de Cuentas -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Creadas / Enviadas por Gerente de Cuentas</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="chartPorGerente" style="max-height: 500px;"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script>
+        // Datos del servidor
+        const datosCreadasEnviadas = @Html.Raw(Json.Serialize(Model.PropuestasPorUnidad));
+        const datosAltaProbabilidad = @Html.Raw(Json.Serialize(Model.PropuestasAltaProbabilidad));
+        const datosPorGerente = @Html.Raw(Json.Serialize(Model.PropuestasPorGerente));
+
+        // Gráfico 1: Propuestas Creadas/Enviadas por Unidad
+        const ctxCreadas = document.getElementById('chartCreadasEnviadas').getContext('2d');
+        new Chart(ctxCreadas, {
+            type: 'bar',
+            data: {
+                labels: datosCreadasEnviadas.map(d => d.grupoUnidad),
+                datasets: [
+                    {
+                        label: 'Creadas y Enviadas',
+                        data: datosCreadasEnviadas.map(d => d.propuestasEnGestion),
+                        backgroundColor: '#28a745',
+                        borderColor: '#28a745',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Por Actualizar',
+                        data: datosCreadasEnviadas.map(d => d.propuestasPorActualizar),
+                        backgroundColor: '#dc3545',
+                        borderColor: '#dc3545',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: @Model.MaximoPropuestas,
+                        title: {
+                            display: true,
+                            text: 'Cantidad'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Unidades'
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                label += context.parsed.y;
+                                
+                                // Mostrar porcentaje para "Por Actualizar"
+                                if (context.datasetIndex === 1) {
+                                    const item = datosCreadasEnviadas[context.dataIndex];
+                                    if (item.propuestasEnGestion > 0) {
+                                        const porcentaje = (item.propuestasPorActualizar / item.propuestasEnGestion * 100).toFixed(2);
+                                        label += ` (${porcentaje}%)`;
+                                    }
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Gráfico 2: Propuestas Alta Probabilidad
+        const ctxAlta = document.getElementById('chartAltaProbabilidad').getContext('2d');
+        new Chart(ctxAlta, {
+            type: 'bar',
+            data: {
+                labels: datosAltaProbabilidad.map(d => d.grupoUnidad),
+                datasets: [
+                    {
+                        label: 'Alta Probabilidad',
+                        data: datosAltaProbabilidad.map(d => d.tPropuestas),
+                        backgroundColor: '#28a745',
+                        borderColor: '#28a745',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Por Actualizar',
+                        data: datosAltaProbabilidad.map(d => d.nSinActualizar),
+                        backgroundColor: '#dc3545',
+                        borderColor: '#dc3545',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: @Model.MaximoPropuestasAltaProbabilidad,
+                        title: {
+                            display: true,
+                            text: 'Cantidad'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Unidades'
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                label += context.parsed.y;
+                                
+                                // Mostrar porcentaje para "Por Actualizar"
+                                if (context.datasetIndex === 1) {
+                                    const item = datosAltaProbabilidad[context.dataIndex];
+                                    if (item.tPropuestas > 0) {
+                                        const porcentaje = (item.nSinActualizar / item.tPropuestas * 100).toFixed(2);
+                                        label += ` (${porcentaje}%)`;
+                                    }
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Gráfico 3: Propuestas por Gerente (horizontal bar)
+        const ctxGerente = document.getElementById('chartPorGerente').getContext('2d');
+        new Chart(ctxGerente, {
+            type: 'bar',
+            data: {
+                labels: datosPorGerente.map(d => d.nombreCompleto),
+                datasets: [
+                    {
+                        label: 'Creadas y Enviadas',
+                        data: datosPorGerente.map(d => d.propuestasEnGestion),
+                        backgroundColor: '#28a745',
+                        borderColor: '#28a745',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Por Actualizar',
+                        data: datosPorGerente.map(d => d.propuestasPorActualizar),
+                        backgroundColor: '#dc3545',
+                        borderColor: '#dc3545',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                indexAxis: 'y', // Horizontal bar chart
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Cantidad'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Gerentes'
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                label += context.parsed.x;
+                                
+                                // Mostrar porcentaje para "Por Actualizar"
+                                if (context.datasetIndex === 1) {
+                                    const item = datosPorGerente[context.dataIndex];
+                                    if (item.propuestasEnGestion > 0) {
+                                        const porcentaje = (item.propuestasPorActualizar / item.propuestasEnGestion * 100).toFixed(2);
+                                        label += ` (${porcentaje}%)`;
+                                    }
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+}
