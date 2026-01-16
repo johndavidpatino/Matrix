@@ -413,6 +413,8 @@ builder.Services.AddScoped<MatrixNext.Web.Services.RE_GT.IRecoleccionDatosServic
 // Ref: docs/RE_GT/SPRINT18_PLAN.md § Fase 2
 builder.Services.AddScoped<MatrixNext.Data.Adapters.RE_GT.ICambioJBIAdapter, MatrixNext.Data.Adapters.RE_GT.CambioJBIAdapter>();
 builder.Services.AddScoped<MatrixNext.Web.Services.RE_GT.ICambioJBIService, MatrixNext.Web.Services.RE_GT.CambioJBIService>();
+builder.Services.AddScoped<MatrixNext.Data.Adapters.RE_GT.IAsignacionCampoAdapter, MatrixNext.Data.Adapters.RE_GT.AsignacionCampoAdapter>();
+builder.Services.AddScoped<MatrixNext.Web.Services.RE_GT.IAsignacionCampoService, MatrixNext.Web.Services.RE_GT.AsignacionCampoService>();
 
 var app = builder.Build();
 

@@ -1,0 +1,367 @@
+@using MatrixNext.Core.DTOs.RE_GT
+@{
+    ViewData["Title"] = "Asignación de Trabajos a Campo";
+    var coes = (IEnumerable<dynamic>)ViewBag.COEs;
+}
+
+<div class="container-fluid pt-4">
+    <!-- Encabezado -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2><i class="fas fa-users-cog"></i> Asignación de Trabajos a Campo</h2>
+            <p class="text-muted">Gestione la asignación de trabajos a coordinadores de operaciones especializadas</p>
+        </div>
+    </div>
+
+    <!-- Filtros de búsqueda -->
+    <div class="card card-body mb-3">
+        <h5 class="mb-3">Filtros de búsqueda</h5>
+        <form id="frmFiltros" class="row g-2">
+            <div class="col-md-3">
+                <input type="text" id="nombrePropuesta" class="form-control" 
+                       placeholder="Propuesta">
+            </div>
+            <div class="col-md-3">
+                <input type="text" id="jobBook" class="form-control" 
+                       placeholder="Job Book">
+            </div>
+            <div class="col-md-3">
+                <input type="text" id="metCodigo" class="form-control" 
+                       placeholder="Código Metodología">
+            </div>
+            <div class="col-md-3 d-flex gap-2">
+                <button type="button" id="btnBuscar" class="btn btn-primary flex-fill">
+                    <i class="fas fa-search"></i> Buscar
+                </button>
+                <button type="reset" class="btn btn-secondary">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Grid de trabajos -->
+    <div class="card">
+        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Trabajos sin asignación</h5>
+            <small id="totalTrabajos" class="text-muted">Cargando...</small>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table id="gridTrabajos" class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width: 10%;">ID Trabajo</th>
+                            <th style="width: 20%;">Propuesta</th>
+                            <th style="width: 15%;">Job Book</th>
+                            <th style="width: 15%;">Met. Código</th>
+                            <th style="width: 20%;">COE Actual</th>
+                            <th style="width: 10%;">Estado</th>
+                            <th style="width: 10%;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyTrabajos">
+                        <tr>
+                            <td colspan="7" class="text-center text-muted py-4">
+                                <i class="fas fa-spinner fa-spin"></i> Cargando datos...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Paginación -->
+        <div class="card-footer bg-light d-flex justify-content-between align-items-center">
+            <small class="text-muted" id="infoRegistros">Mostrando 0 de 0</small>
+            <nav>
+                <ul class="pagination pagination-sm mb-0">
+                    <li class="page-item">
+                        <button type="button" class="page-link" id="btnPrevPage" disabled>
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                    </li>
+                    <li class="page-item">
+                        <span class="page-link" id="pageInfo">Página 1</span>
+                    </li>
+                    <li class="page-item">
+                        <button type="button" class="page-link" id="btnNextPage">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para asignación -->
+<div class="modal fade" id="modalAsignacion" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Asignar Trabajo a Campo</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <form id="frmAsignacion" method="post" action="@Url.Action("Asignar")">
+                <div class="modal-body">
+                    <div id="alertContainer"></div>
+
+                    <!-- Información del trabajo -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <h6 class="mb-0">Información del Trabajo</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>ID Trabajo:</strong> <span id="detalle-idTrabajo"></span></p>
+                                    <p><strong>Propuesta:</strong> <span id="detalle-propuesta"></span></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Job Book:</strong> <span id="detalle-jobBook"></span></p>
+                                    <p><strong>Metodología:</strong> <span id="detalle-metCodigo"></span></p>
+                                </div>
+                            </div>
+                            <p><strong>COE Actual:</strong> <span id="detalle-coeActual"></span></p>
+                        </div>
+                    </div>
+
+                    <!-- Asignación -->
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="idCOE" class="form-label">COE Destino <span class="text-danger">*</span></label>
+                            <select id="idCOE" name="idCOE" class="form-select form-select-lg" required>
+                                <option value="">Seleccione COE...</option>
+                                @if (coes != null)
+                                {
+                                    @foreach (var coe in coes)
+                                    {
+                                        <option value="@coe.IdCOE">@coe.Nombre</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="idPersona" class="form-label">Persona (Opcional)</label>
+                            <select id="idPersona" name="idPersona" class="form-select form-select-lg">
+                                <option value="">Sin asignar persona específica</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <input type="hidden" id="idTrabajo" name="idTrabajo" />
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times"></i> Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary" id="btnAsignar">
+                        <i class="fas fa-check"></i> Asignar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Alertas -->
+<div id="toastContainer" class="toast-container position-fixed p-3"></div>
+
+@section Scripts {
+    <script>
+        // Variables globales
+        let currentPage = 0;
+        const pageSize = 10;
+
+        // Cargar trabajos al iniciar
+        $(document).ready(function() {
+            cargarTrabajos();
+
+            // Evento: Buscar
+            $('#btnBuscar').click(cargarTrabajos);
+
+            // Evento: Paginación
+            $('#btnNextPage').click(() => { currentPage++; cargarTrabajos(); });
+            $('#btnPrevPage').click(() => { if (currentPage > 0) currentPage--; cargarTrabajos(); });
+
+            // Evento: Abrir modal
+            $(document).on('click', '.btn-asignar', function() {
+                const idTrabajo = $(this).data('id');
+                abrirModalAsignacion(idTrabajo);
+            });
+
+            // Evento: Submit de asignación
+            $('#frmAsignacion').on('submit', function(e) {
+                e.preventDefault();
+                realizarAsignacion();
+            });
+
+            // Evento: Cambiar COE (cargar personas)
+            $('#idCOE').change(cargarPersonasParaCOE);
+        });
+
+        // Cargar trabajos según filtros
+        function cargarTrabajos() {
+            const nombrePropuesta = $('#nombrePropuesta').val();
+            const jobBook = $('#jobBook').val();
+            const metCodigo = $('#metCodigo').val();
+
+            $.ajax({
+                url: '@Url.Action("ObtenerTrabajosGrid")',
+                type: 'GET',
+                data: {
+                    pageIndex: currentPage,
+                    pageSize: pageSize,
+                    nombrePropuesta: nombrePropuesta,
+                    jobBook: jobBook,
+                    metCodigo: metCodigo
+                },
+                success: function(response) {
+                    if (response.success) {
+                        renderizarGrid(response.data, response.totalRecords);
+                    } else {
+                        mostrarAlerta(response.message, 'danger');
+                    }
+                },
+                error: function() {
+                    mostrarAlerta('Error al cargar trabajos', 'danger');
+                }
+            });
+        }
+
+        // Renderizar tabla
+        function renderizarGrid(trabajos, totalRecords) {
+            const tbody = $('#tbodyTrabajos');
+            tbody.empty();
+
+            if (trabajos.length === 0) {
+                tbody.html('<tr><td colspan="7" class="text-center text-muted py-4">Sin resultados</td></tr>');
+                $('#totalTrabajos').text(`Total: 0`);
+                return;
+            }
+
+            trabajos.forEach(trabajo => {
+                const row = `
+                    <tr>
+                        <td>${trabajo.idTrabajo}</td>
+                        <td>${trabajo.propuesta || 'N/A'}</td>
+                        <td>${trabajo.jobBook || 'N/A'}</td>
+                        <td>${trabajo.metCodigo || 'N/A'}</td>
+                        <td>${trabajo.coeActualNombre || 'Sin asignar'}</td>
+                        <td>
+                            <span class="badge bg-info">${trabajo.estado || 'Activo'}</span>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-warning btn-asignar" 
+                                    data-id="${trabajo.idTrabajo}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                tbody.append(row);
+            });
+
+            // Actualizar paginación
+            $('#totalTrabajos').text(`Total: ${totalRecords}`);
+            $('#infoRegistros').text(`Mostrando ${trabajos.length} de ${totalRecords}`);
+            $('#pageInfo').text(`Página ${currentPage + 1}`);
+            $('#btnPrevPage').prop('disabled', currentPage === 0);
+            $('#btnNextPage').prop('disabled', (currentPage + 1) * pageSize >= totalRecords);
+        }
+
+        // Abrir modal de asignación
+        function abrirModalAsignacion(idTrabajo) {
+            $.ajax({
+                url: '@Url.Action("ObtenerDetallesTrabajo")',
+                type: 'GET',
+                data: { idTrabajo: idTrabajo },
+                success: function(response) {
+                    if (response.success) {
+                        const trabajo = response.trabajo;
+
+                        // Llenar detalles
+                        $('#detalle-idTrabajo').text(trabajo.idTrabajo);
+                        $('#detalle-propuesta').text(trabajo.propuesta);
+                        $('#detalle-jobBook').text(trabajo.jobBook);
+                        $('#detalle-metCodigo').text(trabajo.metCodigo);
+                        $('#detalle-coeActual').text(trabajo.coeActualNombre);
+
+                        // Llenar hidden
+                        $('#idTrabajo').val(idTrabajo);
+                        $('#idCOE').val(trabajo.idCOEActual);
+
+                        // Mostrar modal
+                        new bootstrap.Modal(document.getElementById('modalAsignacion')).show();
+                    } else {
+                        mostrarAlerta(response.message, 'danger');
+                    }
+                },
+                error: function() {
+                    mostrarAlerta('Error al obtener detalles', 'danger');
+                }
+            });
+        }
+
+        // Cargar personas para COE seleccionado
+        function cargarPersonasParaCOE() {
+            // Si hay datos de personas asociadas al COE, cargarlas aquí
+            // Por ahora, dejar el select vacío
+        }
+
+        // Realizar asignación
+        function realizarAsignacion() {
+            const idTrabajo = $('#idTrabajo').val();
+            const idCOE = $('#idCOE').val();
+            const idPersona = $('#idPersona').val() || null;
+
+            if (!idCOE) {
+                mostrarAlerta('Debe seleccionar un COE', 'warning');
+                return;
+            }
+
+            $.ajax({
+                url: '@Url.Action("Asignar")',
+                type: 'POST',
+                data: {
+                    idTrabajo: idTrabajo,
+                    idCOE: idCOE,
+                    idPersona: idPersona
+                },
+                success: function(response) {
+                    if (response.success) {
+                        mostrarAlerta('Asignación realizada exitosamente', 'success');
+                        bootstrap.Modal.getInstance(document.getElementById('modalAsignacion')).hide();
+                        cargarTrabajos(); // Refrescar grid
+                    } else {
+                        mostrarAlerta(response.message, 'danger');
+                    }
+                },
+                error: function() {
+                    mostrarAlerta('Error al realizar asignación', 'danger');
+                }
+            });
+        }
+
+        // Mostrar alerta toast
+        function mostrarAlerta(mensaje, tipo = 'info') {
+            const alertClass = `alert-${tipo}`;
+            const iconClass = tipo === 'success' ? 'fa-check-circle' : 
+                            tipo === 'danger' ? 'fa-exclamation-circle' :
+                            tipo === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle';
+
+            const html = `
+                <div class="alert alert-dismissible alert-${tipo} fade show" role="alert">
+                    <i class="fas ${iconClass}"></i> ${mensaje}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+
+            $('#alertContainer').html(html);
+        }
+    </script>
+}
