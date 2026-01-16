@@ -1,0 +1,259 @@
+@model MatrixNext.Data.ViewModels.CampoCalidadViewModel
+@{
+    ViewData["Title"] = $"Dashboard Calidad - {Model.Mes:D2}/{Model.Año}";
+}
+
+<div class="container-fluid">
+    <!-- Encabezado con filtros -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="mb-3">
+                <i class="fas fa-star text-warning"></i>
+                Dashboard Calidad de Campo
+            </h2>
+            
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <form method="get" class="row g-3">
+                        <div class="col-md-3">
+                            <label for="año" class="form-label">Año</label>
+                            <input type="number" class="form-control" id="año" name="año" 
+                                   value="@Model.Año" min="2020" max="2030" required />
+                        </div>
+                        <div class="col-md-3">
+                            <label for="mes" class="form-label">Mes</label>
+                            <select class="form-select" id="mes" name="mes" required>
+                                @for (int i = 1; i <= 12; i++)
+                                {
+                                    <option value="@i" selected="@(i == Model.Mes)">
+                                        @System.Globalization.CultureInfo.GetCultureInfo("es-ES").DateTimeFormat.GetMonthName(i)
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="sigla" class="form-label">Unidad</label>
+                            <select class="form-select" id="sigla" name="sigla" required>
+                                @if (Model.UnidadesDisponibles != null)
+                                {
+                                    @foreach (var unidad in Model.UnidadesDisponibles)
+                                    {
+                                        <option value="@unidad.Sigla" selected="@(unidad.Sigla == Model.Sigla)">
+                                            @unidad.NombreUnidad
+                                        </option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-3 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-filter"></i> Filtrar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Semáforo de Calidad y Métricas -->
+    <div class="row mb-4">
+        <!-- Semáforo % Calidad -->
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-traffic-light"></i> Semáforo: % Calidad
+                    </h5>
+                </div>
+                <div class="card-body d-flex align-items-center justify-content-center">
+                    @if (Model.CalidadGeneral != null)
+                    {
+                        var porcentaje = Model.CalidadGeneral.PorcentajeCalidad;
+                        var colorSemaforo = porcentaje >= 95 ? "success" : (porcentaje >= 85 ? "warning" : "danger");
+                        
+                        <div class="text-center">
+                            <canvas id="calidadGauge" width="250" height="150"></canvas>
+                            <h3 class="mt-3 text-@colorSemaforo">
+                                @porcentaje.ToString("F1")%
+                            </h3>
+                            <p class="text-muted mb-0">
+                                Calidad General
+                            </p>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No hay datos disponibles</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Métricas de Calidad -->
+        <div class="col-md-8">
+            <div class="row">
+                @if (Model.CalidadGeneral != null)
+                {
+                    <!-- Encuestas Revisadas -->
+                    <div class="col-md-6 mb-3">
+                        <div class="card shadow-sm border-left-primary">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            Encuestas Revisadas
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            @Model.CalidadGeneral.EncuestasRevisadas
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-clipboard-check fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Índice de Error -->
+                    <div class="col-md-6 mb-3">
+                        <div class="card shadow-sm border-left-danger">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                            Índice de Error
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            @Model.CalidadGeneral.IndiceError.ToString("F2")
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-exclamation-triangle fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Errores Totales -->
+                    <div class="col-md-6 mb-3">
+                        <div class="card shadow-sm border-left-warning">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                            Errores Totales
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            @Model.CalidadGeneral.TotalErrores
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-times-circle fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Ranking por Ciudad y Encuestador -->
+    <div class="row">
+        <!-- Calidad por Ciudad -->
+        <div class="col-md-6 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-map-marker-alt"></i> Calidad por Ciudad
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div id="calidadCiudadContainer">
+                        @await Html.PartialAsync("_CalidadCiudad", Model.CalidadPorCiudad ?? new List<MatrixNext.Data.Models.MBO.CampoCiudadDto>())
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calidad por Encuestador -->
+        <div class="col-md-6 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-users"></i> Ranking Encuestadores
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div id="calidadEncuestadorContainer">
+                        @await Html.PartialAsync("_CalidadEncuestador", Model.CalidadPorEncuestador ?? new List<MatrixNext.Data.Models.MBO.CampoEncuestadorDto>())
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botones de acción -->
+    <div class="row mt-4">
+        <div class="col-md-6 text-center">
+            <a asp-action="Encuestas" asp-route-año="@Model.Año" asp-route-mes="@Model.Mes" asp-route-sigla="@Model.Sigla" 
+               class="btn btn-lg btn-primary">
+                <i class="fas fa-arrow-left"></i> Ver Dashboard Encuestas
+            </a>
+        </div>
+        <div class="col-md-6 text-center">
+            <a asp-action="Errores" asp-route-año="@Model.Año" asp-route-mes="@Model.Mes" asp-route-sigla="@Model.Sigla" 
+               class="btn btn-lg btn-danger">
+                <i class="fas fa-exclamation-circle"></i> Gestionar Errores
+            </a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script>
+        @if (Model.CalidadGeneral != null)
+        {
+            <text>
+            // Semáforo de calidad
+            const porcentajeCalidad = @Model.CalidadGeneral.PorcentajeCalidad.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
+            const colorCalidad = porcentajeCalidad >= 95 ? '#28a745' : (porcentajeCalidad >= 85 ? '#ffc107' : '#dc3545');
+            
+            const ctxCalidad = document.getElementById('calidadGauge').getContext('2d');
+            new Chart(ctxCalidad, {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        data: [porcentajeCalidad, 100 - porcentajeCalidad],
+                        backgroundColor: [colorCalidad, '#e9ecef'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    circumference: 180,
+                    rotation: 270,
+                    cutout: '70%',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: false }
+                    }
+                }
+            });
+            </text>
+        }
+    </script>
+}
+
+<style>
+    .border-left-primary { border-left: 4px solid #007bff !important; }
+    .border-left-success { border-left: 4px solid #28a745 !important; }
+    .border-left-info { border-left: 4px solid #17a2b8 !important; }
+    .border-left-warning { border-left: 4px solid #ffc107 !important; }
+    .border-left-danger { border-left: 4px solid #dc3545 !important; }
+    .text-xs { font-size: 0.7rem; }
+</style>

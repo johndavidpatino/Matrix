@@ -1,0 +1,300 @@
+@model MatrixNext.Data.ViewModels.CampoEncuestasViewModel
+@{
+    ViewData["Title"] = $"Dashboard Encuestas - {Model.Mes:D2}/{Model.Año}";
+}
+
+<div class="container-fluid">
+    <!-- Encabezado con filtros -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="mb-3">
+                <i class="fas fa-clipboard-list text-primary"></i>
+                Dashboard Encuestas Realizadas
+            </h2>
+            
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <form method="get" class="row g-3">
+                        <div class="col-md-3">
+                            <label for="año" class="form-label">Año</label>
+                            <input type="number" class="form-control" id="año" name="año" 
+                                   value="@Model.Año" min="2020" max="2030" required />
+                        </div>
+                        <div class="col-md-3">
+                            <label for="mes" class="form-label">Mes</label>
+                            <select class="form-select" id="mes" name="mes" required>
+                                @for (int i = 1; i <= 12; i++)
+                                {
+                                    <option value="@i" selected="@(i == Model.Mes)">
+                                        @System.Globalization.CultureInfo.GetCultureInfo("es-ES").DateTimeFormat.GetMonthName(i)
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="sigla" class="form-label">Unidad</label>
+                            <select class="form-select" id="sigla" name="sigla" required>
+                                @if (Model.UnidadesDisponibles != null)
+                                {
+                                    @foreach (var unidad in Model.UnidadesDisponibles)
+                                    {
+                                        <option value="@unidad.Sigla" selected="@(unidad.Sigla == Model.Sigla)">
+                                            @unidad.NombreUnidad
+                                        </option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-3 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-filter"></i> Filtrar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Semáforo y gráficos principales -->
+    <div class="row mb-4">
+        <!-- Semáforo % Logro -->
+        <div class="col-md-6 mb-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-traffic-light"></i> Semáforo: % Logro Encuestas
+                    </h5>
+                </div>
+                <div class="card-body d-flex align-items-center justify-content-center">
+                    @if (Model.EncuestasRealizadas != null)
+                    {
+                        var porcentaje = Model.EncuestasRealizadas.MetaEncuestas > 0 
+                            ? (Model.EncuestasRealizadas.EncuestasRealizadas * 100.0 / Model.EncuestasRealizadas.MetaEncuestas) 
+                            : 0;
+                        var colorSemaforo = porcentaje >= 100 ? "success" : (porcentaje >= 80 ? "warning" : "danger");
+                        
+                        <div class="text-center">
+                            <canvas id="semaforoGauge" width="300" height="200"></canvas>
+                            <h3 class="mt-3 text-@colorSemaforo">
+                                @porcentaje.ToString("F1")%
+                            </h3>
+                            <p class="text-muted mb-0">
+                                @Model.EncuestasRealizadas.EncuestasRealizadas de @Model.EncuestasRealizadas.MetaEncuestas encuestas
+                            </p>
+                        </div>
+                        
+                        @section Scripts {
+                            <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+                            <script>
+                                const porcentaje = @porcentaje.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
+                                const color = porcentaje >= 100 ? '#28a745' : (porcentaje >= 80 ? '#ffc107' : '#dc3545');
+                                
+                                const ctx = document.getElementById('semaforoGauge').getContext('2d');
+                                new Chart(ctx, {
+                                    type: 'doughnut',
+                                    data: {
+                                        datasets: [{
+                                            data: [porcentaje, 100 - porcentaje],
+                                            backgroundColor: [color, '#e9ecef'],
+                                            borderWidth: 0
+                                        }]
+                                    },
+                                    options: {
+                                        circumference: 180,
+                                        rotation: 270,
+                                        cutout: '70%',
+                                        plugins: {
+                                            legend: { display: false },
+                                            tooltip: { enabled: false }
+                                        }
+                                    }
+                                });
+                            </script>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-muted">No hay datos disponibles</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Gráfico Cilindro: Meta vs Realizadas -->
+        <div class="col-md-6 mb-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-bar"></i> Meta vs Realizadas
+                    </h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.EncuestasRealizadas != null)
+                    {
+                        <canvas id="cilindroCh art" width="400" height="300"></canvas>
+                        
+                        @section Scripts {
+                            <script>
+                                const ctxCilindro = document.getElementById('cilindroChart').getContext('2d');
+                                new Chart(ctxCilindro, {
+                                    type: 'bar',
+                                    data: {
+                                        labels: ['Encuestas'],
+                                        datasets: [
+                                            {
+                                                label: 'Meta',
+                                                data: [@Model.EncuestasRealizadas.MetaEncuestas],
+                                                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                                                borderColor: 'rgba(54, 162, 235, 1)',
+                                                borderWidth: 2
+                                            },
+                                            {
+                                                label: 'Realizadas',
+                                                data: [@Model.EncuestasRealizadas.EncuestasRealizadas],
+                                                backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                                                borderColor: 'rgba(75, 192, 192, 1)',
+                                                borderWidth: 2
+                                            }
+                                        ]
+                                    },
+                                    options: {
+                                        responsive: true,
+                                        maintainAspectRatio: false,
+                                        plugins: {
+                                            legend: {
+                                                display: true,
+                                                position: 'top'
+                                            }
+                                        },
+                                        scales: {
+                                            y: {
+                                                beginAtZero: true,
+                                                title: {
+                                                    display: true,
+                                                    text: 'Cantidad'
+                                                }
+                                            }
+                                        }
+                                    }
+                                });
+                            </script>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center py-5">No hay datos disponibles</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tarjetas de estadísticas -->
+    <div class="row">
+        @if (Model.Estadisticas != null)
+        {
+            <!-- Encuestadores Activos -->
+            <div class="col-md-3 mb-3">
+                <div class="card shadow-sm border-left-primary">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Encuestadores Activos
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    @Model.Estadisticas.EncuestadoresActivos
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-users fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ciudades Activas -->
+            <div class="col-md-3 mb-3">
+                <div class="card shadow-sm border-left-success">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    Ciudades Activas
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    @Model.Estadisticas.CiudadesActivas
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-map-marker-alt fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Promedio Calidad -->
+            <div class="col-md-3 mb-3">
+                <div class="card shadow-sm border-left-info">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                    Promedio Calidad
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    @Model.Estadisticas.PromedioCalidad.ToString("F1")%
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-star fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Productividad Diaria -->
+            <div class="col-md-3 mb-3">
+                <div class="card shadow-sm border-left-warning">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                    Productividad Diaria
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    @Model.Estadisticas.ProductividadDiaria.ToString("F1")
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-chart-line fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Botón para ir a calidad -->
+    <div class="row mt-4">
+        <div class="col-12 text-center">
+            <a asp-action="Calidad" asp-route-año="@Model.Año" asp-route-mes="@Model.Mes" asp-route-sigla="@Model.Sigla" 
+               class="btn btn-lg btn-success">
+                <i class="fas fa-arrow-right"></i> Ver Dashboard de Calidad
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .border-left-primary { border-left: 4px solid #007bff !important; }
+    .border-left-success { border-left: 4px solid #28a745 !important; }
+    .border-left-info { border-left: 4px solid #17a2b8 !important; }
+    .border-left-warning { border-left: 4px solid #ffc107 !important; }
+    .text-xs { font-size: 0.7rem; }
+</style>

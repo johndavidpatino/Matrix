@@ -1,0 +1,136 @@
+@model MatrixNext.Data.Models.MBO.CampoErrorDto
+
+<form id="@(Model.IdError == 0 ? "formCrearError" : "formEditarError")" 
+      asp-action="@(Model.IdError == 0 ? "CrearError" : "EditarError")" method="post">
+    
+    @if (Model.IdError > 0)
+    {
+        <input type="hidden" asp-for="IdError" />
+    }
+    
+    <div class="row">
+        <!-- IdTrabajo -->
+        <div class="col-md-6 mb-3">
+            <label asp-for="IdTrabajo" class="form-label">
+                ID Trabajo <span class="text-danger">*</span>
+            </label>
+            <input asp-for="IdTrabajo" type="number" class="form-control" required />
+            <span asp-validation-for="IdTrabajo" class="text-danger"></span>
+        </div>
+
+        <!-- IdEncuestador -->
+        <div class="col-md-6 mb-3">
+            <label asp-for="IdEncuestador" class="form-label">
+                Encuestador <span class="text-danger">*</span>
+            </label>
+            <select asp-for="IdEncuestador" class="form-select" required>
+                <option value="">Seleccione...</option>
+                @if (ViewBag.Encuestadores != null)
+                {
+                    @foreach (var enc in ViewBag.Encuestadores)
+                    {
+                        <option value="@enc.IdEncuestador">
+                            @enc.NombreEncuestador (@enc.CodigoEncuestador)
+                        </option>
+                    }
+                }
+            </select>
+            <span asp-validation-for="IdEncuestador" class="text-danger"></span>
+        </div>
+
+        <!-- IdCiudad -->
+        <div class="col-md-6 mb-3">
+            <label asp-for="IdCiudad" class="form-label">
+                Ciudad <span class="text-danger">*</span>
+            </label>
+            <select asp-for="IdCiudad" class="form-select" required>
+                <option value="">Seleccione...</option>
+                @if (ViewBag.Ciudades != null)
+                {
+                    @foreach (var ciudad in ViewBag.Ciudades)
+                    {
+                        <option value="@ciudad.IdCiudad">@ciudad.NombreCiudad</option>
+                    }
+                }
+            </select>
+            <span asp-validation-for="IdCiudad" class="text-danger"></span>
+        </div>
+
+        <!-- FechaEncuesta -->
+        <div class="col-md-6 mb-3">
+            <label asp-for="FechaEncuesta" class="form-label">
+                Fecha Encuesta <span class="text-danger">*</span>
+            </label>
+            <input asp-for="FechaEncuesta" type="date" class="form-control" required />
+            <span asp-validation-for="FechaEncuesta" class="text-danger"></span>
+        </div>
+
+        <!-- NumeroEncuesta -->
+        <div class="col-md-6 mb-3">
+            <label asp-for="NumeroEncuesta" class="form-label">
+                Número de Encuesta <span class="text-danger">*</span>
+            </label>
+            <input asp-for="NumeroEncuesta" type="text" class="form-control" required 
+                   placeholder="Ej: ENC-001" />
+            <span asp-validation-for="NumeroEncuesta" class="text-danger"></span>
+        </div>
+
+        <!-- IdTipoError -->
+        <div class="col-md-6 mb-3">
+            <label asp-for="IdTipoError" class="form-label">
+                Tipo de Error <span class="text-danger">*</span>
+            </label>
+            <select asp-for="IdTipoError" class="form-select" required>
+                <option value="">Seleccione...</option>
+                @if (ViewBag.TiposError != null)
+                {
+                    @foreach (var tipo in ViewBag.TiposError)
+                    {
+                        <option value="@tipo.IdTipoError">
+                            @tipo.NombreTipoError (@tipo.Severidad)
+                        </option>
+                    }
+                }
+            </select>
+            <span asp-validation-for="IdTipoError" class="text-danger"></span>
+        </div>
+
+        <!-- Observaciones -->
+        <div class="col-12 mb-3">
+            <label asp-for="Observaciones" class="form-label">Observaciones</label>
+            <textarea asp-for="Observaciones" class="form-control" rows="3" 
+                      placeholder="Descripción detallada del error..."></textarea>
+            <span asp-validation-for="Observaciones" class="text-danger"></span>
+        </div>
+
+        <!-- Estado (solo en edición) -->
+        @if (Model.IdError > 0)
+        {
+            <div class="col-md-6 mb-3">
+                <label asp-for="Estado" class="form-label">Estado</label>
+                <select asp-for="Estado" class="form-select">
+                    <option value="Pendiente">Pendiente</option>
+                    <option value="Resuelto">Resuelto</option>
+                    <option value="Revisado">Revisado</option>
+                </select>
+            </div>
+        }
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="fas fa-times"></i> Cancelar
+        </button>
+        <button type="submit" class="btn btn-@(Model.IdError == 0 ? "success" : "primary")">
+            <i class="fas fa-@(Model.IdError == 0 ? "plus" : "save")"></i> 
+            @(Model.IdError == 0 ? "Crear" : "Guardar")
+        </button>
+    </div>
+</form>
+
+<script>
+    // Validación cliente
+    $(document).ready(function() {
+        $('#@(Model.IdError == 0 ? "formCrearError" : "formEditarError")').validate();
+    });
+</script>
