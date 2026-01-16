@@ -1,0 +1,214 @@
+@{
+    ViewData["Title"] = "Cambios JobBook Interno";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2 class="mb-3">
+                <i class="fas fa-exchange-alt"></i> Cambios JobBook Interno
+            </h2>
+            <p class="text-muted">Cambiar el JobBook Interno (JBI) de un trabajo</p>
+        </div>
+    </div>
+
+    <!-- Alert containers -->
+    <div id="alertContainer"></div>
+
+    <!-- Main form -->
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-cogs"></i> Parámetros para realizar el cambio de JBI
+                    </h5>
+                </div>
+
+                <div class="card-body p-4">
+                    <form id="cambioJBIForm" method="post">
+                        <!-- ID Trabajo -->
+                        <div class="form-group mb-3">
+                            <label for="idTrabajo" class="form-label fw-bold">
+                                ID Trabajo <span class="text-danger">*</span>
+                            </label>
+                            <input type="number" 
+                                   id="idTrabajo" 
+                                   name="idTrabajo" 
+                                   class="form-control form-control-lg" 
+                                   placeholder="Ingrese el ID del Trabajo"
+                                   required 
+                                   min="1"
+                                   data-toggle="tooltip" 
+                                   title="ID único del trabajo a modificar">
+                            <small class="form-text text-muted">Identificador único del trabajo</small>
+                        </div>
+
+                        <!-- Fases -->
+                        <div class="form-group mb-3">
+                            <label for="idFase" class="form-label fw-bold">
+                                Fases <span class="text-danger">*</span>
+                            </label>
+                            <select id="idFase" 
+                                    name="idFase" 
+                                    class="form-select form-select-lg" 
+                                    required
+                                    data-toggle="tooltip" 
+                                    title="Seleccione la fase para modificar">
+                                <option value="">-- Seleccione --</option>
+                                @foreach (var fase in (IEnumerable<MatrixNext.Core.DTOs.RE_GT.FaseDto>)ViewBag.Fases ?? new List<MatrixNext.Core.DTOs.RE_GT.FaseDto>())
+                                {
+                                    <option value="@fase.IdFase">@fase.DescFase</option>
+                                }
+                            </select>
+                            <small class="form-text text-muted">Fase del trabajo a modificar</small>
+                        </div>
+
+                        <!-- Nuevo JBI -->
+                        <div class="form-group mb-4">
+                            <label for="nuevoJBI" class="form-label fw-bold">
+                                Nuevo JobBook Interno <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" 
+                                   id="nuevoJBI" 
+                                   name="nuevoJBI" 
+                                   class="form-control form-control-lg" 
+                                   placeholder="Ingrese el nuevo JBI (formato: 99-999999-99-99)"
+                                   required
+                                   pattern="\d{2}-\d{6}-\d{2}-\d{2}"
+                                   data-toggle="tooltip" 
+                                   title="Formato: 99-999999-99-99">
+                            <small class="form-text text-muted">Formato requerido: 99-999999-99-99</small>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg flex-grow-1">
+                                <i class="fas fa-save"></i> Cambiar JobBook Interno
+                            </button>
+                            <button type="reset" class="btn btn-secondary btn-lg">
+                                <i class="fas fa-redo"></i> Limpiar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Inicializar tooltips
+            $('[data-toggle="tooltip"]').tooltip();
+
+            // Máscarad para JBI (99-999999-99-99)
+            $('#nuevoJBI').mask('99-999999-99-99');
+
+            // Validar que ID existe al cambiar
+            $('#idTrabajo').on('blur', function () {
+                const idTrabajo = $(this).val();
+                const idFase = $('#idFase').val();
+
+                if (idTrabajo && idFase) {
+                    validarTrabajo(idTrabajo, idFase);
+                }
+            });
+
+            $('#idFase').on('change', function () {
+                const idTrabajo = $('#idTrabajo').val();
+                const idFase = $(this).val();
+
+                if (idTrabajo && idFase) {
+                    validarTrabajo(idTrabajo, idFase);
+                }
+            });
+
+            // Submit form
+            $('#cambioJBIForm').on('submit', function (e) {
+                e.preventDefault();
+
+                const idTrabajo = $('#idTrabajo').val();
+                const idFase = $('#idFase').val();
+                const nuevoJBI = $('#nuevoJBI').val();
+
+                if (!idTrabajo || !idFase || !nuevoJBI) {
+                    mostrarAlerta('Todos los campos son requeridos', 'warning');
+                    return;
+                }
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Cambiar", "CambioJBI")',
+                    data: {
+                        idTrabajo: idTrabajo,
+                        idFase: idFase,
+                        nuevoJBI: nuevoJBI
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            mostrarAlerta(response.message, 'success');
+                            $('#cambioJBIForm')[0].reset();
+                            $('#idFase').val('');
+                        } else {
+                            mostrarAlerta(response.message, 'danger');
+                        }
+                    },
+                    error: function () {
+                        mostrarAlerta('Error al procesar la solicitud', 'danger');
+                    }
+                });
+            });
+
+            function validarTrabajo(idTrabajo, idFase) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("ValidarTrabajo", "CambioJBI")',
+                    data: {
+                        idTrabajo: idTrabajo,
+                        idFase: idFase
+                    },
+                    success: function (response) {
+                        if (!response.success) {
+                            mostrarAlerta(response.message, 'warning');
+                        }
+                    }
+                });
+            }
+
+            function mostrarAlerta(mensaje, tipo) {
+                const alertHtml = `
+                    <div class="alert alert-${tipo} alert-dismissible fade show" role="alert">
+                        <i class="fas fa-${tipo === 'success' ? 'check-circle' : tipo === 'warning' ? 'exclamation-triangle' : 'times-circle'}"></i>
+                        <strong> ${mensaje}</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                `;
+                $('#alertContainer').html(alertHtml);
+                $('html, body').animate({ scrollTop: 0 }, 'slow');
+            }
+        });
+    </script>
+
+    <style>
+        .form-control-lg, .form-select-lg {
+            height: calc(1.5em + 1rem + 2px);
+            font-size: 1.05rem;
+        }
+
+        .card {
+            border-radius: 0.5rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+
+        .card-header {
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+
+        .btn-lg {
+            padding: 0.75rem 1.5rem;
+            font-size: 1.05rem;
+        }
+    </style>
+}
