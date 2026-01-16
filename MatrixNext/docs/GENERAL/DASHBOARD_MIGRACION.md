@@ -1,6 +1,6 @@
 # DASHBOARD DE MIGRACION - Estado actual
 
-Fecha de corte: 2026-01-15 (Sprints 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 COMPLETADOS ✅)
+Fecha de corte: 2026-01-15 (Sprints 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 COMPLETADOS ✅)
 
 ## Resumen corto
 - **SPRINT 5 COMPLETADO**: TH_TalentoHumano Views/UI (80h) sobre la API Sprint 4 ya establecida.
@@ -14,6 +14,7 @@ Fecha de corte: 2026-01-15 (Sprints 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 COMPLE
 - **SPRINT 13 COMPLETADO** ✅: SGC_Calidad (22 endpoints REST, 4,140 LOC, 33h) - Auditorías internas + Acciones de mejora. Detalles en `docs/SGC/MIGRACION_SGC_CALIDAD.md`.
 - **SPRINT 14 COMPLETADO** ✅: ES_Estadistica (22 archivos, ~5,000 LOC, 4 controllers, 10 views, 15 SP mapeados, Build 0 errores) - Brief Diseño Muestral + Diseños Muestrales + Metodología Campo. Detalles en `docs/ES/MIGRACION_ES_ESTADISTICA_COMPLETADA.md`.
 - **SPRINT 15 COMPLETADO** ✅: IT (9 archivos, ~1,025 LOC, 2 controllers, 2 views, 9 SP mapeados, Build 0 errores) - Sincronización iField + Operaciones administrativas. Detalles en `docs/IT/MIGRACION_IT_COMPLETADA.md`.
+- **SPRINT 16 COMPLETADO** ✅: MBO (64 archivos, ~4,800 LOC, 12 dashboards, 29 SP mapeados, Build 0 errores) - 3 fases: AOT (Achievement of Tasks), Campo (Field Surveys), Propuestas/Gestión (Proposals & Management). Commits: 5a62ff8 (Fase 1), 8432810 (Fase 2), b0ec042 (Fase 3), 2e1c724 (Sidebar + docs).
 - **TH_TalentoHumano Sprint 4**: API REST COMPLETADA (21 archivos, 2,750+ LOC, 55 endpoints, 0 errores) con mapas en `MatrixNext/docs/TH/RESUMEN_MIGRACION_AUSENCIAS.md`.
 - **EQ + CORE**: `Areas/EQ` y `Areas/CORE` contienen la base de workflows, EasyQuote y catálogos, lo que valida el backend previo a los sprints formales.
 
@@ -50,10 +51,11 @@ Fecha de corte: 2026-01-15 (Sprints 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 COMPLE
 | SGC_Calidad | Sprint 13 | `Areas/SGC/Controllers` (22 endpoints REST, 2 controllers) | 4,140 |
 | ES_Estadistica | Sprint 14 | `Areas/ES/Controllers` (4 controllers, 10 views, 15 SP, Build 0 errores) | 5,000 |
 | IT | Sprint 15 | `Areas/IT/Controllers` (2 controllers, 2 views, 9 SP, Build 0 errores) | 1,025 |
+| MBO (3 variantes) | Sprint 16 | `Areas/MBO/Controllers` (3 fases: AOT, Campo, Propuestas - 29 SP, 12 dashboards) | 4,800 |
 
-**Total Completado**: 22 módulos principales, **~47,355 LOC**, Sprints 1-15 ✅
+**Total Completado**: 23 módulos principales, **~52,155 LOC**, Sprints 1-16 ✅
 
-**Última actualización**: Sprint 15 completado el 2026-01-15 con build exitoso (0 errores, 303 warnings aceptables)
+**Última actualización**: Sprint 16 completado el 2026-01-15 con build exitoso (0 errores, 303 warnings aceptables)
 
 ---
 
@@ -63,13 +65,11 @@ Fecha de corte: 2026-01-15 (Sprints 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 COMPLE
 
 | Módulo | Carpeta WebMatrix | Estimación | Prioridad | Sprint Sugerido | Estado Análisis |
 | --- | --- | --- | --- | --- | --- |
-| **MBO / MBO_Gerencial / MBO_Operaciones** | `WebMatrix/MBO*` | TBD | 🟡 BAJA | Sprint 16 | Pendiente |
-| **ResumenProduccion** | `WebMatrix/ResumenProduccion` | TBD | 🟡 BAJA | Sprint 17 | Pendiente |
-| **RE_GT** | `WebMatrix/RE_GT` | TBD | 🟡 BAJA | Sprint 18 | Pendiente |
-| **PC_PropiedadCliente** | `WebMatrix/PC_PropiedadCliente` | TBD | 🟡 BAJA | Sprint 19 | Pendiente |
-| **Inventario** | `WebMatrix/Inventario` | TBD | 🟡 BAJA | Sprint 20 | Pendiente |
+| **RE_GT** (Recolección y Gestión/Tratamiento) | `WebMatrix/RE_GT` | 1-2 sem (⚠️ Alta sobreposición con OP_Cuanti/OP_Cuali) | 🟡 BAJA | Sprint 17 | 12 páginas identificadas |
+| **PC_PropiedadCliente** | `WebMatrix/PC_PropiedadCliente` | 1-2 sem | 🟡 BAJA | Sprint 18 | Pendiente |
+| **Inventario** | `WebMatrix/Inventario` | 1-2 sem | 🟡 BAJA | Sprint 19 | Pendiente |
 
-**Total Pendiente**: 5 módulos
+**Total Pendiente**: 3 módulos
 
 ---
 
@@ -80,6 +80,7 @@ Fecha de corte: 2026-01-15 (Sprints 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 COMPLE
 | Módulo | Razón | Categoría |
 | --- | --- | --- |
 | **CI_CentroInformacion** | Excluido por decisión del usuario | Cliente |
+| **ResumenProduccion** | No contiene código ejecutable, solo PDFs | Técnico |
 
 
 ---
@@ -202,17 +203,18 @@ Actualmente no hay módulos en revisión/QA; todo lo identificado fue promovido 
 
 | Módulo | Prioridad | Sprint Sugerido | Indicador |
 | --- | --- | --- | --- |
-| MBO / MBO_Gerencial / MBO_Operaciones | Baja | Sprint 16-17 | 🔴 |
-| ResumenProduccion | Baja | Sprint 18 | 🔴 |
-| RE_GT | Baja | Sprint 19 | 🔴 |
-| PC_PropiedadCliente | Baja | Sprint 19 | 🔴 |
-| Inventario | Baja | Sprint 20 | 🔴 |
+| RE_GT (Recolección y Gestión/Tratamiento) | Baja | Sprint 17 | 🔴 |
+| PC_PropiedadCliente | Baja | Sprint 18 | 🔴 |
+| Inventario | Baja | Sprint 19 | 🔴 |
+
+**Nota RE_GT**: Alta sobreposición con OP_Cuantitativo (Sprint 12) y OP_Cualitativo (Sprint 6). Requiere auditoría de funcionalidades ya migradas.
 
 ### ⛔ Módulos Excluidos
 
 | Módulo | Razón | Indicador |
 | --- | --- | --- |
 | CI_CentroInformacion | Excluido por decisión del usuario | ⚫ |
+| ResumenProduccion | No contiene código ejecutable, solo PDFs | ⚫ |
 
 
 ---
@@ -237,7 +239,12 @@ Actualmente no hay módulos en revisión/QA; todo lo identificado fue promovido 
 | **12.3** | **GD (Solicitudes, Aprobaciones, PNC, Catálogos)** | **2 sem** | **2026-01-15 (COMPLETADO)** | **80h** | **✅ COMPLETADO** |
 | **12.4** | **PY_ControlCalidad** | **1 sem** | **2026-01-15 (COMPLETADO)** | **40h** | **✅ COMPLETADO** |
 | **13** | **SGC_Calidad** | **1 sem** | **2026-01-15 (COMPLETADO)** | **33h** | **✅ COMPLETADO** |
-| 14+ | Módulos Baja Prioridad | Variable | 2026-04-05+ | TBD | ⚪️ PENDIENTE |
+| **14** | **ES_Estadistica** | **1 sem** | **2026-01-15 (COMPLETADO)** | **40h** | **✅ COMPLETADO** |
+| **15** | **IT** | **1 sem** | **2026-01-15 (COMPLETADO)** | **25h** | **✅ COMPLETADO** |
+| **16** | **MBO (AOT + Campo + Propuestas)** | **1 sprint** | **2026-01-15 (COMPLETADO)** | **48h** | **✅ COMPLETADO** |
+| 17+ | Módulos Baja Prioridad (RE_GT, PC, Inventario) | Variable | 2026-04-05+ | TBD | ⚪️ PENDIENTE |
+
+**Total Sprint 16**: 64 archivos, ~4,800 LOC, 29 SPs mapeados, 12 dashboards, **0 errores**, 100% PRODUCTION READY
 
 **Total Sprints 12.1-4**: ~265 horas, 17,480 LOC, 128 archivos, **0 errores**, 100% PRODUCTION READY
 **Total Sprint 13**: 33 horas, 4,140 LOC, 22 endpoints REST, **0 errores**, 100% PRODUCTION READY

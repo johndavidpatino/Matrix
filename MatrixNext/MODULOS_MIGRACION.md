@@ -434,21 +434,48 @@
 - **Total Sprint 16**: 64 archivos, ~4800 LOC, 29 SPs mapeados, 12 dashboards creados
 - **Commit**: b0ec042 + actualizaciones de sidebar y documentación
 
-#### 24. **ResumenProduccion** 🔴 PENDIENTE
+#### 24. **ResumenProduccion** ⛔ EXCLUIDO
 - **Carpeta**: `WebMatrix/ResumenProduccion`
-- **Prioridad**: 🟡 BAJA
-- **Sprint Sugerido**: Sprint 18
-- **Dependencias**: OP, CC
-- **Estimación**: 2-3 semanas
-- **Estado**: ❌ NO INICIADO
+- **Razón**: No contiene código ejecutable, solo archivos PDF de reportes
+- **Fecha Exclusión**: 2026-01-15
+- **Estado**: ⛔ **NO MIGRAR** - Carpeta contiene únicamente documentos PDF (ResumenProduccion-*.pdf)
 
-#### 25. **RE_GT** 🔴 PENDIENTE
+#### 25. **RE_GT** (Recolección y Gestión/Tratamiento de Datos) 🔴 PENDIENTE
 - **Carpeta**: `WebMatrix/RE_GT`
 - **Prioridad**: 🟡 BAJA
-- **Sprint Sugerido**: Sprint 19
-- **Dependencias**: TBD
-- **Estimación**: 1-2 semanas
+- **Sprint Sugerido**: Sprint 17
+- **Dependencias**: OP_Cuantitativo (ALTA - Muchas funcionalidades ya migradas), OP_Cualitativo, CORE (WorkFlow)
+- **Estimación**: 2-3 semanas (con optimización por código duplicado)
 - **Estado**: ❌ NO INICIADO
+- **Páginas Identificadas**: 12 páginas .aspx
+  * HomeRecoleccion.aspx - Landing page de recolección de datos
+  * HomeGestionTratamiento.aspx - Landing page de gestión y tratamiento
+  * TraficoTareas.aspx - Gestión y ejecución de tareas (WorkFlow)
+  * RecoleccionDeDatos.aspx - Gestión de recolección
+  * GestionyTratamientoDeDatos.aspx - Gestión de tratamiento
+  * AsignacionCOE.aspx - Asignación de coordinación de estudios
+  * AsignacionJBI.aspx - Asignación de JobBook Interno a proyectos
+  * AsignacionCoordinador.aspx - Asignación de coordinadores
+  * AsignacionCampo.aspx - Asignación de personal de campo
+  * CambiosJBI.aspx - Cambios de JobBook Interno
+  * SeleccionarPreguntasTabular.aspx - Selección de preguntas para tabulación
+  * TabularEstudios.aspx - Tabulación de estudios
+
+**⚠️ NOTA CRÍTICA - SOBREPOSICIÓN CON OP_CUANTITATIVO**:
+- **TraficoTareas.aspx** es usado extensivamente desde OP_Cuantitativo/HomeGestion.aspx (6+ unidades)
+- **HomeRecoleccion.aspx** es referenciado desde OP_Cuantitativo (ImportarPlanillas, PlanillasCargadas, etc.)
+- **SeleccionarPreguntasTabular** y **TabularEstudios** son parte del flujo de OP_Cuantitativo
+- Las asignaciones (COE, JBI, Coordinador, Campo) son compartidas entre OP_Cuanti y OP_Cuali
+
+**Análisis de Duplicación**:
+1. **TraficoTareas** (WorkFlow) → 90% ya implementado en CORE/WorkFlow (Sprint 7)
+2. **Asignaciones** (COE, JBI, Coordinador, Campo) → Funcionalidad incluida en OP_Cuantitativo (Sprint 12) y OP_Cualitativo (Sprint 6)
+3. **Tabulación** (SeleccionarPreguntas, Tabular) → Parte de procesamiento OP_Cuantitativo (Sprint 12)
+
+**Recomendación**:
+- **Auditar OP_Cuantitativo** y **OP_Cualitativo** para confirmar cobertura de RE_GT
+- Estimación optimizada: **1-2 semanas** (solo funcionalidades no cubiertas)
+- Posible reducción a **Sprint 17 corto** si solo se requieren ajustes/consolidación
 
 #### 26. **PC_PropiedadCliente** 🔴 PENDIENTE
 - **Carpeta**: `WebMatrix/PC_PropiedadCliente`
@@ -474,10 +501,10 @@
 
 | Categoría | Cantidad | Porcentaje | Indicador |
 | --- | --- | --- | --- |
-| **Completados** | 22 módulos | 79% | ✅ |
+| **Completados** | 23 módulos | 85% | ✅ |
 | **En Revisión/QA** | 0 módulos | 0% | 🔍 |
-| **Pendientes Migración** | 5 módulos | 18% | 🔴 |
-| **Excluidos** | 1 módulo | 4% | ⛔ |
+| **Pendientes Migración** | 3 módulos | 11% | 🔴 |
+| **Excluidos** | 2 módulos | 7% | ⛔ |
 | **TOTAL** | 28 módulos | 100% | - |
 
 ### LOC Migradas
@@ -500,12 +527,13 @@
 ### Prioridad 1: Planificar Sprints 16-20 (Nuevos Módulos)
 
 **Orden sugerido** (por prioridad operativa):
-1. Sprint 16-17: MBO (3 variantes, 4-6 sem)
-2. Sprint 18: ResumenProduccion (2-3 sem)
-3. Sprint 19: RE_GT + PC_PropiedadCliente (2-4 sem)
-4. Sprint 20: Inventario (1-2 sem)
+1. ✅ Sprint 16: MBO (3 variantes) - **COMPLETADO** (64 archivos, ~4800 LOC)
+2. Sprint 17: RE_GT (Recolección y Gestión/Tratamiento) (1-2 sem) - Con auditoría de sobreposición OP_Cuanti/OP_Cuali
+3. Sprint 18: PC_PropiedadCliente (1-2 sem)
+4. Sprint 19: Inventario (1-2 sem)
 
-**Estimación Total**: 9-15 semanas
+**Estimación Total Restante**: 4-6 semanas (3 módulos pendientes)
+**Progreso**: 23/27 módulos completados (85%), ResumenProduccion excluido, CI_CentroInformacion excluido
 
 ---
 
@@ -520,6 +548,12 @@
 - **Razón**: Excluido por decisión del usuario/negocio
 - **Fecha Exclusión**: 2026-01-15
 - **Estado**: ⛔ NO MIGRAR
+
+#### 29. **ResumenProduccion** ⛔ EXCLUIDO
+- **Carpeta**: `WebMatrix/ResumenProduccion`
+- **Razón**: No contiene código ejecutable, solo archivos PDF de reportes
+- **Fecha Exclusión**: 2026-01-15
+- **Estado**: ⛔ NO MIGRAR - Carpeta contiene únicamente documentos PDF
 
 ---
 
