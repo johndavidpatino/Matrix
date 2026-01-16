@@ -1,0 +1,66 @@
+@model IEnumerable<MatrixNext.Data.DTOs.INV.MantenimientoEquipoDto>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Activo Fijo (Placa)</th>
+                <th>Tipo</th>
+                <th>Observaciones</th>
+                <th>Registrado Por</th>
+                <th width="80">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var mant in Model)
+                {
+                    <tr>
+                        <td>@mant.Fecha.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            <strong>@mant.PlacaActivo</strong>
+                            @if (!string.IsNullOrEmpty(mant.MarcaModelo))
+                            {
+                                <br />
+                                <small class="text-muted">@mant.MarcaModelo</small>
+                            }
+                        </td>
+                        <td>
+                            <span class="badge badge-info">@mant.TipoArticulo</span>
+                        </td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(mant.Observaciones))
+                            {
+                                var preview = mant.Observaciones.Length > 60 
+                                    ? mant.Observaciones.Substring(0, 60) + "..." 
+                                    : mant.Observaciones;
+                                <text>@preview</text>
+                            }
+                        </td>
+                        <td>@mant.NombreRegistrador</td>
+                        <td class="text-center">
+                            <button type="button" 
+                                    class="btn btn-sm btn-warning" 
+                                    data-ajax-modal 
+                                    data-url="@Url.Action("Edit", new { id = mant.IdMantenimiento })"
+                                    title="Editar">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6" class="text-center text-muted py-4">
+                        <i class="fas fa-inbox fa-3x mb-3"></i>
+                        <p>No se encontraron registros de mantenimiento</p>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

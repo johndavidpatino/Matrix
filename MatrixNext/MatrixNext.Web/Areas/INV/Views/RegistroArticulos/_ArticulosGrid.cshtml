@@ -1,0 +1,123 @@
+@model IEnumerable<MatrixNext.Data.DTOs.INV.RegistroArticuloListDto>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Placa</th>
+                <th>Tipo</th>
+                <th>Marca/Modelo</th>
+                <th>Serial</th>
+                <th>Estado</th>
+                <th>Valor</th>
+                <th>Fecha Compra</th>
+                <th width="120">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var articulo in Model)
+                {
+                    <tr>
+                        <td><strong>@articulo.Placa</strong></td>
+                        <td>
+                            <span class="badge badge-info">@articulo.TipoArticulo</span>
+                        </td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(articulo.Marca))
+                            {
+                                <text>@articulo.Marca</text>
+                            }
+                            @if (!string.IsNullOrEmpty(articulo.Modelo))
+                            {
+                                <text>- @articulo.Modelo</text>
+                            }
+                        </td>
+                        <td>@articulo.Serial</td>
+                        <td>
+                            @if (articulo.Asignado)
+                            {
+                                <span class="badge badge-danger">
+                                    <i class="fas fa-user"></i> Asignado
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-success">
+                                    <i class="fas fa-check"></i> Disponible
+                                </span>
+                            }
+                        </td>
+                        <td>
+                            @if (articulo.ValorUnitario.HasValue)
+                            {
+                                @articulo.ValorUnitario.Value.ToString("C0")
+                            }
+                            else
+                            {
+                                <text>-</text>
+                            }
+                        </td>
+                        <td>
+                            @if (articulo.FechaCompra.HasValue)
+                            {
+                                @articulo.FechaCompra.Value.ToString("dd/MM/yyyy")
+                            }
+                            else
+                            {
+                                <text>-</text>
+                            }
+                        </td>
+                        <td class="text-center">
+                            <div class="btn-group" role="group">
+                                <button type="button" 
+                                        class="btn btn-sm btn-info" 
+                                        data-ajax-modal 
+                                        data-url="@Url.Action("Details", new { id = articulo.IdArticulo })"
+                                        title="Ver Detalles">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                @if (!articulo.Asignado)
+                                {
+                                    <button type="button" 
+                                            class="btn btn-sm btn-warning" 
+                                            data-ajax-modal 
+                                            data-url="@Url.Action("Edit", new { id = articulo.IdArticulo })"
+                                            title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button type="button" 
+                                            class="btn btn-sm btn-danger" 
+                                            data-delete-articulo 
+                                            data-id="@articulo.IdArticulo"
+                                            data-placa="@articulo.Placa"
+                                            title="Eliminar">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-sm btn-secondary" disabled title="No se puede modificar (asignado)">
+                                        <i class="fas fa-lock"></i>
+                                    </button>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="8" class="text-center text-muted py-4">
+                        <i class="fas fa-inbox fa-3x mb-3"></i>
+                        <p>No se encontraron artículos</p>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@* TODO: Implementar paginación *@

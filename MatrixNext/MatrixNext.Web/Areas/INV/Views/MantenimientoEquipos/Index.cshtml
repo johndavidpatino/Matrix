@@ -1,0 +1,74 @@
+@model IEnumerable<MatrixNext.Data.DTOs.INV.MantenimientoEquipoDto>
+
+@{
+    ViewData["Title"] = "Mantenimiento de Equipos - Inventario";
+}
+
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Mantenimiento de Equipos</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home", new { area = "" })">Inicio</a></li>
+                        <li class="breadcrumb-item">Inventario</li>
+                        <li class="breadcrumb-item active">Mantenimiento</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h3 class="card-title">Historial de Mantenimientos</h3>
+                        </div>
+                        <div class="col-md-4 text-right">
+                            <button type="button" class="btn btn-primary" data-ajax-modal data-url="@Url.Action("Create")">
+                                <i class="fas fa-wrench"></i> Nuevo Mantenimiento
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <!-- Filtros -->
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <input type="text" id="filtroTexto" class="form-control" placeholder="Buscar por placa, observaciones...">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="date" id="filtroFechaDesde" class="form-control" placeholder="Desde">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="date" id="filtroFechaHasta" class="form-control" placeholder="Hasta">
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" id="btnFiltrar" class="btn btn-info btn-block">
+                                <i class="fas fa-search"></i> Filtrar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Grid -->
+                    <div id="gridContainer" data-grid-url="@Url.Action("Index")">
+                        @Html.Partial("_MantenimientosGrid", Model)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div id="modalContainer"></div>
+
+@section Scripts {
+    <script src="~/js/inventario/mantenimiento.js"></script>
+}

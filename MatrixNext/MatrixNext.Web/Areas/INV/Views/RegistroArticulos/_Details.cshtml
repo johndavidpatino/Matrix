@@ -1,0 +1,184 @@
+@model MatrixNext.Data.DTOs.INV.RegistroArticuloDto
+
+<div class="modal fade" id="modalDetallesArticulo" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title">
+                    <i class="fas fa-info-circle"></i> Detalles del Artículo
+                </h5>
+                <button type="button" class="close text-white" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <dl class="row">
+                            <dt class="col-sm-4">Placa:</dt>
+                            <dd class="col-sm-8"><strong>@Model.Placa</strong></dd>
+
+                            <dt class="col-sm-4">Tipo:</dt>
+                            <dd class="col-sm-8">
+                                <span class="badge badge-info">
+                                    @switch (Model.IdTipoArticulo)
+                                    {
+                                        case 1: <text>Computador</text>; break;
+                                        case 2: <text>Tableta</text>; break;
+                                        case 3: <text>Celular</text>; break;
+                                        case 4: <text>Consumible</text>; break;
+                                        case 5: <text>Periférico</text>; break;
+                                        case 6: <text>Papelería</text>; break;
+                                        default: <text>Otro</text>; break;
+                                    }
+                                </span>
+                            </dd>
+
+                            <dt class="col-sm-4">Estado:</dt>
+                            <dd class="col-sm-8">
+                                @if (Model.Asignado)
+                                {
+                                    <span class="badge badge-danger">
+                                        <i class="fas fa-user"></i> Asignado
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-success">
+                                        <i class="fas fa-check"></i> Disponible
+                                    </span>
+                                }
+                            </dd>
+
+                            @if (!string.IsNullOrEmpty(Model.Marca))
+                            {
+                                <dt class="col-sm-4">Marca:</dt>
+                                <dd class="col-sm-8">@Model.Marca</dd>
+                            }
+
+                            @if (!string.IsNullOrEmpty(Model.Modelo))
+                            {
+                                <dt class="col-sm-4">Modelo:</dt>
+                                <dd class="col-sm-8">@Model.Modelo</dd>
+                            }
+
+                            @if (!string.IsNullOrEmpty(Model.Serial))
+                            {
+                                <dt class="col-sm-4">Serial:</dt>
+                                <dd class="col-sm-8">@Model.Serial</dd>
+                            }
+                        </dl>
+                    </div>
+
+                    <div class="col-md-6">
+                        <dl class="row">
+                            @if (Model.FechaCompra.HasValue)
+                            {
+                                <dt class="col-sm-4">Fecha Compra:</dt>
+                                <dd class="col-sm-8">@Model.FechaCompra.Value.ToString("dd/MM/yyyy")</dd>
+                            }
+
+                            @if (Model.ValorUnitario.HasValue)
+                            {
+                                <dt class="col-sm-4">Valor:</dt>
+                                <dd class="col-sm-8">@Model.ValorUnitario.Value.ToString("C0")</dd>
+                            }
+
+                            @if (Model.Cantidad.HasValue)
+                            {
+                                <dt class="col-sm-4">Cantidad:</dt>
+                                <dd class="col-sm-8">@Model.Cantidad.Value</dd>
+                            }
+
+                            <dt class="col-sm-4">Registrado:</dt>
+                            <dd class="col-sm-8">@(Model.FechaRegistro?.ToString("dd/MM/yyyy HH:mm") ?? "-")</dd>
+
+                            @if (Model.FechaModificacion.HasValue)
+                            {
+                                <dt class="col-sm-4">Modificado:</dt>
+                                <dd class="col-sm-8">@Model.FechaModificacion.Value.ToString("dd/MM/yyyy HH:mm")</dd>
+                            }
+                        </dl>
+                    </div>
+                </div>
+
+                @if (Model.IdTipoArticulo <= 3)
+                {
+                    <hr />
+                    <h6 class="text-primary">
+                        <i class="fas fa-microchip"></i> Especificaciones Técnicas
+                    </h6>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <dl class="row">
+                                @if (!string.IsNullOrEmpty(Model.Procesador))
+                                {
+                                    <dt class="col-sm-5">Procesador:</dt>
+                                    <dd class="col-sm-7">@Model.Procesador</dd>
+                                }
+
+                                @if (!string.IsNullOrEmpty(Model.Ram))
+                                {
+                                    <dt class="col-sm-5">RAM:</dt>
+                                    <dd class="col-sm-7">@Model.Ram GB</dd>
+                                }
+
+                                @if (!string.IsNullOrEmpty(Model.Disco))
+                                {
+                                    <dt class="col-sm-5">Disco:</dt>
+                                    <dd class="col-sm-7">@Model.Disco GB</dd>
+                                }
+                            </dl>
+                        </div>
+
+                        <div class="col-md-6">
+                            <dl class="row">
+                                @if (!string.IsNullOrEmpty(Model.SistemaOperativo))
+                                {
+                                    <dt class="col-sm-5">S.O.:</dt>
+                                    <dd class="col-sm-7">@Model.SistemaOperativo @Model.VersionSO</dd>
+                                }
+
+                                @if (Model.IdTipoArticulo == 3 && Model.Chip.HasValue)
+                                {
+                                    <dt class="col-sm-5">Chip:</dt>
+                                    <dd class="col-sm-7">@Model.Chip</dd>
+                                }
+
+                                @if (Model.IdTipoArticulo == 3 && Model.IMEI.HasValue)
+                                {
+                                    <dt class="col-sm-5">IMEI:</dt>
+                                    <dd class="col-sm-7">@Model.IMEI</dd>
+                                }
+                            </dl>
+                        </div>
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(Model.Observaciones))
+                {
+                    <hr />
+                    <h6 class="text-primary">
+                        <i class="fas fa-comment"></i> Observaciones
+                    </h6>
+                    <p class="text-muted">@Model.Observaciones</p>
+                }
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    <i class="fas fa-times"></i> Cerrar
+                </button>
+                @if (!Model.Asignado)
+                {
+                    <a href="@Url.Action("Edit", new { id = Model.IdArticulo })" 
+                       class="btn btn-warning"
+                       data-ajax-modal>
+                        <i class="fas fa-edit"></i> Editar
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+</div>

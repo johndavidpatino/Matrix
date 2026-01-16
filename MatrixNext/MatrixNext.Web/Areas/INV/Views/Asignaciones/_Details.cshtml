@@ -1,0 +1,95 @@
+@model MatrixNext.Data.DTOs.INV.AsignacionActivoDto
+
+<div class="modal fade" id="modalDetallesAsignacion" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title">
+                    <i class="fas fa-info-circle"></i> Detalles de Asignación
+                </h5>
+                <button type="button" class="close text-white" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="text-primary">
+                            <i class="fas fa-box"></i> Información del Activo
+                        </h6>
+                        <dl class="row">
+                            <dt class="col-sm-5">Placa:</dt>
+                            <dd class="col-sm-7"><strong>@Model.PlacaActivo</strong></dd>
+
+                            <dt class="col-sm-5">Tipo:</dt>
+                            <dd class="col-sm-7">
+                                <span class="badge badge-info">@Model.TipoArticulo</span>
+                            </dd>
+
+                            @if (!string.IsNullOrEmpty(Model.MarcaModelo))
+                            {
+                                <dt class="col-sm-5">Marca/Modelo:</dt>
+                                <dd class="col-sm-7">@Model.MarcaModelo</dd>
+                            }
+
+                            @if (!string.IsNullOrEmpty(Model.SerialActivo))
+                            {
+                                <dt class="col-sm-5">Serial:</dt>
+                                <dd class="col-sm-7">@Model.SerialActivo</dd>
+                            }
+                        </dl>
+                    </div>
+
+                    <div class="col-md-6">
+                        <h6 class="text-primary">
+                            <i class="fas fa-user"></i> Información del Usuario
+                        </h6>
+                        <dl class="row">
+                            <dt class="col-sm-5">Nombre:</dt>
+                            <dd class="col-sm-7">@Model.NombreUsuario</dd>
+
+                            <dt class="col-sm-5">Fecha Asignación:</dt>
+                            <dd class="col-sm-7">@Model.FechaAsignacion.ToString("dd/MM/yyyy")</dd>
+
+                            <dt class="col-sm-5">Registrado por:</dt>
+                            <dd class="col-sm-7">@Model.NombreRegistrador</dd>
+
+                            <dt class="col-sm-5">Fecha Registro:</dt>
+                            <dd class="col-sm-7">@Model.FechaRegistro.ToString("dd/MM/yyyy HH:mm")</dd>
+                        </dl>
+                    </div>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.Observaciones))
+                {
+                    <hr />
+                    <h6 class="text-primary">
+                        <i class="fas fa-comment"></i> Observaciones
+                    </h6>
+                    <p class="text-muted">@Model.Observaciones</p>
+                }
+
+                @if (Model.FechaModificacion.HasValue)
+                {
+                    <hr />
+                    <div class="text-muted small">
+                        <i class="fas fa-clock"></i> 
+                        Última modificación: @Model.FechaModificacion.Value.ToString("dd/MM/yyyy HH:mm")
+                    </div>
+                }
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    <i class="fas fa-times"></i> Cerrar
+                </button>
+                <a href="@Url.Action("Edit", new { id = Model.IdAsignacion })" 
+                   class="btn btn-warning"
+                   data-ajax-modal>
+                    <i class="fas fa-edit"></i> Editar
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

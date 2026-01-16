@@ -1,0 +1,383 @@
+/* ============================================================
+   INVENTARIO (INV) - ESTILOS ESPECÍFICOS
+   Estilos para módulos de inventario: artículos, asignaciones,
+   stock, legalizaciones y mantenimiento
+   ============================================================ */
+
+/* ============================================================
+   TABS DINÁMICOS - REGISTRO DE ARTÍCULOS
+   ============================================================ */
+.tab-content {
+    display: none;
+    padding: 15px;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    margin-top: 10px;
+    background-color: #f8f9fa;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.tab-header {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px 4px 0 0;
+    margin-bottom: 0;
+    font-weight: 600;
+}
+
+/* ============================================================
+   STOCK DISPONIBLE - CONSUMIBLES
+   ============================================================ */
+.stock-disponible-container {
+    padding: 10px;
+    background-color: #e7f3ff;
+    border-left: 4px solid #007bff;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.stock-disponible-container .label {
+    font-weight: 600;
+    color: #495057;
+}
+
+.stock-disponible-container .valor {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.stock-entrada {
+    color: #28a745 !important;
+    font-weight: 600;
+}
+
+.stock-salida {
+    color: #dc3545 !important;
+    font-weight: 600;
+}
+
+/* ============================================================
+   ALERTAS STOCK
+   ============================================================ */
+#alertaStock {
+    margin-top: 10px;
+    animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* ============================================================
+   LEGALIZACIONES - CÁLCULO COMPONENTES
+   ============================================================ */
+.componente-legalizacion {
+    text-align: right;
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+}
+
+#txtPendiente {
+    font-size: 1.3rem;
+    font-family: 'Courier New', monospace;
+}
+
+.card-componentes {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* ============================================================
+   TIMELINE - HISTORIAL MANTENIMIENTO
+   ============================================================ */
+.swal-historial-mantenimiento {
+    overflow-y: auto;
+    max-height: 80vh;
+}
+
+.timeline {
+    position: relative;
+    margin: 0 0 30px;
+    padding: 0;
+    list-style: none;
+}
+
+.timeline:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: #ddd;
+    left: 31px;
+    margin: 0;
+    border-radius: 2px;
+}
+
+.timeline > div {
+    margin-right: 10px;
+    position: relative;
+}
+
+.timeline > div > .timeline-item {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    border-radius: 6px;
+    margin-top: 0;
+    background: #fff;
+    color: #444;
+    margin-left: 60px;
+    margin-right: 15px;
+    padding: 0;
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.timeline > div > .fa,
+.timeline > div > .fas {
+    width: 35px;
+    height: 35px;
+    font-size: 16px;
+    line-height: 35px;
+    position: absolute;
+    color: #fff;
+    background: #007bff;
+    border-radius: 50%;
+    text-align: center;
+    left: 14px;
+    top: 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.timeline > .time-label > span {
+    font-weight: 600;
+    padding: 6px 12px;
+    display: inline-block;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    color: #495057;
+}
+
+.timeline-header {
+    margin: 0;
+    color: #495057;
+    border-bottom: 1px solid #e9ecef;
+    padding: 12px 15px;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.timeline-body {
+    padding: 15px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #6c757d;
+}
+
+.timeline-footer {
+    padding: 10px 15px;
+    background: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+    border-radius: 0 0 6px 6px;
+}
+
+.time {
+    color: #999;
+    float: right;
+    padding: 12px 15px;
+    font-size: 12px;
+}
+
+/* ============================================================
+   BADGES ESTADO
+   ============================================================ */
+.badge-asignado {
+    background-color: #28a745;
+    color: white;
+}
+
+.badge-disponible {
+    background-color: #6c757d;
+    color: white;
+}
+
+.badge-verificado {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.badge-pendiente {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+/* ============================================================
+   MODALES GRANDES
+   ============================================================ */
+.modal-xl {
+    max-width: 1200px;
+}
+
+@media (max-width: 768px) {
+    .modal-xl {
+        max-width: 95%;
+        margin: 10px auto;
+    }
+}
+
+/* ============================================================
+   GRID RESPONSIVO
+   ============================================================ */
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.075);
+    transition: background-color 0.2s ease-in-out;
+}
+
+/* ============================================================
+   BOTONES ACCIÓN
+   ============================================================ */
+.btn-group .btn {
+    margin-right: 2px;
+}
+
+.btn-group .btn:last-child {
+    margin-right: 0;
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+
+/* ============================================================
+   FILTROS
+   ============================================================ */
+.filtros {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.filtros .form-control,
+.filtros .form-select {
+    font-size: 0.9rem;
+}
+
+/* ============================================================
+   SELECT2 PERSONALIZADO
+   ============================================================ */
+.select2-container--bootstrap4 .select2-selection {
+    border-color: #ced4da;
+}
+
+.select2-container--bootstrap4 .select2-selection--single {
+    height: calc(2.25rem + 2px) !important;
+}
+
+.select2-container--bootstrap4 .select2-selection--single .select2-selection__rendered {
+    line-height: calc(2.25rem + 2px) !important;
+}
+
+/* ============================================================
+   ANIMACIONES
+   ============================================================ */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal.fade .modal-dialog {
+    transition: transform 0.3s ease-out;
+}
+
+.modal.show .modal-dialog {
+    animation: slideDown 0.3s;
+}
+
+/* ============================================================
+   UTILIDADES
+   ============================================================ */
+.text-moneda {
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+    text-align: right;
+}
+
+.required:after {
+    content: " *";
+    color: #dc3545;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.no-data {
+    padding: 40px;
+    text-align: center;
+    color: #6c757d;
+}
+
+.no-data i {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    opacity: 0.5;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 576px) {
+    .btn-group {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .btn-group .btn {
+        margin-bottom: 5px;
+        width: 100%;
+    }
+    
+    .table {
+        font-size: 0.85rem;
+    }
+    
+    .timeline {
+        padding-left: 20px;
+    }
+    
+    .timeline:before {
+        left: 15px;
+    }
+    
+    .timeline > div > .fas {
+        left: 0;
+    }
+    
+    .timeline > div > .timeline-item {
+        margin-left: 40px;
+    }
+}

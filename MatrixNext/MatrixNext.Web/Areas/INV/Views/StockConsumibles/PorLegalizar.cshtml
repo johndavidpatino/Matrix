@@ -1,0 +1,123 @@
+@model IEnumerable<MatrixNext.Data.DTOs.INV.StockConsumibleListDto>
+
+@{
+    ViewData["Title"] = "Movimientos Por Legalizar - Stock Consumibles";
+}
+
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Movimientos Por Legalizar</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home", new { area = "" })">Inicio</a></li>
+                        <li class="breadcrumb-item">Inventario</li>
+                        <li class="breadcrumb-item"><a href="@Url.Action("Index")">Stock Consumibles</a></li>
+                        <li class="breadcrumb-item active">Por Legalizar</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card">
+                <div class="card-header bg-warning">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h3 class="card-title">
+                                <i class="fas fa-exclamation-circle"></i> Salidas Pendientes de Legalización
+                            </h3>
+                        </div>
+                        <div class="col-md-4 text-right">
+                            <a href="@Url.Action("Index")" class="btn btn-light">
+                                <i class="fas fa-arrow-left"></i> Volver al Stock
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>Información:</strong> Estos movimientos de salida deben ser legalizados. 
+                        Puede crear la legalización desde el módulo de <a href="@Url.Action("Index", "Legalizaciones")">Legalizaciones</a>.
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Consumible</th>
+                                    <th class="text-right">Cantidad</th>
+                                    <th class="text-right">Total ($)</th>
+                                    <th>Usuario</th>
+                                    <th>Observaciones</th>
+                                    <th width="100">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null && Model.Any())
+                                {
+                                    foreach (var mov in Model)
+                                    {
+                                        <tr>
+                                            <td>@mov.Fecha.ToString("dd/MM/yyyy")</td>
+                                            <td>
+                                                <strong>@mov.NombreConsumible</strong>
+                                            </td>
+                                            <td class="text-right">
+                                                <span class="badge badge-danger">@mov.Cantidad</span>
+                                            </td>
+                                            <td class="text-right">
+                                                @if (mov.Total.HasValue)
+                                                {
+                                                    @mov.Total.Value.ToString("C0")
+                                                }
+                                                else
+                                                {
+                                                    <text>-</text>
+                                                }
+                                            </td>
+                                            <td>@mov.NombreUsuario</td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(mov.Observaciones))
+                                                {
+                                                    var preview = mov.Observaciones.Length > 50 
+                                                        ? mov.Observaciones.Substring(0, 50) + "..." 
+                                                        : mov.Observaciones;
+                                                    <text>@preview</text>
+                                                }
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="@Url.Action("Create", "Legalizaciones", new { area = "INV", idMovimiento = mov.IdMovimiento })" 
+                                                   class="btn btn-sm btn-success"
+                                                   title="Crear Legalización">
+                                                    <i class="fas fa-clipboard-check"></i> Legalizar
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="7" class="text-center text-muted py-4">
+                                            <i class="fas fa-check-circle fa-3x mb-3 text-success"></i>
+                                            <p>No hay movimientos pendientes de legalización</p>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

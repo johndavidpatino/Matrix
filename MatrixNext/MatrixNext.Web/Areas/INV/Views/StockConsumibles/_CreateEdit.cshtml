@@ -1,0 +1,129 @@
+@model MatrixNext.Data.DTOs.INV.StockConsumibleDto
+
+<div class="modal fade" id="modalMovimientoStock" tabindex="-1" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form asp-action="Create" method="post" data-ajax-form id="formMovimiento">
+                @Html.AntiForgeryToken()
+                
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title">
+                        <i class="fas fa-exchange-alt"></i> Nuevo Movimiento de Stock
+                    </h5>
+                    <button type="button" class="close text-white" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" style="display:none;"></div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="IdConsumible" class="required">Consumible</label>
+                                <select asp-for="IdConsumible" class="form-control select2" id="ddlConsumible" required>
+                                    <option value="">Seleccione...</option>
+                                    @if (ViewBag.Consumibles != null)
+                                    {
+                                        foreach (var consumible in ViewBag.Consumibles)
+                                        {
+                                            <option value="@consumible.Id">@consumible.Nombre</option>
+                                        }
+                                    }
+                                </select>
+                                <span asp-validation-for="IdConsumible" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="TipoMovimiento" class="required">Tipo Movimiento</label>
+                                <select asp-for="TipoMovimiento" class="form-control" id="ddlTipoMovimiento" required>
+                                    <option value="">Seleccione...</option>
+                                    <option value="1">Entrada</option>
+                                    <option value="2">Salida</option>
+                                </select>
+                                <span asp-validation-for="TipoMovimiento" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Fecha" class="required">Fecha</label>
+                                <input asp-for="Fecha" type="date" class="form-control" required />
+                                <span asp-validation-for="Fecha" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Cantidad" class="required">Cantidad</label>
+                                <input asp-for="Cantidad" type="number" class="form-control" min="1" required id="txtCantidad" />
+                                <span asp-validation-for="Cantidad" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="ValorUnitario">Valor Unitario</label>
+                                <input asp-for="ValorUnitario" type="number" class="form-control" min="0" step="0.01" id="txtValorUnitario" />
+                                <span asp-validation-for="ValorUnitario" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Total Calculado</label>
+                                <input type="text" id="txtTotalCalculado" class="form-control bg-light" readonly value="$0" />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Stock Actual</label>
+                                <input type="text" id="txtStockActual" class="form-control bg-light" readonly />
+                                <small class="form-text text-muted">Se calcula al seleccionar consumible</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4" id="divStockProyectado" style="display:none;">
+                            <div class="form-group">
+                                <label>Stock Proyectado</label>
+                                <input type="text" id="txtStockProyectado" class="form-control bg-light font-weight-bold" readonly />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="Observaciones">Observaciones</label>
+                                <textarea asp-for="Observaciones" class="form-control" rows="3" maxlength="500" 
+                                          placeholder="Detalles del movimiento, proveedor, lote..."></textarea>
+                                <span asp-validation-for="Observaciones" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-warning" id="alertSalida" style="display:none;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>Atención:</strong> El movimiento de salida requiere legalización posterior.
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <i class="fas fa-times"></i> Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

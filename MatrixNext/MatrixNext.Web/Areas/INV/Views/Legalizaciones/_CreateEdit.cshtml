@@ -1,0 +1,153 @@
+@model MatrixNext.Data.DTOs.INV.LegalizacionDto
+
+@{
+    var isEdit = Model.IdLegalizacion > 0;
+    var title = isEdit ? "Editar Legalización" : "Nueva Legalización";
+}
+
+<div class="modal fade" id="modalLegalizacion" tabindex="-1" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <form asp-action="@(isEdit ? "Edit" : "Create")" method="post" data-ajax-form id="formLegalizacion">
+                @Html.AntiForgeryToken()
+                @if (isEdit)
+                {
+                    <input type="hidden" asp-for="IdLegalizacion" />
+                    <input type="hidden" asp-for="Verificado" />
+                }
+                
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title">
+                        <i class="fas fa-clipboard-check"></i> @title
+                    </h5>
+                    <button type="button" class="close text-white" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" style="display:none;"></div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="FechaLegalizacion" class="required">Fecha Legalización</label>
+                                <input asp-for="FechaLegalizacion" type="date" class="form-control" required />
+                                <span asp-validation-for="FechaLegalizacion" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="IdUsuario" class="required">Usuario</label>
+                                <select asp-for="IdUsuario" class="form-control select2" required>
+                                    <option value="">Seleccione...</option>
+                                    @* TODO: Cargar desde ViewBag.Usuarios *@
+                                </select>
+                                <span asp-validation-for="IdUsuario" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="IdTrabajo">Trabajo</label>
+                                <select asp-for="IdTrabajo" class="form-control select2">
+                                    <option value="">Sin trabajo asociado</option>
+                                    @* TODO: Cargar desde ViewBag.Trabajos *@
+                                </select>
+                                <span asp-validation-for="IdTrabajo" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="ValorLegalizado" class="required">Valor a Legalizar</label>
+                                <input asp-for="ValorLegalizado" type="number" class="form-control" min="0" step="0.01" required id="txtValorLegalizado" />
+                                <span asp-validation-for="ValorLegalizado" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="card bg-light">
+                                <div class="card-body p-2">
+                                    <small class="text-muted">Valor Legalizado = Firmas + Devoluciones + Notas Crédito + Descuento Nómina + Pendiente</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+                    <h6 class="text-primary">
+                        <i class="fas fa-calculator"></i> Componentes de Legalización
+                    </h6>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="Firmas">Firmas</label>
+                                <input asp-for="Firmas" type="number" class="form-control componente-legalizacion" min="0" step="0.01" data-componente="Firmas" />
+                                <span asp-validation-for="Firmas" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="Devoluciones">Devoluciones</label>
+                                <input asp-for="Devoluciones" type="number" class="form-control componente-legalizacion" min="0" step="0.01" data-componente="Devoluciones" />
+                                <span asp-validation-for="Devoluciones" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="NotasCredito">Notas de Crédito</label>
+                                <input asp-for="NotasCredito" type="number" class="form-control componente-legalizacion" min="0" step="0.01" data-componente="NotasCredito" />
+                                <span asp-validation-for="NotasCredito" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="DescuentoNomina">Descuento Nómina</label>
+                                <input asp-for="DescuentoNomina" type="number" class="form-control componente-legalizacion" min="0" step="0.01" data-componente="DescuentoNomina" />
+                                <span asp-validation-for="DescuentoNomina" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 offset-md-8">
+                            <div class="card">
+                                <div class="card-body bg-light">
+                                    <div class="d-flex justify-content-between">
+                                        <strong>Pendiente:</strong>
+                                        <span id="txtPendiente" class="font-weight-bold text-danger">$0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="Observaciones">Observaciones</label>
+                                <textarea asp-for="Observaciones" class="form-control" rows="3" maxlength="500"></textarea>
+                                <span asp-validation-for="Observaciones" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <i class="fas fa-times"></i> Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

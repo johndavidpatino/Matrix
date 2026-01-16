@@ -1,0 +1,235 @@
+@model MatrixNext.Data.DTOs.INV.RegistroArticuloDto
+
+@{
+    var isEdit = Model.IdArticulo > 0;
+    var title = isEdit ? "Editar Artículo" : "Nuevo Artículo";
+}
+
+<div class="modal fade" id="modalArticulo" tabindex="-1" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <form asp-action="@(isEdit ? "Edit" : "Create")" method="post" data-ajax-form id="formArticulo">
+                @Html.AntiForgeryToken()
+                @if (isEdit)
+                {
+                    <input type="hidden" asp-for="IdArticulo" />
+                }
+                
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title">
+                        <i class="fas fa-box"></i> @title
+                    </h5>
+                    <button type="button" class="close text-white" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" style="display:none;"></div>
+
+                    <!-- Tipo de Artículo -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="IdTipoArticulo" class="required">Tipo de Artículo</label>
+                                <select asp-for="IdTipoArticulo" class="form-control" id="ddlTipoArticulo" required>
+                                    <option value="">Seleccione...</option>
+                                    <option value="1">Computador</option>
+                                    <option value="2">Tableta</option>
+                                    <option value="3">Celular</option>
+                                    <option value="4">Consumible</option>
+                                    <option value="5">Periférico</option>
+                                    <option value="6">Papelería</option>
+                                </select>
+                                <span asp-validation-for="IdTipoArticulo" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Placa" class="required">Placa</label>
+                                <input asp-for="Placa" class="form-control" maxlength="50" required />
+                                <span asp-validation-for="Placa" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabs para campos específicos por tipo -->
+                    <ul class="nav nav-tabs" id="tabsArticulo" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="tab-general" data-toggle="tab" href="#general" role="tab">
+                                General
+                            </a>
+                        </li>
+                        <li class="nav-item" id="tab-computador-item" style="display:none;">
+                            <a class="nav-link" id="tab-computador" data-toggle="tab" href="#computador" role="tab">
+                                Especificaciones
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content border border-top-0 p-3" id="tabsArticuloContent">
+                        <!-- Tab General -->
+                        <div class="tab-pane fade show active" id="general" role="tabpanel">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="Marca">Marca</label>
+                                        <input asp-for="Marca" class="form-control" maxlength="100" list="listMarcas" />
+                                        <datalist id="listMarcas">
+                                            @foreach (var marca in ViewBag.Marcas)
+                                            {
+                                                <option value="@marca"></option>
+                                            }
+                                        </datalist>
+                                        <span asp-validation-for="Marca" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="Modelo">Modelo</label>
+                                        <input asp-for="Modelo" class="form-control" maxlength="100" />
+                                        <span asp-validation-for="Modelo" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="Serial">Serial</label>
+                                        <input asp-for="Serial" class="form-control" maxlength="100" />
+                                        <span asp-validation-for="Serial" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="FechaCompra">Fecha Compra</label>
+                                        <input asp-for="FechaCompra" type="date" class="form-control" />
+                                        <span asp-validation-for="FechaCompra" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="ValorUnitario">Valor Unitario</label>
+                                        <input asp-for="ValorUnitario" type="number" class="form-control" min="0" step="0.01" />
+                                        <span asp-validation-for="ValorUnitario" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="Cantidad">Cantidad</label>
+                                        <input asp-for="Cantidad" type="number" class="form-control" min="1" value="1" />
+                                        <span asp-validation-for="Cantidad" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="Observaciones">Observaciones</label>
+                                        <textarea asp-for="Observaciones" class="form-control" rows="3" maxlength="500"></textarea>
+                                        <span asp-validation-for="Observaciones" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab Especificaciones (Computador/Tableta/Celular) -->
+                        <div class="tab-pane fade" id="computador" role="tabpanel">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Procesador">Procesador</label>
+                                        <input asp-for="Procesador" class="form-control" maxlength="100" list="listProcesadores" />
+                                        <datalist id="listProcesadores">
+                                            @foreach (var proc in ViewBag.Procesadores)
+                                            {
+                                                <option value="@proc"></option>
+                                            }
+                                        </datalist>
+                                        <span asp-validation-for="Procesador" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label asp-for="Ram">RAM (GB)</label>
+                                        <input asp-for="Ram" type="number" class="form-control" min="1" />
+                                        <span asp-validation-for="Ram" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label asp-for="Disco">Disco (GB)</label>
+                                        <input asp-for="Disco" type="number" class="form-control" min="1" />
+                                        <span asp-validation-for="Disco" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="SistemaOperativo">Sistema Operativo</label>
+                                        <input asp-for="SistemaOperativo" class="form-control" maxlength="100" list="listSO" />
+                                        <datalist id="listSO">
+                                            @foreach (var so in ViewBag.SistemasOperativos)
+                                            {
+                                                <option value="@so"></option>
+                                            }
+                                        </datalist>
+                                        <span asp-validation-for="SistemaOperativo" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="VersionSO">Versión SO</label>
+                                        <input asp-for="VersionSO" class="form-control" maxlength="50" />
+                                        <span asp-validation-for="VersionSO" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" id="rowCelular" style="display:none;">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="Chip">Número Chip</label>
+                                        <input asp-for="Chip" class="form-control" maxlength="50" />
+                                        <span asp-validation-for="Chip" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="IMEI">IMEI</label>
+                                        <input asp-for="IMEI" class="form-control" maxlength="50" />
+                                        <span asp-validation-for="IMEI" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="PinPuk">PIN/PUK</label>
+                                        <input asp-for="PinPuk" class="form-control" maxlength="50" />
+                                        <span asp-validation-for="PinPuk" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <i class="fas fa-times"></i> Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

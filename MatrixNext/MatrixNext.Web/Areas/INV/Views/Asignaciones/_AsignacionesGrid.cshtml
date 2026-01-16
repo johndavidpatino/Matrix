@@ -1,0 +1,82 @@
+@model IEnumerable<MatrixNext.Data.DTOs.INV.AsignacionListDto>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Placa</th>
+                <th>Tipo Artículo</th>
+                <th>Usuario Asignado</th>
+                <th>Fecha Asignación</th>
+                <th>Observaciones</th>
+                <th width="100">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var asignacion in Model)
+                {
+                    <tr>
+                        <td><strong>@asignacion.PlacaActivo</strong></td>
+                        <td>
+                            <span class="badge badge-info">@asignacion.TipoArticulo</span>
+                        </td>
+                        <td>
+                            <i class="fas fa-user"></i> @asignacion.NombreUsuario
+                        </td>
+                        <td>@asignacion.FechaAsignacion.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(asignacion.Observaciones))
+                            {
+                                var preview = asignacion.Observaciones.Length > 50 
+                                    ? asignacion.Observaciones.Substring(0, 50) + "..." 
+                                    : asignacion.Observaciones;
+                                <text>@preview</text>
+                            }
+                            else
+                            {
+                                <span class="text-muted">Sin observaciones</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            <div class="btn-group" role="group">
+                                <button type="button" 
+                                        class="btn btn-sm btn-info" 
+                                        data-ajax-modal 
+                                        data-url="@Url.Action("Details", new { id = asignacion.IdAsignacion })"
+                                        title="Ver Detalles">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button type="button" 
+                                        class="btn btn-sm btn-warning" 
+                                        data-ajax-modal 
+                                        data-url="@Url.Action("Edit", new { id = asignacion.IdAsignacion })"
+                                        title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button type="button" 
+                                        class="btn btn-sm btn-danger" 
+                                        data-delete-asignacion 
+                                        data-id="@asignacion.IdAsignacion"
+                                        data-placa="@asignacion.PlacaActivo"
+                                        title="Eliminar">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6" class="text-center text-muted py-4">
+                        <i class="fas fa-inbox fa-3x mb-3"></i>
+                        <p>No se encontraron asignaciones</p>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

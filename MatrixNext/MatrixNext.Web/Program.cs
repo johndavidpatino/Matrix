@@ -139,6 +139,19 @@ builder.Services.AddScoped<MatrixNext.Data.Services.MBO.IPropuestasService, Matr
 builder.Services.AddScoped<MatrixNext.Data.Adapters.PC.IProductoInternoAdapter, MatrixNext.Data.Adapters.PC.ProductoInternoAdapter>();
 builder.Services.AddScoped<MatrixNext.Data.Services.PC.IProductoInternoService, MatrixNext.Data.Services.PC.ProductoInternoService>();
 
+// ===== SPRINT 20: INV_Inventario (Módulo final - 28/28 módulos) =====
+// Adapters and Services for INV (Registro Artículos, Asignaciones, Stock, Legalizaciones, Mantenimiento)
+builder.Services.AddScoped<MatrixNext.Data.Adapters.INV.IRegistroArticulosAdapter, MatrixNext.Data.Adapters.INV.RegistroArticulosAdapter>();
+builder.Services.AddScoped<MatrixNext.Data.Adapters.INV.IAsignacionesAdapter, MatrixNext.Data.Adapters.INV.AsignacionesAdapter>();
+builder.Services.AddScoped<MatrixNext.Data.Adapters.INV.IStockConsumiblesAdapter, MatrixNext.Data.Adapters.INV.StockConsumiblesAdapter>();
+builder.Services.AddScoped<MatrixNext.Data.Adapters.INV.ILegalizacionesAdapter, MatrixNext.Data.Adapters.INV.LegalizacionesAdapter>();
+builder.Services.AddScoped<MatrixNext.Data.Adapters.INV.IMantenimientoEquiposAdapter, MatrixNext.Data.Adapters.INV.MantenimientoEquiposAdapter>();
+builder.Services.AddScoped<MatrixNext.Data.Services.INV.IRegistroArticulosService, MatrixNext.Data.Services.INV.RegistroArticulosService>();
+builder.Services.AddScoped<MatrixNext.Data.Services.INV.IAsignacionesService, MatrixNext.Data.Services.INV.AsignacionesService>();
+builder.Services.AddScoped<MatrixNext.Data.Services.INV.IStockConsumiblesService, MatrixNext.Data.Services.INV.StockConsumiblesService>();
+builder.Services.AddScoped<MatrixNext.Data.Services.INV.ILegalizacionesService, MatrixNext.Data.Services.INV.LegalizacionesService>();
+builder.Services.AddScoped<MatrixNext.Data.Services.INV.IMantenimientoEquiposService, MatrixNext.Data.Services.INV.MantenimientoEquiposService>();
+
 // Authorization Service (Sprint 10-11)
 builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
 

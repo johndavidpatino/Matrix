@@ -1,0 +1,85 @@
+@model IEnumerable<MatrixNext.Data.DTOs.INV.RegistroArticuloListDto>
+
+@{
+    ViewData["Title"] = "Registro de Artículos - Inventario";
+}
+
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Registro de Artículos</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home", new { area = "" })">Inicio</a></li>
+                        <li class="breadcrumb-item">Inventario</li>
+                        <li class="breadcrumb-item active">Registro de Artículos</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h3 class="card-title">Listado de Artículos</h3>
+                        </div>
+                        <div class="col-md-4 text-right">
+                            <button type="button" class="btn btn-primary" data-ajax-modal data-url="@Url.Action("Create")">
+                                <i class="fas fa-plus"></i> Nuevo Artículo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <!-- Filtros -->
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <input type="text" id="filtroTexto" class="form-control" placeholder="Buscar por placa, serial, marca...">
+                        </div>
+                        <div class="col-md-3">
+                            <select id="filtroTipoArticulo" class="form-control">
+                                <option value="">Todos los tipos</option>
+                                @foreach (var tipo in ViewBag.TiposArticulo)
+                                {
+                                    <option value="@tipo.Id">@tipo.Nombre</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select id="filtroAsignado" class="form-control">
+                                <option value="">Todos los estados</option>
+                                <option value="false">Disponibles</option>
+                                <option value="true">Asignados</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" id="btnFiltrar" class="btn btn-info btn-block">
+                                <i class="fas fa-search"></i> Filtrar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Grid -->
+                    <div id="gridContainer" data-grid-url="@Url.Action("Index")">
+                        @Html.Partial("_ArticulosGrid", Model)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Modal Container -->
+<div id="modalContainer"></div>
+
+@section Scripts {
+    <script src="~/js/inventario/registro-articulos.js"></script>
+}

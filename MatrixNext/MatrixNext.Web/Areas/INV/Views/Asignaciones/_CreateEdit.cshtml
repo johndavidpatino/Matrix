@@ -1,0 +1,103 @@
+@model MatrixNext.Data.DTOs.INV.AsignacionActivoDto
+
+@{
+    var isEdit = Model.IdAsignacion > 0;
+    var title = isEdit ? "Editar Asignación" : "Nueva Asignación";
+}
+
+<div class="modal fade" id="modalAsignacion" tabindex="-1" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form asp-action="@(isEdit ? "Edit" : "Create")" method="post" data-ajax-form id="formAsignacion">
+                @Html.AntiForgeryToken()
+                @if (isEdit)
+                {
+                    <input type="hidden" asp-for="IdAsignacion" />
+                }
+                
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title">
+                        <i class="fas fa-user-plus"></i> @title
+                    </h5>
+                    <button type="button" class="close text-white" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" style="display:none;"></div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="IdActivoFijo" class="required">Activo Fijo</label>
+                                <select asp-for="IdActivoFijo" class="form-control select2" id="ddlActivoFijo" required @(isEdit ? "disabled" : "")>
+                                    <option value="">Seleccione un activo...</option>
+                                    @* TODO: Cargar desde ViewBag.ActivosDisponibles *@
+                                </select>
+                                @if (isEdit)
+                                {
+                                    <input type="hidden" asp-for="IdActivoFijo" />
+                                }
+                                <span asp-validation-for="IdActivoFijo" class="text-danger"></span>
+                                <small class="form-text text-muted">Solo se muestran activos disponibles (no asignados)</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="IdUsuarioAsignado" class="required">Usuario</label>
+                                <select asp-for="IdUsuarioAsignado" class="form-control select2" required>
+                                    <option value="">Seleccione un usuario...</option>
+                                    @* TODO: Cargar desde ViewBag.Usuarios *@
+                                </select>
+                                <span asp-validation-for="IdUsuarioAsignado" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="FechaAsignacion" class="required">Fecha Asignación</label>
+                                <input asp-for="FechaAsignacion" type="date" class="form-control" required />
+                                <span asp-validation-for="FechaAsignacion" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="Observaciones">Observaciones</label>
+                                <textarea asp-for="Observaciones" class="form-control" rows="4" maxlength="500" 
+                                          placeholder="Detalles de la asignación, condiciones, acuerdos..."></textarea>
+                                <span asp-validation-for="Observaciones" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (!isEdit)
+                    {
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i>
+                            <strong>Nota:</strong> Al crear la asignación, el activo quedará marcado como "Asignado" y se generará un registro en el log de auditoría.
+                        </div>
+                    }
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <i class="fas fa-times"></i> Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
