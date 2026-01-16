@@ -1,0 +1,154 @@
+@* MatrixNext.Web/Areas/RE_GT/Views/GestionTratamiento/Index.cshtml *@
+@using MatrixNext.Core.DTOs.RE_GT
+@model GestionTratamientoDatosMenuDto
+
+@{
+    ViewData["Title"] = @Model.TituloPagina;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h1 class="display-5 mb-2">
+                <i class="fas fa-flask text-success me-2"></i>@Model.TituloPagina
+            </h1>
+            <p class="text-muted lead">@Model.Descripcion</p>
+            <hr />
+        </div>
+    </div>
+
+    <!-- Secciones de Menú -->
+    @foreach (var seccion in Model.Secciones.OrderBy(s => s.Orden))
+    {
+        @if (seccion.Nombre.Contains("Cualitativa") || seccion.Nombre.Contains("Cuantitativa"))
+        {
+            <!-- Sección: Operaciones Cualitativas / Cuantitativas (destaque) -->
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="alert alert-info border-0 shadow-sm" role="alert">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-2x @seccion.IconoCss text-info me-3"></i>
+                            <div class="flex-grow-1">
+                                <h3 class="mb-1">@seccion.Nombre</h3>
+                                <p class="mb-0 small text-muted">@seccion.Descripcion</p>
+                            </div>
+                            @if (seccion.Items.Any())
+                            {
+                                <a href="@seccion.Items.First().Url" 
+                                   class="btn btn-info ms-3">
+                                    <i class="fas fa-arrow-right me-1"></i>Ir Ahora
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <!-- Secciones normales (Calidad, Tratamiento) -->
+            <div class="row mb-5">
+                <!-- Encabezado de Sección -->
+                <div class="col-md-12">
+                    <div class="section-header d-flex align-items-center mb-3">
+                        <i class="fas fa-2x @seccion.IconoCss text-success me-3"></i>
+                        <div>
+                            <h2 class="mb-0">@seccion.Nombre</h2>
+                            <small class="text-muted">@seccion.Descripcion</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grid de Items -->
+                <div class="col-md-12">
+                    <div class="row">
+                        @foreach (var item in seccion.Items.OrderBy(i => i.Orden))
+                        {
+                            <div class="col-lg-3 col-md-4 col-sm-6 mb-3">
+                                <div class="card h-100 shadow-sm border-0 hover-lift transition-all">
+                                    <div class="card-body d-flex flex-column">
+                                        <!-- Icono -->
+                                        <div class="mb-3">
+                                            <i class="fas fa-3x @item.IconoCss text-success opacity-75"></i>
+                                        </div>
+
+                                        <!-- Título -->
+                                        <h5 class="card-title mb-2 flex-grow-1">@item.Titulo</h5>
+
+                                        <!-- Descripción -->
+                                        <p class="card-text small text-muted flex-grow-1">
+                                            @item.Descripcion
+                                        </p>
+
+                                        <!-- Link -->
+                                        <a href="@item.Url" 
+                                           class="btn btn-sm btn-outline-success mt-auto"
+                                           title="@item.Descripcion"
+                                           data-bs-toggle="tooltip">
+                                            <i class="fas fa-arrow-right me-1"></i>Acceder
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+@section Styles {
+    <style>
+        .hover-lift {
+            transition: all 0.3s ease;
+        }
+
+            .hover-lift:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 16px rgba(0,0,0,0.1) !important;
+            }
+
+        .section-header {
+            border-bottom: 3px solid #198754;
+            padding-bottom: 1rem;
+        }
+
+        .card {
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+            .card:hover {
+                box-shadow: 0 8px 16px rgba(25, 135, 84, 0.2) !important;
+            }
+
+        .transition-all {
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-success:hover {
+            background-color: #198754;
+            border-color: #198754;
+        }
+
+        .alert-info {
+            background-color: #e7f3ff;
+            border-color: #bee5eb;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        // Inicializar tooltips de Bootstrap
+        document.addEventListener('DOMContentLoaded', function () {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+    </script>
+}

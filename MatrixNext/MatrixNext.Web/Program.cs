@@ -405,6 +405,10 @@ builder.Services.AddScoped<ICoreAssignmentService, CoreAssignmentService>();
 builder.Services.AddScoped<ICoreNotificationService, CoreNotificationService>();
 builder.Services.AddScoped<ICoreAuditService, CoreAuditService>();
 
+// ===== SPRINT 17: RE_GT Recolección y Gestión/Tratamiento =====
+// Ref: docs/RE_GT/SPRINT17_FASE3_PLAN.md § Fase 3
+builder.Services.AddScoped<MatrixNext.Web.Services.RE_GT.IRecoleccionDatosService, MatrixNext.Web.Services.RE_GT.RecoleccionDatosService>();
+
 var app = builder.Build();
 
 // ===== FASE 3: EasyQuote Master Data Seeding =====
