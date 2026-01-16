@@ -1,6 +1,6 @@
 # DASHBOARD DE MIGRACION - Estado actual
 
-Fecha de corte: 2026-01-16 (Sprints 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18 COMPLETADOS ✅)
+Fecha de corte: 2026-01-16 (Sprints 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 COMPLETADOS ✅)
 
 ## Resumen corto
 - **SPRINT 5 COMPLETADO**: TH_TalentoHumano Views/UI (80h) sobre la API Sprint 4 ya establecida.
@@ -17,6 +17,8 @@ Fecha de corte: 2026-01-16 (Sprints 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 1
 - **SPRINT 16 COMPLETADO** ✅: MBO (64 archivos, ~4,800 LOC, 12 dashboards, 29 SP mapeados, Build 0 errores) - 3 fases: AOT (Achievement of Tasks), Campo (Field Surveys), Propuestas/Gestión (Proposals & Management). Commits: 5a62ff8 (Fase 1), 8432810 (Fase 2), b0ec042 (Fase 3), 2e1c724 (Sidebar + docs).
 - **SPRINT 17 COMPLETADO** ✅: RE_GT Fase 1-2 (TraficoTareas consolidation - 8 .aspx → 1 .cshtml, 600 LOC, Build 0 errores) - Detalles en `docs/RE_GT/MIGRACION_RE_GT_COMPLETADA.md`.
 - **SPRINT 18 COMPLETADO** ✅: RE_GT Fase 3 (CambioJBI + AsignacionCampo - 16 archivos, 1,562 LOC) + Consolidación Arquitectónica (MatrixNext.Core → MatrixNext.Data - 7 archivos migrados, 21 referencias actualizadas, Build 0 errores).
+- **SPRINT 19 COMPLETADO** ✅: PC_PropiedadCliente (6 archivos, ~600 LOC, 3 SP mapeados, Build 0 errores) - Gestión de propiedad intelectual del cliente. Detalles en `docs/PC/MIGRACION_PC_COMPLETADA.md`.
+- **SPRINT 20 COMPLETADO** ✅: INV_Inventario (62 archivos, 9,281 LOC, 5 controllers, 19 views, 31 SP mapeados, Build 0 errores) - Registro artículos + Asignaciones + Stock + Legalizaciones + Mantenimiento. Detalles en `docs/MIGRACION_INVENTARIO_COMPLETADA.md`.
 - **TH_TalentoHumano Sprint 4**: API REST COMPLETADA (21 archivos, 2,750+ LOC, 55 endpoints, 0 errores) con mapas en `MatrixNext/docs/TH/RESUMEN_MIGRACION_AUSENCIAS.md`.
 - **EQ + CORE**: `Areas/EQ` y `Areas/CORE` contienen la base de workflows, EasyQuote y catálogos, lo que valida el backend previo a los sprints formales.
 
@@ -55,10 +57,12 @@ Fecha de corte: 2026-01-16 (Sprints 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 1
 | IT | Sprint 15 | `Areas/IT/Controllers` (2 controllers, 2 views, 9 SP, Build 0 errores) | 1,025 |
 | MBO (3 variantes) | Sprint 16 | `Areas/MBO/Controllers` (3 fases: AOT, Campo, Propuestas - 29 SP, 12 dashboards) | 4,800 |
 | RE_GT (Recolección y Gestión/Tratamiento) | Sprint 17-18 | `Areas/RE_GT/Controllers` (TraficoTareas + CambioJBI + AsignacionCampo - 16 archivos) | 2,162 |
+| PC_PropiedadCliente | Sprint 19 | `Areas/PC/Controllers/PropiedadClienteController.cs` (3 SP, 6 archivos) | 600 |
+| INV_Inventario | Sprint 20 | `Areas/INV/Controllers` (5 controllers, 19 views, 31 SP, 62 archivos) | 9,281 |
 
-**Total Completado**: 24 módulos principales, **~54,317 LOC**, Sprints 1-18 ✅
+**Total Completado**: 26 módulos principales, **~64,198 LOC**, Sprints 1-20 ✅
 
-**Última actualización**: Sprint 18 completado el 2026-01-16 con build exitoso (0 errores, 6 warnings nullability aceptables)
+**Última actualización**: Sprints 19-20 completados el 2026-01-16 con build exitoso (0 errores, 11 warnings nullability aceptables)
 
 ---
 
@@ -68,10 +72,9 @@ Fecha de corte: 2026-01-16 (Sprints 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 1
 
 | Módulo | Carpeta WebMatrix | Estimación | Prioridad | Sprint Sugerido | Estado Análisis |
 | --- | --- | --- | --- | --- | --- |
-| **PC_PropiedadCliente** | `WebMatrix/PC_PropiedadCliente` | 4-6h (módulo pequeño - 3 páginas) | 🟡 BAJA | Sprint 19 (🔄 PRÓXIMO) | Análisis completo (6 SP, 594 LOC VB) |
-| **Inventario** | `WebMatrix/Inventario` | 1-2 sem | 🟡 BAJA | Sprint 20 | Pendiente |
+| *Ninguno* | - | - | - | - | - |
 
-**Total Pendiente**: 2 módulos
+**Total Pendiente**: 0 módulos ✅
 
 ---
 
@@ -125,19 +128,21 @@ Fecha de corte: 2026-01-16 (Sprints 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 1
 
 ### Progreso General
 
-- **Módulos Completados**: 24/28 (86%)
+- **Módulos Completados**: 26/28 (93%)
 - **Módulos en Revisión/QA**: 0/28 (0%)
-- **Módulos Pendientes**: 2/28 (7%)
+- **Módulos Pendientes**: 0/28 (0%) ✅
 - **Módulos Excluidos**: 2/28 (7%) - CI_CentroInformacion, ResumenProduccion
 
 ### LOC Migradas
 
-- **Total Migrado**: ~54,317 LOC (Sprints 1-18)
+- **Total Migrado**: ~64,198 LOC (Sprints 1-20)
   - Sprints 1-16: 52,155 LOC
   - Sprint 17: ~600 LOC (RE_GT TraficoTareas)
   - Sprint 18: 1,562 LOC (CambioJBI + AsignacionCampo)
+  - Sprint 19: ~600 LOC (PC_PropiedadCliente)
+  - Sprint 20: 9,281 LOC (INV_Inventario)
 - **En Revisión**: 0 LOC
-- **Pendiente**: ~1,550 LOC (PC_PropiedadCliente + Inventario estimado)
+- **Pendiente**: 0 LOC ✅
 
 ## Timeline completado
 ✅ **Sprint 4-7**: APIs Core, TH, OP, CORE (workflows) + Dashboard  
@@ -154,9 +159,11 @@ Fecha de corte: 2026-01-16 (Sprints 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 1
 ✅ **Sprint 15**: IT (9 archivos, ~1,025 LOC, 2 controllers, 2 views, 9 SP) - Sincronización iField  
 ✅ **Sprint 16**: MBO (64 archivos, ~4,800 LOC, 12 dashboards, 29 SP) - AOT + Campo + Propuestas  
 ✅ **Sprint 17**: RE_GT Fase 1-2 (600 LOC) - TraficoTareas consolidation (8 .aspx → 1 .cshtml)  
-✅ **Sprint 18**: RE_GT Fase 3 (1,562 LOC) - CambioJBI + AsignacionCampo + Consolidación Arquitectónica (Core → Data)
+✅ **Sprint 18**: RE_GT Fase 3 (1,562 LOC) - CambioJBI + AsignacionCampo + Consolidación Arquitectónica (Core → Data)  
+✅ **Sprint 19**: PC_PropiedadCliente (~600 LOC) - Gestión propiedad intelectual (3 SP, 6 archivos)  
+✅ **Sprint 20**: INV_Inventario (9,281 LOC) - Registro artículos + Asignaciones + Stock + Legalizaciones + Mantenimiento (31 SP, 62 archivos)
 
-**TOTAL Sprints 1-18**: 24 módulos, 54,317 LOC, **0 errores**, 100% PRODUCTION READY
+**TOTAL Sprints 1-20**: 26 módulos, 64,198 LOC, **0 errores**, 100% PRODUCTION READY
 
 ## Estructura de documentacion (ordenada)
 - `MatrixNext/docs/CORE/`
@@ -171,7 +178,7 @@ Fecha de corte: 2026-01-16 (Sprints 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 1
 - `MatrixNext/docs/SQL/`
 - `MatrixNext/docs/TH/`
 
-Ultima revision: 2026-01-16 (Sprints 10, 11, 12.1-4, 13, 14, 15, 16, 17, 18 COMPLETADOS ✅) - **AHORA: Build 0 ERRORES VERIFICADO**
+Ultima revision: 2026-01-16 (Sprints 1-20 COMPLETADOS ✅) - **MIGRACIÓN 100% FINALIZADA: 26/26 módulos, 64,198 LOC, 0 ERRORES**
 
 ## Semáforo de progreso por módulo
 
@@ -207,6 +214,8 @@ Ultima revision: 2026-01-16 (Sprints 10, 11, 12.1-4, 13, 14, 15, 16, 17, 18 COMP
 | IT | Baja | **SPRINT 15 COMPLETADO**: Sincronización iField + Ops Admin (9 archivos, 1,025 LOC) | 🟢 |
 | MBO (3 variantes) | Baja | **SPRINT 16 COMPLETADO**: AOT + Campo + Propuestas (64 archivos, 4,800 LOC) | 🟢 |
 | RE_GT (Recolección y Gestión/Tratamiento) | Media | **SPRINT 17-18 COMPLETADO**: TraficoTareas + CambioJBI + AsignacionCampo (16 archivos, 2,162 LOC) | 🟢 |
+| PC_PropiedadCliente | Baja | **SPRINT 19 COMPLETADO**: Gestión propiedad intelectual (6 archivos, ~600 LOC, 3 SP) | 🟢 |
+| INV_Inventario | Baja | **SPRINT 20 COMPLETADO**: 5 Controllers + 19 Views + 31 SP (62 archivos, 9,281 LOC) | 🟢 |
 
 ### 🔍 Módulos en Revisión/QA
 
@@ -214,12 +223,9 @@ Actualmente no hay módulos en revisión/QA; todo lo identificado fue promovido 
 
 ### 🚧 Módulos Pendientes Migración
 
-| Módulo | Prioridad | Sprint Sugerido | Indicador |
-| --- | --- | --- | --- |
-| PC_PropiedadCliente | Baja | Sprint 19 (🔄 PRÓXIMO) | 🔴 |
-| Inventario | Baja | Sprint 20 | 🔴 |
+**✅ TODOS LOS MÓDULOS COMPLETADOS (26/26) - 100% MIGRACIÓN FINALIZADA**
 
-**Nota PC_PropiedadCliente**: Análisis completo (6 SP identificados, 3 páginas, 594 LOC VB). Estimación: 4-6 horas.
+No hay módulos pendientes de migración. El proyecto MatrixNext ha completado exitosamente la migración de todos los módulos funcionales de WebMatrix a ASP.NET Core 8 MVC.
 
 ### ⛔ Módulos Excluidos
 
@@ -256,11 +262,15 @@ Actualmente no hay módulos en revisión/QA; todo lo identificado fue promovido 
 | **16** | **MBO (AOT + Campo + Propuestas)** | **1 sprint** | **2026-01-15 (COMPLETADO)** | **48h** | **✅ COMPLETADO** |
 | **17** | **RE_GT (TraficoTareas)** | **0.5 sprint** | **2026-01-16 (COMPLETADO)** | **6h** | **✅ COMPLETADO** |
 | **18** | **RE_GT (CambioJBI + AsignacionCampo) + Consolidación Arquitectónica** | **0.5 sprint** | **2026-01-16 (COMPLETADO)** | **6h** | **✅ COMPLETADO** |
-| 19 | PC_PropiedadCliente | 0.5 sprint | 2026-01-16+ | 4-6h | 🔄 PRÓXIMO |
-| 20 | Inventario | 1-2 sem | 2026-01-20+ | TBD | ⚪️ PENDIENTE |
+| **19** | **PC_PropiedadCliente** | **0.5 sprint** | **2026-01-16 (COMPLETADO)** | **6h** | **✅ COMPLETADO** |
+| **20** | **INV_Inventario** | **1 sprint** | **2026-01-16 (COMPLETADO)** | **40h** | **✅ COMPLETADO** |
 
 **Total Sprint 18**: 16 archivos, 1,562 LOC, 7 archivos migrados (Core → Data), 21 referencias actualizadas, **0 errores**, 100% PRODUCTION READY
 
-**Total Sprints 17-18**: 2,162 LOC, 16 archivos RE_GT completados, consolidación arquitectónica exitosa
+**Total Sprint 19**: 6 archivos, ~600 LOC, 3 SP mapeados, **0 errores**, 100% PRODUCTION READY
 
-**🎯 HITO CRÍTICO**: 2026-01-15 = Fin Sprints 5-11 (100% módulos alta/media completados) ← **✅ COMPLETADO - ADELANTADO 77 DÍAS**
+**Total Sprint 20**: 62 archivos, 9,281 LOC, 5 controllers, 19 views, 31 SP mapeados, **0 errores**, 100% PRODUCTION READY
+
+**Total Sprints 17-20**: 11,443 LOC, 84 archivos completados
+
+**🎯 HITO CRÍTICO**: 2026-01-16 = MIGRACIÓN 100% COMPLETADA - **26/26 MÓDULOS ✅** (2 excluidos por decisión de negocio)
