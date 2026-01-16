@@ -323,7 +323,7 @@ namespace MatrixNext.Data.Adapters.INV
             parameters.Add("@Id", id);
 
             await connection.ExecuteAsync(
-                "INV_RegistroArticulos_Delete",
+                "INV_RegistroArticulos_Del",
                 parameters,
                 commandType: CommandType.StoredProcedure
             );
