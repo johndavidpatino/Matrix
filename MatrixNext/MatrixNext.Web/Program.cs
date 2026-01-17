@@ -402,6 +402,7 @@ builder.Services.AddScoped<IPyInstructivosService, PyInstructivosService>();
 builder.Services.AddScoped<IPyPlanillasService, PyPlanillasService>();
 builder.Services.AddScoped<IPyDistribucionEntrevistasService, PyDistribucionEntrevistasService>();
 builder.Services.AddScoped<IPyTrabajosService, PyTrabajosService>();
+builder.Services.AddScoped<IInstructivosService, InstructivosService>(); // Ref: AUDITORIA - Corrección violación arquitectura
 
 // ===== SPRINT 4: TH Talento Humano Module =====
 // Ref: PLAN_IMPLEMENTACION_SPRINTS.md § Sprint 4 TH

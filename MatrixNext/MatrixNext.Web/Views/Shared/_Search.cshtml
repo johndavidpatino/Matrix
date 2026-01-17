@@ -1,0 +1,90 @@
+@*
+    Componente de búsqueda con filtros
+    Ref: copilot-instructions.md § Componentes reutilizables
+    Uso: @await Html.PartialAsync("_Search", new { FormAction = Url.Action("Index"), Placeholder = "Buscar..." })
+*@
+@{
+    var formAction = ViewBag.FormAction ?? "";
+    var formMethod = ViewBag.FormMethod ?? "get";
+    var placeholder = ViewBag.Placeholder ?? "Buscar...";
+    var searchValue = ViewBag.SearchValue ?? "";
+    var showAdvanced = ViewBag.ShowAdvanced ?? false;
+    var cssClass = ViewBag.CssClass ?? "";
+}
+
+<div class="card mb-3 @cssClass" data-component="search">
+    <div class="card-body py-2">
+        <form action="@formAction" method="@formMethod" class="row g-2 align-items-end">
+            <div class="@(showAdvanced ? "col-md-6" : "col-md-10") col-12">
+                <div class="input-group">
+                    <span class="input-group-text bg-white">
+                        <i class="fas fa-search text-muted"></i>
+                    </span>
+                    <input type="text" 
+                           class="form-control border-start-0" 
+                           name="q" 
+                           placeholder="@placeholder"
+                           value="@searchValue"
+                           data-search-input />
+                    @if (!string.IsNullOrEmpty(searchValue?.ToString()))
+                    {
+                        <button type="button" class="btn btn-outline-secondary" data-clear-search>
+                            <i class="fas fa-times"></i>
+                        </button>
+                    }
+                </div>
+            </div>
+            
+            @if (showAdvanced)
+            {
+                <div class="col-md-4 col-12">
+                    <!-- Espacio para filtros adicionales (pasados como contenido) -->
+                    @if (ViewBag.Filters != null)
+                    {
+                        @Html.Raw(ViewBag.Filters)
+                    }
+                </div>
+            }
+            
+            <div class="col-md-2 col-12">
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary flex-grow-1">
+                        <i class="fas fa-search me-1"></i>Buscar
+                    </button>
+                    @if (!string.IsNullOrEmpty(searchValue?.ToString()) || showAdvanced)
+                    {
+                        <a href="@formAction" class="btn btn-outline-secondary" title="Limpiar filtros">
+                            <i class="fas fa-undo"></i>
+                        </a>
+                    }
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+(function() {
+    document.querySelectorAll('[data-component="search"]').forEach(function(container) {
+        var clearBtn = container.querySelector('[data-clear-search]');
+        var searchInput = container.querySelector('[data-search-input]');
+        
+        if (clearBtn && searchInput) {
+            clearBtn.addEventListener('click', function() {
+                searchInput.value = '';
+                searchInput.focus();
+            });
+        }
+        
+        // Submit con Enter
+        if (searchInput) {
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    this.closest('form').submit();
+                }
+            });
+        }
+    });
+})();
+</script>

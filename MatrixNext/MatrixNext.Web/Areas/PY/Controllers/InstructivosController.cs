@@ -1,11 +1,11 @@
 ﻿/// <summary>
-/// Controller para gestiÃ³n de Instructivos (General y Cualitativo)
-/// Ref: BACKLOG_QA_MODULOS_PENDIENTES.md Â§ Sprint 12.2.7
+/// Controller para gestión de Instructivos (General y Cualitativo)
+/// Ref: BACKLOG_QA_MODULOS_PENDIENTES.md § Sprint 12.2.7
+/// Refactorizado: AUDITORIA_MATRIXNEXT_ENERO_2026.md § Violación de Arquitectura
 /// Webforms: InstructivoGeneral.aspx, InstructivoGeneralCuali.aspx
 /// </summary>
 namespace MatrixNext.Web.Areas.PY.Controllers
 {
-    using MatrixNext.Data.Adapters;
     using MatrixNext.Data.Services.PY.Interfaces;
     using MatrixNext.Web.ViewModels;
     using Microsoft.AspNetCore.Http;
@@ -14,6 +14,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers
     using Microsoft.Extensions.Logging;
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -22,17 +23,14 @@ namespace MatrixNext.Web.Areas.PY.Controllers
     [Authorize]
     public class InstructivosController : Controller
     {
-        private readonly IPyTrabajosService _trabajosService;
-        private readonly IUploadAdapter _uploadAdapter;
+        private readonly IInstructivosService _instructivosService;
         private readonly ILogger<InstructivosController> _logger;
 
         public InstructivosController(
-            IPyTrabajosService trabajosService,
-            IUploadAdapter uploadAdapter,
+            IInstructivosService instructivosService,
             ILogger<InstructivosController> logger)
         {
-            _trabajosService = trabajosService;
-            _uploadAdapter = uploadAdapter;
+            _instructivosService = instructivosService;
             _logger = logger;
         }
 
@@ -50,7 +48,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers
             try
             {
                 // Obtener trabajo para contexto
-                var trabajo = await _trabajosService.ObtenerAsync(idTrabajo);
+                var trabajo = await _instructivosService.ObtenerInfoTrabajoAsync(idTrabajo);
                 if (trabajo == null)
                 {
                     return NotFound(new { success = false, message = "Trabajo no encontrado" });
@@ -60,16 +58,16 @@ namespace MatrixNext.Web.Areas.PY.Controllers
                 var usuarioId = ObtenerIdUsuarioActual();
                 if (!User.IsInRole("Administrador") && !User.IsInRole("GerenteProyectos"))
                 {
-                    _logger.LogWarning("Usuario {UserId} intentÃ³ acceder a instructivos de trabajo {TrabajoId} sin permisos",
+                    _logger.LogWarning("Usuario {UserId} intentó acceder a instructivos de trabajo {TrabajoId} sin permisos",
                         usuarioId, idTrabajo);
                     return Forbid();
                 }
 
                 // Obtener instructivos actuales
-                var instructivos = await _uploadAdapter.ObtenerArchivosPorContenedorAsync("InstructivoGeneral", idTrabajo);
+                var instructivos = await _instructivosService.ObtenerInstructivosGeneralesAsync(idTrabajo);
 
                 ViewBag.IdTrabajo = idTrabajo;
-                ViewBag.NombreTrabajo = trabajo.NombreTrabajoPresupuesto;
+                ViewBag.NombreTrabajo = trabajo.NombreTrabajo;
                 ViewBag.TipoTrabajo = trabajo.TipoTrabajo;
 
                 _logger.LogInformation("Listado instructivos obtenido. Trabajo: {TrabajoId}, Instructivos: {Count}, Usuario: {UserId}",
@@ -93,7 +91,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers
         {
             try
             {
-                var trabajo = await _trabajosService.ObtenerAsync(idTrabajo);
+                var trabajo = await _instructivosService.ObtenerInfoTrabajoAsync(idTrabajo);
                 if (trabajo == null)
                 {
                     return NotFound();
@@ -129,7 +127,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers
         }
 
         /// <summary>
-        /// Listado de instructivos cualitativos (por segmento/sesiÃ³n)
+        /// Listado de instructivos cualitativos (por segmento/sesión)
         /// GET /PY/Instructivos/Cualitativos/{idTrabajo}
         /// </summary>
         [HttpGet("Cualitativos/{idTrabajo}")]
@@ -137,17 +135,17 @@ namespace MatrixNext.Web.Areas.PY.Controllers
         {
             try
             {
-                var trabajo = await _trabajosService.ObtenerAsync(idTrabajo);
+                var trabajo = await _instructivosService.ObtenerInfoTrabajoAsync(idTrabajo);
                 if (trabajo == null)
                 {
                     return NotFound(new { success = false, message = "Trabajo no encontrado" });
                 }
 
                 // Obtener instructivos cualitativos
-                var instructivos = await _uploadAdapter.ObtenerArchivosPorContenedorAsync("InstructivoCuali", idTrabajo);
+                var instructivos = await _instructivosService.ObtenerInstructivosCualitativosAsync(idTrabajo);
 
                 ViewBag.IdTrabajo = idTrabajo;
-                ViewBag.NombreTrabajo = trabajo.NombreTrabajoPresupuesto;
+                ViewBag.NombreTrabajo = trabajo.NombreTrabajo;
                 ViewBag.TipoTrabajo = trabajo.TipoTrabajo;
 
                 var usuarioId = ObtenerIdUsuarioActual();
@@ -172,7 +170,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers
         {
             try
             {
-                var trabajo = await _trabajosService.ObtenerAsync(idTrabajo);
+                var trabajo = await _instructivosService.ObtenerInfoTrabajoAsync(idTrabajo);
                 if (trabajo == null)
                 {
                     return NotFound();
@@ -217,7 +215,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers
             try
             {
                 var usuarioId = ObtenerIdUsuarioActual();
-                var archivo = await _uploadAdapter.ObtenerArchivoAsync(idArchivo);
+                var archivo = await _instructivosService.ObtenerArchivoAsync(idArchivo);
 
                 if (archivo == null)
                 {
@@ -227,12 +225,16 @@ namespace MatrixNext.Web.Areas.PY.Controllers
                 }
 
                 // Validar permisos
-                var stream = await _uploadAdapter.DescargarArchivoAsync(idArchivo);
+                var stream = await _instructivosService.DescargarArchivoAsync(idArchivo, usuarioId);
                 
                 _logger.LogInformation("Instructivo descargado. IdArchivo: {IdArchivo}, Nombre: {Nombre}, Usuario: {UserId}",
                     idArchivo, archivo.Nombre, usuarioId);
 
                 return File(stream, "application/octet-stream", archivo.Nombre);
+            }
+            catch (FileNotFoundException)
+            {
+                return NotFound();
             }
             catch (Exception ex)
             {
@@ -251,30 +253,28 @@ namespace MatrixNext.Web.Areas.PY.Controllers
             try
             {
                 var usuarioId = ObtenerIdUsuarioActual();
-                var archivo = await _uploadAdapter.ObtenerArchivoAsync(idArchivo);
+                var (exitoso, mensaje, idContenedor) = await _instructivosService.EliminarInstructivoAsync(idArchivo, usuarioId);
 
-                if (archivo == null)
+                if (!exitoso && idContenedor == null)
                 {
-                    return NotFound(new { success = false, message = "Archivo no encontrado" });
+                    return NotFound(new { success = false, message = mensaje });
                 }
 
-                var eliminado = await _uploadAdapter.EliminarArchivoAsync(idArchivo, usuarioId, "Eliminado desde Instructivos");
-
-                if (eliminado)
+                if (exitoso)
                 {
                     _logger.LogInformation("Instructivo eliminado. IdArchivo: {IdArchivo}, Usuario: {UserId}",
                         idArchivo, usuarioId);
 
                     if (Request.IsAjaxRequest())
                     {
-                        return Json(new { success = true, message = "Instructivo eliminado exitosamente" });
+                        return Json(new { success = true, message = mensaje });
                     }
 
-                    return RedirectToAction(nameof(Index), new { idTrabajo = archivo.IdContenedor });
+                    return RedirectToAction(nameof(Index), new { idTrabajo = idContenedor });
                 }
                 else
                 {
-                    return BadRequest(new { success = false, message = "Error al eliminar instructivo" });
+                    return BadRequest(new { success = false, message = mensaje });
                 }
             }
             catch (Exception ex)
@@ -293,19 +293,18 @@ namespace MatrixNext.Web.Areas.PY.Controllers
         {
             try
             {
-                var archivos = await _uploadAdapter.ObtenerArchivosPorContenedorAsync(tipoInstructivo, idTrabajo);
+                var versiones = await _instructivosService.ObtenerVersionesAsync(idTrabajo, tipoInstructivo);
                 
-                var datos = archivos
-                    .OrderByDescending(a => a.FechaSubida)
-                    .Select(a => new
-                    {
-                        idArchivo = a.IdArchivo,
-                        nombre = a.Nombre,
-                        version = a.Version,
-                        fechaSubida = a.FechaSubida.ToString("dd/MM/yyyy HH:mm"),
-                        usuario = a.UsuarioSubida,
-                        urlDescarga = Url.Action("Download", "Instructivos", new { idArchivo = a.IdArchivo })
-                    }).ToList();
+                // Agregar URLs de descarga
+                var datos = versiones.Select(v => new
+                {
+                    idArchivo = v.IdArchivo,
+                    nombre = v.Nombre,
+                    version = v.Version,
+                    fechaSubida = v.FechaSubida,
+                    usuario = v.Usuario,
+                    urlDescarga = Url.Action("Download", "Instructivos", new { idArchivo = v.IdArchivo })
+                }).ToList();
 
                 return Json(new { exitoso = true, datos });
             }
@@ -318,4 +317,3 @@ namespace MatrixNext.Web.Areas.PY.Controllers
         }
     }
 }
-

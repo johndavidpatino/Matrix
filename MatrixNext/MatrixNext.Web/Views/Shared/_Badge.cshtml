@@ -1,0 +1,64 @@
+@*
+    Componente de Badge/Estado
+    Ref: copilot-instructions.md § Componentes reutilizables
+    Uso: @await Html.PartialAsync("_Badge", new { Text = "Activo", Type = "success" })
+    Tipos: success, danger, warning, info, primary, secondary, dark, light
+*@
+@{
+    var text = ViewBag.Text ?? "Estado";
+    var type = ViewBag.Type ?? "secondary";
+    var icon = ViewBag.Icon;
+    var pill = ViewBag.Pill ?? true;
+    var size = ViewBag.Size ?? "md"; // sm, md, lg
+    var cssClass = ViewBag.CssClass ?? "";
+    
+    var pillClass = pill ? "rounded-pill" : "";
+    var sizeClass = size switch
+    {
+        "sm" => "badge-sm",
+        "lg" => "badge-lg",
+        _ => ""
+    };
+    
+    // Mapeo de estados comunes a tipos de badge
+    var normalizedType = type?.ToString().ToLower() switch
+    {
+        "activo" or "aprobado" or "completado" or "exitoso" or "success" => "success",
+        "inactivo" or "rechazado" or "error" or "cancelado" or "danger" => "danger",
+        "pendiente" or "en proceso" or "revision" or "warning" => "warning",
+        "info" or "informacion" => "info",
+        "primary" or "principal" => "primary",
+        "dark" or "oscuro" => "dark",
+        "light" or "claro" => "light",
+        _ => "secondary"
+    };
+    
+    // Iconos por tipo si no se especifica
+    var defaultIcon = icon ?? (normalizedType switch
+    {
+        "success" => "fas fa-check-circle",
+        "danger" => "fas fa-times-circle",
+        "warning" => "fas fa-exclamation-triangle",
+        "info" => "fas fa-info-circle",
+        _ => null
+    });
+}
+
+<span class="badge bg-@normalizedType @pillClass @sizeClass @cssClass">
+    @if (!string.IsNullOrEmpty(defaultIcon))
+    {
+        <i class="@defaultIcon me-1"></i>
+    }
+    @text
+</span>
+
+<style>
+    .badge-sm {
+        font-size: 0.7rem;
+        padding: 0.2em 0.5em;
+    }
+    .badge-lg {
+        font-size: 1rem;
+        padding: 0.5em 1em;
+    }
+</style>

@@ -1,0 +1,134 @@
+@*
+    Componente de selección de usuario con búsqueda
+    Ref: copilot-instructions.md § Componentes reutilizables
+    Uso: @await Html.PartialAsync("_SelectUser", new { Id = "idUsuario", Label = "Usuario", ApiUrl = "/api/usuarios/buscar" })
+*@
+@{
+    var id = ViewBag.Id ?? "selectUser";
+    var label = ViewBag.Label ?? "Usuario";
+    var placeholder = ViewBag.Placeholder ?? "Buscar usuario...";
+    var apiUrl = ViewBag.ApiUrl ?? "/api/usuarios/buscar";
+    var value = ViewBag.Value;
+    var text = ViewBag.Text ?? "";
+    var required = ViewBag.Required ?? false;
+    var disabled = ViewBag.Disabled ?? false;
+    var cssClass = ViewBag.CssClass ?? "";
+}
+
+<div class="mb-3 @cssClass" data-component="select-user">
+    <label for="@id" class="form-label">
+        @label
+        @if (required)
+        {
+            <span class="text-danger">*</span>
+        }
+    </label>
+    
+    <div class="input-group">
+        <input type="text" 
+               class="form-control" 
+               id="@(id)_search" 
+               placeholder="@placeholder"
+               autocomplete="off"
+               data-search-input
+               data-api-url="@apiUrl"
+               value="@text"
+               @(disabled ? "disabled" : "") />
+        <button class="btn btn-outline-secondary" 
+                type="button" 
+                data-clear-btn
+                title="Limpiar selección"
+                @(disabled ? "disabled" : "")>
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    
+    <input type="hidden" 
+           id="@id" 
+           name="@id" 
+           value="@value"
+           @(required ? "required" : "")
+           data-hidden-value />
+    
+    <div class="dropdown-menu w-100" data-results-container style="max-height: 200px; overflow-y: auto;">
+        <!-- Resultados de búsqueda dinámicos -->
+    </div>
+    
+    <div class="invalid-feedback">
+        Por favor seleccione un usuario.
+    </div>
+</div>
+
+<script>
+(function() {
+    // Auto-inicializar componentes SelectUser
+    document.querySelectorAll('[data-component="select-user"]').forEach(function(container) {
+        if (container.dataset.initialized) return;
+        container.dataset.initialized = 'true';
+        
+        var searchInput = container.querySelector('[data-search-input]');
+        var hiddenInput = container.querySelector('[data-hidden-value]');
+        var resultsContainer = container.querySelector('[data-results-container]');
+        var clearBtn = container.querySelector('[data-clear-btn]');
+        var apiUrl = searchInput.dataset.apiUrl;
+        var debounceTimer;
+        
+        // Búsqueda con debounce
+        searchInput.addEventListener('input', function() {
+            clearTimeout(debounceTimer);
+            var query = this.value.trim();
+            
+            if (query.length < 2) {
+                resultsContainer.classList.remove('show');
+                return;
+            }
+            
+            debounceTimer = setTimeout(function() {
+                fetch(apiUrl + '?q=' + encodeURIComponent(query))
+                    .then(function(r) { return r.json(); })
+                    .then(function(data) {
+                        resultsContainer.innerHTML = '';
+                        if (data && data.length > 0) {
+                            data.forEach(function(item) {
+                                var option = document.createElement('a');
+                                option.className = 'dropdown-item';
+                                option.href = '#';
+                                option.textContent = item.nombre || item.text;
+                                option.dataset.value = item.id || item.value;
+                                resultsContainer.appendChild(option);
+                            });
+                            resultsContainer.classList.add('show');
+                        } else {
+                            resultsContainer.innerHTML = '<span class="dropdown-item text-muted">Sin resultados</span>';
+                            resultsContainer.classList.add('show');
+                        }
+                    });
+            }, 300);
+        });
+        
+        // Seleccionar resultado
+        resultsContainer.addEventListener('click', function(e) {
+            if (e.target.classList.contains('dropdown-item') && e.target.dataset.value) {
+                e.preventDefault();
+                searchInput.value = e.target.textContent;
+                hiddenInput.value = e.target.dataset.value;
+                resultsContainer.classList.remove('show');
+            }
+        });
+        
+        // Limpiar selección
+        clearBtn.addEventListener('click', function() {
+            searchInput.value = '';
+            hiddenInput.value = '';
+            resultsContainer.classList.remove('show');
+        });
+        
+        // Cerrar al hacer clic fuera
+        document.addEventListener('click', function(e) {
+            if (!container.contains(e.target)) {
+                resultsContainer.classList.remove('show');
+            }
+        });
+    });
+})();
+</script>

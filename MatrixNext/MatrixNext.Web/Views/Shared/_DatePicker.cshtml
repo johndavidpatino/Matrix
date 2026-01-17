@@ -1,0 +1,37 @@
+@*
+    Componente de DatePicker Bootstrap 5
+    Ref: copilot-instructions.md § Componentes reutilizables
+    Uso: @await Html.PartialAsync("_DatePicker", new { Id = "fecha", Label = "Fecha", Value = Model.Fecha })
+*@
+@{
+    var id = ViewBag.Id ?? "datePicker";
+    var label = ViewBag.Label ?? "Fecha";
+    var value = ViewBag.Value != null ? ((DateTime)ViewBag.Value).ToString("yyyy-MM-dd") : "";
+    var minDate = ViewBag.MinDate;
+    var maxDate = ViewBag.MaxDate;
+    var required = ViewBag.Required ?? false;
+    var disabled = ViewBag.Disabled ?? false;
+    var cssClass = ViewBag.CssClass ?? "";
+}
+
+<div class="mb-3 @cssClass">
+    <label for="@id" class="form-label">
+        @label
+        @if (required)
+        {
+            <span class="text-danger">*</span>
+        }
+    </label>
+    <input type="date" 
+           class="form-control" 
+           id="@id" 
+           name="@id" 
+           value="@value"
+           @(minDate != null ? $"min=\"{((DateTime)minDate).ToString("yyyy-MM-dd")}\"" : "")
+           @(maxDate != null ? $"max=\"{((DateTime)maxDate).ToString("yyyy-MM-dd")}\"" : "")
+           @(required ? "required" : "")
+           @(disabled ? "disabled" : "") />
+    <div class="invalid-feedback">
+        Por favor seleccione una fecha válida.
+    </div>
+</div>

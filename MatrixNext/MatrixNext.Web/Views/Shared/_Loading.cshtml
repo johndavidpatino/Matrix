@@ -1,0 +1,86 @@
+@*
+    Componente de Loading/Spinner
+    Ref: copilot-instructions.md § Componentes reutilizables
+    Uso: @await Html.PartialAsync("_Loading", new { Message = "Cargando...", Size = "lg" })
+*@
+@{
+    var message = ViewBag.Message ?? "Cargando...";
+    var size = ViewBag.Size ?? "md"; // sm, md, lg
+    var overlay = ViewBag.Overlay ?? false;
+    var cssClass = ViewBag.CssClass ?? "";
+    var id = ViewBag.Id ?? "loading";
+    
+    var spinnerSize = size switch
+    {
+        "sm" => "spinner-border-sm",
+        "lg" => "",
+        _ => ""
+    };
+    
+    var containerStyle = size switch
+    {
+        "sm" => "font-size: 0.875rem;",
+        "lg" => "font-size: 1.5rem;",
+        _ => ""
+    };
+}
+
+@if (overlay)
+{
+    <div id="@id" class="loading-overlay @cssClass" style="display: none;">
+        <div class="loading-content">
+            <div class="spinner-border text-primary @spinnerSize" role="status">
+                <span class="visually-hidden">@message</span>
+            </div>
+            <div class="loading-message mt-2" style="@containerStyle">@message</div>
+        </div>
+    </div>
+    
+    <style>
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .loading-content {
+            text-align: center;
+        }
+        .loading-message {
+            color: #6c757d;
+        }
+    </style>
+}
+else
+{
+    <div id="@id" class="text-center p-3 @cssClass" style="display: none; @containerStyle">
+        <div class="spinner-border text-primary @spinnerSize" role="status">
+            <span class="visually-hidden">@message</span>
+        </div>
+        <div class="loading-message mt-2">@message</div>
+    </div>
+}
+
+<script>
+// Utilidades globales para mostrar/ocultar loading
+window.MatrixLoading = window.MatrixLoading || {
+    show: function(id) {
+        var el = document.getElementById(id || 'loading');
+        if (el) el.style.display = 'flex';
+    },
+    hide: function(id) {
+        var el = document.getElementById(id || 'loading');
+        if (el) el.style.display = 'none';
+    },
+    toggle: function(show, id) {
+        if (show) this.show(id);
+        else this.hide(id);
+    }
+};
+</script>
