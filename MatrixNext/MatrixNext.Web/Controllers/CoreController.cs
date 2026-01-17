@@ -52,7 +52,7 @@ public class CoreController : ControllerBase
         catch (ArgumentException ex)
         {
             _logger.LogWarning("Validación de tarea fallida: {Message}", ex.Message);
-            return BadRequest(new ApiResponse<object> { Success = false, Message = ex.Message });
+            return BadRequest(new ApiResponse<object> { Success = false, Message = "Error de validación al crear la tarea. Por favor verifique los datos." });
         }
     }
 
@@ -133,7 +133,7 @@ public class CoreController : ControllerBase
         catch (InvalidOperationException ex)
         {
             _logger.LogWarning("Error al actualizar tarea: {Message}", ex.Message);
-            return BadRequest(new ApiResponse<object> { Success = false, Message = ex.Message });
+            return BadRequest(new ApiResponse<object> { Success = false, Message = "No se puede actualizar la tarea. Por favor verifique los datos." });
         }
     }
 
@@ -163,7 +163,7 @@ public class CoreController : ControllerBase
         catch (InvalidOperationException ex)
         {
             _logger.LogWarning("No se puede anular tarea: {Message}", ex.Message);
-            return BadRequest(new ApiResponse<object> { Success = false, Message = ex.Message });
+            return BadRequest(new ApiResponse<object> { Success = false, Message = "No se puede anular la tarea en su estado actual." });
         }
     }
 
@@ -195,7 +195,7 @@ public class CoreController : ControllerBase
         catch (InvalidOperationException ex)
         {
             _logger.LogWarning("Error en asignación: {Message}", ex.Message);
-            return BadRequest(new ApiResponse<object> { Success = false, Message = ex.Message });
+            return BadRequest(new ApiResponse<object> { Success = false, Message = "No se puede asignar la tarea. Verifique los datos de asignación." });
         }
     }
 
@@ -227,7 +227,7 @@ public class CoreController : ControllerBase
         catch (InvalidOperationException ex)
         {
             _logger.LogWarning("Error en escalada: {Message}", ex.Message);
-            return BadRequest(new ApiResponse<object> { Success = false, Message = ex.Message });
+            return BadRequest(new ApiResponse<object> { Success = false, Message = "No se puede escalar la tarea. Verifique los datos." });
         }
     }
 
@@ -257,7 +257,7 @@ public class CoreController : ControllerBase
         catch (InvalidOperationException ex)
         {
             _logger.LogWarning("No se puede cerrar tarea: {Message}", ex.Message);
-            return BadRequest(new ApiResponse<object> { Success = false, Message = ex.Message });
+            return BadRequest(new ApiResponse<object> { Success = false, Message = "No se puede cerrar la tarea en su estado actual." });
         }
     }
 }
