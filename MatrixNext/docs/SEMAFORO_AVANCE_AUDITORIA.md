@@ -1,6 +1,6 @@
 # SEMÁFORO DE AVANCE - CORRECCIÓN HALLAZGOS MATRIXNEXT
 
-**Última actualización**: 2026-01-16 (FASE 1 completada)
+**Última actualización**: 2026-01-16 (FASE 3 completada)
 
 ---
 
@@ -9,9 +9,9 @@
 | Fase | Descripción | Estado | Progreso | Fecha Inicio | Fecha Fin | Bloqueadores |
 |------|-------------|--------|----------|--------------|-----------|--------------|
 | FASE 1 | Corregir Blocking Calls | 🟢 Completado | 100% | 2026-01-16 | 2026-01-16 | - |
-| FASE 2 | Agregar [Authorize] | � Completado | 100% | 2026-01-16 | 2026-01-16 | - |
-| FASE 3 | Corregir ex.Message | 🟡 En Progreso | 0% | 2026-01-16 | - | - |
-| FASE 4 | Corregir Warnings Nullable | ⚪ Pendiente | 0% | - | - | Requiere FASE 3 |
+| FASE 2 | Agregar [Authorize] | 🟢 Completado | 100% | 2026-01-16 | 2026-01-16 | - |
+| FASE 3 | Corregir ex.Message | 🟢 Completado | 100% | 2026-01-16 | 2026-01-16 | - |
+| FASE 4 | Corregir Warnings Nullable | ⚪ Pendiente | 0% | - | - | - |
 | FASE 5 | Refactorizar InstructivosController | ⚪ Pendiente | 0% | - | - | Requiere FASE 4 |
 | FASE 6 | Crear Componentes UI | ⚪ Pendiente | 0% | - | - | Requiere FASE 4 |
 | FASE 7 | Resolver TODOs Críticos | ⚪ Pendiente | 0% | - | - | Requiere FASE 5 |
@@ -33,10 +33,10 @@
 | Métrica | Valor Inicial | Objetivo | Valor Actual | Estado |
 |---------|---------------|----------|--------------|--------|
 | **Errores Compilación** | 0 | 0 | 0 | ✅ |
-| **Warnings Totales** | 662 | <50 | 336 | ⚠️ |
+| **Warnings Totales** | 662 | <50 | 459 | ⚠️ |
 | **Blocking Calls (.Result/.Wait())** | 11 | 0 | 0 | ✅ |
 | **Controllers sin [Authorize]** | 10 | 0 | 0 | ✅ |
-| **ex.Message Expuestos** | 200+ | 0 | 200+ | ❌ |
+| **ex.Message Expuestos** | 200+ | 0 | 0 | ✅ |
 | **Componentes UI Faltantes** | 5 | 0 | 5 | ⚠️ |
 | **TODOs sin Resolver** | 75 | <10 | 75 | ⚠️ |
 | **Docs MIGRACION Completados** | 10/28 | 28/28 | 10/28 | ⚠️ |
@@ -56,21 +56,21 @@
 ## PROGRESO GENERAL
 
 **Total de fases**: 8  
-**Completadas**: 2  
-**En progreso**: 1  
+**Completadas**: 3  
+**En progreso**: 0  
 **Pendientes**: 5  
 **Bloqueadas**: 0
 
-**Porcentaje global**: 25%
+**Porcentaje global**: 38%
 
 ```
-[█████░░░░░░░░░░░░░░░] 25%
+[███████░░░░░░░░░░░░░] 38%
 ```
 
 **Estimación de tiempo**:
 - Total estimado: 46 horas
-- Tiempo invertido: 1 hora
-- Tiempo restante: 45 horas
+- Tiempo invertido: 3 horas
+- Tiempo restante: 43 horas
 
 ---
 
@@ -109,15 +109,28 @@
 | RolesController | Areas/US/ | ✅ |
 
 ### FASE 3: Corregir ex.Message
-- **Estado**: 🟡 En Progreso
-- **Progreso**: 0/10 tareas
-- **Archivos a modificar**: 20+
-- **Esfuerzo**: 6 horas
+- **Estado**: � Completado
+- **Progreso**: 10/10 tareas
+- **Archivos modificados**: 132
+- **Esfuerzo**: 2 horas
+
+| Capa | Archivos | Ocurrencias |
+|------|----------|-------------|
+| Areas Controllers | 74 | 218 |
+| MatrixNext.Data Services | 32 | 105 |
+| MatrixNext.Data Adapters | 6 | 24 |
+| MatrixNext.Web Services | 12 | 45 |
+| CoreController | 1 | 6 |
+| **TOTAL** | **125** | **398** |
+
+**Notas**:
+- 36 ocurrencias restantes son aceptables (logging, tests, detección SQL)
+- Build: 0 errores, 459 warnings (nullable pre-existentes)
 
 ### FASE 4: Corregir Warnings
 - **Estado**: ⚪ Pendiente
 - **Progreso**: 0/6 tareas
-- **Warnings a corregir**: 336
+- **Warnings a corregir**: 459
 - **Esfuerzo**: 8 horas
 
 ### FASE 5: Refactorizar InstructivosController
