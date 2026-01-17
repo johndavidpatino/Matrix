@@ -38,7 +38,7 @@ namespace MatrixNext.Data.Services.GD
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener solicitudes");
-                return (false, new List<SolicitudListDto>(), $"Error al obtener solicitudes: {ex.Message}");
+                return (false, new List<SolicitudListDto>(), "Error al obtener solicitudes. Por favor intente nuevamente.");
             }
         }
 
@@ -61,7 +61,7 @@ namespace MatrixNext.Data.Services.GD
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener solicitud por ID {Id}", id);
-                return (false, null, $"Error al obtener solicitud: {ex.Message}");
+                return (false, null, "Error al obtener la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -128,7 +128,7 @@ namespace MatrixNext.Data.Services.GD
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al crear solicitud");
-                return (false, 0, $"Error al crear solicitud: {ex.Message}");
+                return (false, 0, "Error al crear la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -172,7 +172,7 @@ namespace MatrixNext.Data.Services.GD
                     catch (Exception ex)
                     {
                         _logger.LogError(ex, "Error asignando revisor ID {Id} a solicitud {SolicitudId}", idRevisor, idSolicitud);
-                        errores.Add($"Error asignando revisor ID {idRevisor}: {ex.Message}");
+                        errores.Add($"Error asignando revisor ID {idRevisor}");
                     }
                 }
 
@@ -208,7 +208,7 @@ namespace MatrixNext.Data.Services.GD
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al asignar revisores a solicitud {Id}", idSolicitud);
-                return (false, $"Error al asignar revisores: {ex.Message}");
+                return (false, "Error al asignar revisores. Por favor intente nuevamente.");
             }
         }
 

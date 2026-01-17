@@ -36,7 +36,7 @@ namespace MatrixNext.Data.Services.Usuarios
             }
             catch (Exception ex)
             {
-                return (false, $"Error al obtener unidades: {ex.Message}", new List<UnidadViewModel>());
+                return (false, "Error al obtener unidades. Por favor intente nuevamente.", new List<UnidadViewModel>());
             }
         }
     }

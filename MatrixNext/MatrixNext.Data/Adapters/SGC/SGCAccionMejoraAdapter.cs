@@ -1,4 +1,4 @@
-using System.Data;
+﻿using System.Data;
 using Dapper;
 using Microsoft.Data.SqlClient;
 using MatrixNext.Data.DTOs.SGC;
@@ -20,7 +20,7 @@ namespace MatrixNext.Data.Adapters.SGC
         }
 
         /// <summary>
-        /// Crear nueva acción de mejora
+        /// Crear nueva acciÃ³n de mejora
         /// SP: ACM_AccionMejora_Add
         /// </summary>
         public async Task<int> CreateAsync(SGCAccionMejoraCreateDto dto, long userId)
@@ -57,12 +57,12 @@ namespace MatrixNext.Data.Adapters.SGC
             }
             catch (SqlException ex)
             {
-                throw new Exception($"Error en BD al crear acción mejora: {ex.Message}", ex);
+                throw new Exception("Error en BD al crear acciÃ³n mejora. Por favor intente nuevamente.", ex);
             }
         }
 
         /// <summary>
-        /// Obtener acción de mejora por ID
+        /// Obtener acciÃ³n de mejora por ID
         /// </summary>
         public async Task<SGCAccionMejoraDto> GetByIdAsync(int accionMejoraId)
         {
@@ -104,12 +104,12 @@ namespace MatrixNext.Data.Adapters.SGC
             }
             catch (SqlException ex)
             {
-                throw new Exception($"Error al obtener acción {accionMejoraId}: {ex.Message}", ex);
+                throw new Exception("Error al obtener acciÃ³n. Por favor intente nuevamente.", ex);
             }
         }
 
         /// <summary>
-        /// Listar acciones con filtros y paginación
+        /// Listar acciones con filtros y paginaciÃ³n
         /// </summary>
         public async Task<List<SGCAccionMejoraDto>> GetByFilterAsync(int? procesoId, long? usuarioResponsable, byte? estadoId, int pageSize, int pageIndex)
         {
@@ -167,12 +167,12 @@ namespace MatrixNext.Data.Adapters.SGC
             }
             catch (SqlException ex)
             {
-                throw new Exception($"Error al filtrar acciones: {ex.Message}", ex);
+                throw new Exception("Error al filtrar acciones. Por favor intente nuevamente.", ex);
             }
         }
 
         /// <summary>
-        /// Actualizar acción de mejora
+        /// Actualizar acciÃ³n de mejora
         /// SP: ACM_AccionesMejora_Edit
         /// </summary>
         public async Task<bool> UpdateAsync(SGCAccionMejoraUpdateDto dto, long userId)
@@ -200,12 +200,12 @@ namespace MatrixNext.Data.Adapters.SGC
             }
             catch (SqlException ex)
             {
-                throw new Exception($"Error al actualizar acción: {ex.Message}", ex);
+                throw new Exception("Error al actualizar acciÃ³n. Por favor intente nuevamente.", ex);
             }
         }
 
         /// <summary>
-        /// Eliminar acción (soft delete)
+        /// Eliminar acciÃ³n (soft delete)
         /// </summary>
         public async Task<bool> DeleteAsync(int accionMejoraId, long userId)
         {
@@ -228,12 +228,12 @@ namespace MatrixNext.Data.Adapters.SGC
             }
             catch (SqlException ex)
             {
-                throw new Exception($"Error al eliminar acción: {ex.Message}", ex);
+                throw new Exception("Error al eliminar acciÃ³n. Por favor intente nuevamente.", ex);
             }
         }
 
         /// <summary>
-        /// Obtener causas de una acción
+        /// Obtener causas de una acciÃ³n
         /// </summary>
         public async Task<List<SGCCausaDto>> GetCausasByIdAsync(int accionMejoraId)
         {
@@ -258,12 +258,12 @@ namespace MatrixNext.Data.Adapters.SGC
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error al obtener causas: {ex.Message}", ex);
+                throw new Exception("Error al obtener causas. Por favor intente nuevamente.", ex);
             }
         }
 
         /// <summary>
-        /// Agregar causas a una acción
+        /// Agregar causas a una acciÃ³n
         /// </summary>
         public async Task<bool> AddCausasAsync(int accionMejoraId, List<SGCCausaCreateDto> causas)
         {
@@ -287,7 +287,7 @@ namespace MatrixNext.Data.Adapters.SGC
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error al agregar causas: {ex.Message}", ex);
+                throw new Exception("Error al agregar causas. Por favor intente nuevamente.", ex);
             }
         }
 
@@ -312,12 +312,12 @@ namespace MatrixNext.Data.Adapters.SGC
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error al eliminar causa: {ex.Message}", ex);
+                throw new Exception("Error al eliminar causa.", ex);
             }
         }
 
         /// <summary>
-        /// Obtener planes de acción de una acción
+        /// Obtener planes de acciÃ³n de una acciÃ³n
         /// </summary>
         public async Task<List<SGCPlanAccionDto>> GetPlanesAccionByIdAsync(int accionMejoraId)
         {
@@ -346,12 +346,12 @@ namespace MatrixNext.Data.Adapters.SGC
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error al obtener planes acción: {ex.Message}", ex);
+                throw new Exception("Error al obtener planes de acción.", ex);
             }
         }
 
         /// <summary>
-        /// Agregar planes de acción
+        /// Agregar planes de acciÃ³n
         /// </summary>
         public async Task<bool> AddPlanesAccionAsync(int accionMejoraId, List<SGCPlanAccionCreateDto> planes)
         {
@@ -376,12 +376,12 @@ namespace MatrixNext.Data.Adapters.SGC
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error al agregar planes acción: {ex.Message}", ex);
+                throw new Exception("Error al agregar planes de acción.", ex);
             }
         }
 
         /// <summary>
-        /// Actualizar plan de acción
+        /// Actualizar plan de acciÃ³n
         /// </summary>
         public async Task<bool> UpdatePlanAccionAsync(SGCPlanAccionUpdateDto dto, long userId)
         {
@@ -411,12 +411,12 @@ namespace MatrixNext.Data.Adapters.SGC
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error al actualizar plan: {ex.Message}", ex);
+                throw new Exception("Error al actualizar plan.", ex);
             }
         }
 
         /// <summary>
-        /// Eliminar plan de acción
+        /// Eliminar plan de acciÃ³n
         /// </summary>
         public async Task<bool> DeletePlanAccionAsync(int planAccionId, long userId)
         {
@@ -436,12 +436,12 @@ namespace MatrixNext.Data.Adapters.SGC
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error al eliminar plan: {ex.Message}", ex);
+                throw new Exception("Error al eliminar plan.", ex);
             }
         }
 
         /// <summary>
-        /// Obtener procesos (catálogo)
+        /// Obtener procesos (catÃ¡logo)
         /// </summary>
         public async Task<List<SGCProcesoDto>> GetProcesosAsync()
         {
@@ -461,12 +461,12 @@ namespace MatrixNext.Data.Adapters.SGC
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error al obtener procesos: {ex.Message}", ex);
+                throw new Exception("Error al obtener procesos.", ex);
             }
         }
 
         /// <summary>
-        /// Obtener fuentes de no conformidad (catálogo)
+        /// Obtener fuentes de no conformidad (catÃ¡logo)
         /// </summary>
         public async Task<List<SGCFuenteNoConformidadDto>> GetFuentesNoConformidadAsync()
         {
@@ -486,12 +486,12 @@ namespace MatrixNext.Data.Adapters.SGC
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error al obtener fuentes: {ex.Message}", ex);
+                throw new Exception("Error al obtener fuentes.", ex);
             }
         }
 
         /// <summary>
-        /// Obtener fuentes específicas por tipo
+        /// Obtener fuentes especÃ­ficas por tipo
         /// </summary>
         public async Task<List<SGCFuenteDto>> GetFuentesByTypeAsync(int fuenteNoConformidadId)
         {
@@ -516,8 +516,9 @@ namespace MatrixNext.Data.Adapters.SGC
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error al obtener fuentes por tipo: {ex.Message}", ex);
+                throw new Exception("Error al obtener fuentes por tipo.", ex);
             }
         }
     }
 }
+

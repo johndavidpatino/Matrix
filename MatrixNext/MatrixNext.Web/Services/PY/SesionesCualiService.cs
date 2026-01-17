@@ -84,7 +84,7 @@ namespace MatrixNext.Web.Services.PY
             }
             catch (Exception ex)
             {
-                return ResultVM<long>.Fail($"Error al crear sesión: {ex.Message}");
+                return ResultVM<long>.Fail("Error al crear sesión. Por favor intente nuevamente.");
             }
         }
 
@@ -130,7 +130,7 @@ namespace MatrixNext.Web.Services.PY
             }
             catch (Exception ex)
             {
-                return ResultVM<bool>.Fail($"Error al actualizar sesión: {ex.Message}");
+                return ResultVM<bool>.Fail("Error al actualizar sesión. Por favor intente nuevamente.");
             }
         }
 
@@ -167,7 +167,7 @@ namespace MatrixNext.Web.Services.PY
             }
             catch (Exception ex)
             {
-                return ResultVM<bool>.Fail($"Error al cambiar estado: {ex.Message}");
+                return ResultVM<bool>.Fail("Error al cambiar estado. Por favor intente nuevamente.");
             }
         }
 
@@ -198,7 +198,7 @@ namespace MatrixNext.Web.Services.PY
             }
             catch (Exception ex)
             {
-                return ResultVM<bool>.Fail($"Error al eliminar sesión: {ex.Message}");
+                return ResultVM<bool>.Fail("Error al eliminar sesión. Por favor intente nuevamente.");
             }
         }
 
@@ -242,7 +242,7 @@ namespace MatrixNext.Web.Services.PY
             }
             catch (Exception ex)
             {
-                return ResultVM<bool>.Fail($"Error al registrar asistencia: {ex.Message}");
+                return ResultVM<bool>.Fail("Error al registrar asistencia. Por favor intente nuevamente.");
             }
         }
     }

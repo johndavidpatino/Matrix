@@ -134,7 +134,7 @@ namespace MatrixNext.Web.Services.Dashboard
                     UpcomingAbsences = new List<AbsenceSummary>(),
                     DocumentStats = new DocumentStatistics(),
                     ProductionMetrics = new ProductionMetrics(),
-                    Error = ex.Message
+                    Error = "Error al cargar el dashboard. Por favor intente nuevamente."
                 };
             }
         }

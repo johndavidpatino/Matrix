@@ -85,7 +85,7 @@ namespace MatrixNext.Web.Services.CORE
             }
             catch (Exception ex)
             {
-                return ResultVM<TareaPrevia>.Fail($"Error al crear precedencia: {ex.Message}");
+                return ResultVM<TareaPrevia>.Fail("Error al crear precedencia. Por favor intente nuevamente.");
             }
         }
 
@@ -114,7 +114,7 @@ namespace MatrixNext.Web.Services.CORE
             }
             catch (Exception ex)
             {
-                return ResultVM<bool>.Fail($"Error al eliminar: {ex.Message}");
+                return ResultVM<bool>.Fail("Error al eliminar precedencia. Por favor intente nuevamente.");
             }
         }
 

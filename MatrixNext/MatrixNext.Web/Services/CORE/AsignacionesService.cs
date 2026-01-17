@@ -114,7 +114,7 @@ public class AsignacionesService : IAsignacionesService
         }
         catch (Exception ex)
         {
-            return ResultVM<bool>.Fail($"Error al asignar usuario: {ex.Message}");
+            return ResultVM<bool>.Fail("Error al asignar usuario. Por favor intente nuevamente.");
         }
     }
 
@@ -151,7 +151,7 @@ public class AsignacionesService : IAsignacionesService
         }
         catch (Exception ex)
         {
-            return ResultVM<bool>.Fail($"Error al desasignar usuario: {ex.Message}");
+            return ResultVM<bool>.Fail("Error al desasignar usuario. Por favor intente nuevamente.");
         }
     }
 

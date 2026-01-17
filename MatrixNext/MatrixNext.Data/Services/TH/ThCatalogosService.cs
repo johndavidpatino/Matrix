@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MatrixNext.Data.Adapters.TH;
@@ -28,8 +28,8 @@ namespace MatrixNext.Data.Services.TH
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error obtener áreas");
-                return ApiResponse<List<AreaDto>>.Error(ex.Message);
+                _logger.LogError(ex, "Error obtener Ã¡reas");
+                return ApiResponse<List<AreaDto>>.Error("Error al obtener áreas. Por favor intente nuevamente.");
             }
         }
 
@@ -43,7 +43,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obtener cargos");
-                return ApiResponse<List<CargoDto>>.Error(ex.Message);
+                return ApiResponse<List<CargoDto>>.Error("Error al obtener cargos. Por favor intente nuevamente.");
             }
         }
 
@@ -57,7 +57,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obtener bandas");
-                return ApiResponse<List<BandaDto>>.Error(ex.Message);
+                return ApiResponse<List<BandaDto>>.Error("Error al obtener bandas. Por favor intente nuevamente.");
             }
         }
 
@@ -71,7 +71,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obtener estados civiles");
-                return ApiResponse<List<EstadoCivilDto>>.Error(ex.Message);
+                return ApiResponse<List<EstadoCivilDto>>.Error("Error al obtener estados civiles. Por favor intente nuevamente.");
             }
         }
 
@@ -85,7 +85,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obtener grupos");
-                return ApiResponse<List<GrupoSanguineoDto>>.Error(ex.Message);
+                return ApiResponse<List<GrupoSanguineoDto>>.Error("Error al obtener grupos sanguineos. Por favor intente nuevamente.");
             }
         }
 
@@ -99,7 +99,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obtener sedes");
-                return ApiResponse<List<SedeDto>>.Error(ex.Message);
+                return ApiResponse<List<SedeDto>>.Error("Error al obtener sedes. Por favor intente nuevamente.");
             }
         }
 
@@ -113,7 +113,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obtener tipos contrato");
-                return ApiResponse<List<TipoContratoDto>>.Error(ex.Message);
+                return ApiResponse<List<TipoContratoDto>>.Error("Error al obtener tipos contrato. Por favor intente nuevamente.");
             }
         }
 
@@ -127,7 +127,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obtener tiempos contrato");
-                return ApiResponse<List<TiempContratoDto>>.Error(ex.Message);
+                return ApiResponse<List<TiempContratoDto>>.Error("Error al obtener tiempos contrato. Por favor intente nuevamente.");
             }
         }
 
@@ -141,7 +141,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obtener empresas");
-                return ApiResponse<List<EmpresaDto>>.Error(ex.Message);
+                return ApiResponse<List<EmpresaDto>>.Error("Error al obtener empresas. Por favor intente nuevamente.");
             }
         }
 
@@ -155,7 +155,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obtener job functions");
-                return ApiResponse<List<JobFunctionDto>>.Error(ex.Message);
+                return ApiResponse<List<JobFunctionDto>>.Error("Error al obtener job functions. Por favor intente nuevamente.");
             }
         }
 
@@ -169,7 +169,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obtener parentescos");
-                return ApiResponse<List<ParentescoDto>>.Error(ex.Message);
+                return ApiResponse<List<ParentescoDto>>.Error("Error al obtener parentescos. Por favor intente nuevamente.");
             }
         }
 
@@ -183,7 +183,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obtener motivos");
-                return ApiResponse<List<MotivoCambioSalarioDto>>.Error(ex.Message);
+                return ApiResponse<List<MotivoCambioSalarioDto>>.Error("Error al obtener motivos cambio salario. Por favor intente nuevamente.");
             }
         }
 
@@ -197,8 +197,9 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obtener tipos salario");
-                return ApiResponse<List<TipoSalarioDto>>.Error(ex.Message);
+                return ApiResponse<List<TipoSalarioDto>>.Error("Error al obtener tipos salario. Por favor intente nuevamente.");
             }
         }
     }
 }
+

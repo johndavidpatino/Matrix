@@ -89,7 +89,7 @@ public class OpCargaService : IOpCargaService
         catch (Exception ex)
         {
             _logger.LogWarning(ex, "Error leyendo el Excel cargado para OP_Cuantitativo");
-            return new OpCargaResult(false, $"No se pudo leer el Excel: {ex.Message}");
+            return new OpCargaResult(false, "No se pudo leer el archivo Excel. Verifique el formato.");
         }
 
         if (worksheet.Rows.Count == 0)
@@ -134,7 +134,7 @@ public class OpCargaService : IOpCargaService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error ejecutando carga OP_Cuantitativo");
-            return new OpCargaResult(false, $"La validación fue exitosa, pero la carga falló: {ex.Message}");
+            return new OpCargaResult(false, "La validación fue exitosa, pero la carga falló. Por favor intente nuevamente.");
         }
     }
 

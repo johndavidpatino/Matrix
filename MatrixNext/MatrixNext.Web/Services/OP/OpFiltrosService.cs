@@ -54,7 +54,7 @@ public class OpFiltrosService : IOpFiltrosService
         {
             _logger.LogError(ex, "Error obteniendo configuración filtro trabajo {TrabajoId}, tipo {TipoFiltro}", 
                 trabajoId, tipoFiltro);
-            return (false, null!, ex.Message);
+            return (false, null!, "Error al obtener configuración del filtro. Por favor intente nuevamente.");
         }
     }
 
@@ -71,7 +71,7 @@ public class OpFiltrosService : IOpFiltrosService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error agregando pregunta filtro trabajo {TrabajoId}", trabajoId);
-            return (false, 0, ex.Message);
+            return (false, 0, "Error al agregar pregunta. Por favor intente nuevamente.");
         }
     }
 
@@ -88,7 +88,7 @@ public class OpFiltrosService : IOpFiltrosService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error eliminando pregunta {PreguntaId}", preguntaId);
-            return (false, ex.Message);
+            return (false, "Error al eliminar pregunta. Por favor intente nuevamente.");
         }
     }
 
@@ -104,7 +104,7 @@ public class OpFiltrosService : IOpFiltrosService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error actualizando pregunta {PreguntaId}", preguntaId);
-            return (false, ex.Message);
+            return (false, "Error al actualizar pregunta. Por favor intente nuevamente.");
         }
     }
 
@@ -122,7 +122,7 @@ public class OpFiltrosService : IOpFiltrosService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error generando link visualización trabajo {TrabajoId}", trabajoId);
-            return (false, string.Empty, ex.Message);
+            return (false, string.Empty, "Error al generar link de visualización. Por favor intente nuevamente.");
         }
     }
 
@@ -148,7 +148,7 @@ public class OpFiltrosService : IOpFiltrosService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error obteniendo respuestas filtro trabajo {TrabajoId}", trabajoId);
-            return (false, new List<RespuestaFiltroVm>(), ex.Message);
+            return (false, new List<RespuestaFiltroVm>(), "Error al obtener respuestas del filtro. Por favor intente nuevamente.");
         }
     }
 
@@ -183,7 +183,7 @@ public class OpFiltrosService : IOpFiltrosService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error aprobando respuestas filtro");
-            return (false, ex.Message);
+            return (false, "Error al aprobar respuestas. Por favor intente nuevamente.");
         }
     }
 
@@ -217,7 +217,7 @@ public class OpFiltrosService : IOpFiltrosService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error rechazando respuestas filtro");
-            return (false, ex.Message);
+            return (false, "Error al rechazar respuestas. Por favor intente nuevamente.");
         }
     }
 
@@ -246,7 +246,7 @@ public class OpFiltrosService : IOpFiltrosService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error exportando respuestas Excel trabajo {TrabajoId}", trabajoId);
-            return (false, Array.Empty<byte>(), ex.Message);
+            return (false, Array.Empty<byte>(), "Error al exportar respuestas a Excel. Por favor intente nuevamente.");
         }
     }
 }

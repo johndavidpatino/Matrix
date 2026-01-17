@@ -193,7 +193,7 @@ namespace MatrixNext.Data.Services.OP_RO
             catch (Exception ex)
             {
                 _logger.LogError(ex, "[OP_ROService] Error en ObtenerRevisiones");
-                return ApiResponse<OP_ROResultadoDTO>.Error(ex.Message);
+                return ApiResponse<OP_ROResultadoDTO>.Error("Error al obtener revisiones. Por favor intente nuevamente.");
             }
         }
 
@@ -226,7 +226,7 @@ namespace MatrixNext.Data.Services.OP_RO
             catch (Exception ex)
             {
                 _logger.LogError(ex, "[OP_ROService] Error en ObtenerRevisionDetalle");
-                return ApiResponse<OP_ROSolicitudRevisionDTO>.Error(ex.Message);
+                return ApiResponse<OP_ROSolicitudRevisionDTO>.Error("Error al obtener detalle de revisión. Por favor intente nuevamente.");
             }
         }
 
@@ -265,7 +265,7 @@ namespace MatrixNext.Data.Services.OP_RO
             catch (Exception ex)
             {
                 _logger.LogError(ex, "[OP_ROService] Error en AprobarRevision");
-                return ApiResponse<string>.Error(ex.Message);
+                return ApiResponse<string>.Error("Error al aprobar revisión. Por favor intente nuevamente.");
             }
         }
 
@@ -304,7 +304,7 @@ namespace MatrixNext.Data.Services.OP_RO
             catch (Exception ex)
             {
                 _logger.LogError(ex, "[OP_ROService] Error en RechazarRevision");
-                return ApiResponse<string>.Error(ex.Message);
+                return ApiResponse<string>.Error("Error al rechazar revisión. Por favor intente nuevamente.");
             }
         }
 
@@ -329,7 +329,7 @@ namespace MatrixNext.Data.Services.OP_RO
             catch (Exception ex)
             {
                 _logger.LogError(ex, "[OP_ROService] Error en ObtenerCuestionarios");
-                return ApiResponse<List<OP_ROCuestionarioDTO>>.Error(ex.Message);
+                return ApiResponse<List<OP_ROCuestionarioDTO>>.Error("Error al obtener cuestionarios. Por favor intente nuevamente.");
             }
         }
 
@@ -349,7 +349,7 @@ namespace MatrixNext.Data.Services.OP_RO
             catch (Exception ex)
             {
                 _logger.LogError(ex, "[OP_ROService] Error en ObtenerCuestionario");
-                return ApiResponse<OP_ROCuestionarioDTO>.Error(ex.Message);
+                return ApiResponse<OP_ROCuestionarioDTO>.Error("Error al obtener cuestionario. Por favor intente nuevamente.");
             }
         }
 
@@ -378,7 +378,7 @@ namespace MatrixNext.Data.Services.OP_RO
             catch (Exception ex)
             {
                 _logger.LogError(ex, "[OP_ROService] Error en GuardarCuestionario");
-                return ApiResponse<int>.Error(ex.Message, 0);
+                return ApiResponse<int>.Error("Error al guardar cuestionario. Por favor intente nuevamente.", 0);
             }
         }
 
@@ -403,7 +403,7 @@ namespace MatrixNext.Data.Services.OP_RO
             catch (Exception ex)
             {
                 _logger.LogError(ex, "[OP_ROService] Error en ObtenerInstructivos");
-                return ApiResponse<List<OP_ROInstructivoDTO>>.Error(ex.Message);
+                return ApiResponse<List<OP_ROInstructivoDTO>>.Error("Error al obtener instructivos. Por favor intente nuevamente.");
             }
         }
 
@@ -423,7 +423,7 @@ namespace MatrixNext.Data.Services.OP_RO
             catch (Exception ex)
             {
                 _logger.LogError(ex, "[OP_ROService] Error en ObtenerInstructivo");
-                return ApiResponse<OP_ROInstructivoDTO>.Error(ex.Message);
+                return ApiResponse<OP_ROInstructivoDTO>.Error("Error al obtener instructivo. Por favor intente nuevamente.");
             }
         }
 
@@ -447,7 +447,7 @@ namespace MatrixNext.Data.Services.OP_RO
             catch (Exception ex)
             {
                 _logger.LogError(ex, "[OP_ROService] Error en GuardarInstructivo");
-                return ApiResponse<int>.Error(ex.Message, 0);
+                return ApiResponse<int>.Error("Error al guardar instructivo. Por favor intente nuevamente.", 0);
             }
         }
 
@@ -472,7 +472,7 @@ namespace MatrixNext.Data.Services.OP_RO
             catch (Exception ex)
             {
                 _logger.LogError(ex, "[OP_ROService] Error en ObtenerMetodologias");
-                return ApiResponse<List<OP_ROMetodologiaDTO>>.Error(ex.Message);
+                return ApiResponse<List<OP_ROMetodologiaDTO>>.Error("Error al obtener metodologías. Por favor intente nuevamente.");
             }
         }
 
@@ -492,7 +492,7 @@ namespace MatrixNext.Data.Services.OP_RO
             catch (Exception ex)
             {
                 _logger.LogError(ex, "[OP_ROService] Error en ObtenerMetodologia");
-                return ApiResponse<OP_ROMetodologiaDTO>.Error(ex.Message);
+                return ApiResponse<OP_ROMetodologiaDTO>.Error("Error al obtener metodología. Por favor intente nuevamente.");
             }
         }
 
@@ -516,7 +516,7 @@ namespace MatrixNext.Data.Services.OP_RO
             catch (Exception ex)
             {
                 _logger.LogError(ex, "[OP_ROService] Error en GuardarMetodologia");
-                return ApiResponse<int>.Error(ex.Message, 0);
+                return ApiResponse<int>.Error("Error al guardar metodología. Por favor intente nuevamente.", 0);
             }
         }
 
@@ -541,7 +541,7 @@ namespace MatrixNext.Data.Services.OP_RO
             catch (Exception ex)
             {
                 _logger.LogError(ex, "[OP_ROService] Error en ObtenerMateriales");
-                return ApiResponse<List<OP_ROMaterialAyudaDTO>>.Error(ex.Message);
+                return ApiResponse<List<OP_ROMaterialAyudaDTO>>.Error("Error al obtener materiales. Por favor intente nuevamente.");
             }
         }
 
@@ -561,7 +561,7 @@ namespace MatrixNext.Data.Services.OP_RO
             catch (Exception ex)
             {
                 _logger.LogError(ex, "[OP_ROService] Error en ObtenerMaterial");
-                return ApiResponse<OP_ROMaterialAyudaDTO>.Error(ex.Message);
+                return ApiResponse<OP_ROMaterialAyudaDTO>.Error("Error al obtener material. Por favor intente nuevamente.");
             }
         }
 
@@ -585,7 +585,7 @@ namespace MatrixNext.Data.Services.OP_RO
             catch (Exception ex)
             {
                 _logger.LogError(ex, "[OP_ROService] Error en GuardarMaterial");
-                return ApiResponse<int>.Error(ex.Message, 0);
+                return ApiResponse<int>.Error("Error al guardar material. Por favor intente nuevamente.", 0);
             }
         }
 

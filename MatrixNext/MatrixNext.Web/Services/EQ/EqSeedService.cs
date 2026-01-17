@@ -116,7 +116,7 @@ public class EqSeedService
         catch (Exception ex)
         {
             result.Success = false;
-            result.ErrorMessage = ex.Message;
+            result.ErrorMessage = "Error durante la inicialización de datos. Por favor intente nuevamente.";
             _logger.LogError(ex, "❌ Error durante seed de maestras EasyQuote");
         }
 

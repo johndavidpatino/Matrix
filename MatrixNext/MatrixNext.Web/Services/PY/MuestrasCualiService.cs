@@ -94,7 +94,7 @@ namespace MatrixNext.Web.Services.PY
             }
             catch (Exception ex)
             {
-                return ResultVM<long>.Fail($"Error al crear muestra: {ex.Message}");
+                return ResultVM<long>.Fail("Error al crear muestra. Por favor intente nuevamente.");
             }
         }
 
@@ -150,7 +150,7 @@ namespace MatrixNext.Web.Services.PY
             }
             catch (Exception ex)
             {
-                return ResultVM<bool>.Fail($"Error al actualizar muestra: {ex.Message}");
+                return ResultVM<bool>.Fail("Error al actualizar muestra. Por favor intente nuevamente.");
             }
         }
 
@@ -187,7 +187,7 @@ namespace MatrixNext.Web.Services.PY
             }
             catch (Exception ex)
             {
-                return ResultVM<bool>.Fail($"Error al cambiar estado: {ex.Message}");
+                return ResultVM<bool>.Fail("Error al cambiar estado. Por favor intente nuevamente.");
             }
         }
 
@@ -218,7 +218,7 @@ namespace MatrixNext.Web.Services.PY
             }
             catch (Exception ex)
             {
-                return ResultVM<bool>.Fail($"Error al eliminar muestra: {ex.Message}");
+                return ResultVM<bool>.Fail("Error al eliminar muestra. Por favor intente nuevamente.");
             }
         }
 
@@ -256,7 +256,7 @@ namespace MatrixNext.Web.Services.PY
             }
             catch (Exception ex)
             {
-                return ResultVM<bool>.Fail($"Error al asignar entrevistador: {ex.Message}");
+                return ResultVM<bool>.Fail("Error al asignar entrevistador. Por favor intente nuevamente.");
             }
         }
     }

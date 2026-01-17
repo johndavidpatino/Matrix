@@ -1,4 +1,4 @@
-using MatrixNext.Data.Adapters.Pnc;
+﻿using MatrixNext.Data.Adapters.Pnc;
 using MatrixNext.Data.Models.ViewModels.Pnc;
 using MatrixNext.Data.Models.ViewModels.Pnc.DTOs;
 using MatrixNext.Data.Services;
@@ -8,8 +8,8 @@ namespace MatrixNext.Data.Services.Pnc
 {
     /// <summary>
     /// Servicio de Producto No Conforme (PNC)
-    /// Sistema de Gestión de Calidad ISO 9001
-    /// Implementa lógica de negocio, validaciones y orquestación
+    /// Sistema de GestiÃ³n de Calidad ISO 9001
+    /// Implementa lÃ³gica de negocio, validaciones y orquestaciÃ³n
     /// </summary>
     public class PncService : IPncService
     {
@@ -45,7 +45,7 @@ namespace MatrixNext.Data.Services.Pnc
                     pncs = await _adapter.ObtenerTodos();
                 }
 
-                // Filtros adicionales en memoria (más eficiente que SQL dinámico)
+                // Filtros adicionales en memoria (mÃ¡s eficiente que SQL dinÃ¡mico)
                 var query = pncs.AsQueryable();
 
                 if (filtros.FechaDesde.HasValue)
@@ -86,7 +86,7 @@ namespace MatrixNext.Data.Services.Pnc
                         : string.Empty
                 }).ToList();
 
-                // Paginación
+                // PaginaciÃ³n
                 filtros.TotalRegistros = resultados.Count;
                 filtros.Resultados = resultados
                     .Skip((filtros.PaginaActual - 1) * filtros.RegistrosPorPagina)
@@ -98,7 +98,7 @@ namespace MatrixNext.Data.Services.Pnc
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener PNC con filtros");
-                return (false, filtros, $"Error al obtener PNC: {ex.Message}");
+                return (false, filtros, "Error al obtener PNC. Por favor intente nuevamente.");
             }
         }
 
@@ -107,7 +107,7 @@ namespace MatrixNext.Data.Services.Pnc
             try
             {
                 if (idPnc <= 0)
-                    return (false, null, "ID de PNC inválido");
+                    return (false, null, "ID de PNC invÃ¡lido");
 
                 var detalle = await _adapter.ObtenerPorId(idPnc);
                 if (detalle == null)
@@ -118,7 +118,7 @@ namespace MatrixNext.Data.Services.Pnc
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener PNC {IdPnc}", idPnc);
-                return (false, null, $"Error al obtener PNC: {ex.Message}");
+                return (false, null, "Error al obtener PNC. Por favor intente nuevamente.");
             }
         }
 
@@ -164,11 +164,11 @@ namespace MatrixNext.Data.Services.Pnc
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener seguimiento PNC");
-                return (false, new PncSeguimientoVM(), $"Error al obtener seguimiento: {ex.Message}");
+                return (false, new PncSeguimientoVM(), "Error al obtener seguimiento. Por favor intente nuevamente.");
             }
         }
 
-        // ============= CATÁLOGOS =============
+        // ============= CATÃLOGOS =============
 
         public async Task<(bool success, PncCatalogosDto data, string message)> ObtenerCatalogos()
         {
@@ -181,12 +181,12 @@ namespace MatrixNext.Data.Services.Pnc
                     TiposAccion = await _adapter.ObtenerTiposAccion()
                 };
 
-                return (true, catalogos, "Catálogos obtenidos correctamente");
+                return (true, catalogos, "CatÃ¡logos obtenidos correctamente");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al obtener catálogos PNC");
-                return (false, new PncCatalogosDto(), $"Error al obtener catálogos: {ex.Message}");
+                _logger.LogError(ex, "Error al obtener catÃ¡logos PNC");
+                return (false, new PncCatalogosDto(), "Error al obtener catálogos. Por favor intente nuevamente.");
             }
         }
 
@@ -196,23 +196,23 @@ namespace MatrixNext.Data.Services.Pnc
         {
             try
             {
-                // VALIDACIÓN 1: Datos requeridos
+                // VALIDACIÃ“N 1: Datos requeridos
                 if (string.IsNullOrWhiteSpace(modelo.JobBook))
                     return (false, 0, "JobBook es requerido");
 
                 if (modelo.IdReporta <= 0)
-                    return (false, 0, "Debe seleccionar quién reporta");
+                    return (false, 0, "Debe seleccionar quiÃ©n reporta");
 
                 if (modelo.FuenteReclamo <= 0)
                     return (false, 0, "Fuente de reclamo es requerida");
 
                 if (modelo.Categoria <= 0)
-                    return (false, 0, "Categoría es requerida");
+                    return (false, 0, "CategorÃ­a es requerida");
 
                 if (string.IsNullOrWhiteSpace(modelo.Descripcion))
-                    return (false, 0, "Descripción del problema es requerida");
+                    return (false, 0, "DescripciÃ³n del problema es requerida");
 
-                // VALIDACIÓN 2: FechaReclamo no puede ser futura (REGLA ISO 9001)
+                // VALIDACIÃ“N 2: FechaReclamo no puede ser futura (REGLA ISO 9001)
                 if (modelo.FechaReclamo > DateTime.Now)
                     return (false, 0, "La fecha del reclamo no puede ser futura");
 
@@ -253,7 +253,7 @@ namespace MatrixNext.Data.Services.Pnc
                     }
                 }
 
-                // Enviar notificación email (fire-and-forget)
+                // Enviar notificaciÃ³n email (fire-and-forget)
                 _ = Task.Run(async () =>
                 {
                     try
@@ -262,7 +262,7 @@ namespace MatrixNext.Data.Services.Pnc
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, "Error al enviar notificación PNC {IdPnc}", idPnc);
+                        _logger.LogError(ex, "Error al enviar notificaciÃ³n PNC {IdPnc}", idPnc);
                     }
                 });
 
@@ -272,7 +272,7 @@ namespace MatrixNext.Data.Services.Pnc
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al crear PNC");
-                return (false, 0, $"Error al crear PNC: {ex.Message}");
+                return (false, 0, "Error al crear PNC. Por favor intente nuevamente.");
             }
         }
 
@@ -285,7 +285,7 @@ namespace MatrixNext.Data.Services.Pnc
                 if (existente == null)
                     return (false, "PNC no encontrado");
 
-                // VALIDACIÓN: No permitir actualizar PNC cerrado
+                // VALIDACIÃ“N: No permitir actualizar PNC cerrado
                 if (existente.Pnc.Cerrado)
                     return (false, "No se puede actualizar un PNC cerrado");
 
@@ -308,7 +308,7 @@ namespace MatrixNext.Data.Services.Pnc
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al actualizar PNC {Id}", pnc.Id);
-                return (false, $"Error al actualizar PNC: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -325,7 +325,7 @@ namespace MatrixNext.Data.Services.Pnc
                 if (!cerrado)
                     return (false, "Error al cerrar PNC");
 
-                // Enviar notificación (fire-and-forget)
+                // Enviar notificaciÃ³n (fire-and-forget)
                 _ = Task.Run(async () =>
                 {
                     try
@@ -334,7 +334,7 @@ namespace MatrixNext.Data.Services.Pnc
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, "Error al enviar notificación cierre PNC {IdPnc}", idPnc);
+                        _logger.LogError(ex, "Error al enviar notificaciÃ³n cierre PNC {IdPnc}", idPnc);
                     }
                 });
 
@@ -344,7 +344,7 @@ namespace MatrixNext.Data.Services.Pnc
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al cerrar PNC {IdPnc}", idPnc);
-                return (false, $"Error al cerrar PNC: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -363,7 +363,7 @@ namespace MatrixNext.Data.Services.Pnc
                     return (false, 0, "No se pueden agregar causas a un PNC cerrado");
 
                 if (string.IsNullOrWhiteSpace(modelo.CausaRaiz))
-                    return (false, 0, "La causa raíz es requerida");
+                    return (false, 0, "La causa raÃ­z es requerida");
 
                 var causa = new ProductoNoConformeCausaVM
                 {
@@ -381,7 +381,7 @@ namespace MatrixNext.Data.Services.Pnc
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al agregar causa al PNC {IdPnc}", modelo.IdPNC);
-                return (false, 0, $"Error al agregar causa: {ex.Message}");
+                return (false, 0, "Error al agregar causa. Por favor intente nuevamente.");
             }
         }
 
@@ -394,14 +394,14 @@ namespace MatrixNext.Data.Services.Pnc
 
                 var actualizado = await _adapter.ActualizarCausa(causa);
                 if (!actualizado)
-                    return (false, "Error al actualizar causa");
+                    return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
 
                 return (true, "Causa actualizada correctamente");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al actualizar causa {Id}", causa.Id);
-                return (false, $"Error al actualizar causa: {ex.Message}");
+                _logger.LogError(ex, "Error al actualizar causa");
+                return (false, "Error al actualizar causa. Por favor intente nuevamente.");
             }
         }
 
@@ -420,7 +420,7 @@ namespace MatrixNext.Data.Services.Pnc
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al eliminar causa {IdCausa}", idCausa);
-                return (false, $"Error al eliminar causa: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -435,17 +435,17 @@ namespace MatrixNext.Data.Services.Pnc
                     return (false, 0, "PNC y Causa son requeridos");
 
                 if (string.IsNullOrWhiteSpace(modelo.Accion))
-                    return (false, 0, "La acción es requerida");
+                    return (false, 0, "La acciÃ³n es requerida");
 
                 if (modelo.FechaPlaneada <= DateTime.Now)
                     return (false, 0, "La fecha planeada debe ser futura");
 
-                // VALIDACIÓN CRÍTICA: Acción Inmediata OBLIGATORIA (ISO 9001)
+                // VALIDACIÃ“N CRÃTICA: AcciÃ³n Inmediata OBLIGATORIA (ISO 9001)
                 if (modelo.TipoAccion == (int)TipoAccionEnum.Inmediata)
                 {
                     var existe = await _adapter.ExisteAccion(modelo.IdPNC, modelo.IdCausa, (int)TipoAccionEnum.Inmediata);
                     if (existe)
-                        return (false, 0, "Esta causa ya tiene una acción inmediata registrada");
+                        return (false, 0, "Esta causa ya tiene una acciÃ³n inmediata registrada");
                 }
 
                 var accion = new ProductoNoConformeAccionVM
@@ -462,9 +462,9 @@ namespace MatrixNext.Data.Services.Pnc
 
                 var idAccion = await _adapter.InsertarAccion(accion);
                 if (idAccion <= 0)
-                    return (false, 0, "Error al agregar acción");
+                    return (false, 0, "Error al agregar acciÃ³n");
 
-                // Enviar notificación a responsables (fire-and-forget)
+                // Enviar notificaciÃ³n a responsables (fire-and-forget)
                 _ = Task.Run(async () =>
                 {
                     try
@@ -473,17 +473,17 @@ namespace MatrixNext.Data.Services.Pnc
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, "Error al enviar notificación acción {IdAccion}", idAccion);
+                        _logger.LogError(ex, "Error al enviar notificaciÃ³n acciÃ³n {IdAccion}", idAccion);
                     }
                 });
 
-                _logger.LogInformation("Acción agregada: {IdAccion} a causa {IdCausa}", idAccion, modelo.IdCausa);
-                return (true, idAccion, "Acción agregada correctamente");
+                _logger.LogInformation("AcciÃ³n agregada: {IdAccion} a causa {IdCausa}", idAccion, modelo.IdCausa);
+                return (true, idAccion, "AcciÃ³n agregada correctamente");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al agregar acción");
-                return (false, 0, $"Error al agregar acción: {ex.Message}");
+                _logger.LogError(ex, "Error al agregar acciÃ³n");
+                return (false, 0, "Error al agregar acción. Por favor intente nuevamente.");
             }
         }
 
@@ -500,14 +500,14 @@ namespace MatrixNext.Data.Services.Pnc
 
                 var actualizado = await _adapter.ActualizarAccion(accion);
                 if (!actualizado)
-                    return (false, "Error al actualizar acción");
+                    return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
 
                 return (true, "Acción actualizada correctamente");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al actualizar acción {Id}", accion.Id);
-                return (false, $"Error al actualizar acción: {ex.Message}");
+                _logger.LogError(ex, "Error al actualizar acción");
+                return (false, "Error al actualizar acción. Por favor intente nuevamente.");
             }
         }
 
@@ -516,22 +516,22 @@ namespace MatrixNext.Data.Services.Pnc
             try
             {
                 if (modelo.FechaEjecucion > DateTime.Now)
-                    return (false, "La fecha de ejecución no puede ser futura");
+                    return (false, "La fecha de ejecuciÃ³n no puede ser futura");
 
                 if (string.IsNullOrWhiteSpace(modelo.EvidenciaCierre))
                     return (false, "La evidencia de cierre es requerida");
 
                 var ejecutado = await _adapter.EjecutarAccion(modelo.IdAccion, modelo.FechaEjecucion, modelo.EvidenciaCierre);
                 if (!ejecutado)
-                    return (false, "Error al ejecutar acción");
+                    return (false, "Error al ejecutar acciÃ³n");
 
-                _logger.LogInformation("Acción ejecutada: {IdAccion} por usuario {IdUsuario}", modelo.IdAccion, idUsuario);
-                return (true, "Acción ejecutada correctamente");
+                _logger.LogInformation("AcciÃ³n ejecutada: {IdAccion} por usuario {IdUsuario}", modelo.IdAccion, idUsuario);
+                return (true, "AcciÃ³n ejecutada correctamente");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al ejecutar acción {IdAccion}", modelo.IdAccion);
-                return (false, $"Error al ejecutar acción: {ex.Message}");
+                _logger.LogError(ex, "Error al ejecutar acciÃ³n {IdAccion}", modelo.IdAccion);
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -541,15 +541,15 @@ namespace MatrixNext.Data.Services.Pnc
             {
                 var eliminado = await _adapter.EliminarAccion(idAccion);
                 if (!eliminado)
-                    return (false, "Error al eliminar acción");
+                    return (false, "Error al eliminar acciÃ³n");
 
-                _logger.LogInformation("Acción eliminada: {IdAccion}", idAccion);
-                return (true, "Acción eliminada correctamente");
+                _logger.LogInformation("AcciÃ³n eliminada: {IdAccion}", idAccion);
+                return (true, "AcciÃ³n eliminada correctamente");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al eliminar acción {IdAccion}", idAccion);
-                return (false, $"Error al eliminar acción: {ex.Message}");
+                _logger.LogError(ex, "Error al eliminar acciÃ³n {IdAccion}", idAccion);
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -564,7 +564,7 @@ namespace MatrixNext.Data.Services.Pnc
                     return (false, "PNC no encontrado");
 
                 if (detalle.Pnc.Cerrado)
-                    return (false, "El PNC ya está cerrado");
+                    return (false, "El PNC ya estÃ¡ cerrado");
 
                 if (detalle.TotalCausas == 0)
                     return (false, "El PNC debe tener al menos una causa registrada");
@@ -575,11 +575,11 @@ namespace MatrixNext.Data.Services.Pnc
                 if (detalle.AccionesPendientes > 0)
                     return (false, $"Hay {detalle.AccionesPendientes} acciones pendientes de ejecutar");
 
-                // Validar que cada causa tenga acción inmediata
+                // Validar que cada causa tenga acciÃ³n inmediata
                 foreach (var causa in detalle.Causas)
                 {
                     if (!causa.TieneAccionInmediata)
-                        return (false, $"La causa '{causa.CausaRaiz}' no tiene acción inmediata");
+                        return (false, $"La causa '{causa.CausaRaiz}' no tiene acciÃ³n inmediata");
                 }
 
                 return (true, "El PNC puede ser cerrado");
@@ -587,7 +587,7 @@ namespace MatrixNext.Data.Services.Pnc
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al validar cierre PNC {IdPnc}", idPnc);
-                return (false, $"Error al validar: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -598,14 +598,14 @@ namespace MatrixNext.Data.Services.Pnc
                 var existe = await _adapter.ExisteAccion(idPnc, idCausa, (int)TipoAccionEnum.Inmediata);
                 
                 if (existe)
-                    return (true, "La causa tiene acción inmediata");
+                    return (true, "La causa tiene acciÃ³n inmediata");
                 else
-                    return (false, "ADVERTENCIA: Debe registrar una acción inmediata (obligatoria según ISO 9001)");
+                    return (false, "ADVERTENCIA: Debe registrar una acciÃ³n inmediata (obligatoria segÃºn ISO 9001)");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al validar acción inmediata");
-                return (false, $"Error: {ex.Message}");
+                _logger.LogError(ex, "Error al validar acciÃ³n inmediata");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -618,7 +618,7 @@ namespace MatrixNext.Data.Services.Pnc
                 var emails = await _adapter.ObtenerCorreosNotificacion(idPnc);
                 if (!emails.Any())
                 {
-                    _logger.LogWarning("No hay destinatarios para notificación PNC {IdPnc}", idPnc);
+                    _logger.LogWarning("No hay destinatarios para notificaciÃ³n PNC {IdPnc}", idPnc);
                     return;
                 }
 
@@ -632,16 +632,16 @@ namespace MatrixNext.Data.Services.Pnc
                     <p><strong>Estudio:</strong> {detalle.Pnc.NombreEstudio}</p>
                     <p><strong>Fecha Reclamo:</strong> {detalle.Pnc.FechaReclamo:dd/MM/yyyy}</p>
                     <p><strong>Reporta:</strong> {detalle.Pnc.NombreReporta}</p>
-                    <p><strong>Descripción:</strong> {detalle.Pnc.Descripcion}</p>
+                    <p><strong>DescripciÃ³n:</strong> {detalle.Pnc.Descripcion}</p>
                     <p>Por favor revise el PNC y registre las acciones correspondientes.</p>
                 ";
 
                 await _emailQueue.QueueEmailMultipleAsync(emails, asunto, cuerpo);
-                _logger.LogInformation("Notificación enviada para PNC {IdPnc} a {Count} destinatarios", idPnc, emails.Count);
+                _logger.LogInformation("NotificaciÃ³n enviada para PNC {IdPnc} a {Count} destinatarios", idPnc, emails.Count);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al enviar notificación nuevo PNC {IdPnc}", idPnc);
+                _logger.LogError(ex, "Error al enviar notificaciÃ³n nuevo PNC {IdPnc}", idPnc);
                 throw;
             }
         }
@@ -653,27 +653,27 @@ namespace MatrixNext.Data.Services.Pnc
                 var datosEmail = await _adapter.ObtenerDatosEmailAccion(idAccion);
                 if (datosEmail == null || !datosEmail.EmailsDestinatarios.Any())
                 {
-                    _logger.LogWarning("No hay destinatarios para notificación acción {IdAccion}", idAccion);
+                    _logger.LogWarning("No hay destinatarios para notificaciÃ³n acciÃ³n {IdAccion}", idAccion);
                     return;
                 }
 
-                var asunto = $"Acción PNC Asignada - {datosEmail.JobBook}";
+                var asunto = $"AcciÃ³n PNC Asignada - {datosEmail.JobBook}";
                 var cuerpo = $@"
-                    <h2>Acción PNC Asignada</h2>
+                    <h2>AcciÃ³n PNC Asignada</h2>
                     <p><strong>PNC:</strong> {datosEmail.JobBook} - {datosEmail.NombreEstudio}</p>
-                    <p><strong>Descripción PNC:</strong> {datosEmail.DescripcionPNC}</p>
-                    <p><strong>Acción:</strong> {datosEmail.AccionDescripcion}</p>
+                    <p><strong>DescripciÃ³n PNC:</strong> {datosEmail.DescripcionPNC}</p>
+                    <p><strong>AcciÃ³n:</strong> {datosEmail.AccionDescripcion}</p>
                     <p><strong>Fecha Planeada:</strong> {datosEmail.FechaPlaneada:dd/MM/yyyy}</p>
                     <p><strong>Responsable:</strong> {datosEmail.NombreResponsable}</p>
-                    <p>Por favor complete la acción antes de la fecha planeada.</p>
+                    <p>Por favor complete la acciÃ³n antes de la fecha planeada.</p>
                 ";
 
                 await _emailQueue.QueueEmailMultipleAsync(datosEmail.EmailsDestinatarios, asunto, cuerpo);
-                _logger.LogInformation("Notificación enviada para acción {IdAccion}", idAccion);
+                _logger.LogInformation("NotificaciÃ³n enviada para acciÃ³n {IdAccion}", idAccion);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al enviar notificación acción {IdAccion}", idAccion);
+                _logger.LogError(ex, "Error al enviar notificaciÃ³n acciÃ³n {IdAccion}", idAccion);
                 throw;
             }
         }
@@ -703,7 +703,7 @@ namespace MatrixNext.Data.Services.Pnc
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al enviar notificación cierre PNC {IdPnc}", idPnc);
+                _logger.LogError(ex, "Error al enviar notificaciÃ³n cierre PNC {IdPnc}", idPnc);
                 throw;
             }
         }
@@ -730,7 +730,7 @@ namespace MatrixNext.Data.Services.Pnc
                             a.FechaPlaneada.Value < DateTime.Now && 
                             a.FechaEjecucion == null).ToList();
 
-                        // Acciones próximas a vencer (3 días)
+                        // Acciones prÃ³ximas a vencer (3 dÃ­as)
                         var proximasVencer = acciones.Where(a =>
                             a.FechaPlaneada.HasValue &&
                             (a.FechaPlaneada.Value - DateTime.Now).Days <= 3 &&
@@ -755,3 +755,4 @@ namespace MatrixNext.Data.Services.Pnc
         }
     }
 }
+

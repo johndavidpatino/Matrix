@@ -92,7 +92,7 @@ namespace MatrixNext.Web.Services.CORE
             }
             catch (Exception ex)
             {
-                return ResultVM<bool>.Fail($"Error al crear tareas CORE: {ex.Message}");
+                return ResultVM<bool>.Fail("Error al crear tareas CORE. Por favor intente nuevamente.");
             }
         }
 
@@ -122,7 +122,7 @@ namespace MatrixNext.Web.Services.CORE
             }
             catch (Exception ex)
             {
-                return ResultVM<WorkFlow>.Fail($"Error al crear WorkFlow: {ex.Message}");
+                return ResultVM<WorkFlow>.Fail("Error al crear WorkFlow. Por favor intente nuevamente.");
             }
         }
 
@@ -157,7 +157,7 @@ namespace MatrixNext.Web.Services.CORE
             }
             catch (Exception ex)
             {
-                return ResultVM<WorkFlow>.Fail($"Error al actualizar: {ex.Message}");
+                return ResultVM<WorkFlow>.Fail("Error al actualizar WorkFlow. Por favor intente nuevamente.");
             }
         }
 
@@ -186,7 +186,7 @@ namespace MatrixNext.Web.Services.CORE
             }
             catch (Exception ex)
             {
-                return ResultVM<bool>.Fail($"Error al eliminar: {ex.Message}");
+                return ResultVM<bool>.Fail("Error al eliminar WorkFlow. Por favor intente nuevamente.");
             }
         }
 

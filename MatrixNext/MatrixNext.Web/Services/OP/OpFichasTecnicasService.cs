@@ -67,7 +67,7 @@ public class OpFichasTecnicasService : IOpFichasTecnicasService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error obteniendo ficha entrevista trabajo {TrabajoId}", trabajoId);
-            return (false, null!, ex.Message);
+            return (false, null!, "Error al obtener ficha de entrevista. Por favor intente nuevamente.");
         }
     }
 
@@ -171,7 +171,7 @@ public class OpFichasTecnicasService : IOpFichasTecnicasService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error guardando ficha entrevista trabajo {TrabajoId}", ficha.TrabajoId);
-            return (false, ex.Message);
+            return (false, "Error al guardar ficha de entrevista. Por favor intente nuevamente.");
         }
     }
 
@@ -198,7 +198,7 @@ public class OpFichasTecnicasService : IOpFichasTecnicasService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error entregando ficha entrevista trabajo {TrabajoId}", trabajoId);
-            return (false, ex.Message);
+            return (false, "Error al entregar ficha de entrevista. Por favor intente nuevamente.");
         }
     }
 
@@ -283,7 +283,7 @@ public class OpFichasTecnicasService : IOpFichasTecnicasService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error guardando ficha sesión trabajo {TrabajoId}", ficha.TrabajoId);
-            return (false, ex.Message);
+            return (false, "Error al guardar ficha de sesión. Por favor intente nuevamente.");
         }
     }
 
@@ -370,7 +370,7 @@ public class OpFichasTecnicasService : IOpFichasTecnicasService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error guardando ficha observación trabajo {TrabajoId}", ficha.TrabajoId);
-            return (false, ex.Message);
+            return (false, "Error al guardar ficha de observación. Por favor intente nuevamente.");
         }
     }
 
@@ -432,7 +432,7 @@ public class OpFichasTecnicasService : IOpFichasTecnicasService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error guardando ficha transcripción trabajo {TrabajoId}", ficha.TrabajoId);
-            return (false, ex.Message);
+            return (false, "Error al guardar ficha de transcripción. Por favor intente nuevamente.");
         }
     }
 
@@ -460,7 +460,7 @@ public class OpFichasTecnicasService : IOpFichasTecnicasService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error entregando ficha transcripción trabajo {TrabajoId}", trabajoId);
-            return (false, ex.Message);
+            return (false, "Error al entregar ficha de transcripción. Por favor intente nuevamente.");
         }
     }
 
@@ -497,7 +497,7 @@ public class OpFichasTecnicasService : IOpFichasTecnicasService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error validando presupuesto trabajo {TrabajoId}", trabajoId);
-            return (false, 0, ex.Message);
+            return (false, 0, "Error al validar presupuesto. Por favor intente nuevamente.");
         }
     }
 
@@ -522,7 +522,7 @@ public class OpFichasTecnicasService : IOpFichasTecnicasService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error actualizando Habeas Data trabajo {TrabajoId}", trabajoId);
-            return (false, ex.Message);
+            return (false, "Error al actualizar Habeas Data. Por favor intente nuevamente.");
         }
     }
 
@@ -588,7 +588,7 @@ public class OpFichasTecnicasService : IOpFichasTecnicasService
         {
             _logger.LogError(ex, "Error obteniendo ficha tipo {TipoFicha} trabajo {TrabajoId}", 
                 tipoFicha, trabajoId);
-            return (false, null!, ex.Message);
+            return (false, null!, "Error al obtener ficha técnica. Por favor intente nuevamente.");
         }
     }
 }

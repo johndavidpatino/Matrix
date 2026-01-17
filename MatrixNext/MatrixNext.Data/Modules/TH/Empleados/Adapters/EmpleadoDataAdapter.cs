@@ -1,4 +1,4 @@
-using Dapper;
+﻿using Dapper;
 using MatrixNext.Data.Modules.TH.Empleados.Models;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
@@ -7,7 +7,7 @@ using System.Data;
 namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
 {
     /// <summary>
-    /// Adaptador de datos para gestión de empleados.
+    /// Adaptador de datos para gestiÃ³n de empleados.
     /// Ejecuta stored procedures de la base de datos usando Dapper.
     /// </summary>
     public class EmpleadoDataAdapter
@@ -46,7 +46,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
         }
 
         /// <summary>
-        /// Obtiene empleado por identificación
+        /// Obtiene empleado por identificaciÃ³n
         /// SP: TH_Empleado_GetPorIdentificacion
         /// </summary>
         public async Task<EmpleadoDetalleDTO?> ObtenerEmpleadoPorIdentificacion(string identificacion)
@@ -116,7 +116,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
             }
             catch (SqlException ex)
             {
-                return (false, $"Error al guardar empleado: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -150,7 +150,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
             }
             catch (SqlException ex)
             {
-                return (false, $"Error al retirar empleado: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -182,7 +182,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
             }
             catch (SqlException ex)
             {
-                return (false, $"Error al reintegrar empleado: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -239,7 +239,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
             }
             catch (SqlException ex)
             {
-                return (false, $"Error al guardar experiencia: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -266,16 +266,16 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
             }
             catch (SqlException ex)
             {
-                return (false, $"Error al eliminar experiencia: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
         #endregion
 
-        #region Educación
+        #region EducaciÃ³n
 
         /// <summary>
-        /// Obtiene educación de un empleado
+        /// Obtiene educaciÃ³n de un empleado
         /// SP: TH_Educacion_Get
         /// </summary>
         public async Task<IEnumerable<EducacionDTO>> ObtenerEducacion(string identificacion)
@@ -293,7 +293,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
         }
 
         /// <summary>
-        /// Guarda información de educación
+        /// Guarda informaciÃ³n de educaciÃ³n
         /// SP: TH_Educacion_InsertUpdate
         /// </summary>
         public async Task<(bool success, string message)> GuardarEducacion(EducacionDTO educacion)
@@ -319,16 +319,16 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
                     commandType: CommandType.StoredProcedure
                 );
                 
-                return (true, "Información de educación guardada exitosamente");
+                return (true, "InformaciÃ³n de educaciÃ³n guardada exitosamente");
             }
             catch (SqlException ex)
             {
-                return (false, $"Error al guardar educación: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
         /// <summary>
-        /// Elimina información de educación
+        /// Elimina informaciÃ³n de educaciÃ³n
         /// SP: TH_Educacion_Delete
         /// </summary>
         public async Task<(bool success, string message)> EliminarEducacion(int id)
@@ -346,11 +346,11 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
                     commandType: CommandType.StoredProcedure
                 );
                 
-                return (true, "Información de educación eliminada exitosamente");
+                return (true, "InformaciÃ³n de educaciÃ³n eliminada exitosamente");
             }
             catch (SqlException ex)
             {
-                return (false, $"Error al eliminar educación: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -377,7 +377,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
         }
 
         /// <summary>
-        /// Guarda información de hijo
+        /// Guarda informaciÃ³n de hijo
         /// SP: TH_Hijos_InsertUpdate
         /// </summary>
         public async Task<(bool success, string message)> GuardarHijo(HijoDTO hijo)
@@ -403,16 +403,16 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
                     commandType: CommandType.StoredProcedure
                 );
                 
-                return (true, "Información de hijo guardada exitosamente");
+                return (true, "InformaciÃ³n de hijo guardada exitosamente");
             }
             catch (SqlException ex)
             {
-                return (false, $"Error al guardar información del hijo: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
         /// <summary>
-        /// Elimina información de hijo
+        /// Elimina informaciÃ³n de hijo
         /// SP: TH_Hijos_Delete
         /// </summary>
         public async Task<(bool success, string message)> EliminarHijo(int id)
@@ -430,11 +430,11 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
                     commandType: CommandType.StoredProcedure
                 );
                 
-                return (true, "Información de hijo eliminada exitosamente");
+                return (true, "InformaciÃ³n de hijo eliminada exitosamente");
             }
             catch (SqlException ex)
             {
-                return (false, $"Error al eliminar información del hijo: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -489,7 +489,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
             }
             catch (SqlException ex)
             {
-                return (false, $"Error al guardar contacto de emergencia: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -516,7 +516,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
             }
             catch (SqlException ex)
             {
-                return (false, $"Error al eliminar contacto: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -543,7 +543,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
         }
 
         /// <summary>
-        /// Registra una promoción/cambio de cargo
+        /// Registra una promociÃ³n/cambio de cargo
         /// SP: TH_Promociones_Insert
         /// </summary>
         public async Task<(bool success, string message)> GuardarPromocion(PromocionDTO promocion, string usuario)
@@ -567,11 +567,11 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
                     commandType: CommandType.StoredProcedure
                 );
                 
-                return (true, "Promoción registrada exitosamente");
+                return (true, "PromociÃ³n registrada exitosamente");
             }
             catch (SqlException ex)
             {
-                return (false, $"Error al registrar promoción: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -626,7 +626,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
             }
             catch (SqlException ex)
             {
-                return (false, $"Error al registrar cambio de salario: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -635,7 +635,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
         #region Reportes
 
         /// <summary>
-        /// Obtiene reporte de estado de diligenciamiento de información de empleados
+        /// Obtiene reporte de estado de diligenciamiento de informaciÃ³n de empleados
         /// SP: TH_ReporteDiligenciamientoEmpleados_Get
         /// </summary>
         public async Task<IEnumerable<EstadoDiligenciamientoEmpleadoDTO>> ObtenerReporteDiligenciamiento()
@@ -649,7 +649,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
         }
 
         /// <summary>
-        /// Obtiene reporte de información general de empleados
+        /// Obtiene reporte de informaciÃ³n general de empleados
         /// SP: TH_Empleados_Reporte_Info
         /// </summary>
         public async Task<IEnumerable<EmpleadoReporteInfoDTO>> ObtenerReporteInformacionGeneral()
@@ -677,7 +677,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
         }
 
         /// <summary>
-        /// Obtiene reporte de educación de empleados
+        /// Obtiene reporte de educaciÃ³n de empleados
         /// SP: TH_Educacion_Report
         /// </summary>
         public async Task<IEnumerable<EmpleadoEducacionReporteDTO>> ObtenerReporteEducacion()
@@ -720,7 +720,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
 
         #endregion
 
-        #region Actualización de Datos Maestros
+        #region ActualizaciÃ³n de Datos Maestros
 
         /// <summary>
         /// Actualiza o crea datos generales del empleado
@@ -749,7 +749,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
             parameters.Add("@RutaFoto", datos.RutaFoto);
             parameters.Add("@UsuarioId", usuarioId);
 
-            // El SP determinará si es inserción o actualización basado en EsNuevo
+            // El SP determinarÃ¡ si es inserciÃ³n o actualizaciÃ³n basado en EsNuevo
             await connection.ExecuteAsync(
                 "TH_Empleado_ActualizarDatosGenerales",
                 parameters,
@@ -821,7 +821,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
         }
 
         /// <summary>
-        /// Actualiza información de nómina del empleado
+        /// Actualiza informaciÃ³n de nÃ³mina del empleado
         /// SP: TH_Empleado_ActualizarNomina
         /// Equivalente a updateNomina del legacy
         /// </summary>
@@ -848,7 +848,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
         }
 
         /// <summary>
-        /// Actualiza nivel de inglés del empleado
+        /// Actualiza nivel de inglÃ©s del empleado
         /// SP: TH_Empleado_ActualizarNivelIngles
         /// Equivalente a updateNivelIngles del legacy
         /// </summary>
@@ -869,10 +869,10 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
 
         #endregion
 
-        #region Catálogos
+        #region CatÃ¡logos
 
         /// <summary>
-        /// Obtiene listado de áreas/service lines
+        /// Obtiene listado de Ã¡reas/service lines
         /// SP: TH_Areas_Get
         /// Equivalente a getAreasServiceLines del legacy
         /// </summary>
@@ -887,7 +887,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
         }
 
         /// <summary>
-        /// Obtiene listado de grupos sanguíneos
+        /// Obtiene listado de grupos sanguÃ­neos
         /// SP: TH_GruposSanguineos_Get
         /// Equivalente a getGruposSanguineos del legacy
         /// </summary>
@@ -984,7 +984,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
         }
 
         /// <summary>
-        /// Obtiene listado de fondos de cesantías
+        /// Obtiene listado de fondos de cesantÃ­as
         /// </summary>
         public async Task<IEnumerable<FondoCesantiasDTO>> ObtenerFondosCesantias()
         {
@@ -997,7 +997,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
         }
 
         /// <summary>
-        /// Obtiene listado de cajas de compensación
+        /// Obtiene listado de cajas de compensaciÃ³n
         /// </summary>
         public async Task<IEnumerable<CajaCompensacionDTO>> ObtenerCajasCompensacion()
         {
@@ -1023,7 +1023,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
         }
 
         /// <summary>
-        /// Obtiene listado de niveles de inglés
+        /// Obtiene listado de niveles de inglÃ©s
         /// </summary>
         public async Task<IEnumerable<NivelInglesDTO>> ObtenerNivelesIngles()
         {
@@ -1116,3 +1116,4 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
         #endregion
     }
 }
+

@@ -92,7 +92,7 @@ namespace MatrixNext.Web.Services.PY
             }
             catch (Exception ex)
             {
-                return ResultVM<long>.Fail($"Error al crear segmento: {ex.Message}");
+                return ResultVM<long>.Fail("Error al crear segmento. Por favor intente nuevamente.");
             }
         }
 
@@ -152,7 +152,7 @@ namespace MatrixNext.Web.Services.PY
             }
             catch (Exception ex)
             {
-                return ResultVM<bool>.Fail($"Error al actualizar segmento: {ex.Message}");
+                return ResultVM<bool>.Fail("Error al actualizar segmento. Por favor intente nuevamente.");
             }
         }
 
@@ -193,7 +193,7 @@ namespace MatrixNext.Web.Services.PY
             }
             catch (Exception ex)
             {
-                return ResultVM<bool>.Fail($"Error al eliminar segmento: {ex.Message}");
+                return ResultVM<bool>.Fail("Error al eliminar segmento. Por favor intente nuevamente.");
             }
         }
 
@@ -242,7 +242,7 @@ namespace MatrixNext.Web.Services.PY
             }
             catch (Exception ex)
             {
-                return ResultVM<long>.Fail($"Error al duplicar segmento: {ex.Message}");
+                return ResultVM<long>.Fail("Error al duplicar segmento. Por favor intente nuevamente.");
             }
         }
 

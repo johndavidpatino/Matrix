@@ -75,7 +75,7 @@ public class OpBulkImportService : IOpBulkImportService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error validando archivo {Nombre}", nombreArchivo);
-            errores.Add($"Error leyendo archivo: {ex.Message}");
+            errores.Add("Error al leer el archivo. Verifique que el formato sea correcto.");
             return (false, errores);
         }
     }
@@ -130,7 +130,7 @@ public class OpBulkImportService : IOpBulkImportService
                 {
                     errores++;
                     _logger.LogWarning(ex, "Error insertando muestra {Muestra}", muestra.IdMuestra);
-                    mensajes.Add($"Error en muestra {muestra.IdMuestra}: {ex.Message}");
+                    mensajes.Add($"Error en muestra {muestra.IdMuestra}: Error al procesar el registro.");
                 }
             }
 
@@ -144,7 +144,7 @@ public class OpBulkImportService : IOpBulkImportService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error importando muestras {Nombre}", nombreArchivo);
-            mensajes.Add($"Error durante importación: {ex.Message}");
+            mensajes.Add("Error durante la importación. Por favor intente nuevamente.");
             return (false, insertados, errores + 1, mensajes);
         }
     }
@@ -259,7 +259,7 @@ public class OpBulkImportService : IOpBulkImportService
         }
         catch (Exception ex)
         {
-            errores.Add($"Error leyendo Excel: {ex.Message}");
+            errores.Add("Error al leer archivo Excel. Verifique el formato.");
         }
 
         return errores;
@@ -287,7 +287,7 @@ public class OpBulkImportService : IOpBulkImportService
         }
         catch (Exception ex)
         {
-            errores.Add($"Error leyendo CSV: {ex.Message}");
+            errores.Add("Error al leer archivo CSV. Verifique el formato.");
         }
 
         return errores;

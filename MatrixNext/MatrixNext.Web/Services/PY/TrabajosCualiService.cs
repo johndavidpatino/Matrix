@@ -103,7 +103,7 @@ namespace MatrixNext.Web.Services.PY
             }
             catch (Exception ex)
             {
-                return ResultVM<long>.Fail($"Error al crear trabajo cualitativo: {ex.Message}");
+                return ResultVM<long>.Fail("Error al crear trabajo cualitativo. Por favor intente nuevamente.");
             }
         }
 
@@ -158,7 +158,7 @@ namespace MatrixNext.Web.Services.PY
             }
             catch (Exception ex)
             {
-                return ResultVM<bool>.Fail($"Error al actualizar trabajo: {ex.Message}");
+                return ResultVM<bool>.Fail("Error al actualizar trabajo. Por favor intente nuevamente.");
             }
         }
 
@@ -191,7 +191,7 @@ namespace MatrixNext.Web.Services.PY
             }
             catch (Exception ex)
             {
-                return ResultVM<bool>.Fail($"Error al cambiar estado: {ex.Message}");
+                return ResultVM<bool>.Fail("Error al cambiar estado. Por favor intente nuevamente.");
             }
         }
 
@@ -231,7 +231,7 @@ namespace MatrixNext.Web.Services.PY
             }
             catch (Exception ex)
             {
-                return ResultVM<bool>.Fail($"Error al eliminar trabajo: {ex.Message}");
+                return ResultVM<bool>.Fail("Error al eliminar trabajo. Por favor intente nuevamente.");
             }
         }
 
@@ -309,7 +309,7 @@ namespace MatrixNext.Web.Services.PY
             }
             catch (Exception ex)
             {
-                return ResultVM<long>.Fail($"Error al duplicar trabajo: {ex.Message}");
+                return ResultVM<long>.Fail("Error al duplicar trabajo. Por favor intente nuevamente.");
             }
         }
 
@@ -345,7 +345,7 @@ namespace MatrixNext.Web.Services.PY
             }
             catch (Exception ex)
             {
-                return ResultVM<bool>.Fail($"Error al validar eliminación: {ex.Message}");
+                return ResultVM<bool>.Fail("Error al validar eliminación. Por favor intente nuevamente.");
             }
         }
     }

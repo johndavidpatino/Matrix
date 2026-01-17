@@ -109,7 +109,7 @@ public class CargaMasivaAdapter : ICargaMasivaAdapter
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error validando fila CATI {NumFila}", numFila);
-            resultado.Errores.Add($"Error en validación: {ex.Message}");
+            resultado.Errores.Add("Error en validación. Por favor intente nuevamente.");
             resultado.EsValida = false;
             return resultado;
         }
@@ -174,7 +174,7 @@ public class CargaMasivaAdapter : ICargaMasivaAdapter
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error validando fila Planilla {NumFila}", numFila);
-            resultado.Errores.Add($"Error en validación: {ex.Message}");
+            resultado.Errores.Add("Error en validación. Por favor intente nuevamente.");
             resultado.EsValida = false;
             return resultado;
         }

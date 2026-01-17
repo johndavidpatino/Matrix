@@ -47,7 +47,7 @@ namespace MatrixNext.Data.Adapters.SGC
             }
             catch (SqlException ex)
             {
-                throw new Exception($"Error en BD al crear auditoría: {ex.Message}", ex);
+                throw new Exception("Error en BD al crear auditoría.", ex);
             }
         }
 
@@ -78,7 +78,7 @@ namespace MatrixNext.Data.Adapters.SGC
             }
             catch (SqlException ex)
             {
-                throw new Exception($"Error al obtener auditoría {auditoriaId}: {ex.Message}", ex);
+                throw new Exception($"Error al obtener auditoría {auditoriaId}.", ex);
             }
         }
 
@@ -108,7 +108,7 @@ namespace MatrixNext.Data.Adapters.SGC
             }
             catch (SqlException ex)
             {
-                throw new Exception($"Error al filtrar auditorías: {ex.Message}", ex);
+                throw new Exception("Error al filtrar auditorías.", ex);
             }
         }
 
@@ -139,7 +139,7 @@ namespace MatrixNext.Data.Adapters.SGC
             }
             catch (SqlException ex)
             {
-                throw new Exception($"Error al actualizar estado: {ex.Message}", ex);
+                throw new Exception("Error al actualizar estado.", ex);
             }
         }
 
@@ -177,7 +177,7 @@ namespace MatrixNext.Data.Adapters.SGC
             }
             catch (SqlException ex)
             {
-                throw new Exception($"Error al crear informe auditoría: {ex.Message}", ex);
+                throw new Exception("Error al crear informe de auditoría.", ex);
             }
         }
 
@@ -209,7 +209,7 @@ namespace MatrixNext.Data.Adapters.SGC
             }
             catch (SqlException ex)
             {
-                throw new Exception($"Error al obtener informe auditoría {auditoriaId}: {ex.Message}", ex);
+                throw new Exception($"Error al obtener informe de auditoría {auditoriaId}.", ex);
             }
         }
 
@@ -234,7 +234,7 @@ namespace MatrixNext.Data.Adapters.SGC
             }
             catch (SqlException ex)
             {
-                throw new Exception($"Error al obtener auditados: {ex.Message}", ex);
+                throw new Exception("Error al obtener auditados.", ex);
             }
         }
 
@@ -259,7 +259,7 @@ namespace MatrixNext.Data.Adapters.SGC
             }
             catch (SqlException ex)
             {
-                throw new Exception($"Error al obtener hallazgos: {ex.Message}", ex);
+                throw new Exception("Error al obtener hallazgos.", ex);
             }
         }
 
@@ -284,7 +284,7 @@ namespace MatrixNext.Data.Adapters.SGC
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error al obtener normativas: {ex.Message}", ex);
+                throw new Exception("Error al obtener normativas.", ex);
             }
         }
 
@@ -309,7 +309,7 @@ namespace MatrixNext.Data.Adapters.SGC
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error al obtener tipos auditoría: {ex.Message}", ex);
+                throw new Exception("Error al obtener tipos de auditoría.", ex);
             }
         }
 
@@ -334,7 +334,7 @@ namespace MatrixNext.Data.Adapters.SGC
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error al obtener tipos hallazgo: {ex.Message}", ex);
+                throw new Exception("Error al obtener tipos de hallazgo.", ex);
             }
         }
 
@@ -360,7 +360,7 @@ namespace MatrixNext.Data.Adapters.SGC
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error al obtener estados: {ex.Message}", ex);
+                throw new Exception("Error al obtener estados.", ex);
             }
         }
 

@@ -36,7 +36,7 @@ namespace MatrixNext.Data.Services.Usuarios
             }
             catch (Exception ex)
             {
-                return (false, $"Error al obtener roles: {ex.Message}", new List<RolViewModel>());
+                return (false, "Error al obtener roles. Por favor intente nuevamente.", new List<RolViewModel>());
             }
         }
     }

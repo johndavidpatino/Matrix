@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -57,13 +57,13 @@ namespace MatrixNext.Data.Adapters.CU
         }
 
         /// <summary>
-        /// Guarda la relación entre un estudio y sus presupuestos aprobados
+        /// Guarda la relaciÃ³n entre un estudio y sus presupuestos aprobados
         /// </summary>
         public void AsignarPresupuestosAEstudio(long idEstudio, List<long> idsPresupuestos)
         {
             using var context = CreateContext();
             
-            // Eliminar asignaciones anteriores si es edición
+            // Eliminar asignaciones anteriores si es ediciÃ³n
             var asignacionesExistentes = context.Set<CU_Estudios_Presupuestos>()
                 .Where(ep => ep.EstudioId == idEstudio)
                 .ToList();
@@ -226,7 +226,7 @@ namespace MatrixNext.Data.Adapters.CU
         }
 
         /// <summary>
-        /// Obtiene los presupuestos de una alternativa, opcionalmente filtrados por técnica
+        /// Obtiene los presupuestos de una alternativa, opcionalmente filtrados por tÃ©cnica
         /// </summary>
         public List<PresupuestoListItemViewModel> ObtenerPresupuestos(long idPropuesta, int alternativa, int? tecnicaFiltro = null)
         {
@@ -274,7 +274,7 @@ namespace MatrixNext.Data.Adapters.CU
         }
 
         /// <summary>
-        /// Obtiene un presupuesto completo para edición
+        /// Obtiene un presupuesto completo para ediciÃ³n
         /// </summary>
         public EditarPresupuestoViewModel? ObtenerPresupuesto(long idPropuesta, int alternativa, int metCodigo, int nacional)
         {
@@ -381,7 +381,7 @@ namespace MatrixNext.Data.Adapters.CU
         }
 
         /// <summary>
-        /// Guarda o actualiza un presupuesto completo (transacción)
+        /// Guarda o actualiza un presupuesto completo (transacciÃ³n)
         /// </summary>
         public (bool success, string message) GuardarPresupuesto(EditarPresupuestoViewModel model, long usuarioId)
         {
@@ -505,12 +505,12 @@ namespace MatrixNext.Data.Adapters.CU
             catch (Exception ex)
             {
                 transaction.Rollback();
-                return (false, $"Error guardando presupuesto: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
         /// <summary>
-        /// Agrega una línea de muestra
+        /// Agrega una lÃ­nea de muestra
         /// </summary>
         public (bool success, string message) AgregarMuestra(MuestraItemViewModel muestra)
         {
@@ -537,12 +537,12 @@ namespace MatrixNext.Data.Adapters.CU
             }
             catch (Exception ex)
             {
-                return (false, $"Error agregando muestra: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
         /// <summary>
-        /// Elimina una línea de muestra
+        /// Elimina una lÃ­nea de muestra
         /// </summary>
         public (bool success, string message) EliminarMuestra(long idPropuesta, int alternativa, int metCodigo, int ciuCodigo, int muIdentificador, int nacional)
         {
@@ -569,7 +569,7 @@ namespace MatrixNext.Data.Adapters.CU
             }
             catch (Exception ex)
             {
-                return (false, $"Error eliminando muestra: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -608,7 +608,7 @@ namespace MatrixNext.Data.Adapters.CU
                         && p.ParNacional == nacional);
                 context.IQProcesos.RemoveRange(procesos);
 
-                // Eliminar parámetros (principal)
+                // Eliminar parÃ¡metros (principal)
                 var parametros = context.IQParametros
                     .FirstOrDefault(p => p.IdPropuesta == idPropuesta 
                         && p.ParAlternativa == alternativa 
@@ -626,8 +626,9 @@ namespace MatrixNext.Data.Adapters.CU
             catch (Exception ex)
             {
                 transaction.Rollback();
-                return (false, $"Error eliminando presupuesto: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
     }
 }
+

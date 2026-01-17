@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MatrixNext.Data.Adapters.TH;
@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 namespace MatrixNext.Data.Services.TH
 {
     /// <summary>
-    /// Servicio para gestión integral de Empleados
+    /// Servicio para gestiÃ³n integral de Empleados
     /// Orquesta operaciones de adapters y aplica reglas de negocio
     /// </summary>
     public class ThEmpleadosService : IThEmpleadosService
@@ -41,7 +41,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener empleados");
-                return ApiResponse<List<EmpleadoDto>>.Error($"Error al obtener empleados: {ex.Message}");
+                return ApiResponse<List<EmpleadoDto>>.Error("Error al obtener empleados. Por favor intente nuevamente.");
             }
         }
 
@@ -58,7 +58,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error al obtener empleado {id}");
-                return ApiResponse<EmpleadoDto>.Error($"Error al obtener empleado: {ex.Message}");
+                return ApiResponse<EmpleadoDto>.Error("Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -71,7 +71,7 @@ namespace MatrixNext.Data.Services.TH
                     return ApiResponse<long>.Error("Nombres y apellidos son requeridos");
 
                 if (input.Identificacion <= 0)
-                    return ApiResponse<long>.Error("Identificación inválida");
+                    return ApiResponse<long>.Error("IdentificaciÃ³n invÃ¡lida");
 
                 var newId = await _empleadosAdapter.CrearEmpleado(input);
                 return ApiResponse<long>.Ok(newId, "Empleado creado correctamente", 201);
@@ -79,7 +79,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al crear empleado");
-                return ApiResponse<long>.Error($"Error al crear empleado: {ex.Message}");
+                return ApiResponse<long>.Error("Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -96,7 +96,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error al actualizar datos generales de {id}");
-                return ApiResponse<bool>.Error($"Error al actualizar: {ex.Message}");
+                return ApiResponse<bool>.Error("Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -113,7 +113,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error al actualizar datos laborales");
-                return ApiResponse<bool>.Error($"Error al actualizar: {ex.Message}");
+                return ApiResponse<bool>.Error("Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -130,7 +130,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error al actualizar datos personales");
-                return ApiResponse<bool>.Error($"Error al actualizar: {ex.Message}");
+                return ApiResponse<bool>.Error("Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -140,14 +140,14 @@ namespace MatrixNext.Data.Services.TH
             {
                 var result = await _empleadosAdapter.ActualizarNomina(input);
                 if (!result)
-                    return ApiResponse<bool>.Error($"No se pudo actualizar la nómina del empleado {input.Id}");
+                    return ApiResponse<bool>.Error($"No se pudo actualizar la nÃ³mina del empleado {input.Id}");
 
-                return ApiResponse<bool>.Ok(true, "Datos de nómina actualizados correctamente");
+                return ApiResponse<bool>.Ok(true, "Datos de nÃ³mina actualizados correctamente");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error al actualizar nómina");
-                return ApiResponse<bool>.Error($"Error al actualizar: {ex.Message}");
+                _logger.LogError(ex, $"Error al actualizar nÃ³mina");
+                return ApiResponse<bool>.Error("Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -167,7 +167,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error al actualizar salario");
-                return ApiResponse<bool>.Error($"Error al actualizar: {ex.Message}");
+                return ApiResponse<bool>.Error("Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -187,7 +187,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error al retirar empleado");
-                return ApiResponse<bool>.Error($"Error al retirar: {ex.Message}");
+                return ApiResponse<bool>.Error("Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -207,7 +207,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error al reintegrar empleado");
-                return ApiResponse<bool>.Error($"Error al reintegrar: {ex.Message}");
+                return ApiResponse<bool>.Error("Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -225,7 +225,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener experiencias");
-                return ApiResponse<List<ExperienciaLaboralDto>>.Error($"Error: {ex.Message}");
+                return ApiResponse<List<ExperienciaLaboralDto>>.Error("Error al obtener experiencias. Por favor intente nuevamente.");
             }
         }
 
@@ -242,7 +242,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al agregar experiencia");
-                return ApiResponse<long>.Error($"Error: {ex.Message}");
+                return ApiResponse<long>.Error("Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -256,7 +256,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al eliminar experiencia");
-                return ApiResponse<bool>.Error($"Error: {ex.Message}");
+                return ApiResponse<bool>.Error("Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -269,8 +269,8 @@ namespace MatrixNext.Data.Services.TH
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al obtener educación");
-                return ApiResponse<List<EducacionDto>>.Error($"Error: {ex.Message}");
+                _logger.LogError(ex, "Error al obtener educaciÃ³n");
+                return ApiResponse<List<EducacionDto>>.Error("Error al obtener educación. Por favor intente nuevamente.");
             }
         }
 
@@ -279,12 +279,12 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var newId = await _empleadosAdapter.AgregarEducacion(input);
-                return ApiResponse<long>.Ok(newId, "Educación agregada correctamente", 201);
+                return ApiResponse<long>.Ok(newId, "EducaciÃ³n agregada correctamente", 201);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al agregar educación");
-                return ApiResponse<long>.Error($"Error: {ex.Message}");
+                _logger.LogError(ex, "Error al agregar educaciÃ³n");
+                return ApiResponse<long>.Error("Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -297,8 +297,8 @@ namespace MatrixNext.Data.Services.TH
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al eliminar educación");
-                return ApiResponse<bool>.Error($"Error: {ex.Message}");
+                _logger.LogError(ex, "Error al eliminar educaciÃ³n");
+                return ApiResponse<bool>.Error("Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -312,7 +312,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener hijos");
-                return ApiResponse<List<HijoDto>>.Error($"Error: {ex.Message}");
+                return ApiResponse<List<HijoDto>>.Error("Error al obtener hijos. Por favor intente nuevamente.");
             }
         }
 
@@ -326,7 +326,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al agregar hijo");
-                return ApiResponse<long>.Error($"Error: {ex.Message}");
+                return ApiResponse<long>.Error("Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -340,7 +340,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al eliminar hijo");
-                return ApiResponse<bool>.Error($"Error: {ex.Message}");
+                return ApiResponse<bool>.Error("Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -354,7 +354,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener contactos");
-                return ApiResponse<List<ContactoEmergenciaDto>>.Error($"Error: {ex.Message}");
+                return ApiResponse<List<ContactoEmergenciaDto>>.Error("Error al obtener contactos. Por favor intente nuevamente.");
             }
         }
 
@@ -368,7 +368,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al agregar contacto");
-                return ApiResponse<long>.Error($"Error: {ex.Message}");
+                return ApiResponse<long>.Error("Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -382,7 +382,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al eliminar contacto");
-                return ApiResponse<bool>.Error($"Error: {ex.Message}");
+                return ApiResponse<bool>.Error("Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -396,7 +396,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener promociones");
-                return ApiResponse<List<PromocionDto>>.Error($"Error: {ex.Message}");
+                return ApiResponse<List<PromocionDto>>.Error("Error al obtener promociones. Por favor intente nuevamente.");
             }
         }
 
@@ -405,12 +405,12 @@ namespace MatrixNext.Data.Services.TH
             try
             {
                 var newId = await _empleadosAdapter.AgregarPromocion(input);
-                return ApiResponse<long>.Ok(newId, "Promoción agregada correctamente", 201);
+                return ApiResponse<long>.Ok(newId, "PromociÃ³n agregada correctamente", 201);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al agregar promoción");
-                return ApiResponse<long>.Error($"Error: {ex.Message}");
+                _logger.LogError(ex, "Error al agregar promociÃ³n");
+                return ApiResponse<long>.Error("Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -423,8 +423,8 @@ namespace MatrixNext.Data.Services.TH
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al eliminar promoción");
-                return ApiResponse<bool>.Error($"Error: {ex.Message}");
+                _logger.LogError(ex, "Error al eliminar promociÃ³n");
+                return ApiResponse<bool>.Error("Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -438,7 +438,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener salarios");
-                return ApiResponse<List<SalarioDto>>.Error($"Error: {ex.Message}");
+                return ApiResponse<List<SalarioDto>>.Error("Error al obtener salarios. Por favor intente nuevamente.");
             }
         }
 
@@ -455,7 +455,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al agregar salario");
-                return ApiResponse<long>.Error($"Error: {ex.Message}");
+                return ApiResponse<long>.Error("Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -469,13 +469,13 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al eliminar salario");
-                return ApiResponse<bool>.Error($"Error: {ex.Message}");
+                return ApiResponse<bool>.Error("Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
         #endregion
 
-        #region CATÁLOGOS
+        #region CATÃLOGOS
 
         public async Task<ApiResponse<List<AreaDto>>> ObtenerAreas()
         {
@@ -486,8 +486,8 @@ namespace MatrixNext.Data.Services.TH
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al obtener áreas");
-                return ApiResponse<List<AreaDto>>.Error($"Error: {ex.Message}");
+                _logger.LogError(ex, "Error al obtener Ã¡reas");
+                return ApiResponse<List<AreaDto>>.Error("Error al obtener áreas. Por favor intente nuevamente.");
             }
         }
 
@@ -501,7 +501,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener cargos");
-                return ApiResponse<List<CargoDto>>.Error($"Error: {ex.Message}");
+                return ApiResponse<List<CargoDto>>.Error("Error al obtener cargos. Por favor intente nuevamente.");
             }
         }
 
@@ -515,7 +515,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener bandas");
-                return ApiResponse<List<BandaDto>>.Error($"Error: {ex.Message}");
+                return ApiResponse<List<BandaDto>>.Error("Error al obtener bandas. Por favor intente nuevamente.");
             }
         }
 
@@ -529,7 +529,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener estados civiles");
-                return ApiResponse<List<EstadoCivilDto>>.Error($"Error: {ex.Message}");
+                return ApiResponse<List<EstadoCivilDto>>.Error("Error al obtener estados civiles. Por favor intente nuevamente.");
             }
         }
 
@@ -542,8 +542,8 @@ namespace MatrixNext.Data.Services.TH
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al obtener grupos sanguíneos");
-                return ApiResponse<List<GrupoSanguineoDto>>.Error($"Error: {ex.Message}");
+                _logger.LogError(ex, "Error al obtener grupos sanguÃ­neos");
+                return ApiResponse<List<GrupoSanguineoDto>>.Error("Error al obtener grupos sanguineos. Por favor intente nuevamente.");
             }
         }
 
@@ -557,7 +557,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener sedes");
-                return ApiResponse<List<SedeDto>>.Error($"Error: {ex.Message}");
+                return ApiResponse<List<SedeDto>>.Error("Error al obtener sedes. Por favor intente nuevamente.");
             }
         }
 
@@ -571,7 +571,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener tipos contrato");
-                return ApiResponse<List<TipoContratoDto>>.Error($"Error: {ex.Message}");
+                return ApiResponse<List<TipoContratoDto>>.Error("Error al obtener tipos contrato. Por favor intente nuevamente.");
             }
         }
 
@@ -585,7 +585,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener tiempos contrato");
-                return ApiResponse<List<TiempContratoDto>>.Error($"Error: {ex.Message}");
+                return ApiResponse<List<TiempContratoDto>>.Error("Error al obtener tiempos contrato. Por favor intente nuevamente.");
             }
         }
 
@@ -599,7 +599,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener empresas");
-                return ApiResponse<List<EmpresaDto>>.Error($"Error: {ex.Message}");
+                return ApiResponse<List<EmpresaDto>>.Error("Error al obtener empresas. Por favor intente nuevamente.");
             }
         }
 
@@ -613,7 +613,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener job functions");
-                return ApiResponse<List<JobFunctionDto>>.Error($"Error: {ex.Message}");
+                return ApiResponse<List<JobFunctionDto>>.Error("Error al obtener job functions. Por favor intente nuevamente.");
             }
         }
 
@@ -627,7 +627,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener parentescos");
-                return ApiResponse<List<ParentescoDto>>.Error($"Error: {ex.Message}");
+                return ApiResponse<List<ParentescoDto>>.Error("Error al obtener parentescos. Por favor intente nuevamente.");
             }
         }
 
@@ -641,7 +641,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener motivos cambio salario");
-                return ApiResponse<List<MotivoCambioSalarioDto>>.Error($"Error: {ex.Message}");
+                return ApiResponse<List<MotivoCambioSalarioDto>>.Error("Error al obtener motivos cambio salario. Por favor intente nuevamente.");
             }
         }
 
@@ -655,10 +655,11 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener tipos salario");
-                return ApiResponse<List<TipoSalarioDto>>.Error($"Error: {ex.Message}");
+                return ApiResponse<List<TipoSalarioDto>>.Error("Error al obtener tipos salario. Por favor intente nuevamente.");
             }
         }
 
         #endregion
     }
 }
+

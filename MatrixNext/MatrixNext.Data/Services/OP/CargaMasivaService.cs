@@ -125,7 +125,7 @@ public class CargaMasivaService : ICargaMasivaService
             {
                 NumeroFila = 0,
                 EsValida = false,
-                Errores = new List<string> { $"Error crítico: {ex.Message}" }
+                Errores = new List<string> { "Error crítico al procesar archivo. Por favor intente nuevamente." }
             });
             
             return resumen;
@@ -231,7 +231,7 @@ public class CargaMasivaService : ICargaMasivaService
             {
                 NumeroFila = 0,
                 EsValida = false,
-                Errores = new List<string> { $"Error crítico: {ex.Message}" }
+                Errores = new List<string> { "Error crítico al procesar archivo. Por favor intente nuevamente." }
             });
             
             return resumen;

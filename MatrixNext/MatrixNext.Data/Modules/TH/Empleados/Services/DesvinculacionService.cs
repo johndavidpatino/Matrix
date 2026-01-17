@@ -74,9 +74,9 @@ namespace MatrixNext.Data.Services.TH
 
                 return (true, "Desvinculaciones obtenidas exitosamente", resultado);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (false, $"Error al obtener desvinculaciones: {ex.Message}", null);
+                return (false, "Error al obtener desvinculaciones. Por favor intente nuevamente.", null);
             }
         }
 
@@ -96,9 +96,9 @@ namespace MatrixNext.Data.Services.TH
                 var empleados = await _adapter.ObtenerEmpleadosActivos();
                 return (true, "Empleados activos obtenidos exitosamente", empleados);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (false, $"Error al obtener empleados activos: {ex.Message}", null);
+                return (false, "Error al obtener empleados activos. Por favor intente nuevamente.", null);
             }
         }
 
@@ -143,9 +143,9 @@ namespace MatrixNext.Data.Services.TH
                 var safeId = desvinculacionIdLong > int.MaxValue ? 0 : (int)desvinculacionIdLong;
                 return (true, "Proceso de desvinculación iniciado exitosamente", safeId);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (false, $"Error al iniciar proceso de desvinculación: {ex.Message}", 0);
+                return (false, "Error al iniciar proceso de desvinculación. Por favor intente nuevamente.", 0);
             }
         }
 
@@ -170,9 +170,9 @@ namespace MatrixNext.Data.Services.TH
                 var evaluaciones = await _adapter.ObtenerEvaluacionesPorDesvinculacion(desvinculacionEmpleadoId);
                 return (true, "Evaluaciones obtenidas exitosamente", evaluaciones);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (false, $"Error al obtener evaluaciones: {ex.Message}", null);
+                return (false, "Error al obtener evaluaciones. Por favor intente nuevamente.", null);
             }
         }
 
@@ -189,9 +189,9 @@ namespace MatrixNext.Data.Services.TH
                 var data = await _adapter.PendientesPorEvaluarPorArea(areaId);
                 return (true, "Procesos pendientes obtenidos", data);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (false, $"Error al consultar pendientes por área: {ex.Message}", null);
+                return (false, "Error al consultar pendientes por área. Por favor intente nuevamente.", null);
             }
         }
 
@@ -204,9 +204,9 @@ namespace MatrixNext.Data.Services.TH
                 var data = await _adapter.PendientesPorEvaluarPorEvaluador(usuarioId);
                 return (true, "Procesos pendientes obtenidos", data);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (false, $"Error al consultar pendientes por evaluador: {ex.Message}", null);
+                return (false, "Error al consultar pendientes por evaluador. Por favor intente nuevamente.", null);
             }
         }
 
@@ -219,9 +219,9 @@ namespace MatrixNext.Data.Services.TH
                 var data = await _adapter.ItemsVerificarPor(areaId);
                 return (true, "Items obtenidos", data);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (false, $"Error al consultar items: {ex.Message}", null);
+                return (false, "Error al consultar items. Por favor intente nuevamente.", null);
             }
         }
 
@@ -236,9 +236,9 @@ namespace MatrixNext.Data.Services.TH
                     ? (false, "No se encontró información del empleado", null)
                     : (true, "Información obtenida", data);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (false, $"Error al consultar información de empleado: {ex.Message}", null);
+                return (false, "Error al consultar información de empleado. Por favor intente nuevamente.", null);
             }
         }
 
@@ -274,9 +274,9 @@ namespace MatrixNext.Data.Services.TH
 
                 return (true, "Evaluación guardada");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (false, $"Error al guardar evaluación: {ex.Message}");
+                return (false, "Error al guardar evaluación. Por favor intente nuevamente.");
             }
         }
 
@@ -289,9 +289,9 @@ namespace MatrixNext.Data.Services.TH
                 var data = await _adapter.EvaluacionesRealizadasPorEvaluador(usuarioId);
                 return (true, "Evaluaciones obtenidas", data);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (false, $"Error al consultar evaluaciones realizadas: {ex.Message}", null);
+                return (false, "Error al consultar evaluaciones realizadas. Por favor intente nuevamente.", null);
             }
         }
 
@@ -368,9 +368,9 @@ namespace MatrixNext.Data.Services.TH
                 var pdfBase64 = await ConvertHtmlToPdfBase64Async(htmlTemplate);
                 return (true, "PDF generado exitosamente", pdfBase64);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (false, $"Error al generar PDF: {ex.Message}", null);
+                return (false, "Error al generar PDF. Por favor intente nuevamente.", null);
             }
         }
 

@@ -1,4 +1,4 @@
-using MatrixNext.Data.Modules.TH.Empleados.Adapters;
+﻿using MatrixNext.Data.Modules.TH.Empleados.Adapters;
 using MatrixNext.Data.Modules.TH.Empleados.Models;
 using Microsoft.Extensions.Configuration;
 using System.IO;
@@ -6,7 +6,7 @@ using System.IO;
 namespace MatrixNext.Data.Modules.TH.Empleados.Services
 {
     /// <summary>
-    /// Servicio de negocio para gestión de empleados.
+    /// Servicio de negocio para gestiÃ³n de empleados.
     /// Implementa validaciones y reglas de negocio antes de llamar al adaptador.
     /// </summary>
     public class EmpleadoService
@@ -19,11 +19,11 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
         {
             _adapter = adapter;
 
-            // Leer ruta de fotos desde configuración, con fallback a wwwroot/fotos/empleados
+            // Leer ruta de fotos desde configuraciÃ³n, con fallback a wwwroot/fotos/empleados
             var configuredPath = configuration?["Files:EmployeePhotosPath"];
             if (!string.IsNullOrWhiteSpace(configuredPath))
             {
-                // Si la ruta es relativa a la web root, convertirla a ruta física
+                // Si la ruta es relativa a la web root, convertirla a ruta fÃ­sica
                 if (!Path.IsPathRooted(configuredPath))
                 {
                     var webRoot = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
@@ -46,7 +46,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             }
             catch
             {
-                // Ignorar errores de creación; el guardado lanzará excepción si es necesario
+                // Ignorar errores de creaciÃ³n; el guardado lanzarÃ¡ excepciÃ³n si es necesario
             }
 
             // Ruta web relativa usada en la BD (por ejemplo: /fotos/empleados/{fileName})
@@ -68,19 +68,19 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             }
             catch (Exception ex)
             {
-                return (false, $"Error al obtener empleados: {ex.Message}", null);
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.", null);
             }
         }
 
         /// <summary>
-        /// Obtiene empleado por identificación
+        /// Obtiene empleado por identificaciÃ³n
         /// </summary>
         public async Task<(bool success, string message, EmpleadoDetalleDTO? data)> ObtenerEmpleadoPorIdentificacion(
             string identificacion)
         {
             if (string.IsNullOrWhiteSpace(identificacion))
             {
-                return (false, "La identificación es requerida", null);
+                return (false, "La identificaciÃ³n es requerida", null);
             }
 
             try
@@ -94,7 +94,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             }
             catch (Exception ex)
             {
-                return (false, $"Error al obtener empleado: {ex.Message}", null);
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.", null);
             }
         }
 
@@ -105,7 +105,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             EmpleadoDetalleDTO empleado,
             string usuario)
         {
-            // Validaciones básicas
+            // Validaciones bÃ¡sicas
             var (esValido, mensajeValidacion) = ValidarEmpleado(empleado);
             if (!esValido)
             {
@@ -123,7 +123,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             }
             catch (Exception ex)
             {
-                return (false, $"Error al guardar empleado: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -139,7 +139,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             // Validaciones
             if (string.IsNullOrWhiteSpace(identificacion))
             {
-                return (false, "La identificación es requerida");
+                return (false, "La identificaciÃ³n es requerida");
             }
 
             if (fechaRetiro > DateTime.Now)
@@ -157,7 +157,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
                 return (false, "Usuario es requerido");
             }
 
-            // Verificar que el empleado existe y está activo
+            // Verificar que el empleado existe y estÃ¡ activo
             var (existe, mensaje, empleado) = await ObtenerEmpleadoPorIdentificacion(identificacion);
             if (!existe || empleado == null)
             {
@@ -180,7 +180,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             }
             catch (Exception ex)
             {
-                return (false, $"Error al retirar empleado: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -195,12 +195,12 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             // Validaciones
             if (string.IsNullOrWhiteSpace(identificacion))
             {
-                return (false, "La identificación es requerida");
+                return (false, "La identificaciÃ³n es requerida");
             }
 
             if (fechaReintegro > DateTime.Now.AddDays(30))
             {
-                return (false, "La fecha de reintegro no puede ser mayor a 30 días en el futuro");
+                return (false, "La fecha de reintegro no puede ser mayor a 30 dÃ­as en el futuro");
             }
 
             if (string.IsNullOrWhiteSpace(usuario))
@@ -208,7 +208,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
                 return (false, "Usuario es requerido");
             }
 
-            // Verificar que el empleado existe y está retirado
+            // Verificar que el empleado existe y estÃ¡ retirado
             var (existe, mensaje, empleado) = await ObtenerEmpleadoPorIdentificacion(identificacion);
             if (!existe || empleado == null)
             {
@@ -231,7 +231,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             }
             catch (Exception ex)
             {
-                return (false, $"Error al reintegrar empleado: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -247,7 +247,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
         {
             if (string.IsNullOrWhiteSpace(identificacion))
             {
-                return (false, "La identificación es requerida", null);
+                return (false, "La identificaciÃ³n es requerida", null);
             }
 
             try
@@ -257,7 +257,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             }
             catch (Exception ex)
             {
-                return (false, $"Error al obtener experiencia laboral: {ex.Message}", null);
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.", null);
             }
         }
 
@@ -269,7 +269,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             // Validaciones
             if (string.IsNullOrWhiteSpace(experiencia.Identificacion))
             {
-                return (false, "La identificación del empleado es requerida");
+                return (false, "La identificaciÃ³n del empleado es requerida");
             }
 
             if (string.IsNullOrWhiteSpace(experiencia.Empresa))
@@ -298,7 +298,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             }
             catch (Exception ex)
             {
-                return (false, $"Error al guardar experiencia laboral: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -309,7 +309,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
         {
             if (id <= 0)
             {
-                return (false, "ID inválido");
+                return (false, "ID invÃ¡lido");
             }
 
             try
@@ -318,45 +318,45 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             }
             catch (Exception ex)
             {
-                return (false, $"Error al eliminar experiencia laboral: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
         #endregion
 
-        #region Educación
+        #region EducaciÃ³n
 
         /// <summary>
-        /// Obtiene educación de un empleado
+        /// Obtiene educaciÃ³n de un empleado
         /// </summary>
         public async Task<(bool success, string message, IEnumerable<EducacionDTO>? data)> ObtenerEducacion(
             string identificacion)
         {
             if (string.IsNullOrWhiteSpace(identificacion))
             {
-                return (false, "La identificación es requerida", null);
+                return (false, "La identificaciÃ³n es requerida", null);
             }
 
             try
             {
                 var educacion = await _adapter.ObtenerEducacion(identificacion);
-                return (true, "Educación obtenida exitosamente", educacion);
+                return (true, "EducaciÃ³n obtenida exitosamente", educacion);
             }
             catch (Exception ex)
             {
-                return (false, $"Error al obtener educación: {ex.Message}", null);
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.", null);
             }
         }
 
         /// <summary>
-        /// Guarda información de educación
+        /// Guarda informaciÃ³n de educaciÃ³n
         /// </summary>
         public async Task<(bool success, string message)> GuardarEducacion(EducacionDTO educacion)
         {
             // Validaciones
             if (string.IsNullOrWhiteSpace(educacion.Identificacion))
             {
-                return (false, "La identificación del empleado es requerida");
+                return (false, "La identificaciÃ³n del empleado es requerida");
             }
 
             if (string.IsNullOrWhiteSpace(educacion.NivelEducativo))
@@ -366,12 +366,12 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
 
             if (string.IsNullOrWhiteSpace(educacion.Institucion))
             {
-                return (false, "La institución es requerida");
+                return (false, "La instituciÃ³n es requerida");
             }
 
             if (string.IsNullOrWhiteSpace(educacion.TituloObtenido))
             {
-                return (false, "El título obtenido es requerido");
+                return (false, "El tÃ­tulo obtenido es requerido");
             }
 
             if (educacion.FechaFin.HasValue && educacion.FechaInicio.HasValue &&
@@ -386,18 +386,18 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             }
             catch (Exception ex)
             {
-                return (false, $"Error al guardar educación: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
         /// <summary>
-        /// Elimina información de educación
+        /// Elimina informaciÃ³n de educaciÃ³n
         /// </summary>
         public async Task<(bool success, string message)> EliminarEducacion(int id)
         {
             if (id <= 0)
             {
-                return (false, "ID inválido");
+                return (false, "ID invÃ¡lido");
             }
 
             try
@@ -406,7 +406,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             }
             catch (Exception ex)
             {
-                return (false, $"Error al eliminar educación: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -422,7 +422,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
         {
             if (string.IsNullOrWhiteSpace(identificacion))
             {
-                return (false, "La identificación es requerida", null);
+                return (false, "La identificaciÃ³n es requerida", null);
             }
 
             try
@@ -432,19 +432,19 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             }
             catch (Exception ex)
             {
-                return (false, $"Error al obtener hijos: {ex.Message}", null);
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.", null);
             }
         }
 
         /// <summary>
-        /// Guarda información de hijo
+        /// Guarda informaciÃ³n de hijo
         /// </summary>
         public async Task<(bool success, string message)> GuardarHijo(HijoDTO hijo)
         {
             // Validaciones
             if (string.IsNullOrWhiteSpace(hijo.IdentificacionEmpleado))
             {
-                return (false, "La identificación del empleado es requerida");
+                return (false, "La identificaciÃ³n del empleado es requerida");
             }
 
             if (string.IsNullOrWhiteSpace(hijo.NombreCompleto))
@@ -464,7 +464,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
 
             if (string.IsNullOrWhiteSpace(hijo.Genero))
             {
-                return (false, "El género es requerido");
+                return (false, "El gÃ©nero es requerido");
             }
 
             try
@@ -473,18 +473,18 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             }
             catch (Exception ex)
             {
-                return (false, $"Error al guardar información del hijo: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
         /// <summary>
-        /// Elimina información de hijo
+        /// Elimina informaciÃ³n de hijo
         /// </summary>
         public async Task<(bool success, string message)> EliminarHijo(int id)
         {
             if (id <= 0)
             {
-                return (false, "ID inválido");
+                return (false, "ID invÃ¡lido");
             }
 
             try
@@ -493,7 +493,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             }
             catch (Exception ex)
             {
-                return (false, $"Error al eliminar información del hijo: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -509,7 +509,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
         {
             if (string.IsNullOrWhiteSpace(identificacion))
             {
-                return (false, "La identificación es requerida", null);
+                return (false, "La identificaciÃ³n es requerida", null);
             }
 
             try
@@ -519,7 +519,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             }
             catch (Exception ex)
             {
-                return (false, $"Error al obtener contactos de emergencia: {ex.Message}", null);
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.", null);
             }
         }
 
@@ -531,7 +531,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             // Validaciones
             if (string.IsNullOrWhiteSpace(contacto.IdentificacionEmpleado))
             {
-                return (false, "La identificación del empleado es requerida");
+                return (false, "La identificaciÃ³n del empleado es requerida");
             }
 
             if (string.IsNullOrWhiteSpace(contacto.NombreCompleto))
@@ -546,7 +546,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
 
             if (string.IsNullOrWhiteSpace(contacto.Telefono))
             {
-                return (false, "El teléfono es requerido");
+                return (false, "El telÃ©fono es requerido");
             }
 
             try
@@ -555,7 +555,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             }
             catch (Exception ex)
             {
-                return (false, $"Error al guardar contacto de emergencia: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -566,7 +566,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
         {
             if (id <= 0)
             {
-                return (false, "ID inválido");
+                return (false, "ID invÃ¡lido");
             }
 
             try
@@ -575,7 +575,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             }
             catch (Exception ex)
             {
-                return (false, $"Error al eliminar contacto de emergencia: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -591,7 +591,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
         {
             if (string.IsNullOrWhiteSpace(identificacion))
             {
-                return (false, "La identificación es requerida", null);
+                return (false, "La identificaciÃ³n es requerida", null);
             }
 
             try
@@ -601,19 +601,19 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             }
             catch (Exception ex)
             {
-                return (false, $"Error al obtener promociones: {ex.Message}", null);
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.", null);
             }
         }
 
         /// <summary>
-        /// Guarda una promoción
+        /// Guarda una promociÃ³n
         /// </summary>
         public async Task<(bool success, string message)> GuardarPromocion(PromocionDTO promocion, string usuario)
         {
             // Validaciones
             if (string.IsNullOrWhiteSpace(promocion.Identificacion))
             {
-                return (false, "La identificación del empleado es requerida");
+                return (false, "La identificaciÃ³n del empleado es requerida");
             }
 
             if (promocion.CargoAnterior <= 0 || promocion.CargoNuevo <= 0)
@@ -642,7 +642,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             }
             catch (Exception ex)
             {
-                return (false, $"Error al guardar promoción: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -658,7 +658,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
         {
             if (string.IsNullOrWhiteSpace(identificacion))
             {
-                return (false, "La identificación es requerida", null);
+                return (false, "La identificaciÃ³n es requerida", null);
             }
 
             try
@@ -668,7 +668,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             }
             catch (Exception ex)
             {
-                return (false, $"Error al obtener salarios: {ex.Message}", null);
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.", null);
             }
         }
 
@@ -680,7 +680,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             // Validaciones
             if (string.IsNullOrWhiteSpace(salario.Identificacion))
             {
-                return (false, "La identificación del empleado es requerida");
+                return (false, "La identificaciÃ³n del empleado es requerida");
             }
 
             if (salario.SalarioAnterior <= 0 || salario.SalarioNuevo <= 0)
@@ -709,7 +709,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             }
             catch (Exception ex)
             {
-                return (false, $"Error al guardar cambio de salario: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -730,12 +730,12 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             }
             catch (Exception ex)
             {
-                return (false, $"Error al obtener reporte: {ex.Message}", null);
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.", null);
             }
         }
 
         /// <summary>
-        /// Obtiene reporte de información general de empleados
+        /// Obtiene reporte de informaciÃ³n general de empleados
         /// </summary>
         public async Task<(bool success, string message, IEnumerable<EmpleadoReporteInfoDTO>? data)> 
             ObtenerReporteInformacionGeneral()
@@ -747,7 +747,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             }
             catch (Exception ex)
             {
-                return (false, $"Error al obtener reporte: {ex.Message}", null);
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.", null);
             }
         }
 
@@ -764,12 +764,12 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             }
             catch (Exception ex)
             {
-                return (false, $"Error al obtener reporte: {ex.Message}", null);
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.", null);
             }
         }
 
         /// <summary>
-        /// Obtiene reporte de educación de empleados
+        /// Obtiene reporte de educaciÃ³n de empleados
         /// </summary>
         public async Task<(bool success, string message, IEnumerable<EmpleadoEducacionReporteDTO>? data)> 
             ObtenerReporteEducacion()
@@ -781,7 +781,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             }
             catch (Exception ex)
             {
-                return (false, $"Error al obtener reporte: {ex.Message}", null);
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.", null);
             }
         }
 
@@ -798,7 +798,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             }
             catch (Exception ex)
             {
-                return (false, $"Error al obtener reporte: {ex.Message}", null);
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.", null);
             }
         }
 
@@ -815,13 +815,13 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             }
             catch (Exception ex)
             {
-                return (false, $"Error al obtener reporte: {ex.Message}", null);
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.", null);
             }
         }
 
         #endregion
 
-        #region Actualización de Datos Maestros
+        #region ActualizaciÃ³n de Datos Maestros
 
         /// <summary>
         /// Actualiza datos generales del empleado
@@ -833,12 +833,12 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             // Validaciones
             if (string.IsNullOrWhiteSpace(datos.TipoIdentificacion))
             {
-                return (false, "El tipo de identificación es requerido");
+                return (false, "El tipo de identificaciÃ³n es requerido");
             }
 
             if (string.IsNullOrWhiteSpace(datos.Identificacion))
             {
-                return (false, "La identificación es requerida");
+                return (false, "La identificaciÃ³n es requerida");
             }
 
             if (string.IsNullOrWhiteSpace(datos.PrimerNombre))
@@ -853,7 +853,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
 
             if (datos.FechaNacimiento.HasValue && datos.FechaNacimiento.Value > DateTime.Now.AddYears(-18))
             {
-                return (false, "El empleado debe ser mayor de 18 años");
+                return (false, "El empleado debe ser mayor de 18 aÃ±os");
             }
 
             try
@@ -876,14 +876,14 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
                     }
                     catch
                     {
-                        return (false, "El formato de la imagen (base64) es inválido");
+                        return (false, "El formato de la imagen (base64) es invÃ¡lido");
                     }
 
-                    // Validación de tamaño (2 MB)
+                    // ValidaciÃ³n de tamaÃ±o (2 MB)
                     const int maxBytes = 2 * 1024 * 1024;
                     if (fotoBytes.Length > maxBytes)
                     {
-                        return (false, "La imagen excede el tamaño máximo permitido (2 MB)");
+                        return (false, "La imagen excede el tamaÃ±o mÃ¡ximo permitido (2 MB)");
                     }
 
                     // Detectar tipo por firma (JPEG/PNG)
@@ -910,7 +910,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
                     }
                     catch (Exception ex)
                     {
-                        return (false, $"Error al guardar la imagen: {ex.Message}");
+                        return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
                     }
 
                     // Asignar ruta web relativa (asume carpeta /fotos/empleados)
@@ -922,7 +922,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             }
             catch (Exception ex)
             {
-                return (false, $"Error al actualizar datos generales: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -938,12 +938,12 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
 
             if (datos.FechaIngreso.HasValue && datos.FechaIngreso.Value > DateTime.Now.AddDays(30))
             {
-                return (false, "La fecha de ingreso no puede ser mayor a 30 días en el futuro");
+                return (false, "La fecha de ingreso no puede ser mayor a 30 dÃ­as en el futuro");
             }
 
             if (!string.IsNullOrWhiteSpace(datos.CorreoIpsos) && !EsEmailValido(datos.CorreoIpsos))
             {
-                return (false, "El formato del correo Ipsos es inválido");
+                return (false, "El formato del correo Ipsos es invÃ¡lido");
             }
 
             try
@@ -953,7 +953,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             }
             catch (Exception ex)
             {
-                return (false, $"Error al actualizar datos laborales: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -969,7 +969,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
 
             if (!string.IsNullOrWhiteSpace(datos.EmailPersonal) && !EsEmailValido(datos.EmailPersonal))
             {
-                return (false, "El formato del email personal es inválido");
+                return (false, "El formato del email personal es invÃ¡lido");
             }
 
             try
@@ -979,12 +979,12 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             }
             catch (Exception ex)
             {
-                return (false, $"Error al actualizar datos personales: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
         /// <summary>
-        /// Actualiza información de nómina del empleado
+        /// Actualiza informaciÃ³n de nÃ³mina del empleado
         /// </summary>
         public async Task<(bool success, string message)> ActualizarNomina(ActualizarNominaDTO datos)
         {
@@ -996,16 +996,16 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             try
             {
                 await _adapter.ActualizarNomina(datos);
-                return (true, "Información de nómina actualizada exitosamente");
+                return (true, "InformaciÃ³n de nÃ³mina actualizada exitosamente");
             }
             catch (Exception ex)
             {
-                return (false, $"Error al actualizar nómina: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
         /// <summary>
-        /// Actualiza nivel de inglés del empleado
+        /// Actualiza nivel de inglÃ©s del empleado
         /// </summary>
         public async Task<(bool success, string message)> ActualizarNivelIngles(ActualizarNivelInglesDTO datos)
         {
@@ -1017,47 +1017,47 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             try
             {
                 await _adapter.ActualizarNivelIngles(datos);
-                return (true, "Nivel de inglés actualizado exitosamente");
+                return (true, "Nivel de inglÃ©s actualizado exitosamente");
             }
             catch (Exception ex)
             {
-                return (false, $"Error al actualizar nivel de inglés: {ex.Message}");
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
         #endregion
 
-        #region Catálogos
+        #region CatÃ¡logos
 
         /// <summary>
-        /// Obtiene todas las áreas/service lines
+        /// Obtiene todas las Ã¡reas/service lines
         /// </summary>
         public async Task<(bool success, string message, IEnumerable<AreaServiceLineDTO>? data)> ObtenerAreasServiceLines()
         {
             try
             {
                 var areas = await _adapter.ObtenerAreasServiceLines();
-                return (true, "Áreas obtenidas exitosamente", areas);
+                return (true, "Ãreas obtenidas exitosamente", areas);
             }
             catch (Exception ex)
             {
-                return (false, $"Error al obtener áreas: {ex.Message}", null);
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.", null);
             }
         }
 
         /// <summary>
-        /// Obtiene todos los grupos sanguíneos
+        /// Obtiene todos los grupos sanguÃ­neos
         /// </summary>
         public async Task<(bool success, string message, IEnumerable<GrupoSanguineoDTO>? data)> ObtenerGruposSanguineos()
         {
             try
             {
                 var grupos = await _adapter.ObtenerGruposSanguineos();
-                return (true, "Grupos sanguíneos obtenidos exitosamente", grupos);
+                return (true, "Grupos sanguÃ­neos obtenidos exitosamente", grupos);
             }
             catch (Exception ex)
             {
-                return (false, $"Error al obtener grupos sanguíneos: {ex.Message}", null);
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.", null);
             }
         }
 
@@ -1073,7 +1073,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             }
             catch (Exception ex)
             {
-                return (false, $"Error al obtener cargos: {ex.Message}", null);
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.", null);
             }
         }
 
@@ -1089,12 +1089,12 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
             }
             catch (Exception ex)
             {
-                return (false, $"Error al obtener estados civiles: {ex.Message}", null);
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.", null);
             }
         }
 
         /// <summary>
-        /// Obtiene todos los catálogos necesarios en un solo método
+        /// Obtiene todos los catÃ¡logos necesarios en un solo mÃ©todo
         /// </summary>
         public async Task<(bool success, string message, object? data)> ObtenerTodosCatalogos()
         {
@@ -1122,11 +1122,11 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
                     Levels = await _adapter.ObtenerLevels()
                 };
 
-                return (true, "Catálogos obtenidos exitosamente", catalogos);
+                return (true, "CatÃ¡logos obtenidos exitosamente", catalogos);
             }
             catch (Exception ex)
             {
-                return (false, $"Error al obtener catálogos: {ex.Message}", null);
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.", null);
             }
         }
 
@@ -1135,18 +1135,18 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
         #region Validaciones Privadas
 
         /// <summary>
-        /// Valida datos básicos del empleado
+        /// Valida datos bÃ¡sicos del empleado
         /// </summary>
         private (bool esValido, string mensaje) ValidarEmpleado(EmpleadoDetalleDTO empleado)
         {
             if (string.IsNullOrWhiteSpace(empleado.TipoIdentificacion))
             {
-                return (false, "El tipo de identificación es requerido");
+                return (false, "El tipo de identificaciÃ³n es requerido");
             }
 
             if (string.IsNullOrWhiteSpace(empleado.Identificacion))
             {
-                return (false, "La identificación es requerida");
+                return (false, "La identificaciÃ³n es requerida");
             }
 
             if (string.IsNullOrWhiteSpace(empleado.PrimerNombre))
@@ -1161,17 +1161,17 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
 
             if (empleado.FechaNacimiento.HasValue && empleado.FechaNacimiento.Value > DateTime.Now.AddYears(-18))
             {
-                return (false, "El empleado debe ser mayor de 18 años");
+                return (false, "El empleado debe ser mayor de 18 aÃ±os");
             }
 
             if (empleado.FechaIngreso.HasValue && empleado.FechaIngreso.Value > DateTime.Now.AddDays(30))
             {
-                return (false, "La fecha de ingreso no puede ser mayor a 30 días en el futuro");
+                return (false, "La fecha de ingreso no puede ser mayor a 30 dÃ­as en el futuro");
             }
 
             if (!string.IsNullOrWhiteSpace(empleado.Email) && !EsEmailValido(empleado.Email))
             {
-                return (false, "El formato del email es inválido");
+                return (false, "El formato del email es invÃ¡lido");
             }
 
             return (true, string.Empty);
@@ -1196,3 +1196,4 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Services
         #endregion
     }
 }
+

@@ -130,7 +130,7 @@ namespace MatrixNext.Data.Services.CU
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error guardando propuesta");
-                return (false, ex.Message, 0);
+                return (false, "Error al guardar la propuesta. Por favor intente nuevamente.", 0);
             }
         }
 
@@ -144,7 +144,7 @@ namespace MatrixNext.Data.Services.CU
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error eliminando propuesta");
-                return (false, ex.Message);
+                return (false, "Error al eliminar la propuesta. Por favor intente nuevamente.");
             }
         }
 
@@ -176,7 +176,7 @@ namespace MatrixNext.Data.Services.CU
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error guardando observacion");
-                return (false, ex.Message);
+                return (false, "Error al guardar la observación. Por favor intente nuevamente.");
             }
         }
 

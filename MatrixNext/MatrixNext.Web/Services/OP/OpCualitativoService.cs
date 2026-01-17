@@ -69,7 +69,7 @@ public class OpCualitativoService : IOpCualitativoService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error obteniendo trabajos por coordinador {UsuarioId}", usuarioId);
-            return (false, new List<TrabajoCualitativoVm>(), ex.Message);
+            return (false, new List<TrabajoCualitativoVm>(), "Error al obtener trabajos. Por favor intente nuevamente.");
         }
     }
 
@@ -116,7 +116,7 @@ public class OpCualitativoService : IOpCualitativoService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error obteniendo trabajos por COE {CoeId}", coeId);
-            return (false, new List<TrabajoCualitativoVm>(), ex.Message);
+            return (false, new List<TrabajoCualitativoVm>(), "Error al obtener trabajos por COE. Por favor intente nuevamente.");
         }
     }
 
@@ -164,7 +164,7 @@ public class OpCualitativoService : IOpCualitativoService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error obteniendo configuración trabajo {TrabajoId}", trabajoId);
-            return (false, null!, ex.Message);
+            return (false, null!, "Error al obtener configuración del trabajo. Por favor intente nuevamente.");
         }
     }
 
@@ -225,7 +225,7 @@ public class OpCualitativoService : IOpCualitativoService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error guardando configuración trabajo {TrabajoId}", trabajoId);
-            return (false, ex.Message);
+            return (false, "Error al guardar configuración del trabajo. Por favor intente nuevamente.");
         }
     }
 
@@ -297,7 +297,7 @@ public class OpCualitativoService : IOpCualitativoService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error obteniendo detalle trabajo {TrabajoId}", trabajoId);
-            return (false, null!, ex.Message);
+            return (false, null!, "Error al obtener detalle del trabajo. Por favor intente nuevamente.");
         }
     }
 
@@ -344,7 +344,7 @@ public class OpCualitativoService : IOpCualitativoService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error creando trabajo");
-            return (false, 0, ex.Message);
+            return (false, 0, "Error al crear trabajo. Por favor intente nuevamente.");
         }
     }
 
@@ -413,7 +413,7 @@ public class OpCualitativoService : IOpCualitativoService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error actualizando trabajo {TrabajoId}", trabajo.Id);
-            return (false, ex.Message);
+            return (false, "Error al actualizar trabajo. Por favor intente nuevamente.");
         }
     }
 
@@ -451,7 +451,7 @@ public class OpCualitativoService : IOpCualitativoService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error eliminando trabajo {TrabajoId}", trabajoId);
-            return (false, ex.Message);
+            return (false, "Error al eliminar trabajo. Por favor intente nuevamente.");
         }
     }
 
@@ -507,7 +507,7 @@ public class OpCualitativoService : IOpCualitativoService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error obteniendo navegación trabajo {TrabajoId}", trabajoId);
-            return (false, null!, ex.Message);
+            return (false, null!, "Error al obtener navegación del trabajo. Por favor intente nuevamente.");
         }
     }
 }

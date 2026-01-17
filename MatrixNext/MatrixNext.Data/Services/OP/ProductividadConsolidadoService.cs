@@ -127,7 +127,7 @@ public class ProductividadConsolidadoService : IProductividadConsolidadoService
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "Error aprobando planilla {Id}", aprobacion.IdPlanilla);
-                    errores.Add($"Error en planilla {aprobacion.IdPlanilla}: {ex.Message}");
+                    errores.Add($"Error en planilla {aprobacion.IdPlanilla}. Por favor intente nuevamente.");
                 }
             }
 

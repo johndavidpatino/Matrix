@@ -149,7 +149,7 @@ namespace MatrixNext.Data.Services.GD
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al enviar notificaciones para solicitud {SolicitudId}", solicitudId);
-                return (false, $"Error al enviar notificaciones: {ex.Message}");
+                return (false, "Error al enviar notificaciones. Por favor intente nuevamente.");
             }
         }
 

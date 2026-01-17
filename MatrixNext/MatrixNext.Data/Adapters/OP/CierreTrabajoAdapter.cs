@@ -119,7 +119,7 @@ public class CierreTrabajoAdapter : ICierreTrabajoAdapter
             return new ValidacionDocumentosDto
             {
                 EsValido = false,
-                MensajeError = "Error al validar documentos: " + ex.Message
+                MensajeError = "Error al validar documentos. Por favor intente nuevamente."
             };
         }
     }

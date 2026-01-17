@@ -94,7 +94,7 @@ namespace MatrixNext.Web.Services.PY
             }
             catch (Exception ex)
             {
-                return ResultVM<long>.Fail($"Error al asignar entrevistador: {ex.Message}");
+                return ResultVM<long>.Fail("Error al asignar entrevistador. Por favor intente nuevamente.");
             }
         }
 
@@ -136,7 +136,7 @@ namespace MatrixNext.Web.Services.PY
             }
             catch (Exception ex)
             {
-                return ResultVM<bool>.Fail($"Error al actualizar entrevistador: {ex.Message}");
+                return ResultVM<bool>.Fail("Error al actualizar entrevistador. Por favor intente nuevamente.");
             }
         }
 
@@ -168,7 +168,7 @@ namespace MatrixNext.Web.Services.PY
             }
             catch (Exception ex)
             {
-                return ResultVM<bool>.Fail($"Error al cambiar disponibilidad: {ex.Message}");
+                return ResultVM<bool>.Fail("Error al cambiar disponibilidad. Por favor intente nuevamente.");
             }
         }
 
@@ -207,7 +207,7 @@ namespace MatrixNext.Web.Services.PY
             }
             catch (Exception ex)
             {
-                return ResultVM<bool>.Fail($"Error al eliminar entrevistador: {ex.Message}");
+                return ResultVM<bool>.Fail("Error al eliminar entrevistador. Por favor intente nuevamente.");
             }
         }
 
@@ -240,7 +240,7 @@ namespace MatrixNext.Web.Services.PY
             }
             catch (Exception ex)
             {
-                return ResultVM<bool>.Fail($"Error al actualizar porcentaje: {ex.Message}");
+                return ResultVM<bool>.Fail("Error al actualizar porcentaje. Por favor intente nuevamente.");
             }
         }
     }

@@ -149,7 +149,7 @@ namespace MatrixNext.Data.Adapters.PY
             }
             catch (Exception ex)
             {
-                resultado.ErrorMessage = $"Error duplicando trabajo: {ex.Message}";
+                resultado.ErrorMessage = "Error duplicando trabajo. Por favor intente nuevamente.";
                 return resultado;
             }
         }

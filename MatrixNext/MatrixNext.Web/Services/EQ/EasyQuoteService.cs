@@ -62,7 +62,7 @@ namespace MatrixNext.Web.Services.EQ
                 return new ApiResponse<EasyQuoteHeaderDto>
                 {
                     Success = false,
-                    Message = $"Error al crear cotización: {ex.Message}"
+                    Message = "Error al crear cotización. Por favor intente nuevamente."
                 };
             }
         }
@@ -100,7 +100,7 @@ namespace MatrixNext.Web.Services.EQ
                 return new ApiResponse<EasyQuoteDetailDto>
                 {
                     Success = false,
-                    Message = $"Error al obtener cotización: {ex.Message}"
+                    Message = "Error al obtener cotización. Por favor intente nuevamente."
                 };
             }
         }
@@ -142,7 +142,7 @@ namespace MatrixNext.Web.Services.EQ
                 return new ApiResponse<PaginatedResult<EasyQuoteListDto>>
                 {
                     Success = false,
-                    Message = $"Error al listar cotizaciones: {ex.Message}"
+                    Message = "Error al listar cotizaciones. Por favor intente nuevamente."
                 };
             }
         }
@@ -193,7 +193,7 @@ namespace MatrixNext.Web.Services.EQ
                 return new ApiResponse<EasyQuoteHeaderDto>
                 {
                     Success = false,
-                    Message = $"Error al actualizar cotización: {ex.Message}"
+                    Message = "Error al actualizar cotización. Por favor intente nuevamente."
                 };
             }
         }
@@ -227,7 +227,7 @@ namespace MatrixNext.Web.Services.EQ
                 return new ApiResponse<bool>
                 {
                     Success = false,
-                    Message = $"Error al eliminar cotización: {ex.Message}"
+                    Message = "Error al eliminar cotización. Por favor intente nuevamente."
                 };
             }
         }

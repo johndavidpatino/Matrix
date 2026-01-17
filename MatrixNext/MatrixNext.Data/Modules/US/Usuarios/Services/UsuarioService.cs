@@ -62,9 +62,9 @@ namespace MatrixNext.Data.Modules.US.Usuarios.Services
                     return (true, "Listado obtenido exitosamente", viewModels);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (false, $"Error al obtener listado: {ex.Message}", new List<UsuarioListViewModel>());
+                return (false, "Error al obtener listado. Por favor intente nuevamente.", new List<UsuarioListViewModel>());
             }
         }
 
@@ -115,9 +115,9 @@ namespace MatrixNext.Data.Modules.US.Usuarios.Services
                     return (true, "Detalle obtenido exitosamente", viewModel);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (false, $"Error al obtener detalle: {ex.Message}", null);
+                return (false, "Error al obtener detalle. Por favor intente nuevamente.", null);
             }
         }
 
@@ -133,9 +133,9 @@ namespace MatrixNext.Data.Modules.US.Usuarios.Services
                 var vm = list.Select(r => new RolViewModel { Id = r.Id, Nombre = r.Rol, Descripcion = r.Descripcion }).ToList();
                 return (true, "Roles obtenidos", vm);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (false, ex.Message, new List<RolViewModel>());
+                return (false, "Error al obtener roles. Por favor intente nuevamente.", new List<RolViewModel>());
             }
         }
 
@@ -148,9 +148,9 @@ namespace MatrixNext.Data.Modules.US.Usuarios.Services
                 var vm = list.Select(r => new RolViewModel { Id = r.Id, Nombre = r.Rol, Descripcion = r.Descripcion }).ToList();
                 return (true, "Roles disponibles obtenidos", vm);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (false, ex.Message, new List<RolViewModel>());
+                return (false, "Error al obtener roles disponibles. Por favor intente nuevamente.", new List<RolViewModel>());
             }
         }
 
@@ -162,9 +162,9 @@ namespace MatrixNext.Data.Modules.US.Usuarios.Services
                 var ok = adapter.GuardarRolUsuario(usuarioId, rolId);
                 return ok ? (true, "Rol asignado") : (false, "El rol ya estaba asignado o no se pudo asignar");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (false, ex.Message);
+                return (false, "Error al asignar rol. Por favor intente nuevamente.");
             }
         }
 
@@ -176,9 +176,9 @@ namespace MatrixNext.Data.Modules.US.Usuarios.Services
                 var ok = adapter.EliminarRolUsuario(usuarioId, rolId);
                 return ok ? (true, "Rol removido") : (false, "No se pudo remover el rol");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (false, ex.Message);
+                return (false, "Error al eliminar rol. Por favor intente nuevamente.");
             }
         }
 
@@ -192,9 +192,9 @@ namespace MatrixNext.Data.Modules.US.Usuarios.Services
                 var vm = list.Select(u => new UnidadViewModel { Id = u.Id, Nombre = u.Nombre, Descripcion = u.Descripcion }).ToList();
                 return (true, "Unidades obtenidas", vm);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (false, ex.Message, new List<UnidadViewModel>());
+                return (false, "Error al obtener unidades. Por favor intente nuevamente.", new List<UnidadViewModel>());
             }
         }
 
@@ -207,9 +207,9 @@ namespace MatrixNext.Data.Modules.US.Usuarios.Services
                 var vm = list.Select(u => new UnidadViewModel { Id = u.Id, Nombre = u.Nombre, Descripcion = u.Descripcion }).ToList();
                 return (true, "Unidades disponibles obtenidas", vm);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (false, ex.Message, new List<UnidadViewModel>());
+                return (false, "Error al obtener unidades disponibles. Por favor intente nuevamente.", new List<UnidadViewModel>());
             }
         }
 
@@ -221,9 +221,9 @@ namespace MatrixNext.Data.Modules.US.Usuarios.Services
                 var ok = adapter.GuardarUsuariosUnidades(usuarioId, grupoUnidadId);
                 return ok ? (true, "Unidad asignada") : (false, "La unidad ya estaba asignada o no se pudo asignar");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (false, ex.Message);
+                return (false, "Error al asignar unidad. Por favor intente nuevamente.");
             }
         }
 
@@ -235,9 +235,9 @@ namespace MatrixNext.Data.Modules.US.Usuarios.Services
                 var ok = adapter.EliminarUsuariosUnidades(usuarioId, grupoUnidadId);
                 return ok ? (true, "Unidad removida") : (false, "No se pudo remover la unidad");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (false, ex.Message);
+                return (false, "Error al eliminar unidad. Por favor intente nuevamente.");
             }
         }
 
@@ -251,9 +251,9 @@ namespace MatrixNext.Data.Modules.US.Usuarios.Services
                 var vm = list.Select(p => new { p.Id, p.Permiso, p.Descripcion }).Cast<object>().ToList();
                 return (true, "Permisos obtenidos", vm);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (false, ex.Message, new List<object>());
+                return (false, "Error al obtener permisos. Por favor intente nuevamente.", new List<object>());
             }
         }
 
@@ -265,9 +265,9 @@ namespace MatrixNext.Data.Modules.US.Usuarios.Services
                 var ok = adapter.GuardarPermisoUsuario(usuarioId, permisoId);
                 return ok ? (true, "Permiso asignado") : (false, "El permiso ya estaba asignado o no se pudo asignar");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (false, ex.Message);
+                return (false, "Error al asignar permiso. Por favor intente nuevamente.");
             }
         }
 
@@ -279,9 +279,9 @@ namespace MatrixNext.Data.Modules.US.Usuarios.Services
                 var ok = adapter.EliminarPermisoUsuario(usuarioId, permisoId);
                 return ok ? (true, "Permiso removido") : (false, "No se pudo remover el permiso");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (false, ex.Message);
+                return (false, "Error al eliminar permiso. Por favor intente nuevamente.");
             }
         }
 
@@ -301,9 +301,9 @@ namespace MatrixNext.Data.Modules.US.Usuarios.Services
                     return (false, "Usuario no encontrado", 0);
                 return (true, "OK", (int)usuario.Id);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (false, ex.Message, 0);
+                return (false, "Error al buscar usuario. Por favor intente nuevamente.", 0);
             }
         }
 
@@ -342,9 +342,9 @@ namespace MatrixNext.Data.Modules.US.Usuarios.Services
                     return (true, "Usuario creado exitosamente", newId);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (false, $"Error al crear usuario: {ex.Message}", 0);
+                return (false, "Error al crear usuario. Por favor intente nuevamente.", 0);
             }
         }
 
@@ -384,9 +384,9 @@ namespace MatrixNext.Data.Modules.US.Usuarios.Services
                     return (true, "Usuario actualizado exitosamente");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (false, $"Error al actualizar usuario: {ex.Message}");
+                return (false, "Error al actualizar usuario. Por favor intente nuevamente.");
             }
         }
 
@@ -409,9 +409,9 @@ namespace MatrixNext.Data.Modules.US.Usuarios.Services
                         : (false, "Error al eliminar usuario");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (false, $"Error al eliminar usuario: {ex.Message}");
+                return (false, "Error al eliminar usuario. Por favor intente nuevamente.");
             }
         }
 
@@ -481,9 +481,9 @@ namespace MatrixNext.Data.Modules.US.Usuarios.Services
                     return ok ? (true, "Contraseña actualizada correctamente") : (false, "No se pudo actualizar la contraseña");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (false, $"Error al cambiar contraseña: {ex.Message}");
+                return (false, "Error al cambiar contraseña. Por favor intente nuevamente.");
             }
         }
 

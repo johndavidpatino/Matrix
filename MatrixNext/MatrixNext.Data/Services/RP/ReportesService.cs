@@ -64,7 +64,7 @@ namespace MatrixNext.Data.Services.RP
             {
                 _logger.LogError(ex, $"[ReportesService] Error generando reporte {reporteId}");
                 // REGLA 8: Gestión errores
-                return ApiResponse<ReporteResultadoDTO>.Error($"Error al generar reporte: {ex.Message}");
+                return ApiResponse<ReporteResultadoDTO>.Error("Error al generar el reporte. Por favor intente nuevamente.");
             }
         }
 
@@ -88,7 +88,7 @@ namespace MatrixNext.Data.Services.RP
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"[ReportesService] Error obteniendo reporte {reporteId}");
-                return ApiResponse<ReporteDTO>.Error(ex.Message);
+                return ApiResponse<ReporteDTO>.Error("Error al obtener el reporte. Por favor intente nuevamente.");
             }
         }
 
@@ -107,7 +107,7 @@ namespace MatrixNext.Data.Services.RP
             catch (Exception ex)
             {
                 _logger.LogError(ex, "[ReportesService] Error obteniendo reportes disponibles");
-                return ApiResponse<List<ReporteDTO>>.Error(ex.Message);
+                return ApiResponse<List<ReporteDTO>>.Error("Error al obtener los reportes disponibles. Por favor intente nuevamente.");
             }
         }
 
@@ -170,7 +170,7 @@ namespace MatrixNext.Data.Services.RP
             catch (Exception ex)
             {
                 _logger.LogError(ex, "[ReportesService] Error aplicando filtros");
-                return ApiResponse<ReporteResultadoDTO>.Error(ex.Message);
+                return ApiResponse<ReporteResultadoDTO>.Error("Error al aplicar los filtros. Por favor intente nuevamente.");
             }
         }
 
@@ -276,7 +276,7 @@ namespace MatrixNext.Data.Services.RP
             catch (Exception ex)
             {
                 _logger.LogError(ex, "[ReportesService] Error obteniendo indicadores calidad");
-                return ApiResponse<Dictionary<string, object>>.Error(ex.Message);
+                return ApiResponse<Dictionary<string, object>>.Error("Error al obtener indicadores de calidad. Por favor intente nuevamente.");
             }
         }
 
@@ -303,7 +303,7 @@ namespace MatrixNext.Data.Services.RP
             catch (Exception ex)
             {
                 _logger.LogError(ex, "[ReportesService] Error obteniendo indicadores cumplimiento");
-                return ApiResponse<Dictionary<string, object>>.Error(ex.Message);
+                return ApiResponse<Dictionary<string, object>>.Error("Error al obtener indicadores de cumplimiento. Por favor intente nuevamente.");
             }
         }
 

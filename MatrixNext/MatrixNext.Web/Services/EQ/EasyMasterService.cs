@@ -70,7 +70,7 @@ namespace MatrixNext.Web.Services.EQ
                 return new ApiResponse<List<EasyMasterPrecioDto>>
                 {
                     Success = false,
-                    Message = $"Error al obtener matriz de precios: {ex.Message}"
+                    Message = "Error al obtener matriz de precios. Por favor intente nuevamente."
                 };
             }
         }
@@ -109,7 +109,7 @@ namespace MatrixNext.Web.Services.EQ
                 return new ApiResponse<EasyMasterScriptProcDto>
                 {
                     Success = false,
-                    Message = $"Error al obtener horas: {ex.Message}"
+                    Message = "Error al obtener horas. Por favor intente nuevamente."
                 };
             }
         }
@@ -156,7 +156,7 @@ namespace MatrixNext.Web.Services.EQ
                 return new ApiResponse<List<EasyMasterValorHoraDto>>
                 {
                     Success = false,
-                    Message = $"Error al obtener tarifas horas: {ex.Message}"
+                    Message = "Error al obtener tarifas de horas. Por favor intente nuevamente."
                 };
             }
         }
@@ -195,7 +195,7 @@ namespace MatrixNext.Web.Services.EQ
                 return new ApiResponse<EasyMasterCostInsumosDto>
                 {
                     Success = false,
-                    Message = $"Error al obtener costos insumos: {ex.Message}"
+                    Message = "Error al obtener costos de insumos. Por favor intente nuevamente."
                 };
             }
         }
@@ -241,7 +241,7 @@ namespace MatrixNext.Web.Services.EQ
                 return new ApiResponse<List<EasyMasterRateEstadisticaDto>>
                 {
                     Success = false,
-                    Message = $"Error al obtener rates estadística: {ex.Message}"
+                    Message = "Error al obtener rates de estadística. Por favor intente nuevamente."
                 };
             }
         }
@@ -286,7 +286,7 @@ namespace MatrixNext.Web.Services.EQ
                 return new ApiResponse<List<EasyMasterLocacionesDto>>
                 {
                     Success = false,
-                    Message = $"Error al obtener locaciones: {ex.Message}"
+                    Message = "Error al obtener locaciones. Por favor intente nuevamente."
                 };
             }
         }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using MatrixNext.Data.Adapters.CU;
 using MatrixNext.Data.Modules.CU.Entities;
@@ -158,7 +158,7 @@ namespace MatrixNext.Data.Services.CU
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error guardando brief");
-                return (false, ex.Message, 0);
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.", 0);
             }
         }
 
@@ -179,7 +179,7 @@ namespace MatrixNext.Data.Services.CU
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error actualizando viabilidad");
-                return (false, ex.Message);
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -192,7 +192,7 @@ namespace MatrixNext.Data.Services.CU
             {
                 if (string.IsNullOrWhiteSpace(nuevoTitulo))
                 {
-                    return (false, "Debe proporcionar un título para el Brief clonado", 0);
+                    return (false, "Debe proporcionar un tÃ­tulo para el Brief clonado", 0);
                 }
 
                 if (idUnidad <= 0)
@@ -215,7 +215,7 @@ namespace MatrixNext.Data.Services.CU
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error clonando brief {IdBrief}", idBrief);
-                return (false, ex.Message, 0);
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.", 0);
             }
         }
 
@@ -309,3 +309,4 @@ namespace MatrixNext.Data.Services.CU
         }
     }
 }
+

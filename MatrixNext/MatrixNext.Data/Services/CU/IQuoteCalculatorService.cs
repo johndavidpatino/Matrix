@@ -275,7 +275,7 @@ namespace MatrixNext.Data.Services.CU
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error ejecutando simulador");
-                return new SimuladorResultado { Exito = false, Mensaje = ex.Message };
+                return new SimuladorResultado { Exito = false, Mensaje = "Error al procesar el cálculo. Por favor intente nuevamente." };
             }
         }
     }

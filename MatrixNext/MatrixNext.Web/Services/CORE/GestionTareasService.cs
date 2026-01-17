@@ -135,7 +135,7 @@ public class GestionTareasService : IGestionTareasService
         }
         catch (Exception ex)
         {
-            return ResultVM<bool>.Fail($"Error al cambiar estado: {ex.Message}");
+            return ResultVM<bool>.Fail("Error al cambiar estado. Por favor intente nuevamente.");
         }
     }
 
@@ -209,7 +209,7 @@ public class GestionTareasService : IGestionTareasService
         }
         catch (Exception ex)
         {
-            return ResultVM<bool>.Fail($"Error al agregar observación: {ex.Message}");
+            return ResultVM<bool>.Fail("Error al agregar observación. Por favor intente nuevamente.");
         }
     }
 
@@ -253,7 +253,7 @@ public class GestionTareasService : IGestionTareasService
         }
         catch (Exception ex)
         {
-            return ResultVM<bool>.Fail($"Error al anular tarea: {ex.Message}");
+            return ResultVM<bool>.Fail("Error al anular tarea. Por favor intente nuevamente.");
         }
     }
 

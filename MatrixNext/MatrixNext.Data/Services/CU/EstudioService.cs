@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using MatrixNext.Data.Adapters.CU;
@@ -124,7 +124,7 @@ namespace MatrixNext.Data.Services.CU
                     catch (Exception exPresu)
                     {
                         _logger.LogError(exPresu, "Error asignando presupuestos al estudio {IdEstudio}", id);
-                        // No falla la operación, solo registra el error
+                        // No falla la operaciÃ³n, solo registra el error
                     }
                 }
                 
@@ -133,7 +133,7 @@ namespace MatrixNext.Data.Services.CU
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error guardando estudio");
-                return (false, ex.Message, 0);
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.", 0);
             }
         }
 
@@ -163,7 +163,7 @@ namespace MatrixNext.Data.Services.CU
             if (model == null) return "Modelo vacio";
             if (model.PropuestaId <= 0) return "Propuesta requerida";
             
-            // TODO-P0-02: Validar que se seleccionó al menos un presupuesto
+            // TODO-P0-02: Validar que se seleccionÃ³ al menos un presupuesto
             if (model.PresupuestosSeleccionados == null || !model.PresupuestosSeleccionados.Any())
                 return "Debe seleccionar al menos un presupuesto aprobado";
             
@@ -180,3 +180,4 @@ namespace MatrixNext.Data.Services.CU
         }
     }
 }
+

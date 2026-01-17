@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MatrixNext.Data.Adapters.TH;
@@ -9,8 +9,8 @@ using Microsoft.Extensions.Logging;
 namespace MatrixNext.Data.Services.TH
 {
     /// <summary>
-    /// Servicio para gestión de Desvinculaciones
-    /// Orquesta el flujo de desvinculación con evaluaciones
+    /// Servicio para gestiÃ³n de Desvinculaciones
+    /// Orquesta el flujo de desvinculaciÃ³n con evaluaciones
     /// </summary>
     public class ThDesvinculacionService : IThDesvinculacionService
     {
@@ -35,7 +35,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener desvinculaciones");
-                return ApiResponse<List<DesvinculacionDto>>.Error($"Error: {ex.Message}");
+                return ApiResponse<List<DesvinculacionDto>>.Error("Error al obtener desvinculaciones. Por favor intente nuevamente.");
             }
         }
 
@@ -47,12 +47,12 @@ namespace MatrixNext.Data.Services.TH
                     return ApiResponse<long>.Error("Fecha de retiro es requerida");
 
                 var newId = await _desvinculacionAdapter.IniciarProcesoDesvinculacion(input);
-                return ApiResponse<long>.Ok(newId, "Proceso de desvinculación iniciado correctamente");
+                return ApiResponse<long>.Ok(newId, "Proceso de desvinculaciÃ³n iniciado correctamente");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al iniciar desvinculación");
-                return ApiResponse<long>.Error($"Error: {ex.Message}");
+                _logger.LogError(ex, "Error al iniciar desvinculaciÃ³n");
+                return ApiResponse<long>.Error("Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -66,7 +66,7 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener evaluaciones");
-                return ApiResponse<List<dynamic>>.Error($"Error: {ex.Message}");
+                return ApiResponse<List<dynamic>>.Error("Error al obtener evaluaciones. Por favor intente nuevamente.");
             }
         }
 
@@ -79,14 +79,14 @@ namespace MatrixNext.Data.Services.TH
 
                 var result = await _desvinculacionAdapter.GuardarEvaluacionDesvinculacion(input, usuario);
                 if (!result)
-                    return ApiResponse<bool>.Error("No se pudo guardar la evaluación");
+                    return ApiResponse<bool>.Error("No se pudo guardar la evaluaciÃ³n");
 
-                return ApiResponse<bool>.Ok(true, "Evaluación guardada correctamente");
+                return ApiResponse<bool>.Ok(true, "EvaluaciÃ³n guardada correctamente");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al guardar evaluación");
-                return ApiResponse<bool>.Error($"Error: {ex.Message}");
+                _logger.LogError(ex, "Error al guardar evaluaciÃ³n");
+                return ApiResponse<bool>.Error("Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -102,8 +102,8 @@ namespace MatrixNext.Data.Services.TH
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al finalizar desvinculación");
-                return ApiResponse<bool>.Error($"Error: {ex.Message}");
+                _logger.LogError(ex, "Error al finalizar desvinculaciÃ³n");
+                return ApiResponse<bool>.Error("Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -120,8 +120,9 @@ namespace MatrixNext.Data.Services.TH
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al generar PDF");
-                return ApiResponse<string>.Error($"Error: {ex.Message}");
+                return ApiResponse<string>.Error("Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
     }
 }
+

@@ -71,7 +71,7 @@ namespace MatrixNext.Data.Modules.TH.Ausencias.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error creando solicitud de ausencia");
-                return (false, $"Error: {ex.Message}", 0);
+                return (false, "Error al crear la solicitud de ausencia. Por favor intente nuevamente.", 0);
             }
         }
 
@@ -101,7 +101,7 @@ namespace MatrixNext.Data.Modules.TH.Ausencias.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error aprobando solicitud");
-                return (false, $"Error: {ex.Message}");
+                return (false, "Error al aprobar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -127,7 +127,7 @@ namespace MatrixNext.Data.Modules.TH.Ausencias.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error rechazando solicitud");
-                return (false, $"Error: {ex.Message}");
+                return (false, "Error al rechazar la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -168,7 +168,7 @@ namespace MatrixNext.Data.Modules.TH.Ausencias.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error obteniendo solicitudes del empleado: {idEmpleado}");
-                return (false, ex.Message, new List<AusenciaViewModel>());
+                return (false, "Error al obtener solicitudes del empleado. Por favor intente nuevamente.", new List<AusenciaViewModel>());
             }
         }
 
@@ -185,7 +185,7 @@ namespace MatrixNext.Data.Modules.TH.Ausencias.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obteniendo solicitudes pendientes");
-                return (false, ex.Message, new List<ReporteSolicitudesPendientesViewModel>());
+                return (false, "Error al obtener solicitudes pendientes. Por favor intente nuevamente.", new List<ReporteSolicitudesPendientesViewModel>());
             }
         }
 
@@ -223,7 +223,7 @@ namespace MatrixNext.Data.Modules.TH.Ausencias.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error creando incapacidad");
-                return (false, $"Error: {ex.Message}");
+                return (false, "Error al registrar la incapacidad. Por favor intente nuevamente.");
             }
         }
 
@@ -324,7 +324,7 @@ namespace MatrixNext.Data.Modules.TH.Ausencias.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error anulando solicitud");
-                return (false, ex.Message);
+                return (false, "Error al anular la solicitud. Por favor intente nuevamente.");
             }
         }
 
@@ -338,7 +338,7 @@ namespace MatrixNext.Data.Modules.TH.Ausencias.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error causando vacaciones");
-                return (false, ex.Message);
+                return (false, "Error al ejecutar la causación. Por favor intente nuevamente.");
             }
         }
 
@@ -472,7 +472,7 @@ namespace MatrixNext.Data.Modules.TH.Ausencias.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obteniendo ausencias del equipo");
-                return (false, ex.Message, new List<AusenciaEquipoViewModel>());
+                return (false, "Error al obtener ausencias del equipo. Por favor intente nuevamente.", new List<AusenciaEquipoViewModel>());
             }
         }
 
@@ -528,7 +528,7 @@ namespace MatrixNext.Data.Modules.TH.Ausencias.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error agregando subordinado");
-                return (false, ex.Message);
+                return (false, "Error al agregar subordinado. Por favor intente nuevamente.");
             }
         }
 
@@ -542,7 +542,7 @@ namespace MatrixNext.Data.Modules.TH.Ausencias.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error removiendo subordinado");
-                return (false, ex.Message);
+                return (false, "Error al remover subordinado. Por favor intente nuevamente.");
             }
         }
 

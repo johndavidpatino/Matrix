@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using MatrixNext.Data.Adapters.CU;
 using MatrixNext.Data.Modules.CU.Models;
@@ -58,15 +58,16 @@ namespace MatrixNext.Data.Services.CU
         {
             try
             {
-                // TODO-P0-03: Delegar la clonación al BriefService
+                // TODO-P0-03: Delegar la clonaciÃ³n al BriefService
                 var (success, message, nuevoId) = _briefService.ClonarBrief(idBrief, idUsuario, idUnidad, nuevoNombre);
                 return (success, message);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error clonando brief {IdBrief}", idBrief);
-                return (false, ex.Message);
+                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
             }
         }
     }
 }
+

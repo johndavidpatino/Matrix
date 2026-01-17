@@ -51,7 +51,7 @@ namespace MatrixNext.Web.Services.PY
                 {
                     IsSuccess = false,
                     Data = new List<dynamic>(),
-                    Message = $"Error al obtener proyectos: {ex.Message}"
+                    Message = "Error al obtener proyectos. Por favor intente nuevamente."
                 };
             }
         }
@@ -121,7 +121,7 @@ namespace MatrixNext.Web.Services.PY
                 {
                     IsSuccess = false,
                     Data = new List<dynamic>(),
-                    Message = $"Error al obtener proyectos: {ex.Message}"
+                    Message = "Error al obtener proyectos para reasignación. Por favor intente nuevamente."
                 };
             }
         }
@@ -154,7 +154,7 @@ namespace MatrixNext.Web.Services.PY
                 {
                     IsSuccess = false,
                     Data = new List<dynamic>(),
-                    Message = $"Error al obtener gerentes: {ex.Message}"
+                    Message = "Error al obtener gerentes. Por favor intente nuevamente."
                 };
             }
         }
@@ -215,7 +215,7 @@ namespace MatrixNext.Web.Services.PY
                 {
                     IsSuccess = false,
                     Data = false,
-                    Message = $"Error al asignar gerente: {ex.Message}"
+                    Message = "Error al asignar gerente. Por favor intente nuevamente."
                 };
             }
         }
@@ -281,7 +281,7 @@ namespace MatrixNext.Web.Services.PY
                 {
                     IsSuccess = false,
                     Data = false,
-                    Message = $"Error al reasignar gerente: {ex.Message}"
+                    Message = "Error al reasignar gerente. Por favor intente nuevamente."
                 };
             }
         }
@@ -311,7 +311,7 @@ namespace MatrixNext.Web.Services.PY
                 {
                     IsSuccess = false,
                     Data = new List<AsignacionProyecto>(),
-                    Message = $"Error al obtener historial: {ex.Message}"
+                    Message = "Error al obtener historial. Por favor intente nuevamente."
                 };
             }
         }
@@ -340,7 +340,7 @@ namespace MatrixNext.Web.Services.PY
                 {
                     IsSuccess = false,
                     Data = false,
-                    Message = $"Error al validar permisos: {ex.Message}"
+                    Message = "Error al validar permisos. Por favor intente nuevamente."
                 };
             }
         }

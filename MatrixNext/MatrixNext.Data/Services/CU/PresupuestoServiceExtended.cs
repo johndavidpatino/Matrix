@@ -124,7 +124,7 @@ namespace MatrixNext.Data.Services.CU
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error guardando presupuesto");
-                return (false, $"Error: {ex.Message}");
+                return (false, "Error al guardar el presupuesto. Por favor intente nuevamente.");
             }
         }
 

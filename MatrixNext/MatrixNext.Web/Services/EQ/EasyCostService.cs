@@ -188,7 +188,7 @@ namespace MatrixNext.Web.Services.EQ
                 return new ApiResponse<EasyCostResultDto>
                 {
                     Success = false,
-                    Message = $"Error al calcular costos: {ex.Message}"
+                    Message = "Error al calcular costos. Por favor intente nuevamente."
                 };
             }
         }
@@ -222,7 +222,7 @@ namespace MatrixNext.Web.Services.EQ
                 return new ApiResponse<EasyCostResultDto>
                 {
                     Success = false,
-                    Message = $"Error al obtener cálculo: {ex.Message}"
+                    Message = "Error al obtener cálculo. Por favor intente nuevamente."
                 };
             }
         }
@@ -283,7 +283,7 @@ namespace MatrixNext.Web.Services.EQ
                 return new ApiResponse<bool>
                 {
                     Success = false,
-                    Message = $"Error al validar cotización: {ex.Message}"
+                    Message = "Error al validar cotización. Por favor intente nuevamente."
                 };
             }
         }

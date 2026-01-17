@@ -91,7 +91,7 @@ public class OpProgramacionService : IOpProgramacionService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error obteniendo programaciones trabajo {TrabajoId}", trabajoId);
-            return (false, new List<ProgramacionCampoVm>(), ex.Message);
+            return (false, new List<ProgramacionCampoVm>(), "Error al obtener programaciones. Por favor intente nuevamente.");
         }
     }
 
@@ -109,7 +109,7 @@ public class OpProgramacionService : IOpProgramacionService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error guardando programación");
-            return (false, 0, ex.Message);
+            return (false, 0, "Error al guardar programación. Por favor intente nuevamente.");
         }
     }
 
@@ -126,7 +126,7 @@ public class OpProgramacionService : IOpProgramacionService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error cambiando estado programación {ProgramacionId}", programacionId);
-            return (false, ex.Message);
+            return (false, "Error al cambiar estado de programación. Por favor intente nuevamente.");
         }
     }
 
@@ -165,7 +165,7 @@ public class OpProgramacionService : IOpProgramacionService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error exportando programaciones trabajo {TrabajoId}", trabajoId);
-            return (false, Array.Empty<byte>(), ex.Message);
+            return (false, Array.Empty<byte>(), "Error al exportar programaciones a Excel. Por favor intente nuevamente.");
         }
     }
 
@@ -203,7 +203,7 @@ public class OpProgramacionService : IOpProgramacionService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error obteniendo entrevistados disponibles trabajo {TrabajoId}", trabajoId);
-            return (false, new List<EntrevistadoDisponibleVm>(), ex.Message);
+            return (false, new List<EntrevistadoDisponibleVm>(), "Error al obtener entrevistados disponibles. Por favor intente nuevamente.");
         }
     }
 
@@ -324,7 +324,7 @@ public class OpProgramacionService : IOpProgramacionService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error validando participantes trabajo {TrabajoId}", trabajoId);
-            return (false, new List<ParticipanteValidacionVm>(), ex.Message);
+            return (false, new List<ParticipanteValidacionVm>(), "Error al validar participantes. Por favor intente nuevamente.");
         }
     }
 }
