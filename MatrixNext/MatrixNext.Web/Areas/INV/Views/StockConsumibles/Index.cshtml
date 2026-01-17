@@ -78,7 +78,7 @@
 
                     <!-- Grid -->
                     <div id="gridContainer" data-grid-url="@Url.Action("Index")">
-                        @Html.Partial("_StockGrid", Model)
+                        @await Html.PartialAsync("_StockGrid", Model)
                     </div>
                 </div>
             </div>

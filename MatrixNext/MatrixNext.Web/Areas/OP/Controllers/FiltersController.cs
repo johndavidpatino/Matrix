@@ -1,4 +1,5 @@
 using MatrixNext.Web.Services.OP.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace MatrixNext.Web.Areas.OP.Controllers
     [Area("OP")]
     [Route("api/OP/[controller]")]
     [ApiController]
+    [Authorize]
     public class FiltersController : ControllerBase
     {
         private readonly IOpAdvancedFiltersService _filtersService;
@@ -50,7 +52,7 @@ namespace MatrixNext.Web.Areas.OP.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error en autocomplete de trabajos");
-                return BadRequest(new { success = false, message = ex.Message });
+                return BadRequest(new { success = false, message = "Error en autocomplete de trabajos. Por favor intente nuevamente." });
             }
         }
 
@@ -76,7 +78,7 @@ namespace MatrixNext.Web.Areas.OP.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error en autocomplete de moderadores");
-                return BadRequest(new { success = false, message = ex.Message });
+                return BadRequest(new { success = false, message = "Error en autocomplete de moderadores. Por favor intente nuevamente." });
             }
         }
 
@@ -102,7 +104,7 @@ namespace MatrixNext.Web.Areas.OP.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error en autocomplete de entrevistadores");
-                return BadRequest(new { success = false, message = ex.Message });
+                return BadRequest(new { success = false, message = "Error en autocomplete de entrevistadores. Por favor intente nuevamente." });
             }
         }
 
@@ -131,7 +133,7 @@ namespace MatrixNext.Web.Areas.OP.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al filtrar sesiones por rango de fechas");
-                return BadRequest(new { success = false, message = ex.Message });
+                return BadRequest(new { success = false, message = "Error al filtrar sesiones por rango de fechas. Por favor intente nuevamente." });
             }
         }
 
@@ -158,7 +160,7 @@ namespace MatrixNext.Web.Areas.OP.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al filtrar entrevistas por rango de fechas");
-                return BadRequest(new { success = false, message = ex.Message });
+                return BadRequest(new { success = false, message = "Error al filtrar entrevistas por rango de fechas. Por favor intente nuevamente." });
             }
         }
 
@@ -179,7 +181,7 @@ namespace MatrixNext.Web.Areas.OP.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener estados disponibles");
-                return BadRequest(new { success = false, message = ex.Message });
+                return BadRequest(new { success = false, message = "Error al obtener estados disponibles. Por favor intente nuevamente." });
             }
         }
 
@@ -207,7 +209,7 @@ namespace MatrixNext.Web.Areas.OP.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al filtrar sesiones por múltiples estados");
-                return BadRequest(new { success = false, message = ex.Message });
+                return BadRequest(new { success = false, message = "Error al filtrar sesiones por múltiples estados. Por favor intente nuevamente." });
             }
         }
 
@@ -233,7 +235,7 @@ namespace MatrixNext.Web.Areas.OP.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al filtrar entrevistas por múltiples estados");
-                return BadRequest(new { success = false, message = ex.Message });
+                return BadRequest(new { success = false, message = "Error al filtrar entrevistas por múltiples estados. Por favor intente nuevamente." });
             }
         }
     }

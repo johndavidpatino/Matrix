@@ -53,7 +53,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error en ObtenerPresupuestos");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al obtener presupuestos. Por favor intente nuevamente." });
             }
         }
 
@@ -71,7 +71,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error obteniendo detalles presupuesto {id}");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al obtener detalles del presupuesto. Por favor intente nuevamente." });
             }
         }
 
@@ -101,7 +101,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error guardando presupuesto");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al guardar presupuesto. Por favor intente nuevamente." });
             }
         }
 
@@ -119,7 +119,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error eliminando presupuesto {id}");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al eliminar presupuesto. Por favor intente nuevamente." });
             }
         }
 
@@ -136,7 +136,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error en Verificacion");
-                return BadRequest(ex.Message);
+                return BadRequest("Error al verificar presupuestos. Por favor intente nuevamente.");
             }
         }
 
@@ -154,7 +154,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error en ObtenerVerificacion");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al obtener verificación. Por favor intente nuevamente." });
             }
         }
 
@@ -171,7 +171,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error en Nomina");
-                return BadRequest(ex.Message);
+                return BadRequest("Error al obtener nómina. Por favor intente nuevamente.");
             }
         }
 
@@ -197,7 +197,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error guardando distribución");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al guardar distribución. Por favor intente nuevamente." });
             }
         }
 
@@ -215,7 +215,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error en Asignacion");
-                return BadRequest(ex.Message);
+                return BadRequest("Error al obtener asignación. Por favor intente nuevamente.");
             }
         }
 
@@ -234,7 +234,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obteniendo actividades");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al obtener actividades. Por favor intente nuevamente." });
             }
         }
 
@@ -260,7 +260,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error guardando asignación");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al guardar asignación. Por favor intente nuevamente." });
             }
         }
 
@@ -287,7 +287,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error exportando presupuestos");
-                return BadRequest(ex.Message);
+                return BadRequest("Error al exportar presupuestos. Por favor intente nuevamente.");
             }
         }
     }

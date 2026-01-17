@@ -35,7 +35,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obteniendo jornadas");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al obtener las jornadas. Por favor intente nuevamente." });
             }
         }
 
@@ -52,7 +52,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error obteniendo ausencias empleado {idEmpleado}");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al obtener las ausencias. Por favor intente nuevamente." });
             }
         }
 
@@ -67,7 +67,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error calculando jornada");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al calcular la jornada. Por favor intente nuevamente." });
             }
         }
 
@@ -82,7 +82,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error obteniendo resumen periodo {periodo}");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al obtener el resumen del período. Por favor intente nuevamente." });
             }
         }
     }

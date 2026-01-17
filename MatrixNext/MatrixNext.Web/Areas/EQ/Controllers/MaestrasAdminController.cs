@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using System;
@@ -10,6 +11,7 @@ namespace MatrixNext.Web.Areas.EQ.Controllers
 {
     [Area("EQ")]
     [Route("EQ/[controller]")]
+    [Authorize]
     public class MaestrasAdminController : Controller
     {
         private readonly IConfiguration _configuration;
@@ -66,7 +68,7 @@ namespace MatrixNext.Web.Areas.EQ.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Error al obtener maestros: {ex.Message}");
-                return BadRequest($"Error: {ex.Message}");
+                return BadRequest("Error al obtener maestros. Por favor intente nuevamente.");
             }
         }
 
@@ -111,7 +113,7 @@ namespace MatrixNext.Web.Areas.EQ.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Error al desactivar: {ex.Message}");
-                return BadRequest($"Error: {ex.Message}");
+                return BadRequest("Error al desactivar registro. Por favor intente nuevamente.");
             }
         }
 
@@ -154,7 +156,7 @@ namespace MatrixNext.Web.Areas.EQ.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Error al obtener versiones: {ex.Message}");
-                return BadRequest($"Error: {ex.Message}");
+                return BadRequest("Error al obtener versiones. Por favor intente nuevamente.");
             }
         }
 
@@ -180,7 +182,7 @@ namespace MatrixNext.Web.Areas.EQ.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Error: {ex.Message}");
-                return BadRequest($"Error: {ex.Message}");
+                return BadRequest("Error al obtener registros activos. Por favor intente nuevamente.");
             }
         }
 

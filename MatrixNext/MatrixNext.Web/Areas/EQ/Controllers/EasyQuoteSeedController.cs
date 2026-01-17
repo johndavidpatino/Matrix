@@ -55,7 +55,7 @@ public class EasyQuoteSeedController : Controller
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error ejecutando seed de maestras EasyQuote");
-            TempData["ErrorMessage"] = $"❌ Error inesperado: {ex.Message}";
+            TempData["ErrorMessage"] = "❌ Error inesperado al ejecutar seed. Por favor intente nuevamente.";
         }
 
         return RedirectToAction(nameof(Index));
@@ -92,7 +92,7 @@ public class EasyQuoteSeedController : Controller
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error ejecutando force seed de maestras EasyQuote");
-            TempData["ErrorMessage"] = $"❌ Error inesperado: {ex.Message}";
+            TempData["ErrorMessage"] = "❌ Error inesperado al ejecutar force seed. Por favor intente nuevamente.";
         }
 
         return RedirectToAction(nameof(Index));
@@ -115,7 +115,7 @@ public class EasyQuoteSeedController : Controller
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error limpiando maestras EasyQuote");
-            TempData["ErrorMessage"] = $"❌ Error: {ex.Message}";
+            TempData["ErrorMessage"] = "❌ Error al limpiar maestras. Por favor intente nuevamente.";
         }
 
         return RedirectToAction(nameof(Index));

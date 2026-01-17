@@ -37,7 +37,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obteniendo varianzas presupuestarias");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al obtener las varianzas presupuestarias. Por favor intente nuevamente." });
             }
         }
 
@@ -57,7 +57,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error exportando varianzas presupuestarias");
-                return BadRequest(ex.Message);
+                return BadRequest("Error al exportar las varianzas presupuestarias. Por favor intente nuevamente.");
             }
         }
     }

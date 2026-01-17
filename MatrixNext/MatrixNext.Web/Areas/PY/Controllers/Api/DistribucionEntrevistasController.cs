@@ -80,7 +80,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers.Api
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error guardando distribución");
-                return StatusCode(500, new { success = false, message = ex.Message });
+                return StatusCode(500, new { success = false, message = "Error al procesar la solicitud. Por favor intente nuevamente." });
             }
         }
 
@@ -99,7 +99,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers.Api
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error actualizando estado distribución {Id}", id);
-                return StatusCode(500, new { success = false, message = ex.Message });
+                return StatusCode(500, new { success = false, message = "Error al procesar la solicitud. Por favor intente nuevamente." });
             }
         }
 
@@ -140,7 +140,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers.Api
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error guardando log distribución {Id}", id);
-                return StatusCode(500, new { success = false, message = ex.Message });
+                return StatusCode(500, new { success = false, message = "Error al procesar la solicitud. Por favor intente nuevamente." });
             }
         }
 
@@ -201,7 +201,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers.Api
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error validando distribución trabajo {TrabajoId}", trabajoId);
-                return StatusCode(500, new { success = false, message = ex.Message });
+                return StatusCode(500, new { success = false, message = "Error al procesar la solicitud. Por favor intente nuevamente." });
             }
         }
     }

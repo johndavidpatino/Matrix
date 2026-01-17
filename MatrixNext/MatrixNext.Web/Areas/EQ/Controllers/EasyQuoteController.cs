@@ -62,7 +62,7 @@ namespace MatrixNext.Web.Areas.EQ.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, error = ex.Message });
+                return Json(new { success = false, error = "Error al guardar cotización. Por favor intente nuevamente." });
             }
         }
 
@@ -79,7 +79,7 @@ namespace MatrixNext.Web.Areas.EQ.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, error = ex.Message });
+                return Json(new { success = false, error = "Error al calcular cotización. Por favor intente nuevamente." });
             }
         }
     }

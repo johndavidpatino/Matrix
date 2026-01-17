@@ -36,7 +36,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obteniendo conteos");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al obtener los conteos. Por favor intente nuevamente." });
             }
         }
 
@@ -51,7 +51,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error obteniendo actividades para trabajo {idTrabajo}");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al obtener las actividades. Por favor intente nuevamente." });
             }
         }
 
@@ -66,7 +66,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error guardando conteo");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al guardar el conteo. Por favor intente nuevamente." });
             }
         }
 
@@ -81,7 +81,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error eliminando conteo {id}");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al eliminar el conteo. Por favor intente nuevamente." });
             }
         }
     }

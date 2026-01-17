@@ -47,7 +47,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obteniendo reporte de conteos");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al obtener el reporte de conteos. Por favor intente nuevamente." });
             }
         }
 
@@ -65,7 +65,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obteniendo totales");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al obtener los totales. Por favor intente nuevamente." });
             }
         }
 
@@ -90,7 +90,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error exportando reporte de conteos");
-                return BadRequest(ex.Message);
+                return BadRequest("Error al exportar el reporte. Por favor intente nuevamente.");
             }
         }
     }

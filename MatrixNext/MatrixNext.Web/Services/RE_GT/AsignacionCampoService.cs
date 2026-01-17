@@ -54,7 +54,7 @@ namespace MatrixNext.Web.Services.RE_GT
         /// <summary>
         /// Obtiene información del trabajo por ID
         /// </summary>
-        public async Task<TrabajoAsignacionDto> ObtenerTrabajoAsync(int idTrabajo)
+        public async Task<TrabajoAsignacionDto?> ObtenerTrabajoAsync(int idTrabajo)
         {
             try
             {

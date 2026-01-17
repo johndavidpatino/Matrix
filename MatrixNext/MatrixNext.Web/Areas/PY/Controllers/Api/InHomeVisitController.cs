@@ -75,7 +75,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers.Api
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error guardando InHome");
-                return StatusCode(500, new { success = false, message = ex.Message });
+                return StatusCode(500, new { success = false, message = "Error al procesar la solicitud. Por favor intente nuevamente." });
             }
         }
 
@@ -98,7 +98,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers.Api
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error actualizando InHome {Id}", id);
-                return StatusCode(500, new { success = false, message = ex.Message });
+                return StatusCode(500, new { success = false, message = "Error al procesar la solicitud. Por favor intente nuevamente." });
             }
         }
 
@@ -118,7 +118,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers.Api
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error guardando log InHome {IdInHome}", idInHome);
-                return StatusCode(500, new { success = false, message = ex.Message });
+                return StatusCode(500, new { success = false, message = "Error al procesar la solicitud. Por favor intente nuevamente." });
             }
         }
     }

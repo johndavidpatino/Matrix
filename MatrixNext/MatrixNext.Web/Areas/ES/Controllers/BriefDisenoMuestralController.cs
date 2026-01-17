@@ -43,7 +43,7 @@ namespace MatrixNext.Web.Areas.ES.Controllers
             }
             catch (Exception ex)
             {
-                TempData["Error"] = "Error al cargar los briefs: " + ex.Message;
+                TempData["Error"] = "Error al cargar los briefs. Por favor intente nuevamente.";
                 return View();
             }
         }
@@ -67,7 +67,8 @@ namespace MatrixNext.Web.Areas.ES.Controllers
 
             try
             {
-                var usuarioId = long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var usuarioId = !string.IsNullOrEmpty(userIdClaim) ? long.Parse(userIdClaim) : 0;
                 var (success, message, id) = await _service.CrearAsync(dto, usuarioId);
 
                 if (success)
@@ -80,7 +81,7 @@ namespace MatrixNext.Web.Areas.ES.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = "Error al crear el brief: " + ex.Message });
+                return Json(new { success = false, message = "Error al crear el brief. Por favor intente nuevamente." });
             }
         }
 
@@ -113,7 +114,7 @@ namespace MatrixNext.Web.Areas.ES.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = "Error al cargar el brief: " + ex.Message });
+                return Json(new { success = false, message = "Error al cargar el brief. Por favor intente nuevamente." });
             }
         }
 
@@ -143,7 +144,7 @@ namespace MatrixNext.Web.Areas.ES.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = "Error al actualizar el brief: " + ex.Message });
+                return Json(new { success = false, message = "Error al actualizar el brief. Por favor intente nuevamente." });
             }
         }
 
@@ -162,7 +163,7 @@ namespace MatrixNext.Web.Areas.ES.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = "Error al cargar los detalles: " + ex.Message });
+                return Json(new { success = false, message = "Error al cargar los detalles. Por favor intente nuevamente." });
             }
         }
 
@@ -178,7 +179,7 @@ namespace MatrixNext.Web.Areas.ES.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = "Error al eliminar el brief: " + ex.Message });
+                return Json(new { success = false, message = "Error al eliminar el brief. Por favor intente nuevamente." });
             }
         }
     }

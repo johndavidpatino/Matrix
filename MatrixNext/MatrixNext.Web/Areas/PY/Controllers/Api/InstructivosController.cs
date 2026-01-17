@@ -59,7 +59,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers.Api
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error guardando especificación cuanti");
-                return StatusCode(500, new { success = false, message = ex.Message });
+                return StatusCode(500, new { success = false, message = "Error al guardar especificación cuantitativa. Por favor intente nuevamente." });
             }
         }
 
@@ -103,7 +103,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers.Api
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error guardando especificación cuali");
-                return StatusCode(500, new { success = false, message = ex.Message });
+                return StatusCode(500, new { success = false, message = "Error al guardar especificación cualitativa. Por favor intente nuevamente." });
             }
         }
 
@@ -146,7 +146,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers.Api
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error guardando ayuda cuali");
-                return StatusCode(500, new { success = false, message = ex.Message });
+                return StatusCode(500, new { success = false, message = "Error al guardar ayuda cualitativa. Por favor intente nuevamente." });
             }
         }
 
@@ -189,7 +189,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers.Api
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error guardando tipo reclutamiento");
-                return StatusCode(500, new { success = false, message = ex.Message });
+                return StatusCode(500, new { success = false, message = "Error al guardar tipo de reclutamiento. Por favor intente nuevamente." });
             }
         }
 

@@ -179,7 +179,7 @@ namespace MatrixNext.Web.Areas.TH.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error creating solicitud ausencia");
-                ModelState.AddModelError("", ex.Message);
+                ModelState.AddModelError("", "Error al crear la solicitud. Por favor intente nuevamente.");
                 return View(model);
             }
         }
@@ -234,7 +234,7 @@ namespace MatrixNext.Web.Areas.TH.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error fetching solicitudes");
-                return Json(new { success = false, message = ex.Message, data = new List<object>() });
+                return Json(new { success = false, message = "Error al obtener las solicitudes. Por favor intente nuevamente.", data = new List<object>() });
             }
         }
 
@@ -255,7 +255,7 @@ namespace MatrixNext.Web.Areas.TH.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error fetching solicitudes pendientes");
-                return Json(new { success = false, message = ex.Message, data = new List<object>() });
+                return Json(new { success = false, message = "Error al obtener las solicitudes pendientes. Por favor intente nuevamente.", data = new List<object>() });
             }
         }
 
@@ -276,7 +276,7 @@ namespace MatrixNext.Web.Areas.TH.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error approving solicitud");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al aprobar la solicitud. Por favor intente nuevamente." });
             }
         }
 
@@ -297,7 +297,7 @@ namespace MatrixNext.Web.Areas.TH.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error rejecting solicitud");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al rechazar la solicitud. Por favor intente nuevamente." });
             }
         }
 
@@ -318,7 +318,7 @@ namespace MatrixNext.Web.Areas.TH.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error fetching beneficios pendientes");
-                return Json(new { success = false, message = ex.Message, data = new List<object>() });
+                return Json(new { success = false, message = "Error al obtener los beneficios pendientes. Por favor intente nuevamente.", data = new List<object>() });
             }
         }
 
@@ -352,7 +352,7 @@ namespace MatrixNext.Web.Areas.TH.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error creating incapacidad");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al crear la incapacidad. Por favor intente nuevamente." });
             }
         }
 
@@ -373,7 +373,7 @@ namespace MatrixNext.Web.Areas.TH.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error fetching incapacidad");
-                return Json(new { success = false, message = ex.Message, data = new object() });
+                return Json(new { success = false, message = "Error al obtener la incapacidad. Por favor intente nuevamente.", data = new object() });
             }
         }
 
@@ -394,7 +394,7 @@ namespace MatrixNext.Web.Areas.TH.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error fetching tipos ausencia");
-                return Json(new { success = false, message = ex.Message, data = new List<object>() });
+                return Json(new { success = false, message = "Error al obtener los tipos de ausencia. Por favor intente nuevamente.", data = new List<object>() });
             }
         }
 

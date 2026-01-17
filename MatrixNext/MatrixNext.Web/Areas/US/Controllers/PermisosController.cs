@@ -1,4 +1,5 @@
 using System;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MatrixNext.Data.Services.Usuarios;
 
@@ -6,6 +7,7 @@ namespace MatrixNext.Web.Areas.US.Controllers
 {
     [Area("US")]
     [Route("Usuarios/Permisos")]
+    [Authorize]
     public class PermisosController : Controller
     {
         private readonly PermisosService _permisosService;

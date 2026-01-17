@@ -110,7 +110,7 @@ namespace MatrixNext.Web.Areas.RP.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"[ReportesController] Error en GenerarReporte {id}");
-                return StatusCode(500, ApiResponse<string>.Error(ex.Message));
+                return StatusCode(500, ApiResponse<string>.Error("Error al generar el reporte. Por favor intente nuevamente."));
             }
         }
 
@@ -146,7 +146,7 @@ namespace MatrixNext.Web.Areas.RP.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"[ReportesController] Error en GetReporte {id}");
-                return StatusCode(500, ApiResponse<string>.Error(ex.Message));
+                return StatusCode(500, ApiResponse<string>.Error("Error al obtener el reporte. Por favor intente nuevamente."));
             }
         }
 
@@ -198,7 +198,7 @@ namespace MatrixNext.Web.Areas.RP.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"[ReportesController] Error en ExportExcel {id}");
-                return StatusCode(500, ApiResponse<string>.Error(ex.Message));
+                return StatusCode(500, ApiResponse<string>.Error("Error al exportar a Excel. Por favor intente nuevamente."));
             }
         }
 
@@ -250,7 +250,7 @@ namespace MatrixNext.Web.Areas.RP.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"[ReportesController] Error en ExportPdf {id}");
-                return StatusCode(500, ApiResponse<string>.Error(ex.Message));
+                return StatusCode(500, ApiResponse<string>.Error("Error al exportar a PDF. Por favor intente nuevamente."));
             }
         }
 
@@ -290,7 +290,7 @@ namespace MatrixNext.Web.Areas.RP.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "[ReportesController] Error en GetIndicadoresCalidad");
-                return StatusCode(500, ApiResponse<string>.Error(ex.Message));
+                return StatusCode(500, ApiResponse<string>.Error("Error al obtener indicadores de calidad. Por favor intente nuevamente."));
             }
         }
 
@@ -326,7 +326,7 @@ namespace MatrixNext.Web.Areas.RP.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "[ReportesController] Error en GetIndicadoresCumplimiento");
-                return StatusCode(500, ApiResponse<string>.Error(ex.Message));
+                return StatusCode(500, ApiResponse<string>.Error("Error al obtener indicadores de cumplimiento. Por favor intente nuevamente."));
             }
         }
     }

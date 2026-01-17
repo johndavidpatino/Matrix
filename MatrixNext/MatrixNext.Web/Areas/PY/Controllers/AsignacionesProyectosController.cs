@@ -94,7 +94,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers
                 {
                     IsSuccess = false,
                     Data = new List<dynamic>(),
-                    Message = $"Error: {ex.Message}"
+                    Message = "Error al procesar la solicitud. Por favor intente nuevamente."
                 });
             }
         }
@@ -153,7 +153,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers
                 {
                     IsSuccess = false,
                     Data = new List<dynamic>(),
-                    Message = $"Error: {ex.Message}"
+                    Message = "Error al procesar la solicitud. Por favor intente nuevamente."
                 });
             }
         }
@@ -203,7 +203,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers
                 {
                     IsSuccess = false,
                     Data = new List<dynamic>(),
-                    Message = $"Error: {ex.Message}"
+                    Message = "Error al procesar la solicitud. Por favor intente nuevamente."
                 });
             }
         }
@@ -288,7 +288,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers
                 {
                     IsSuccess = false,
                     Data = false,
-                    Message = $"Error: {ex.Message}"
+                    Message = "Error al procesar la solicitud. Por favor intente nuevamente."
                 });
             }
         }
@@ -374,7 +374,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers
                 {
                     IsSuccess = false,
                     Data = false,
-                    Message = $"Error: {ex.Message}"
+                    Message = "Error al procesar la solicitud. Por favor intente nuevamente."
                 });
             }
         }
@@ -430,7 +430,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers
                 {
                     IsSuccess = false,
                     Data = new List<Models.PY.AsignacionProyecto>(),
-                    Message = $"Error: {ex.Message}"
+                    Message = "Error al procesar la solicitud. Por favor intente nuevamente."
                 });
             }
         }
@@ -468,7 +468,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers
                 {
                     IsSuccess = false,
                     Data = false,
-                    Message = $"Error: {ex.Message}"
+                    Message = "Error al procesar la solicitud. Por favor intente nuevamente."
                 });
             }
         }

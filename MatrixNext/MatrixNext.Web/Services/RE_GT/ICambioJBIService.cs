@@ -17,7 +17,7 @@ namespace MatrixNext.Web.Services.RE_GT
         /// <summary>
         /// Obtiene información de un trabajo por ID para validación
         /// </summary>
-        Task<TrabajoInfoDto> ObtenerTrabajoAsync(int idTrabajo);
+        Task<TrabajoInfoDto?> ObtenerTrabajoAsync(int idTrabajo);
 
         /// <summary>
         /// Valida si la fase está creada en presupuestos

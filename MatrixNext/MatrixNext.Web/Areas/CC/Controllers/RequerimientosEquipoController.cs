@@ -35,7 +35,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obteniendo requerimientos");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al obtener los requerimientos. Por favor intente nuevamente." });
             }
         }
 
@@ -50,7 +50,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error generando muestra para trabajo {idTrabajo}");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al generar la muestra. Por favor intente nuevamente." });
             }
         }
 
@@ -65,7 +65,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error guardando requerimiento");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al guardar el requerimiento. Por favor intente nuevamente." });
             }
         }
 
@@ -80,7 +80,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error eliminando requerimiento {id}");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al eliminar el requerimiento. Por favor intente nuevamente." });
             }
         }
     }

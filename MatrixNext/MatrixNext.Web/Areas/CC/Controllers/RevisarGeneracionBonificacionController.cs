@@ -40,7 +40,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener bonificaciones para revisión");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al obtener las bonificaciones para revisión. Por favor intente nuevamente." });
             }
         }
 
@@ -59,7 +59,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al exportar bonificaciones");
-                return BadRequest(ex.Message);
+                return BadRequest("Error al exportar las bonificaciones. Por favor intente nuevamente.");
             }
         }
     }

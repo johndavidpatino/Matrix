@@ -60,7 +60,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
                 return Json(new
                 {
                     success = false,
-                    message = ex.Message
+                    message = "Error al obtener los registros de producción. Por favor intente nuevamente."
                 });
             }
         }
@@ -84,7 +84,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al exportar registros de producción");
-                return BadRequest(ex.Message);
+                return BadRequest("Error al exportar los registros de producción. Por favor intente nuevamente.");
             }
         }
     }

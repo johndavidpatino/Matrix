@@ -56,7 +56,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers.Api
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error guardando variable de control");
-                return StatusCode(500, new { success = false, message = ex.Message });
+                return StatusCode(500, new { success = false, message = "Error al guardar variable de control. Por favor intente nuevamente." });
             }
         }
 
@@ -75,7 +75,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers.Api
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error validando variables trabajo {TrabajoId}", trabajoId);
-                return StatusCode(500, new { success = false, message = ex.Message });
+                return StatusCode(500, new { success = false, message = "Error al validar variables. Por favor intente nuevamente." });
             }
         }
     }

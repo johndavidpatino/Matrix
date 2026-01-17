@@ -93,18 +93,26 @@ namespace MatrixNext.Web.Services.Dashboard
 
                 await Task.WhenAll(tasksTask, projectsTask, quotesTask, absencesTask, docsTask, metricsTask);
 
+                // Obtener resultados de las tareas ya completadas (no bloquea, son awaited)
+                var pendingTasks = await tasksTask;
+                var activeProjects = await projectsTask;
+                var recentQuotes = await quotesTask;
+                var upcomingAbsences = await absencesTask;
+                var documentStats = await docsTask;
+                var productionMetrics = await metricsTask;
+
                 var dashboard = new DashboardViewModel
                 {
                     LoadedAt = DateTime.UtcNow,
-                    PendingTasks = tasksTask.Result,
-                    ActiveProjects = projectsTask.Result,
-                    RecentQuotes = quotesTask.Result,
-                    UpcomingAbsences = absencesTask.Result,
-                    DocumentStats = docsTask.Result,
-                    ProductionMetrics = metricsTask.Result,
-                    TaskCount = tasksTask.Result.Count,
-                    ProjectCount = projectsTask.Result.Count,
-                    QuoteCount = quotesTask.Result.Count
+                    PendingTasks = pendingTasks,
+                    ActiveProjects = activeProjects,
+                    RecentQuotes = recentQuotes,
+                    UpcomingAbsences = upcomingAbsences,
+                    DocumentStats = documentStats,
+                    ProductionMetrics = productionMetrics,
+                    TaskCount = pendingTasks.Count,
+                    ProjectCount = activeProjects.Count,
+                    QuoteCount = recentQuotes.Count
                 };
 
                 // Cachear resultado

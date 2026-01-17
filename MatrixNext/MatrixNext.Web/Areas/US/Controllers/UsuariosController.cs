@@ -46,7 +46,7 @@ namespace MatrixNext.Web.Areas.US.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error assigning role");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al asignar el rol. Por favor intente nuevamente." });
             }
         }
 
@@ -61,7 +61,7 @@ namespace MatrixNext.Web.Areas.US.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error removing role");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al remover el rol. Por favor intente nuevamente." });
             }
         }
 
@@ -76,7 +76,7 @@ namespace MatrixNext.Web.Areas.US.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error assigning unidad");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al asignar la unidad. Por favor intente nuevamente." });
             }
         }
 
@@ -91,7 +91,7 @@ namespace MatrixNext.Web.Areas.US.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error removing unidad");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al remover la unidad. Por favor intente nuevamente." });
             }
         }
 
@@ -106,7 +106,7 @@ namespace MatrixNext.Web.Areas.US.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error assigning permiso");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al asignar el permiso. Por favor intente nuevamente." });
             }
         }
 
@@ -121,7 +121,7 @@ namespace MatrixNext.Web.Areas.US.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error removing permiso");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al remover el permiso. Por favor intente nuevamente." });
             }
         }
 
@@ -140,7 +140,7 @@ namespace MatrixNext.Web.Areas.US.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error fetching roles asignados");
-                return Json(new { success = false, message = ex.Message, data = new List<object>() });
+                return Json(new { success = false, message = "Error al obtener roles asignados. Por favor intente nuevamente.", data = new List<object>() });
             }
         }
 
@@ -155,7 +155,7 @@ namespace MatrixNext.Web.Areas.US.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error fetching roles disponibles");
-                return Json(new { success = false, message = ex.Message, data = new List<object>() });
+                return Json(new { success = false, message = "Error al obtener roles disponibles. Por favor intente nuevamente.", data = new List<object>() });
             }
         }
 
@@ -170,7 +170,7 @@ namespace MatrixNext.Web.Areas.US.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error fetching unidades asignadas");
-                return Json(new { success = false, message = ex.Message, data = new List<object>() });
+                return Json(new { success = false, message = "Error al obtener unidades asignadas. Por favor intente nuevamente.", data = new List<object>() });
             }
         }
 
@@ -185,7 +185,7 @@ namespace MatrixNext.Web.Areas.US.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error fetching unidades disponibles");
-                return Json(new { success = false, message = ex.Message, data = new List<object>() });
+                return Json(new { success = false, message = "Error al obtener unidades disponibles. Por favor intente nuevamente.", data = new List<object>() });
             }
         }
 
@@ -200,7 +200,7 @@ namespace MatrixNext.Web.Areas.US.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error fetching permisos asignados");
-                return Json(new { success = false, message = ex.Message, data = new List<object>() });
+                return Json(new { success = false, message = "Error al obtener permisos asignados. Por favor intente nuevamente.", data = new List<object>() });
             }
         }
 
@@ -215,7 +215,7 @@ namespace MatrixNext.Web.Areas.US.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error fetching permisos disponibles");
-                return Json(new { success = false, message = ex.Message, data = new List<object>() });
+                return Json(new { success = false, message = "Error al obtener permisos disponibles. Por favor intente nuevamente.", data = new List<object>() });
             }
         }
 
@@ -274,7 +274,7 @@ namespace MatrixNext.Web.Areas.US.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener listado de usuarios");
-                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                TempData["ErrorMessage"] = "Error al obtener el listado de usuarios. Por favor intente nuevamente.";
                 return View(new List<UsuarioListViewModel>());
             }
         }
@@ -290,7 +290,7 @@ namespace MatrixNext.Web.Areas.US.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error searching users");
-                return Json(new { success = false, message = ex.Message, data = new List<object>() });
+                return Json(new { success = false, message = "Error al buscar usuarios. Por favor intente nuevamente.", data = new List<object>() });
             }
         }
 
@@ -309,7 +309,7 @@ namespace MatrixNext.Web.Areas.US.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al cargar formulario de creación");
-                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                TempData["ErrorMessage"] = "Error al cargar el formulario. Por favor intente nuevamente.";
                 return RedirectToAction("Index");
             }
         }
@@ -344,7 +344,7 @@ namespace MatrixNext.Web.Areas.US.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error al crear usuario: {viewModel?.NombreUsuario}");
-                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                TempData["ErrorMessage"] = "Error al crear el usuario. Por favor intente nuevamente.";
                 return View(viewModel);
             }
         }
@@ -371,7 +371,7 @@ namespace MatrixNext.Web.Areas.US.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error al cargar usuario para edición: {id}");
-                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                TempData["ErrorMessage"] = "Error al cargar el usuario. Por favor intente nuevamente.";
                 return RedirectToAction("Index");
             }
         }
@@ -421,7 +421,7 @@ namespace MatrixNext.Web.Areas.US.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error al actualizar usuario: {id}");
-                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                TempData["ErrorMessage"] = "Error al actualizar el usuario. Por favor intente nuevamente.";
                 return View(viewModel);
             }
         }
@@ -448,7 +448,7 @@ namespace MatrixNext.Web.Areas.US.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error al obtener detalles del usuario: {id}");
-                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                TempData["ErrorMessage"] = "Error al obtener los detalles del usuario. Por favor intente nuevamente.";
                 return RedirectToAction("Index");
             }
         }
@@ -475,7 +475,7 @@ namespace MatrixNext.Web.Areas.US.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error al cargar confirmación de eliminación: {id}");
-                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                TempData["ErrorMessage"] = "Error al cargar la confirmación. Por favor intente nuevamente.";
                 return RedirectToAction("Index");
             }
         }
@@ -505,7 +505,7 @@ namespace MatrixNext.Web.Areas.US.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error al eliminar usuario: {id}");
-                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                TempData["ErrorMessage"] = "Error al eliminar el usuario. Por favor intente nuevamente.";
                 return RedirectToAction("Details", new { id });
             }
         }
@@ -536,7 +536,7 @@ namespace MatrixNext.Web.Areas.US.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error redirecting to MyChangePassword");
-                TempData["ErrorMessage"] = ex.Message;
+                TempData["ErrorMessage"] = "Error al acceder al cambio de contraseña. Por favor intente nuevamente.";
                 return RedirectToAction("Index");
             }
         }
@@ -564,7 +564,7 @@ namespace MatrixNext.Web.Areas.US.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error al cargar ChangePassword: {id}");
-                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                TempData["ErrorMessage"] = "Error al cargar el formulario de cambio de contraseña. Por favor intente nuevamente.";
                 return RedirectToAction("Index");
             }
         }
@@ -611,7 +611,7 @@ namespace MatrixNext.Web.Areas.US.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error al cambiar contraseña para usuario {id}");
-                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                TempData["ErrorMessage"] = "Error al cambiar la contraseña. Por favor intente nuevamente.";
                 return View(model);
             }
         }

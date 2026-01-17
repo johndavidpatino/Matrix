@@ -37,7 +37,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obteniendo contabilización PST");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al obtener la contabilización PST. Por favor intente nuevamente." });
             }
         }
 
@@ -57,7 +57,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error exportando contabilización PST");
-                return BadRequest(ex.Message);
+                return BadRequest("Error al exportar la contabilización PST. Por favor intente nuevamente.");
             }
         }
     }

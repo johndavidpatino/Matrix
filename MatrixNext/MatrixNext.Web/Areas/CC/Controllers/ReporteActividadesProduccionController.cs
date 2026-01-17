@@ -37,7 +37,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obteniendo actividades de producción");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al obtener las actividades de producción. Por favor intente nuevamente." });
             }
         }
 
@@ -57,7 +57,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error exportando actividades de producción");
-                return BadRequest(ex.Message);
+                return BadRequest("Error al exportar las actividades de producción. Por favor intente nuevamente.");
             }
         }
     }

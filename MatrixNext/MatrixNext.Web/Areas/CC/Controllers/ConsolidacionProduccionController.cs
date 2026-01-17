@@ -35,7 +35,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obteniendo producción pendiente");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al obtener la producción pendiente. Por favor intente nuevamente." });
             }
         }
 
@@ -50,7 +50,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error consolidando producción");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al consolidar la producción. Por favor intente nuevamente." });
             }
         }
 
@@ -65,7 +65,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error obteniendo resumen periodo {periodo}");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al obtener el resumen de consolidación. Por favor intente nuevamente." });
             }
         }
     }

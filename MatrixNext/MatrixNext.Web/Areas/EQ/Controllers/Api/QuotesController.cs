@@ -110,7 +110,7 @@ public class QuotesController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error calculando quote");
-            return BadRequest(new { error = ex.Message });
+            return BadRequest(new { error = "Error al calcular cotización. Por favor intente nuevamente." });
         }
     }
 
@@ -139,7 +139,7 @@ public class QuotesController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error creando quote");
-            return BadRequest(new { error = ex.Message });
+            return BadRequest(new { error = "Error al crear cotización. Por favor intente nuevamente." });
         }
     }
 
@@ -170,7 +170,7 @@ public class QuotesController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error actualizando quote {QuoteId}", id);
-            return BadRequest(new { error = ex.Message });
+            return BadRequest(new { error = "Error al actualizar cotización. Por favor intente nuevamente." });
         }
     }
 

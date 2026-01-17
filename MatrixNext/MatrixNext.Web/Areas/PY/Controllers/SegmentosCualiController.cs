@@ -55,7 +55,7 @@ public class SegmentosCualiController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al obtener segmentos del trabajo. Por favor intente nuevamente."
             });
         }
     }
@@ -91,7 +91,7 @@ public class SegmentosCualiController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al obtener segmento. Por favor intente nuevamente."
             });
         }
     }
@@ -118,7 +118,7 @@ public class SegmentosCualiController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al calcular total de participantes. Por favor intente nuevamente."
             });
         }
     }
@@ -145,7 +145,7 @@ public class SegmentosCualiController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al crear segmento. Por favor intente nuevamente."
             });
         }
     }
@@ -172,7 +172,7 @@ public class SegmentosCualiController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al actualizar segmento. Por favor intente nuevamente."
             });
         }
     }
@@ -198,7 +198,7 @@ public class SegmentosCualiController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al eliminar segmento. Por favor intente nuevamente."
             });
         }
     }
@@ -225,7 +225,7 @@ public class SegmentosCualiController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al duplicar segmento. Por favor intente nuevamente."
             });
         }
     }

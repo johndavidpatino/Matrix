@@ -43,7 +43,7 @@ namespace MatrixNext.Web.Areas.ES.Controllers
             }
             catch (Exception ex)
             {
-                TempData["Error"] = "Error al cargar las metodologías: " + ex.Message;
+                TempData["Error"] = "Error al cargar las metodologías. Por favor intente nuevamente.";
                 return View();
             }
         }
@@ -67,7 +67,8 @@ namespace MatrixNext.Web.Areas.ES.Controllers
 
             try
             {
-                var usuarioId = long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var usuarioId = !string.IsNullOrEmpty(userIdClaim) ? long.Parse(userIdClaim) : 0;
                 var (success, message, id) = await _service.CrearAsync(dto, usuarioId);
 
                 if (success)
@@ -80,7 +81,7 @@ namespace MatrixNext.Web.Areas.ES.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = "Error al crear la metodología: " + ex.Message });
+                return Json(new { success = false, message = "Error al crear la metodología. Por favor intente nuevamente." });
             }
         }
 
@@ -134,7 +135,7 @@ namespace MatrixNext.Web.Areas.ES.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = "Error al cargar la metodología: " + ex.Message });
+                return Json(new { success = false, message = "Error al cargar la metodología. Por favor intente nuevamente." });
             }
         }
 
@@ -164,7 +165,7 @@ namespace MatrixNext.Web.Areas.ES.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = "Error al actualizar la metodología: " + ex.Message });
+                return Json(new { success = false, message = "Error al actualizar la metodología. Por favor intente nuevamente." });
             }
         }
 
@@ -183,7 +184,7 @@ namespace MatrixNext.Web.Areas.ES.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = "Error al cargar los detalles: " + ex.Message });
+                return Json(new { success = false, message = "Error al cargar los detalles. Por favor intente nuevamente." });
             }
         }
 
@@ -199,7 +200,7 @@ namespace MatrixNext.Web.Areas.ES.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = "Error al eliminar la metodología: " + ex.Message });
+                return Json(new { success = false, message = "Error al eliminar la metodología. Por favor intente nuevamente." });
             }
         }
     }

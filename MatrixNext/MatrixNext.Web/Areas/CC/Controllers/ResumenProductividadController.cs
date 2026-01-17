@@ -47,7 +47,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obteniendo resumen de productividad");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al obtener el resumen de productividad. Por favor intente nuevamente." });
             }
         }
 
@@ -66,7 +66,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obteniendo productividad agregada");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al obtener la productividad agregada. Por favor intente nuevamente." });
             }
         }
 
@@ -91,7 +91,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error exportando resumen de productividad");
-                return BadRequest(ex.Message);
+                return BadRequest("Error al exportar el resumen de productividad. Por favor intente nuevamente.");
             }
         }
     }

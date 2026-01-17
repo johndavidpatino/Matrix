@@ -61,7 +61,7 @@ public class GestionTareasController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al procesar la solicitud. Por favor intente nuevamente."
             });
         }
     }
@@ -116,7 +116,7 @@ public class GestionTareasController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al procesar la solicitud. Por favor intente nuevamente."
             });
         }
     }
@@ -166,7 +166,7 @@ public class GestionTareasController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al procesar la solicitud. Por favor intente nuevamente."
             });
         }
     }
@@ -216,7 +216,7 @@ public class GestionTareasController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al procesar la solicitud. Por favor intente nuevamente."
             });
         }
     }
@@ -258,7 +258,7 @@ public class GestionTareasController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al procesar la solicitud. Por favor intente nuevamente."
             });
         }
     }
@@ -290,7 +290,7 @@ public class GestionTareasController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al procesar la solicitud. Por favor intente nuevamente."
             });
         }
     }
@@ -310,7 +310,7 @@ public class GestionTareasController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, $"Error al obtener estados permitidos para tarea {idWorkFlow}, usuario {idUsuario}");
-            return BadRequest(new { exitoso = false, mensaje = ex.Message });
+            return BadRequest(new { exitoso = false, mensaje = "Error al procesar la solicitud. Por favor intente nuevamente." });
         }
     }
 
@@ -328,7 +328,7 @@ public class GestionTareasController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, $"Error al obtener detalles de tarea {idWorkFlow}");
-            return BadRequest(new { exitoso = false, mensaje = ex.Message });
+            return BadRequest(new { exitoso = false, mensaje = "Error al procesar la solicitud. Por favor intente nuevamente." });
         }
     }
 
@@ -346,7 +346,7 @@ public class GestionTareasController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, $"Error al obtener observaciones de tarea {idWorkFlow}");
-            return BadRequest(new { exitoso = false, mensaje = ex.Message });
+            return BadRequest(new { exitoso = false, mensaje = "Error al procesar la solicitud. Por favor intente nuevamente." });
         }
     }
 }

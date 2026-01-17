@@ -47,7 +47,7 @@ public class ReportesWorkFlowController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error obteniendo indicadores de cumplimiento");
-            return BadRequest(new { exitoso = false, mensaje = ex.Message });
+            return BadRequest(new { exitoso = false, mensaje = "Error al procesar la solicitud. Por favor intente nuevamente." });
         }
     }
 
@@ -70,7 +70,7 @@ public class ReportesWorkFlowController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, $"Error obteniendo tareas vencidas del usuario {idUsuario}");
-            return BadRequest(new { exitoso = false, mensaje = ex.Message });
+            return BadRequest(new { exitoso = false, mensaje = "Error al procesar la solicitud. Por favor intente nuevamente." });
         }
     }
 
@@ -92,7 +92,7 @@ public class ReportesWorkFlowController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error obteniendo estadísticas");
-            return BadRequest(new { exitoso = false, mensaje = ex.Message });
+            return BadRequest(new { exitoso = false, mensaje = "Error al procesar la solicitud. Por favor intente nuevamente." });
         }
     }
 }

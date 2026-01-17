@@ -16,7 +16,7 @@ namespace MatrixNext.Web.Services.RE_GT
         /// <summary>
         /// Obtiene información del trabajo por ID
         /// </summary>
-        Task<TrabajoAsignacionDto> ObtenerTrabajoAsync(int idTrabajo);
+        Task<TrabajoAsignacionDto?> ObtenerTrabajoAsync(int idTrabajo);
 
         /// <summary>
         /// Obtiene lista de usuarios COE disponibles

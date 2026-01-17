@@ -40,7 +40,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener descuentos");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al obtener los descuentos. Por favor intente nuevamente." });
             }
         }
 
@@ -59,7 +59,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al exportar descuentos");
-                return BadRequest(ex.Message);
+                return BadRequest("Error al exportar los descuentos. Por favor intente nuevamente.");
             }
         }
     }

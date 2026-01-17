@@ -1,9 +1,11 @@
 using MatrixNext.Data.Modules.CC.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MatrixNext.Web.Areas.CC.Controllers
 {
     [Area("CC")]
+    [Authorize]
     public class CcFinzOpeController : Controller
     {
         private readonly ICcFinzOpeService _service;
@@ -52,7 +54,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obteniendo liquidación");
-                return StatusCode(500, new { success = false, error = ex.Message });
+                return StatusCode(500, new { success = false, error = "Error al obtener la liquidación. Por favor intente nuevamente." });
             }
         }
 
@@ -74,7 +76,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obteniendo bonificaciones");
-                return StatusCode(500, new { success = false, error = ex.Message });
+                return StatusCode(500, new { success = false, error = "Error al obtener las bonificaciones. Por favor intente nuevamente." });
             }
         }
 
@@ -99,7 +101,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obteniendo producción total");
-                return StatusCode(500, new { success = false, error = ex.Message });
+                return StatusCode(500, new { success = false, error = "Error al obtener la producción total. Por favor intente nuevamente." });
             }
         }
 

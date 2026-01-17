@@ -57,7 +57,7 @@ public class HomeController : Controller
             // Retornar vista con error en lugar de romper la página
             return View("Index", new DashboardViewModel 
             { 
-                Error = "Error al cargar el dashboard: " + ex.Message,
+                Error = "Error al cargar el dashboard. Por favor intente nuevamente.",
                 LoadedAt = DateTime.UtcNow
             });
         }
@@ -113,7 +113,7 @@ public class HomeController : Controller
             _logger.LogError(ex, "Error refrescando dashboard");
             return Json(new { 
                 success = false, 
-                error = ex.Message 
+                error = "Error al refrescar el dashboard. Por favor intente nuevamente." 
             });
         }
     }
@@ -148,7 +148,7 @@ public class HomeController : Controller
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error cargando widget {WidgetName}", widgetName);
-            return Json(new { success = false, error = ex.Message });
+            return Json(new { success = false, error = "Error al cargar el widget. Por favor intente nuevamente." });
         }
     }
 

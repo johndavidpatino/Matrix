@@ -92,7 +92,7 @@ namespace MatrixNext.Web.Areas.TH.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error fetching solicitudes por aprobar");
-                return Json(new { success = false, message = ex.Message, data = new List<object>() });
+                return Json(new { success = false, message = "Error al procesar la solicitud. Por favor intente nuevamente.", data = new List<object>() });
             }
         }
 
@@ -117,7 +117,7 @@ namespace MatrixNext.Web.Areas.TH.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error approving solicitud");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al procesar la solicitud. Por favor intente nuevamente." });
             }
         }
 
@@ -142,7 +142,7 @@ namespace MatrixNext.Web.Areas.TH.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error rejecting solicitud");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al procesar la solicitud. Por favor intente nuevamente." });
             }
         }
 
@@ -172,7 +172,7 @@ namespace MatrixNext.Web.Areas.TH.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error generating reporte vacaciones");
-                return Json(new { success = false, message = ex.Message, data = new List<object>() });
+                return Json(new { success = false, message = "Error al procesar la solicitud. Por favor intente nuevamente.", data = new List<object>() });
             }
         }
 
@@ -209,7 +209,7 @@ namespace MatrixNext.Web.Areas.TH.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error generating reporte ausentismo");
-                return Json(new { success = false, message = ex.Message, data = new List<object>() });
+                return Json(new { success = false, message = "Error al procesar la solicitud. Por favor intente nuevamente.", data = new List<object>() });
             }
         }
 
@@ -246,7 +246,7 @@ namespace MatrixNext.Web.Areas.TH.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error generating reporte incapacidades");
-                return Json(new { success = false, message = ex.Message, data = new List<object>() });
+                return Json(new { success = false, message = "Error al procesar la solicitud. Por favor intente nuevamente.", data = new List<object>() });
             }
         }
 
@@ -276,7 +276,7 @@ namespace MatrixNext.Web.Areas.TH.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error generating reporte beneficios");
-                return Json(new { success = false, message = ex.Message, data = new List<object>() });
+                return Json(new { success = false, message = "Error al procesar la solicitud. Por favor intente nuevamente.", data = new List<object>() });
             }
         }
 

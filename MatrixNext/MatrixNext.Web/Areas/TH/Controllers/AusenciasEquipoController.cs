@@ -116,7 +116,7 @@ namespace MatrixNext.Web.Areas.TH.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error fetching ausencias equipo");
-                return Json(new { success = false, message = ex.Message, data = new List<object>() });
+                return Json(new { success = false, message = "Error al obtener las ausencias del equipo. Por favor intente nuevamente.", data = new List<object>() });
             }
         }
 
@@ -137,7 +137,7 @@ namespace MatrixNext.Web.Areas.TH.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error fetching subordinados");
-                return Json(new { success = false, message = ex.Message, data = new List<object>() });
+                return Json(new { success = false, message = "Error al obtener los subordinados. Por favor intente nuevamente.", data = new List<object>() });
             }
         }
 
@@ -159,7 +159,7 @@ namespace MatrixNext.Web.Areas.TH.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error fetching personas con ausencias");
-                return Json(new { success = false, message = ex.Message, data = new List<object>() });
+                return Json(new { success = false, message = "Error al obtener las personas con ausencias. Por favor intente nuevamente.", data = new List<object>() });
             }
         }
 
@@ -180,7 +180,7 @@ namespace MatrixNext.Web.Areas.TH.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error adding subordinado");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al agregar el subordinado. Por favor intente nuevamente." });
             }
         }
 
@@ -201,7 +201,7 @@ namespace MatrixNext.Web.Areas.TH.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error removing subordinado");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al remover el subordinado. Por favor intente nuevamente." });
             }
         }
 
@@ -222,7 +222,7 @@ namespace MatrixNext.Web.Areas.TH.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error fetching beneficios pendientes");
-                return Json(new { success = false, message = ex.Message, data = new List<object>() });
+                return Json(new { success = false, message = "Error al obtener los beneficios pendientes. Por favor intente nuevamente.", data = new List<object>() });
             }
         }
 

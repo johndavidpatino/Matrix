@@ -40,17 +40,20 @@ namespace MatrixNext.Web.Services.CORE
         private readonly WorkFlowDataAdapter _adapter;
         private readonly IAuditoriaService _auditoria;
         private readonly IGridService _grid;
+        private readonly ILogger<WorkFlowService> _logger;
 
         public WorkFlowService(
             MatrixDbContext db, 
             WorkFlowDataAdapter adapter,
             IAuditoriaService auditoria,
-            IGridService grid)
+            IGridService grid,
+            ILogger<WorkFlowService> logger)
         {
             _db = db;
             _adapter = adapter;
             _auditoria = auditoria;
             _grid = grid;
+            _logger = logger;
         }
 
         public async Task<PaginationResultVM<WorkFlow>> ObtenerPaginadoAsync(int page, int size, string sortBy, bool desc, long? idTrabajo = null, long? idTarea = null, int? estado = null)

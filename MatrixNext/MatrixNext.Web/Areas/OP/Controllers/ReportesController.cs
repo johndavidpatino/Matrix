@@ -1,4 +1,5 @@
 using MatrixNext.Web.Services.OP.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ namespace MatrixNext.Web.Areas.OP.Controllers
     [Area("OP")]
     [Route("OP/[controller]")]
     [ApiController]
+    [Authorize]
     public class ReportesController : ControllerBase
     {
         private readonly IOpReportService _reportService;
@@ -50,7 +52,7 @@ namespace MatrixNext.Web.Areas.OP.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener reporte de sesiones");
-                return BadRequest(new { success = false, message = ex.Message });
+                return BadRequest(new { success = false, message = "Error al obtener reporte de sesiones. Por favor intente nuevamente." });
             }
         }
 
@@ -79,7 +81,7 @@ namespace MatrixNext.Web.Areas.OP.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al exportar sesiones a Excel");
-                return BadRequest(new { success = false, message = ex.Message });
+                return BadRequest(new { success = false, message = "Error al exportar sesiones a Excel. Por favor intente nuevamente." });
             }
         }
 
@@ -108,7 +110,7 @@ namespace MatrixNext.Web.Areas.OP.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al exportar sesiones a PDF");
-                return BadRequest(new { success = false, message = ex.Message });
+                return BadRequest(new { success = false, message = "Error al exportar sesiones a PDF. Por favor intente nuevamente." });
             }
         }
 
@@ -139,7 +141,7 @@ namespace MatrixNext.Web.Areas.OP.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener reporte de entrevistas");
-                return BadRequest(new { success = false, message = ex.Message });
+                return BadRequest(new { success = false, message = "Error al obtener reporte de entrevistas. Por favor intente nuevamente." });
             }
         }
 
@@ -169,7 +171,7 @@ namespace MatrixNext.Web.Areas.OP.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al exportar entrevistas a Excel");
-                return BadRequest(new { success = false, message = ex.Message });
+                return BadRequest(new { success = false, message = "Error al exportar entrevistas a Excel. Por favor intente nuevamente." });
             }
         }
 
@@ -199,7 +201,7 @@ namespace MatrixNext.Web.Areas.OP.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al exportar entrevistas a PDF");
-                return BadRequest(new { success = false, message = ex.Message });
+                return BadRequest(new { success = false, message = "Error al exportar entrevistas a PDF. Por favor intente nuevamente." });
             }
         }
 
@@ -226,7 +228,7 @@ namespace MatrixNext.Web.Areas.OP.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener reporte de moderadores");
-                return BadRequest(new { success = false, message = ex.Message });
+                return BadRequest(new { success = false, message = "Error al obtener reporte de moderadores. Por favor intente nuevamente." });
             }
         }
 
@@ -254,7 +256,7 @@ namespace MatrixNext.Web.Areas.OP.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al exportar moderadores a Excel");
-                return BadRequest(new { success = false, message = ex.Message });
+                return BadRequest(new { success = false, message = "Error al exportar moderadores a Excel. Por favor intente nuevamente." });
             }
         }
 
@@ -303,7 +305,7 @@ namespace MatrixNext.Web.Areas.OP.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al validar concurrencia");
-                return BadRequest(new { success = false, message = ex.Message });
+                return BadRequest(new { success = false, message = "Error al validar concurrencia. Por favor intente nuevamente." });
             }
         }
     }

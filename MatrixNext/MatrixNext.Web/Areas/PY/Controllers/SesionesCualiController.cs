@@ -55,7 +55,7 @@ public class SesionesCualiController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al obtener sesiones del trabajo. Por favor intente nuevamente."
             });
         }
     }
@@ -82,7 +82,7 @@ public class SesionesCualiController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al obtener sesiones del segmento. Por favor intente nuevamente."
             });
         }
     }
@@ -118,7 +118,7 @@ public class SesionesCualiController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al obtener sesión. Por favor intente nuevamente."
             });
         }
     }
@@ -145,7 +145,7 @@ public class SesionesCualiController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al crear sesión. Por favor intente nuevamente."
             });
         }
     }
@@ -172,7 +172,7 @@ public class SesionesCualiController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al actualizar sesión. Por favor intente nuevamente."
             });
         }
     }
@@ -202,7 +202,7 @@ public class SesionesCualiController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al cambiar estado de la sesión. Por favor intente nuevamente."
             });
         }
     }
@@ -228,7 +228,7 @@ public class SesionesCualiController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al eliminar sesión. Por favor intente nuevamente."
             });
         }
     }
@@ -257,7 +257,7 @@ public class SesionesCualiController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al registrar asistencia de la sesión. Por favor intente nuevamente."
             });
         }
     }

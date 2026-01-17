@@ -143,7 +143,7 @@ namespace MatrixNext.Web.Areas.CU.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error en GuardarPresupuesto");
-                return Ok(new { success = false, message = ex.Message });
+                return Ok(new { success = false, message = "Error al guardar presupuesto. Por favor intente nuevamente." });
             }
         }
 

@@ -35,7 +35,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obteniendo reporte de pagos");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error al obtener el reporte de pagos. Por favor intente nuevamente." });
             }
         }
 
@@ -55,7 +55,7 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error exportando reporte de pagos");
-                return BadRequest(ex.Message);
+                return BadRequest("Error al exportar el reporte de pagos. Por favor intente nuevamente.");
             }
         }
     }

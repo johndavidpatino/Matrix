@@ -13,7 +13,7 @@ namespace MatrixNext.Web.Services.CORE
     /// </summary>
     public partial class WorkFlowService : IWorkFlowService
     {
-        private readonly ILogger<WorkFlowService> _logger;
+        // _logger se declara en WorkFlowService.cs principal
 
         /// <summary>
         /// Obtiene tareas de WorkFlow por unidad OP (para TraficoTareas consolidada)

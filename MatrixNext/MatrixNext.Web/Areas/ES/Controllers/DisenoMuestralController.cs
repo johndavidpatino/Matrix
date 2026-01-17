@@ -39,7 +39,7 @@ namespace MatrixNext.Web.Areas.ES.Controllers
             }
             catch (Exception ex)
             {
-                TempData["Error"] = "Error al cargar los diseños: " + ex.Message;
+                TempData["Error"] = "Error al cargar los diseños. Por favor intente nuevamente.";
                 return View();
             }
         }
@@ -75,7 +75,7 @@ namespace MatrixNext.Web.Areas.ES.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = "Error al crear el diseño: " + ex.Message });
+                return Json(new { success = false, message = "Error al crear el diseño. Por favor intente nuevamente." });
             }
         }
 
@@ -127,7 +127,7 @@ namespace MatrixNext.Web.Areas.ES.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = "Error al cargar el diseño: " + ex.Message });
+                return Json(new { success = false, message = "Error al cargar el diseño. Por favor intente nuevamente." });
             }
         }
 
@@ -157,7 +157,7 @@ namespace MatrixNext.Web.Areas.ES.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = "Error al actualizar el diseño: " + ex.Message });
+                return Json(new { success = false, message = "Error al actualizar el diseño. Por favor intente nuevamente." });
             }
         }
 
@@ -176,7 +176,7 @@ namespace MatrixNext.Web.Areas.ES.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = "Error al cargar los detalles: " + ex.Message });
+                return Json(new { success = false, message = "Error al cargar los detalles. Por favor intente nuevamente." });
             }
         }
 
@@ -192,7 +192,7 @@ namespace MatrixNext.Web.Areas.ES.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = "Error al eliminar el diseño: " + ex.Message });
+                return Json(new { success = false, message = "Error al eliminar el diseño. Por favor intente nuevamente." });
             }
         }
     }

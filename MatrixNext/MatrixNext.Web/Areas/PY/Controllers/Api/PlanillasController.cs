@@ -60,7 +60,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers.Api
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error creando planilla moderación");
-                return StatusCode(500, new { success = false, message = ex.Message });
+                return StatusCode(500, new { success = false, message = "Error al procesar la solicitud. Por favor intente nuevamente." });
             }
         }
 
@@ -83,7 +83,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers.Api
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error actualizando planilla moderación {Id}", id);
-                return StatusCode(500, new { success = false, message = ex.Message });
+                return StatusCode(500, new { success = false, message = "Error al procesar la solicitud. Por favor intente nuevamente." });
             }
         }
 
@@ -102,7 +102,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers.Api
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error validando planilla {Id}", id);
-                return StatusCode(500, new { success = false, message = ex.Message });
+                return StatusCode(500, new { success = false, message = "Error al procesar la solicitud. Por favor intente nuevamente." });
             }
         }
 
@@ -142,7 +142,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers.Api
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error actualizando estado planilla {Id}", id);
-                return StatusCode(500, new { success = false, message = ex.Message });
+                return StatusCode(500, new { success = false, message = "Error al procesar la solicitud. Por favor intente nuevamente." });
             }
         }
 
@@ -182,7 +182,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers.Api
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error marcando planilla exportada {Id}", id);
-                return StatusCode(500, new { success = false, message = ex.Message });
+                return StatusCode(500, new { success = false, message = "Error al procesar la solicitud. Por favor intente nuevamente." });
             }
         }
 

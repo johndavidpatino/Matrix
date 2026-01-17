@@ -43,7 +43,7 @@ namespace MatrixNext.Web.Services.RE_GT
         /// <summary>
         /// Obtiene información de un trabajo para validar su existencia
         /// </summary>
-        public async Task<TrabajoInfoDto> ObtenerTrabajoAsync(int idTrabajo)
+        public async Task<TrabajoInfoDto?> ObtenerTrabajoAsync(int idTrabajo)
         {
             try
             {

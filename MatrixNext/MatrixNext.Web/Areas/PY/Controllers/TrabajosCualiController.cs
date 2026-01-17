@@ -55,7 +55,7 @@ public class TrabajosCualiController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al obtener trabajos cualitativos. Por favor intente nuevamente."
             });
         }
     }
@@ -91,7 +91,7 @@ public class TrabajosCualiController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al obtener trabajo cualitativo. Por favor intente nuevamente."
             });
         }
     }
@@ -118,7 +118,7 @@ public class TrabajosCualiController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al obtener trabajos cualitativos por estado. Por favor intente nuevamente."
             });
         }
     }
@@ -145,7 +145,7 @@ public class TrabajosCualiController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al obtener trabajos cualitativos del coordinador. Por favor intente nuevamente."
             });
         }
     }
@@ -172,7 +172,7 @@ public class TrabajosCualiController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al crear trabajo cualitativo. Por favor intente nuevamente."
             });
         }
     }
@@ -199,7 +199,7 @@ public class TrabajosCualiController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al actualizar trabajo cualitativo. Por favor intente nuevamente."
             });
         }
     }
@@ -229,7 +229,7 @@ public class TrabajosCualiController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al cambiar estado del trabajo. Por favor intente nuevamente."
             });
         }
     }
@@ -255,7 +255,7 @@ public class TrabajosCualiController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al eliminar trabajo cualitativo. Por favor intente nuevamente."
             });
         }
     }
@@ -282,7 +282,7 @@ public class TrabajosCualiController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al duplicar trabajo cualitativo. Por favor intente nuevamente."
             });
         }
     }
@@ -309,7 +309,7 @@ public class TrabajosCualiController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al validar eliminación del trabajo. Por favor intente nuevamente."
             });
         }
     }

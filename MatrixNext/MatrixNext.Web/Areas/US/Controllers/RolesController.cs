@@ -1,4 +1,5 @@
 using System;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MatrixNext.Data.Services.Usuarios;
 using Microsoft.Extensions.Logging;
@@ -7,6 +8,7 @@ namespace MatrixNext.Web.Areas.US.Controllers
 {
     [Area("US")]
     [Route("Usuarios/Roles")]
+    [Authorize]
     public class RolesController : Controller
     {
         private readonly RolService _rolService;

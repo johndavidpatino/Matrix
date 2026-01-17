@@ -49,7 +49,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers.Api
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error duplicando trabajo");
-                return StatusCode(500, new { success = false, message = ex.Message });
+                return StatusCode(500, new { success = false, message = "Error al duplicar trabajo. Por favor intente nuevamente." });
             }
         }
 
@@ -95,7 +95,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers.Api
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error guardando configuración trabajo {TrabajoId}", trabajoId);
-                return StatusCode(500, new { success = false, message = ex.Message });
+                return StatusCode(500, new { success = false, message = "Error al guardar configuración. Por favor intente nuevamente." });
             }
         }
 
@@ -121,7 +121,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers.Api
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error validando trabajo {TrabajoId}", trabajoId);
-                return StatusCode(500, new { success = false, message = ex.Message });
+                return StatusCode(500, new { success = false, message = "Error al validar trabajo. Por favor intente nuevamente." });
             }
         }
 
@@ -166,7 +166,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers.Api
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error cerrando trabajo {TrabajoId}", trabajoId);
-                return StatusCode(500, new { success = false, message = ex.Message });
+                return StatusCode(500, new { success = false, message = "Error al cerrar trabajo. Por favor intente nuevamente." });
             }
         }
     }

@@ -49,7 +49,7 @@ public class EqSeedController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error checking master data status");
-            return StatusCode(500, new { success = false, error = ex.Message });
+            return StatusCode(500, new { success = false, error = "Error al verificar estado de maestras. Por favor intente nuevamente." });
         }
     }
 
@@ -87,7 +87,7 @@ public class EqSeedController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error running seed");
-            return StatusCode(500, new { success = false, error = ex.Message });
+            return StatusCode(500, new { success = false, error = "Error al ejecutar seed. Por favor intente nuevamente." });
         }
     }
 
@@ -110,7 +110,7 @@ public class EqSeedController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error clearing master data");
-            return StatusCode(500, new { success = false, error = ex.Message });
+            return StatusCode(500, new { success = false, error = "Error al limpiar maestras. Por favor intente nuevamente." });
         }
     }
 }

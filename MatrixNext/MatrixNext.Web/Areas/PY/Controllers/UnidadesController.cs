@@ -65,7 +65,7 @@ namespace MatrixNext.Web.Areas.PY.Controllers
                 return StatusCode(500, new
                 {
                     success = false,
-                    message = $"Error al obtener unidades: {ex.Message}",
+                    message = "Error al obtener unidades. Por favor intente nuevamente.",
                     data = new List<object>()
                 });
             }

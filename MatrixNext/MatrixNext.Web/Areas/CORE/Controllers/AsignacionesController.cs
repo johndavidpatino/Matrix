@@ -51,7 +51,7 @@ public class AsignacionesController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al procesar la solicitud. Por favor intente nuevamente."
             });
         }
     }
@@ -85,7 +85,7 @@ public class AsignacionesController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al procesar la solicitud. Por favor intente nuevamente."
             });
         }
     }
@@ -117,7 +117,7 @@ public class AsignacionesController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al procesar la solicitud. Por favor intente nuevamente."
             });
         }
     }
@@ -146,7 +146,7 @@ public class AsignacionesController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al procesar la solicitud. Por favor intente nuevamente."
             });
         }
     }
@@ -176,7 +176,7 @@ public class AsignacionesController : ControllerBase
             return BadRequest(new
             {
                 exitoso = false,
-                mensaje = $"Error: {ex.Message}"
+                mensaje = "Error al procesar la solicitud. Por favor intente nuevamente."
             });
         }
     }

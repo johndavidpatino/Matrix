@@ -178,7 +178,7 @@ namespace MatrixNext.Web.Areas.OP.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error guardando registro de producción");
-                return Json(new { success = false, message = "Error al guardar el registro: " + ex.Message });
+                return Json(new { success = false, message = "Error al guardar el registro. Por favor intente nuevamente." });
             }
         }
 

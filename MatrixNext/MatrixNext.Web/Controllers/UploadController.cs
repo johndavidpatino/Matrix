@@ -66,7 +66,7 @@ namespace MatrixNext.Web.Controllers
             catch (ArgumentException ex)
             {
                 _logger.LogWarning("Error validando archivo: {Mensaje}", ex.Message);
-                return BadRequest(ResultVM<object>.Fail(ex.Message));
+                return BadRequest(ResultVM<object>.Fail("Error al procesar la solicitud. Por favor intente nuevamente."));
             }
             catch (Exception ex)
             {

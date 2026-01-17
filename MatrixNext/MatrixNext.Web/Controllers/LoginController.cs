@@ -30,7 +30,7 @@ public class LoginController : Controller
     }
 
     [HttpPost]
-    public IActionResult Index(string usuario, string contrasena)
+    public async Task<IActionResult> Index(string usuario, string contrasena)
     {
         if (string.IsNullOrWhiteSpace(usuario) || string.IsNullOrWhiteSpace(contrasena))
         {
@@ -95,7 +95,7 @@ public class LoginController : Controller
         };
 
         // Iniciar sesión con cookie de autenticación
-        HttpContext.SignInAsync("MatrixCookies", new ClaimsPrincipal(claimsIdentity), authProperties).Wait();
+        await HttpContext.SignInAsync("MatrixCookies", new ClaimsPrincipal(claimsIdentity), authProperties);
 
         // Guardar logs
         try
