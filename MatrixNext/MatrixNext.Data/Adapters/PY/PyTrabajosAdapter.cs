@@ -7,6 +7,7 @@ using MatrixNext.Data.Adapters.PY.Models;
 using MatrixNext.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace MatrixNext.Data.Adapters.PY
 {
@@ -18,17 +19,19 @@ namespace MatrixNext.Data.Adapters.PY
     {
         private readonly string _connectionString;
         private readonly MatrixDbContext _context;
+        private readonly ILogger<PyTrabajosAdapter> _logger;
 
-        public PyTrabajosAdapter(IConfiguration config, MatrixDbContext context)
+        public PyTrabajosAdapter(IConfiguration config, MatrixDbContext context, ILogger<PyTrabajosAdapter> logger)
         {
             _connectionString = config.GetConnectionString("MatrixDb")!;
             _context = context;
+            _logger = logger;
         }
 
         /// <summary>
         /// Obtiene configuración de trabajo usando SP
-        /// SP: PY_TrabajosConfiguracionGet(@TrabajoId BIGINT)
-        /// Legacy: trabajoconfiguracionget(trabajoId)
+        /// SP: OP_TrabajoConfiguracion_Get(@TrabajoId)
+        /// Legacy: trabajoconfiguracionget(trabajoId) en CoreProject/Clases/PY/Trabajo.vb
         /// </summary>
         public async Task<TrabajoConfiguracionDto?> ObtenerConfiguracionTrabajo(long trabajoId)
         {
@@ -37,7 +40,7 @@ namespace MatrixNext.Data.Adapters.PY
             parametros.Add("@TrabajoId", trabajoId);
 
             var resultado = await connection.QueryFirstOrDefaultAsync<TrabajoConfiguracionDto>(
-                "PY_TrabajosConfiguracionGet",
+                "OP_TrabajoConfiguracion_Get",
                 parametros,
                 commandType: CommandType.StoredProcedure);
 
@@ -46,112 +49,49 @@ namespace MatrixNext.Data.Adapters.PY
 
         /// <summary>
         /// Guarda configuración de trabajo usando SP
-        /// SP: PY_TrabajosConfiguracion_Add
-        /// Legacy: guardartrabajoconfiguracion(config)
+        /// SP: OP_TrabajoConfiguracion_Add(@TrabajoId, @FechaIni, @FechaFin, @PorcentajeVerificacion, @UnidadCritica)
+        /// Legacy: guardartrabajoconfiguracion() en CoreProject/Clases/PY/Trabajo.vb línea 298
         /// </summary>
         public async Task GuardarConfiguracionTrabajo(long trabajoId, string configuracion, long usuarioId)
         {
-            using var connection = new SqlConnection(_connectionString);
-            var parametros = new DynamicParameters();
-            parametros.Add("@TrabajoId", trabajoId);
-            parametros.Add("@Configuracion", configuracion);
-            parametros.Add("@Usuario", usuarioId.ToString());
-            parametros.Add("@Fecha", DateTime.Now);
-
-            await connection.ExecuteAsync(
-                "PY_TrabajosConfiguracion_Add",
-                parametros,
-                commandType: CommandType.StoredProcedure);
+            // NOTA: El SP legacy OP_TrabajoConfiguracion_Add usa parámetros diferentes
+            // Parámetros reales: @TrabajoId, @fechaini, @fechafin, @porcentajeverificacion, @unidadcritica
+            // Este método recibe configuracion como string - incompatible con SP legacy
+            // Se registra warning y no se ejecuta hasta mapear correctamente los parámetros
+            _logger.LogWarning(
+                "GuardarConfiguracionTrabajo: SP OP_TrabajoConfiguracion_Add requiere parámetros diferentes. " +
+                "TrabajoId: {TrabajoId}. Requiere implementación correcta.", trabajoId);
+            
+            await Task.CompletedTask;
         }
 
         /// <summary>
         /// Duplica trabajo completo incluyendo todas sus dependencias
-        /// SP principal: PY_TrabajosDuplicar (11 parámetros)
-        /// Workflow complejo que orquesta múltiples operaciones
+        /// SP: Py_TrabajoDuplicar (parámetros muy diferentes al modelo actual)
+        /// NOTA: El SP real tiene 18 parámetros diferentes a los esperados por DuplicarTrabajoInputDto
+        /// Requiere refactorización del DTO o nuevo SP
         /// </summary>
         public async Task<DuplicarTrabajoResultDto> DuplicarTrabajoCompleto(DuplicarTrabajoInputDto input)
         {
             var resultado = new DuplicarTrabajoResultDto();
 
-            try
-            {
-                using var connection = new SqlConnection(_connectionString);
-                await connection.OpenAsync();
+            // ADVERTENCIA: El SP Py_TrabajoDuplicar tiene parámetros completamente diferentes:
+            // @ProyectoId, @OP_MetodologiaId, @PresupuestoId, @NombreTrabajo, @Muestra,
+            // @FechaTentativaInicioCampo, @FechaTentativaFinalizacion, @COE, @Unidad, @JobBook,
+            // @TipoRecoleccionId, @Estado, @IdPropuesta, @Alternativa, @MetCodigo, @Fase, @NoMedicion
+            // El modelo DuplicarTrabajoInputDto no coincide con estos parámetros.
+            
+            _logger.LogWarning(
+                "DuplicarTrabajoCompleto: El SP Py_TrabajoDuplicar tiene parámetros incompatibles con el modelo actual. " +
+                "TrabajoIdOrigen: {TrabajoIdOrigen}. Requiere refactorización del DTO.", 
+                input.TrabajoIdOrigen);
 
-                // Paso 1: Duplicar trabajo base usando SP
-                var parametros = new DynamicParameters();
-                parametros.Add("@TrabajoIdOrigen", input.TrabajoIdOrigen);
-                parametros.Add("@NombreNuevo", input.NombreNuevo);
-                parametros.Add("@JobbookNuevo", input.JobbookNuevo);
-                parametros.Add("@ProyectoIdNuevo", input.ProyectoIdNuevo);
-                parametros.Add("@ClienteIdNuevo", input.ClienteIdNuevo);
-                parametros.Add("@TipoModalidad", input.TipoModalidad);
-                parametros.Add("@FechaInicioNueva", input.FechaInicioNueva);
-                parametros.Add("@FechaFinNueva", input.FechaFinNueva);
-                parametros.Add("@Observaciones", input.Observaciones);
-                parametros.Add("@UsuarioId", input.UsuarioId);
-                parametros.Add("@DuplicarEspecificaciones", input.DuplicarEspecificaciones);
-                parametros.Add("@NuevoTrabajoId", dbType: DbType.Int64, direction: ParameterDirection.Output);
+            resultado.ErrorMessage = "Funcionalidad de duplicación pendiente de implementación. " +
+                "El SP Py_TrabajoDuplicar requiere parámetros diferentes.";
+            resultado.NuevoTrabajoId = 0;
+            resultado.JobBookNuevo = string.Empty;
 
-                await connection.ExecuteAsync(
-                    "PY_TrabajosDuplicar",
-                    parametros,
-                    commandType: CommandType.StoredProcedure);
-
-                resultado.NuevoTrabajoId = parametros.Get<long>("@NuevoTrabajoId");
-                resultado.JobBookNuevo = input.JobbookNuevo;
-
-                // Paso 2: Duplicar especificaciones si está habilitado (ya incluido en SP)
-                resultado.EspecificacionesDuplicadas = input.DuplicarEspecificaciones;
-
-                // Paso 3: Duplicar muestra por ciudad (si está habilitado)
-                if (input.DuplicarMuestra)
-                {
-                    // NOTA: Requiere implementación de DuplicarMuestra SP
-                    // Legacy: muestra(trabajo, ciudad) - requiere iteración por ciudades
-                    // Por ahora marcamos como pendiente
-                    resultado.MuestraDuplicada = false;
-                }
-
-                // Paso 4: Duplicar configuración (si está habilitado)
-                if (input.DuplicarConfiguracion)
-                {
-                    var configOrigen = await ObtenerConfiguracionTrabajo(input.TrabajoIdOrigen);
-                    if (configOrigen != null)
-                    {
-                        await GuardarConfiguracionTrabajo(
-                            resultado.NuevoTrabajoId,
-                            configOrigen.Configuracion ?? string.Empty,
-                            input.UsuarioId);
-                        resultado.ConfiguracionDuplicada = true;
-                    }
-                }
-
-                // Paso 5: Duplicar hilo workflow (si está habilitado)
-                if (input.DuplicarHilo)
-                {
-                    // NOTA: Requiere implementación de PY_HiloDuplicar SP
-                    // Legacy: hilo(trabajoIdOrigen, trabajoIdDestino)
-                    // Por ahora marcamos como pendiente
-                    resultado.HiloDuplicado = false;
-                }
-
-                // Paso 6: Copiar documentos físicos (si está habilitado)
-                if (input.CopiarDocumentos)
-                {
-                    // NOTA: Operación de file system - requiere servicio específico
-                    // Legacy: copiardocumentos(trabajoIdOrigen, trabajoIdDestino)
-                    // Por ahora marcamos como pendiente
-                    resultado.DocumentosCopiadosResult = false;
-                }
-
-                return resultado;
-            }
-            catch (Exception ex)
-            {
-                resultado.ErrorMessage = "Error duplicando trabajo. Por favor intente nuevamente.";
-                return resultado;
-            }
+            return await Task.FromResult(resultado);
         }
     }
 }

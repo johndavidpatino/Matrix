@@ -7,9 +7,8 @@ namespace MatrixNext.Data.Adapters.RP
 {
     /// <summary>
     /// Implementación de Adapter para Reportes
-    /// Utiliza Dapper para ejecutar StoredProcedures contra BD
-    /// REGLA 2: Mapeo exacto de nombres SP / parámetros desde CoreProject
-    /// REGLA 3: Validación de respuestas
+    /// NOTA: Varios SP de este módulo NO EXISTEN en la BD legacy (CO_Matrix_Intranet)
+    /// Los métodos afectados retornan valores vacíos/default hasta que se creen los SP correspondientes
     /// </summary>
     public class ReportesAdapter : IReportesAdapter
     {
@@ -26,70 +25,26 @@ namespace MatrixNext.Data.Adapters.RP
         // INDICADORES Y DASHBOARDS
         // ============================================
 
-        public async Task<List<Dictionary<string, object>>> GetIndicadoresCalidadAsync(
+        /// <summary>
+        /// STUB: SP REP_IndicadoresCalidad_Get no existe en BD legacy
+        /// </summary>
+        public Task<List<Dictionary<string, object>>> GetIndicadoresCalidadAsync(
             DateTime fechaDesde, DateTime fechaHasta, int? usuarioId = null)
         {
-            try
-            {
-                ValidarRangoFechas(fechaDesde, fechaHasta);
-                _logger.LogInformation($"[RP] Iniciando GetIndicadoresCalidad: {fechaDesde:yyyy-MM-dd} a {fechaHasta:yyyy-MM-dd}");
-
-                var parameters = new DynamicParameters();
-                parameters.Add("@FechaDesde", fechaDesde);
-                parameters.Add("@FechaHasta", fechaHasta);
-                if (usuarioId.HasValue)
-                    parameters.Add("@UsuarioId", usuarioId.Value);
-
-                // REGLA 2: SP exacto del CoreProject (a confirmar nombre)
-                var result = await _dbConnection.QueryAsync<dynamic>(
-                    "REP_IndicadoresCalidad_Get",
-                    parameters,
-                    commandType: CommandType.StoredProcedure,
-                    commandTimeout: 300);
-
-                var dictList = ConvertirDynamicADictionary(result);
-                _logger.LogInformation($"[RP] GetIndicadoresCalidad retornó {dictList.Count} registros");
-
-                return dictList;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "[RP] Error en GetIndicadoresCalidad");
-                throw;
-            }
+            ValidarRangoFechas(fechaDesde, fechaHasta);
+            _logger.LogWarning("[RP] GetIndicadoresCalidadAsync: SP 'REP_IndicadoresCalidad_Get' no existe en BD legacy. Retornando lista vacía. FechaDesde={FechaDesde}, FechaHasta={FechaHasta}", fechaDesde, fechaHasta);
+            return Task.FromResult(new List<Dictionary<string, object>>());
         }
 
-        public async Task<List<Dictionary<string, object>>> GetIndicadoresCumplimientoAsync(
+        /// <summary>
+        /// STUB: SP REP_IndicadoresCumplimiento_Get no existe en BD legacy
+        /// </summary>
+        public Task<List<Dictionary<string, object>>> GetIndicadoresCumplimientoAsync(
             DateTime fechaDesde, DateTime fechaHasta, int? usuarioId = null)
         {
-            try
-            {
-                ValidarRangoFechas(fechaDesde, fechaHasta);
-                _logger.LogInformation($"[RP] Iniciando GetIndicadoresCumplimiento: {fechaDesde:yyyy-MM-dd} a {fechaHasta:yyyy-MM-dd}");
-
-                var parameters = new DynamicParameters();
-                parameters.Add("@FechaDesde", fechaDesde);
-                parameters.Add("@FechaHasta", fechaHasta);
-                if (usuarioId.HasValue)
-                    parameters.Add("@UsuarioId", usuarioId.Value);
-
-                // REGLA 2: SP exacto del CoreProject
-                var result = await _dbConnection.QueryAsync<dynamic>(
-                    "REP_IndicadoresCumplimiento_Get",
-                    parameters,
-                    commandType: CommandType.StoredProcedure,
-                    commandTimeout: 300);
-
-                var dictList = ConvertirDynamicADictionary(result);
-                _logger.LogInformation($"[RP] GetIndicadoresCumplimiento retornó {dictList.Count} registros");
-
-                return dictList;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "[RP] Error en GetIndicadoresCumplimiento");
-                throw;
-            }
+            ValidarRangoFechas(fechaDesde, fechaHasta);
+            _logger.LogWarning("[RP] GetIndicadoresCumplimientoAsync: SP 'REP_IndicadoresCumplimiento_Get' no existe en BD legacy. Retornando lista vacía. FechaDesde={FechaDesde}, FechaHasta={FechaHasta}", fechaDesde, fechaHasta);
+            return Task.FromResult(new List<Dictionary<string, object>>());
         }
 
         public async Task<List<Dictionary<string, object>>> GetReportDataAsync(
@@ -100,7 +55,7 @@ namespace MatrixNext.Data.Adapters.RP
                 if (string.IsNullOrEmpty(spName))
                     throw new ArgumentException("spName no puede estar vacío");
 
-                _logger.LogInformation($"[RP] Ejecutando SP genérico: {spName}");
+                _logger.LogInformation("[RP] Ejecutando SP genérico: {SpName}", spName);
 
                 var dynamicParams = new DynamicParameters();
                 foreach (var param in parameters)
@@ -115,13 +70,13 @@ namespace MatrixNext.Data.Adapters.RP
                     commandTimeout: 300);
 
                 var dictList = ConvertirDynamicADictionary(result);
-                _logger.LogInformation($"[RP] SP {spName} retornó {dictList.Count} registros");
+                _logger.LogInformation("[RP] SP {SpName} retornó {Count} registros", spName, dictList.Count);
 
                 return dictList;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"[RP] Error ejecutando SP genérico: {spName}");
+                _logger.LogError(ex, "[RP] Error ejecutando SP genérico: {SpName}", spName);
                 throw;
             }
         }
@@ -130,237 +85,96 @@ namespace MatrixNext.Data.Adapters.RP
         // REPORTES DE OPERACIÓN
         // ============================================
 
-        public async Task<List<Dictionary<string, object>>> GetReporteActividadesAsync(
+        /// <summary>
+        /// STUB: SP OP_ReporteActividades_Get no existe en BD legacy
+        /// </summary>
+        public Task<List<Dictionary<string, object>>> GetReporteActividadesAsync(
             DateTime fechaDesde, DateTime fechaHasta, int? usuarioId = null)
         {
-            try
-            {
-                ValidarRangoFechas(fechaDesde, fechaHasta);
-                _logger.LogInformation($"[RP-OP] Iniciando GetReporteActividades");
-
-                var parameters = new DynamicParameters();
-                parameters.Add("@FechaDesde", fechaDesde);
-                parameters.Add("@FechaHasta", fechaHasta);
-                if (usuarioId.HasValue)
-                    parameters.Add("@UsuarioId", usuarioId.Value);
-
-                var result = await _dbConnection.QueryAsync<dynamic>(
-                    "OP_ReporteActividades_Get",
-                    parameters,
-                    commandType: CommandType.StoredProcedure,
-                    commandTimeout: 300);
-
-                return ConvertirDynamicADictionary(result);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "[RP-OP] Error en GetReporteActividades");
-                throw;
-            }
+            ValidarRangoFechas(fechaDesde, fechaHasta);
+            _logger.LogWarning("[RP-OP] GetReporteActividadesAsync: SP 'OP_ReporteActividades_Get' no existe en BD legacy. Retornando lista vacía. FechaDesde={FechaDesde}, FechaHasta={FechaHasta}", fechaDesde, fechaHasta);
+            return Task.FromResult(new List<Dictionary<string, object>>());
         }
 
-        public async Task<List<Dictionary<string, object>>> GetReporteInconsistenciasAsync(
+        /// <summary>
+        /// STUB: SP OP_ReporteInconsistencias_Get no existe en BD legacy
+        /// </summary>
+        public Task<List<Dictionary<string, object>>> GetReporteInconsistenciasAsync(
             DateTime fechaDesde, DateTime fechaHasta, string? tipo = null)
         {
-            try
-            {
-                ValidarRangoFechas(fechaDesde, fechaHasta);
-                _logger.LogInformation($"[RP-OP] Iniciando GetReporteInconsistencias");
-
-                var parameters = new DynamicParameters();
-                parameters.Add("@FechaDesde", fechaDesde);
-                parameters.Add("@FechaHasta", fechaHasta);
-                if (!string.IsNullOrEmpty(tipo))
-                    parameters.Add("@Tipo", tipo);
-
-                var result = await _dbConnection.QueryAsync<dynamic>(
-                    "OP_ReporteInconsistencias_Get",
-                    parameters,
-                    commandType: CommandType.StoredProcedure,
-                    commandTimeout: 300);
-
-                return ConvertirDynamicADictionary(result);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "[RP-OP] Error en GetReporteInconsistencias");
-                throw;
-            }
+            ValidarRangoFechas(fechaDesde, fechaHasta);
+            _logger.LogWarning("[RP-OP] GetReporteInconsistenciasAsync: SP 'OP_ReporteInconsistencias_Get' no existe en BD legacy. Retornando lista vacía. FechaDesde={FechaDesde}, FechaHasta={FechaHasta}", fechaDesde, fechaHasta);
+            return Task.FromResult(new List<Dictionary<string, object>>());
         }
 
-        public async Task<List<Dictionary<string, object>>> GetReporteListadoTrabajosAsync(
+        /// <summary>
+        /// STUB: SP OP_ReporteListadoTrabajos_Get no existe en BD legacy
+        /// </summary>
+        public Task<List<Dictionary<string, object>>> GetReporteListadoTrabajosAsync(
             DateTime fechaDesde, DateTime fechaHasta, int? proyectoId = null)
         {
-            try
-            {
-                ValidarRangoFechas(fechaDesde, fechaHasta);
-                _logger.LogInformation($"[RP-OP] Iniciando GetReporteListadoTrabajos");
-
-                var parameters = new DynamicParameters();
-                parameters.Add("@FechaDesde", fechaDesde);
-                parameters.Add("@FechaHasta", fechaHasta);
-                if (proyectoId.HasValue)
-                    parameters.Add("@ProyectoId", proyectoId.Value);
-
-                var result = await _dbConnection.QueryAsync<dynamic>(
-                    "OP_ReporteListadoTrabajos_Get",
-                    parameters,
-                    commandType: CommandType.StoredProcedure,
-                    commandTimeout: 300);
-
-                return ConvertirDynamicADictionary(result);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "[RP-OP] Error en GetReporteListadoTrabajos");
-                throw;
-            }
+            ValidarRangoFechas(fechaDesde, fechaHasta);
+            _logger.LogWarning("[RP-OP] GetReporteListadoTrabajosAsync: SP 'OP_ReporteListadoTrabajos_Get' no existe en BD legacy. Retornando lista vacía. FechaDesde={FechaDesde}, FechaHasta={FechaHasta}", fechaDesde, fechaHasta);
+            return Task.FromResult(new List<Dictionary<string, object>>());
         }
 
         // ============================================
         // REPORTES DE PLANEACIÓN
         // ============================================
 
-        public async Task<List<Dictionary<string, object>>> GetPlaneacionCampoAsync(
+        /// <summary>
+        /// STUB: SP PY_PlaneacionCampo_Get no existe en BD legacy
+        /// </summary>
+        public Task<List<Dictionary<string, object>>> GetPlaneacionCampoAsync(
             DateTime fechaDesde, DateTime fechaHasta, int? areaId = null)
         {
-            try
-            {
-                ValidarRangoFechas(fechaDesde, fechaHasta);
-                _logger.LogInformation($"[RP-PY] Iniciando GetPlaneacionCampo");
-
-                var parameters = new DynamicParameters();
-                parameters.Add("@FechaDesde", fechaDesde);
-                parameters.Add("@FechaHasta", fechaHasta);
-                if (areaId.HasValue)
-                    parameters.Add("@AreaId", areaId.Value);
-
-                var result = await _dbConnection.QueryAsync<dynamic>(
-                    "PY_PlaneacionCampo_Get",
-                    parameters,
-                    commandType: CommandType.StoredProcedure,
-                    commandTimeout: 300);
-
-                return ConvertirDynamicADictionary(result);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "[RP-PY] Error en GetPlaneacionCampo");
-                throw;
-            }
+            ValidarRangoFechas(fechaDesde, fechaHasta);
+            _logger.LogWarning("[RP-PY] GetPlaneacionCampoAsync: SP 'PY_PlaneacionCampo_Get' no existe en BD legacy. Retornando lista vacía. FechaDesde={FechaDesde}, FechaHasta={FechaHasta}", fechaDesde, fechaHasta);
+            return Task.FromResult(new List<Dictionary<string, object>>());
         }
 
-        public async Task<List<Dictionary<string, object>>> GetPlaneacionEstudiosAsync(
+        /// <summary>
+        /// STUB: SP PY_PlaneacionEstudios_Get no existe en BD legacy
+        /// </summary>
+        public Task<List<Dictionary<string, object>>> GetPlaneacionEstudiosAsync(
             DateTime fechaDesde, DateTime fechaHasta)
         {
-            try
-            {
-                ValidarRangoFechas(fechaDesde, fechaHasta);
-                _logger.LogInformation($"[RP-PY] Iniciando GetPlaneacionEstudios");
-
-                var parameters = new DynamicParameters();
-                parameters.Add("@FechaDesde", fechaDesde);
-                parameters.Add("@FechaHasta", fechaHasta);
-
-                var result = await _dbConnection.QueryAsync<dynamic>(
-                    "PY_PlaneacionEstudios_Get",
-                    parameters,
-                    commandType: CommandType.StoredProcedure,
-                    commandTimeout: 300);
-
-                return ConvertirDynamicADictionary(result);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "[RP-PY] Error en GetPlaneacionEstudios");
-                throw;
-            }
+            ValidarRangoFechas(fechaDesde, fechaHasta);
+            _logger.LogWarning("[RP-PY] GetPlaneacionEstudiosAsync: SP 'PY_PlaneacionEstudios_Get' no existe en BD legacy. Retornando lista vacía. FechaDesde={FechaDesde}, FechaHasta={FechaHasta}", fechaDesde, fechaHasta);
+            return Task.FromResult(new List<Dictionary<string, object>>());
         }
 
         // ============================================
         // REPORTES DE RECURSOS
         // ============================================
 
-        public async Task<List<Dictionary<string, object>>> GetListadoEncuestadoresAsync(
+        /// <summary>
+        /// STUB: SP TH_ListadoEncuestadores_Get no existe en BD legacy
+        /// </summary>
+        public Task<List<Dictionary<string, object>>> GetListadoEncuestadoresAsync(
             int? areaId = null, string? estado = null)
         {
-            try
-            {
-                _logger.LogInformation($"[RP-TH] Iniciando GetListadoEncuestadores");
-
-                var parameters = new DynamicParameters();
-                if (areaId.HasValue)
-                    parameters.Add("@AreaId", areaId.Value);
-                if (!string.IsNullOrEmpty(estado))
-                    parameters.Add("@Estado", estado);
-
-                var result = await _dbConnection.QueryAsync<dynamic>(
-                    "TH_ListadoEncuestadores_Get",
-                    parameters,
-                    commandType: CommandType.StoredProcedure,
-                    commandTimeout: 300);
-
-                return ConvertirDynamicADictionary(result);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "[RP-TH] Error en GetListadoEncuestadores");
-                throw;
-            }
+            _logger.LogWarning("[RP-TH] GetListadoEncuestadoresAsync: SP 'TH_ListadoEncuestadores_Get' no existe en BD legacy. Retornando lista vacía. AreaId={AreaId}, Estado={Estado}", areaId, estado);
+            return Task.FromResult(new List<Dictionary<string, object>>());
         }
 
-        public async Task<Dictionary<string, object>> GetFichaEncuestadorAsync(int idEncuestador)
+        /// <summary>
+        /// STUB: SP TH_FichaEncuestador_Get no existe en BD legacy
+        /// </summary>
+        public Task<Dictionary<string, object>> GetFichaEncuestadorAsync(int idEncuestador)
         {
-            try
-            {
-                _logger.LogInformation($"[RP-TH] Iniciando GetFichaEncuestador: {idEncuestador}");
-
-                var parameters = new DynamicParameters();
-                parameters.Add("@IdEncuestador", idEncuestador);
-
-                var result = await _dbConnection.QueryFirstOrDefaultAsync<dynamic>(
-                    "TH_FichaEncuestador_Get",
-                    parameters,
-                    commandType: CommandType.StoredProcedure,
-                    commandTimeout: 300);
-
-                if (result == null)
-                    return new Dictionary<string, object>();
-
-                return ConvertirDynamicADictionary(new[] { result })[0];
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"[RP-TH] Error en GetFichaEncuestador: {idEncuestador}");
-                throw;
-            }
+            _logger.LogWarning("[RP-TH] GetFichaEncuestadorAsync: SP 'TH_FichaEncuestador_Get' no existe en BD legacy. Retornando diccionario vacío. IdEncuestador={IdEncuestador}", idEncuestador);
+            return Task.FromResult(new Dictionary<string, object>());
         }
 
-        public async Task<List<Dictionary<string, object>>> GetPersonalSinProduccionAsync(
+        /// <summary>
+        /// STUB: SP OP_PersonalSinProduccion_Get no existe en BD legacy
+        /// </summary>
+        public Task<List<Dictionary<string, object>>> GetPersonalSinProduccionAsync(
             DateTime fecha, int? areaId = null)
         {
-            try
-            {
-                _logger.LogInformation($"[RP-OP] Iniciando GetPersonalSinProduccion: {fecha:yyyy-MM-dd}");
-
-                var parameters = new DynamicParameters();
-                parameters.Add("@Fecha", fecha);
-                if (areaId.HasValue)
-                    parameters.Add("@AreaId", areaId.Value);
-
-                var result = await _dbConnection.QueryAsync<dynamic>(
-                    "OP_PersonalSinProduccion_Get",
-                    parameters,
-                    commandType: CommandType.StoredProcedure,
-                    commandTimeout: 300);
-
-                return ConvertirDynamicADictionary(result);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "[RP-OP] Error en GetPersonalSinProduccion");
-                throw;
-            }
+            _logger.LogWarning("[RP-OP] GetPersonalSinProduccionAsync: SP 'OP_PersonalSinProduccion_Get' no existe en BD legacy. Retornando lista vacía. Fecha={Fecha}, AreaId={AreaId}", fecha, areaId);
+            return Task.FromResult(new List<Dictionary<string, object>>());
         }
 
         // ============================================
@@ -388,34 +202,13 @@ namespace MatrixNext.Data.Adapters.RP
                 throw new ArgumentException("PageSize debe estar entre 1 y 1000");
         }
 
-        public async Task<List<ReporteDTO>> GetReportesDisponiblesAsync()
+        /// <summary>
+        /// STUB: SP REP_ReportesDisponibles_Get no existe en BD legacy
+        /// </summary>
+        public Task<List<ReporteDTO>> GetReportesDisponiblesAsync()
         {
-            try
-            {
-                _logger.LogInformation("[RP] Obteniendo reportes disponibles");
-
-                var result = await _dbConnection.QueryAsync<dynamic>(
-                    "REP_ReportesDisponibles_Get",
-                    commandType: CommandType.StoredProcedure,
-                    commandTimeout: 60);
-
-                return result
-                    .Select(r => new ReporteDTO
-                    {
-                        ReporteId = (int)r.ReporteId,
-                        Nombre = (string)r.Nombre,
-                        Descripcion = (string)r.Descripcion,
-                        Categoria = (string)r.Categoria,
-                        UltimaGeneracion = (DateTime?)r.UltimaGeneracion,
-                        Disponible = (bool)r.Disponible
-                    })
-                    .ToList();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "[RP] Error en GetReportesDisponibles");
-                throw;
-            }
+            _logger.LogWarning("[RP] GetReportesDisponiblesAsync: SP 'REP_ReportesDisponibles_Get' no existe en BD legacy. Retornando lista vacía.");
+            return Task.FromResult(new List<ReporteDTO>());
         }
 
         // ============================================

@@ -120,19 +120,20 @@ namespace MatrixNext.Data.Adapters.SGC
         {
             try
             {
+                // NOTA: La columna en la tabla es UsuarioRegistro (no UsuarioRegistra)
                 const string sql = @"
                     UPDATE SGC_AI_Auditorias 
                     SET SGC_AI_EstadoId = @NuevoEstadoId
                     WHERE Id = @AuditoriaId;
                     
-                    INSERT INTO SGC_AI_Auditorias_EstadosLog (SGC_AI_AuditoriaId, SGC_AI_Estado, FechaRegistro, UsuarioRegistra)
-                    VALUES (@AuditoriaId, @NuevoEstadoId, GETDATE(), @UsuarioRegistra);
+                    INSERT INTO SGC_AI_Auditorias_EstadosLog (SGC_AI_AuditoriaId, SGC_AI_Estado, FechaRegistro, UsuarioRegistro)
+                    VALUES (@AuditoriaId, @NuevoEstadoId, GETDATE(), @UsuarioRegistro);
                 ";
 
                 var parameters = new DynamicParameters();
                 parameters.Add("@AuditoriaId", auditoriaId);
                 parameters.Add("@NuevoEstadoId", nuevoEstadoId);
-                parameters.Add("@UsuarioRegistra", userId);
+                parameters.Add("@UsuarioRegistro", userId);
 
                 var rowsAffected = await _connection.ExecuteAsync(sql, parameters);
                 return rowsAffected > 0;
@@ -270,12 +271,12 @@ namespace MatrixNext.Data.Adapters.SGC
         {
             try
             {
+                // NOTA: La tabla SGC_Normativas NO tiene columna IsDeleted
                 const string sql = @"
-                    SELECT DISTINCT 
-                        CAST(ROW_NUMBER() OVER (ORDER BY Estandar) AS SMALLINT) as Id,
+                    SELECT 
+                        Id,
                         Estandar
                     FROM SGC_Normativas
-                    WHERE IsDeleted = 0
                     ORDER BY Estandar
                 ";
 
@@ -295,12 +296,12 @@ namespace MatrixNext.Data.Adapters.SGC
         {
             try
             {
+                // NOTA: La tabla SGC_AI_Tipos NO tiene columna IsDeleted
                 const string sql = @"
                     SELECT 
                         Id,
                         TipoAuditoria
                     FROM SGC_AI_Tipos
-                    WHERE IsDeleted = 0
                     ORDER BY TipoAuditoria
                 ";
 
@@ -320,13 +321,13 @@ namespace MatrixNext.Data.Adapters.SGC
         {
             try
             {
+                // NOTA: Tabla es SGC_AI_TiposHallazgos (plural), columna es TipoHallazgo (no Nombre), sin IsDeleted
                 const string sql = @"
                     SELECT 
                         Id,
-                        Nombre
-                    FROM SGC_AI_TiposHallazgo
-                    WHERE IsDeleted = 0
-                    ORDER BY Nombre
+                        TipoHallazgo AS Nombre
+                    FROM SGC_AI_TiposHallazgos
+                    ORDER BY TipoHallazgo
                 ";
 
                 var result = await _connection.QueryAsync<SGCTipoHallazgoDto>(sql);
@@ -345,13 +346,13 @@ namespace MatrixNext.Data.Adapters.SGC
         {
             try
             {
+                // NOTA: Tabla SGC_AI_Estados solo tiene Id y EstadoAuditoria (no Nombre, Descripcion ni IsDeleted)
                 const string sql = @"
                     SELECT 
                         Id,
-                        Nombre,
-                        Descripcion
+                        EstadoAuditoria AS Nombre,
+                        EstadoAuditoria AS Descripcion
                     FROM SGC_AI_Estados
-                    WHERE IsDeleted = 0
                     ORDER BY Id
                 ";
 

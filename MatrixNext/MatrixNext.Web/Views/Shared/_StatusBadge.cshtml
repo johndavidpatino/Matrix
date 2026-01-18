@@ -1,0 +1,70 @@
+@*
+    Componente de Badge de Estado Mejorado
+    Uso: <partial name="~/Views/Shared/_StatusBadge.cshtml" model='new { Status = "Activo", Type = "success" }' />
+    
+    Tipos: success (verde), danger (rojo), warning (amarillo), info (azul), secondary (gris), primary (azul oscuro)
+    
+    Mapeo automático de estados comunes:
+    - "Activo", "Aprobado", "Completado", "Exitoso" → success
+    - "Inactivo", "Rechazado", "Error", "Cancelado" → danger
+    - "Pendiente", "En proceso", "Revisión" → warning
+    - "Info", "En curso" → info
+*@
+@{
+    var status = ViewData["Status"]?.ToString() ?? "Sin estado";
+    var type = ViewData["Type"]?.ToString();
+    var icon = ViewData["Icon"]?.ToString();
+    var pill = ViewData["Pill"]?.ToString() != "false";
+    var size = ViewData["Size"]?.ToString() ?? "md";
+    var tooltip = ViewData["Tooltip"]?.ToString();
+    
+    // Auto-mapeo de estados a tipos si no se especifica tipo
+    if (string.IsNullOrEmpty(type))
+    {
+        type = status.ToLower() switch
+        {
+            "activo" or "aprobado" or "aprobada" or "completado" or "completada" or "exitoso" or "vigente" or "disponible" => "success",
+            "inactivo" or "rechazado" or "rechazada" or "error" or "cancelado" or "cancelada" or "obsoleto" or "vencido" or "vencida" or "crítico" => "danger",
+            "pendiente" or "en proceso" or "revisión" or "en revisión" or "programada" or "programado" or "alerta" => "warning",
+            "info" or "en curso" or "asignado" or "asignada" or "en ejecución" => "info",
+            "borrador" or "neutral" or "n/a" => "secondary",
+            _ => "secondary"
+        };
+    }
+    
+    // Auto-mapeo de iconos si no se especifica
+    if (string.IsNullOrEmpty(icon))
+    {
+        icon = type switch
+        {
+            "success" => "bi-check-circle-fill",
+            "danger" => "bi-x-circle-fill",
+            "warning" => "bi-exclamation-circle-fill",
+            "info" => "bi-info-circle-fill",
+            "primary" => "bi-circle-fill",
+            _ => ""
+        };
+    }
+    
+    var badgeClass = $"badge bg-{type}";
+    if (pill) badgeClass += " rounded-pill";
+    
+    var sizeStyle = size switch
+    {
+        "sm" => "font-size: 0.75em; padding: 0.25em 0.5em;",
+        "lg" => "font-size: 1em; padding: 0.5em 0.75em;",
+        _ => ""
+    };
+}
+
+<span class="@badgeClass" style="@sizeStyle"
+      @if (!string.IsNullOrEmpty(tooltip))
+      {
+          <text>data-bs-toggle="tooltip" title="@tooltip"</text>
+      }>
+    @if (!string.IsNullOrEmpty(icon))
+    {
+        <i class="bi @icon me-1" style="font-size: 0.9em;"></i>
+    }
+    @status
+</span>

@@ -114,159 +114,74 @@ namespace MatrixNext.Data.Adapters.GD
 
         #endregion
 
-        #region Estados
+        #region Estados - TABLAS NO EXISTEN
+        
+        /// <summary>
+        /// NOTA: Tabla GD_Estados NO EXISTE en CO_Matrix_Intranet
+        /// Existe GD_EstadoSolicitud pero con estructura diferente
+        /// </summary>
 
-        public async Task<IEnumerable<EstadoDto>> ObtenerEstadosAsync(bool soloActivos = false)
+        public Task<IEnumerable<EstadoDto>> ObtenerEstadosAsync(bool soloActivos = false)
         {
-            var query = "SELECT * FROM GD_Estados";
-            
-            if (soloActivos)
-                query += " WHERE Activo = 1";
-            
-            query += " ORDER BY Modulo, Orden, Nombre";
-
-            return await _connection.QueryAsync<EstadoDto>(query);
+            throw new NotImplementedException(
+                "Tabla GD_Estados no existe en BD. " +
+                "Existe GD_EstadoSolicitud pero con estructura diferente.");
         }
 
-        public async Task<IEnumerable<EstadoDto>> ObtenerEstadosPorModuloAsync(string modulo, bool soloActivos = false)
+        public Task<IEnumerable<EstadoDto>> ObtenerEstadosPorModuloAsync(string modulo, bool soloActivos = false)
         {
-            var query = "SELECT * FROM GD_Estados WHERE Modulo = @Modulo";
-            
-            if (soloActivos)
-                query += " AND Activo = 1";
-            
-            query += " ORDER BY Orden, Nombre";
-
-            var parameters = new DynamicParameters();
-            parameters.Add("@Modulo", modulo);
-
-            return await _connection.QueryAsync<EstadoDto>(query, parameters);
+            throw new NotImplementedException(
+                "Tabla GD_Estados no existe en BD.");
         }
 
-        public async Task<EstadoDto> ObtenerEstadoAsync(long idEstado)
+        public Task<EstadoDto> ObtenerEstadoAsync(long idEstado)
         {
-            const string query = "SELECT * FROM GD_Estados WHERE IdEstado = @IdEstado";
-            var parameters = new DynamicParameters();
-            parameters.Add("@IdEstado", idEstado);
-
-            return await _connection.QueryFirstOrDefaultAsync<EstadoDto>(query, parameters);
+            throw new NotImplementedException(
+                "Tabla GD_Estados no existe en BD.");
         }
 
-        public async Task<bool> ActualizarEstadoAsync(EstadoDto estado, long usuarioModifica)
+        public Task<bool> ActualizarEstadoAsync(EstadoDto estado, long usuarioModifica)
         {
-            const string query = @"
-                UPDATE GD_Estados
-                SET 
-                    Nombre = @Nombre,
-                    Descripcion = @Descripcion,
-                    Modulo = @Modulo,
-                    Color = @Color,
-                    Icono = @Icono,
-                    Activo = @Activo,
-                    Orden = @Orden,
-                    ModificadoPor = @ModificadoPor,
-                    FechaModificacion = GETDATE()
-                WHERE IdEstado = @IdEstado";
-
-            var parameters = new DynamicParameters();
-            parameters.Add("@IdEstado", estado.IdEstado);
-            parameters.Add("@Nombre", estado.Nombre);
-            parameters.Add("@Descripcion", estado.Descripcion);
-            parameters.Add("@Modulo", estado.Modulo);
-            parameters.Add("@Color", estado.Color);
-            parameters.Add("@Icono", estado.Icono);
-            parameters.Add("@Activo", estado.Activo);
-            parameters.Add("@Orden", estado.Orden);
-            parameters.Add("@ModificadoPor", usuarioModifica);
-
-            var rowsAffected = await _connection.ExecuteAsync(query, parameters);
-            return rowsAffected > 0;
+            throw new NotImplementedException(
+                "Tabla GD_Estados no existe en BD.");
         }
 
-        public async Task<bool> DesactivarEstadoAsync(long idEstado, long usuarioModifica)
+        public Task<bool> DesactivarEstadoAsync(long idEstado, long usuarioModifica)
         {
-            const string query = @"
-                UPDATE GD_Estados
-                SET Activo = 0, ModificadoPor = @ModificadoPor, FechaModificacion = GETDATE()
-                WHERE IdEstado = @IdEstado";
-
-            var parameters = new DynamicParameters();
-            parameters.Add("@IdEstado", idEstado);
-            parameters.Add("@ModificadoPor", usuarioModifica);
-
-            var rowsAffected = await _connection.ExecuteAsync(query, parameters);
-            return rowsAffected > 0;
+            throw new NotImplementedException(
+                "Tabla GD_Estados no existe en BD.");
         }
 
         #endregion
 
-        #region Procesos
+        #region Procesos - TABLA NO EXISTE
 
-        public async Task<IEnumerable<ProcesoDto>> ObtenerProcesosAsync(bool soloActivos = false)
+        /// <summary>
+        /// NOTA: Tabla GD_Procesos NO EXISTE en CO_Matrix_Intranet
+        /// </summary>
+
+        public Task<IEnumerable<ProcesoDto>> ObtenerProcesosAsync(bool soloActivos = false)
         {
-            var query = "SELECT * FROM GD_Procesos";
-            
-            if (soloActivos)
-                query += " WHERE Activo = 1";
-            
-            query += " ORDER BY Orden, Nombre";
-
-            return await _connection.QueryAsync<ProcesoDto>(query);
+            throw new NotImplementedException(
+                "Tabla GD_Procesos no existe en BD.");
         }
 
-        public async Task<ProcesoDto> ObtenerProcesoAsync(long idProceso)
+        public Task<ProcesoDto> ObtenerProcesoAsync(long idProceso)
         {
-            const string query = "SELECT * FROM GD_Procesos WHERE IdProceso = @IdProceso";
-            var parameters = new DynamicParameters();
-            parameters.Add("@IdProceso", idProceso);
-
-            return await _connection.QueryFirstOrDefaultAsync<ProcesoDto>(query, parameters);
+            throw new NotImplementedException(
+                "Tabla GD_Procesos no existe en BD.");
         }
 
-        public async Task<bool> ActualizarProcesoAsync(ProcesoDto proceso, long usuarioModifica)
+        public Task<bool> ActualizarProcesoAsync(ProcesoDto proceso, long usuarioModifica)
         {
-            const string query = @"
-                UPDATE GD_Procesos
-                SET 
-                    Nombre = @Nombre,
-                    Descripcion = @Descripcion,
-                    Codigo = @Codigo,
-                    IdResponsable = @IdResponsable,
-                    Version = @Version,
-                    Activo = @Activo,
-                    Orden = @Orden,
-                    ModificadoPor = @ModificadoPor,
-                    FechaModificacion = GETDATE()
-                WHERE IdProceso = @IdProceso";
-
-            var parameters = new DynamicParameters();
-            parameters.Add("@IdProceso", proceso.IdProceso);
-            parameters.Add("@Nombre", proceso.Nombre);
-            parameters.Add("@Descripcion", proceso.Descripcion);
-            parameters.Add("@Codigo", proceso.Codigo);
-            parameters.Add("@IdResponsable", proceso.IdResponsable);
-            parameters.Add("@Version", proceso.Version);
-            parameters.Add("@Activo", proceso.Activo);
-            parameters.Add("@Orden", proceso.Orden);
-            parameters.Add("@ModificadoPor", usuarioModifica);
-
-            var rowsAffected = await _connection.ExecuteAsync(query, parameters);
-            return rowsAffected > 0;
+            throw new NotImplementedException(
+                "Tabla GD_Procesos no existe en BD.");
         }
 
-        public async Task<bool> DesactivarProcesoAsync(long idProceso, long usuarioModifica)
+        public Task<bool> DesactivarProcesoAsync(long idProceso, long usuarioModifica)
         {
-            const string query = @"
-                UPDATE GD_Procesos
-                SET Activo = 0, ModificadoPor = @ModificadoPor, FechaModificacion = GETDATE()
-                WHERE IdProceso = @IdProceso";
-
-            var parameters = new DynamicParameters();
-            parameters.Add("@IdProceso", idProceso);
-            parameters.Add("@ModificadoPor", usuarioModifica);
-
-            var rowsAffected = await _connection.ExecuteAsync(query, parameters);
-            return rowsAffected > 0;
+            throw new NotImplementedException(
+                "Tabla GD_Procesos no existe en BD.");
         }
 
         #endregion
@@ -275,14 +190,15 @@ namespace MatrixNext.Data.Adapters.GD
 
         public async Task<CatalogosResumenDto> ObtenerResumenAsync()
         {
+            // Solo GD_TipoSolicitud existe - los otros catálogos devuelven 0
             const string query = @"
                 SELECT
                     (SELECT COUNT(*) FROM GD_TipoSolicitud) AS TotalTiposSolicitud,
                     (SELECT COUNT(*) FROM GD_TipoSolicitud WHERE Activo = 1) AS TiposActivos,
-                    (SELECT COUNT(*) FROM GD_Estados) AS TotalEstados,
-                    (SELECT COUNT(*) FROM GD_Estados WHERE Activo = 1) AS EstadosActivos,
-                    (SELECT COUNT(*) FROM GD_Procesos) AS TotalProcesos,
-                    (SELECT COUNT(*) FROM GD_Procesos WHERE Activo = 1) AS ProcesosActivos";
+                    0 AS TotalEstados,
+                    0 AS EstadosActivos,
+                    0 AS TotalProcesos,
+                    0 AS ProcesosActivos";
 
             return await _connection.QueryFirstOrDefaultAsync<CatalogosResumenDto>(query) 
                    ?? new CatalogosResumenDto();

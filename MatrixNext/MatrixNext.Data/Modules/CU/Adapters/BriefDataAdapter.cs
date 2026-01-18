@@ -58,10 +58,10 @@ namespace MatrixNext.Data.Adapters.CU
             using var connection = CreateConnection();
             var parameters = new
             {
-                IdBrief = idBrief,
-                IdUsuario = idUsuario,
-                IdUnidad = idUnidad,
-                NuevoNombre = nuevoTitulo
+                idBrief = idBrief,
+                idUser = idUsuario,
+                idUnidad = idUnidad,
+                Titulo = nuevoTitulo
             };
 
             // El SP CU_Brief_Clone retorna el ID del nuevo Brief clonado

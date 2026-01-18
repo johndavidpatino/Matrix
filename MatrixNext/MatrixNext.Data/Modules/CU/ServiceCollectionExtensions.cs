@@ -4,6 +4,7 @@ using MatrixNext.Data.Modules.CU.Entities;
 using MatrixNext.Data.Services.CU;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace MatrixNext.Data.Modules.CU
 {
@@ -19,7 +20,9 @@ namespace MatrixNext.Data.Modules.CU
             services.AddScoped(sp => new PropuestaDataAdapter(configuration));
             services.AddScoped(sp => new EstudioDataAdapter(configuration));
             services.AddScoped(sp => new BriefDataAdapter(configuration));
-            services.AddScoped(sp => new PresupuestoDataAdapter(configuration));
+            services.AddScoped(sp => new PresupuestoDataAdapter(
+                configuration,
+                sp.GetRequiredService<ILogger<PresupuestoDataAdapter>>()));
 
             // DbContext para IQuoteCalculatorService
             services.AddScoped(sp => 

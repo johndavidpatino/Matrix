@@ -7,13 +7,24 @@
 <div class="container-fluid py-3">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
-            <h2 class="mb-0">Proyectos</h2>
+            <h2 class="mb-0">
+                Proyectos
+                <partial name="~/Views/Shared/_HelpTooltip.cshtml" model='new { Text = "Gestione proyectos de investigación con JobBook único", Type = "info" }' />
+            </h2>
             <small class="text-muted">Gestión de proyectos (PY_Proyectos)</small>
         </div>
-        <button class="btn btn-primary" data-url="@Url.Action("CreateModal")" data-ajax-modal>
-            <i class="bi bi-plus-lg"></i> Nuevo Proyecto
-        </button>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-info" data-help-topic="py-proyectos" title="Ayuda">
+                <i class="bi bi-question-circle"></i>
+            </button>
+            <button class="btn btn-primary" data-url="@Url.Action("CreateModal")" data-ajax-modal>
+                <i class="bi bi-plus-lg"></i> Nuevo Proyecto
+            </button>
+        </div>
     </div>
+
+    <!-- Alerta informativa -->
+    <partial name="~/Views/Shared/_InfoAlert.cshtml" model='new { Type = "tip", Message = "Cada proyecto tiene un JobBook único que identifica el trabajo en todo el sistema. Los proyectos cerrados no se pueden reabrir.", Dismissible = true }' />
 
     <form id="filtrosForm" class="row g-2 mb-3" data-grid-target="#gridContainer" data-grid-url="@Url.Action("Grid")">
         <div class="col-md-4">

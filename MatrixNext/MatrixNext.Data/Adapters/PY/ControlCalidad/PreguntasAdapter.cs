@@ -23,8 +23,15 @@ namespace MatrixNext.Data.Adapters.PY.ControlCalidad
         {
             try
             {
+                // SP PY_Preguntas_Get acepta @ID y @IdTipo
+                // Pasar null en ambos para obtener todas
+                var parameters = new DynamicParameters();
+                parameters.Add("@ID", null);
+                parameters.Add("@IdTipo", null);
+
                 var result = await _connection.QueryAsync<PreguntaListDto>(
                     "PY_Preguntas_Get",
+                    parameters,
                     commandType: CommandType.StoredProcedure
                 );
 
@@ -41,11 +48,13 @@ namespace MatrixNext.Data.Adapters.PY.ControlCalidad
         {
             try
             {
+                // SP PY_Preguntas_Get acepta @ID y @IdTipo
                 var parameters = new DynamicParameters();
-                parameters.Add("@IdTipoProceso", tipoProceso);
+                parameters.Add("@ID", null);
+                parameters.Add("@IdTipo", tipoProceso);
 
                 var result = await _connection.QueryAsync<PreguntaListDto>(
-                    "PY_Preguntas_GetByTipo",
+                    "PY_Preguntas_Get",
                     parameters,
                     commandType: CommandType.StoredProcedure
                 );
@@ -64,11 +73,10 @@ namespace MatrixNext.Data.Adapters.PY.ControlCalidad
             try
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@IdProceso", dto.IdProceso);
                 parameters.Add("@Pregunta", dto.Pregunta);
+                parameters.Add("@IdTipo", dto.IdProceso); // El SP usa @IdTipo, no @IdProceso
                 parameters.Add("@Activa", dto.Activa);
-                parameters.Add("@RegistradoPor", userId);
-                parameters.Add("@IdPregunta", dbType: DbType.Int64, direction: ParameterDirection.Output);
+                // Nota: El SP no tiene @RegistradoPor ni @IdPregunta OUTPUT
 
                 await _connection.ExecuteAsync(
                     "PY_Preguntas_Add",
@@ -76,7 +84,8 @@ namespace MatrixNext.Data.Adapters.PY.ControlCalidad
                     commandType: CommandType.StoredProcedure
                 );
 
-                long preguntaId = parameters.Get<long>("@IdPregunta");
+                // Obtener el ID insertado usando SCOPE_IDENTITY
+                long preguntaId = await _connection.QueryFirstAsync<long>("SELECT SCOPE_IDENTITY()");
                 _logger.LogInformation("Pregunta {Id} creada por usuario {UserId}", preguntaId, userId);
                 return preguntaId;
             }
@@ -93,10 +102,10 @@ namespace MatrixNext.Data.Adapters.PY.ControlCalidad
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@IdPregunta", id);
-                parameters.Add("@IdProceso", dto.IdProceso);
                 parameters.Add("@Pregunta", dto.Pregunta);
+                parameters.Add("@IdTipo", dto.IdProceso); // El SP usa @IdTipo, no @IdProceso
                 parameters.Add("@Activa", dto.Activa);
-                parameters.Add("@ModificadoPor", userId);
+                // Nota: El SP no tiene @ModificadoPor
 
                 await _connection.ExecuteAsync(
                     "PY_Preguntas_Edit",

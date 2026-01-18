@@ -23,11 +23,15 @@ namespace MatrixNext.Data.Adapters.PY.ControlCalidad
         {
             try
             {
+                // SP PY_ControlCalidad_Get acepta @ID, @TrabajoId, @TipoProceso
+                // Pasar null en ID y TrabajoId para filtrar solo por tipo
                 var parameters = new DynamicParameters();
+                parameters.Add("@ID", null);
+                parameters.Add("@TrabajoId", null);
                 parameters.Add("@TipoProceso", tipoProceso);
 
                 var result = await _connection.QueryAsync<ControlCalidadListDto>(
-                    "PY_ControlCalidad_GetByTipo",
+                    "PY_ControlCalidad_Get",
                     parameters,
                     commandType: CommandType.StoredProcedure
                 );
@@ -45,12 +49,14 @@ namespace MatrixNext.Data.Adapters.PY.ControlCalidad
         {
             try
             {
+                // SP PY_ControlCalidad_Get acepta @ID, @TrabajoId, @TipoProceso
                 var parameters = new DynamicParameters();
+                parameters.Add("@ID", null);
                 parameters.Add("@TrabajoId", trabajoId);
                 parameters.Add("@TipoProceso", tipoProceso);
 
                 var result = await _connection.QueryAsync<ControlCalidadListDto>(
-                    "PY_ControlCalidad_GetByTrabajo",
+                    "PY_ControlCalidad_Get",
                     parameters,
                     commandType: CommandType.StoredProcedure
                 );
@@ -68,8 +74,11 @@ namespace MatrixNext.Data.Adapters.PY.ControlCalidad
         {
             try
             {
+                // SP PY_ControlCalidad_Get acepta @ID, @TrabajoId, @TipoProceso
                 var parameters = new DynamicParameters();
                 parameters.Add("@ID", id);
+                parameters.Add("@TrabajoId", null);
+                parameters.Add("@TipoProceso", null);
 
                 var result = await _connection.QueryFirstOrDefaultAsync<ControlCalidadDetailDto>(
                     "PY_ControlCalidad_Get",
@@ -103,8 +112,7 @@ namespace MatrixNext.Data.Adapters.PY.ControlCalidad
                 parameters.Add("@Persona", dto.PersonaId);
                 parameters.Add("@Fecha", dto.Fecha);
                 parameters.Add("@TipoProceso", dto.TipoProceso);
-                parameters.Add("@RegistradoPor", userId);
-                parameters.Add("@Id", dbType: DbType.Int64, direction: ParameterDirection.Output);
+                // Nota: El SP no tiene @RegistradoPor ni @Id OUTPUT
 
                 await _connection.ExecuteAsync(
                     "PY_ControlCalidad_Add",
@@ -112,7 +120,8 @@ namespace MatrixNext.Data.Adapters.PY.ControlCalidad
                     commandType: CommandType.StoredProcedure
                 );
 
-                long controlId = parameters.Get<long>("@Id");
+                // Obtener el ID insertado usando SCOPE_IDENTITY
+                long controlId = await _connection.QueryFirstAsync<long>("SELECT SCOPE_IDENTITY()");
 
                 // Guardar detalles
                 if (dto.Detalles?.Count > 0)
@@ -135,14 +144,14 @@ namespace MatrixNext.Data.Adapters.PY.ControlCalidad
             try
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@Id", id);
+                parameters.Add("@ID", id); // Nota: El SP usa @ID (mayúsculas)
                 parameters.Add("@TrabajoId", dto.TrabajoId);
                 parameters.Add("@Evaluador", dto.Evaluador);
                 parameters.Add("@RolEvaluador", dto.RolEvaluador);
                 parameters.Add("@Persona", dto.PersonaId);
                 parameters.Add("@Fecha", dto.Fecha);
                 parameters.Add("@TipoProceso", dto.TipoProceso);
-                parameters.Add("@ModificadoPor", userId);
+                // Nota: El SP no tiene @ModificadoPor
 
                 await _connection.ExecuteAsync(
                     "PY_ControlCalidad_Edit",

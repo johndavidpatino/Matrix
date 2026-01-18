@@ -35,16 +35,16 @@ public class NotificacionesOpAdapter : INotificacionesOpAdapter
 
             var result = await connection.QueryFirstOrDefaultAsync<DestinatarioEmailDto>(
                 @"SELECT 
-                    u.IdUsuario,
-                    u.NombreCompleto,
+                    u.Id AS IdUsuario,
+                    u.NombreUsuario AS NombreCompleto,
                     u.Email AS EmailOrigen,
                     'Coordinador' AS Rol,
-                    t.IdUnidad,
-                    un.NombreUnidad
-                FROM PY_Trabajos t
-                LEFT JOIN TH_Usuario u ON t.IdCoordinador = u.IdUsuario
-                LEFT JOIN CS_Unidad un ON t.IdUnidad = un.IdUnidad
-                WHERE t.IdTrabajo = @IdTrabajo",
+                    t.Unidad AS IdUnidad,
+                    un.Nombre AS NombreUnidad
+                FROM PY_Trabajo t
+                LEFT JOIN US_Usuarios u ON t.COE = u.Id
+                LEFT JOIN US_Unidades un ON t.Unidad = un.id
+                WHERE t.id = @IdTrabajo",
                 new { IdTrabajo = idTrabajo }
             );
 
@@ -84,17 +84,16 @@ public class NotificacionesOpAdapter : INotificacionesOpAdapter
             // Buscar usuarios con rol COE en TH_UsuarioRol o similar
             var result = await connection.QueryAsync<DestinatarioEmailDto>(
                 @"SELECT 
-                    u.IdUsuario,
-                    u.NombreCompleto,
+                    u.Id AS IdUsuario,
+                    u.NombreUsuario AS NombreCompleto,
                     u.Email AS EmailOrigen,
                     'COE' AS Rol,
-                    u.IdUnidad,
-                    un.NombreUnidad
-                FROM TH_Usuario u
-                INNER JOIN TH_UsuarioRol ur ON u.IdUsuario = ur.IdUsuario
-                LEFT JOIN CS_Unidad un ON u.IdUnidad = un.IdUnidad
-                WHERE ur.NombreRol LIKE '%COE%'
-                  AND (@IdUnidad IS NULL OR u.IdUnidad = @IdUnidad)
+                    u.Id AS IdUnidad,
+                    'N/A' AS NombreUnidad
+                FROM US_Usuarios u
+                INNER JOIN US_RolesUsuarios ur ON u.Id = ur.IdUsuario
+                WHERE ur.IdRol IN (SELECT Id FROM US_Roles WHERE Nombre LIKE '%COE%')
+                  AND (@IdUnidad IS NULL OR u.Id IN (SELECT Id FROM US_Unidades WHERE id = @IdUnidad))
                   AND u.Activo = 1",
                 parameters
             );
@@ -123,17 +122,17 @@ public class NotificacionesOpAdapter : INotificacionesOpAdapter
 
             var result = await connection.QueryFirstOrDefaultAsync<DestinatarioEmailDto>(
                 @"SELECT 
-                    u.IdUsuario,
-                    u.NombreCompleto,
+                    u.Id AS IdUsuario,
+                    u.NombreUsuario AS NombreCompleto,
                     u.Email AS EmailOrigen,
                     'PMO' AS Rol,
-                    p.IdUnidad,
-                    un.NombreUnidad
-                FROM PY_Trabajos t
-                INNER JOIN PY_Proyectos p ON t.IdProyecto = p.IdProyecto
-                LEFT JOIN TH_Usuario u ON p.IdPmo = u.IdUsuario
-                LEFT JOIN CS_Unidad un ON p.IdUnidad = un.IdUnidad
-                WHERE t.IdTrabajo = @IdTrabajo",
+                    t.Unidad AS IdUnidad,
+                    un.Nombre AS NombreUnidad
+                FROM PY_Trabajo t
+                LEFT JOIN PY_Proyectos p ON t.ProyectoId = p.id
+                LEFT JOIN US_Usuarios u ON p.GerenteProyectos = u.Id
+                LEFT JOIN US_Unidades un ON t.Unidad = un.id
+                WHERE t.id = @IdTrabajo",
                 new { IdTrabajo = idTrabajo }
             );
 

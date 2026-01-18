@@ -5,7 +5,10 @@ using System.Data;
 namespace MatrixNext.Data.Modules.CC.Adapters
 {
     /// <summary>
-    /// Adapter para Control de Presupuestos usando Stored Procedures
+    /// Adapter para Control de Presupuestos usando Stored Procedures existentes en BD
+    /// SP disponibles: CC_PresupuestosInternosGet, CC_PresupuestosInternosGetXId, 
+    /// CC_DetallePresupuestosSelect, CC_DetallePresupuestoGet, CC_PresupuestoInternoDelete,
+    /// CC_ActividadesPresupuestadas
     /// </summary>
     public class CcControlPresupuestosAdapter
     {
@@ -17,34 +20,55 @@ namespace MatrixNext.Data.Modules.CC.Adapters
         }
 
         /// <summary>
-        /// Obtiene lista de presupuestos con filtros
+        /// Obtiene lista de presupuestos por trabajo
+        /// SP: CC_PresupuestosInternosGet
         /// </summary>
         public async Task<IEnumerable<PresupuestoDto>> ObtenerPresupuestosAsync(
             int? periodo = null, long? idTrabajo = null, byte? estado = null)
         {
-            const string sql = "CC_ObtenerPresupuestos";
+            // Usar SP existente CC_PresupuestosInternosGet (solo acepta @TrabajoId)
+            const string sql = "CC_PresupuestosInternosGet";
             var parameters = new DynamicParameters();
             
-            if (periodo.HasValue)
-                parameters.Add("@Periodo", periodo.Value);
             if (idTrabajo.HasValue)
-                parameters.Add("@IdTrabajo", idTrabajo.Value);
-            if (estado.HasValue)
-                parameters.Add("@Estado", estado.Value);
+                parameters.Add("@TrabajoId", idTrabajo.Value);
 
             var result = await _dbConnection.QueryAsync<PresupuestoDto>(
                 sql, parameters, commandType: CommandType.StoredProcedure);
+            
+            // Filtrar por periodo y estado en memoria si se especificaron
+            if (periodo.HasValue || estado.HasValue)
+            {
+                return result.Where(p => 
+                    (!periodo.HasValue || p.Periodo == periodo.Value) &&
+                    (!estado.HasValue || p.Estado == estado.Value));
+            }
             
             return result;
         }
 
         /// <summary>
+        /// Obtiene un presupuesto por ID
+        /// SP: CC_PresupuestosInternosGetXId
+        /// </summary>
+        public async Task<PresupuestoDto?> ObtenerPresupuestoPorIdAsync(long idPresupuesto)
+        {
+            const string sql = "CC_PresupuestosInternosGetXId";
+            var parameters = new DynamicParameters();
+            parameters.Add("@IdPresupuesto", idPresupuesto);
+
+            return await _dbConnection.QueryFirstOrDefaultAsync<PresupuestoDto>(
+                sql, parameters, commandType: CommandType.StoredProcedure);
+        }
+
+        /// <summary>
         /// Obtiene detalles de un presupuesto específico
+        /// SP: CC_DetallePresupuestoGet
         /// </summary>
         public async Task<IEnumerable<DetallePresupuestoDto>> ObtenerDetallePresupuestoAsync(
             long idPresupuesto)
         {
-            const string sql = "CC_DetallePresupuesto";
+            const string sql = "CC_DetallePresupuestoGet";
             var parameters = new DynamicParameters();
             parameters.Add("@IdPresupuesto", idPresupuesto);
 
@@ -55,56 +79,54 @@ namespace MatrixNext.Data.Modules.CC.Adapters
         }
 
         /// <summary>
+        /// Obtiene detalles de presupuesto (alternativo)
+        /// SP: CC_DetallePresupuestosSelect
+        /// </summary>
+        public async Task<IEnumerable<DetallePresupuestoDto>> ObtenerDetallesPresupuestoSelectAsync(
+            long idPresupuesto)
+        {
+            const string sql = "CC_DetallePresupuestosSelect";
+            var parameters = new DynamicParameters();
+            parameters.Add("@idpresup", idPresupuesto);
+
+            var result = await _dbConnection.QueryAsync<DetallePresupuestoDto>(
+                sql, parameters, commandType: CommandType.StoredProcedure);
+            
+            return result;
+        }
+
+        /// <summary>
         /// Guarda un presupuesto (insert/update)
+        /// NOTA: No existe SP para guardar - usar EF Core o implementar SP en BD
         /// </summary>
         public async Task<long> GuardarPresupuestoAsync(PresupuestoDto presupuesto)
         {
-            const string sql = "CC_GuardarPresupuesto";
-            var parameters = new DynamicParameters();
-            
-            parameters.Add("@IdPresupuesto", presupuesto.IdPresupuesto);
-            parameters.Add("@Periodo", presupuesto.Periodo);
-            parameters.Add("@IdTrabajo", presupuesto.IdTrabajo);
-            parameters.Add("@MontoPresupuesto", presupuesto.MontoPresupuesto);
-            parameters.Add("@Estado", presupuesto.Estado);
-            parameters.Add("@IdPresupuestoOutput", direction: ParameterDirection.Output);
-
-            await _dbConnection.ExecuteAsync(
-                sql, parameters, commandType: CommandType.StoredProcedure);
-            
-            return parameters.Get<long>("@IdPresupuestoOutput");
+            // TODO: SP CC_GuardarPresupuesto no existe en BD legacy
+            // Usar CC_SolicitudPresupuestoInternoAdd si aplica o implementar con EF
+            throw new NotImplementedException(
+                "SP CC_GuardarPresupuesto no existe. Usar CC_SolicitudPresupuestoInternoAdd o implementar con EF Core.");
         }
 
         /// <summary>
         /// Guarda detalles de presupuesto
+        /// NOTA: No existe SP para guardar detalle - usar CC_DetallePresupuestosUpdate
         /// </summary>
-        public async Task<long> GuardarDetallePresupuestoAsync(
-            DetallePresupuestoDto detalle)
+        public async Task<long> GuardarDetallePresupuestoAsync(DetallePresupuestoDto detalle)
         {
-            const string sql = "CC_GuardarDetallePresupuesto";
-            var parameters = new DynamicParameters();
-            
-            parameters.Add("@IdDetallePresupuesto", detalle.IdDetallePresupuesto);
-            parameters.Add("@IdPresupuesto", detalle.IdPresupuesto);
-            parameters.Add("@IdActividad", detalle.IdActividad);
-            parameters.Add("@Cantidad", detalle.Cantidad);
-            parameters.Add("@ValorUnitario", detalle.ValorUnitario);
-            parameters.Add("@IdDetalleOutput", direction: ParameterDirection.Output);
-
-            await _dbConnection.ExecuteAsync(
-                sql, parameters, commandType: CommandType.StoredProcedure);
-            
-            return parameters.Get<long>("@IdDetalleOutput");
+            // TODO: SP CC_GuardarDetallePresupuesto no existe - usar CC_DetallePresupuestosUpdate
+            throw new NotImplementedException(
+                "SP CC_GuardarDetallePresupuesto no existe. Usar CC_DetallePresupuestosUpdate.");
         }
 
         /// <summary>
-        /// Elimina un presupuesto (soft delete)
+        /// Elimina un presupuesto
+        /// SP: CC_PresupuestoInternoDelete
         /// </summary>
         public async Task EliminarPresupuestoAsync(long idPresupuesto)
         {
-            const string sql = "CC_EliminarPresupuesto";
+            const string sql = "CC_PresupuestoInternoDelete";
             var parameters = new DynamicParameters();
-            parameters.Add("@IdPresupuesto", idPresupuesto);
+            parameters.Add("@PresupuestoId", idPresupuesto);
 
             await _dbConnection.ExecuteAsync(
                 sql, parameters, commandType: CommandType.StoredProcedure);
@@ -112,71 +134,49 @@ namespace MatrixNext.Data.Modules.CC.Adapters
 
         /// <summary>
         /// Obtiene verificación de presupuesto vs. realizado
+        /// NOTA: SP no existe en BD legacy
         /// </summary>
         public async Task<IEnumerable<VerificacionPresupuestoDto>> 
             ObtenerVerificacionPresupuestosAsync(int? periodo = null)
         {
-            const string sql = "CC_VerificacionPresupuestosRealizados";
-            var parameters = new DynamicParameters();
-            
-            if (periodo.HasValue)
-                parameters.Add("@Periodo", periodo.Value);
-
-            var result = await _dbConnection.QueryAsync<VerificacionPresupuestoDto>(
-                sql, parameters, commandType: CommandType.StoredProcedure);
-            
-            return result;
+            // TODO: SP CC_VerificacionPresupuestosRealizados no existe
+            throw new NotImplementedException(
+                "SP CC_VerificacionPresupuestosRealizados no existe en BD legacy.");
         }
 
         /// <summary>
         /// Obtiene datos de nómina para distribución de costos
+        /// NOTA: SP no existe - usar CC_NominaDistribucionCostos si aplica
         /// </summary>
         public async Task<IEnumerable<NominaDistribucionDto>> 
             ObtenerNominaDistribucionAsync(int periodo, long? idEmpleado = null)
         {
-            const string sql = "CC_LiquidarPlanillas";
-            var parameters = new DynamicParameters();
-            parameters.Add("@Periodo", periodo);
-            
-            if (idEmpleado.HasValue)
-                parameters.Add("@IdEmpleado", idEmpleado.Value);
-
-            var result = await _dbConnection.QueryAsync<NominaDistribucionDto>(
-                sql, parameters, commandType: CommandType.StoredProcedure);
-            
-            return result;
+            // TODO: SP CC_LiquidarPlanillas no existe con esos parámetros
+            throw new NotImplementedException(
+                "SP CC_LiquidarPlanillas no existe. Revisar CC_NominaDistribucion* disponibles.");
         }
 
         /// <summary>
         /// Guarda distribución de costos por centro
+        /// NOTA: SP no existe en BD legacy
         /// </summary>
-        public async Task<long> GuardarDistribucionCostoAsync(
-            DistribucionPorCentroDto distribucion)
+        public async Task<long> GuardarDistribucionCostoAsync(DistribucionPorCentroDto distribucion)
         {
-            const string sql = "CC_GuardarDistribucionCostos";
-            var parameters = new DynamicParameters();
-            
-            parameters.Add("@IdDistribucion", distribucion.IdDistribucion);
-            parameters.Add("@IdEmpleado", distribucion.IdCentroCosto);
-            parameters.Add("@IdCentroCosto", distribucion.IdCentroCosto);
-            parameters.Add("@PorcentajeDistribucion", distribucion.PorcentajeDistribucion);
-            parameters.Add("@IdDistribucionOutput", direction: ParameterDirection.Output);
-
-            await _dbConnection.ExecuteAsync(
-                sql, parameters, commandType: CommandType.StoredProcedure);
-            
-            return parameters.Get<long>("@IdDistribucionOutput");
+            // TODO: SP CC_GuardarDistribucionCostos no existe
+            throw new NotImplementedException(
+                "SP CC_GuardarDistribucionCostos no existe en BD legacy.");
         }
 
         /// <summary>
         /// Obtiene actividades disponibles para asignación de presupuesto
+        /// SP: CC_ActividadesPresupuestadas
         /// </summary>
         public async Task<IEnumerable<AsignacionPresupuestoDto>> 
-            ObtenerActividadesPresupuestadasAsync(long idPresupuesto)
+            ObtenerActividadesPresupuestadasAsync(long idPropuesta)
         {
             const string sql = "CC_ActividadesPresupuestadas";
             var parameters = new DynamicParameters();
-            parameters.Add("@IdPresupuesto", idPresupuesto);
+            parameters.Add("@IdPropuesta", idPropuesta);
 
             var result = await _dbConnection.QueryAsync<AsignacionPresupuestoDto>(
                 sql, parameters, commandType: CommandType.StoredProcedure);
@@ -186,23 +186,13 @@ namespace MatrixNext.Data.Modules.CC.Adapters
 
         /// <summary>
         /// Guarda asignación de presupuesto a actividad
+        /// NOTA: SP no existe en BD legacy
         /// </summary>
-        public async Task<long> GuardarAsignacionPresupuestoAsync(
-            AsignacionPresupuestoDto asignacion)
+        public async Task<long> GuardarAsignacionPresupuestoAsync(AsignacionPresupuestoDto asignacion)
         {
-            const string sql = "CC_GuardarAsignacionPresupuesto";
-            var parameters = new DynamicParameters();
-            
-            parameters.Add("@IdAsignacion", asignacion.IdAsignacion);
-            parameters.Add("@IdPresupuesto", asignacion.IdPresupuesto);
-            parameters.Add("@IdActividad", asignacion.IdActividad);
-            parameters.Add("@MontoAsignado", asignacion.MontoAsignado);
-            parameters.Add("@IdAsignacionOutput", direction: ParameterDirection.Output);
-
-            await _dbConnection.ExecuteAsync(
-                sql, parameters, commandType: CommandType.StoredProcedure);
-            
-            return parameters.Get<long>("@IdAsignacionOutput");
+            // TODO: SP CC_GuardarAsignacionPresupuesto no existe
+            throw new NotImplementedException(
+                "SP CC_GuardarAsignacionPresupuesto no existe en BD legacy.");
         }
     }
 }

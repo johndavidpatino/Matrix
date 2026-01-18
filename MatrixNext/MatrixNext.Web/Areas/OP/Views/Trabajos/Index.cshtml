@@ -9,28 +9,42 @@
         <div class="col">
             <h1 class="h3">
                 <i class="bi bi-briefcase"></i> Gestión de Trabajos - Portal COE
+                <partial name="~/Views/Shared/_HelpTooltip.cshtml" model='new { Text = "Portal de operaciones de campo para trabajos cuantitativos", Type = "info" }' />
             </h1>
             <p class="text-muted mb-0">
                 Gestión de trabajos operativos cuantitativos (Permiso 100)
+                <button type="button" class="btn btn-sm btn-outline-info ms-2" data-help-topic="op-trabajos" title="Ayuda">
+                    <i class="bi bi-question-circle"></i>
+                </button>
             </p>
         </div>
     </div>
+
+    <!-- Alerta informativa sobre estados -->
+    <partial name="~/Views/Shared/_InfoAlert.cshtml" model='new { Type = "info", Message = "Estados del trabajo: Nuevo → En Ejecución → Cerrado. Los trabajos anulados no pueden reactivarse.", Dismissible = true }' />
 
     @* Sección de búsqueda y filtros *@
     <div class="card mb-4">
         <div class="card-header bg-light">
             <h5 class="card-title mb-0">
                 <i class="bi bi-search"></i> Búsqueda y Filtros
+                <partial name="~/Views/Shared/_HelpTooltip.cshtml" model='new { Text = "Filtre por nombre del trabajo o código JobBook", Type = "tip" }' />
             </h5>
         </div>
         <div class="card-body">
             <form method="get" class="row g-3">
                 <div class="col-md-3">
-                    <label for="txtNombreBuscar" class="form-label">Nombre o Job Book</label>
+                    <label for="txtNombreBuscar" class="form-label">
+                        Nombre o Job Book
+                        <partial name="~/Views/Shared/_HelpTooltip.cshtml" model='new { Text = "Puede buscar por nombre parcial o código completo", Type = "info" }' />
+                    </label>
                     <input type="text" class="form-control" id="txtNombreBuscar" name="Busqueda" value="@Model.Filtros.Busqueda" placeholder="Nombre o Job Book">
                 </div>
                 <div class="col-md-2">
-                    <label for="ddlEstado" class="form-label">Estado</label>
+                    <label for="ddlEstado" class="form-label">
+                        Estado
+                        <partial name="~/Views/Shared/_HelpTooltip.cshtml" model='new { Text = "Nuevo: recién creado | Ejecución: en campo | Cerrado: finalizado", Type = "info" }' />
+                    </label>
                     <select class="form-select" id="ddlEstado" name="Estado">
                         <option value="-1">Todos</option>
                         <option value="1" selected="@(Model.Filtros.Estado == 1)">Nuevo</option>

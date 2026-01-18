@@ -131,17 +131,19 @@ public class OpFiltrosService : IOpFiltrosService
     {
         try
         {
-            // Ref: AprobacionesFiltros.aspx.vb líneas 28-91
+            // NOTA: SP OP_ObtenerRespuestasFiltro no existe en BD
+            // Usar SELECT directo de tabla OP_RespuestasFiltro si existe
+            _logger.LogWarning("[OpFiltros] ObtenerRespuestasFiltro: SP no existe. TrabajoId: {TrabajoId}", trabajoId);
+            
             using var connection = new SqlConnection(_connectionString);
-            var parameters = new DynamicParameters();
-            parameters.Add("@TrabajoId", trabajoId);
-            parameters.Add("@TipoFiltro", tipoFiltro);
-            parameters.Add("@Estado", estado);
-
+            var sql = @"SELECT * FROM OP_RespuestasFiltro 
+                        WHERE TrabajoId = @TrabajoId 
+                        AND (@TipoFiltro IS NULL OR TipoFiltro = @TipoFiltro)
+                        AND (@Estado IS NULL OR Estado = @Estado)";
+            
             var respuestas = await connection.QueryAsync<RespuestaFiltroVm>(
-                "OP_ObtenerRespuestasFiltro",
-                parameters,
-                commandType: CommandType.StoredProcedure);
+                sql,
+                new { TrabajoId = trabajoId, TipoFiltro = tipoFiltro, Estado = estado });
 
             return (true, respuestas.ToList(), string.Empty);
         }

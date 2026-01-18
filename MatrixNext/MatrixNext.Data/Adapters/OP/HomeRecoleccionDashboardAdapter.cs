@@ -26,7 +26,7 @@ public class HomeRecoleccionDashboardAdapter : IHomeRecoleccionDashboardAdapter
 
     /// <summary>
     /// Obtiene trabajos activos filtrando por unidad (si aplica)
-    /// SP: OP_Trabajos_Activos (basada en OP_Trabajos_Get de CoreProject)
+    /// SP: OP_Trabajos_Get (SP real - OP_Trabajos_Activos no existe)
     /// </summary>
     public async Task<IEnumerable<TrabajoActivoDashboardDto>> ObtenerTrabajosActivosAsync(long? idUnidad = null, int? limite = 10)
     {
@@ -34,21 +34,25 @@ public class HomeRecoleccionDashboardAdapter : IHomeRecoleccionDashboardAdapter
         {
             using var connection = _context.CreateConnection();
 
+            // SP OP_Trabajos_Activos no existe - usar OP_Trabajos_Get con filtro de estado
             var parameters = new DynamicParameters();
+            parameters.Add("@Id", (long?)null);
             parameters.Add("@IdUnidad", idUnidad);
-            parameters.Add("@Limite", limite ?? 10);
-            parameters.Add("@Estado", "Activo"); // Solo trabajos activos
+            parameters.Add("@Estado", (short?)1); // 1 = Activo
 
             var result = await connection.QueryAsync<TrabajoActivoDashboardDto>(
-                "OP_Trabajos_Activos",
+                "OP_Trabajos_Get",
                 parameters,
                 commandType: CommandType.StoredProcedure
             );
 
-            _logger.LogInformation("Trabajos activos obtenidos. Unidad: {IdUnidad}, Total: {Total}", 
-                idUnidad, result.Count());
+            // Aplicar límite en memoria
+            var limitados = result.Take(limite ?? 10);
 
-            return result;
+            _logger.LogInformation("Trabajos activos obtenidos. Unidad: {IdUnidad}, Total: {Total}", 
+                idUnidad, limitados.Count());
+
+            return limitados;
         }
         catch (Exception ex)
         {
@@ -67,7 +71,7 @@ public class HomeRecoleccionDashboardAdapter : IHomeRecoleccionDashboardAdapter
         {
             using var connection = _context.CreateConnection();
 
-            // Obtener trabajos para calcular estadísticas
+            // Obtener trabajos para calcular estadísticas (CORREGIDO: PY_Trabajo, Unidad)
             var parameters = new DynamicParameters();
             parameters.Add("@IdUnidad", idUnidad);
 
@@ -75,9 +79,9 @@ public class HomeRecoleccionDashboardAdapter : IHomeRecoleccionDashboardAdapter
                 @"SELECT 
                     Estado, 
                     COUNT(*) AS Total
-                FROM PY_Trabajos
+                FROM PY_Trabajo
                 WHERE (Estado IN ('Activo', 'Pausado', 'Completado', 'En Riesgo'))
-                  AND (@IdUnidad IS NULL OR IdUnidad = @IdUnidad)
+                  AND (@IdUnidad IS NULL OR Unidad = @IdUnidad)
                 GROUP BY Estado",
                 parameters
             );
@@ -138,7 +142,7 @@ public class HomeRecoleccionDashboardAdapter : IHomeRecoleccionDashboardAdapter
 
     /// <summary>
     /// Obtiene producción diaria de los últimos N días
-    /// Compara planeado vs ejecutado para mostrar tendencia
+    /// CORREGIDO: OP_ProduccionDiaria no existe - usar OP_Produccion con Fecha
     /// </summary>
     public async Task<IEnumerable<ProduccionDiariaDto>> ObtenerProduccionDiariaAsync(int diasAtras = 7)
     {
@@ -149,16 +153,16 @@ public class HomeRecoleccionDashboardAdapter : IHomeRecoleccionDashboardAdapter
             var parameters = new DynamicParameters();
             parameters.Add("@DiasAtras", diasAtras);
 
+            // CORREGIDO: Usar OP_Produccion con columna Fecha (tabla real)
             var result = await connection.QueryAsync<ProduccionDiariaDto>(
                 @"SELECT TOP (@DiasAtras)
-                    CAST(FechaEjecucion AS DATE) AS Fecha,
-                    SUM(CASE WHEN Tipo = 'Planeada' THEN Cantidad ELSE 0 END) AS EncuestasPlaneadas,
-                    SUM(CASE WHEN Tipo = 'Ejecutada' THEN Cantidad ELSE 0 END) AS EncuestasEjecutadas,
-                    SUM(CASE WHEN Tipo = 'Ejecutada' THEN Cantidad ELSE 0 END) -
-                    SUM(CASE WHEN Tipo = 'Planeada' THEN Cantidad ELSE 0 END) AS Diferencia
-                FROM OP_ProduccionDiaria
-                WHERE FechaEjecucion >= DATEADD(DAY, -@DiasAtras, CAST(GETDATE() AS DATE))
-                GROUP BY CAST(FechaEjecucion AS DATE)
+                    CAST(Fecha AS DATE) AS Fecha,
+                    0 AS EncuestasPlaneadas, -- No existe columna planeada en OP_Produccion
+                    SUM(Cantidad) AS EncuestasEjecutadas,
+                    SUM(Cantidad) AS Diferencia
+                FROM OP_Produccion
+                WHERE Fecha >= DATEADD(DAY, -@DiasAtras, CAST(GETDATE() AS DATE))
+                GROUP BY CAST(Fecha AS DATE)
                 ORDER BY Fecha DESC",
                 parameters
             );
@@ -197,33 +201,34 @@ public class HomeRecoleccionDashboardAdapter : IHomeRecoleccionDashboardAdapter
             parameters.Add("@IdUnidad", idUnidad);
             parameters.Add("@DiasRestantes", 7);
 
+            // CORREGIDO: PY_Trabajos → PY_Trabajo, OP_RegistrosProduccion → OP_Produccion (TrabajoId)
             var result = await connection.QueryAsync<TrabajoActivoDashboardDto>(
                 @"SELECT 
-                    t.IdTrabajo,
-                    t.NumeroTrabajo,
-                    p.CodigoProyecto,
-                    p.NombreProyecto,
+                    t.id AS IdTrabajo,
+                    CAST(t.id AS VARCHAR) AS NumeroTrabajo,
+                    pr.JobBook AS CodigoProyecto,
+                    pr.Nombre AS NombreProyecto,
                     t.Estado,
                     fc.Metodologia,
                     fc.MetaEncuestas,
-                    ISNULL(pr.EncuestasActuales, 0) AS EncuestasActuales,
-                    CAST((ISNULL(pr.EncuestasActuales, 0) * 100.0 / NULLIF(fc.MetaEncuestas, 0)) AS DECIMAL(5,2)) AS AvancePercentual,
-                    t.FechaInicio,
-                    t.FechaFin AS FechaFinaProgramada,
-                    u.NombreCompleto AS CoordinadorNombre,
-                    t.IdUnidad,
-                    un.NombreUnidad
-                FROM PY_Trabajos t
-                INNER JOIN PY_Proyectos p ON t.IdProyecto = p.IdProyecto
-                LEFT JOIN OP_FichaCuantitativo fc ON t.IdTrabajo = fc.IdTrabajo
-                LEFT JOIN (SELECT IdTrabajo, COUNT(*) AS EncuestasActuales FROM OP_RegistrosProduccion GROUP BY IdTrabajo) pr ON t.IdTrabajo = pr.IdTrabajo
-                LEFT JOIN TH_Usuario u ON t.IdCoordinador = u.IdUsuario
-                LEFT JOIN CS_Unidad un ON t.IdUnidad = un.IdUnidad
-                WHERE t.Estado = 'Activo'
-                  AND (@IdUnidad IS NULL OR t.IdUnidad = @IdUnidad)
+                    ISNULL(prod.EncuestasActuales, 0) AS EncuestasActuales,
+                    CAST((ISNULL(prod.EncuestasActuales, 0) * 100.0 / NULLIF(fc.MetaEncuestas, 0)) AS DECIMAL(5,2)) AS AvancePercentual,
+                    t.FechaTentativaInicioCampo AS FechaInicio,
+                    t.FechaTentativaFinalizacion AS FechaFinaProgramada,
+                    u.NombreUsuario AS CoordinadorNombre,
+                    t.Unidad AS IdUnidad,
+                    un.Nombre AS NombreUnidad
+                FROM PY_Trabajo t
+                LEFT JOIN PY_Proyectos pr ON t.ProyectoId = pr.id
+                LEFT JOIN OP_FichaCuantitativo fc ON t.id = fc.IdTrabajo
+                LEFT JOIN (SELECT TrabajoId, SUM(Cantidad) AS EncuestasActuales FROM OP_Produccion GROUP BY TrabajoId) prod ON t.id = prod.TrabajoId
+                LEFT JOIN US_Usuarios u ON t.COE = u.Id
+                LEFT JOIN US_Unidades un ON t.Unidad = un.id
+                WHERE t.Estado = 1
+                  AND (@IdUnidad IS NULL OR t.Unidad = @IdUnidad)
                   AND (
-                    (ISNULL(pr.EncuestasActuales, 0) * 100.0 / NULLIF(fc.MetaEncuestas, 0)) < 50
-                    OR DATEDIFF(DAY, GETDATE(), t.FechaFin) <= @DiasRestantes
+                    (ISNULL(prod.EncuestasActuales, 0) * 100.0 / NULLIF(fc.MetaEncuestas, 0)) < 50
+                    OR DATEDIFF(DAY, GETDATE(), t.FechaTentativaFinalizacion) <= @DiasRestantes
                   )
                 ORDER BY AvancePercentual ASC",
                 parameters
@@ -251,17 +256,18 @@ public class HomeRecoleccionDashboardAdapter : IHomeRecoleccionDashboardAdapter
         {
             using var connection = _context.CreateConnection();
 
+            // CORREGIDO: PY_Trabajos → PY_Trabajo, TH_Usuario → US_Usuarios
             var result = await connection.QueryAsync<dynamic>(
                 @"SELECT 
-                    u.NombreCompleto AS NombreCoordinador,
-                    COUNT(DISTINCT t.IdTrabajo) AS TrabajosAsignados,
+                    u.NombreUsuario AS NombreCoordinador,
+                    COUNT(DISTINCT t.id) AS TrabajosAsignados,
                     SUM(ISNULL(fc.MetaEncuestas, 0)) AS EncuestasPlaneadas
-                FROM PY_Trabajos t
-                LEFT JOIN TH_Usuario u ON t.IdCoordinador = u.IdUsuario
-                LEFT JOIN OP_FichaCuantitativo fc ON t.IdTrabajo = fc.IdTrabajo
-                WHERE t.Estado = 'Activo'
-                GROUP BY u.NombreCompleto, t.IdCoordinador
-                ORDER BY COUNT(DISTINCT t.IdTrabajo) DESC"
+                FROM PY_Trabajo t
+                LEFT JOIN US_Usuarios u ON t.COE = u.Id
+                LEFT JOIN OP_FichaCuantitativo fc ON t.id = fc.IdTrabajo
+                WHERE t.Estado = 1
+                GROUP BY u.NombreUsuario, t.COE
+                ORDER BY COUNT(DISTINCT t.id) DESC"
             );
 
             var carga = result.Select(r => 

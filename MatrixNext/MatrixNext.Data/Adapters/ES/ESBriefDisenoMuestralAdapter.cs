@@ -57,15 +57,15 @@ namespace MatrixNext.Data.Adapters.ES
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                // Briefs sin diseño muestral asociado
+                // NOTA: CU_Cuentas no existe y CU_Propuestas no tiene CuentaId
+                // Se simplifica query sin JOIN a cliente
                 var query = @"
                     SELECT b.Id, b.PropuestaId, b.Fecha, b.Objetivo, b.Poblacion, b.Capacidad, 
                            b.Metodologia, b.NivelesDesagregacion, b.PosiblesMarcos, b.Variable, 
                            b.Observaciones, b.NoVersion,
-                           p.Nombre as PropuestaNombre, c.Nombre as ClienteNombre
+                           p.Titulo as PropuestaNombre, '' as ClienteNombre
                     FROM ES_BriefDisenoMuestral b
                     INNER JOIN CU_Propuestas p ON b.PropuestaId = p.Id
-                    INNER JOIN CU_Cuentas c ON p.CuentaId = c.Id
                     WHERE NOT EXISTS (
                         SELECT 1 FROM ES_DisenoMuestral d WHERE d.BriefId = b.Id
                     )
@@ -81,14 +81,14 @@ namespace MatrixNext.Data.Adapters.ES
         {
             using (var connection = new SqlConnection(_connectionString))
             {
+                // NOTA: CU_Cuentas no existe - simplificado sin JOIN a cliente
                 var query = @"
                     SELECT b.Id, b.PropuestaId, b.Fecha, b.Objetivo, b.Poblacion, b.Capacidad, 
                            b.Metodologia, b.NivelesDesagregacion, b.PosiblesMarcos, b.Variable, 
                            b.Observaciones, b.NoVersion,
-                           p.Nombre as PropuestaNombre, c.Nombre as ClienteNombre
+                           p.Titulo as PropuestaNombre, '' as ClienteNombre
                     FROM ES_BriefDisenoMuestral b
                     LEFT JOIN CU_Propuestas p ON b.PropuestaId = p.Id
-                    LEFT JOIN CU_Cuentas c ON p.CuentaId = c.Id
                     WHERE b.Id = @Id";
 
                 var result = await connection.QueryFirstOrDefaultAsync<ESBriefDisenoMuestralOutputDto>(

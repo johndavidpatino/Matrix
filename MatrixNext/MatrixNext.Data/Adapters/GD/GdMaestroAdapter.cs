@@ -77,7 +77,8 @@ namespace MatrixNext.Data.Adapters.GD
         public async Task<DocumentoControlledDto?> ObtenerControlledDocById(int idMaestro)
         {
             using var connection = new SqlConnection(_connectionString);
-            const string sql = @"SELECT TOP 1 Id, DocumentoId, UbicacionArchivo, MetodoRecuperacion, TiempoRetencion, DisposicionFinal, Activo, FechaRegistro
+            // NOTA: Tabla GD_DocumentosControlados NO tiene columna FechaRegistro
+            const string sql = @"SELECT TOP 1 Id, DocumentoId, UbicacionArchivo, MetodoRecuperacion, TiempoRetencion, DisposicionFinal, Activo
                                   FROM GD_DocumentosControlados
                                   WHERE DocumentoId = @IdDocumento";
 
@@ -105,7 +106,7 @@ namespace MatrixNext.Data.Adapters.GD
                 TiempoRetencion = tiempoRetencion,
                 DisposicionFinal = row.DisposicionFinal,
                 Activo = row.Activo,
-                FechaRegistro = row.FechaRegistro
+                FechaRegistro = null // Columna no existe en BD
             };
         }
 

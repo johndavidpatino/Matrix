@@ -1,5 +1,6 @@
 using Dapper;
 using MatrixNext.Data.Models.IT;
+using Microsoft.Extensions.Logging;
 using System.Data;
 
 namespace MatrixNext.Data.Adapters.IT;
@@ -17,134 +18,100 @@ public interface IITSyncAdapter
     Task GrabarAuditoriaAsync(decimal usuarioId, short tipoAccion, short modulo, string descripcion, DateTime fecha, decimal idRegistro, short tabla);
 }
 
+/// <summary>
+/// Adapter para sincronización IT
+/// NOTA: Todos los SP de este módulo NO EXISTEN en la BD legacy (CO_Matrix_Intranet)
+/// Los métodos retornan valores vacíos/default hasta que se creen los SP correspondientes
+/// </summary>
 public class ITSyncAdapter : IITSyncAdapter
 {
     private readonly IDbConnection _connection;
+    private readonly ILogger<ITSyncAdapter> _logger;
 
-    public ITSyncAdapter(IDbConnection connection)
+    public ITSyncAdapter(IDbConnection connection, ILogger<ITSyncAdapter> logger)
     {
         _connection = connection;
+        _logger = logger;
     }
 
-    public async Task<IEnumerable<SyncPreguntaDto>> ObtenerPreguntasAsync(long? trabajoId, decimal? sbjNum)
+    /// <summary>
+    /// STUB: SP Sync_Preguntas_Get no existe en BD legacy
+    /// </summary>
+    public Task<IEnumerable<SyncPreguntaDto>> ObtenerPreguntasAsync(long? trabajoId, decimal? sbjNum)
     {
-        var parameters = new DynamicParameters();
-        parameters.Add("@TrabajoId", trabajoId, DbType.Int64);
-        parameters.Add("@SbjNum", sbjNum, DbType.Decimal);
-
-        return await _connection.QueryAsync<SyncPreguntaDto>(
-            "Sync_Preguntas_Get",
-            parameters,
-            commandType: CommandType.StoredProcedure
-        );
+        _logger.LogWarning("[IT] ObtenerPreguntasAsync: SP 'Sync_Preguntas_Get' no existe en BD legacy. Retornando lista vacía. TrabajoId={TrabajoId}, SbjNum={SbjNum}", trabajoId, sbjNum);
+        return Task.FromResult<IEnumerable<SyncPreguntaDto>>(new List<SyncPreguntaDto>());
     }
 
-    public async Task ActualizarPreguntaAsync(decimal sbjNum, string dcp, string valor, decimal eId)
+    /// <summary>
+    /// STUB: SP Sync_Preguntas_UpdateInfo no existe en BD legacy
+    /// </summary>
+    public Task ActualizarPreguntaAsync(decimal sbjNum, string dcp, string valor, decimal eId)
     {
-        var parameters = new DynamicParameters();
-        parameters.Add("@SbjNum", sbjNum, DbType.Decimal);
-        parameters.Add("@DCP", dcp, DbType.String, size: 50);
-        parameters.Add("@valor", valor, DbType.String);
-        parameters.Add("@e_Id", eId, DbType.Decimal);
-
-        await _connection.ExecuteAsync(
-            "Sync_Preguntas_UpdateInfo",
-            parameters,
-            commandType: CommandType.StoredProcedure
-        );
+        _logger.LogWarning("[IT] ActualizarPreguntaAsync: SP 'Sync_Preguntas_UpdateInfo' no existe en BD legacy. Operación ignorada. SbjNum={SbjNum}, DCP={DCP}, EId={EId}", sbjNum, dcp, eId);
+        return Task.CompletedTask;
     }
 
-    public async Task<decimal?> ObtenerIdRegistroRespuestaAsync(decimal eId, decimal numeroEncuesta)
+    /// <summary>
+    /// STUB: SP obtenerRespuestaIdRegistroXIdTrabajoNumeroEncuesta no existe en BD legacy
+    /// </summary>
+    public Task<decimal?> ObtenerIdRegistroRespuestaAsync(decimal eId, decimal numeroEncuesta)
     {
-        var parameters = new DynamicParameters();
-        parameters.Add("@E_Id", eId, DbType.Decimal);
-        parameters.Add("@numeroEncuesta", numeroEncuesta, DbType.Decimal);
-
-        var result = await _connection.QueryFirstOrDefaultAsync<decimal?>(
-            "obtenerRespuestaIdRegistroXIdTrabajoNumeroEncuesta",
-            parameters,
-            commandType: CommandType.StoredProcedure
-        );
-
-        return result;
+        _logger.LogWarning("[IT] ObtenerIdRegistroRespuestaAsync: SP 'obtenerRespuestaIdRegistroXIdTrabajoNumeroEncuesta' no existe en BD legacy. Retornando null. EId={EId}, NumeroEncuesta={NumeroEncuesta}", eId, numeroEncuesta);
+        return Task.FromResult<decimal?>(null);
     }
 
-    public async Task QuitarPreguntasEntrenamientoAsync(long trabajoId)
+    /// <summary>
+    /// STUB: SP Sync_EncuestasEntrenamiento no existe en BD legacy
+    /// </summary>
+    public Task QuitarPreguntasEntrenamientoAsync(long trabajoId)
     {
-        var parameters = new DynamicParameters();
-        parameters.Add("@TrabajoId", trabajoId, DbType.Int64);
-
-        await _connection.ExecuteAsync(
-            "Sync_EncuestasEntrenamiento",
-            parameters,
-            commandType: CommandType.StoredProcedure
-        );
+        _logger.LogWarning("[IT] QuitarPreguntasEntrenamientoAsync: SP 'Sync_EncuestasEntrenamiento' no existe en BD legacy. Operación ignorada. TrabajoId={TrabajoId}", trabajoId);
+        return Task.CompletedTask;
     }
 
-    public async Task ErrorTrabajoEspecializadoAsync(long trabajoId)
+    /// <summary>
+    /// STUB: SP Sync_ErrorTrabajoEspecializado no existe en BD legacy
+    /// </summary>
+    public Task ErrorTrabajoEspecializadoAsync(long trabajoId)
     {
-        var parameters = new DynamicParameters();
-        parameters.Add("@TrabajoId", trabajoId, DbType.Int64);
-
-        await _connection.ExecuteAsync(
-            "Sync_ErrorTrabajoEspecializado",
-            parameters,
-            commandType: CommandType.StoredProcedure
-        );
+        _logger.LogWarning("[IT] ErrorTrabajoEspecializadoAsync: SP 'Sync_ErrorTrabajoEspecializado' no existe en BD legacy. Operación ignorada. TrabajoId={TrabajoId}", trabajoId);
+        return Task.CompletedTask;
     }
 
-    public async Task HabilitarSincronizacionAsync(long trabajoId)
+    /// <summary>
+    /// STUB: SP Sync_HabilitarSincronizacionEstudio no existe en BD legacy
+    /// </summary>
+    public Task HabilitarSincronizacionAsync(long trabajoId)
     {
-        var parameters = new DynamicParameters();
-        parameters.Add("@TrabajoId", trabajoId, DbType.Int64);
-
-        await _connection.ExecuteAsync(
-            "Sync_HabilitarSincronizacionEstudio",
-            parameters,
-            commandType: CommandType.StoredProcedure
-        );
+        _logger.LogWarning("[IT] HabilitarSincronizacionAsync: SP 'Sync_HabilitarSincronizacionEstudio' no existe en BD legacy. Operación ignorada. TrabajoId={TrabajoId}", trabajoId);
+        return Task.CompletedTask;
     }
 
-    public async Task HabilitarEncuestaPilotoAsync(decimal sbjNum)
+    /// <summary>
+    /// STUB: SP Sync_HabilitarEncuestasPiloto no existe en BD legacy
+    /// </summary>
+    public Task HabilitarEncuestaPilotoAsync(decimal sbjNum)
     {
-        var parameters = new DynamicParameters();
-        parameters.Add("@sbjNum", sbjNum, DbType.Decimal);
-
-        await _connection.ExecuteAsync(
-            "Sync_HabilitarEncuestasPiloto",
-            parameters,
-            commandType: CommandType.StoredProcedure
-        );
+        _logger.LogWarning("[IT] HabilitarEncuestaPilotoAsync: SP 'Sync_HabilitarEncuestasPiloto' no existe en BD legacy. Operación ignorada. SbjNum={SbjNum}", sbjNum);
+        return Task.CompletedTask;
     }
 
-    public async Task EncuestaPilotoAsync(decimal sbjNum)
+    /// <summary>
+    /// STUB: SP Sync_EncuestaPiloto no existe en BD legacy
+    /// </summary>
+    public Task EncuestaPilotoAsync(decimal sbjNum)
     {
-        var parameters = new DynamicParameters();
-        parameters.Add("@sbjNum", sbjNum, DbType.Decimal);
-
-        await _connection.ExecuteAsync(
-            "Sync_EncuestaPiloto",
-            parameters,
-            commandType: CommandType.StoredProcedure
-        );
+        _logger.LogWarning("[IT] EncuestaPilotoAsync: SP 'Sync_EncuestaPiloto' no existe en BD legacy. Operación ignorada. SbjNum={SbjNum}", sbjNum);
+        return Task.CompletedTask;
     }
 
-    public async Task GrabarAuditoriaAsync(decimal usuarioId, short tipoAccion, short modulo, string descripcion, DateTime fecha, decimal idRegistro, short tabla)
+    /// <summary>
+    /// STUB: SP GrabarAuditoria no existe en BD legacy
+    /// </summary>
+    public Task GrabarAuditoriaAsync(decimal usuarioId, short tipoAccion, short modulo, string descripcion, DateTime fecha, decimal idRegistro, short tabla)
     {
-        var parameters = new DynamicParameters();
-        parameters.Add("@A_Id", dbType: DbType.Decimal, direction: ParameterDirection.InputOutput);
-        parameters.Add("@Usu_Id", usuarioId, DbType.Decimal);
-        parameters.Add("@TA_Id", tipoAccion, DbType.Int16);
-        parameters.Add("@Mod_Id", modulo, DbType.Int16);
-        parameters.Add("@A_Descripcion", descripcion, DbType.String);
-        parameters.Add("@A_Fecha", fecha, DbType.DateTime);
-        parameters.Add("@Id_Reg", idRegistro, DbType.Decimal);
-        parameters.Add("@T_Id", tabla, DbType.Int16);
-
-        await _connection.ExecuteAsync(
-            "GrabarAuditoria",
-            parameters,
-            commandType: CommandType.StoredProcedure
-        );
+        _logger.LogWarning("[IT] GrabarAuditoriaAsync: SP 'GrabarAuditoria' no existe en BD legacy. Operación ignorada. UsuarioId={UsuarioId}, TipoAccion={TipoAccion}, Modulo={Modulo}", usuarioId, tipoAccion, modulo);
+        return Task.CompletedTask;
     }
 }

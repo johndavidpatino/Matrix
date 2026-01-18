@@ -9,6 +9,7 @@ using MatrixNext.Data.Services.TH.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace MatrixNext.Data.Modules.TH
 {
@@ -25,11 +26,15 @@ namespace MatrixNext.Data.Modules.TH
                 options.UseSqlServer(connectionString));
 
             // Ausencias services
-            services.AddScoped(sp => new AusenciaDataAdapter(configuration));
+            services.AddScoped(sp => new AusenciaDataAdapter(
+                configuration, 
+                sp.GetRequiredService<ILogger<AusenciaDataAdapter>>()));
             services.AddScoped<AusenciaService>();
             
             // Modular Empleados services (para todos los controllers TH)
-            services.AddScoped(sp => new Empleados.Adapters.EmpleadoDataAdapter(configuration));
+            services.AddScoped(sp => new Empleados.Adapters.EmpleadoDataAdapter(
+                configuration,
+                sp.GetRequiredService<ILogger<Empleados.Adapters.EmpleadoDataAdapter>>()));
             services.AddScoped<Empleados.Services.EmpleadoService>();
 
             // Desvinculaciones services

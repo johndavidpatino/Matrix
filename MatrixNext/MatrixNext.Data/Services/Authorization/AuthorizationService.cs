@@ -58,25 +58,10 @@ namespace MatrixNext.Data.Services.Authorization
 
         public async Task<bool> TieneRolAsync(int usuarioId, string rol)
         {
-            try
-            {
-                var parametros = new DynamicParameters();
-                parametros.Add("@UsuarioId", usuarioId);
-                parametros.Add("@Rol", rol);
-
-                var resultado = await _connection.QueryFirstOrDefaultAsync<int>(
-                    "US_Usuario_TieneRol",
-                    parametros,
-                    commandType: CommandType.StoredProcedure
-                );
-
-                return resultado > 0;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"[Auth] Error verificando rol: Usuario={usuarioId}, Rol={rol}");
-                return false;
-            }
+            // STUB: SP US_Usuario_TieneRol no existe en legacy
+            _logger.LogWarning("[Auth] TieneRolAsync: SP US_Usuario_TieneRol no existe en legacy. UsuarioId: {UsuarioId}, Rol: {Rol}", usuarioId, rol);
+            // Por seguridad, retornar false si no existe el SP
+            return await Task.FromResult(false);
         }
 
         public async Task<List<string>> ObtenerPermisosUsuarioAsync(int usuarioId)
@@ -103,26 +88,10 @@ namespace MatrixNext.Data.Services.Authorization
 
         public async Task<bool> EsPropietarioAsync(int usuarioId, string recurso, int recursoId)
         {
-            try
-            {
-                var parametros = new DynamicParameters();
-                parametros.Add("@UsuarioId", usuarioId);
-                parametros.Add("@Recurso", recurso);
-                parametros.Add("@RecursoId", recursoId);
-
-                var resultado = await _connection.QueryFirstOrDefaultAsync<int>(
-                    "AUTH_ValidarOwnership",
-                    parametros,
-                    commandType: CommandType.StoredProcedure
-                );
-
-                return resultado > 0;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"[Auth] Error validando ownership: Usuario={usuarioId}, Recurso={recurso}, RecursoId={recursoId}");
-                return false;
-            }
+            // STUB: SP AUTH_ValidarOwnership no existe en legacy
+            _logger.LogWarning("[Auth] EsPropietarioAsync: SP AUTH_ValidarOwnership no existe en legacy. UsuarioId: {UsuarioId}, Recurso: {Recurso}, RecursoId: {RecursoId}", usuarioId, recurso, recursoId);
+            // Por seguridad, retornar false si no existe el SP
+            return await Task.FromResult(false);
         }
 
         private async Task<bool> ValidarPermisoPorRolAsync(int usuarioId, string recurso, string accion)

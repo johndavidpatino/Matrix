@@ -227,13 +227,14 @@ namespace MatrixNext.Data.Adapters.GD
 
         public async Task<PncResumenDto> ObtenerResumenAsync()
         {
+            // CORREGIDO: PNC_ProductoNoConformes_Causas → PNC_ProductoNoConformeCausas
             const string query = @"
                 SELECT
                     COUNT(DISTINCT IdProductoNoConforme) AS TotalPnc,
                     SUM(CASE WHEN IdEstado = 1 THEN 1 ELSE 0 END) AS PncRegistrados,
                     SUM(CASE WHEN IdEstado = 7 THEN 1 ELSE 0 END) AS PncCausaRegistrada,
                     SUM(CASE WHEN IdEstado = 6 THEN 1 ELSE 0 END) AS PncRechazados,
-                    SUM(CASE WHEN IdEstado = 1 AND (SELECT COUNT(*) FROM PNC_ProductoNoConformes_Causas WHERE IdProductoNoConforme = PNC_Productos.IdProductoNoConforme) > 0 THEN 1 ELSE 0 END) AS CausasAbiertas,
+                    SUM(CASE WHEN IdEstado = 1 AND (SELECT COUNT(*) FROM PNC_ProductoNoConformeCausas WHERE IdProductoNoConforme = PNC_Productos.IdProductoNoConforme) > 0 THEN 1 ELSE 0 END) AS CausasAbiertas,
                     SUM(CASE WHEN IdEstado = 2 THEN 1 ELSE 0 END) AS CausasCerradas,
                     SUM(CASE WHEN DATEDIFF(DAY, GETDATE(), FechaVencimiento) < 0 THEN 1 ELSE 0 END) AS CausasVencidas,
                     SUM(CASE WHEN DATEDIFF(DAY, GETDATE(), FechaVencimiento) BETWEEN 0 AND 3 THEN 1 ELSE 0 END) AS CausasProximasVencer

@@ -29,8 +29,8 @@ namespace MatrixNext.Data.Adapters.CU
         {
             using var conn = CreateConnection();
             var parameters = new DynamicParameters();
-            parameters.Add("@IdGerenteCuentas", userId);
-            parameters.Add("@IdEstado", estadoId);
+            parameters.Add("@idGerenteCuentas", userId);
+            parameters.Add("@idEstadoPropuesta", estadoId);
 
             var data = conn.Query<PropuestaListItemViewModel>(
                 "CU_Propuestas_Get",
@@ -88,7 +88,7 @@ namespace MatrixNext.Data.Adapters.CU
         {
             using var conn = CreateConnection();
             return conn.Query<CatalogoItem<decimal>>(
-                "SELECT id AS Id, probabilidad AS Nombre FROM CU_ProbabilidadAprobacion ORDER BY id"
+                "SELECT id AS Id, Probabilidad AS Nombre FROM CU_ProbabilidadAprobacion ORDER BY id"
             ).AsList();
         }
 
@@ -96,7 +96,7 @@ namespace MatrixNext.Data.Adapters.CU
         {
             using var conn = CreateConnection();
             return conn.Query<CatalogoItem<short>>(
-                "SELECT id AS Id, razon AS Nombre FROM CU_RazonesNoAprobacion ORDER BY razon"
+                "SELECT Id AS Id, Razon AS Nombre FROM CU_RazonesNoAprobacion ORDER BY Razon"
             ).AsList();
         }
 

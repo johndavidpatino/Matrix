@@ -64,9 +64,9 @@ public class CargaMasivaAdapter : ICargaMasivaAdapter
 
         try
         {
-            // Validación 1: TrabajoId debe existir en PY_Trabajos
+            // Validación 1: TrabajoId debe existir en PY_Trabajo (CORREGIDO)
             var trabajoExiste = await _connection.ExecuteScalarAsync<bool>(
-                "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END FROM PY_Trabajos WHERE IdTrabajo = @IdTrabajo",
+                "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END FROM PY_Trabajo WHERE id = @IdTrabajo",
                 new { fila.TrabajoId });
 
             if (!trabajoExiste)
@@ -121,9 +121,9 @@ public class CargaMasivaAdapter : ICargaMasivaAdapter
 
         try
         {
-            // Validación 1: Trabajo existe
+            // Validación 1: Trabajo existe (CORREGIDO: PY_Trabajo, id)
             var trabajoExiste = await _connection.ExecuteScalarAsync<bool>(
-                "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END FROM PY_Trabajos WHERE IdTrabajo = @IdTrabajo",
+                "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END FROM PY_Trabajo WHERE id = @IdTrabajo",
                 new { fila.IdTrabajo });
 
             if (!trabajoExiste)
@@ -133,9 +133,9 @@ public class CargaMasivaAdapter : ICargaMasivaAdapter
                 return resultado;
             }
 
-            // Validación 2: Empleado existe
+            // Validación 2: Empleado existe (CORREGIDO: TH_Personas, id)
             var empleadoExiste = await _connection.ExecuteScalarAsync<bool>(
-                "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END FROM TH_Empleado WHERE IdEmpleado = @IdEmpleado",
+                "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END FROM TH_Personas WHERE id = @IdEmpleado",
                 new { fila.IdEmpleado });
 
             if (!empleadoExiste)
@@ -184,8 +184,9 @@ public class CargaMasivaAdapter : ICargaMasivaAdapter
     {
         try
         {
+            // NOTA: Tabla _Festivos existe con columna 'festivo' (date)
             var festivos = await _connection.QueryAsync<DateTime>(
-                "SELECT FechaFestiva FROM Configuracion_Festivos WHERE YEAR(FechaFestiva) = @Ano ORDER BY FechaFestiva",
+                "SELECT festivo FROM _Festivos WHERE YEAR(festivo) = @Ano ORDER BY festivo",
                 new { Ano = año });
             
             _logger.LogInformation("Obtenidos {Count} festivos para año {Ano}", festivos.Count(), año);

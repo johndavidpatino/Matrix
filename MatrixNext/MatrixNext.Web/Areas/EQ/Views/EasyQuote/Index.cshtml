@@ -10,7 +10,10 @@
     <div id="alert-container" style="position: fixed; top: 20px; right: 20px; max-width: 400px; z-index: 9999;"></div>
     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
         <div>
-            <h1 class="h3 mb-0">EasyQuote (Área EQ)</h1>
+            <h1 class="h3 mb-0">
+                EasyQuote (Área EQ)
+                <partial name="~/Views/Shared/_HelpTooltip.cshtml" model='new { Text = "Sistema de cotización rápida con cálculo automático de costos", Type = "info" }' />
+            </h1>
             <small class="text-muted">Grid editable estilo Excel con cálculo en backend; todo persiste vía TVP/SP.</small>
         </div>
         <div class="d-flex gap-2">
@@ -23,6 +26,9 @@
     </div>
 
     @Html.AntiForgeryToken()
+
+    <!-- Alerta informativa sobre el flujo -->
+    <partial name="~/Views/Shared/_InfoAlert.cshtml" model='new { Type = "tip", Message = "Complete los datos generales primero, luego configure muestra y logística. Use Calcular para actualizar costos antes de Guardar.", Dismissible = true }' />
 
     <div class="alert alert-info py-2">
         <div class="d-flex flex-wrap gap-2 align-items-center">

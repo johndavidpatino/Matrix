@@ -15,7 +15,7 @@ namespace MatrixNext.Web.Services.CORE
     {
         /// <summary>
         /// Obtiene tareas de WorkFlow por unidad OP desde SP legacy
-        /// SP: WorkFlow.obtenerTrabajosWorkFlow (@IdUnidad, @TextoBusqueda)
+        /// SP: CORE_WorkFlow_Trabajos_Get (SP real - WorkFlow.obtenerTrabajosWorkFlow no existe)
         /// </summary>
         public async Task<(List<TareasPorUnidadDto> Tareas, int Total)> 
             ObtenerTareasPorUnidadAsync(
@@ -31,13 +31,26 @@ namespace MatrixNext.Web.Services.CORE
                 using var connection = new SqlConnection(_connectionString);
                 await connection.OpenAsync();
 
-                // Llamar SP legacy con búsqueda
+                // SP real: CORE_WorkFlow_Trabajos_Get con parámetros completos
+                // WorkFlow.obtenerTrabajosWorkFlow NO existe
                 var allData = await connection.QueryAsync<TareasPorUnidadDto>(
-                    "WorkFlow.obtenerTrabajosWorkFlow",
+                    "CORE_WorkFlow_Trabajos_Get",
                     new 
                     { 
-                        IdUnidad = idUnidad, 
-                        TextoBusqueda = string.IsNullOrEmpty(busqueda) ? (object?)DBNull.Value : busqueda 
+                        Id = (long?)null,
+                        HiloId = (long?)null,
+                        TareaId = (long?)null,
+                        FIniP = (DateTime?)null,
+                        FFinP = (DateTime?)null,
+                        FIniR = (DateTime?)null,
+                        FFinR = (DateTime?)null,
+                        UsuarioEstima = (long?)null,
+                        UsuarioAsignado = (long?)null,
+                        TrabajoId = (long?)null,
+                        TodosCampos = string.IsNullOrEmpty(busqueda) ? (string?)null : busqueda,
+                        RolEstima = (int?)null,
+                        EstadoWorkFlow_Id = (short?)null,
+                        unidadEjecuta = (long?)idUnidad
                     },
                     commandType: CommandType.StoredProcedure,
                     commandTimeout: 60);

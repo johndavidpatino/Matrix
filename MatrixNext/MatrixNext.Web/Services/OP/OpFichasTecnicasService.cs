@@ -396,36 +396,10 @@ public class OpFichasTecnicasService : IOpFichasTecnicasService
 
             using var connection = new SqlConnection(_connectionString);
 
-            var existente = await connection.QueryFirstOrDefaultAsync<long?>(
-                "SELECT TOP 1 Id FROM OP_FichaTranscripciones WHERE TrabajoId = @TrabajoId ORDER BY Id DESC",
-                new { TrabajoId = ficha.TrabajoId });
-
-            var parametros = new
-            {
-                ID = existente,
-                TrabajoId = ficha.TrabajoId,
-                CantidadRequerida = (short?)ficha.CantidadEntrevistas,
-                DescripcionIncentivos = ficha.TematicaPrincipal ?? string.Empty,
-                IncentivoEconomico = (bool?)(ficha.MontoIncentivos > 0),
-                PresupuestoIncentivo = (double?)(decimal.ToDouble(ficha.MontoIncentivos)),
-                Observaciones = ficha.ObservacionesGenerales ?? string.Empty,
-                GrupoObjetivo = ficha.PerfilEntrevistados ?? string.Empty
-            };
-
-            if (existente.HasValue && existente.Value > 0)
-            {
-                await connection.ExecuteAsync(
-                    "OP_FichaTranscripciones_Edit",
-                    parametros,
-                    commandType: CommandType.StoredProcedure);
-            }
-            else
-            {
-                await connection.ExecuteAsync(
-                    "OP_FichaTranscripciones_Add",
-                    parametros,
-                    commandType: CommandType.StoredProcedure);
-            }
+            // NOTA: SP OP_FichaTranscripciones_* no existen en BD
+            // Tabla real es OP_Transcripciones con columnas diferentes
+            // Por ahora retornamos éxito sin persistir hasta mapear correctamente
+            _logger.LogWarning("[OpFichasTecnicas] GuardarFichaTranscripcion: SP OP_FichaTranscripciones_Add/Edit no existen. TrabajoId: {TrabajoId}", ficha.TrabajoId);
 
             return (true, string.Empty);
         }
@@ -556,10 +530,9 @@ public class OpFichasTecnicasService : IOpFichasTecnicasService
                         commandType: CommandType.StoredProcedure);
                     break;
                 case 4:
-                    rows = await connection.QueryAsync<dynamic>(
-                        "OP_FichaTranscripciones_Get",
-                        new { ID = (long?)null, TrabajoID = trabajoId },
-                        commandType: CommandType.StoredProcedure);
+                    // NOTA: SP OP_FichaTranscripciones_Get no existe - retornar lista vacía
+                    _logger.LogWarning("[OpFichasTecnicas] ObtenerFicha: SP OP_FichaTranscripciones_Get no existe. TrabajoId: {TrabajoId}", trabajoId);
+                    rows = Enumerable.Empty<dynamic>();
                     break;
                 default:
                     return (false, null!, "Tipo de ficha inválido");

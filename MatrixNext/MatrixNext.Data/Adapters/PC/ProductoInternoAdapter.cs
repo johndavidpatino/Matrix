@@ -36,7 +36,7 @@ namespace MatrixNext.Data.Adapters.PC
             var parameters = new DynamicParameters();
             parameters.Add("@IdUsuario", unidadId);
             if (proyectoId.HasValue)
-                parameters.Add("@IdProyecto", proyectoId.Value);
+                parameters.Add("@ProyectoId", proyectoId.Value); // NOTA: Parámetro correcto es @ProyectoId
 
             return await connection.QueryAsync<ProductoInternoListDto>(
                 "CU_ProductoInterno_GetEnvia",
@@ -52,7 +52,7 @@ namespace MatrixNext.Data.Adapters.PC
             var parameters = new DynamicParameters();
             parameters.Add("@IdUsuario", unidadId);
             if (proyectoId.HasValue)
-                parameters.Add("@IdProyecto", proyectoId.Value);
+                parameters.Add("@ProyectoId", proyectoId.Value); // NOTA: Parámetro correcto es @ProyectoId
 
             return await connection.QueryAsync<ProductoInternoListDto>(
                 "CU_ProductoInterno_GetRecibe",
@@ -90,7 +90,7 @@ namespace MatrixNext.Data.Adapters.PC
             parameters.Add("@Recibe", dto.Recibe);
             parameters.Add("@FechaRecepcion", dto.FechaRecepcion);
             parameters.Add("@Observaciones", dto.Observaciones);
-            parameters.Add("@Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
+            // NOTA: SP CU_ProductoInterno_Add NO tiene parámetro OUTPUT @Id
 
             await connection.ExecuteAsync(
                 "CU_ProductoInterno_Add",
@@ -98,7 +98,9 @@ namespace MatrixNext.Data.Adapters.PC
                 commandType: CommandType.StoredProcedure
             );
 
-            return parameters.Get<int>("@Id");
+            // Obtener el ID insertado usando SCOPE_IDENTITY
+            var newId = await connection.QuerySingleAsync<int>("SELECT CAST(SCOPE_IDENTITY() AS INT)");
+            return newId;
         }
 
         public async Task<bool> ActualizarAsync(ProductoInternoDto dto, int userId)

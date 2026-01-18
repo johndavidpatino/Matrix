@@ -32,18 +32,19 @@ public class CierreTrabajoAdapter : ICierreTrabajoAdapter
         try
         {
             using var connection = _context.CreateConnection();
-
+            
+            // CORREGIDO: PY_Trabajos → PY_Trabajo, IdTrabajo → id, Estado → JobBk_Estado
             var result = await connection.QueryFirstOrDefaultAsync<CierreTrabajoDto>(
                 @"SELECT 
-                    IdTrabajo,
-                    Estado AS EstadoAnterior,
+                    id AS IdTrabajo,
+                    JobBk_Estado AS EstadoAnterior,
                     'Cerrado' AS EstadoNuevo,
                     GETDATE() AS FechaCierre,
                     NULL AS Observaciones,
                     0 AS ValidacionDocumentosOk,
                     0 AS TotalDocumentosValidados
-                FROM PY_Trabajos
-                WHERE IdTrabajo = @IdTrabajo",
+                FROM PY_Trabajo
+                WHERE id = @IdTrabajo",
                 new { IdTrabajo = idTrabajo }
             );
 
@@ -75,12 +76,12 @@ public class CierreTrabajoAdapter : ICierreTrabajoAdapter
         {
             using var connection = _context.CreateConnection();
 
-            // Obtener documentos escaneados para el trabajo
+            // Obtener documentos escaneados para el trabajo (CORREGIDO: GD_EscanerDocumentos)
             var documentos = await connection.QueryAsync<dynamic>(
                 @"SELECT 
                     COUNT(*) AS Total,
-                    SUM(CASE WHEN Estado = 'Escaneado' THEN 1 ELSE 0 END) AS Validados
-                FROM GD_DocumentosEscaneados
+                    SUM(CASE WHEN Encontrado = 1 THEN 1 ELSE 0 END) AS Validados
+                FROM GD_EscanerDocumentos
                 WHERE IdTrabajo = @IdTrabajo",
                 new { IdTrabajo = idTrabajo }
             );
@@ -126,6 +127,7 @@ public class CierreTrabajoAdapter : ICierreTrabajoAdapter
 
     /// <summary>
     /// Cambia estado del trabajo a "Cerrado"
+    /// NOTA: SP PY_Trabajos_UpdateEstado no existe - usar UPDATE directo
     /// </summary>
     public async Task<bool> CambiarEstadoACerradoAsync(long idTrabajo, string? observaciones, long usuarioId)
     {
@@ -133,51 +135,29 @@ public class CierreTrabajoAdapter : ICierreTrabajoAdapter
         {
             using var connection = _context.CreateConnection();
 
-            var parameters = new DynamicParameters();
-            parameters.Add("@IdTrabajo", idTrabajo);
-            parameters.Add("@NuevoEstado", "Cerrado");
-            parameters.Add("@FechaCierre", DateTime.UtcNow);
-            parameters.Add("@Observaciones", observaciones);
-            parameters.Add("@CerradoPor", usuarioId);
-            parameters.Add("@FechaCierreDatos", DateTime.UtcNow);
+            // SP PY_Trabajos_UpdateEstado no existe - usar UPDATE directo
+            var result = await connection.ExecuteAsync(
+                @"UPDATE PY_Trabajo
+                  SET Estado = @NuevoEstado,
+                      Observaciones = @Observaciones,
+                      ModificadoPor = @CerradoPor,
+                      FechaModificacion = @FechaCierreDatos
+                  WHERE id = @IdTrabajo",
+                new
+                {
+                    IdTrabajo = idTrabajo,
+                    NuevoEstado = (short)3, // 3 = Cerrado típicamente
+                    Observaciones = observaciones,
+                    CerradoPor = usuarioId,
+                    FechaCierreDatos = DateTime.UtcNow
+                }
+            );
 
-            // Intentar usar SP, si no existe usar query
-            try
-            {
-                var result = await connection.ExecuteAsync(
-                    "PY_Trabajos_UpdateEstado",
-                    parameters,
-                    commandType: CommandType.StoredProcedure
-                );
+            _logger.LogInformation(
+                "Estado del trabajo actualizado a Cerrado. IdTrabajo: {IdTrabajo}, Rows: {Rows}",
+                idTrabajo, result);
 
-                _logger.LogInformation(
-                    "Estado del trabajo actualizado a Cerrado. IdTrabajo: {IdTrabajo}, Rows: {Rows}",
-                    idTrabajo, result);
-
-                return result > 0;
-            }
-            catch (Exception spEx)
-            {
-                _logger.LogWarning(spEx, "SP PY_Trabajos_UpdateEstado no existe, usando query directa");
-
-                // Fallback a query directa
-                var result = await connection.ExecuteAsync(
-                    @"UPDATE PY_Trabajos
-                      SET Estado = @NuevoEstado,
-                          FechaCierre = @FechaCierre,
-                          Observaciones = @Observaciones,
-                          ModificadoPor = @CerradoPor,
-                          FechaModificacion = @FechaCierreDatos
-                      WHERE IdTrabajo = @IdTrabajo",
-                    parameters
-                );
-
-                _logger.LogInformation(
-                    "Estado del trabajo actualizado vía query. IdTrabajo: {IdTrabajo}, Rows: {Rows}",
-                    idTrabajo, result);
-
-                return result > 0;
-            }
+            return result > 0;
         }
         catch (Exception ex)
         {
@@ -197,12 +177,12 @@ public class CierreTrabajoAdapter : ICierreTrabajoAdapter
 
             var result = await connection.QueryFirstOrDefaultAsync<dynamic>(
                 @"SELECT 
-                    t.NumeroTrabajo,
-                    p.CodigoProyecto,
-                    p.NombreProyecto
-                FROM PY_Trabajos t
-                INNER JOIN PY_Proyectos p ON t.IdProyecto = p.IdProyecto
-                WHERE t.IdTrabajo = @IdTrabajo",
+                    CAST(t.id AS VARCHAR) AS NumeroTrabajo,
+                    p.JobBook AS CodigoProyecto,
+                    p.Nombre AS NombreProyecto
+                FROM PY_Trabajo t
+                INNER JOIN PY_Proyectos p ON t.ProyectoId = p.id
+                WHERE t.id = @IdTrabajo",
                 new { IdTrabajo = idTrabajo }
             );
 

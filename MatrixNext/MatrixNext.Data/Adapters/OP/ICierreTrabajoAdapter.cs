@@ -15,7 +15,7 @@ public interface ICierreTrabajoAdapter
 
     /// <summary>
     /// Valida documentos escaneados antes del cierre
-    /// Consulta GD_DocumentosEscaneados validando completitud
+    /// Consulta GD_EscanerDocumentos validando completitud
     /// </summary>
     Task<ValidacionDocumentosDto> ValidarDocumentosAsync(long idTrabajo);
 

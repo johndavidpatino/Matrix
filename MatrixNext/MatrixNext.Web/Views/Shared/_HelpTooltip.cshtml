@@ -1,0 +1,47 @@
+@*
+    Componente de Ayuda Contextual (Tooltip/Tip)
+    Uso: <partial name="~/Views/Shared/_HelpTooltip.cshtml" model='new { Text = "Texto de ayuda", Type = "info" }' />
+    
+    Tipos disponibles:
+    - info (ℹ️): Información general sobre campos
+    - tip (💡): Mejores prácticas y sugerencias
+    - warning (⚠️): Advertencias importantes
+    - help (?): Ayuda contextual
+*@
+@{
+    var text = ViewData["Text"]?.ToString() ?? "Información adicional";
+    var type = ViewData["Type"]?.ToString() ?? "info";
+    var placement = ViewData["Placement"]?.ToString() ?? "top";
+    
+    var iconClass = type switch
+    {
+        "info" => "bi-info-circle text-primary",
+        "tip" => "bi-lightbulb text-warning",
+        "warning" => "bi-exclamation-triangle text-danger",
+        "help" => "bi-question-circle text-secondary",
+        _ => "bi-info-circle text-primary"
+    };
+}
+
+<span class="help-tooltip" 
+      data-bs-toggle="tooltip" 
+      data-bs-placement="@placement"
+      data-bs-html="true"
+      title="@text">
+    <i class="bi @iconClass ms-1" style="cursor: help; font-size: 0.9em;"></i>
+</span>
+
+<style>
+    .help-tooltip {
+        display: inline-flex;
+        align-items: center;
+        vertical-align: middle;
+    }
+    .help-tooltip i {
+        opacity: 0.7;
+        transition: opacity 0.2s;
+    }
+    .help-tooltip:hover i {
+        opacity: 1;
+    }
+</style>

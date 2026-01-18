@@ -7,10 +7,8 @@ namespace MatrixNext.Data.Adapters.OP_RO
 {
     /// <summary>
     /// Implementación Adapter para Operational Review
-    /// Utiliza Dapper para ejecutar SP contra BD
-    /// REGLA 2: Mapeo exacto nombres/parámetros desde CoreProject
-    /// REGLA 3: Validación respuestas
-    /// REGLA 4: Ejecución SP
+    /// NOTA: Todos los SP de este módulo NO EXISTEN en la BD legacy (CO_Matrix_Intranet)
+    /// Los métodos retornan valores vacíos/default hasta que se creen los SP correspondientes
     /// </summary>
     public class OP_ROAdapter : IOP_ROAdapter
     {
@@ -27,518 +25,188 @@ namespace MatrixNext.Data.Adapters.OP_RO
         // CONSULTAS GENERALES
         // ============================================
 
-        public async Task<List<OP_ROReviewDTO>> GetRevisionesAsync(OP_ROFiltrosDTO filtros)
+        /// <summary>
+        /// STUB: SP OP_RO_Revisiones_Get no existe en BD legacy
+        /// </summary>
+        public Task<List<OP_ROReviewDTO>> GetRevisionesAsync(OP_ROFiltrosDTO filtros)
         {
-            try
-            {
-                ValidarFiltros(filtros);
-                _logger.LogInformation("[OP_RO] Iniciando GetRevisiones con filtros");
-
-                var parameters = new DynamicParameters();
-                parameters.Add("@TipoRevision", filtros.TipoRevision ?? "");
-                parameters.Add("@Estado", filtros.Estado ?? "");
-                parameters.Add("@FechaDesde", filtros.FechaDesde ?? DateTime.MinValue);
-                parameters.Add("@FechaHasta", filtros.FechaHasta ?? DateTime.Now);
-                parameters.Add("@UsuarioId", filtros.UsuarioId);
-                parameters.Add("@NombreDocumento", filtros.NombreDocumento ?? "");
-                parameters.Add("@PageNumber", filtros.PageNumber);
-                parameters.Add("@PageSize", filtros.PageSize);
-
-                var result = await _dbConnection.QueryAsync<OP_ROReviewDTO>(
-                    "OP_RO_Revisiones_Get",
-                    parameters,
-                    commandType: CommandType.StoredProcedure,
-                    commandTimeout: 300);
-
-                _logger.LogInformation($"[OP_RO] GetRevisiones retornó {result.Count()} registros");
-                return result.ToList();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "[OP_RO] Error en GetRevisiones");
-                throw;
-            }
+            ValidarFiltros(filtros);
+            _logger.LogWarning("[OP_RO] GetRevisionesAsync: SP 'OP_RO_Revisiones_Get' no existe en BD legacy. Retornando lista vacía.");
+            return Task.FromResult(new List<OP_ROReviewDTO>());
         }
 
-        public async Task<OP_ROReviewDTO> GetRevisionByIdAsync(int reviewId)
+        /// <summary>
+        /// STUB: SP OP_RO_Revision_GetById no existe en BD legacy
+        /// </summary>
+        public Task<OP_ROReviewDTO> GetRevisionByIdAsync(int reviewId)
         {
-            try
-            {
-                _logger.LogInformation($"[OP_RO] Iniciando GetRevisionById: {reviewId}");
-
-                var parameters = new DynamicParameters();
-                parameters.Add("@ReviewId", reviewId);
-
-                var result = await _dbConnection.QueryFirstOrDefaultAsync<OP_ROReviewDTO>(
-                    "OP_RO_Revision_GetById",
-                    parameters,
-                    commandType: CommandType.StoredProcedure,
-                    commandTimeout: 60);
-
-                return result ?? new OP_ROReviewDTO();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"[OP_RO] Error en GetRevisionById: {reviewId}");
-                throw;
-            }
+            _logger.LogWarning("[OP_RO] GetRevisionByIdAsync: SP 'OP_RO_Revision_GetById' no existe en BD legacy. Retornando DTO vacío. ReviewId={ReviewId}", reviewId);
+            return Task.FromResult(new OP_ROReviewDTO());
         }
 
         // ============================================
         // CUESTIONARIOS
         // ============================================
 
-        public async Task<List<OP_ROCuestionarioDTO>> GetCuestionariosAsync(OP_ROFiltrosDTO filtros)
+        /// <summary>
+        /// STUB: SP OP_RO_Cuestionarios_Get no existe en BD legacy
+        /// </summary>
+        public Task<List<OP_ROCuestionarioDTO>> GetCuestionariosAsync(OP_ROFiltrosDTO filtros)
         {
-            try
-            {
-                ValidarFiltros(filtros);
-                _logger.LogInformation("[OP_RO] Iniciando GetCuestionarios");
-
-                var parameters = new DynamicParameters();
-                parameters.Add("@Estado", filtros.Estado ?? "");
-                parameters.Add("@FechaDesde", filtros.FechaDesde ?? DateTime.MinValue);
-                parameters.Add("@FechaHasta", filtros.FechaHasta ?? DateTime.Now);
-                parameters.Add("@PageNumber", filtros.PageNumber);
-                parameters.Add("@PageSize", filtros.PageSize);
-
-                var result = await _dbConnection.QueryAsync<OP_ROCuestionarioDTO>(
-                    "OP_RO_Cuestionarios_Get",
-                    parameters,
-                    commandType: CommandType.StoredProcedure,
-                    commandTimeout: 300);
-
-                return result.ToList();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "[OP_RO] Error en GetCuestionarios");
-                throw;
-            }
+            ValidarFiltros(filtros);
+            _logger.LogWarning("[OP_RO] GetCuestionariosAsync: SP 'OP_RO_Cuestionarios_Get' no existe en BD legacy. Retornando lista vacía.");
+            return Task.FromResult(new List<OP_ROCuestionarioDTO>());
         }
 
-        public async Task<OP_ROCuestionarioDTO> GetCuestionarioByIdAsync(int cuestionarioId)
+        /// <summary>
+        /// STUB: SP OP_RO_Cuestionario_GetById no existe en BD legacy
+        /// </summary>
+        public Task<OP_ROCuestionarioDTO> GetCuestionarioByIdAsync(int cuestionarioId)
         {
-            try
-            {
-                _logger.LogInformation($"[OP_RO] Iniciando GetCuestionarioById: {cuestionarioId}");
-
-                // Obtener cuestionario base
-                var parameters = new DynamicParameters();
-                parameters.Add("@CuestionarioId", cuestionarioId);
-
-                var result = await _dbConnection.QueryFirstOrDefaultAsync<OP_ROCuestionarioDTO>(
-                    "OP_RO_Cuestionario_GetById",
-                    parameters,
-                    commandType: CommandType.StoredProcedure,
-                    commandTimeout: 60);
-
-                if (result == null)
-                    return new OP_ROCuestionarioDTO();
-
-                // Obtener preguntas (puede ser en SP separado o en multi-resultado)
-                result.Preguntas = await ObtenerPreguntasAsync(cuestionarioId);
-
-                return result;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"[OP_RO] Error en GetCuestionarioById: {cuestionarioId}");
-                throw;
-            }
+            _logger.LogWarning("[OP_RO] GetCuestionarioByIdAsync: SP 'OP_RO_Cuestionario_GetById' no existe en BD legacy. Retornando DTO vacío. CuestionarioId={CuestionarioId}", cuestionarioId);
+            return Task.FromResult(new OP_ROCuestionarioDTO());
         }
 
-        public async Task<int> SaveCuestionarioAsync(OP_ROCuestionarioDTO cuestionario)
+        /// <summary>
+        /// STUB: SP OP_RO_Cuestionario_Save no existe en BD legacy
+        /// </summary>
+        public Task<int> SaveCuestionarioAsync(OP_ROCuestionarioDTO cuestionario)
         {
-            try
-            {
-                ValidarDatos(cuestionario);
-                _logger.LogInformation($"[OP_RO] Guardando cuestionario: {cuestionario.Titulo}");
-
-                var parameters = new DynamicParameters();
-                parameters.Add("@CuestionarioId", cuestionario.CuestionarioId);
-                parameters.Add("@Titulo", cuestionario.Titulo);
-                parameters.Add("@Descripcion", cuestionario.Descripcion);
-                parameters.Add("@NumeroPreguntas", cuestionario.NumeroPreguntas);
-                parameters.Add("@Estado", cuestionario.Estado);
-                parameters.Add("@VersionId", cuestionario.VersionId);
-                parameters.Add("@IdOutput", dbType: DbType.Int32, direction: ParameterDirection.Output);
-
-                await _dbConnection.ExecuteAsync(
-                    "OP_RO_Cuestionario_Save",
-                    parameters,
-                    commandType: CommandType.StoredProcedure,
-                    commandTimeout: 300);
-
-                var id = parameters.Get<int>("@IdOutput");
-                _logger.LogInformation($"[OP_RO] Cuestionario guardado con ID: {id}");
-
-                return id;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "[OP_RO] Error en SaveCuestionario");
-                throw;
-            }
+            ValidarDatos(cuestionario);
+            _logger.LogWarning("[OP_RO] SaveCuestionarioAsync: SP 'OP_RO_Cuestionario_Save' no existe en BD legacy. Retornando 0.");
+            return Task.FromResult(0);
         }
 
         // ============================================
         // INSTRUCTIVOS
         // ============================================
 
-        public async Task<List<OP_ROInstructivoDTO>> GetInstructivosAsync(OP_ROFiltrosDTO filtros)
+        /// <summary>
+        /// STUB: SP OP_RO_Instructivos_Get no existe en BD legacy
+        /// </summary>
+        public Task<List<OP_ROInstructivoDTO>> GetInstructivosAsync(OP_ROFiltrosDTO filtros)
         {
-            try
-            {
-                ValidarFiltros(filtros);
-                _logger.LogInformation("[OP_RO] Iniciando GetInstructivos");
-
-                var parameters = new DynamicParameters();
-                parameters.Add("@Estado", filtros.Estado ?? "");
-                parameters.Add("@FechaDesde", filtros.FechaDesde ?? DateTime.MinValue);
-                parameters.Add("@FechaHasta", filtros.FechaHasta ?? DateTime.Now);
-                parameters.Add("@PageNumber", filtros.PageNumber);
-                parameters.Add("@PageSize", filtros.PageSize);
-
-                var result = await _dbConnection.QueryAsync<OP_ROInstructivoDTO>(
-                    "OP_RO_Instructivos_Get",
-                    parameters,
-                    commandType: CommandType.StoredProcedure,
-                    commandTimeout: 300);
-
-                return result.ToList();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "[OP_RO] Error en GetInstructivos");
-                throw;
-            }
+            ValidarFiltros(filtros);
+            _logger.LogWarning("[OP_RO] GetInstructivosAsync: SP 'OP_RO_Instructivos_Get' no existe en BD legacy. Retornando lista vacía.");
+            return Task.FromResult(new List<OP_ROInstructivoDTO>());
         }
 
-        public async Task<OP_ROInstructivoDTO> GetInstructivoByIdAsync(int instructivoId)
+        /// <summary>
+        /// STUB: SP OP_RO_Instructivo_GetById no existe en BD legacy
+        /// </summary>
+        public Task<OP_ROInstructivoDTO> GetInstructivoByIdAsync(int instructivoId)
         {
-            try
-            {
-                _logger.LogInformation($"[OP_RO] Iniciando GetInstructivoById: {instructivoId}");
-
-                var parameters = new DynamicParameters();
-                parameters.Add("@InstructivoId", instructivoId);
-
-                var result = await _dbConnection.QueryFirstOrDefaultAsync<OP_ROInstructivoDTO>(
-                    "OP_RO_Instructivo_GetById",
-                    parameters,
-                    commandType: CommandType.StoredProcedure,
-                    commandTimeout: 60);
-
-                if (result == null)
-                    return new OP_ROInstructivoDTO();
-
-                result.Pasos = await ObtenerPasosAsync(instructivoId);
-                return result;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"[OP_RO] Error en GetInstructivoById: {instructivoId}");
-                throw;
-            }
+            _logger.LogWarning("[OP_RO] GetInstructivoByIdAsync: SP 'OP_RO_Instructivo_GetById' no existe en BD legacy. Retornando DTO vacío. InstructivoId={InstructivoId}", instructivoId);
+            return Task.FromResult(new OP_ROInstructivoDTO());
         }
 
-        public async Task<int> SaveInstructivoAsync(OP_ROInstructivoDTO instructivo)
+        /// <summary>
+        /// STUB: SP OP_RO_Instructivo_Save no existe en BD legacy
+        /// </summary>
+        public Task<int> SaveInstructivoAsync(OP_ROInstructivoDTO instructivo)
         {
-            try
-            {
-                ValidarDatos(instructivo);
-                _logger.LogInformation($"[OP_RO] Guardando instructivo: {instructivo.Titulo}");
-
-                var parameters = new DynamicParameters();
-                parameters.Add("@InstructivoId", instructivo.InstructivoId);
-                parameters.Add("@Titulo", instructivo.Titulo);
-                parameters.Add("@Contenido", instructivo.Contenido);
-                parameters.Add("@Estado", instructivo.Estado);
-                parameters.Add("@VersionId", instructivo.VersionId);
-                parameters.Add("@OrdenCampo", instructivo.OrdenCampo);
-                parameters.Add("@IdOutput", dbType: DbType.Int32, direction: ParameterDirection.Output);
-
-                await _dbConnection.ExecuteAsync(
-                    "OP_RO_Instructivo_Save",
-                    parameters,
-                    commandType: CommandType.StoredProcedure,
-                    commandTimeout: 300);
-
-                var id = parameters.Get<int>("@IdOutput");
-                return id;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "[OP_RO] Error en SaveInstructivo");
-                throw;
-            }
+            ValidarDatos(instructivo);
+            _logger.LogWarning("[OP_RO] SaveInstructivoAsync: SP 'OP_RO_Instructivo_Save' no existe en BD legacy. Retornando 0.");
+            return Task.FromResult(0);
         }
 
         // ============================================
         // METODOLOGÍAS
         // ============================================
 
-        public async Task<List<OP_ROMetodologiaDTO>> GetMetodologiasAsync(OP_ROFiltrosDTO filtros)
+        /// <summary>
+        /// STUB: SP OP_RO_Metodologias_Get no existe en BD legacy
+        /// </summary>
+        public Task<List<OP_ROMetodologiaDTO>> GetMetodologiasAsync(OP_ROFiltrosDTO filtros)
         {
-            try
-            {
-                ValidarFiltros(filtros);
-                _logger.LogInformation("[OP_RO] Iniciando GetMetodologias");
-
-                var parameters = new DynamicParameters();
-                parameters.Add("@Estado", filtros.Estado ?? "");
-                parameters.Add("@FechaDesde", filtros.FechaDesde ?? DateTime.MinValue);
-                parameters.Add("@FechaHasta", filtros.FechaHasta ?? DateTime.Now);
-                parameters.Add("@PageNumber", filtros.PageNumber);
-                parameters.Add("@PageSize", filtros.PageSize);
-
-                var result = await _dbConnection.QueryAsync<OP_ROMetodologiaDTO>(
-                    "OP_RO_Metodologias_Get",
-                    parameters,
-                    commandType: CommandType.StoredProcedure,
-                    commandTimeout: 300);
-
-                return result.ToList();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "[OP_RO] Error en GetMetodologias");
-                throw;
-            }
+            ValidarFiltros(filtros);
+            _logger.LogWarning("[OP_RO] GetMetodologiasAsync: SP 'OP_RO_Metodologias_Get' no existe en BD legacy. Retornando lista vacía.");
+            return Task.FromResult(new List<OP_ROMetodologiaDTO>());
         }
 
-        public async Task<OP_ROMetodologiaDTO> GetMetodologiaByIdAsync(int metodologiaId)
+        /// <summary>
+        /// STUB: SP OP_RO_Metodologia_GetById no existe en BD legacy
+        /// </summary>
+        public Task<OP_ROMetodologiaDTO> GetMetodologiaByIdAsync(int metodologiaId)
         {
-            try
-            {
-                _logger.LogInformation($"[OP_RO] Iniciando GetMetodologiaById: {metodologiaId}");
-
-                var parameters = new DynamicParameters();
-                parameters.Add("@MetodologiaId", metodologiaId);
-
-                var result = await _dbConnection.QueryFirstOrDefaultAsync<OP_ROMetodologiaDTO>(
-                    "OP_RO_Metodologia_GetById",
-                    parameters,
-                    commandType: CommandType.StoredProcedure,
-                    commandTimeout: 60);
-
-                if (result == null)
-                    return new OP_ROMetodologiaDTO();
-
-                result.Fases = await ObtenerFasesAsync(metodologiaId);
-                return result;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"[OP_RO] Error en GetMetodologiaById: {metodologiaId}");
-                throw;
-            }
+            _logger.LogWarning("[OP_RO] GetMetodologiaByIdAsync: SP 'OP_RO_Metodologia_GetById' no existe en BD legacy. Retornando DTO vacío. MetodologiaId={MetodologiaId}", metodologiaId);
+            return Task.FromResult(new OP_ROMetodologiaDTO());
         }
 
-        public async Task<int> SaveMetodologiaAsync(OP_ROMetodologiaDTO metodologia)
+        /// <summary>
+        /// STUB: SP OP_RO_Metodologia_Save no existe en BD legacy
+        /// </summary>
+        public Task<int> SaveMetodologiaAsync(OP_ROMetodologiaDTO metodologia)
         {
-            try
-            {
-                ValidarDatos(metodologia);
-                _logger.LogInformation($"[OP_RO] Guardando metodología: {metodologia.Nombre}");
-
-                var parameters = new DynamicParameters();
-                parameters.Add("@MetodologiaId", metodologia.MetodologiaId);
-                parameters.Add("@Nombre", metodologia.Nombre);
-                parameters.Add("@Descripcion", metodologia.Descripcion);
-                parameters.Add("@Alcance", metodologia.Alcance);
-                parameters.Add("@Estado", metodologia.Estado);
-                parameters.Add("@VersionId", metodologia.VersionId);
-                parameters.Add("@IdOutput", dbType: DbType.Int32, direction: ParameterDirection.Output);
-
-                await _dbConnection.ExecuteAsync(
-                    "OP_RO_Metodologia_Save",
-                    parameters,
-                    commandType: CommandType.StoredProcedure,
-                    commandTimeout: 300);
-
-                var id = parameters.Get<int>("@IdOutput");
-                return id;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "[OP_RO] Error en SaveMetodologia");
-                throw;
-            }
+            ValidarDatos(metodologia);
+            _logger.LogWarning("[OP_RO] SaveMetodologiaAsync: SP 'OP_RO_Metodologia_Save' no existe en BD legacy. Retornando 0.");
+            return Task.FromResult(0);
         }
 
         // ============================================
         // MATERIALES DE AYUDA
         // ============================================
 
-        public async Task<List<OP_ROMaterialAyudaDTO>> GetMaterialesAsync(OP_ROFiltrosDTO filtros)
+        /// <summary>
+        /// STUB: SP OP_RO_Materiales_Get no existe en BD legacy
+        /// </summary>
+        public Task<List<OP_ROMaterialAyudaDTO>> GetMaterialesAsync(OP_ROFiltrosDTO filtros)
         {
-            try
-            {
-                ValidarFiltros(filtros);
-                _logger.LogInformation("[OP_RO] Iniciando GetMateriales");
-
-                var parameters = new DynamicParameters();
-                parameters.Add("@Estado", filtros.Estado ?? "");
-                parameters.Add("@FechaDesde", filtros.FechaDesde ?? DateTime.MinValue);
-                parameters.Add("@FechaHasta", filtros.FechaHasta ?? DateTime.Now);
-                parameters.Add("@PageNumber", filtros.PageNumber);
-                parameters.Add("@PageSize", filtros.PageSize);
-
-                var result = await _dbConnection.QueryAsync<OP_ROMaterialAyudaDTO>(
-                    "OP_RO_Materiales_Get",
-                    parameters,
-                    commandType: CommandType.StoredProcedure,
-                    commandTimeout: 300);
-
-                return result.ToList();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "[OP_RO] Error en GetMateriales");
-                throw;
-            }
+            ValidarFiltros(filtros);
+            _logger.LogWarning("[OP_RO] GetMaterialesAsync: SP 'OP_RO_Materiales_Get' no existe en BD legacy. Retornando lista vacía.");
+            return Task.FromResult(new List<OP_ROMaterialAyudaDTO>());
         }
 
-        public async Task<OP_ROMaterialAyudaDTO> GetMaterialByIdAsync(int materialId)
+        /// <summary>
+        /// STUB: SP OP_RO_Material_GetById no existe en BD legacy
+        /// </summary>
+        public Task<OP_ROMaterialAyudaDTO> GetMaterialByIdAsync(int materialId)
         {
-            try
-            {
-                _logger.LogInformation($"[OP_RO] Iniciando GetMaterialById: {materialId}");
-
-                var parameters = new DynamicParameters();
-                parameters.Add("@MaterialId", materialId);
-
-                var result = await _dbConnection.QueryFirstOrDefaultAsync<OP_ROMaterialAyudaDTO>(
-                    "OP_RO_Material_GetById",
-                    parameters,
-                    commandType: CommandType.StoredProcedure,
-                    commandTimeout: 60);
-
-                return result ?? new OP_ROMaterialAyudaDTO();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"[OP_RO] Error en GetMaterialById: {materialId}");
-                throw;
-            }
+            _logger.LogWarning("[OP_RO] GetMaterialByIdAsync: SP 'OP_RO_Material_GetById' no existe en BD legacy. Retornando DTO vacío. MaterialId={MaterialId}", materialId);
+            return Task.FromResult(new OP_ROMaterialAyudaDTO());
         }
 
-        public async Task<int> SaveMaterialAsync(OP_ROMaterialAyudaDTO material)
+        /// <summary>
+        /// STUB: SP OP_RO_Material_Save no existe en BD legacy
+        /// </summary>
+        public Task<int> SaveMaterialAsync(OP_ROMaterialAyudaDTO material)
         {
-            try
-            {
-                ValidarDatos(material);
-                _logger.LogInformation($"[OP_RO] Guardando material: {material.Titulo}");
-
-                var parameters = new DynamicParameters();
-                parameters.Add("@MaterialId", material.MaterialId);
-                parameters.Add("@Titulo", material.Titulo);
-                parameters.Add("@Tipo", material.Tipo);
-                parameters.Add("@ContenidoUrl", material.ContenidoUrl);
-                parameters.Add("@Estado", material.Estado);
-                parameters.Add("@VersionId", material.VersionId);
-                parameters.Add("@TamanoMB", material.TamanoMB);
-                parameters.Add("@IdOutput", dbType: DbType.Int32, direction: ParameterDirection.Output);
-
-                await _dbConnection.ExecuteAsync(
-                    "OP_RO_Material_Save",
-                    parameters,
-                    commandType: CommandType.StoredProcedure,
-                    commandTimeout: 300);
-
-                var id = parameters.Get<int>("@IdOutput");
-                return id;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "[OP_RO] Error en SaveMaterial");
-                throw;
-            }
+            ValidarDatos(material);
+            _logger.LogWarning("[OP_RO] SaveMaterialAsync: SP 'OP_RO_Material_Save' no existe en BD legacy. Retornando 0.");
+            return Task.FromResult(0);
         }
 
         // ============================================
         // WORKFLOW: APROBACIÓN/RECHAZO
         // ============================================
 
-        public async Task<bool> AprobarRevisionAsync(OP_ROAprobarDTO aprobacion)
+        /// <summary>
+        /// STUB: SP OP_RO_Revision_Aprobar no existe en BD legacy
+        /// </summary>
+        public Task<bool> AprobarRevisionAsync(OP_ROAprobarDTO aprobacion)
         {
-            try
-            {
-                ValidarDatos(aprobacion);
-                _logger.LogInformation($"[OP_RO] Aprobando revisión: {aprobacion.ReviewId}");
-
-                var parameters = new DynamicParameters();
-                parameters.Add("@ReviewId", aprobacion.ReviewId);
-                parameters.Add("@UsuarioRevisorId", aprobacion.UsuarioRevisorId);
-                parameters.Add("@Comentarios", aprobacion.Comentarios ?? "");
-
-                var result = await _dbConnection.ExecuteAsync(
-                    "OP_RO_Revision_Aprobar",
-                    parameters,
-                    commandType: CommandType.StoredProcedure,
-                    commandTimeout: 60);
-
-                return result > 0;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "[OP_RO] Error en AprobarRevision");
-                throw;
-            }
+            ValidarDatos(aprobacion);
+            _logger.LogWarning("[OP_RO] AprobarRevisionAsync: SP 'OP_RO_Revision_Aprobar' no existe en BD legacy. Retornando false. ReviewId={ReviewId}", aprobacion.ReviewId);
+            return Task.FromResult(false);
         }
 
-        public async Task<bool> RechazarRevisionAsync(OP_RORechazarDTO rechazo)
+        /// <summary>
+        /// STUB: SP OP_RO_Revision_Rechazar no existe en BD legacy
+        /// </summary>
+        public Task<bool> RechazarRevisionAsync(OP_RORechazarDTO rechazo)
         {
-            try
-            {
-                ValidarDatos(rechazo);
-                _logger.LogInformation($"[OP_RO] Rechazando revisión: {rechazo.ReviewId}");
-
-                var parameters = new DynamicParameters();
-                parameters.Add("@ReviewId", rechazo.ReviewId);
-                parameters.Add("@UsuarioRevisorId", rechazo.UsuarioRevisorId);
-                parameters.Add("@MotivoRechazo", rechazo.MotivoRechazo ?? "");
-                parameters.Add("@Comentarios", rechazo.Comentarios ?? "");
-
-                var result = await _dbConnection.ExecuteAsync(
-                    "OP_RO_Revision_Rechazar",
-                    parameters,
-                    commandType: CommandType.StoredProcedure,
-                    commandTimeout: 60);
-
-                return result > 0;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "[OP_RO] Error en RechazarRevision");
-                throw;
-            }
+            ValidarDatos(rechazo);
+            _logger.LogWarning("[OP_RO] RechazarRevisionAsync: SP 'OP_RO_Revision_Rechazar' no existe en BD legacy. Retornando false. ReviewId={ReviewId}", rechazo.ReviewId);
+            return Task.FromResult(false);
         }
 
-        public async Task<List<HistorialRevisionDTO>> GetHistorialRevisionAsync(int reviewId)
+        /// <summary>
+        /// STUB: SP OP_RO_Revision_Historial_Get no existe en BD legacy
+        /// </summary>
+        public Task<List<HistorialRevisionDTO>> GetHistorialRevisionAsync(int reviewId)
         {
-            try
-            {
-                _logger.LogInformation($"[OP_RO] Obteniendo historial de revisión: {reviewId}");
-
-                var parameters = new DynamicParameters();
-                parameters.Add("@ReviewId", reviewId);
-
-                var result = await _dbConnection.QueryAsync<HistorialRevisionDTO>(
-                    "OP_RO_Revision_Historial_Get",
-                    parameters,
-                    commandType: CommandType.StoredProcedure,
-                    commandTimeout: 60);
-
-                return result.ToList();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "[OP_RO] Error en GetHistorialRevision");
-                throw;
-            }
+            _logger.LogWarning("[OP_RO] GetHistorialRevisionAsync: SP 'OP_RO_Revision_Historial_Get' no existe en BD legacy. Retornando lista vacía. ReviewId={ReviewId}", reviewId);
+            return Task.FromResult(new List<HistorialRevisionDTO>());
         }
 
         // ============================================
@@ -567,55 +235,38 @@ namespace MatrixNext.Data.Adapters.OP_RO
 
             // Validaciones específicas por tipo
             var tipo = dto.GetType();
-            _logger.LogInformation($"[OP_RO] Validando datos de tipo: {tipo.Name}");
-
-            // TODO: Implementar validaciones específicas según tipo DTO
+            _logger.LogDebug("[OP_RO] Validando datos de tipo: {TipoNombre}", tipo.Name);
         }
 
         // ============================================
-        // HELPERS PRIVADOS
+        // HELPERS PRIVADOS (STUBS)
         // ============================================
 
-        private async Task<List<PreguntaDTO>> ObtenerPreguntasAsync(int cuestionarioId)
+        /// <summary>
+        /// STUB: SP OP_RO_Preguntas_Get no existe en BD legacy
+        /// </summary>
+        private Task<List<PreguntaDTO>> ObtenerPreguntasAsync(int cuestionarioId)
         {
-            var parameters = new DynamicParameters();
-            parameters.Add("@CuestionarioId", cuestionarioId);
-
-            var result = await _dbConnection.QueryAsync<PreguntaDTO>(
-                "OP_RO_Preguntas_Get",
-                parameters,
-                commandType: CommandType.StoredProcedure,
-                commandTimeout: 60);
-
-            return result.ToList();
+            _logger.LogWarning("[OP_RO] ObtenerPreguntasAsync: SP 'OP_RO_Preguntas_Get' no existe en BD legacy. Retornando lista vacía. CuestionarioId={CuestionarioId}", cuestionarioId);
+            return Task.FromResult(new List<PreguntaDTO>());
         }
 
-        private async Task<List<PasoInstructivoDTO>> ObtenerPasosAsync(int instructivoId)
+        /// <summary>
+        /// STUB: SP OP_RO_Pasos_Get no existe en BD legacy
+        /// </summary>
+        private Task<List<PasoInstructivoDTO>> ObtenerPasosAsync(int instructivoId)
         {
-            var parameters = new DynamicParameters();
-            parameters.Add("@InstructivoId", instructivoId);
-
-            var result = await _dbConnection.QueryAsync<PasoInstructivoDTO>(
-                "OP_RO_Pasos_Get",
-                parameters,
-                commandType: CommandType.StoredProcedure,
-                commandTimeout: 60);
-
-            return result.ToList();
+            _logger.LogWarning("[OP_RO] ObtenerPasosAsync: SP 'OP_RO_Pasos_Get' no existe en BD legacy. Retornando lista vacía. InstructivoId={InstructivoId}", instructivoId);
+            return Task.FromResult(new List<PasoInstructivoDTO>());
         }
 
-        private async Task<List<FaseMetodologiaDTO>> ObtenerFasesAsync(int metodologiaId)
+        /// <summary>
+        /// STUB: SP OP_RO_Fases_Get no existe en BD legacy
+        /// </summary>
+        private Task<List<FaseMetodologiaDTO>> ObtenerFasesAsync(int metodologiaId)
         {
-            var parameters = new DynamicParameters();
-            parameters.Add("@MetodologiaId", metodologiaId);
-
-            var result = await _dbConnection.QueryAsync<FaseMetodologiaDTO>(
-                "OP_RO_Fases_Get",
-                parameters,
-                commandType: CommandType.StoredProcedure,
-                commandTimeout: 60);
-
-            return result.ToList();
+            _logger.LogWarning("[OP_RO] ObtenerFasesAsync: SP 'OP_RO_Fases_Get' no existe en BD legacy. Retornando lista vacía. MetodologiaId={MetodologiaId}", metodologiaId);
+            return Task.FromResult(new List<FaseMetodologiaDTO>());
         }
     }
 }

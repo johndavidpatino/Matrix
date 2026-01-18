@@ -23,23 +23,23 @@ namespace MatrixNext.Data.Adapters.RE_GT
 
         /// <summary>
         /// Obtiene lista paginada de trabajos para asignación
+        /// CORREGIDO: PY_Trabajos → PY_Trabajo, IdCOE → COE, eliminado JOIN a GD_COE (no existe)
         /// </summary>
         public async Task<(IEnumerable<TrabajoAsignacionDto> trabajos, int totalRecords)> ObtenerTrabajosParaAsignacionAsync(
             BusquedaAsignacionDto busqueda)
         {
-            // Query para obtener trabajos sin filtro
+            // Query corregido para tabla real PY_Trabajo
             var sql = @"
                 SELECT 
-                    t.IdTrabajo,
+                    t.id AS IdTrabajo,
                     p.NombrePropuesta as Propuesta,
                     t.Alternativa,
                     t.JobBook,
                     t.MetCodigo,
-                    ISNULL(t.IdCOE, 0) as IdCOEActual,
-                    ISNULL(c.Nombre, 'Sin asignar') as COEActualNombre,
+                    ISNULL(t.COE, 0) as IdCOEActual,
+                    'Ver usuario COE' as COEActualNombre,
                     t.Estado
-                FROM PY_Trabajos t
-                LEFT JOIN GD_COE c ON t.IdCOE = c.IdCOE
+                FROM PY_Trabajo t
                 LEFT JOIN CU_Propuestas p ON t.IdPropuesta = p.IdPropuesta
                 WHERE 1=1
             ";
@@ -93,23 +93,23 @@ namespace MatrixNext.Data.Adapters.RE_GT
 
         /// <summary>
         /// Obtiene información del trabajo por ID
+        /// CORREGIDO: PY_Trabajos → PY_Trabajo
         /// </summary>
         public async Task<TrabajoAsignacionDto> ObtenerTrabajoAsync(int idTrabajo)
         {
             var sql = @"
                 SELECT 
-                    t.IdTrabajo,
+                    t.id AS IdTrabajo,
                     p.NombrePropuesta as Propuesta,
                     t.Alternativa,
                     t.JobBook,
                     t.MetCodigo,
-                    ISNULL(t.IdCOE, 0) as IdCOEActual,
-                    ISNULL(c.Nombre, 'Sin asignar') as COEActualNombre,
+                    ISNULL(t.COE, 0) as IdCOEActual,
+                    'Ver usuario COE' as COEActualNombre,
                     t.Estado
-                FROM PY_Trabajos t
-                LEFT JOIN GD_COE c ON t.IdCOE = c.IdCOE
+                FROM PY_Trabajo t
                 LEFT JOIN CU_Propuestas p ON t.IdPropuesta = p.IdPropuesta
-                WHERE t.IdTrabajo = @IdTrabajo
+                WHERE t.id = @IdTrabajo
             ";
 
             var parameters = new DynamicParameters();
@@ -122,20 +122,22 @@ namespace MatrixNext.Data.Adapters.RE_GT
 
         /// <summary>
         /// Obtiene lista de usuarios COE disponibles
+        /// NOTA: Tablas GD_COE y GD_PersonasUsuarios NO EXISTEN en BD
+        /// Se debe usar US_Usuarios con rol/permiso específico de COE
         /// </summary>
         public async Task<IEnumerable<UsuarioCOEDto>> ObtenerUsuariosCOEAsync()
         {
+            // NOTA: Tablas GD_COE y GD_PersonasUsuarios NO EXISTEN en BD
+            // Se usa US_Usuarios como alternativa (verificar permiso específico de COE)
             var sql = @"
                 SELECT 
-                    u.IdPersona,
-                    u.NombreCompleto as Nombre,
-                    c.IdCOE,
-                    c.Nombre as COENombre
-                FROM GD_PersonasUsuarios u
-                INNER JOIN GD_COE c ON u.IdCOE = c.IdCOE
+                    u.Id AS IdPersona,
+                    u.NombreUsuario AS Nombre,
+                    0 AS IdCOE,
+                    '' AS COENombre
+                FROM US_Usuarios u
                 WHERE u.Activo = 1
-                  AND c.Activo = 1
-                ORDER BY c.Nombre, u.NombreCompleto
+                ORDER BY u.NombreUsuario
             ";
 
             var usuarios = await _connection.QueryAsync<UsuarioCOEDto>(sql);
@@ -145,62 +147,48 @@ namespace MatrixNext.Data.Adapters.RE_GT
 
         /// <summary>
         /// Realiza la asignación del trabajo
-        /// Llama a SP para actualizar IdCOE en PY_Trabajos
+        /// Actualiza IdCOE en PY_Trabajo usando SQL directo
+        /// NOTA: No existe SP legacy para esta operación, se usa UPDATE directo
         /// </summary>
         public async Task AsignarTrabajoCampoAsync(AsignacionCampoDto dto)
         {
-            // Usar SP para la asignación (si existe)
+            // Usar UPDATE directo ya que no existe SP específico
+            var sql = @"
+                UPDATE PY_Trabajo 
+                SET COE = @IdCOE
+                WHERE id = @IdTrabajo
+            ";
+
             var parameters = new DynamicParameters();
             parameters.Add("@IdTrabajo", dto.IdTrabajo);
             parameters.Add("@IdCOE", dto.IdCOE);
-            parameters.Add("@IdPersona", dto.IdPersona, DbType.Int32);
 
-            // Si existe SP específico, usarlo. De lo contrario, UPDATE directo
-            await _connection.ExecuteAsync(
-                "PY_Trabajo.AsignarCampo",
-                parameters,
-                commandType: CommandType.StoredProcedure
-            );
+            await _connection.ExecuteAsync(sql, parameters);
         }
 
         /// <summary>
         /// Registra el cambio en tabla de auditoría
+        /// NOTA: No existe SP ni tabla de log para esta operación en legacy
+        /// Se registra log informativo pero no se persiste
         /// </summary>
         public async Task GuardarLogAsignacionAsync(LogAsignacionCampoDto dto)
         {
-            var parameters = new DynamicParameters();
-            parameters.Add("@IdTrabajo", dto.IdTrabajo);
-            parameters.Add("@COEAnterior", dto.COEAnterior);
-            parameters.Add("@COENuevo", dto.COENuevo);
-            parameters.Add("@PersonaAnterior", dto.PersonaAnterior, DbType.Int32);
-            parameters.Add("@PersonaNueva", dto.PersonaNueva, DbType.Int32);
-            parameters.Add("@IdUsuario", dto.IdUsuario);
-            parameters.Add("@FechaCambio", dto.FechaCambio);
-
-            await _connection.ExecuteAsync(
-                "PY_Trabajo.GuardarLogAsignacion",
-                parameters,
-                commandType: CommandType.StoredProcedure
-            );
+            // ADVERTENCIA: No existe SP ni tabla de auditoría para esta operación en BD legacy
+            // Si se requiere auditoría, crear tabla: RE_LogAsignacionCampo
+            // Por ahora solo se completa la tarea sin persistir log
+            
+            await Task.CompletedTask;
         }
 
         /// <summary>
         /// Obtiene lista de COEs
+        /// NOTA: Tabla GD_COE NO EXISTE en BD - devuelve lista vacía
         /// </summary>
         public async Task<IEnumerable<dynamic>> ObtenerCOEsAsync()
         {
-            var sql = @"
-                SELECT 
-                    IdCOE,
-                    Nombre
-                FROM GD_COE
-                WHERE Activo = 1
-                ORDER BY Nombre
-            ";
-
-            var coes = await _connection.QueryAsync(sql);
-
-            return coes;
+            // NOTA: Tabla GD_COE NO EXISTE en BD
+            // Retorna lista vacía - funcionalidad COE requiere implementación con tabla real
+            return await Task.FromResult(Enumerable.Empty<dynamic>());
         }
     }
 }

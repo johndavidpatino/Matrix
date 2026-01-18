@@ -8,14 +8,23 @@
 <div class="container-fluid mt-4">
     <div class="row mb-4">
         <div class="col-md-8">
-            <h2><i class="bi bi-people-fill me-2"></i>Gestión de Usuarios</h2>
+            <h2>
+                <i class="bi bi-people-fill me-2"></i>Gestión de Usuarios
+                <partial name="~/Views/Shared/_HelpTooltip.cshtml" model='new { Text = "Administre cuentas de acceso al sistema y sus permisos", Type = "info" }' />
+            </h2>
         </div>
         <div class="col-md-4 text-end">
+            <button type="button" class="btn btn-outline-info me-2" data-help-topic="us-usuarios" title="Ayuda">
+                <i class="bi bi-question-circle"></i>
+            </button>
             <button id="btnNuevoUsuario" class="btn btn-primary">
                 <i class="bi bi-person-plus me-2"></i>Nuevo Usuario
             </button>
         </div>
     </div>
+
+    <!-- Alerta informativa -->
+    <partial name="~/Views/Shared/_InfoAlert.cshtml" model='new { Type = "tip", Message = "La contraseña inicial se envía automáticamente al correo del usuario. Los permisos se heredan del rol asignado.", Dismissible = true }' />
 
     @if (TempData["Success"] != null)
     {

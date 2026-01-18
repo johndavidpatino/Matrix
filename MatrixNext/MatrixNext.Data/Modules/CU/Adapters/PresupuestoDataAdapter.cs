@@ -9,17 +9,20 @@ using MatrixNext.Data.Modules.CU.Entities;
 using MatrixNext.Data.Modules.CU.Models;
 using MatrixNext.Data.Modules.IQ.Entities;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace MatrixNext.Data.Adapters.CU
 {
     public class PresupuestoDataAdapter
     {
         private readonly string _connectionString;
+        private readonly ILogger<PresupuestoDataAdapter> _logger;
 
-        public PresupuestoDataAdapter(IConfiguration configuration)
+        public PresupuestoDataAdapter(IConfiguration configuration, ILogger<PresupuestoDataAdapter> logger)
         {
             _connectionString = configuration.GetConnectionString("MatrixDb")
                 ?? throw new ArgumentNullException(nameof(configuration), "Connection string 'MatrixDb' not found");
+            _logger = logger;
         }
 
         private IDbConnection CreateConnection() => new SqlConnection(_connectionString);
@@ -31,14 +34,9 @@ namespace MatrixNext.Data.Adapters.CU
         /// </summary>
         public List<PresupuestoAprobadoViewModel> ObtenerPresupuestosAprobados(long idPropuesta)
         {
-            using var conn = CreateConnection();
-            var presupuestos = conn.Query<PresupuestoAprobadoViewModel>(
-                "CU_Presupuestos.DevolverxIdPropuestaAprobados",
-                new { IdPropuesta = idPropuesta },
-                commandType: CommandType.StoredProcedure
-            );
-
-            return presupuestos?.AsList() ?? new List<PresupuestoAprobadoViewModel>();
+            // STUB: SP CU_Presupuestos.DevolverxIdPropuestaAprobados no existe en legacy
+            _logger.LogWarning("[CU] ObtenerPresupuestosAprobados: SP CU_Presupuestos.DevolverxIdPropuestaAprobados no existe en legacy. IdPropuesta: {IdPropuesta}", idPropuesta);
+            return new List<PresupuestoAprobadoViewModel>();
         }
 
         /// <summary>
@@ -46,14 +44,9 @@ namespace MatrixNext.Data.Adapters.CU
         /// </summary>
         public List<PresupuestoAsignadoViewModel> ObtenerPresupuestosAsignadosXEstudio(long idEstudio)
         {
-            using var conn = CreateConnection();
-            var presupuestos = conn.Query<PresupuestoAsignadoViewModel>(
-                "CU_Presupuestos.ObtenerPresupuestosAsignadosXEstudio",
-                new { IdEstudio = idEstudio },
-                commandType: CommandType.StoredProcedure
-            );
-
-            return presupuestos?.AsList() ?? new List<PresupuestoAsignadoViewModel>();
+            // STUB: SP CU_Presupuestos.ObtenerPresupuestosAsignadosXEstudio no existe en legacy
+            _logger.LogWarning("[CU] ObtenerPresupuestosAsignadosXEstudio: SP CU_Presupuestos.ObtenerPresupuestosAsignadosXEstudio no existe en legacy. IdEstudio: {IdEstudio}", idEstudio);
+            return new List<PresupuestoAsignadoViewModel>();
         }
 
         /// <summary>

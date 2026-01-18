@@ -34,7 +34,7 @@ namespace MatrixNext.Data.Adapters.TH
                 var desvinculaciones = new List<DesvinculacionDto>();
 
                 var resultado = await _context.Database.GetDbConnection().QueryAsync<dynamic>(
-                    "TH_Desvinculacion_Get",
+                    "TH_DesvinculacionEmpleadosEstatus",
                     new
                     {
                         pageSize = pageSize,
@@ -74,7 +74,7 @@ namespace MatrixNext.Data.Adapters.TH
             try
             {
                 var newId = await _context.Database.GetDbConnection().QueryFirstOrDefaultAsync<long?>(
-                    "TH_Desvinculacion_Iniciar",
+                    "TH_DesvinculacionEmpleadosAdd",
                     new
                     {
                         empleadoId = input.EmpleadoId,
@@ -102,7 +102,7 @@ namespace MatrixNext.Data.Adapters.TH
             try
             {
                 var evaluaciones = await _context.Database.GetDbConnection().QueryAsync<dynamic>(
-                    "TH_Desvinculacion_Evaluaciones_Get",
+                    "TH_DesvinculacionEmpleadosEstatusEvaluacionesPorDesvinculacion",
                     new { desvinculacionId = desvinculacionId },
                     commandType: System.Data.CommandType.StoredProcedure
                 );
@@ -124,7 +124,7 @@ namespace MatrixNext.Data.Adapters.TH
             try
             {
                 var resultado = await _context.Database.GetDbConnection().ExecuteAsync(
-                    "TH_Desvinculacion_Evaluacion_Save",
+                    "TH_DesvinculacionEmpleadoAreaEvaluacion_Add",
                     new
                     {
                         desvinculacionEmpleadoId = input.DesvinculacionEmpleadoId,
@@ -153,7 +153,7 @@ namespace MatrixNext.Data.Adapters.TH
             try
             {
                 var resultado = await _context.Database.GetDbConnection().ExecuteAsync(
-                    "TH_Desvinculacion_Finalizar",
+                    "TH_DesvinculacionEmpleadoFinalizarProceso",
                     new { desvinculacionId = desvinculacionId },
                     commandType: System.Data.CommandType.StoredProcedure
                 );
@@ -170,25 +170,12 @@ namespace MatrixNext.Data.Adapters.TH
 
         /// <summary>
         /// Genera PDF del acta de desvinculación
+        /// NOTA: SP TH_Desvinculacion_GenerarPDF no existe en BD - funcionalidad no implementada en legacy
         /// </summary>
         public async Task<string?> GenerarPDFDesvinculacion(long desvinculacionId)
         {
-            try
-            {
-                var pdfBase64 = await _context.Database.GetDbConnection().QueryFirstOrDefaultAsync<string>(
-                    "TH_Desvinculacion_GenerarPDF",
-                    new { desvinculacionId = desvinculacionId },
-                    commandType: System.Data.CommandType.StoredProcedure
-                );
-
-                _logger.LogInformation($"PDF generado para desvinculación {desvinculacionId}");
-                return pdfBase64;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Error al generar PDF de desvinculación {desvinculacionId}");
-                throw;
-            }
+            _logger.LogWarning("GenerarPDFDesvinculacion: Funcionalidad no disponible - SP no existe en BD");
+            return await Task.FromResult<string?>(null);
         }
     }
 }

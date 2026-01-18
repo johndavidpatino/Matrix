@@ -2,6 +2,7 @@ using MatrixNext.Data.Modules.CC.Adapters;
 using MatrixNext.Data.Modules.CC.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace MatrixNext.Data.Modules.CC
 {
@@ -22,7 +23,9 @@ namespace MatrixNext.Data.Modules.CC
                 throw new InvalidOperationException("Connection string 'WebMatrix' or 'MatrixDb' is required for CC module");
 
             // CC FinzOpe Module (Sprint Pre-1)
-            services.AddScoped(sp => new CcFinzOpeAdapter(webMatrixConnection));
+            services.AddScoped(sp => new CcFinzOpeAdapter(
+                webMatrixConnection,
+                sp.GetRequiredService<ILogger<CcFinzOpeAdapter>>()));
             services.AddScoped<ICcFinzOpeAdapter>(sp => sp.GetRequiredService<CcFinzOpeAdapter>());
             services.AddScoped<ICcFinzOpeService, CcFinzOpeService>();
             

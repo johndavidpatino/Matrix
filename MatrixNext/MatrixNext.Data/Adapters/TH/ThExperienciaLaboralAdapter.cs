@@ -120,30 +120,9 @@ namespace MatrixNext.Data.Adapters.TH
         /// </summary>
         public async Task<bool> EditarExperienciaLaboral(long id, ExperienciaLaboralInputDto input)
         {
-            try
-            {
-                var resultado = await _context.Database.GetDbConnection().ExecuteAsync(
-                    "TH_ExperienciaLaboral_Edit",
-                    new
-                    {
-                        id = id,
-                        empresa = input.Empresa,
-                        fechaInicio = input.FechaInicio,
-                        fechaFin = input.FechaFin,
-                        cargo = input.Cargo,
-                        esInvestigacion = input.EsInvestigacion
-                    },
-                    commandType: System.Data.CommandType.StoredProcedure
-                );
-
-                _logger.LogInformation($"Experiencia laboral {id} editada");
-                return resultado > 0;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Error al editar experiencia laboral {id}");
-                throw;
-            }
+            // STUB: SP TH_ExperienciaLaboral_Edit no existe en legacy
+            _logger.LogWarning("[TH] EditarExperienciaLaboral: SP TH_ExperienciaLaboral_Edit no existe en legacy. Id: {Id}", id);
+            return await Task.FromResult(false);
         }
     }
 }

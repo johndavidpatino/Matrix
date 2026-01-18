@@ -68,6 +68,8 @@ namespace MatrixNext.Data.Adapters.SGC
         {
             try
             {
+                // NOTA: Columnas FuenteNoConformidadId, FuenteId, FechaRegistro, RegistradoPor NO existen en la tabla
+                // Las fuentes se manejan en ACM_AccionesMejora_Fuentes (relación N:M)
                 const string sql = @"
                     SELECT 
                         AccionMejoraId,
@@ -78,11 +80,7 @@ namespace MatrixNext.Data.Adapters.SGC
                         UsuarioResponsable,
                         Descripcion,
                         Correccion,
-                        FuenteNoConformidadId,
-                        FuenteId,
-                        IsDeleted,
-                        FechaRegistro,
-                        RegistradoPor
+                        IsDeleted
                     FROM ACM_AccionesMejora
                     WHERE AccionMejoraId = @AccionMejoraId
                         AND IsDeleted = 0
@@ -117,6 +115,7 @@ namespace MatrixNext.Data.Adapters.SGC
             {
                 var offset = (pageIndex - 1) * pageSize;
 
+                // NOTA: Columnas FuenteNoConformidadId, FuenteId, FechaRegistro, RegistradoPor NO existen en la tabla
                 var sql = @"
                     SELECT 
                         AccionMejoraId,
@@ -127,11 +126,7 @@ namespace MatrixNext.Data.Adapters.SGC
                         UsuarioResponsable,
                         Descripcion,
                         Correccion,
-                        FuenteNoConformidadId,
-                        FuenteId,
-                        IsDeleted,
-                        FechaRegistro,
-                        RegistradoPor
+                        IsDeleted
                     FROM ACM_AccionesMejora
                     WHERE IsDeleted = 0
                 ";
@@ -239,6 +234,7 @@ namespace MatrixNext.Data.Adapters.SGC
         {
             try
             {
+                // NOTA: La tabla ACM_Causas NO tiene columna IsDeleted
                 const string sql = @"
                     SELECT 
                         CausaId,
@@ -246,7 +242,6 @@ namespace MatrixNext.Data.Adapters.SGC
                         DescripcionCausa
                     FROM ACM_Causas
                     WHERE AccionMejoraId = @AccionMejoraId
-                        AND IsDeleted = 0
                     ORDER BY CausaId
                 ";
 
@@ -269,9 +264,10 @@ namespace MatrixNext.Data.Adapters.SGC
         {
             try
             {
+                // NOTA: La tabla ACM_Causas NO tiene columna FechaRegistro
                 const string sql = @"
-                    INSERT INTO ACM_Causas (AccionMejoraId, DescripcionCausa, FechaRegistro)
-                    VALUES (@AccionMejoraId, @DescripcionCausa, GETDATE())
+                    INSERT INTO ACM_Causas (AccionMejoraId, DescripcionCausa)
+                    VALUES (@AccionMejoraId, @DescripcionCausa)
                 ";
 
                 foreach (var causa in causas)
@@ -298,9 +294,9 @@ namespace MatrixNext.Data.Adapters.SGC
         {
             try
             {
+                // NOTA: La tabla ACM_Causas NO tiene columna IsDeleted - usar DELETE físico
                 const string sql = @"
-                    UPDATE ACM_Causas 
-                    SET IsDeleted = 1
+                    DELETE FROM ACM_Causas 
                     WHERE CausaId = @CausaId
                 ";
 
@@ -323,6 +319,7 @@ namespace MatrixNext.Data.Adapters.SGC
         {
             try
             {
+                // NOTA: La tabla ACM_PlanesAccion NO tiene columna IsDeleted
                 const string sql = @"
                     SELECT 
                         PlanAccionId,
@@ -334,7 +331,6 @@ namespace MatrixNext.Data.Adapters.SGC
                         FechaRevision
                     FROM ACM_PlanesAccion
                     WHERE AccionMejoraId = @AccionMejoraId
-                        AND IsDeleted = 0
                     ORDER BY FechaPlaneado
                 ";
 
@@ -357,9 +353,10 @@ namespace MatrixNext.Data.Adapters.SGC
         {
             try
             {
+                // NOTA: La tabla ACM_PlanesAccion NO tiene columna FechaRegistro
                 const string sql = @"
-                    INSERT INTO ACM_PlanesAccion (AccionMejoraId, DescripcionPlan, FechaPlaneado, FechaRegistro)
-                    VALUES (@AccionMejoraId, @DescripcionPlan, @FechaPlaneado, GETDATE())
+                    INSERT INTO ACM_PlanesAccion (AccionMejoraId, DescripcionPlan, FechaPlaneado)
+                    VALUES (@AccionMejoraId, @DescripcionPlan, @FechaPlaneado)
                 ";
 
                 foreach (var plan in planes)
@@ -387,14 +384,14 @@ namespace MatrixNext.Data.Adapters.SGC
         {
             try
             {
+                // NOTA: La tabla ACM_PlanesAccion NO tiene columna FechaModificacion
                 const string sql = @"
                     UPDATE ACM_PlanesAccion 
                     SET DescripcionPlan = @DescripcionPlan,
                         FechaPlaneado = @FechaPlaneado,
                         FechaEjecutado = @FechaEjecutado,
                         EficaciaPlan = @EficaciaPlan,
-                        FechaRevision = @FechaRevision,
-                        FechaModificacion = GETDATE()
+                        FechaRevision = @FechaRevision
                     WHERE PlanAccionId = @PlanAccionId
                 ";
 
@@ -422,9 +419,9 @@ namespace MatrixNext.Data.Adapters.SGC
         {
             try
             {
+                // NOTA: La tabla ACM_PlanesAccion NO tiene columna IsDeleted - usar DELETE físico
                 const string sql = @"
-                    UPDATE ACM_PlanesAccion 
-                    SET IsDeleted = 1
+                    DELETE FROM ACM_PlanesAccion 
                     WHERE PlanAccionId = @PlanAccionId
                 ";
 
@@ -447,12 +444,12 @@ namespace MatrixNext.Data.Adapters.SGC
         {
             try
             {
+                // NOTA: La tabla ACM_Procesos NO tiene columna IsDeleted
                 const string sql = @"
                     SELECT 
                         ProcesoId,
                         NombreProceso
                     FROM ACM_Procesos
-                    WHERE IsDeleted = 0
                     ORDER BY NombreProceso
                 ";
 
@@ -472,13 +469,13 @@ namespace MatrixNext.Data.Adapters.SGC
         {
             try
             {
+                // NOTA: Tabla ACM_FuentesNoConformidad NO EXISTE - usar ACM_TiposFuente
                 const string sql = @"
                     SELECT 
-                        FuenteNoConformidadId,
-                        NombreFuente
-                    FROM ACM_FuentesNoConformidad
-                    WHERE IsDeleted = 0
-                    ORDER BY NombreFuente
+                        TipoFuenteId AS FuenteNoConformidadId,
+                        TipoFuenteNombre AS NombreFuente
+                    FROM ACM_TiposFuente
+                    ORDER BY TipoFuenteNombre
                 ";
 
                 var result = await _connection.QueryAsync<SGCFuenteNoConformidadDto>(sql);
@@ -497,15 +494,16 @@ namespace MatrixNext.Data.Adapters.SGC
         {
             try
             {
+                // NOTA: Tabla ACM_Fuentes NO EXISTE - usar ACM_AccionesMejora_Fuentes
+                // La estructura real es: AccionMejoraFuenteId, AccionMejoraId, TipoFuenteId, FuenteId
                 const string sql = @"
-                    SELECT 
+                    SELECT DISTINCT
                         FuenteId,
-                        FuenteNoConformidadId,
-                        NombreFuente
-                    FROM ACM_Fuentes
-                    WHERE FuenteNoConformidadId = @FuenteNoConformidadId
-                        AND IsDeleted = 0
-                    ORDER BY NombreFuente
+                        TipoFuenteId AS FuenteNoConformidadId,
+                        CAST(FuenteId AS NVARCHAR(50)) AS NombreFuente
+                    FROM ACM_AccionesMejora_Fuentes
+                    WHERE TipoFuenteId = @FuenteNoConformidadId
+                    ORDER BY FuenteId
                 ";
 
                 var parameters = new DynamicParameters();

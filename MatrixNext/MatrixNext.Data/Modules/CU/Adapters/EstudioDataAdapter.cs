@@ -30,7 +30,7 @@ namespace MatrixNext.Data.Adapters.CU
             using var conn = CreateConnection();
             var data = conn.Query<EstudioListItemViewModel>(
                 "CU_Estudios_Get",
-                new { PropuestaId = propuestaId, IdGerenteCuentas = usuarioId },
+                new { PropuestaId = propuestaId, GerenteCuentas = usuarioId },
                 commandType: CommandType.StoredProcedure
             );
 
@@ -63,7 +63,7 @@ namespace MatrixNext.Data.Adapters.CU
         {
             using var conn = CreateConnection();
             return conn.Query<CatalogoItem<byte>>(
-                "SELECT Id as Id, Descripcion as Nombre FROM CU_Estudios_DocumentosSoporte ORDER BY Id"
+                "SELECT id as Id, DocumentoSoporte as Nombre FROM CU_Estudios_DocumentosSoporte ORDER BY id"
             ).AsList();
         }
     }

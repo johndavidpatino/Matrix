@@ -40,13 +40,13 @@ namespace MatrixNext.Data.Adapters.ES
             using (var connection = new SqlConnection(_connectionString))
             {
                 var query = @"
-                    SELECT m.*, t.Nombre as TrabajoNombre, u.NombreCompleto as UsuarioNombre,
-                           a.FechaAprobacion, 
-                           CASE WHEN a.Id IS NOT NULL THEN 'Aprobada' ELSE 'Pendiente' END as EstadoAprobacion
+                    SELECT m.*, t.NombreTrabajo as TrabajoNombre, u.NombreCompleto as UsuarioNombre,
+                           a.Fecha as FechaAprobacion, 
+                           CASE WHEN a.id IS NOT NULL THEN 'Aprobada' ELSE 'Pendiente' END as EstadoAprobacion
                     FROM ES_MetodologiaCampo m
-                    INNER JOIN PY_Trabajos t ON m.TrabajoId = t.Id
+                    INNER JOIN PY_Trabajo t ON m.TrabajoId = t.id
                     LEFT JOIN US_Usuarios u ON m.Usuario = u.Id
-                    LEFT JOIN ES_AprobacionMetodologia a ON m.Id = a.IdMetodologia
+                    LEFT JOIN ES_AprobacionMetodologia a ON m.Id = a.MetodologiaId
                     WHERE m.TrabajoId = @TrabajoId
                     ORDER BY m.NoVersion DESC";
 
@@ -64,12 +64,12 @@ namespace MatrixNext.Data.Adapters.ES
             using (var connection = new SqlConnection(_connectionString))
             {
                 var query = @"
-                    SELECT m.*, t.Nombre as TrabajoNombre, u.NombreCompleto as UsuarioNombre
+                    SELECT m.*, t.NombreTrabajo as TrabajoNombre, u.NombreCompleto as UsuarioNombre
                     FROM ES_MetodologiaCampo m
-                    INNER JOIN PY_Trabajos t ON m.TrabajoId = t.Id
+                    INNER JOIN PY_Trabajo t ON m.TrabajoId = t.id
                     LEFT JOIN US_Usuarios u ON m.Usuario = u.Id
                     WHERE NOT EXISTS (
-                        SELECT 1 FROM ES_AprobacionMetodologia a WHERE a.IdMetodologia = m.Id
+                        SELECT 1 FROM ES_AprobacionMetodologia a WHERE a.MetodologiaId = m.Id
                     )
                     ORDER BY m.Fecha DESC";
 
@@ -84,13 +84,13 @@ namespace MatrixNext.Data.Adapters.ES
             using (var connection = new SqlConnection(_connectionString))
             {
                 var query = @"
-                    SELECT m.*, t.Nombre as TrabajoNombre, u.NombreCompleto as UsuarioNombre,
-                           a.FechaAprobacion,
-                           CASE WHEN a.Id IS NOT NULL THEN 'Aprobada' ELSE 'Pendiente' END as EstadoAprobacion
+                    SELECT m.*, t.NombreTrabajo as TrabajoNombre, u.NombreCompleto as UsuarioNombre,
+                           a.Fecha as FechaAprobacion,
+                           CASE WHEN a.id IS NOT NULL THEN 'Aprobada' ELSE 'Pendiente' END as EstadoAprobacion
                     FROM ES_MetodologiaCampo m
-                    LEFT JOIN PY_Trabajos t ON m.TrabajoId = t.Id
+                    LEFT JOIN PY_Trabajo t ON m.TrabajoId = t.id
                     LEFT JOIN US_Usuarios u ON m.Usuario = u.Id
-                    LEFT JOIN ES_AprobacionMetodologia a ON m.Id = a.IdMetodologia
+                    LEFT JOIN ES_AprobacionMetodologia a ON m.Id = a.MetodologiaId
                     WHERE m.Id = @Id";
 
                 var result = await connection.QueryFirstOrDefaultAsync<ESMetodologiaCampoOutputDto>(

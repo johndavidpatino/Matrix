@@ -5,26 +5,43 @@
 <div class="page-header">
     <div class="d-flex justify-content-between align-items-center">
         <div>
-            <h1 class="page-title">Administración de Empleados</h1>
+            <h1 class="page-title">
+                Administración de Empleados
+                <partial name="~/Views/Shared/_HelpTooltip.cshtml" model='new { Text = "Gestione datos personales, laborales y de nómina de los empleados", Type = "info" }' />
+            </h1>
             <p class="text-muted">Gestión integral de información de empleados</p>
         </div>
-        <button id="btnNuevoEmpleado" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalEmpleado">
-            <i class="ri-add-line"></i> Nuevo Empleado
-        </button>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-info" data-help-topic="th-empleados" title="Ayuda">
+                <i class="ri-question-line"></i>
+            </button>
+            <button id="btnNuevoEmpleado" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalEmpleado">
+                <i class="ri-add-line"></i> Nuevo Empleado
+            </button>
+        </div>
     </div>
 </div>
+
+<!-- Alerta informativa contextual -->
+<partial name="~/Views/Shared/_InfoAlert.cshtml" model='new { Type = "tip", Message = "Los cambios en información de nómina requieren aprobación del área de RRHH antes de hacerse efectivos.", Dismissible = true }' />
 
 <div class="row">
     <div class="col-12">
         <!-- Filtros -->
         <div class="card custom-card">
             <div class="card-header">
-                <div class="card-title">Filtros de Búsqueda</div>
+                <div class="card-title">
+                    Filtros de Búsqueda
+                    <partial name="~/Views/Shared/_HelpTooltip.cshtml" model='new { Text = "Use los filtros para encontrar empleados específicos", Type = "tip" }' />
+                </div>
             </div>
             <div class="card-body">
                 <div class="row gy-3">
                     <div class="col-lg-3">
-                        <label class="form-label">Identificación</label>
+                        <label class="form-label">
+                            Identificación
+                            <partial name="~/Views/Shared/_HelpTooltip.cshtml" model='new { Text = "Cédula de ciudadanía, extranjería o pasaporte", Type = "info" }' />
+                        </label>
                         <input id="filterIdentificacion" class="form-control" placeholder="Cédula o Pasaporte" />
                     </div>
                     <div class="col-lg-3">
@@ -32,7 +49,10 @@
                         <input id="filterNombre" class="form-control" placeholder="Nombre del empleado" />
                     </div>
                     <div class="col-lg-2">
-                        <label class="form-label">Estado</label>
+                        <label class="form-label">
+                            Estado
+                            <partial name="~/Views/Shared/_HelpTooltip.cshtml" model='new { Text = "Activo: empleado vigente. Inactivo: retirado o suspendido", Type = "info" }' />
+                        </label>
                         <select id="filterEstado" class="form-select">
                             <option value="">Todos</option>
                             <option value="true">Activo</option>

@@ -1,5 +1,6 @@
 using Dapper;
 using MatrixNext.Data.Modules.CC.DTOs;
+using Microsoft.Extensions.Logging;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -18,10 +19,12 @@ namespace MatrixNext.Data.Modules.CC.Adapters
     public class CcFinzOpeAdapter : ICcFinzOpeAdapter
     {
         private readonly string _webMatrixConnection;
+        private readonly ILogger<CcFinzOpeAdapter> _logger;
 
-        public CcFinzOpeAdapter(string webMatrixConnection)
+        public CcFinzOpeAdapter(string webMatrixConnection, ILogger<CcFinzOpeAdapter> logger)
         {
             _webMatrixConnection = webMatrixConnection ?? throw new ArgumentNullException(nameof(webMatrixConnection));
+            _logger = logger;
         }
 
         /// <summary>
@@ -29,23 +32,9 @@ namespace MatrixNext.Data.Modules.CC.Adapters
         /// </summary>
         public async Task<CcLiquidacionDto> ObtenerLiquidacion(int idPeriodo, DateTime fechaInicio, DateTime fechaFin)
         {
-            try
-            {
-                using (var connection = new SqlConnection(_webMatrixConnection))
-                {
-                    var result = await connection.QuerySingleOrDefaultAsync<CcLiquidacionDto>(
-                        "CC_LiquidarPlanillas",
-                        new { IdPeriodo = idPeriodo, FechaInicio = fechaInicio, FechaFin = fechaFin },
-                        commandType: CommandType.StoredProcedure
-                    );
-
-                    return result ?? new CcLiquidacionDto { IdPeriodo = idPeriodo, FechaInicio = fechaInicio, FechaFin = fechaFin };
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException($"Error executing CC_LiquidarPlanillas for period {idPeriodo}", ex);
-            }
+            // STUB: SP CC_LiquidarPlanillas no existe en legacy
+            _logger.LogWarning("[CC] ObtenerLiquidacion: SP CC_LiquidarPlanillas no existe en legacy. IdPeriodo: {IdPeriodo}", idPeriodo);
+            return await Task.FromResult(new CcLiquidacionDto { IdPeriodo = idPeriodo, FechaInicio = fechaInicio, FechaFin = fechaFin });
         }
 
         /// <summary>
@@ -53,23 +42,9 @@ namespace MatrixNext.Data.Modules.CC.Adapters
         /// </summary>
         public async Task<List<CcBonificacionDto>> ObtenerBonificaciones(int idPeriodo)
         {
-            try
-            {
-                using (var connection = new SqlConnection(_webMatrixConnection))
-                {
-                    var result = await connection.QueryAsync<CcBonificacionDto>(
-                        "CC_GenerarBonificacion",
-                        new { IdPeriodo = idPeriodo },
-                        commandType: CommandType.StoredProcedure
-                    );
-
-                    return result?.ToList() ?? new List<CcBonificacionDto>();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException($"Error executing CC_GenerarBonificacion for period {idPeriodo}", ex);
-            }
+            // STUB: SP CC_GenerarBonificacion no existe en legacy
+            _logger.LogWarning("[CC] ObtenerBonificaciones: SP CC_GenerarBonificacion no existe en legacy. IdPeriodo: {IdPeriodo}", idPeriodo);
+            return await Task.FromResult(new List<CcBonificacionDto>());
         }
 
         /// <summary>

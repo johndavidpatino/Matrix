@@ -101,12 +101,12 @@ namespace MatrixNext.Data.Adapters.TH
         {
             try
             {
+                var ahora = DateTime.Now;
                 var newId = await _context.Database.GetDbConnection().QueryFirstOrDefaultAsync<long?>(
                     "TH_Empleados_DatosGenerales_Add",
                     new
                     {
-                        tipoIdentificacion = input.TipoId,
-                        identificacion = input.Identificacion,
+                        tipoId = input.TipoId,
                         nombres = input.Nombres,
                         apellidos = input.Apellidos,
                         nombrePreferido = input.NombrePreferido,
@@ -115,7 +115,10 @@ namespace MatrixNext.Data.Adapters.TH
                         estadoCivil = input.EstadoCivil,
                         grupoSanguineo = input.GrupoSanguineo,
                         nacionalidad = input.Nacionalidad,
-                        foto = input.FotoBase64
+                        urlFoto = input.FotoBase64,
+                        fechaCreacion = ahora,
+                        usuarioRegistro = (long)0, // Usuario de sistema por defecto
+                        fechaUltimaActualizacion = ahora
                     },
                     commandType: System.Data.CommandType.StoredProcedure
                 );
@@ -142,8 +145,7 @@ namespace MatrixNext.Data.Adapters.TH
                     new
                     {
                         id = id,
-                        tipoIdentificacion = input.TipoId,
-                        identificacion = input.Identificacion,
+                        tipoId = input.TipoId,
                         nombres = input.Nombres,
                         apellidos = input.Apellidos,
                         nombrePreferido = input.NombrePreferido,
@@ -152,7 +154,8 @@ namespace MatrixNext.Data.Adapters.TH
                         estadoCivil = input.EstadoCivil,
                         grupoSanguineo = input.GrupoSanguineo,
                         nacionalidad = input.Nacionalidad,
-                        foto = input.FotoBase64
+                        urlFoto = input.FotoBase64,
+                        fechaUltimaActualizacion = DateTime.Now
                     },
                     commandType: System.Data.CommandType.StoredProcedure
                 );
@@ -279,27 +282,9 @@ namespace MatrixNext.Data.Adapters.TH
         /// </summary>
         public async Task<bool> ActualizarSalario(EmpleadoActualizarSalarioInputDto input)
         {
-            try
-            {
-                var resultado = await _context.Database.GetDbConnection().ExecuteAsync(
-                    "TH_Empleados_DatosLaborales_ActualizarSalario",
-                    new
-                    {
-                        empleadoId = input.EmpleadoId,
-                        salario = input.Salario,
-                        tipoSalarioId = input.TipoSalarioId
-                    },
-                    commandType: System.Data.CommandType.StoredProcedure
-                );
-
-                _logger.LogInformation($"Salario del empleado {input.EmpleadoId} actualizado");
-                return resultado > 0;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Error al actualizar salario del empleado {input.EmpleadoId}");
-                throw;
-            }
+            // STUB: SP TH_Empleados_DatosLaborales_ActualizarSalario no existe en legacy
+            _logger.LogWarning("[TH] ActualizarSalario: SP TH_Empleados_DatosLaborales_ActualizarSalario no existe en legacy. EmpleadoId: {EmpleadoId}", input.EmpleadoId);
+            return await Task.FromResult(false);
         }
 
         /// <summary>
@@ -313,9 +298,11 @@ namespace MatrixNext.Data.Adapters.TH
                     "TH_Empleados_Retirar",
                     new
                     {
-                        empleadoId = empleadoId,
+                        personaId = empleadoId,
+                        observacion = observacion,
                         fechaRetiro = fechaRetiro,
-                        observacion = observacion
+                        usuarioRegistro = 0, // TODO: Obtener del contexto de usuario actual
+                        fechaRegistro = DateTime.Now
                     },
                     commandType: System.Data.CommandType.StoredProcedure
                 );
@@ -341,7 +328,7 @@ namespace MatrixNext.Data.Adapters.TH
                     "TH_Empleados_Reintegrar",
                     new
                     {
-                        empleadoId = empleadoId,
+                        personaId = empleadoId,
                         fechaReintegro = fechaReintegro
                     },
                     commandType: System.Data.CommandType.StoredProcedure
@@ -899,7 +886,7 @@ namespace MatrixNext.Data.Adapters.TH
                         fechaAplicacion = input.FechaAplicacion,
                         motivoCambioId = input.MotivoCambioId,
                         tipo = input.Tipo,
-                        monto = input.Monto
+                        salario = input.Monto
                     },
                     commandType: System.Data.CommandType.StoredProcedure
                 );

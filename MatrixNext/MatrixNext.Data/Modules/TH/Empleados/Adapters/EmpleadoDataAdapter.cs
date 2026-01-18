@@ -2,6 +2,7 @@
 using MatrixNext.Data.Modules.TH.Empleados.Models;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System.Data;
 
 namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
@@ -13,11 +14,13 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
     public class EmpleadoDataAdapter
     {
         private readonly string _connectionString;
+        private readonly ILogger<EmpleadoDataAdapter> _logger;
 
-        public EmpleadoDataAdapter(IConfiguration configuration)
+        public EmpleadoDataAdapter(IConfiguration configuration, ILogger<EmpleadoDataAdapter> logger)
         {
             _connectionString = configuration.GetConnectionString("MatrixDb") 
                 ?? throw new InvalidOperationException("Connection string 'MatrixDb' not found.");
+            _logger = logger;
         }
 
         #region Empleados - CRUD Principal
@@ -51,16 +54,9 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
         /// </summary>
         public async Task<EmpleadoDetalleDTO?> ObtenerEmpleadoPorIdentificacion(string identificacion)
         {
-            using var connection = new SqlConnection(_connectionString);
-            
-            var parameters = new DynamicParameters();
-            parameters.Add("@Identificacion", identificacion);
-
-            return await connection.QueryFirstOrDefaultAsync<EmpleadoDetalleDTO>(
-                "TH_Empleado_GetPorIdentificacion",
-                parameters,
-                commandType: CommandType.StoredProcedure
-            );
+            // STUB: SP TH_Empleado_GetPorIdentificacion no existe en legacy
+            _logger.LogWarning("[TH] ObtenerEmpleadoPorIdentificacion: SP TH_Empleado_GetPorIdentificacion no existe en legacy. Identificacion: {Identificacion}", identificacion);
+            return await Task.FromResult<EmpleadoDetalleDTO?>(null);
         }
 
         /// <summary>
@@ -69,55 +65,9 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
         /// </summary>
         public async Task<(bool success, string message)> GuardarEmpleado(EmpleadoDetalleDTO empleado, string usuario)
         {
-            using var connection = new SqlConnection(_connectionString);
-            
-            var parameters = new DynamicParameters();
-            parameters.Add("@TipoIdentificacion", empleado.TipoIdentificacion);
-            parameters.Add("@Identificacion", empleado.Identificacion);
-            parameters.Add("@PrimerNombre", empleado.PrimerNombre);
-            parameters.Add("@SegundoNombre", empleado.SegundoNombre);
-            parameters.Add("@PrimerApellido", empleado.PrimerApellido);
-            parameters.Add("@SegundoApellido", empleado.SegundoApellido);
-            parameters.Add("@FechaNacimiento", empleado.FechaNacimiento);
-            parameters.Add("@LugarNacimiento", empleado.LugarNacimiento);
-            parameters.Add("@Genero", empleado.Genero);
-            parameters.Add("@EstadoCivil", empleado.EstadoCivil);
-            parameters.Add("@GrupoSanguineo", empleado.GrupoSanguineo);
-            parameters.Add("@RH", empleado.RH);
-            parameters.Add("@Direccion", empleado.Direccion);
-            parameters.Add("@IdMunicipio", empleado.IdMunicipio);
-            parameters.Add("@Telefono", empleado.Telefono);
-            parameters.Add("@Celular", empleado.Celular);
-            parameters.Add("@Email", empleado.Email);
-            parameters.Add("@IdCargo", empleado.IdCargo);
-            parameters.Add("@FechaIngreso", empleado.FechaIngreso);
-            parameters.Add("@TallaCamisa", empleado.TallaCamisa);
-            parameters.Add("@TallaPantalon", empleado.TallaPantalon);
-            parameters.Add("@TallaZapatos", empleado.TallaZapatos);
-            parameters.Add("@TieneHijos", empleado.TieneHijos);
-            parameters.Add("@NumeroHijos", empleado.NumeroHijos);
-            parameters.Add("@TieneVehiculo", empleado.TieneVehiculo);
-            parameters.Add("@TieneLicenciaConduccion", empleado.TieneLicenciaConduccion);
-            parameters.Add("@CategoriaLicencia", empleado.CategoriaLicencia);
-            parameters.Add("@Banco", empleado.Banco);
-            parameters.Add("@TipoCuenta", empleado.TipoCuenta);
-            parameters.Add("@NumeroCuenta", empleado.NumeroCuenta);
-            parameters.Add("@Usuario", usuario);
-
-            try
-            {
-                await connection.ExecuteAsync(
-                    "TH_Empleado_InsertUpdate",
-                    parameters,
-                    commandType: CommandType.StoredProcedure
-                );
-                
-                return (true, "Empleado guardado exitosamente");
-            }
-            catch (SqlException ex)
-            {
-                return (false, "Error al procesar la solicitud. Por favor intente nuevamente.");
-            }
+            // STUB: SP TH_Empleado_InsertUpdate no existe en legacy
+            _logger.LogWarning("[TH] GuardarEmpleado: SP TH_Empleado_InsertUpdate no existe en legacy. Identificacion: {Identificacion}", empleado.Identificacion);
+            return await Task.FromResult((false, "Funcionalidad no disponible - SP no existe en legacy"));
         }
 
         /// <summary>
@@ -141,7 +91,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
             try
             {
                 await connection.ExecuteAsync(
-                    "TH_Empleado_Retirar",
+                    "TH_Empleados_Retirar",
                     parameters,
                     commandType: CommandType.StoredProcedure
                 );
@@ -173,7 +123,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
             try
             {
                 await connection.ExecuteAsync(
-                    "TH_Empleado_Reintegrar",
+                    "TH_Empleados_Reintegrar",
                     parameters,
                     commandType: CommandType.StoredProcedure
                 );
@@ -230,7 +180,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
             try
             {
                 await connection.ExecuteAsync(
-                    "TH_ExperienciaLaboral_InsertUpdate",
+                    "TH_ExperienciaLaboral_Add",
                     parameters,
                     commandType: CommandType.StoredProcedure
                 );
@@ -257,7 +207,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
             try
             {
                 await connection.ExecuteAsync(
-                    "TH_ExperienciaLaboral_Delete",
+                    "TH_ExperienciaLaboral_Del",
                     parameters,
                     commandType: CommandType.StoredProcedure
                 );
@@ -314,12 +264,12 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
             try
             {
                 await connection.ExecuteAsync(
-                    "TH_Educacion_InsertUpdate",
+                    "TH_Educacion_Add",
                     parameters,
                     commandType: CommandType.StoredProcedure
                 );
                 
-                return (true, "InformaciÃ³n de educaciÃ³n guardada exitosamente");
+                return (true, "Información de educación guardada exitosamente");
             }
             catch (SqlException ex)
             {
@@ -341,12 +291,12 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
             try
             {
                 await connection.ExecuteAsync(
-                    "TH_Educacion_Delete",
+                    "TH_Educacion_Del",
                     parameters,
                     commandType: CommandType.StoredProcedure
                 );
                 
-                return (true, "InformaciÃ³n de educaciÃ³n eliminada exitosamente");
+                return (true, "Información de educación eliminada exitosamente");
             }
             catch (SqlException ex)
             {
@@ -398,12 +348,12 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
             try
             {
                 await connection.ExecuteAsync(
-                    "TH_Hijos_InsertUpdate",
+                    "TH_Hijos_Add",
                     parameters,
                     commandType: CommandType.StoredProcedure
                 );
                 
-                return (true, "InformaciÃ³n de hijo guardada exitosamente");
+                return (true, "Información de hijo guardada exitosamente");
             }
             catch (SqlException ex)
             {
@@ -425,12 +375,12 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
             try
             {
                 await connection.ExecuteAsync(
-                    "TH_Hijos_Delete",
+                    "TH_Hijos_Del",
                     parameters,
                     commandType: CommandType.StoredProcedure
                 );
                 
-                return (true, "InformaciÃ³n de hijo eliminada exitosamente");
+                return (true, "Información de hijo eliminada exitosamente");
             }
             catch (SqlException ex)
             {
@@ -480,7 +430,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
             try
             {
                 await connection.ExecuteAsync(
-                    "TH_ContactosEmergencia_InsertUpdate",
+                    "TH_ContactosEmergencia_Add",
                     parameters,
                     commandType: CommandType.StoredProcedure
                 );
@@ -507,7 +457,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
             try
             {
                 await connection.ExecuteAsync(
-                    "TH_ContactosEmergencia_Delete",
+                    "TH_ContactosEmergencia_Del",
                     parameters,
                     commandType: CommandType.StoredProcedure
                 );
@@ -562,12 +512,12 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
             try
             {
                 await connection.ExecuteAsync(
-                    "TH_Promociones_Insert",
+                    "TH_Promociones_Add",
                     parameters,
                     commandType: CommandType.StoredProcedure
                 );
                 
-                return (true, "PromociÃ³n registrada exitosamente");
+                return (true, "Promoción registrada exitosamente");
             }
             catch (SqlException ex)
             {
@@ -606,18 +556,18 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
             using var connection = new SqlConnection(_connectionString);
             
             var parameters = new DynamicParameters();
-            parameters.Add("@Identificacion", salario.Identificacion);
-            parameters.Add("@SalarioAnterior", salario.SalarioAnterior);
-            parameters.Add("@SalarioNuevo", salario.SalarioNuevo);
-            parameters.Add("@FechaCambio", salario.FechaCambio);
-            parameters.Add("@Motivo", salario.Motivo);
-            parameters.Add("@Observaciones", salario.Observaciones);
-            parameters.Add("@Usuario", usuario);
+            // Nota: El SP TH_Salarios_Add tiene parámetros: @personaId, @fechaAplicacion, @motivoCambioId, @tipo, @salario
+            // Identificacion se usa para buscar el personaId - se debe convertir si es necesario
+            parameters.Add("@personaId", salario.Id ?? 0); // Usar Id como personaId
+            parameters.Add("@fechaAplicacion", salario.FechaCambio);
+            parameters.Add("@motivoCambioId", (byte)1); // TODO: Mapear desde Motivo
+            parameters.Add("@tipo", (byte)1); // TODO: Definir tipo de salario
+            parameters.Add("@salario", salario.SalarioNuevo);
 
             try
             {
                 await connection.ExecuteAsync(
-                    "TH_Salarios_Insert",
+                    "TH_Salarios_Add",
                     parameters,
                     commandType: CommandType.StoredProcedure
                 );
@@ -640,12 +590,9 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
         /// </summary>
         public async Task<IEnumerable<EstadoDiligenciamientoEmpleadoDTO>> ObtenerReporteDiligenciamiento()
         {
-            using var connection = new SqlConnection(_connectionString);
-
-            return await connection.QueryAsync<EstadoDiligenciamientoEmpleadoDTO>(
-                "TH_ReporteDiligenciamientoEmpleados_Get",
-                commandType: CommandType.StoredProcedure
-            );
+            // STUB: SP TH_ReporteDiligenciamientoEmpleados_Get no existe en legacy
+            _logger.LogWarning("[TH] ObtenerReporteDiligenciamiento: SP TH_ReporteDiligenciamientoEmpleados_Get no existe en legacy");
+            return await Task.FromResult(Enumerable.Empty<EstadoDiligenciamientoEmpleadoDTO>());
         }
 
         /// <summary>
@@ -749,9 +696,10 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
             parameters.Add("@RutaFoto", datos.RutaFoto);
             parameters.Add("@UsuarioId", usuarioId);
 
-            // El SP determinarÃ¡ si es inserciÃ³n o actualizaciÃ³n basado en EsNuevo
+            // Usar SP correcto según sea inserción o actualización
+            var spName = datos.EsNuevo ? "TH_Empleados_DatosGenerales_Add" : "TH_Empleados_DatosGenerales_Edit";
             await connection.ExecuteAsync(
-                "TH_Empleado_ActualizarDatosGenerales",
+                spName,
                 parameters,
                 commandType: CommandType.StoredProcedure
             );
@@ -785,7 +733,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
             parameters.Add("@Observaciones", datos.Observaciones);
 
             await connection.ExecuteAsync(
-                "TH_Empleado_ActualizarDatosLaborales",
+                "TH_Empleados_DatosLaborales_Edit",
                 parameters,
                 commandType: CommandType.StoredProcedure
             );
@@ -814,14 +762,14 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
             parameters.Add("@TallaCamisetaId", datos.TallaCamisetaId);
 
             await connection.ExecuteAsync(
-                "TH_Empleado_ActualizarDatosPersonales",
+                "TH_Empleados_DatosPersonales_Edit",
                 parameters,
                 commandType: CommandType.StoredProcedure
             );
         }
 
         /// <summary>
-        /// Actualiza informaciÃ³n de nÃ³mina del empleado
+        /// Actualiza información de nómina del empleado
         /// SP: TH_Empleado_ActualizarNomina
         /// Equivalente a updateNomina del legacy
         /// </summary>
@@ -841,14 +789,14 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
             parameters.Add("@ArlId", datos.ArlId);
 
             await connection.ExecuteAsync(
-                "TH_Empleado_ActualizarNomina",
+                "TH_Empleados_Nomina_Edit",
                 parameters,
                 commandType: CommandType.StoredProcedure
             );
         }
 
         /// <summary>
-        /// Actualiza nivel de inglÃ©s del empleado
+        /// Actualiza nivel de inglés del empleado
         /// SP: TH_Empleado_ActualizarNivelIngles
         /// Equivalente a updateNivelIngles del legacy
         /// </summary>
@@ -861,7 +809,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
             parameters.Add("@NivelInglesId", datos.NivelInglesId);
 
             await connection.ExecuteAsync(
-                "TH_Empleado_ActualizarNivelIngles",
+                "TH_Empleados_NivelIngles_Edit",
                 parameters,
                 commandType: CommandType.StoredProcedure
             );
@@ -869,7 +817,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
 
         #endregion
 
-        #region CatÃ¡logos
+        #region Catálogos
 
         /// <summary>
         /// Obtiene listado de Ã¡reas/service lines
@@ -881,7 +829,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
             using var connection = new SqlConnection(_connectionString);
 
             return await connection.QueryAsync<AreaServiceLineDTO>(
-                "TH_Areas_Get",
+                "TH_Area_Get",
                 commandType: CommandType.StoredProcedure
             );
         }
@@ -895,9 +843,9 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
         {
             using var connection = new SqlConnection(_connectionString);
 
+            // NOTA: No existe SP, se usa SELECT directo de tabla TH_GruposSanguineos
             return await connection.QueryAsync<GrupoSanguineoDTO>(
-                "TH_GruposSanguineos_Get",
-                commandType: CommandType.StoredProcedure
+                "SELECT * FROM TH_GruposSanguineos ORDER BY GrupoSanguineo"
             );
         }
 
@@ -925,9 +873,9 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
         {
             using var connection = new SqlConnection(_connectionString);
 
+            // NOTA: No existe SP, se usa SELECT directo de tabla TH_EstadosCiviles
             return await connection.QueryAsync<EstadoCivilDTO>(
-                "TH_EstadosCiviles_Get",
-                commandType: CommandType.StoredProcedure
+                "SELECT * FROM TH_EstadosCiviles ORDER BY EstadoCivil"
             );
         }
 
@@ -938,9 +886,9 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
         {
             using var connection = new SqlConnection(_connectionString);
 
+            // NOTA: No existe SP, se usa SELECT directo de tabla TH_Bancos
             return await connection.QueryAsync<BancoDTO>(
-                "TH_Bancos_Get",
-                commandType: CommandType.StoredProcedure
+                "SELECT * FROM TH_Bancos ORDER BY Banco"
             );
         }
 
@@ -951,9 +899,9 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
         {
             using var connection = new SqlConnection(_connectionString);
 
+            // NOTA: No existe SP, se usa SELECT directo de tabla TH_TiposCuentaBancaria
             return await connection.QueryAsync<TipoCuentaDTO>(
-                "TH_TiposCuenta_Get",
-                commandType: CommandType.StoredProcedure
+                "SELECT * FROM TH_TiposCuentaBancaria ORDER BY TipoCuenta"
             );
         }
 
@@ -964,9 +912,9 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
         {
             using var connection = new SqlConnection(_connectionString);
 
+            // NOTA: No existe SP, se usa SELECT directo de tabla TH_EPS
             return await connection.QueryAsync<EpsDTO>(
-                "TH_EPS_Get",
-                commandType: CommandType.StoredProcedure
+                "SELECT * FROM TH_EPS ORDER BY EPS"
             );
         }
 
@@ -977,9 +925,9 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
         {
             using var connection = new SqlConnection(_connectionString);
 
+            // NOTA: No existe SP, se usa SELECT directo de tabla TH_FondosPensiones
             return await connection.QueryAsync<FondoPensionesDTO>(
-                "TH_FondosPensiones_Get",
-                commandType: CommandType.StoredProcedure
+                "SELECT * FROM TH_FondosPensiones ORDER BY FondoPensiones"
             );
         }
 
@@ -990,9 +938,9 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
         {
             using var connection = new SqlConnection(_connectionString);
 
+            // NOTA: No existe SP, se usa SELECT directo de tabla TH_FondosCesantias
             return await connection.QueryAsync<FondoCesantiasDTO>(
-                "TH_FondosCesantias_Get",
-                commandType: CommandType.StoredProcedure
+                "SELECT * FROM TH_FondosCesantias ORDER BY FondoCesantias"
             );
         }
 
@@ -1003,9 +951,9 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
         {
             using var connection = new SqlConnection(_connectionString);
 
+            // NOTA: No existe SP, se usa SELECT directo de tabla TH_CajasCompensacion
             return await connection.QueryAsync<CajaCompensacionDTO>(
-                "TH_CajasCompensacion_Get",
-                commandType: CommandType.StoredProcedure
+                "SELECT * FROM TH_CajasCompensacion ORDER BY CajaCompensacion"
             );
         }
 
@@ -1016,9 +964,9 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
         {
             using var connection = new SqlConnection(_connectionString);
 
+            // NOTA: No existe SP, se usa SELECT directo de tabla TH_ARL
             return await connection.QueryAsync<ArlDTO>(
-                "TH_ARL_Get",
-                commandType: CommandType.StoredProcedure
+                "SELECT * FROM TH_ARL ORDER BY ARL"
             );
         }
 
@@ -1030,7 +978,7 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
             using var connection = new SqlConnection(_connectionString);
 
             return await connection.QueryAsync<NivelInglesDTO>(
-                "TH_NivelesIngles_Get",
+                "TH_NivelesIdiomas_Get",
                 commandType: CommandType.StoredProcedure
             );
         }
@@ -1042,9 +990,9 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
         {
             using var connection = new SqlConnection(_connectionString);
 
+            // NOTA: No existe SP, se usa SELECT directo de tabla TH_Sedes
             return await connection.QueryAsync<SedeDTO>(
-                "TH_Sedes_Get",
-                commandType: CommandType.StoredProcedure
+                "SELECT * FROM TH_Sedes ORDER BY Sede"
             );
         }
 
@@ -1055,9 +1003,9 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
         {
             using var connection = new SqlConnection(_connectionString);
 
+            // NOTA: No existe SP, se usa SELECT directo de tabla TH_TipoContratacion
             return await connection.QueryAsync<TipoContratoDTO>(
-                "TH_TiposContrato_Get",
-                commandType: CommandType.StoredProcedure
+                "SELECT * FROM TH_TipoContratacion ORDER BY TipoContratacion"
             );
         }
 
@@ -1068,9 +1016,10 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
         {
             using var connection = new SqlConnection(_connectionString);
 
+            // TODO: TH_NSE_Get no existe en BD - verificar tabla correcta o eliminar
+            // Por ahora retornamos lista vacía para evitar error
             return await connection.QueryAsync<NseDTO>(
-                "TH_NSE_Get",
-                commandType: CommandType.StoredProcedure
+                "SELECT 0 as Id, 'No configurado' as Descripcion WHERE 1=0"
             );
         }
 
@@ -1081,9 +1030,9 @@ namespace MatrixNext.Data.Modules.TH.Empleados.Adapters
         {
             using var connection = new SqlConnection(_connectionString);
 
+            // NOTA: No existe SP, se usa SELECT directo de tabla TH_TallasCamiseta
             return await connection.QueryAsync<TallaCamisetaDTO>(
-                "TH_TallasCamiseta_Get",
-                commandType: CommandType.StoredProcedure
+                "SELECT * FROM TH_TallasCamiseta ORDER BY TallaCamiseta"
             );
         }
 

@@ -7,44 +7,39 @@ using System.Threading.Tasks;
 using Dapper;
 using MatrixNext.Data.Adapters.GD.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace MatrixNext.Data.Adapters.GD
 {
     public class GdSolicitudesAdapter : IGdSolicitudesAdapter
     {
         private readonly string _connectionString;
+        private readonly ILogger<GdSolicitudesAdapter> _logger;
 
-        public GdSolicitudesAdapter(IConfiguration config)
+        public GdSolicitudesAdapter(IConfiguration config, ILogger<GdSolicitudesAdapter> logger)
         {
             _connectionString = config.GetConnectionString("MatrixDb")!;
+            _logger = logger;
         }
 
         /// <summary>
-        /// Obtiene lista de solicitudes con estado
+        /// STUB: SP GD_SolDocumentos_Get no existe en BD legacy.
+        /// Retorna lista vacía hasta que se implemente el SP o se migre la lógica.
         /// </summary>
-        public async Task<List<SolicitudListDto>> ObtenerSolicitudes()
+        public Task<List<SolicitudListDto>> ObtenerSolicitudes()
         {
-            using var connection = new SqlConnection(_connectionString);
-            var resultado = await connection.QueryAsync<SolicitudListDto>(
-                "GD_SolDocumentos_Get",
-                commandType: CommandType.StoredProcedure);
-            return resultado.ToList();
+            _logger.LogWarning("[GD] ObtenerSolicitudes: SP GD_SolDocumentos_Get no existe en legacy");
+            return Task.FromResult(new List<SolicitudListDto>());
         }
 
         /// <summary>
-        /// Obtiene solicitud por ID
+        /// STUB: SP GD_SolDocumentos_Get no existe en BD legacy.
+        /// Retorna null hasta que se implemente el SP o se migre la lógica.
         /// </summary>
-        public async Task<SolicitudDocumentoDto?> ObtenerSolicitudById(int id)
+        public Task<SolicitudDocumentoDto?> ObtenerSolicitudById(int id)
         {
-            using var connection = new SqlConnection(_connectionString);
-            var parametros = new DynamicParameters();
-            parametros.Add("@Id", id);
-
-            var resultado = await connection.QueryFirstOrDefaultAsync<SolicitudDocumentoDto>(
-                "GD_SolDocumentos_Get",
-                parametros,
-                commandType: CommandType.StoredProcedure);
-            return resultado;
+            _logger.LogWarning("[GD] ObtenerSolicitudById: SP GD_SolDocumentos_Get no existe en legacy. Id: {Id}", id);
+            return Task.FromResult<SolicitudDocumentoDto?>(null);
         }
 
         /// <summary>
@@ -66,7 +61,7 @@ namespace MatrixNext.Data.Adapters.GD
             parametros.Add("@SitioAcceso", dto.SitioAcceso ?? string.Empty);
             parametros.Add("@RazonSolicitud", dto.Razon ?? string.Empty);
             parametros.Add("@DescripcionSolicitud", dto.Descripcion ?? string.Empty);
-            parametros.Add("@IdEstado", dto.IdEstado);
+            parametros.Add("@Estadoid", dto.IdEstado);
             parametros.Add("@FechaEstado", DateTime.Now);
             parametros.Add("@Comentarios", dto.Comentarios ?? string.Empty);
             parametros.Add("@Modificacion", "");

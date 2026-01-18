@@ -7,56 +7,45 @@ using System.Threading.Tasks;
 using Dapper;
 using MatrixNext.Data.Adapters.PY.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace MatrixNext.Data.Adapters.PY
 {
     /// <summary>
     /// Adapter para Planillas de Moderación e Informes UU
-    /// Usa Dapper puro (patrón existente en CoreProject.PlanillaModeracionDapper)
+    /// NOTA: Los SP UU_* no existen en BD legacy - métodos son stubs.
     /// </summary>
     public class PyPlanillasAdapter : IPyPlanillasAdapter
     {
         private readonly string _connectionString;
+        private readonly ILogger<PyPlanillasAdapter> _logger;
 
-        public PyPlanillasAdapter(IConfiguration config)
+        public PyPlanillasAdapter(IConfiguration config, ILogger<PyPlanillasAdapter> logger)
         {
             _connectionString = config.GetConnectionString("MatrixDb")!;
+            _logger = logger;
         }
 
         #region Catálogos
 
         /// <summary>
-        /// Obtiene técnicas por tipo
-        /// SP: UU_TecnicasGet(@TipoTecnica NVARCHAR(50))
-        /// Legacy: PlanillaModeracionRepository.GetTecnicas(TipoTecnica)
+        /// STUB: SP UU_TecnicasGet no existe en BD legacy.
+        /// Retorna lista vacía hasta que se implemente el SP o se migre la lógica.
         /// </summary>
-        public async Task<List<TecnicaDto>> ObtenerTecnicas(string tipoTecnica)
+        public Task<List<TecnicaDto>> ObtenerTecnicas(string tipoTecnica)
         {
-            using var connection = new SqlConnection(_connectionString);
-            var parametros = new DynamicParameters();
-            parametros.Add("@TipoTecnica", tipoTecnica);
-
-            var resultado = await connection.QueryAsync<TecnicaDto>(
-                "UU_TecnicasGet",
-                parametros,
-                commandType: CommandType.StoredProcedure);
-
-            return resultado.ToList();
+            _logger.LogWarning("[PY] ObtenerTecnicas: SP UU_TecnicasGet no existe en legacy. TipoTecnica: {TipoTecnica}", tipoTecnica);
+            return Task.FromResult(new List<TecnicaDto>());
         }
 
         /// <summary>
-        /// Obtiene moderadores
-        /// SP: UU_ModeradoresGet
-        /// Legacy: PlanillaModeracionRepository.GetModeradores()
+        /// STUB: SP UU_ModeradoresGet no existe en BD legacy.
+        /// Retorna lista vacía hasta que se implemente el SP o se migre la lógica.
         /// </summary>
-        public async Task<List<ModeradorDto>> ObtenerModeradores()
+        public Task<List<ModeradorDto>> ObtenerModeradores()
         {
-            using var connection = new SqlConnection(_connectionString);
-            var resultado = await connection.QueryAsync<ModeradorDto>(
-                "UU_ModeradoresGet",
-                commandType: CommandType.StoredProcedure);
-
-            return resultado.ToList();
+            _logger.LogWarning("[PY] ObtenerModeradores: SP UU_ModeradoresGet no existe en legacy");
+            return Task.FromResult(new List<ModeradorDto>());
         }
 
         #endregion
@@ -64,77 +53,33 @@ namespace MatrixNext.Data.Adapters.PY
         #region Planillas Moderación
 
         /// <summary>
-        /// Crea planilla de moderación
-        /// SP: UU_PlanillaModeracion_Add
-        /// Legacy: PlanillaModeracionRepository.SavePlanillaModeracion(planillaModeracion)
+        /// STUB: SP UU_PlanillaModeracion_Add no existe en BD legacy.
+        /// Retorna 0 hasta que se implemente el SP o se migre la lógica.
         /// </summary>
-        public async Task<int> CrearPlanillaModeracion(PlanillaModeracionInputDto input)
+        public Task<int> CrearPlanillaModeracion(PlanillaModeracionInputDto input)
         {
-            using var connection = new SqlConnection(_connectionString);
-            var parametros = new DynamicParameters();
-            parametros.Add("@IdJob", input.IdJob);
-            parametros.Add("@JobDesc", input.JobDesc);
-            parametros.Add("@Fecha", input.Fecha);
-            parametros.Add("@Hora", input.Hora);
-            parametros.Add("@Tecnica", input.Tecnica);
-            parametros.Add("@Tiempo", input.Tiempo);
-            parametros.Add("@Moderador", input.Moderador);
-            parametros.Add("@Rol", input.Rol);
-            parametros.Add("@IdUsuarioRegistro", input.IdUsuarioRegistro);
-            parametros.Add("@Observaciones", input.Observaciones);
-            parametros.Add("@IdCuentasUU", input.IdCuentasUU);
-            parametros.Add("@BI_WBSL", input.ServiceLineName);
-            parametros.Add("@IdPlanilla", dbType: DbType.Int32, direction: ParameterDirection.Output);
-
-            await connection.ExecuteAsync(
-                "UU_PlanillaModeracion_Add",
-                parametros,
-                commandType: CommandType.StoredProcedure);
-
-            return parametros.Get<int>("@IdPlanilla");
+            _logger.LogWarning("[PY] CrearPlanillaModeracion: SP UU_PlanillaModeracion_Add no existe en legacy. IdJob: {IdJob}", input.IdJob);
+            return Task.FromResult(0);
         }
 
         /// <summary>
-        /// Actualiza estado de planilla de moderación
-        /// SP: UU_PlanillaModeracion_Update
-        /// Legacy: PlanillaModeracionRepository.UpdatePlanillaModeracion(...)
+        /// STUB: SP UU_PlanillaModeracion_Update no existe en BD legacy.
+        /// No realiza acción hasta que se implemente el SP o se migre la lógica.
         /// </summary>
-        public async Task ActualizarPlanillaModeracion(ActualizarEstadoPlanillaInputDto input)
+        public Task ActualizarPlanillaModeracion(ActualizarEstadoPlanillaInputDto input)
         {
-            using var connection = new SqlConnection(_connectionString);
-            var parametros = new DynamicParameters();
-            parametros.Add("@IdPlanilla", input.IdPlanilla);
-            parametros.Add("@IdEstado", input.IdEstado);
-            parametros.Add("@Observaciones", input.Observaciones);
-            parametros.Add("@DineroBi", input.BiDinero);
-            parametros.Add("@StatusBi", input.BiStatus);
-            parametros.Add("@IdUsuarioAprueba", input.IdUsuarioAprueba);
-            parametros.Add("@FechaAprobacion", DateTime.Now);
-            parametros.Add("@JobEncontradoEnBI", input.JobEncontradoEnBI);
-
-            await connection.ExecuteAsync(
-                "UU_PlanillaModeracion_Update",
-                parametros,
-                commandType: CommandType.StoredProcedure);
+            _logger.LogWarning("[PY] ActualizarPlanillaModeracion: SP UU_PlanillaModeracion_Update no existe en legacy. IdPlanilla: {IdPlanilla}", input.IdPlanilla);
+            return Task.CompletedTask;
         }
 
         /// <summary>
-        /// Obtiene planilla de moderación por ID
-        /// SP: UU_PlanillaModeracionGetBy(@IdPlanilla INT)
-        /// Legacy: PlanillaModeracionRepository.GetPlanillasModeracionBy(idPlanilla)
+        /// STUB: SP UU_PlanillaModeracionGetBy no existe en BD legacy.
+        /// Retorna null hasta que se implemente el SP o se migre la lógica.
         /// </summary>
-        public async Task<PlanillaModeracionDto?> ObtenerPlanillaModeracionPorId(int idPlanilla)
+        public Task<PlanillaModeracionDto?> ObtenerPlanillaModeracionPorId(int idPlanilla)
         {
-            using var connection = new SqlConnection(_connectionString);
-            var parametros = new DynamicParameters();
-            parametros.Add("@IdPlanilla", idPlanilla);
-
-            var resultado = await connection.QueryFirstOrDefaultAsync<PlanillaModeracionDto>(
-                "UU_PlanillaModeracionGetBy",
-                parametros,
-                commandType: CommandType.StoredProcedure);
-
-            return resultado;
+            _logger.LogWarning("[PY] ObtenerPlanillaModeracionPorId: SP UU_PlanillaModeracionGetBy no existe en legacy. IdPlanilla: {IdPlanilla}", idPlanilla);
+            return Task.FromResult<PlanillaModeracionDto?>(null);
         }
 
         #endregion
@@ -142,75 +87,33 @@ namespace MatrixNext.Data.Adapters.PY
         #region Planillas Informes
 
         /// <summary>
-        /// Crea planilla de informes
-        /// SP: UU_PlanillaInformes_Add
-        /// Legacy: PlanillaModeracionRepository.SavePlanillaInformes(planillaInformes)
+        /// STUB: SP UU_PlanillaInformes_Add no existe en BD legacy.
+        /// Retorna 0 hasta que se implemente el SP o se migre la lógica.
         /// </summary>
-        public async Task<int> CrearPlanillaInformes(PlanillaInformesInputDto input)
+        public Task<int> CrearPlanillaInformes(PlanillaInformesInputDto input)
         {
-            using var connection = new SqlConnection(_connectionString);
-            var parametros = new DynamicParameters();
-            parametros.Add("@IdJob", input.IdJob);
-            parametros.Add("@JobDesc", input.JobDesc);
-            parametros.Add("@Fecha", input.Fecha);
-            parametros.Add("@Tecnica", input.Tecnica);
-            parametros.Add("@Muestra", input.Muestra);
-            parametros.Add("@IdCuentasUU", input.IdCuentasUU);
-            parametros.Add("@Analista", input.Analista);
-            parametros.Add("@Observaciones", input.Observaciones);
-            parametros.Add("@IdUsuarioRegistro", input.IdUsuarioRegistro);
-            parametros.Add("@ServiceLineName", input.ServiceLineName);
-            parametros.Add("@IdPlanilla", dbType: DbType.Int32, direction: ParameterDirection.Output);
-
-            await connection.ExecuteAsync(
-                "UU_PlanillaInformes_Add",
-                parametros,
-                commandType: CommandType.StoredProcedure);
-
-            return parametros.Get<int>("@IdPlanilla");
+            _logger.LogWarning("[PY] CrearPlanillaInformes: SP UU_PlanillaInformes_Add no existe en legacy. IdJob: {IdJob}", input.IdJob);
+            return Task.FromResult(0);
         }
 
         /// <summary>
-        /// Actualiza estado de planilla de informes
-        /// SP: UU_PlanillaInformes_Update
-        /// Legacy: PlanillaModeracionRepository.UpdatePlanillaInformes(...)
+        /// STUB: SP UU_PlanillaInformes_Update no existe en BD legacy.
+        /// No realiza acción hasta que se implemente el SP o se migre la lógica.
         /// </summary>
-        public async Task ActualizarPlanillaInformes(ActualizarEstadoPlanillaInputDto input)
+        public Task ActualizarPlanillaInformes(ActualizarEstadoPlanillaInputDto input)
         {
-            using var connection = new SqlConnection(_connectionString);
-            var parametros = new DynamicParameters();
-            parametros.Add("@IdPlanilla", input.IdPlanilla);
-            parametros.Add("@IdEstado", input.IdEstado);
-            parametros.Add("@Observaciones", input.Observaciones);
-            parametros.Add("@DineroBi", input.BiDinero);
-            parametros.Add("@StatusBi", input.BiStatus);
-            parametros.Add("@IdUsuarioAprueba", input.IdUsuarioAprueba);
-            parametros.Add("@FechaAprobacion", DateTime.Now);
-            parametros.Add("@JobEncontradoEnBI", input.JobEncontradoEnBI);
-
-            await connection.ExecuteAsync(
-                "UU_PlanillaInformes_Update",
-                parametros,
-                commandType: CommandType.StoredProcedure);
+            _logger.LogWarning("[PY] ActualizarPlanillaInformes: SP UU_PlanillaInformes_Update no existe en legacy. IdPlanilla: {IdPlanilla}", input.IdPlanilla);
+            return Task.CompletedTask;
         }
 
         /// <summary>
-        /// Obtiene planilla de informes por ID
-        /// SP: UU_PlanillaInformesGetBy(@IdPlanilla INT)
-        /// Legacy: PlanillaModeracionRepository.GetPlanillasInformesBy(idPlanilla)
+        /// STUB: SP UU_PlanillaInformesGetBy no existe en BD legacy.
+        /// Retorna null hasta que se implemente el SP o se migre la lógica.
         /// </summary>
-        public async Task<PlanillaInformesDto?> ObtenerPlanillaInformesPorId(int idPlanilla)
+        public Task<PlanillaInformesDto?> ObtenerPlanillaInformesPorId(int idPlanilla)
         {
-            using var connection = new SqlConnection(_connectionString);
-            var parametros = new DynamicParameters();
-            parametros.Add("@IdPlanilla", idPlanilla);
-
-            var resultado = await connection.QueryFirstOrDefaultAsync<PlanillaInformesDto>(
-                "UU_PlanillaInformesGetBy",
-                parametros,
-                commandType: CommandType.StoredProcedure);
-
-            return resultado;
+            _logger.LogWarning("[PY] ObtenerPlanillaInformesPorId: SP UU_PlanillaInformesGetBy no existe en legacy. IdPlanilla: {IdPlanilla}", idPlanilla);
+            return Task.FromResult<PlanillaInformesDto?>(null);
         }
 
         #endregion
@@ -218,65 +121,33 @@ namespace MatrixNext.Data.Adapters.PY
         #region Listado y Exportación
 
         /// <summary>
-        /// Obtiene planillas paginadas con filtros
-        /// SP: UU_PlanillasGet(@PageSize INT, @PageIndex INT, @FiltroPlanilla NVARCHAR(100), @IdEstado SMALLINT)
-        /// Legacy: PlanillaModeracionRepository.GetPlanillas(pageSize, pageIndex, filtroPlanilla, idEstado)
+        /// STUB: SP UU_PlanillasGet no existe en BD legacy.
+        /// Retorna lista vacía hasta que se implemente el SP o se migre la lógica.
         /// </summary>
-        public async Task<List<PlanillaListDto>> ObtenerPlanillasPaginadas(int pageSize, int pageIndex, string? filtro, short? idEstado)
+        public Task<List<PlanillaListDto>> ObtenerPlanillasPaginadas(int pageSize, int pageIndex, string? filtro, short? idEstado)
         {
-            using var connection = new SqlConnection(_connectionString);
-            var parametros = new DynamicParameters();
-            parametros.Add("@PageSize", pageSize);
-            parametros.Add("@PageIndex", pageIndex);
-            parametros.Add("@FiltroPlanilla", filtro);
-            parametros.Add("@IdEstado", idEstado);
-
-            var resultado = await connection.QueryAsync<PlanillaListDto>(
-                "UU_PlanillasGet",
-                parametros,
-                commandType: CommandType.StoredProcedure);
-
-            return resultado.ToList();
+            _logger.LogWarning("[PY] ObtenerPlanillasPaginadas: SP UU_PlanillasGet no existe en legacy. PageSize: {PageSize}, PageIndex: {PageIndex}", pageSize, pageIndex);
+            return Task.FromResult(new List<PlanillaListDto>());
         }
 
         /// <summary>
-        /// Obtiene planillas de moderación para exportar
-        /// SP: UU_PlanillasModeracionExport(@FechaInicio DATETIME, @FechaFinal DATETIME)
-        /// Legacy: PlanillaModeracionRepository.GetPlanillasModeracionToExport(fechaInicio, fechaFinal)
+        /// STUB: SP UU_PlanillasModeracionExport no existe en BD legacy.
+        /// Retorna lista vacía hasta que se implemente el SP o se migre la lógica.
         /// </summary>
-        public async Task<List<PlanillaModeracionDto>> ObtenerPlanillasModeracionParaExportar(DateTime fechaInicio, DateTime fechaFinal)
+        public Task<List<PlanillaModeracionDto>> ObtenerPlanillasModeracionParaExportar(DateTime fechaInicio, DateTime fechaFinal)
         {
-            using var connection = new SqlConnection(_connectionString);
-            var parametros = new DynamicParameters();
-            parametros.Add("@FechaInicio", fechaInicio);
-            parametros.Add("@FechaFinal", fechaFinal);
-
-            var resultado = await connection.QueryAsync<PlanillaModeracionDto>(
-                "UU_PlanillasModeracionExport",
-                parametros,
-                commandType: CommandType.StoredProcedure);
-
-            return resultado.ToList();
+            _logger.LogWarning("[PY] ObtenerPlanillasModeracionParaExportar: SP UU_PlanillasModeracionExport no existe en legacy. FechaInicio: {FechaInicio}, FechaFinal: {FechaFinal}", fechaInicio, fechaFinal);
+            return Task.FromResult(new List<PlanillaModeracionDto>());
         }
 
         /// <summary>
-        /// Obtiene planillas de informes para exportar
-        /// SP: UU_PlanillasInformesExport(@FechaInicio DATETIME, @FechaFinal DATETIME)
-        /// Legacy: PlanillaModeracionRepository.GetPlanillasInformesToExport(fechaInicio, fechaFinal)
+        /// STUB: SP UU_PlanillasInformesExport no existe en BD legacy.
+        /// Retorna lista vacía hasta que se implemente el SP o se migre la lógica.
         /// </summary>
-        public async Task<List<PlanillaInformesDto>> ObtenerPlanillasInformesParaExportar(DateTime fechaInicio, DateTime fechaFinal)
+        public Task<List<PlanillaInformesDto>> ObtenerPlanillasInformesParaExportar(DateTime fechaInicio, DateTime fechaFinal)
         {
-            using var connection = new SqlConnection(_connectionString);
-            var parametros = new DynamicParameters();
-            parametros.Add("@FechaInicio", fechaInicio);
-            parametros.Add("@FechaFinal", fechaFinal);
-
-            var resultado = await connection.QueryAsync<PlanillaInformesDto>(
-                "UU_PlanillasInformesExport",
-                parametros,
-                commandType: CommandType.StoredProcedure);
-
-            return resultado.ToList();
+            _logger.LogWarning("[PY] ObtenerPlanillasInformesParaExportar: SP UU_PlanillasInformesExport no existe en legacy. FechaInicio: {FechaInicio}, FechaFinal: {FechaFinal}", fechaInicio, fechaFinal);
+            return Task.FromResult(new List<PlanillaInformesDto>());
         }
 
         #endregion

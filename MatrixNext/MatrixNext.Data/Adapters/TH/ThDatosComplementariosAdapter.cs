@@ -334,7 +334,7 @@ namespace MatrixNext.Data.Adapters.TH
                         fechaAplicacion = input.FechaAplicacion,
                         motivoCambioId = input.MotivoCambioId,
                         tipo = input.Tipo,
-                        monto = input.Monto
+                        salario = input.Monto
                     },
                     commandType: System.Data.CommandType.StoredProcedure
                 );

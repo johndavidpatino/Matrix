@@ -9,6 +9,7 @@ using MatrixNext.Data.Modules.TH.Ausencias.Models;
 using MatrixNext.Data.Modules.TH.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace MatrixNext.Data.Modules.TH.Ausencias.Adapters
 {
@@ -19,11 +20,13 @@ namespace MatrixNext.Data.Modules.TH.Ausencias.Adapters
     public class AusenciaDataAdapter
     {
         private readonly string _connectionString;
+        private readonly ILogger<AusenciaDataAdapter> _logger;
 
-        public AusenciaDataAdapter(IConfiguration configuration)
+        public AusenciaDataAdapter(IConfiguration configuration, ILogger<AusenciaDataAdapter> logger)
         {
             _connectionString = configuration.GetConnectionString("MatrixDb") ??
                 throw new ArgumentNullException(nameof(configuration), "MatrixDb connection string not found");
+            _logger = logger;
         }
 
         private MatrixDbContext CreateContext()
@@ -464,12 +467,9 @@ namespace MatrixNext.Data.Modules.TH.Ausencias.Adapters
 
         public List<PeriodoCausadoVacacionesViewModel> ObtenerCausacionVacaciones(long idSolicitud)
         {
-            using var connection = new SqlConnection(_connectionString);
-
-            var dp = new DynamicParameters();
-            dp.Add("@IdSolicitud", idSolicitud);
-
-            return connection.Query<PeriodoCausadoVacacionesViewModel>("TH_Ausencia_Causacion", dp, commandType: CommandType.StoredProcedure).ToList();
+            // STUB: SP TH_Ausencia_Causacion no existe en legacy
+            _logger.LogWarning("[TH] ObtenerCausacionVacaciones: SP TH_Ausencia_Causacion no existe en legacy. IdSolicitud: {IdSolicitud}", idSolicitud);
+            return new List<PeriodoCausadoVacacionesViewModel>();
         }
 
         #endregion
@@ -478,8 +478,9 @@ namespace MatrixNext.Data.Modules.TH.Ausencias.Adapters
 
         public List<ReporteVacacionesViewModel> ReporteVacaciones()
         {
-            using var connection = new SqlConnection(_connectionString);
-            return connection.Query<ReporteVacacionesViewModel>("TH_REP_Vacaciones", commandType: CommandType.StoredProcedure).ToList();
+            // STUB: SP TH_REP_Vacaciones no existe en legacy
+            _logger.LogWarning("[TH] ReporteVacaciones: SP TH_REP_Vacaciones no existe en legacy");
+            return new List<ReporteVacacionesViewModel>();
         }
 
         public List<ReporteBeneficiosViewModel> ReporteBeneficios(int anno)
@@ -524,12 +525,9 @@ namespace MatrixNext.Data.Modules.TH.Ausencias.Adapters
 
         public List<ReporteVacacionesNominaViewModel> ReporteVacacionesNomina(int anno)
         {
-            using var connection = new SqlConnection(_connectionString);
-
-            var dp = new DynamicParameters();
-            dp.Add("@Anno", anno);
-
-            return connection.Query<ReporteVacacionesNominaViewModel>("TH_REP_Vacaciones_Nomina", dp, commandType: CommandType.StoredProcedure).ToList();
+            // STUB: SP TH_REP_Vacaciones_Nomina no existe en legacy
+            _logger.LogWarning("[TH] ReporteVacacionesNomina: SP TH_REP_Vacaciones_Nomina no existe en legacy. Anno: {Anno}", anno);
+            return new List<ReporteVacacionesNominaViewModel>();
         }
 
         #endregion

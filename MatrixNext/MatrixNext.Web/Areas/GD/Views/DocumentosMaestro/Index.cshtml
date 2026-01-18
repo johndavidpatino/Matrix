@@ -6,13 +6,24 @@
 <div class="container-fluid py-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
-            <h2 class="mb-0">@ViewData["Title"]</h2>
+            <h2 class="mb-0">
+                @ViewData["Title"]
+                <partial name="~/Views/Shared/_HelpTooltip.cshtml" model='new { Text = "Catálogo central de documentos del Sistema de Gestión de Calidad", Type = "info" }' />
+            </h2>
             <p class="text-muted mb-0">CRUD de documentos (construcción, actualización, anulación).</p>
         </div>
-        <button class="btn btn-primary" id="btnCreateMaestro">
-            <i class="fas fa-plus"></i> Nuevo Documento
-        </button>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-info" data-help-topic="gd-documentos" title="Ayuda">
+                <i class="fas fa-question-circle"></i>
+            </button>
+            <button class="btn btn-primary" id="btnCreateMaestro">
+                <i class="fas fa-plus"></i> Nuevo Documento
+            </button>
+        </div>
     </div>
+
+    <!-- Alerta informativa -->
+    <partial name="~/Views/Shared/_InfoAlert.cshtml" model='new { Type = "info", Message = "Los documentos requieren aprobación antes de publicarse. Solo documentos Activos pueden ser consultados por los usuarios.", Dismissible = true }' />
 
     <div class="table-responsive">
         <table class="table table-striped table-hover align-middle" id="tblMaestro">

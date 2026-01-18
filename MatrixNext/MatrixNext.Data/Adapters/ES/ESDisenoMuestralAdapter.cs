@@ -40,7 +40,7 @@ namespace MatrixNext.Data.Adapters.ES
             using (var connection = new SqlConnection(_connectionString))
             {
                 var query = @"
-                    SELECT d.*, b.Objetivo as BriefObjetivo, p.Nombre as PropuestaNombre
+                    SELECT d.*, b.Objetivo as BriefObjetivo, p.Titulo as PropuestaNombre
                     FROM ES_DisenoMuestral d
                     INNER JOIN ES_BriefDisenoMuestral b ON d.BriefId = b.Id
                     LEFT JOIN CU_Propuestas p ON b.PropuestaId = p.Id
@@ -61,7 +61,7 @@ namespace MatrixNext.Data.Adapters.ES
             using (var connection = new SqlConnection(_connectionString))
             {
                 var query = @"
-                    SELECT d.*, b.Objetivo as BriefObjetivo, p.Nombre as PropuestaNombre
+                    SELECT d.*, b.Objetivo as BriefObjetivo, p.Titulo as PropuestaNombre
                     FROM ES_DisenoMuestral d
                     INNER JOIN ES_BriefDisenoMuestral b ON d.BriefId = b.Id
                     LEFT JOIN CU_Propuestas p ON b.PropuestaId = p.Id

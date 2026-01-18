@@ -60,7 +60,7 @@ namespace MatrixNext.Data.Adapters.GD
                         m.FechaRegistro,
                         m.FechaModificacion
                     FROM GD_MaestroDocumentos m
-                    LEFT JOIN GD_Procesos p ON p.IdProceso = m.IdProceso
+                    LEFT JOIN Procesos p ON p.IdProceso = m.IdProceso
                     LEFT JOIN GD_TipoSolicitud ts ON ts.IdTipoSolicitud = m.IdTipoSolicitud
                     WHERE 1=1";
 
@@ -117,7 +117,7 @@ namespace MatrixNext.Data.Adapters.GD
                         m.FechaRegistro,
                         m.FechaModificacion
                     FROM GD_MaestroDocumentos m
-                    LEFT JOIN GD_Procesos p ON p.IdProceso = m.IdProceso
+                    LEFT JOIN Procesos p ON p.IdProceso = m.IdProceso
                     LEFT JOIN GD_TipoSolicitud ts ON ts.IdTipoSolicitud = m.IdTipoSolicitud
                     WHERE m.IdDocumento = @IdMaestro";
 

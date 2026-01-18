@@ -22,7 +22,7 @@ namespace MatrixNext.Data.Adapters.RE_GT
         }
 
         /// <summary>
-        /// Obtiene lista de fases activas (SPs: IQ_Fase.ObtenerActivas o similar)
+        /// Obtiene lista de fases activas (CORREGIDO: IQ_Fase → IQ_Fases)
         /// </summary>
         public async Task<List<FaseDto>> ObtenerFasesAsync()
         {
@@ -30,8 +30,7 @@ namespace MatrixNext.Data.Adapters.RE_GT
                 SELECT 
                     IdFase,
                     DescFase
-                FROM IQ_Fase
-                WHERE Activo = 1
+                FROM IQ_Fases
                 ORDER BY DescFase
             ";
 
@@ -48,6 +47,7 @@ namespace MatrixNext.Data.Adapters.RE_GT
 
         /// <summary>
         /// Obtiene información de trabajo para validación de existencia
+        /// CORREGIDO: PY_Trabajos → PY_Trabajo, IdTrabajo → id
         /// </summary>
         public async Task<TrabajoInfoDto> ObtenerTrabajoAsync(int idTrabajo)
         {
@@ -59,13 +59,13 @@ namespace MatrixNext.Data.Adapters.RE_GT
                 var trabajo = await _connection.QueryFirstOrDefaultAsync<TrabajoInfoDto>(
                     @"
                     SELECT 
-                        IdTrabajo,
+                        id AS IdTrabajo,
                         IdPropuesta,
                         Alternativa,
                         JobBook,
                         MetCodigo
-                    FROM PY_Trabajos
-                    WHERE IdTrabajo = @IdTrabajo
+                    FROM PY_Trabajo
+                    WHERE id = @IdTrabajo
                     ",
                     parameters
                 );
@@ -80,24 +80,25 @@ namespace MatrixNext.Data.Adapters.RE_GT
 
         /// <summary>
         /// Valida si la fase existe en presupuestos del trabajo
+        /// NOTA: Tabla IQ_Presupuestos NO EXISTE - usar IQ_ProcesosPresupuesto o CU_Presupuestos
         /// </summary>
         public async Task<bool> ValidarFaseCreadaAsync(int idPropuesta, int alternativa, int idFase, string metCodigo)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@IdPropuesta", idPropuesta);
             parameters.Add("@Alternativa", alternativa);
-            parameters.Add("@IdFase", idFase);
             parameters.Add("@MetCodigo", metCodigo);
 
             try
             {
+                // NOTA: IQ_Presupuestos no existe - usar IQ_ProcesosPresupuesto (sin IdFase)
+                // Si se requiere validar fase, integrar con IQ_Fases
                 var existe = await _connection.QueryFirstOrDefaultAsync<bool>(
                     @"
                     SELECT COUNT(*) > 0
-                    FROM IQ_Presupuestos
+                    FROM IQ_ProcesosPresupuesto
                     WHERE IdPropuesta = @IdPropuesta
-                        AND Alternativa = @Alternativa
-                        AND IdFase = @IdFase
+                        AND ParAlternativa = @Alternativa
                         AND MetCodigo = @MetCodigo
                     ",
                     parameters
@@ -112,23 +113,20 @@ namespace MatrixNext.Data.Adapters.RE_GT
         }
 
         /// <summary>
-        /// Ejecuta SP para cambiar JBI (IQ_JBI.CambiarJBI o UPDATE directo)
+        /// Ejecuta cambio de JBI usando UPDATE directo
+        /// NOTA: SP IQ_JBI.CambiarJBI no existe en BD
         /// </summary>
         public async Task CambiarJBIAsync(CambioJBIDto dto)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@IdTrabajo", dto.IdTrabajo);
-            parameters.Add("@IdFase", dto.IdFase);
             parameters.Add("@NuevoJBI", dto.NuevoJBI);
 
             try
             {
-                // SP probablemente: IQ_JBI.CambiarJBI
-                await _connection.ExecuteAsync(
-                    "IQ_JBI.CambiarJBI",
-                    parameters,
-                    commandType: CommandType.StoredProcedure
-                );
+                // SP IQ_JBI.CambiarJBI no existe - usar UPDATE directo
+                var sql = "UPDATE PY_Trabajo SET JobBook = @NuevoJBI WHERE id = @IdTrabajo";
+                await _connection.ExecuteAsync(sql, parameters);
             }
             catch (Exception ex)
             {
@@ -138,29 +136,14 @@ namespace MatrixNext.Data.Adapters.RE_GT
 
         /// <summary>
         /// Guarda log de cambio de JBI para auditoría
+        /// NOTA: SP IQ_JBI.GuardarLogCambios no existe - solo se registra log interno
         /// </summary>
         public async Task GuardarLogCambioAsync(LogCambioJBIDto logDto)
         {
-            var parameters = new DynamicParameters();
-            parameters.Add("@IdTrabajo", logDto.IdTrabajo);
-            parameters.Add("@JBIAnterior", logDto.JBIAnterior);
-            parameters.Add("@JBINuevo", logDto.JBINuevo);
-            parameters.Add("@IdUsuario", logDto.IdUsuario);
-            parameters.Add("@FechaCambio", logDto.FechaCambio);
-
-            try
-            {
-                // SP probablemente: IQ_JBI.GuardarLogCambios
-                await _connection.ExecuteAsync(
-                    "IQ_JBI.GuardarLogCambios",
-                    parameters,
-                    commandType: CommandType.StoredProcedure
-                );
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error al guardar log de cambio de JBI", ex);
-            }
+            // SP IQ_JBI.GuardarLogCambios no existe en BD
+            // No hay tabla de log de cambios JBI en legacy
+            // Solo completar operación sin persistir log
+            await Task.CompletedTask;
         }
     }
 }

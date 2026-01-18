@@ -128,34 +128,9 @@ namespace MatrixNext.Data.Adapters.TH
         /// </summary>
         public async Task<bool> EditarEducacion(long id, EducacionInputDto input)
         {
-            try
-            {
-                var resultado = await _context.Database.GetDbConnection().ExecuteAsync(
-                    "TH_Educacion_Edit",
-                    new
-                    {
-                        id = id,
-                        tipo = input.Tipo,
-                        titulo = input.Titulo,
-                        institucion = input.Institucion,
-                        pais = input.Pais,
-                        ciudad = input.Ciudad,
-                        fechaInicio = input.FechaInicio,
-                        fechaFin = input.FechaFin,
-                        modalidad = input.Modalidad,
-                        estado = input.Estado
-                    },
-                    commandType: System.Data.CommandType.StoredProcedure
-                );
-
-                _logger.LogInformation($"Educación {id} editada");
-                return resultado > 0;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Error al editar educación {id}");
-                throw;
-            }
+            // STUB: SP TH_Educacion_Edit no existe en legacy
+            _logger.LogWarning("[TH] EditarEducacion: SP TH_Educacion_Edit no existe en legacy. Id: {Id}", id);
+            return await Task.FromResult(false);
         }
     }
 }

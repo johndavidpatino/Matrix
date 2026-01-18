@@ -6,22 +6,34 @@
 <div class="container-fluid">
     <div class="row mb-4">
         <div class="col-md-8">
-            <h1>Mis Trabajos</h1>
+            <h1>
+                Mis Trabajos
+                <partial name="~/Views/Shared/_HelpTooltip.cshtml" model='new { Text = "Tareas del sistema de workflow asignadas a usted", Type = "info" }' />
+            </h1>
             <p class="text-muted">Tareas asignadas que requieren tu atención</p>
         </div>
         <div class="col-md-4 text-end">
+            <button type="button" class="btn btn-outline-info me-2" data-help-topic="core-tareas" title="Ayuda">
+                <i class="bi bi-question-circle"></i>
+            </button>
             <button class="btn btn-primary" id="btnRefresh" title="Actualizar lista">
                 <i class="bi bi-arrow-clockwise"></i> Actualizar
             </button>
         </div>
     </div>
 
+    <!-- Alerta informativa -->
+    <partial name="~/Views/Shared/_InfoAlert.cshtml" model='new { Type = "warning", Message = "Las tareas con prioridad ALTA y vencimiento próximo se muestran resaltadas. Complete las tareas antes de su fecha límite.", Dismissible = true }' />
+
     <!-- Filtros -->
     <div class="card mb-4">
         <div class="card-body">
             <div class="row g-3">
                 <div class="col-md-4">
-                    <label class="form-label">Filtrar por estado</label>
+                    <label class="form-label">
+                        Filtrar por estado
+                        <partial name="~/Views/Shared/_HelpTooltip.cshtml" model='new { Text = "Creada: nueva | En Progreso: trabajando | Completada: finalizada", Type = "info" }' />
+                    </label>
                     <select id="filterEstado" class="form-select">
                         <option value="">-- Todos los estados --</option>
                         <option value="Creada">Creada</option>
@@ -31,7 +43,10 @@
                     </select>
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label">Filtrar por prioridad</label>
+                    <label class="form-label">
+                        Filtrar por prioridad
+                        <partial name="~/Views/Shared/_HelpTooltip.cshtml" model='new { Text = "Alta: urgente | Normal: estándar | Baja: sin prisa", Type = "info" }' />
+                    </label>
                     <select id="filterPrioridad" class="form-select">
                         <option value="">-- Todas --</option>
                         <option value="1">Normal</option>

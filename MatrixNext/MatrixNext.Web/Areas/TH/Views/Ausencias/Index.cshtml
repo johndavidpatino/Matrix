@@ -11,9 +11,17 @@
 <div class="container-fluid mt-4">
     <div class="row">
         <div class="col-12">
+            <!-- Alerta informativa sobre tipos de ausencia -->
+            <partial name="~/Views/Shared/_InfoAlert.cshtml" model='new { Type = "info", Message = "Las vacaciones requieren mínimo 5 días de anticipación. Las incapacidades deben adjuntar certificado médico.", Dismissible = true }' />
+            
             <div class="card">
                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0">Solicitudes de Ausencia</h4>
+                    <div class="d-flex align-items-center gap-2">
+                        <h4 class="mb-0">Solicitudes de Ausencia</h4>
+                        <button type="button" class="btn btn-sm btn-outline-light" data-help-topic="th-ausencias" title="Ayuda">
+                            <i class="fas fa-question-circle"></i>
+                        </button>
+                    </div>
                     <a href="@Url.Action("Create", "Ausencias", new { area = "TH" })" class="btn btn-light btn-sm">
                         <i class="fas fa-plus"></i> Nueva Solicitud
                     </a>
@@ -24,11 +32,20 @@
                             <thead class="table-light">
                                 <tr>
                                     <th>ID</th>
-                                    <th>Tipo de Ausencia</th>
+                                    <th>
+                                        Tipo de Ausencia
+                                        <partial name="~/Views/Shared/_HelpTooltip.cshtml" model='new { Text = "Vacaciones, Permisos, Licencias o Incapacidades", Type = "info" }' />
+                                    </th>
                                     <th>Fecha Inicio</th>
                                     <th>Fecha Fin</th>
-                                    <th>Días Laborales</th>
-                                    <th>Estado</th>
+                                    <th>
+                                        Días Laborales
+                                        <partial name="~/Views/Shared/_HelpTooltip.cshtml" model='new { Text = "Solo cuenta días hábiles (excluye fines de semana y festivos)", Type = "tip" }' />
+                                    </th>
+                                    <th>
+                                        Estado
+                                        <partial name="~/Views/Shared/_HelpTooltip.cshtml" model='new { Text = "Pendiente: en revisión | Aprobado: autorizado | Rechazado: no autorizado", Type = "info" }' />
+                                    </th>
                                     <th>Aprobado Por</th>
                                     <th>Acciones</th>
                                 </tr>

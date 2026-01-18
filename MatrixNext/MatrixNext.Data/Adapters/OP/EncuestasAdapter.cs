@@ -30,7 +30,8 @@ namespace MatrixNext.Data.Adapters.OP
             {
                 using var connection = _context.CreateConnection();
                 
-                // Consulta directa a tabla OP_EncuestasAnuladas (según CoreProject)
+                // Consulta directa a tabla OP_EncuestasAnuladas
+                // CORREGIDO: PY_Trabajos → PY_Trabajo, GN_Unidades → US_Unidades
                 var query = @"
                     SELECT 
                         ea.id AS Id,
@@ -40,13 +41,13 @@ namespace MatrixNext.Data.Adapters.OP
                         ea.Fecha,
                         ea.UsuarioId,
                         ea.UnidadId,
-                        t.TrabajoNombre AS NombreTrabajo,
+                        t.NombreTrabajo AS NombreTrabajo,
                         u.NombreUsuario AS NombreUsuario,
-                        un.Descripcion AS NombreUnidad
+                        un.Nombre AS NombreUnidad
                     FROM OP_EncuestasAnuladas ea
-                    LEFT JOIN PY_Trabajos t ON ea.TrabajoId = t.Id
+                    LEFT JOIN PY_Trabajo t ON ea.TrabajoId = t.id
                     LEFT JOIN US_Usuarios u ON ea.UsuarioId = u.Id
-                    LEFT JOIN GN_Unidades un ON ea.UnidadId = un.Id
+                    LEFT JOIN US_Unidades un ON ea.UnidadId = un.id
                     WHERE ea.TrabajoId = @TrabajoId
                     ORDER BY ea.Fecha DESC";
 

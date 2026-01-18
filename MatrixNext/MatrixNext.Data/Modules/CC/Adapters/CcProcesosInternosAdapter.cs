@@ -8,6 +8,8 @@ namespace MatrixNext.Data.Modules.CC.Adapters
 {
     /// <summary>
     /// Adapter para Reportes de Procesos Internos
+    /// SP disponibles: CC_ConteosXIdGet, CC_ActividadesXTrabajo, CC_ProduccionXFechas,
+    /// CC_ProduccionResumenPersonas, CC_ProduccionResumenXCedula, CC_TrabajosConteo
     /// </summary>
     public class CcProcesosInternosAdapter
     {
@@ -22,55 +24,26 @@ namespace MatrixNext.Data.Modules.CC.Adapters
 
         /// <summary>
         /// Obtiene reporte de conteos de trabajos con filtros
+        /// NOTA: SP CC_ReporteConteoTrabajos no existe - usar CC_TrabajosConteo
         /// </summary>
         public async Task<IEnumerable<ReporteConteoDto>> ObtenerReporteConteosAsync(
             FiltrosReporteConteoDto filtros)
         {
-            const string sql = "CC_ReporteConteoTrabajos";
-            var parameters = new DynamicParameters();
-            
-            if (filtros.FechaInicio.HasValue)
-                parameters.Add("@FechaInicio", filtros.FechaInicio.Value);
-            if (filtros.FechaFin.HasValue)
-                parameters.Add("@FechaFin", filtros.FechaFin.Value);
-            if (filtros.IdTrabajo.HasValue)
-                parameters.Add("@IdTrabajo", filtros.IdTrabajo.Value);
-            if (filtros.IdActividad.HasValue)
-                parameters.Add("@IdActividad", filtros.IdActividad.Value);
-            if (!string.IsNullOrWhiteSpace(filtros.Categoria))
-                parameters.Add("@Categoria", filtros.Categoria);
-            if (filtros.Estado.HasValue)
-                parameters.Add("@Estado", filtros.Estado.Value);
-
-            IEnumerable<ReporteConteoDto>? result = await _dbConnection.QueryAsync<ReporteConteoDto>(
-                sql, parameters, commandType: CommandType.StoredProcedure);
-
-            if (result is null)
-            {
-                return Enumerable.Empty<ReporteConteoDto>();
-            }
-
-            return result;
+            // TODO: SP CC_ReporteConteoTrabajos no existe, usar CC_TrabajosConteo si tiene parámetros similares
+            throw new NotImplementedException(
+                "SP CC_ReporteConteoTrabajos no existe. Usar CC_TrabajosConteo como alternativa.");
         }
 
         /// <summary>
         /// Obtiene totales agregados de conteos
+        /// NOTA: SP CC_TotalesConteoTrabajos no existe
         /// </summary>
         public async Task<dynamic?> ObtenerTotalesConteosAsync(
             DateTime? fechaInicio = null, DateTime? fechaFin = null)
         {
-            const string sql = "CC_TotalesConteoTrabajos";
-            var parameters = new DynamicParameters();
-            
-            if (fechaInicio.HasValue)
-                parameters.Add("@FechaInicio", fechaInicio.Value);
-            if (fechaFin.HasValue)
-                parameters.Add("@FechaFin", fechaFin.Value);
-
-            var result = await _dbConnection.QueryFirstOrDefaultAsync<dynamic?>(
-                sql, parameters, commandType: CommandType.StoredProcedure);
-            
-            return result;
+            // TODO: SP CC_TotalesConteoTrabajos no existe
+            throw new NotImplementedException(
+                "SP CC_TotalesConteoTrabajos no existe en BD legacy.");
         }
 
         #endregion
@@ -79,23 +52,19 @@ namespace MatrixNext.Data.Modules.CC.Adapters
 
         /// <summary>
         /// Obtiene resumen de productividad con filtros
+        /// Usar SP: CC_ProduccionXFechas como alternativa
         /// </summary>
         public async Task<IEnumerable<ResumenProductividadDto>> ObtenerResumenProductividadAsync(
             FiltrosResumenProductividadDto filtros)
         {
-            const string sql = "CC_ResumenesdeProduccion";
+            // Usar CC_ProduccionXFechas que sí existe
+            const string sql = "CC_ProduccionXFechas";
             var parameters = new DynamicParameters();
             
-            if (filtros.Periodo.HasValue)
-                parameters.Add("@Periodo", filtros.Periodo.Value);
             if (filtros.FechaInicio.HasValue)
                 parameters.Add("@FechaInicio", filtros.FechaInicio.Value);
             if (filtros.FechaFin.HasValue)
                 parameters.Add("@FechaFin", filtros.FechaFin.Value);
-            if (filtros.IdTrabajo.HasValue)
-                parameters.Add("@IdTrabajo", filtros.IdTrabajo.Value);
-            if (!string.IsNullOrWhiteSpace(filtros.CodigoActividad))
-                parameters.Add("@CodigoActividad", filtros.CodigoActividad);
 
             IEnumerable<ResumenProductividadDto>? result = await _dbConnection.QueryAsync<ResumenProductividadDto>(
                 sql, parameters, commandType: CommandType.StoredProcedure);
@@ -105,24 +74,14 @@ namespace MatrixNext.Data.Modules.CC.Adapters
 
         /// <summary>
         /// Obtiene datos agregados de productividad global
+        /// NOTA: SP CC_ProductividadAgregada no existe
         /// </summary>
         public async Task<ProductividadAgregadaDto?> ObtenerProductividadAgregadaAsync(
             int? periodo = null, DateTime? fechaInicio = null, DateTime? fechaFin = null)
         {
-            const string sql = "CC_ProductividadAgregada";
-            var parameters = new DynamicParameters();
-            
-            if (periodo.HasValue)
-                parameters.Add("@Periodo", periodo.Value);
-            if (fechaInicio.HasValue)
-                parameters.Add("@FechaInicio", fechaInicio.Value);
-            if (fechaFin.HasValue)
-                parameters.Add("@FechaFin", fechaFin.Value);
-
-            var result = await _dbConnection.QueryFirstOrDefaultAsync<ProductividadAgregadaDto>(
-                sql, parameters, commandType: CommandType.StoredProcedure);
-            
-            return result;
+            // TODO: SP CC_ProductividadAgregada no existe
+            throw new NotImplementedException(
+                "SP CC_ProductividadAgregada no existe en BD legacy.");
         }
 
         #endregion
@@ -131,6 +90,7 @@ namespace MatrixNext.Data.Modules.CC.Adapters
 
         /// <summary>
         /// Obtiene conteos con filtros
+        /// SP: CC_ConteosXIdGet (solo acepta @TrabajoId)
         /// </summary>
         public async Task<IEnumerable<ConteoTrabajoDto>> ObtenerConteosAsync(
             long? idTrabajo = null, DateTime? fechaInicio = null, DateTime? fechaFin = null)
@@ -139,11 +99,8 @@ namespace MatrixNext.Data.Modules.CC.Adapters
             var parameters = new DynamicParameters();
             
             if (idTrabajo.HasValue)
-                parameters.Add("@IdTrabajo", idTrabajo.Value);
-            if (fechaInicio.HasValue)
-                parameters.Add("@FechaInicio", fechaInicio.Value);
-            if (fechaFin.HasValue)
-                parameters.Add("@FechaFin", fechaFin.Value);
+                parameters.Add("@TrabajoId", idTrabajo.Value);
+            // Nota: fechaInicio y fechaFin se ignoran porque el SP no los acepta
 
             return await _dbConnection.QueryAsync<ConteoTrabajoDto>(
                 sql, parameters, commandType: CommandType.StoredProcedure);
@@ -151,13 +108,14 @@ namespace MatrixNext.Data.Modules.CC.Adapters
 
         /// <summary>
         /// Obtiene actividades por trabajo
+        /// SP: CC_ActividadesXTrabajo
         /// </summary>
         public async Task<IEnumerable<ActividadTrabajoDto>> ObtenerActividadesPorTrabajoAsync(
             long idTrabajo)
         {
             const string sql = "CC_ActividadesXTrabajo";
             var parameters = new DynamicParameters();
-            parameters.Add("@IdTrabajo", idTrabajo);
+            parameters.Add("@TrabajoId", idTrabajo);
 
             return await _dbConnection.QueryAsync<ActividadTrabajoDto>(
                 sql, parameters, commandType: CommandType.StoredProcedure);
@@ -165,38 +123,24 @@ namespace MatrixNext.Data.Modules.CC.Adapters
 
         /// <summary>
         /// Guarda un conteo
+        /// NOTA: SP CC_Conteos_Insert no existe
         /// </summary>
         public async Task<long> GuardarConteoAsync(GuardarConteoRequest request)
         {
-            const string sql = "CC_Conteos_Insert";
-            var parameters = new DynamicParameters();
-            
-            parameters.Add("@IdConteo", request.IdConteo);
-            parameters.Add("@IdTrabajo", request.IdTrabajo);
-            parameters.Add("@IdActividad", request.IdActividad);
-            parameters.Add("@Categoria", request.Categoria);
-            parameters.Add("@Cantidad", request.Cantidad);
-            parameters.Add("@FechaConteo", request.FechaConteo);
-            parameters.Add("@Observaciones", request.Observaciones);
-            parameters.Add("@IdConteoOutput", direction: ParameterDirection.Output);
-
-            await _dbConnection.ExecuteAsync(
-                sql, parameters, commandType: CommandType.StoredProcedure);
-            
-            return parameters.Get<long>("@IdConteoOutput");
+            // TODO: SP CC_Conteos_Insert no existe en BD legacy
+            throw new NotImplementedException(
+                "SP CC_Conteos_Insert no existe en BD legacy.");
         }
 
         /// <summary>
         /// Elimina un conteo
+        /// NOTA: SP CC_Conteos_Delete no existe
         /// </summary>
         public async Task EliminarConteoAsync(long idConteo)
         {
-            const string sql = "CC_Conteos_Delete";
-            var parameters = new DynamicParameters();
-            parameters.Add("@IdConteo", idConteo);
-
-            await _dbConnection.ExecuteAsync(
-                sql, parameters, commandType: CommandType.StoredProcedure);
+            // TODO: SP CC_Conteos_Delete no existe en BD legacy
+            throw new NotImplementedException(
+                "SP CC_Conteos_Delete no existe en BD legacy.");
         }
 
         #endregion
@@ -205,69 +149,48 @@ namespace MatrixNext.Data.Modules.CC.Adapters
 
         /// <summary>
         /// Obtiene requerimientos de equipo
+        /// NOTA: SP CC_Requerimientos_Get no existe
         /// </summary>
         public async Task<IEnumerable<RequerimientoEquipoDto>> ObtenerRequerimientosAsync(
             long? idTrabajo = null, byte? estado = null)
         {
-            const string sql = "CC_Requerimientos_Get";
-            var parameters = new DynamicParameters();
-            
-            if (idTrabajo.HasValue)
-                parameters.Add("@IdTrabajo", idTrabajo.Value);
-            if (estado.HasValue)
-                parameters.Add("@Estado", estado.Value);
-
-            return await _dbConnection.QueryAsync<RequerimientoEquipoDto>(
-                sql, parameters, commandType: CommandType.StoredProcedure);
+            // TODO: SP CC_Requerimientos_Get no existe en BD legacy
+            throw new NotImplementedException(
+                "SP CC_Requerimientos_Get no existe en BD legacy.");
         }
 
         /// <summary>
         /// Genera muestra de requerimientos
+        /// SP: CC_MuestraGenerarRequerimiento (verificar si existe)
         /// </summary>
         public async Task<IEnumerable<MuestraRequerimientoDto>> GenerarMuestraRequerimientosAsync(
             long idTrabajo)
         {
-            const string sql = "CC_MuestraGenerarRequerimiento";
-            var parameters = new DynamicParameters();
-            parameters.Add("@IdTrabajo", idTrabajo);
-
-            return await _dbConnection.QueryAsync<MuestraRequerimientoDto>(
-                sql, parameters, commandType: CommandType.StoredProcedure);
+            // TODO: Verificar si CC_MuestraGenerarRequerimiento existe
+            throw new NotImplementedException(
+                "SP CC_MuestraGenerarRequerimiento - verificar existencia.");
         }
 
         /// <summary>
         /// Guarda un requerimiento
+        /// NOTA: SP CC_GenerarRequerimientos no existe como CRUD
         /// </summary>
         public async Task<long> GuardarRequerimientoAsync(GuardarRequerimientoRequest request)
         {
-            const string sql = "CC_GenerarRequerimientos";
-            var parameters = new DynamicParameters();
-            
-            parameters.Add("@IdRequerimiento", request.IdRequerimiento);
-            parameters.Add("@IdTrabajo", request.IdTrabajo);
-            parameters.Add("@FechaRequerimiento", request.FechaRequerimiento);
-            parameters.Add("@TipoEquipo", request.TipoEquipo);
-            parameters.Add("@CantidadRequerida", request.CantidadRequerida);
-            parameters.Add("@Justificacion", request.Justificacion);
-            parameters.Add("@IdRequerimientoOutput", direction: ParameterDirection.Output);
-
-            await _dbConnection.ExecuteAsync(
-                sql, parameters, commandType: CommandType.StoredProcedure);
-            
-            return parameters.Get<long>("@IdRequerimientoOutput");
+            // TODO: SP CC_GenerarRequerimientos no existe para CRUD
+            throw new NotImplementedException(
+                "SP CC_GenerarRequerimientos no existe para operaciones CRUD.");
         }
 
         /// <summary>
         /// Elimina un requerimiento
+        /// NOTA: SP CC_Requerimientos_Delete no existe
         /// </summary>
         public async Task EliminarRequerimientoAsync(long idRequerimiento)
         {
-            const string sql = "CC_Requerimientos_Delete";
-            var parameters = new DynamicParameters();
-            parameters.Add("@IdRequerimiento", idRequerimiento);
-
-            await _dbConnection.ExecuteAsync(
-                sql, parameters, commandType: CommandType.StoredProcedure);
+            // TODO: SP CC_Requerimientos_Delete no existe
+            throw new NotImplementedException(
+                "SP CC_Requerimientos_Delete no existe en BD legacy.");
         }
 
         #endregion
@@ -276,17 +199,24 @@ namespace MatrixNext.Data.Modules.CC.Adapters
 
         /// <summary>
         /// Obtiene producción pendiente de consolidar
+        /// NOTA: SP CC_Produccion_PendienteConsolidar no existe - usar CC_ProduccionXFechas
         /// </summary>
         public async Task<IEnumerable<ProduccionDto>> ObtenerProduccionPendienteAsync(
             int? periodo = null, long? idTrabajo = null)
         {
-            const string sql = "CC_Produccion_PendienteConsolidar";
+            // Usar CC_ProduccionXFechas como alternativa
+            const string sql = "CC_ProduccionXFechas";
             var parameters = new DynamicParameters();
             
+            // CC_ProduccionXFechas acepta @FechaInicio, @FechaFin
+            // Calcular fechas del periodo si se especifica
             if (periodo.HasValue)
-                parameters.Add("@Periodo", periodo.Value);
-            if (idTrabajo.HasValue)
-                parameters.Add("@IdTrabajo", idTrabajo.Value);
+            {
+                var año = periodo.Value / 100;
+                var mes = periodo.Value % 100;
+                parameters.Add("@FechaInicio", new DateTime(año, mes, 1));
+                parameters.Add("@FechaFin", new DateTime(año, mes, DateTime.DaysInMonth(año, mes)));
+            }
 
             return await _dbConnection.QueryAsync<ProduccionDto>(
                 sql, parameters, commandType: CommandType.StoredProcedure);
@@ -294,33 +224,24 @@ namespace MatrixNext.Data.Modules.CC.Adapters
 
         /// <summary>
         /// Consolida producción
+        /// NOTA: SP CC_ConsolidacionProduccion no existe
         /// </summary>
         public async Task ConsolidarProduccionAsync(ConsolidarProduccionRequest request)
         {
-            const string sql = "CC_ConsolidacionProduccion";
-            var parameters = new DynamicParameters();
-            
-            parameters.Add("@IdProduccion", request.IdProduccion);
-            parameters.Add("@CantidadConsolidada", request.CantidadConsolidada);
-            parameters.Add("@UsuarioConsolida", request.UsuarioConsolida);
-            parameters.Add("@Observaciones", request.Observaciones);
-
-            await _dbConnection.ExecuteAsync(
-                sql, parameters, commandType: CommandType.StoredProcedure);
+            // TODO: SP CC_ConsolidacionProduccion no existe
+            throw new NotImplementedException(
+                "SP CC_ConsolidacionProduccion no existe en BD legacy.");
         }
 
         /// <summary>
         /// Obtiene resumen de consolidación
+        /// NOTA: SP CC_ResumenConsolidacion no existe
         /// </summary>
-        public async Task<ResumenConsolidacionDto?> ObtenerResumenConsolidacionAsync(
-            int periodo)
+        public async Task<ResumenConsolidacionDto?> ObtenerResumenConsolidacionAsync(int periodo)
         {
-            const string sql = "CC_ResumenConsolidacion";
-            var parameters = new DynamicParameters();
-            parameters.Add("@Periodo", periodo);
-
-            return await _dbConnection.QueryFirstOrDefaultAsync<ResumenConsolidacionDto>(
-                sql, parameters, commandType: CommandType.StoredProcedure);
+            // TODO: SP CC_ResumenConsolidacion no existe
+            throw new NotImplementedException(
+                "SP CC_ResumenConsolidacion no existe en BD legacy.");
         }
 
         #endregion
@@ -329,73 +250,48 @@ namespace MatrixNext.Data.Modules.CC.Adapters
 
         /// <summary>
         /// Obtiene jornadas laborales
+        /// NOTA: SP CC_CalculoJornada_Get no existe
         /// </summary>
         public async Task<IEnumerable<JornadaLaboralDto>> ObtenerJornadasAsync(
             int? periodo = null, long? idEmpleado = null)
         {
-            const string sql = "CC_CalculoJornada_Get";
-            var parameters = new DynamicParameters();
-            
-            if (periodo.HasValue)
-                parameters.Add("@Periodo", periodo.Value);
-            if (idEmpleado.HasValue)
-                parameters.Add("@IdEmpleado", idEmpleado.Value);
-
-            return await _dbConnection.QueryAsync<JornadaLaboralDto>(
-                sql, parameters, commandType: CommandType.StoredProcedure);
+            // TODO: SP CC_CalculoJornada_Get no existe
+            throw new NotImplementedException(
+                "SP CC_CalculoJornada_Get no existe en BD legacy.");
         }
 
         /// <summary>
         /// Obtiene ausencias del empleado (integración TH)
+        /// NOTA: SP TH_Ausencia_CalculoDias - verificar existencia
         /// </summary>
         public async Task<IEnumerable<AusenciaEmpleadoDto>> ObtenerAusenciasEmpleadoAsync(
             long idEmpleado, DateTime fechaInicio, DateTime fechaFin)
         {
-            const string sql = "TH_Ausencia_CalculoDias";
-            var parameters = new DynamicParameters();
-            
-            parameters.Add("@IdEmpleado", idEmpleado);
-            parameters.Add("@FechaInicio", fechaInicio);
-            parameters.Add("@FechaFin", fechaFin);
-
-            return await _dbConnection.QueryAsync<AusenciaEmpleadoDto>(
-                sql, parameters, commandType: CommandType.StoredProcedure);
+            // TODO: Verificar si TH_Ausencia_CalculoDias existe
+            throw new NotImplementedException(
+                "SP TH_Ausencia_CalculoDias - verificar existencia en BD.");
         }
 
         /// <summary>
         /// Calcula y guarda jornada laboral
+        /// NOTA: SP CC_CalculoJornada_Insert no existe
         /// </summary>
         public async Task<long> CalcularJornadaAsync(CalcularJornadaRequest request)
         {
-            const string sql = "CC_CalculoJornada_Insert";
-            var parameters = new DynamicParameters();
-            
-            parameters.Add("@IdEmpleado", request.IdEmpleado);
-            parameters.Add("@Periodo", request.Periodo);
-            parameters.Add("@FechaInicio", request.FechaInicio);
-            parameters.Add("@FechaFin", request.FechaFin);
-            parameters.Add("@HorasBase", request.HorasBase);
-            parameters.Add("@HorasExtras", request.HorasExtras);
-            parameters.Add("@UsuarioCalcula", request.UsuarioCalcula);
-            parameters.Add("@IdJornadaOutput", direction: ParameterDirection.Output);
-
-            await _dbConnection.ExecuteAsync(
-                sql, parameters, commandType: CommandType.StoredProcedure);
-            
-            return parameters.Get<long>("@IdJornadaOutput");
+            // TODO: SP CC_CalculoJornada_Insert no existe
+            throw new NotImplementedException(
+                "SP CC_CalculoJornada_Insert no existe en BD legacy.");
         }
 
         /// <summary>
         /// Obtiene resumen de jornadas
+        /// NOTA: SP CC_ResumenJornadas no existe
         /// </summary>
         public async Task<ResumenJornadasDto?> ObtenerResumenJornadasAsync(int periodo)
         {
-            const string sql = "CC_ResumenJornadas";
-            var parameters = new DynamicParameters();
-            parameters.Add("@Periodo", periodo);
-
-            return await _dbConnection.QueryFirstOrDefaultAsync<ResumenJornadasDto>(
-                sql, parameters, commandType: CommandType.StoredProcedure);
+            // TODO: SP CC_ResumenJornadas no existe
+            throw new NotImplementedException(
+                "SP CC_ResumenJornadas no existe en BD legacy.");
         }
 
         #endregion

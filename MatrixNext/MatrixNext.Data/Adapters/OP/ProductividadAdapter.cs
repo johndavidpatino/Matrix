@@ -1,6 +1,26 @@
 /// <summary>
 /// Adapter consolidado para gestión de productividad multi-roles
-/// Ejecuta SPs con fallback a consultas directas
+/// 
+/// VALIDACIÓN BD 2025-01:
+/// TABLA REAL: OP_CuantiPlanillas
+/// Columnas: Id, TrabajoId(varchar), Per_NumIdentificacionEncu, Res_Ciudad, Res_Fecha,
+///           Cantidad, TipoActividad, SubidoPor, FechaCarga, Revisado, RevisadoPor, FechaRevision
+/// 
+/// OTRA TABLA: OP_PersonasAsignadasTrabajo
+/// Columnas: id, TrabajoId(bigint), Persona, Ciudad, Fecha
+/// 
+/// TABLAS INEXISTENTES que se intentaban usar:
+/// - CuantiPlanillas (existe: OP_CuantiPlanillas con estructura diferente)
+/// - PY_Trabajos (existe: PY_Trabajo)
+/// - TH_Empleado (existe: TH_Personas)
+/// - PY_TrabajosPersonal (existe: OP_PersonasAsignadasTrabajo con estructura diferente)
+/// - US_PermisosUsuario (existe: US_PermisosUsuarios)
+///
+/// NOTA: La estructura original del adapter asumía columnas que NO existen:
+/// IdPlanilla, IdEmpleado, MontoReportado, MontoAutorizado, TipoProductividad, Estado,
+/// Observaciones, ObservacionesRechazo, FechaRegistro, RegistradoPor, FechaAprobacion,
+/// AprobadoPor, Corte16_15
+///
 /// Ref: BACKLOG_QA_MODULOS_PENDIENTES.md § Sprint 12.1.8
 /// </summary>
 namespace MatrixNext.Data.Adapters.OP;
@@ -23,6 +43,10 @@ public class ProductividadAdapter : IProductividadAdapter
         _logger = logger;
     }
 
+    /// <summary>
+    /// Obtiene planillas de productividad por rol
+    /// TABLA REAL: OP_CuantiPlanillas (estructura diferente a la esperada)
+    /// </summary>
     public async Task<List<ProductividadPlanillaDto>> ObtenerPlanillasPorRolAsync(
         FiltrosProductividadDto filtros, 
         string rol, 
@@ -30,82 +54,69 @@ public class ProductividadAdapter : IProductividadAdapter
     {
         try
         {
-            // SP según rol: OP_CuantiDapper.CuantiProdProductividad_Get
+            // Query ajustado a estructura REAL de OP_CuantiPlanillas
             var query = @"
                 SELECT 
-                    p.IdPlanilla,
-                    p.IdTrabajo,
-                    t.NumeroTrabajo,
-                    p.IdEmpleado,
-                    CONCAT(e.Nombres, ' ', e.Apellidos) AS NombreEmpleado,
-                    e.NumeroIdentificacion,
-                    p.Fecha,
+                    p.Id AS IdPlanilla,
+                    CAST(p.TrabajoId AS BIGINT) AS IdTrabajo,
+                    p.TrabajoId AS NumeroTrabajo,
+                    0 AS IdEmpleado,
+                    p.Per_NumIdentificacionEncu AS NumeroIdentificacion,
+                    per.nombres + ' ' + per.apellidos AS NombreEmpleado,
+                    p.Res_Fecha AS Fecha,
                     p.Cantidad,
-                    p.MontoReportado,
-                    p.MontoAutorizado,
-                    p.TipoProductividad,
-                    p.Estado,
-                    p.Observaciones,
-                    p.ObservacionesRechazo,
-                    p.FechaRegistro,
-                    p.RegistradoPor,
-                    p.FechaAprobacion,
-                    p.AprobadoPor,
-                    p.Corte16_15 AS Corte16_15,
-                    MONTH(p.Fecha) AS Mes,
-                    YEAR(p.Fecha) AS Año,
+                    0 AS MontoReportado,
+                    0 AS MontoAutorizado,
+                    CAST(p.TipoActividad AS VARCHAR) AS TipoProductividad,
+                    CASE WHEN p.Revisado = 1 THEN 'Revisado' ELSE 'Pendiente' END AS Estado,
+                    '' AS Observaciones,
+                    '' AS ObservacionesRechazo,
+                    p.FechaCarga AS FechaRegistro,
+                    p.SubidoPor AS RegistradoPor,
+                    p.FechaRevision AS FechaAprobacion,
+                    p.RevisadoPor AS AprobadoPor,
+                    0 AS Corte16_15,
+                    MONTH(p.Res_Fecha) AS Mes,
+                    YEAR(p.Res_Fecha) AS Año,
+                    p.Res_Ciudad AS Ciudad,
                     CASE WHEN @Rol IN ('PMO', 'Coordinador') THEN 1 ELSE 0 END AS PuedeAprobar,
                     CASE WHEN @Rol IN ('PMO', 'Coordinador') THEN 1 ELSE 0 END AS PuedeRechazar,
-                    CASE WHEN p.Estado = 'Pendiente' THEN 1 ELSE 0 END AS PuedeEditar
-                FROM CuantiPlanillas p
-                INNER JOIN PY_Trabajos t ON p.IdTrabajo = t.IdTrabajo
-                INNER JOIN TH_Empleado e ON p.IdEmpleado = e.IdEmpleado
+                    CASE WHEN p.Revisado = 0 THEN 1 ELSE 0 END AS PuedeEditar
+                FROM OP_CuantiPlanillas p
+                LEFT JOIN TH_Personas per ON p.Per_NumIdentificacionEncu = per.num_identificacion
                 WHERE 1=1
-                    AND (@IdTrabajo IS NULL OR p.IdTrabajo = @IdTrabajo)
-                    AND (@IdEmpleado IS NULL OR p.IdEmpleado = @IdEmpleado)
-                    AND (@FechaInicio IS NULL OR p.Fecha >= @FechaInicio)
-                    AND (@FechaFin IS NULL OR p.Fecha <= @FechaFin)
-                    AND (@Corte IS NULL OR p.Corte16_15 = @Corte)
-                    AND (@Mes IS NULL OR MONTH(p.Fecha) = @Mes)
-                    AND (@Año IS NULL OR YEAR(p.Fecha) = @Año)
-                    AND (@Estado IS NULL OR @Estado = 'Todos' OR p.Estado = @Estado)
-                    AND (@TipoProductividad IS NULL OR p.TipoProductividad = @TipoProductividad)";
+                    AND (@IdTrabajo IS NULL OR p.TrabajoId = CAST(@IdTrabajo AS VARCHAR))
+                    AND (@FechaInicio IS NULL OR p.Res_Fecha >= @FechaInicio)
+                    AND (@FechaFin IS NULL OR p.Res_Fecha <= @FechaFin)
+                    AND (@Mes IS NULL OR MONTH(p.Res_Fecha) = @Mes)
+                    AND (@Año IS NULL OR YEAR(p.Res_Fecha) = @Año)
+                    AND (@Estado IS NULL OR @Estado = 'Todos' 
+                         OR (@Estado = 'Pendiente' AND p.Revisado = 0)
+                         OR (@Estado = 'Revisado' AND p.Revisado = 1))";
 
-            // Filtro adicional por rol
+            // Filtro adicional por rol usando OP_PersonasAsignadasTrabajo
             if (rol == "Coordinador")
             {
                 query += @"
                     AND EXISTS (
-                        SELECT 1 FROM PY_TrabajosPersonal tp
-                        WHERE tp.IdTrabajo = p.IdTrabajo
-                          AND tp.IdEmpleado = @UsuarioId
-                          AND tp.Cargo = 'Coordinador'
+                        SELECT 1 FROM OP_PersonasAsignadasTrabajo pat
+                        WHERE pat.TrabajoId = CAST(p.TrabajoId AS BIGINT)
+                          AND pat.Persona = @UsuarioId
                     )";
-            }
-            else if (rol == "Campo")
-            {
-                query += " AND p.IdEmpleado = @UsuarioId";
-            }
-            else if (rol == "MyS")
-            {
-                query += " AND p.TipoProductividad IN ('Supervisión', 'Llamadas')";
             }
 
             query += @"
-                ORDER BY p.Fecha DESC, p.IdPlanilla DESC
+                ORDER BY p.Res_Fecha DESC, p.Id DESC
                 OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY";
 
             var parameters = new
             {
-                filtros.IdTrabajo,
-                filtros.IdEmpleado,
+                IdTrabajo = filtros.IdTrabajo.HasValue ? filtros.IdTrabajo.Value.ToString() : null,
                 filtros.FechaInicio,
                 filtros.FechaFin,
-                filtros.Corte,
                 filtros.Mes,
                 filtros.Año,
                 filtros.Estado,
-                filtros.TipoProductividad,
                 Rol = rol,
                 UsuarioId = usuarioId,
                 Offset = (filtros.PageNumber - 1) * filtros.PageSize,
@@ -126,6 +137,10 @@ public class ProductividadAdapter : IProductividadAdapter
         }
     }
 
+    /// <summary>
+    /// Obtiene resumen de productividad
+    /// TABLA REAL: OP_CuantiPlanillas (sin columnas de montos ni corte)
+    /// </summary>
     public async Task<ResumenProductividadDto> ObtenerResumenAsync(int año, int mes, int corte, long? idTrabajo = null)
     {
         try
@@ -133,66 +148,70 @@ public class ProductividadAdapter : IProductividadAdapter
             var query = @"
                 SELECT 
                     COUNT(*) AS TotalPlanillas,
-                    SUM(CASE WHEN Estado = 'Pendiente' THEN 1 ELSE 0 END) AS PendientesAprobacion,
-                    SUM(CASE WHEN Estado = 'Aprobado' THEN 1 ELSE 0 END) AS Aprobadas,
-                    SUM(CASE WHEN Estado = 'Rechazado' THEN 1 ELSE 0 END) AS Rechazadas,
-                    SUM(MontoReportado) AS TotalMontoReportado,
-                    SUM(ISNULL(MontoAutorizado, 0)) AS TotalMontoAutorizado
-                FROM CuantiPlanillas
-                WHERE YEAR(Fecha) = @Año
-                  AND MONTH(Fecha) = @Mes
-                  AND Corte16_15 = @Corte
-                  AND (@IdTrabajo IS NULL OR IdTrabajo = @IdTrabajo)";
+                    SUM(CASE WHEN Revisado = 0 THEN 1 ELSE 0 END) AS PendientesAprobacion,
+                    SUM(CASE WHEN Revisado = 1 THEN 1 ELSE 0 END) AS Aprobadas,
+                    0 AS Rechazadas,
+                    CAST(SUM(Cantidad) AS DECIMAL(18,2)) AS TotalMontoReportado,
+                    0 AS TotalMontoAutorizado
+                FROM OP_CuantiPlanillas
+                WHERE YEAR(Res_Fecha) = @Año
+                  AND MONTH(Res_Fecha) = @Mes
+                  AND (@IdTrabajo IS NULL OR TrabajoId = CAST(@IdTrabajo AS VARCHAR))";
 
-            var resumen = await _connection.QuerySingleAsync<ResumenProductividadDto>(query, new { Año = año, Mes = mes, Corte = corte, IdTrabajo = idTrabajo });
+            var resumen = await _connection.QueryFirstOrDefaultAsync<ResumenProductividadDto>(query, 
+                new { Año = año, Mes = mes, IdTrabajo = idTrabajo });
+            
+            if (resumen == null)
+            {
+                resumen = new ResumenProductividadDto();
+            }
+            
             resumen.Corte = corte;
             resumen.Mes = mes;
             resumen.Año = año;
 
-            _logger.LogInformation("Resumen productividad: {Total} planillas, {Pendientes} pendientes. Periodo: {Año}/{Mes} Corte {Corte}",
-                resumen.TotalPlanillas, resumen.PendientesAprobacion, año, mes, corte);
+            _logger.LogInformation("Resumen productividad: {Total} planillas, {Pendientes} pendientes. Periodo: {Año}/{Mes}",
+                resumen.TotalPlanillas, resumen.PendientesAprobacion, año, mes);
             
             return resumen;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error obteniendo resumen productividad. Año: {Año}, Mes: {Mes}, Corte: {Corte}", año, mes, corte);
+            _logger.LogError(ex, "Error obteniendo resumen productividad. Año: {Año}, Mes: {Mes}", año, mes);
             throw;
         }
     }
 
+    /// <summary>
+    /// Marca planilla como revisada
+    /// TABLA REAL: OP_CuantiPlanillas (columna Revisado, RevisadoPor, FechaRevision)
+    /// </summary>
     public async Task<bool> AprobarPlanillaAsync(AprobacionPlanillaDto aprobacion)
     {
         try
         {
-            // SP: CuantiPlanillasTrabajosUpdate
             var query = @"
-                UPDATE CuantiPlanillas
-                SET Estado = 'Aprobado',
-                    MontoAutorizado = @MontoAutorizado,
-                    Observaciones = ISNULL(@Observaciones, Observaciones),
-                    FechaAprobacion = @FechaAprobacion,
-                    AprobadoPor = @AprobadoPor
-                WHERE IdPlanilla = @IdPlanilla
-                  AND Estado = 'Pendiente'";
+                UPDATE OP_CuantiPlanillas
+                SET Revisado = 1,
+                    RevisadoPor = @AprobadoPor,
+                    FechaRevision = GETDATE()
+                WHERE Id = @IdPlanilla
+                  AND Revisado = 0";
 
             var rowsAffected = await _connection.ExecuteAsync(query, new
             {
                 aprobacion.IdPlanilla,
-                aprobacion.MontoAutorizado,
-                aprobacion.Observaciones,
-                FechaAprobacion = DateTime.Now,
                 aprobacion.AprobadoPor
             });
 
             if (rowsAffected > 0)
             {
-                _logger.LogInformation("Planilla {Id} aprobada por usuario {UserId} con monto {Monto}", 
-                    aprobacion.IdPlanilla, aprobacion.AprobadoPor, aprobacion.MontoAutorizado);
+                _logger.LogInformation("Planilla {Id} marcada como revisada por usuario {UserId}", 
+                    aprobacion.IdPlanilla, aprobacion.AprobadoPor);
                 return true;
             }
 
-            _logger.LogWarning("Planilla {Id} no fue aprobada (posiblemente ya no está pendiente)", aprobacion.IdPlanilla);
+            _logger.LogWarning("Planilla {Id} no fue actualizada (ya revisada o no existe)", aprobacion.IdPlanilla);
             return false;
         }
         catch (Exception ex)
@@ -202,75 +221,44 @@ public class ProductividadAdapter : IProductividadAdapter
         }
     }
 
-    public async Task<bool> RechazarPlanillaAsync(long idPlanilla, string observaciones, long usuarioId)
+    /// <summary>
+    /// Rechazar planilla - NO IMPLEMENTADO
+    /// NOTA: OP_CuantiPlanillas no tiene columna de estado rechazado
+    /// </summary>
+    public Task<bool> RechazarPlanillaAsync(long idPlanilla, string observaciones, long usuarioId)
     {
-        try
-        {
-            // SP: CuantiPlanillasTrabajosRemove
-            var query = @"
-                UPDATE CuantiPlanillas
-                SET Estado = 'Rechazado',
-                    ObservacionesRechazo = @Observaciones,
-                    FechaAprobacion = @FechaRechazo,
-                    AprobadoPor = @UsuarioId
-                WHERE IdPlanilla = @IdPlanilla
-                  AND Estado = 'Pendiente'";
-
-            var rowsAffected = await _connection.ExecuteAsync(query, new
-            {
-                IdPlanilla = idPlanilla,
-                Observaciones = observaciones,
-                FechaRechazo = DateTime.Now,
-                UsuarioId = usuarioId
-            });
-
-            if (rowsAffected > 0)
-            {
-                _logger.LogInformation("Planilla {Id} rechazada por usuario {UserId}. Observaciones: {Obs}", 
-                    idPlanilla, usuarioId, observaciones);
-                return true;
-            }
-
-            _logger.LogWarning("Planilla {Id} no fue rechazada (posiblemente ya no está pendiente)", idPlanilla);
-            return false;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error rechazando planilla {Id}", idPlanilla);
-            throw;
-        }
+        _logger.LogWarning("RechazarPlanilla: OP_CuantiPlanillas no soporta estado 'Rechazado' - solo Revisado bit");
+        throw new NotImplementedException(
+            "La tabla OP_CuantiPlanillas no tiene columna para estados de rechazo. " +
+            "Solo existe columna 'Revisado' (bit).");
     }
 
+    /// <summary>
+    /// Verifica permiso según rol
+    /// NOTA: Simplificado porque PY_TrabajosPersonal no existe con estructura esperada
+    /// </summary>
     public async Task<bool> TienePermisoAsync(long usuarioId, long idTrabajo, string accion, string rol)
     {
         try
         {
-            // Verificar permisos según rol y acción
-            // PMO (100): puede aprobar/rechazar todos los trabajos
-            // Coordinador (135): puede aprobar/rechazar sus trabajos
-            // Campo (156): solo puede ver sus propias planillas
-            // MyS (157): puede ver supervisión y llamadas
-
             if (rol == "PMO")
             {
-                // PMO siempre tiene permisos
                 return true;
             }
             else if (rol == "Coordinador")
             {
-                // Verificar si es coordinador del trabajo
+                // Verificar usando OP_PersonasAsignadasTrabajo
                 var query = @"
                     SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
-                    FROM PY_TrabajosPersonal
-                    WHERE IdTrabajo = @IdTrabajo
-                      AND IdEmpleado = @UsuarioId
-                      AND Cargo = 'Coordinador'";
+                    FROM OP_PersonasAsignadasTrabajo
+                    WHERE TrabajoId = @IdTrabajo
+                      AND Persona = @UsuarioId";
 
-                return await _connection.ExecuteScalarAsync<bool>(query, new { IdTrabajo = idTrabajo, UsuarioId = usuarioId });
+                return await _connection.ExecuteScalarAsync<bool>(query, 
+                    new { IdTrabajo = idTrabajo, UsuarioId = usuarioId });
             }
             else
             {
-                // Campo y MyS: solo pueden ver, no aprobar/rechazar
                 return accion == "Ver";
             }
         }
@@ -282,39 +270,36 @@ public class ProductividadAdapter : IProductividadAdapter
         }
     }
 
-    public async Task<(int Corte, int Mes, int Año)> CalcularCorte16_15Async(DateTime fecha)
+    /// <summary>
+    /// Calcula periodo de corte 16-15 (lógica de negocio)
+    /// </summary>
+    public Task<(int Corte, int Mes, int Año)> CalcularCorte16_15Async(DateTime fecha)
     {
-        try
+        int corte, mes, año;
+        
+        if (fecha.Day >= 1 && fecha.Day <= 15)
         {
-            int corte, mes, año;
-            
-            if (fecha.Day >= 1 && fecha.Day <= 15)
-            {
-                // Primera quincena
-                corte = 1;
-                mes = fecha.Month;
-                año = fecha.Year;
-            }
-            else
-            {
-                // Segunda quincena
-                corte = 2;
-                mes = fecha.Month;
-                año = fecha.Year;
-            }
+            corte = 1;
+            mes = fecha.Month;
+            año = fecha.Year;
+        }
+        else
+        {
+            corte = 2;
+            mes = fecha.Month;
+            año = fecha.Year;
+        }
 
-            _logger.LogInformation("Corte calculado: {Fecha} → {Año}/{Mes} Corte {Corte}", 
-                fecha.ToString("yyyy-MM-dd"), año, mes, corte);
-            
-            return (corte, mes, año);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error calculando corte para fecha {Fecha}", fecha);
-            return (0, 0, 0);
-        }
+        _logger.LogInformation("Corte calculado: {Fecha} → {Año}/{Mes} Corte {Corte}", 
+            fecha.ToString("yyyy-MM-dd"), año, mes, corte);
+        
+        return Task.FromResult((corte, mes, año));
     }
 
+    /// <summary>
+    /// Obtiene permisos de usuario
+    /// TABLA: US_PermisosUsuarios (corregido de US_PermisosUsuario)
+    /// </summary>
     public async Task<PermisosProductividadDto> ObtenerPermisosUsuarioAsync(long usuarioId)
     {
         try
@@ -328,11 +313,12 @@ public class ProductividadAdapter : IProductividadAdapter
                     MAX(CASE WHEN IdPermiso IN (100, 135) THEN 1 ELSE 0 END) AS PuedeAprobar,
                     MAX(CASE WHEN IdPermiso IN (100, 135) THEN 1 ELSE 0 END) AS PuedeRechazar,
                     MAX(CASE WHEN IdPermiso IN (100, 135, 156) THEN 1 ELSE 0 END) AS PuedeEditar
-                FROM US_PermisosUsuario
+                FROM US_PermisosUsuarios
                 WHERE IdUsuario = @UsuarioId
                   AND IdPermiso IN (100, 135, 156, 157)";
 
-            var permisos = await _connection.QuerySingleOrDefaultAsync<PermisosProductividadDto>(query, new { UsuarioId = usuarioId });
+            var permisos = await _connection.QueryFirstOrDefaultAsync<PermisosProductividadDto>(query, 
+                new { UsuarioId = usuarioId });
             
             if (permisos == null)
             {
@@ -359,6 +345,10 @@ public class ProductividadAdapter : IProductividadAdapter
         }
     }
 
+    /// <summary>
+    /// Obtiene trabajos asignados al usuario
+    /// TABLAS: PY_Trabajo (corregido de PY_Trabajos), OP_PersonasAsignadasTrabajo
+    /// </summary>
     public async Task<List<dynamic>> ObtenerTrabajosAsignadosAsync(long usuarioId, string rol)
     {
         try
@@ -369,33 +359,33 @@ public class ProductividadAdapter : IProductividadAdapter
             {
                 // PMO ve todos los trabajos activos
                 query = @"
-                    SELECT IdTrabajo, NumeroTrabajo, NombreProyecto, Estado
-                    FROM PY_Trabajos
-                    WHERE Estado IN ('Activo', 'En Curso')
-                    ORDER BY FechaInicio DESC";
+                    SELECT id AS IdTrabajo, CAST(id AS VARCHAR) AS NumeroTrabajo, 
+                           IdCli_Nombre AS NombreProyecto, '' AS Estado
+                    FROM PY_Trabajo
+                    ORDER BY id DESC";
             }
             else if (rol == "Coordinador")
             {
                 // Coordinador ve sus trabajos asignados
                 query = @"
-                    SELECT t.IdTrabajo, t.NumeroTrabajo, t.NombreProyecto, t.Estado
-                    FROM PY_Trabajos t
-                    INNER JOIN PY_TrabajosPersonal tp ON t.IdTrabajo = tp.IdTrabajo
-                    WHERE tp.IdEmpleado = @UsuarioId
-                      AND tp.Cargo = 'Coordinador'
-                      AND t.Estado IN ('Activo', 'En Curso')
-                    ORDER BY t.FechaInicio DESC";
+                    SELECT t.id AS IdTrabajo, CAST(t.id AS VARCHAR) AS NumeroTrabajo, 
+                           t.IdCli_Nombre AS NombreProyecto, '' AS Estado
+                    FROM PY_Trabajo t
+                    INNER JOIN OP_PersonasAsignadasTrabajo pat ON t.id = pat.TrabajoId
+                    WHERE pat.Persona = @UsuarioId
+                    ORDER BY t.id DESC";
             }
             else
             {
-                // Campo y MyS: solo trabajos donde tienen planillas
+                // Campo y MyS: trabajos donde tienen planillas
                 query = @"
-                    SELECT DISTINCT t.IdTrabajo, t.NumeroTrabajo, t.NombreProyecto, t.Estado
-                    FROM PY_Trabajos t
-                    INNER JOIN CuantiPlanillas p ON t.IdTrabajo = p.IdTrabajo
-                    WHERE p.IdEmpleado = @UsuarioId
-                      AND t.Estado IN ('Activo', 'En Curso')
-                    ORDER BY t.FechaInicio DESC";
+                    SELECT DISTINCT CAST(p.TrabajoId AS BIGINT) AS IdTrabajo, 
+                           p.TrabajoId AS NumeroTrabajo, 
+                           t.IdCli_Nombre AS NombreProyecto, '' AS Estado
+                    FROM OP_CuantiPlanillas p
+                    LEFT JOIN PY_Trabajo t ON CAST(p.TrabajoId AS BIGINT) = t.id
+                    WHERE p.SubidoPor = @UsuarioId
+                    ORDER BY IdTrabajo DESC";
             }
 
             var trabajos = await _connection.QueryAsync<dynamic>(query, new { UsuarioId = usuarioId });
