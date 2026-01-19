@@ -1,0 +1,149 @@
+@model MatrixNext.Data.DTOs.PY.DuplicarTrabajoViewModel
+
+<div class="modal-header">
+    <h5 class="modal-title"><i class="fas fa-copy"></i> Duplicar Trabajo</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+</div>
+
+<form id="formDuplicarTrabajo">
+    <div class="modal-body">
+        <input type="hidden" id="idTrabajoOrigen" value="@Model.IdTrabajo" />
+        <input type="hidden" id="idProyecto" value="@Model.IdProyecto" />
+
+        <!-- Información del Trabajo Original -->
+        <div class="alert alert-info">
+            <strong>Trabajo a duplicar:</strong><br />
+            <strong>ID:</strong> @Model.IdTrabajo | <strong>JobBook:</strong> @Model.JobBook<br />
+            <strong>Nombre:</strong> @Model.NombreTrabajo
+        </div>
+
+        <!-- Datos del Nuevo Trabajo -->
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <label class="form-label">Nombre del Nuevo Trabajo *</label>
+                <input type="text" id="nombreNuevo" class="form-control" 
+                       value="@Model.NombreTrabajo - Copia" required maxlength="200" />
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label">Fecha Tentativa Inicio Campo *</label>
+                <input type="date" id="fechaInicio" class="form-control" 
+                       value="@Model.FechaTentativaInicioCampo?.ToString("yyyy-MM-dd")" required />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Fecha Tentativa Finalización *</label>
+                <input type="date" id="fechaFin" class="form-control" 
+                       value="@Model.FechaTentativaFinalizacion?.ToString("yyyy-MM-dd")" required />
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label">Número de Medición</label>
+                <input type="number" id="numeroMedicion" class="form-control" 
+                       value="@Model.NoMedicion" min="1" />
+            </div>
+        </div>
+
+        <hr />
+
+        <!-- Opciones de Duplicación -->
+        <h6>Opciones de Duplicación</h6>
+        <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="duplicarDocumentos" />
+            <label class="form-check-label" for="duplicarDocumentos">
+                Duplicar Documentos (referencias en BD)
+            </label>
+        </div>
+        <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="duplicarEspecificaciones" />
+            <label class="form-check-label" for="duplicarEspecificaciones">
+                Duplicar Especificaciones Técnicas y Fichas
+            </label>
+        </div>
+        <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="sumarUnMes" />
+            <label class="form-check-label" for="sumarUnMes">
+                Sumar un mes a las fechas seleccionadas
+            </label>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="fas fa-times"></i> Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary" id="btnDuplicar">
+            <i class="fas fa-copy"></i> Duplicar Trabajo
+        </button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function() {
+        // Auto-ajustar fechas al marcar "Sumar un mes"
+        $('#sumarUnMes').on('change', function() {
+            if (this.checked) {
+                const fechaInicio = new Date($('#fechaInicio').val());
+                const fechaFin = new Date($('#fechaFin').val());
+                
+                if (!isNaN(fechaInicio)) {
+                    fechaInicio.setMonth(fechaInicio.getMonth() + 1);
+                    $('#fechaInicio').val(fechaInicio.toISOString().split('T')[0]);
+                }
+                
+                if (!isNaN(fechaFin)) {
+                    fechaFin.setMonth(fechaFin.getMonth() + 1);
+                    $('#fechaFin').val(fechaFin.toISOString().split('T')[0]);
+                }
+            }
+        });
+
+        // Submit
+        $('#formDuplicarTrabajo').on('submit', function(e) {
+            e.preventDefault();
+
+            const data = {
+                idTrabajoOrigen: parseInt($('#idTrabajoOrigen').val()),
+                idProyecto: parseInt($('#idProyecto').val()),
+                nombreNuevo: $('#nombreNuevo').val(),
+                fechaTentativaInicioCampo: $('#fechaInicio').val() || null,
+                fechaTentativaFinalizacion: $('#fechaFin').val() || null,
+                numeroMedicion: $('#numeroMedicion').val() ? parseInt($('#numeroMedicion').val()) : null,
+                duplicarDocumentos: $('#duplicarDocumentos').is(':checked'),
+                duplicarEspecificaciones: $('#duplicarEspecificaciones').is(':checked'),
+                sumarUnMes: $('#sumarUnMes').is(':checked')
+            };
+
+            $('#btnDuplicar').prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Duplicando...');
+
+            $.ajax({
+                url: '@Url.Action("Duplicar", "DuplicarTrabajos", new { area = "PY" })',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function(response) {
+                    if (response.success) {
+                        alert(response.message);
+                        $('#modalDuplicar').modal('hide');
+                        // Recargar grid o redirigir
+                        if (typeof recargarTrabajos === 'function') {
+                            recargarTrabajos();
+                        } else {
+                            location.reload();
+                        }
+                    } else {
+                        alert(response.message);
+                        $('#btnDuplicar').prop('disabled', false).html('<i class="fas fa-copy"></i> Duplicar Trabajo');
+                    }
+                },
+                error: function() {
+                    alert('Error al duplicar el trabajo');
+                    $('#btnDuplicar').prop('disabled', false).html('<i class="fas fa-copy"></i> Duplicar Trabajo');
+                }
+            });
+        });
+    });
+</script>

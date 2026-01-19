@@ -170,6 +170,13 @@ builder.Services.AddScoped<MatrixNext.Data.Services.PY.IVariablesControlService>
     return new MatrixNext.Data.Services.PY.VariablesControlService(connectionString!, logger);
 });
 
+// PY Duplicar Trabajos (Modal duplicación con opciones: Documentos, Especificaciones, SumarMes)
+builder.Services.AddScoped<MatrixNext.Data.Services.PY.IDuplicarTrabajoService>(sp =>
+{
+    var logger = sp.GetRequiredService<ILogger<MatrixNext.Data.Services.PY.DuplicarTrabajoService>>();
+    return new MatrixNext.Data.Services.PY.DuplicarTrabajoService(connectionString!, logger);
+});
+
 // Authorization Service (Sprint 10-11)
 builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
 
