@@ -1,6 +1,8 @@
 using MatrixNext.Data.Adapters.CU;
 using MatrixNext.Data.Context;
 using MatrixNext.Data.Modules.CU.Entities;
+using MatrixNext.Data.Modules.CU.Clientes.Adapters;
+using MatrixNext.Data.Modules.CU.Clientes.Services;
 using MatrixNext.Data.Services.CU;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -41,6 +43,10 @@ namespace MatrixNext.Data.Modules.CU
             // Fase 2 - Presupuesto extendido
             services.AddScoped<IQuoteCalculatorService>();
             services.AddScoped<PresupuestoServiceExtended>();
+
+            // Fase 2 - Clientes y Contactos
+            services.AddScoped<IClienteAdapter, ClienteAdapter>();
+            services.AddScoped<IClienteService, ClienteService>();
 
             return services;
         }

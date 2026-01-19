@@ -1,0 +1,361 @@
+@model IEnumerable<MatrixNext.Data.Modules.CU.Clientes.Models.ClienteDto>
+@{
+    ViewData["Title"] = "Clientes";
+    var clienteEditar = ViewBag.ClienteEditar as MatrixNext.Data.Modules.CU.Clientes.Models.ClienteDto;
+    var paises = ViewBag.Paises as IEnumerable<MatrixNext.Data.Modules.CU.Clientes.Models.PaisDto>;
+    var sectores = ViewBag.Sectores as IEnumerable<MatrixNext.Data.Modules.CU.Clientes.Models.SectorDto>;
+    var tiposCliente = ViewBag.TiposCliente as IEnumerable<MatrixNext.Data.Modules.CU.Clientes.Models.TipoClienteDto>;
+}
+
+<div class="main-content app-content">
+    <div class="container-fluid">
+        <!-- Breadcrumb -->
+        <div class="d-flex align-items-center justify-content-between page-header-breadcrumb flex-wrap gap-2">
+            <div>
+                <nav>
+                    <ol class="breadcrumb mb-1">
+                        <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Matrix</a></li>
+                        <li class="breadcrumb-item"><a asp-area="CU" asp-controller="Cuentas" asp-action="Index">Cuentas</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Clientes</li>
+                    </ol>
+                </nav>
+                <h1 class="page-title fw-medium fs-18 mb-0">Gestión de Clientes</h1>
+            </div>
+            <div class="btn-list">
+                <button type="button" class="btn btn-primary btn-wave" data-bs-toggle="modal" data-bs-target="#modalCliente" onclick="limpiarFormulario()">
+                    <i class="ri-add-line me-1"></i> Nuevo Cliente
+                </button>
+            </div>
+        </div>
+
+        <!-- Card Principal -->
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card custom-card">
+                    <div class="card-header">
+                        <div class="card-title">Lista de Clientes</div>
+                    </div>
+                    <div class="card-body">
+                        <!-- Filtros -->
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <input type="text" id="txtBuscar" class="form-control" placeholder="Buscar por NIT o razón social...">
+                            </div>
+                            <div class="col-md-3">
+                                <select id="ddlSector" class="form-select">
+                                    <option value="">Todos los sectores</option>
+                                    @if (sectores != null)
+                                    {
+                                        @foreach (var sector in sectores)
+                                        {
+                                            <option value="@sector.Id">@sector.Nombre</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select id="ddlTipoCliente" class="form-select">
+                                    <option value="">Todos los tipos</option>
+                                    @if (tiposCliente != null)
+                                    {
+                                        @foreach (var tipo in tiposCliente)
+                                        {
+                                            <option value="@tipo.Id">@tipo.Nombre</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-secondary w-100" onclick="buscarClientes()">
+                                    <i class="ri-search-line"></i> Buscar
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Tabla de Clientes -->
+                        <div id="listaClientes">
+                            @await Html.PartialAsync("_ListaClientes", Model)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Cliente -->
+<div class="modal fade" id="modalCliente" tabindex="-1" aria-labelledby="modalClienteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalClienteLabel">Nuevo Cliente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="formCliente">
+                <div class="modal-body">
+                    <input type="hidden" id="hfIdCliente" name="Id" />
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">NIT <span class="text-danger">*</span></label>
+                            <input type="number" id="txtNit" name="Nit" class="form-control" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Grupo Económico</label>
+                            <input type="text" id="txtGrupoEconomico" name="GrupoEconomico" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-8 mb-3">
+                            <label class="form-label">Razón Social <span class="text-danger">*</span></label>
+                            <input type="text" id="txtRazonSocial" name="RazonSocial" class="form-control" required maxlength="200">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Apodo/Alias</label>
+                            <input type="text" id="txtApodo" name="Apodo" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">País</label>
+                            <select id="ddlPais" class="form-select" onchange="cargarDepartamentos()">
+                                <option value="">Seleccione...</option>
+                                @if (paises != null)
+                                {
+                                    @foreach (var pais in paises)
+                                    {
+                                        <option value="@pais.Id">@pais.Nombre</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Departamento</label>
+                            <select id="ddlDepartamento" class="form-select" onchange="cargarCiudades()">
+                                <option value="">Seleccione...</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Ciudad</label>
+                            <select id="ddlCiudad" name="IdCiudad" class="form-select">
+                                <option value="">Seleccione...</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Dirección</label>
+                            <input type="text" id="txtDireccion" name="Direccion" class="form-control">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Teléfono</label>
+                            <input type="text" id="txtTelefono" name="Telefono" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Sector</label>
+                            <select id="ddlSectorForm" name="IdSector" class="form-select">
+                                <option value="">Seleccione...</option>
+                                @if (sectores != null)
+                                {
+                                    @foreach (var sector in sectores)
+                                    {
+                                        <option value="@sector.Id">@sector.Nombre</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Tipo de Cliente</label>
+                            <select id="ddlTipoClienteForm" name="IdTipoCliente" class="form-select">
+                                <option value="">Seleccione...</option>
+                                @if (tiposCliente != null)
+                                {
+                                    @foreach (var tipo in tiposCliente)
+                                    {
+                                        <option value="@tipo.Id">@tipo.Nombre</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Anticipo (%)</label>
+                            <input type="number" id="txtAnticipo" name="Anticipo" class="form-control" value="50" min="0" max="100">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Saldo (%)</label>
+                            <input type="number" id="txtSaldo" name="Saldo" class="form-control" value="50" min="0" max="100">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Plazo (días)</label>
+                            <input type="number" id="txtPlazo" name="Plazo" class="form-control" value="30" min="0" max="365">
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info" id="alertaPorcentaje" style="display:none;">
+                        <i class="ri-information-line"></i> El anticipo más el saldo debe sumar 100%
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="ri-save-line me-1"></i> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Buscar clientes
+        function buscarClientes() {
+            const params = new URLSearchParams({
+                Buscar: $('#txtBuscar').val(),
+                IdSector: $('#ddlSector').val(),
+                IdTipoCliente: $('#ddlTipoCliente').val()
+            });
+
+            $.get('@Url.Action("Buscar")?' + params.toString(), function(html) {
+                $('#listaClientes').html(html);
+            });
+        }
+
+        // Cargar departamentos por país
+        function cargarDepartamentos() {
+            const idPais = $('#ddlPais').val();
+            $('#ddlDepartamento').html('<option value="">Seleccione...</option>');
+            $('#ddlCiudad').html('<option value="">Seleccione...</option>');
+
+            if (idPais) {
+                $.get('@Url.Action("Departamentos")?idPais=' + idPais, function(data) {
+                    data.forEach(function(d) {
+                        $('#ddlDepartamento').append(`<option value="${d.id}">${d.nombre}</option>`);
+                    });
+                });
+            }
+        }
+
+        // Cargar ciudades por departamento
+        function cargarCiudades() {
+            const idDepartamento = $('#ddlDepartamento').val();
+            $('#ddlCiudad').html('<option value="">Seleccione...</option>');
+
+            if (idDepartamento) {
+                $.get('@Url.Action("Ciudades")?idDepartamento=' + idDepartamento, function(data) {
+                    data.forEach(function(c) {
+                        $('#ddlCiudad').append(`<option value="${c.id}">${c.nombre}</option>`);
+                    });
+                });
+            }
+        }
+
+        // Limpiar formulario
+        function limpiarFormulario() {
+            $('#formCliente')[0].reset();
+            $('#hfIdCliente').val('');
+            $('#modalClienteLabel').text('Nuevo Cliente');
+            $('#ddlDepartamento').html('<option value="">Seleccione...</option>');
+            $('#ddlCiudad').html('<option value="">Seleccione...</option>');
+            $('#txtAnticipo').val(50);
+            $('#txtSaldo').val(50);
+            $('#txtPlazo').val(30);
+        }
+
+        // Editar cliente
+        function editarCliente(id) {
+            $.get('@Url.Action("Obtener")?id=' + id, function(data) {
+                $('#hfIdCliente').val(data.id);
+                $('#txtNit').val(data.nit);
+                $('#txtGrupoEconomico').val(data.grupoEconomico);
+                $('#txtRazonSocial').val(data.razonSocial);
+                $('#txtApodo').val(data.apodo);
+                $('#txtDireccion').val(data.direccion);
+                $('#txtTelefono').val(data.telefono);
+                $('#ddlSectorForm').val(data.idSector);
+                $('#ddlTipoClienteForm').val(data.idTipoCliente);
+                $('#txtAnticipo').val(data.anticipo);
+                $('#txtSaldo').val(data.saldo);
+                $('#txtPlazo').val(data.plazo);
+                // TODO: Cargar cascada país/departamento/ciudad si es necesario
+                $('#modalClienteLabel').text('Editar Cliente');
+                new bootstrap.Modal(document.getElementById('modalCliente')).show();
+            });
+        }
+
+        // Validar porcentajes
+        $('#txtAnticipo, #txtSaldo').on('change', function() {
+            const anticipo = parseInt($('#txtAnticipo').val()) || 0;
+            const saldo = parseInt($('#txtSaldo').val()) || 0;
+            if (anticipo + saldo !== 100) {
+                $('#alertaPorcentaje').show();
+            } else {
+                $('#alertaPorcentaje').hide();
+            }
+        });
+
+        // Submit formulario
+        $('#formCliente').on('submit', function(e) {
+            e.preventDefault();
+
+            const anticipo = parseInt($('#txtAnticipo').val()) || 0;
+            const saldo = parseInt($('#txtSaldo').val()) || 0;
+            if (anticipo + saldo !== 100) {
+                toastr.error('El anticipo más el saldo debe sumar 100%');
+                return;
+            }
+
+            const data = {
+                Id: $('#hfIdCliente').val() || null,
+                Nit: parseFloat($('#txtNit').val()),
+                GrupoEconomico: $('#txtGrupoEconomico').val(),
+                RazonSocial: $('#txtRazonSocial').val(),
+                IdCiudad: $('#ddlCiudad').val() || null,
+                Apodo: $('#txtApodo').val(),
+                IdTipoCliente: $('#ddlTipoClienteForm').val() || null,
+                Direccion: $('#txtDireccion').val(),
+                Telefono: $('#txtTelefono').val(),
+                IdSector: $('#ddlSectorForm').val() || null,
+                Anticipo: anticipo,
+                Saldo: saldo,
+                Plazo: parseInt($('#txtPlazo').val()) || 30
+            };
+
+            $.ajax({
+                url: '@Url.Action("Guardar")',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                headers: {
+                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function(response) {
+                    if (response.success) {
+                        toastr.success(response.message);
+                        bootstrap.Modal.getInstance(document.getElementById('modalCliente')).hide();
+                        buscarClientes();
+                    } else {
+                        toastr.error(response.message);
+                    }
+                },
+                error: function() {
+                    toastr.error('Error al guardar el cliente');
+                }
+            });
+        });
+
+        // Buscar con Enter
+        $('#txtBuscar').on('keypress', function(e) {
+            if (e.which === 13) buscarClientes();
+        });
+    </script>
+}

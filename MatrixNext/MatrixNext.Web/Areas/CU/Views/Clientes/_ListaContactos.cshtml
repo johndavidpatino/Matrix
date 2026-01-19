@@ -1,0 +1,67 @@
+@model IEnumerable<MatrixNext.Data.Modules.CU.Clientes.Models.ContactoDto>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-striped table-hover">
+        <thead class="table-light">
+            <tr>
+                <th>Nombre</th>
+                <th>Cargo</th>
+                <th>Teléfono</th>
+                <th>Celular</th>
+                <th>Email</th>
+                <th class="text-center">Estado</th>
+                <th class="text-center" style="width: 100px;">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var contacto in Model)
+                {
+                    <tr>
+                        <td>@contacto.Nombre</td>
+                        <td>@contacto.Cargo</td>
+                        <td>@contacto.Telefono</td>
+                        <td>@contacto.Celular</td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(contacto.Email))
+                            {
+                                <a href="mailto:@contacto.Email">@contacto.Email</a>
+                            }
+                        </td>
+                        <td class="text-center">
+                            @if (contacto.Activo)
+                            {
+                                <span class="badge bg-success">Activo</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Inactivo</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            <button type="button" class="btn btn-sm btn-info" onclick="editarContacto(@contacto.Id)" title="Editar">
+                                <i class="ri-edit-line"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="7" class="text-center text-muted">
+                        <i class="ri-information-line me-1"></i> No se encontraron contactos
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@if (Model != null && Model.Any())
+{
+    <div class="d-flex justify-content-between align-items-center mt-3">
+        <span class="text-muted">Total: @Model.Count() contactos</span>
+    </div>
+}

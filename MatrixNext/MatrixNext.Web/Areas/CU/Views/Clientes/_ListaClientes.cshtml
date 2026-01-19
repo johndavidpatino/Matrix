@@ -1,0 +1,56 @@
+@model IEnumerable<MatrixNext.Data.Modules.CU.Clientes.Models.ClienteDto>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-striped table-hover">
+        <thead class="table-light">
+            <tr>
+                <th>NIT</th>
+                <th>Razón Social</th>
+                <th>Apodo</th>
+                <th>Ciudad</th>
+                <th>Sector</th>
+                <th>Tipo</th>
+                <th class="text-center" style="width: 150px;">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var cliente in Model)
+                {
+                    <tr>
+                        <td>@cliente.Nit</td>
+                        <td>@cliente.RazonSocial</td>
+                        <td>@cliente.Apodo</td>
+                        <td>@cliente.CiudadNombre</td>
+                        <td>@cliente.SectorNombre</td>
+                        <td>@cliente.TipoClienteNombre</td>
+                        <td class="text-center">
+                            <button type="button" class="btn btn-sm btn-info" onclick="editarCliente(@cliente.Id)" title="Editar">
+                                <i class="ri-edit-line"></i>
+                            </button>
+                            <a asp-action="Contactos" asp-route-idCliente="@cliente.Id" class="btn btn-sm btn-success" title="Contactos">
+                                <i class="ri-contacts-line"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="7" class="text-center text-muted">
+                        <i class="ri-information-line me-1"></i> No se encontraron clientes
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@if (Model != null && Model.Any())
+{
+    <div class="d-flex justify-content-between align-items-center mt-3">
+        <span class="text-muted">Total: @Model.Count() clientes</span>
+    </div>
+}

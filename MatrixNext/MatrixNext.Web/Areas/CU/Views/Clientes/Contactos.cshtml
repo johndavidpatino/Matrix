@@ -1,0 +1,219 @@
+@model IEnumerable<MatrixNext.Data.Modules.CU.Clientes.Models.ContactoDto>
+@{
+    ViewData["Title"] = "Contactos";
+    var cliente = ViewBag.Cliente as MatrixNext.Data.Modules.CU.Clientes.Models.ClienteDto;
+}
+
+<div class="main-content app-content">
+    <div class="container-fluid">
+        <!-- Breadcrumb -->
+        <div class="d-flex align-items-center justify-content-between page-header-breadcrumb flex-wrap gap-2">
+            <div>
+                <nav>
+                    <ol class="breadcrumb mb-1">
+                        <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Matrix</a></li>
+                        <li class="breadcrumb-item"><a asp-area="CU" asp-controller="Clientes" asp-action="Index">Clientes</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Contactos</li>
+                    </ol>
+                </nav>
+                <h1 class="page-title fw-medium fs-18 mb-0">
+                    Contactos de @cliente?.RazonSocial
+                </h1>
+            </div>
+            <div class="btn-list">
+                <a asp-action="Index" class="btn btn-outline-secondary btn-wave">
+                    <i class="ri-arrow-left-line me-1"></i> Volver a Clientes
+                </a>
+                <button type="button" class="btn btn-primary btn-wave" data-bs-toggle="modal" data-bs-target="#modalContacto" onclick="limpiarFormularioContacto()">
+                    <i class="ri-add-line me-1"></i> Nuevo Contacto
+                </button>
+            </div>
+        </div>
+
+        <!-- Info Cliente -->
+        @if (cliente != null)
+        {
+            <div class="alert alert-primary mb-3">
+                <div class="row">
+                    <div class="col-md-3"><strong>NIT:</strong> @cliente.Nit</div>
+                    <div class="col-md-3"><strong>Teléfono:</strong> @cliente.Telefono</div>
+                    <div class="col-md-3"><strong>Ciudad:</strong> @cliente.CiudadNombre</div>
+                    <div class="col-md-3"><strong>Sector:</strong> @cliente.SectorNombre</div>
+                </div>
+            </div>
+        }
+
+        <!-- Card Principal -->
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card custom-card">
+                    <div class="card-header">
+                        <div class="card-title">Lista de Contactos</div>
+                    </div>
+                    <div class="card-body">
+                        <!-- Filtro -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <input type="text" id="txtBuscarContacto" class="form-control" placeholder="Buscar por nombre...">
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-secondary w-100" onclick="buscarContactos()">
+                                    <i class="ri-search-line"></i> Buscar
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Tabla de Contactos -->
+                        <div id="listaContactos">
+                            @await Html.PartialAsync("_ListaContactos", Model)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Contacto -->
+<div class="modal fade" id="modalContacto" tabindex="-1" aria-labelledby="modalContactoLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalContactoLabel">Nuevo Contacto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="formContacto">
+                <div class="modal-body">
+                    <input type="hidden" id="hfIdContacto" name="Id" />
+                    <input type="hidden" id="hfIdCliente" name="IdCliente" value="@cliente?.Id" />
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Nombre <span class="text-danger">*</span></label>
+                        <input type="text" id="txtNombreContacto" name="Nombre" class="form-control" required maxlength="200">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Cargo</label>
+                        <input type="text" id="txtCargo" name="Cargo" class="form-control">
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Teléfono</label>
+                            <input type="text" id="txtTelefonoContacto" name="Telefono" class="form-control">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Celular</label>
+                            <input type="text" id="txtCelular" name="Celular" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" id="txtEmail" name="Email" class="form-control">
+                    </div>
+
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="chkActivo" name="Activo" checked>
+                        <label class="form-check-label" for="chkActivo">Activo</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="ri-save-line me-1"></i> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const idCliente = @(cliente?.Id ?? 0);
+
+        // Buscar contactos
+        function buscarContactos() {
+            const buscar = $('#txtBuscarContacto').val();
+            $.get('@Url.Action("ListaContactos")?idCliente=' + idCliente + '&buscar=' + encodeURIComponent(buscar), function(html) {
+                $('#listaContactos').html(html);
+            });
+        }
+
+        // Limpiar formulario
+        function limpiarFormularioContacto() {
+            $('#formContacto')[0].reset();
+            $('#hfIdContacto').val('');
+            $('#chkActivo').prop('checked', true);
+            $('#modalContactoLabel').text('Nuevo Contacto');
+        }
+
+        // Editar contacto
+        function editarContacto(id) {
+            $.get('@Url.Action("CreateEditContacto")?idCliente=' + idCliente + '&id=' + id, function(html) {
+                // Llenar el modal con los datos
+                $.get('@Url.Action("Obtener", "Clientes", new { Area = "CU" })', { id: id }, function(data) {
+                    // Usar endpoint dedicado para obtener contacto
+                }).fail(function() {
+                    // Cargar via modal parcial
+                });
+            });
+
+            // Alternativa: obtener datos JSON
+            $.ajax({
+                url: '@Url.Action("CreateEditContacto")?idCliente=' + idCliente + '&id=' + id,
+                type: 'GET',
+                success: function(html) {
+                    // Para simplificar, abrimos modal y llenamos datos
+                    $('#modalContactoLabel').text('Editar Contacto');
+                    // TODO: Parsear HTML o usar endpoint JSON dedicado
+                    new bootstrap.Modal(document.getElementById('modalContacto')).show();
+                }
+            });
+        }
+
+        // Submit formulario
+        $('#formContacto').on('submit', function(e) {
+            e.preventDefault();
+
+            const data = {
+                Id: $('#hfIdContacto').val() || null,
+                IdCliente: idCliente,
+                Nombre: $('#txtNombreContacto').val(),
+                Cargo: $('#txtCargo').val(),
+                Telefono: $('#txtTelefonoContacto').val(),
+                Celular: $('#txtCelular').val(),
+                Email: $('#txtEmail').val(),
+                Activo: $('#chkActivo').is(':checked')
+            };
+
+            $.ajax({
+                url: '@Url.Action("GuardarContacto")',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                headers: {
+                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function(response) {
+                    if (response.success) {
+                        toastr.success(response.message);
+                        bootstrap.Modal.getInstance(document.getElementById('modalContacto')).hide();
+                        buscarContactos();
+                    } else {
+                        toastr.error(response.message);
+                    }
+                },
+                error: function() {
+                    toastr.error('Error al guardar el contacto');
+                }
+            });
+        });
+
+        // Buscar con Enter
+        $('#txtBuscarContacto').on('keypress', function(e) {
+            if (e.which === 13) buscarContactos();
+        });
+    </script>
+}
