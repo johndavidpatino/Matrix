@@ -265,7 +265,6 @@ builder.Services.AddScoped<QuoteCalculator>();
 builder.Services.AddScoped<EasyQuoteMasterService>();
 // OP módulo
 builder.Services.AddScoped<IOpCatalogCacheService, OpCatalogCacheService>(); // S4-006.3 Catalog caching
-builder.Services.AddScoped<IOpAvancesService, OpAvancesService>();
 builder.Services.AddScoped<IOpPortalService, OpPortalService>();
 builder.Services.AddScoped<IOpTraficoDataAdapter, OpTraficoDataAdapter>();
 builder.Services.AddScoped<IOpTraficoService, OpTraficoService>();

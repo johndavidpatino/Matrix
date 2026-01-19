@@ -1,0 +1,106 @@
+@model IEnumerable<MatrixNext.Data.Modules.US.Unidades.Models.UnidadDto>
+
+@{
+    ViewData["Title"] = "Unidades";
+    var gruposUnidad = ViewBag.GruposUnidad as List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> ?? new List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>();
+}
+
+<div class="container mt-4">
+    <h3>Unidades</h3>
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between mb-3">
+                <div class="d-flex gap-2">
+                    <div class="input-group" style="max-width: 200px;">
+                        <input type="text" id="txtFiltro" class="form-control" placeholder="Buscar..." />
+                    </div>
+                    <select id="ddlGrupoUnidad" class="form-select" style="max-width: 200px;">
+                        <option value="">-- Todos los grupos --</option>
+                        @foreach (var grupo in gruposUnidad)
+                        {
+                            <option value="@grupo.Value">@grupo.Text</option>
+                        }
+                    </select>
+                    <button id="btnBuscar" class="btn btn-outline-secondary" type="button">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+                <button id="btnNuevo" class="btn btn-sm btn-primary">
+                    <i class="bi bi-plus-lg"></i> Nueva Unidad
+                </button>
+            </div>
+
+            <div id="listaContainer">
+                @await Html.PartialAsync("_Lista", Model)
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalContainer"></div>
+
+@section Scripts {
+    <script>
+        document.getElementById('btnNuevo')?.addEventListener('click', function() {
+            fetch('@Url.Action("CreateModal", "Unidades", new { area = "US" })')
+                .then(r => r.text())
+                .then(html => {
+                    document.getElementById('modalContainer').innerHTML = html;
+                    var modalEl = document.getElementById('modalCreateEdit');
+                    var modal = new bootstrap.Modal(modalEl);
+                    modal.show();
+                });
+        });
+
+        document.getElementById('btnBuscar')?.addEventListener('click', buscar);
+        document.getElementById('txtFiltro')?.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') { e.preventDefault(); buscar(); }
+        });
+
+        function buscar() {
+            var filtro = document.getElementById('txtFiltro').value;
+            var idGrupoUnidad = document.getElementById('ddlGrupoUnidad').value;
+            var url = '@Url.Action("Lista", "Unidades", new { area = "US" })' + 
+                      '?filtro=' + encodeURIComponent(filtro) + 
+                      '&idGrupoUnidad=' + encodeURIComponent(idGrupoUnidad);
+            fetch(url)
+                .then(r => r.text())
+                .then(html => {
+                    document.getElementById('listaContainer').innerHTML = html;
+                    enlazarBotones();
+                });
+        }
+
+        function enlazarBotones() {
+            document.querySelectorAll('.btn-edit').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    var id = this.getAttribute('data-id');
+                    fetch('@Url.Action("EditModal", "Unidades", new { area = "US" })/' + id)
+                        .then(r => r.text())
+                        .then(html => {
+                            document.getElementById('modalContainer').innerHTML = html;
+                            var modalEl = document.getElementById('modalCreateEdit');
+                            var modal = new bootstrap.Modal(modalEl);
+                            modal.show();
+                        });
+                });
+            });
+
+            document.querySelectorAll('.btn-delete').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    var id = this.getAttribute('data-id');
+                    fetch('@Url.Action("DeleteModal", "Unidades", new { area = "US" })/' + id)
+                        .then(r => r.text())
+                        .then(html => {
+                            document.getElementById('modalContainer').innerHTML = html;
+                            var modalEl = document.getElementById('modalDelete');
+                            var modal = new bootstrap.Modal(modalEl);
+                            modal.show();
+                        });
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', enlazarBotones);
+    </script>
+}

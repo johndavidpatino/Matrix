@@ -360,7 +360,7 @@ public class ProductividadAdapter : IProductividadAdapter
                 // PMO ve todos los trabajos activos
                 query = @"
                     SELECT id AS IdTrabajo, CAST(id AS VARCHAR) AS NumeroTrabajo, 
-                           IdCli_Nombre AS NombreProyecto, '' AS Estado
+                           NombreTrabajo AS NombreProyecto, '' AS Estado
                     FROM PY_Trabajo
                     ORDER BY id DESC";
             }
@@ -369,7 +369,7 @@ public class ProductividadAdapter : IProductividadAdapter
                 // Coordinador ve sus trabajos asignados
                 query = @"
                     SELECT t.id AS IdTrabajo, CAST(t.id AS VARCHAR) AS NumeroTrabajo, 
-                           t.IdCli_Nombre AS NombreProyecto, '' AS Estado
+                           t.NombreTrabajo AS NombreProyecto, '' AS Estado
                     FROM PY_Trabajo t
                     INNER JOIN OP_PersonasAsignadasTrabajo pat ON t.id = pat.TrabajoId
                     WHERE pat.Persona = @UsuarioId
@@ -381,7 +381,7 @@ public class ProductividadAdapter : IProductividadAdapter
                 query = @"
                     SELECT DISTINCT CAST(p.TrabajoId AS BIGINT) AS IdTrabajo, 
                            p.TrabajoId AS NumeroTrabajo, 
-                           t.IdCli_Nombre AS NombreProyecto, '' AS Estado
+                           t.NombreTrabajo AS NombreProyecto, '' AS Estado
                     FROM OP_CuantiPlanillas p
                     LEFT JOIN PY_Trabajo t ON CAST(p.TrabajoId AS BIGINT) = t.id
                     WHERE p.SubidoPor = @UsuarioId

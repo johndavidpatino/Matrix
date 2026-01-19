@@ -1,0 +1,63 @@
+@model MatrixNext.Data.Modules.US.Unidades.Models.UnidadDto
+
+<div class="modal fade" id="modalDelete" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmar Eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro que desea eliminar la unidad?</p>
+                <dl class="row">
+                    <dt class="col-sm-4">Id:</dt>
+                    <dd class="col-sm-8">@Model.Id</dd>
+                    <dt class="col-sm-4">Unidad:</dt>
+                    <dd class="col-sm-8">@Model.Unidad</dd>
+                    <dt class="col-sm-4">Grupo:</dt>
+                    <dd class="col-sm-8">@(Model.GrupoUnidadNombre ?? "-")</dd>
+                </dl>
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    Esta acción no se puede deshacer.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnConfirmDelete" class="btn btn-danger" data-id="@Model.Id">
+                    Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('btnConfirmDelete')?.addEventListener('click', function() {
+        var id = this.getAttribute('data-id');
+        var token = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
+        
+        fetch('@Url.Action("Delete", "Unidades", new { area = "US" })/' + id, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'RequestVerificationToken': token
+            }
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                var modal = bootstrap.Modal.getInstance(document.getElementById('modalDelete'));
+                modal.hide();
+                alert(data.message);
+                location.reload();
+            } else {
+                alert(data.message || 'Error al eliminar');
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert('Error al procesar la solicitud');
+        });
+    });
+</script>

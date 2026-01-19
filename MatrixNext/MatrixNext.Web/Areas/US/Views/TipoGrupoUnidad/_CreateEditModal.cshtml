@@ -1,0 +1,72 @@
+@model MatrixNext.Data.Modules.US.TipoGrupoUnidad.Models.TipoGrupoUnidadDto
+
+@{
+    var isNew = Model.Id == 0;
+    var titulo = isNew ? "Crear Tipo de Grupo de Unidad" : "Editar Tipo de Grupo de Unidad";
+    var action = isNew ? "Create" : "Edit";
+}
+
+<div class="modal fade" id="modalCreateEdit" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="formTipoGrupoUnidad" asp-area="US" asp-controller="TipoGrupoUnidad" asp-action="@action" method="post">
+                @Html.AntiForgeryToken()
+                <div class="modal-header">
+                    <h5 class="modal-title">@titulo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label asp-for="Id" class="form-label">Id</label>
+                        @if (isNew)
+                        {
+                            <input asp-for="Id" class="form-control" />
+                        }
+                        else
+                        {
+                            <input asp-for="Id" class="form-control" readonly />
+                        }
+                        <span asp-validation-for="Id" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="TipoGrupoUnidad" class="form-label">Tipo de Grupo de Unidad</label>
+                        <input asp-for="TipoGrupoUnidad" class="form-control" required />
+                        <span asp-validation-for="TipoGrupoUnidad" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">@(isNew ? "Crear" : "Guardar")</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('formTipoGrupoUnidad')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var form = this;
+        var formData = new FormData(form);
+        
+        fetch(form.action, {
+            method: 'POST',
+            body: formData
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                var modal = bootstrap.Modal.getInstance(document.getElementById('modalCreateEdit'));
+                modal.hide();
+                alert(data.message);
+                location.reload();
+            } else {
+                alert(data.message || 'Error al guardar');
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert('Error al procesar la solicitud');
+        });
+    });
+</script>
