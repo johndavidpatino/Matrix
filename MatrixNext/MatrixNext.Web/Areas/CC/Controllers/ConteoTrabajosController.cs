@@ -3,9 +3,14 @@ using MatrixNext.Data.Modules.CC.DTOs.ProcesosInternos;
 using MatrixNext.Data.Modules.CC.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace MatrixNext.Web.Areas.CC.Controllers
 {
+    /// <summary>
+    /// Controller para Conteo de Trabajos (Preguntas Históricas de Cuestionarios)
+    /// Migrado de: WebMatrix/CC_FinzOpe/ConteoTrabajos.aspx
+    /// </summary>
     [Area("CC")]
     [Route("CC/[controller]")]
     [Authorize]
@@ -50,38 +55,39 @@ namespace MatrixNext.Web.Areas.CC.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error obteniendo actividades para trabajo {idTrabajo}");
+                _logger.LogError(ex, "Error obteniendo actividades para trabajo {TrabajoId}", idTrabajo);
                 return Json(new { success = false, message = "Error al obtener las actividades. Por favor intente nuevamente." });
             }
         }
 
+        /// <summary>
+        /// Guarda preguntas históricas de un trabajo (conteo de cuestionario)
+        /// Migrado de: btnGuardarPreguntas_Click en ConteoTrabajos.aspx.vb
+        /// </summary>
         [HttpPost]
-        public async Task<IActionResult> GuardarConteo([FromBody] GuardarConteoRequest request)
+        public async Task<IActionResult> GuardarPreguntas([FromBody] GuardarPreguntasHistoricoRequest request)
         {
             try
             {
-                var id = await _service.GuardarConteoAsync(request);
-                return Json(new { success = true, id });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error guardando conteo");
-                return Json(new { success = false, message = "Error al guardar el conteo. Por favor intente nuevamente." });
-            }
-        }
+                // Obtener usuario actual
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userIdClaim) || !long.TryParse(userIdClaim, out long userId))
+                {
+                    return Json(new { success = false, message = "Usuario no autenticado" });
+                }
 
-        [HttpDelete]
-        public async Task<IActionResult> EliminarConteo(long id)
-        {
-            try
+                request.UsuarioId = userId;
+                await _service.GuardarPreguntasHistoricoAsync(request);
+                return Json(new { success = true, message = "Datos guardados exitosamente" });
+            }
+            catch (ArgumentException ex)
             {
-                await _service.EliminarConteoAsync(id);
-                return Json(new { success = true });
+                return Json(new { success = false, message = ex.Message });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error eliminando conteo {id}");
-                return Json(new { success = false, message = "Error al eliminar el conteo. Por favor intente nuevamente." });
+                _logger.LogError(ex, "Error guardando preguntas históricas");
+                return Json(new { success = false, message = "Error al guardar las preguntas. Por favor intente nuevamente." });
             }
         }
     }

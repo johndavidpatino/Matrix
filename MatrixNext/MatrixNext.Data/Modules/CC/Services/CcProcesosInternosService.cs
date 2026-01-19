@@ -36,9 +36,11 @@ namespace MatrixNext.Data.Modules.CC.Services
         
         Task<IEnumerable<ActividadTrabajoDto>> ObtenerActividadesPorTrabajoAsync(long idTrabajo);
         
-        Task<long> GuardarConteoAsync(GuardarConteoRequest request);
-        
-        Task EliminarConteoAsync(long idConteo);
+        /// <summary>
+        /// Guarda preguntas históricas de un trabajo (conteo de cuestionario)
+        /// SP: CC_PreguntasHistoricoGuardar
+        /// </summary>
+        Task GuardarPreguntasHistoricoAsync(GuardarPreguntasHistoricoRequest request);
 
         // Requerimientos Equipo (CRUD)
         Task<IEnumerable<RequerimientoEquipoDto>> ObtenerRequerimientosAsync(
@@ -271,27 +273,26 @@ namespace MatrixNext.Data.Modules.CC.Services
             return actividades;
         }
 
-        public async Task<long> GuardarConteoAsync(GuardarConteoRequest request)
+        /// <summary>
+        /// Guarda preguntas históricas de un trabajo
+        /// Origen: WebMatrix/CC_FinzOpe/ConteoTrabajos.aspx.vb - btnGuardarPreguntas_Click
+        /// </summary>
+        public async Task GuardarPreguntasHistoricoAsync(GuardarPreguntasHistoricoRequest request)
         {
-            // Validaciones
-            if (request.Cantidad <= 0)
-                throw new ArgumentException("La cantidad debe ser mayor a cero");
+            // Validaciones de negocio
+            if (request.TrabajoId <= 0)
+                throw new ArgumentException("El trabajo es requerido");
 
-            if (request.IdTrabajo <= 0)
-                throw new ArgumentException("Trabajo es requerido");
+            if (string.IsNullOrWhiteSpace(request.Job))
+                throw new ArgumentException("El código JobBook es requerido");
 
-            if (request.IdActividad <= 0)
-                throw new ArgumentException("Actividad es requerida");
+            if (request.UsuarioId <= 0)
+                throw new ArgumentException("El usuario es requerido");
 
-            var id = await _adapter.GuardarConteoAsync(request);
-            _logger.LogInformation($"Conteo {id} guardado exitosamente");
-            return id;
-        }
-
-        public async Task EliminarConteoAsync(long idConteo)
-        {
-            await _adapter.EliminarConteoAsync(idConteo);
-            _logger.LogInformation($"Conteo {idConteo} eliminado");
+            await _adapter.GuardarPreguntasHistoricoAsync(request);
+            _logger.LogInformation(
+                "Preguntas históricas guardadas para trabajo {TrabajoId} por usuario {UsuarioId}", 
+                request.TrabajoId, request.UsuarioId);
         }
 
         #endregion

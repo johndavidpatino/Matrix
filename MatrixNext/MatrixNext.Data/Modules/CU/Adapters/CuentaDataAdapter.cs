@@ -65,10 +65,25 @@ namespace MatrixNext.Data.Adapters.CU
             };
         }
 
-        public void ClonarBrief(long idBrief, long idUsuario, int idUnidad, string nuevoNombre)
+        /// <summary>
+        /// Clona un Brief existente con nuevo título
+        /// SP: CU_Brief_Clone (@idBrief, @idUser, @idUnidad, @Titulo)
+        /// Origen: Legacy WebMatrix Brief cloning functionality
+        /// </summary>
+        public void ClonarBrief(long idBrief, long idUsuario, int idUnidad, string nuevoTitulo)
         {
-            // SP por confirmar en legacy (CU_Brief.CloneBrief). No se implementa sin evidencia.
-            throw new NotImplementedException("CloneBrief requiere confirmar SP en legacy (CU_Brief.CloneBrief)");
+            using var conn = CreateConnection();
+            var parameters = new DynamicParameters();
+            parameters.Add("@idBrief", idBrief);
+            parameters.Add("@idUser", idUsuario);
+            parameters.Add("@idUnidad", idUnidad);
+            parameters.Add("@Titulo", nuevoTitulo);
+
+            conn.Execute(
+                "CU_Brief_Clone",
+                parameters,
+                commandType: CommandType.StoredProcedure
+            );
         }
     }
 }

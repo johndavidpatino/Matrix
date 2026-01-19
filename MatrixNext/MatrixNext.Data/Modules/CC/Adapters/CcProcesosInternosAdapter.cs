@@ -122,25 +122,33 @@ namespace MatrixNext.Data.Modules.CC.Adapters
         }
 
         /// <summary>
-        /// Guarda un conteo
-        /// NOTA: SP CC_Conteos_Insert no existe
+        /// Guarda preguntas históricas de un trabajo (conteo de cuestionario)
+        /// SP: CC_PreguntasHistoricoGuardar
+        /// Origen: CoreProject/Clases/CC_FinzOpe/ProcesosInternos.vb - GuardarConteo
         /// </summary>
-        public async Task<long> GuardarConteoAsync(GuardarConteoRequest request)
+        public async Task GuardarPreguntasHistoricoAsync(GuardarPreguntasHistoricoRequest request)
         {
-            // TODO: SP CC_Conteos_Insert no existe en BD legacy
-            throw new NotImplementedException(
-                "SP CC_Conteos_Insert no existe en BD legacy.");
-        }
+            const string sql = "CC_PreguntasHistoricoGuardar";
+            var parameters = new DynamicParameters();
+            
+            // Parámetros exactos del SP legacy
+            parameters.Add("@duracion", request.Duracion);
+            parameters.Add("@Cerradas", request.Cerradas);
+            parameters.Add("@CerradasM", request.CerradasMultiple);
+            parameters.Add("@Abiertas", request.Abiertas);
+            parameters.Add("@AbiertasM", request.AbiertasMultiple);
+            parameters.Add("@Otros", request.Otros);
+            parameters.Add("@Demograficos", request.Demograficos);
+            parameters.Add("@Paginas", request.Paginas);
+            parameters.Add("@Observacion", request.Observaciones ?? string.Empty);
+            parameters.Add("@Usuarioid", request.UsuarioId);
+            parameters.Add("@Job", request.Job);
+            parameters.Add("@TrabajoId", request.TrabajoId);
+            parameters.Add("@NombreTrabajo", request.NombreTrabajo);
+            parameters.Add("@Unidad", request.Unidad);
+            parameters.Add("@Producto", request.Producto);
 
-        /// <summary>
-        /// Elimina un conteo
-        /// NOTA: SP CC_Conteos_Delete no existe
-        /// </summary>
-        public async Task EliminarConteoAsync(long idConteo)
-        {
-            // TODO: SP CC_Conteos_Delete no existe en BD legacy
-            throw new NotImplementedException(
-                "SP CC_Conteos_Delete no existe en BD legacy.");
+            await _dbConnection.ExecuteAsync(sql, parameters, commandType: CommandType.StoredProcedure);
         }
 
         #endregion

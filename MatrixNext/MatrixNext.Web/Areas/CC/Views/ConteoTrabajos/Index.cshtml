@@ -1,118 +1,172 @@
+@*
+    Vista: Conteo de Trabajos - Preguntas Históricas de Cuestionarios
+    Migrado de: WebMatrix/CC_FinzOpe/ConteoTrabajos.aspx
+    SP: CC_PreguntasHistoricoGuardar, CC_ConteosXIdGet
+*@
 @{
-    ViewData["Title"] = "Conteo de Trabajos";
+    ViewData["Title"] = "Conteo de Trabajos - Preguntas";
 }
 
 <div class="container-fluid mt-4">
-    <div class="card">
+    <!-- Encabezado -->
+    <div class="card mb-3">
         <div class="card-header bg-primary text-white">
             <h4 class="mb-0">
-                <i class="bi bi-clipboard-check"></i> Conteo de Trabajos
+                <i class="bi bi-clipboard-check"></i> Conteo de Trabajos - Preguntas de Cuestionarios
             </h4>
         </div>
-        <div class="card-body">
-            <!-- Filtros -->
-            <div class="row mb-3">
-                <div class="col-md-4">
-                    <label class="form-label">Trabajo</label>
-                    <select id="filtroTrabajo" class="form-select">
-                        <option value="">Todos</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Fecha Inicio</label>
-                    <input type="date" id="filtroFechaInicio" class="form-control">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Fecha Fin</label>
-                    <input type="date" id="filtroFechaFin" class="form-control">
-                </div>
-                <div class="col-md-2 d-flex align-items-end">
-                    <button id="btnFiltrar" class="btn btn-primary w-100">
-                        <i class="bi bi-search"></i> Filtrar
-                    </button>
-                </div>
-            </div>
+    </div>
 
-            <!-- Botones de acción -->
-            <div class="mb-3">
-                <button id="btnNuevo" class="btn btn-success">
-                    <i class="bi bi-plus-circle"></i> Nuevo Conteo
-                </button>
-            </div>
-
-            <!-- Tabla -->
-            <div class="table-responsive">
-                <table id="tablaConteos" class="table table-striped table-hover">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>ID</th>
-                            <th>Trabajo</th>
-                            <th>Actividad</th>
-                            <th>Cantidad</th>
-                            <th>Categoría</th>
-                            <th>Fecha Conteo</th>
-                            <th>Usuario</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+    <div class="row">
+        <!-- Panel Izquierdo: Selección de Trabajo -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    <i class="bi bi-briefcase"></i> Seleccionar Trabajo
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Buscar Trabajo</label>
+                        <input type="text" id="buscarTrabajo" class="form-control" placeholder="Nombre o JobBook...">
+                    </div>
+                    <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                        <table id="tablaTrabajos" class="table table-sm table-hover">
+                            <thead class="table-dark sticky-top">
+                                <tr>
+                                    <th>JobBook</th>
+                                    <th>Nombre</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
 
-<!-- Modal Conteo -->
-<div class="modal fade" id="modalConteo" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title">
-                    <i class="bi bi-clipboard-check"></i> <span id="modalTitulo">Nuevo Conteo</span>
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        <!-- Panel Derecho: Formulario de Preguntas -->
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <i class="bi bi-card-checklist"></i> Información del Cuestionario
+                    <span id="trabajoSeleccionado" class="badge bg-light text-dark ms-2"></span>
+                </div>
+                <div class="card-body">
+                    <form id="formPreguntas">
+                        <input type="hidden" id="trabajoId">
+                        <input type="hidden" id="jobBook">
+                        <input type="hidden" id="nombreTrabajo">
+                        <input type="hidden" id="unidad">
+                        <input type="hidden" id="producto">
+
+                        <!-- Tabla Comparativa: Propuesta vs Real -->
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="text-center" style="width: 30%;">Campo</th>
+                                        <th class="text-center" style="width: 23%;">Propuesta</th>
+                                        <th class="text-center" style="width: 23%;">Real <span class="text-danger">*</span></th>
+                                        <th class="text-center" style="width: 24%;">Diferencia</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><i class="bi bi-clock"></i> Duración (min)</td>
+                                        <td><input type="number" id="duracionProp" class="form-control form-control-sm bg-light" readonly></td>
+                                        <td><input type="number" id="duracionReal" class="form-control form-control-sm" min="0" required></td>
+                                        <td><span id="duracionDif" class="badge"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="bi bi-check-square"></i> Cerradas RU</td>
+                                        <td><input type="number" id="cerradasProp" class="form-control form-control-sm bg-light" readonly></td>
+                                        <td><input type="number" id="cerradasReal" class="form-control form-control-sm" min="0" required></td>
+                                        <td><span id="cerradasDif" class="badge"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="bi bi-check2-square"></i> Cerradas RM</td>
+                                        <td><input type="number" id="cerradasMultProp" class="form-control form-control-sm bg-light" readonly></td>
+                                        <td><input type="number" id="cerradasMultReal" class="form-control form-control-sm" min="0" required></td>
+                                        <td><span id="cerradasMultDif" class="badge"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="bi bi-chat-left-text"></i> Abiertas</td>
+                                        <td><input type="number" id="abiertasProp" class="form-control form-control-sm bg-light" readonly></td>
+                                        <td><input type="number" id="abiertasReal" class="form-control form-control-sm" min="0" required></td>
+                                        <td><span id="abiertasDif" class="badge"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="bi bi-chat-square-text"></i> Abiertas Múlt.</td>
+                                        <td><input type="number" id="abiertasMultProp" class="form-control form-control-sm bg-light" readonly></td>
+                                        <td><input type="number" id="abiertasMultReal" class="form-control form-control-sm" min="0" required></td>
+                                        <td><span id="abiertasMultDif" class="badge"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="bi bi-collection"></i> Otras</td>
+                                        <td><input type="number" id="otrosProp" class="form-control form-control-sm bg-light" readonly></td>
+                                        <td><input type="number" id="otrosReal" class="form-control form-control-sm" min="0" required></td>
+                                        <td><span id="otrosDif" class="badge"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="bi bi-person-badge"></i> Demográficas</td>
+                                        <td><input type="number" id="demoProp" class="form-control form-control-sm bg-light" readonly></td>
+                                        <td><input type="number" id="demoReal" class="form-control form-control-sm" min="0" required></td>
+                                        <td><span id="demoDif" class="badge"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="bi bi-file-earmark-text"></i> Páginas</td>
+                                        <td><input type="number" id="paginasProp" class="form-control form-control-sm bg-light" readonly></td>
+                                        <td><input type="number" id="paginasReal" class="form-control form-control-sm" min="0"></td>
+                                        <td><span id="paginasDif" class="badge"></span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Observaciones -->
+                        <div class="mb-3">
+                            <label for="observaciones" class="form-label">Observaciones</label>
+                            <textarea id="observaciones" class="form-control" rows="2" maxlength="500"></textarea>
+                        </div>
+
+                        <!-- Botones -->
+                        <div class="d-flex justify-content-end gap-2">
+                            <button type="button" id="btnLimpiar" class="btn btn-secondary">
+                                <i class="bi bi-eraser"></i> Limpiar
+                            </button>
+                            <button type="submit" id="btnGuardar" class="btn btn-success" disabled>
+                                <i class="bi bi-save"></i> Guardar Preguntas
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="modal-body">
-                <form id="formConteo">
-                    <input type="hidden" id="idConteo">
-                    
-                    <div class="mb-3">
-                        <label for="idTrabajo" class="form-label">Trabajo <span class="text-danger">*</span></label>
-                        <select id="idTrabajo" class="form-select" required>
-                            <option value="">Seleccione...</option>
-                        </select>
-                    </div>
 
-                    <div class="mb-3">
-                        <label for="idActividad" class="form-label">Actividad <span class="text-danger">*</span></label>
-                        <select id="idActividad" class="form-select" required disabled>
-                            <option value="">Seleccione un trabajo primero...</option>
-                        </select>
+            <!-- Historial de Conteos -->
+            <div class="card mt-3">
+                <div class="card-header bg-secondary text-white">
+                    <i class="bi bi-clock-history"></i> Historial de Registros
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table id="tablaHistorial" class="table table-sm table-striped mb-0">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Duración</th>
+                                    <th>Cerr. RU</th>
+                                    <th>Cerr. RM</th>
+                                    <th>Abiertas</th>
+                                    <th>Abiert. M</th>
+                                    <th>Otras</th>
+                                    <th>Demo</th>
+                                    <th>Usuario</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
-
-                    <div class="mb-3">
-                        <label for="cantidad" class="form-label">Cantidad <span class="text-danger">*</span></label>
-                        <input type="number" id="cantidad" class="form-control" min="1" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="categoria" class="form-label">Categoría</label>
-                        <input type="text" id="categoria" class="form-control" maxlength="50">
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="observaciones" class="form-label">Observaciones</label>
-                        <textarea id="observaciones" class="form-control" rows="3"></textarea>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <i class="bi bi-x-circle"></i> Cancelar
-                </button>
-                <button type="button" id="btnGuardar" class="btn btn-primary">
-                    <i class="bi bi-save"></i> Guardar
-                </button>
+                </div>
             </div>
         </div>
     </div>
@@ -121,154 +175,232 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            let tabla = null;
-            const modal = new bootstrap.Modal('#modalConteo');
+            let trabajoActual = null;
 
-            // Inicializar DataTable
-            function inicializarTabla() {
-                tabla = $('#tablaConteos').DataTable({
-                    language: {
-                        url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json'
-                    },
-                    columns: [
-                        { data: 'idConteo' },
-                        { data: 'nombreTrabajo' },
-                        { data: 'nombreActividad' },
-                        { data: 'cantidad', className: 'text-end' },
-                        { data: 'categoria' },
-                        {
-                            data: 'fechaConteo',
-                            render: (data) => data ? new Date(data).toLocaleDateString('es-CO') : ''
-                        },
-                        { data: 'usuarioRegistra' },
-                        {
-                            data: null,
-                            orderable: false,
-                            render: (data) => `
-                                <button class="btn btn-sm btn-danger btn-eliminar" data-id="${data.idConteo}">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            `
-                        }
-                    ]
-                });
-            }
-
-            // Cargar conteos
-            function cargarConteos() {
-                const idTrabajo = $('#filtroTrabajo').val() || null;
-                const fechaInicio = $('#filtroFechaInicio').val() || null;
-                const fechaFin = $('#filtroFechaFin').val() || null;
-
-                $.get('@Url.Action("ObtenerConteos", "ConteoTrabajos")', {
-                    idTrabajo, fechaInicio, fechaFin
-                }).done(function (response) {
-                    if (response.success) {
-                        tabla.clear().rows.add(response.data).draw();
-                    } else {
-                        Swal.fire('Error', response.message, 'error');
+            // Cargar trabajos disponibles
+            function cargarTrabajos() {
+                $.get('@Url.Action("ObtenerConteos", "ConteoTrabajos")').done(function (response) {
+                    if (response.success && response.data) {
+                        const tbody = $('#tablaTrabajos tbody');
+                        tbody.empty();
+                        
+                        // Agrupar por trabajo único
+                        const trabajosUnicos = {};
+                        response.data.forEach(item => {
+                            if (!trabajosUnicos[item.idTrabajo]) {
+                                trabajosUnicos[item.idTrabajo] = item;
+                            }
+                        });
+                        
+                        Object.values(trabajosUnicos).forEach(t => {
+                            tbody.append(`
+                                <tr class="cursor-pointer" data-id="${t.idTrabajo}" 
+                                    data-jobbook="${t.jobBook || ''}" 
+                                    data-nombre="${t.nombre || ''}"
+                                    data-unidad="${t.unidad || 0}"
+                                    data-producto="${t.producto || ''}">
+                                    <td>${t.jobBook || '-'}</td>
+                                    <td>${t.nombre || 'Sin nombre'}</td>
+                                </tr>
+                            `);
+                        });
                     }
                 });
             }
 
-            // Cargar actividades al seleccionar trabajo
-            $('#idTrabajo').change(function () {
-                const idTrabajo = $(this).val();
-                const $actividad = $('#idActividad');
+            // Seleccionar trabajo
+            $(document).on('click', '#tablaTrabajos tbody tr', function () {
+                $('#tablaTrabajos tbody tr').removeClass('table-active');
+                $(this).addClass('table-active');
 
-                $actividad.prop('disabled', !idTrabajo).html('<option value="">Cargando...</option>');
+                trabajoActual = {
+                    id: $(this).data('id'),
+                    jobBook: $(this).data('jobbook'),
+                    nombre: $(this).data('nombre'),
+                    unidad: $(this).data('unidad'),
+                    producto: $(this).data('producto')
+                };
 
-                if (idTrabajo) {
-                    $.get('@Url.Action("ObtenerActividadesPorTrabajo", "ConteoTrabajos")', { idTrabajo })
-                        .done(function (response) {
-                            if (response.success) {
-                                let options = '<option value="">Seleccione...</option>';
-                                response.data.forEach(a => {
-                                    options += `<option value="${a.idActividad}">${a.nombreActividad}</option>`;
-                                });
-                                $actividad.html(options);
-                            }
+                $('#trabajoId').val(trabajoActual.id);
+                $('#jobBook').val(trabajoActual.jobBook);
+                $('#nombreTrabajo').val(trabajoActual.nombre);
+                $('#unidad').val(trabajoActual.unidad);
+                $('#producto').val(trabajoActual.producto);
+                $('#trabajoSeleccionado').text(`${trabajoActual.jobBook} - ${trabajoActual.nombre}`);
+                $('#btnGuardar').prop('disabled', false);
+
+                cargarHistorial(trabajoActual.id);
+                limpiarFormulario(false);
+            });
+
+            // Cargar historial de conteos del trabajo
+            function cargarHistorial(idTrabajo) {
+                $.get('@Url.Action("ObtenerConteos", "ConteoTrabajos")', { idTrabajo }).done(function (response) {
+                    const tbody = $('#tablaHistorial tbody');
+                    tbody.empty();
+
+                    if (response.success && response.data && response.data.length > 0) {
+                        response.data.forEach(c => {
+                            const fecha = c.fecha ? new Date(c.fecha).toLocaleDateString('es-CO') : '-';
+                            tbody.append(`
+                                <tr>
+                                    <td>${fecha}</td>
+                                    <td class="text-end">${c.duracion || 0}</td>
+                                    <td class="text-end">${c.cerradasRU || 0}</td>
+                                    <td class="text-end">${c.cerradasRM || 0}</td>
+                                    <td class="text-end">${c.abiertas || 0}</td>
+                                    <td class="text-end">${c.abiertasMul || 0}</td>
+                                    <td class="text-end">${c.otros || 0}</td>
+                                    <td class="text-end">${c.demograficos || 0}</td>
+                                    <td>${c.usuarioId || '-'}</td>
+                                </tr>
+                            `);
                         });
+
+                        // Cargar último registro en campos "Real"
+                        const ultimo = response.data[0];
+                        if (ultimo) {
+                            $('#duracionReal').val(ultimo.duracion || 0);
+                            $('#cerradasReal').val(ultimo.cerradasRU || 0);
+                            $('#cerradasMultReal').val(ultimo.cerradasRM || 0);
+                            $('#abiertasReal').val(ultimo.abiertas || 0);
+                            $('#abiertasMultReal').val(ultimo.abiertasMul || 0);
+                            $('#otrosReal').val(ultimo.otros || 0);
+                            $('#demoReal').val(ultimo.demograficos || 0);
+                            $('#paginasReal').val(ultimo.paginas || 0);
+                            $('#observaciones').val(ultimo.observacion || '');
+                            calcularDiferencias();
+                        }
+                    } else {
+                        tbody.append('<tr><td colspan="9" class="text-center text-muted">Sin registros</td></tr>');
+                    }
+                });
+            }
+
+            // Calcular diferencias
+            function calcularDiferencias() {
+                calcularDif('duracion');
+                calcularDif('cerradas');
+                calcularDif('cerradasMult');
+                calcularDif('abiertas');
+                calcularDif('abiertasMult');
+                calcularDif('otros');
+                calcularDif('demo');
+                calcularDif('paginas');
+            }
+
+            function calcularDif(campo) {
+                const prop = parseInt($(`#${campo}Prop`).val()) || 0;
+                const real = parseInt($(`#${campo}Real`).val()) || 0;
+                const span = $(`#${campo}Dif`);
+
+                if (prop === 0) {
+                    span.text(real > 0 ? '100%' : '-').removeClass('bg-success bg-warning bg-danger').addClass('bg-secondary');
+                } else {
+                    const dif = Math.round((real / prop - 1) * 100);
+                    span.text(`${dif >= 0 ? '+' : ''}${dif}%`);
+                    span.removeClass('bg-success bg-warning bg-danger bg-secondary');
+                    if (Math.abs(dif) <= 10) span.addClass('bg-success');
+                    else if (Math.abs(dif) <= 25) span.addClass('bg-warning');
+                    else span.addClass('bg-danger');
                 }
+            }
+
+            // Eventos de cambio para calcular diferencias
+            $('[id$="Real"]').on('input', calcularDiferencias);
+
+            // Limpiar formulario
+            function limpiarFormulario(limpiarTodo = true) {
+                $('[id$="Real"]').val('');
+                $('[id$="Prop"]').val('');
+                $('[id$="Dif"]').text('-').removeClass('bg-success bg-warning bg-danger').addClass('bg-secondary');
+                $('#observaciones').val('');
+                
+                if (limpiarTodo) {
+                    trabajoActual = null;
+                    $('#trabajoId').val('');
+                    $('#trabajoSeleccionado').text('');
+                    $('#btnGuardar').prop('disabled', true);
+                    $('#tablaTrabajos tbody tr').removeClass('table-active');
+                    $('#tablaHistorial tbody').html('<tr><td colspan="9" class="text-center text-muted">Seleccione un trabajo</td></tr>');
+                }
+            }
+
+            $('#btnLimpiar').click(function() {
+                limpiarFormulario(true);
             });
 
-            // Nuevo conteo
-            $('#btnNuevo').click(function () {
-                $('#formConteo')[0].reset();
-                $('#idConteo').val('');
-                $('#modalTitulo').text('Nuevo Conteo');
-                $('#idActividad').prop('disabled', true).html('<option value="">Seleccione un trabajo primero...</option>');
-                modal.show();
-            });
+            // Guardar preguntas
+            $('#formPreguntas').submit(function (e) {
+                e.preventDefault();
 
-            // Guardar conteo
-            $('#btnGuardar').click(function () {
-                if (!$('#formConteo')[0].checkValidity()) {
-                    $('#formConteo')[0].reportValidity();
+                if (!trabajoActual) {
+                    Swal.fire('Error', 'Debe seleccionar un trabajo', 'error');
                     return;
                 }
 
+                // Validar campos numéricos
+                const campos = ['duracionReal', 'cerradasReal', 'cerradasMultReal', 'abiertasReal', 
+                               'abiertasMultReal', 'otrosReal', 'demoReal'];
+                for (const campo of campos) {
+                    const val = $(`#${campo}`).val();
+                    if (val === '' || isNaN(parseInt(val))) {
+                        Swal.fire('Error', 'Todos los campos numéricos son requeridos', 'error');
+                        $(`#${campo}`).focus();
+                        return;
+                    }
+                }
+
                 const request = {
-                    idConteo: parseInt($('#idConteo').val()) || 0,
-                    idTrabajo: parseInt($('#idTrabajo').val()),
-                    idActividad: parseInt($('#idActividad').val()),
-                    cantidad: parseInt($('#cantidad').val()),
-                    categoria: $('#categoria').val(),
-                    observaciones: $('#observaciones').val(),
-                    usuarioRegistra: '@User.Identity?.Name'
+                    job: trabajoActual.jobBook,
+                    trabajoId: trabajoActual.id,
+                    nombreTrabajo: trabajoActual.nombre,
+                    unidad: parseFloat(trabajoActual.unidad) || 0,
+                    producto: trabajoActual.producto || '',
+                    duracion: parseInt($('#duracionReal').val()) || 0,
+                    cerradas: parseInt($('#cerradasReal').val()) || 0,
+                    cerradasMultiple: parseInt($('#cerradasMultReal').val()) || 0,
+                    abiertas: parseInt($('#abiertasReal').val()) || 0,
+                    abiertasMultiple: parseInt($('#abiertasMultReal').val()) || 0,
+                    otros: parseInt($('#otrosReal').val()) || 0,
+                    demograficos: parseInt($('#demoReal').val()) || 0,
+                    paginas: parseInt($('#paginasReal').val()) || 0,
+                    observaciones: $('#observaciones').val()
                 };
 
                 $.ajax({
-                    url: '@Url.Action("GuardarConteo", "ConteoTrabajos")',
+                    url: '@Url.Action("GuardarPreguntas", "ConteoTrabajos")',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify(request)
                 }).done(function (response) {
                     if (response.success) {
-                        Swal.fire('Éxito', 'Conteo guardado correctamente', 'success');
-                        modal.hide();
-                        cargarConteos();
+                        Swal.fire('Éxito', response.message || 'Datos guardados correctamente', 'success');
+                        cargarHistorial(trabajoActual.id);
                     } else {
-                        Swal.fire('Error', response.message, 'error');
+                        Swal.fire('Error', response.message || 'Error al guardar', 'error');
                     }
+                }).fail(function () {
+                    Swal.fire('Error', 'Error de conexión', 'error');
                 });
             });
 
-            // Eliminar conteo
-            $(document).on('click', '.btn-eliminar', function () {
-                const id = $(this).data('id');
-
-                Swal.fire({
-                    title: '¿Está seguro?',
-                    text: 'Esta acción no se puede deshacer',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Sí, eliminar',
-                    cancelButtonText: 'Cancelar'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: '@Url.Action("EliminarConteo", "ConteoTrabajos")',
-                            type: 'DELETE',
-                            data: { id }
-                        }).done(function (response) {
-                            if (response.success) {
-                                Swal.fire('Éxito', 'Conteo eliminado', 'success');
-                                cargarConteos();
-                            } else {
-                                Swal.fire('Error', response.message, 'error');
-                            }
-                        });
-                    }
+            // Filtrar trabajos
+            $('#buscarTrabajo').on('input', function () {
+                const filtro = $(this).val().toLowerCase();
+                $('#tablaTrabajos tbody tr').each(function () {
+                    const texto = $(this).text().toLowerCase();
+                    $(this).toggle(texto.includes(filtro));
                 });
             });
-
-            // Eventos
-            $('#btnFiltrar').click(cargarConteos);
 
             // Inicializar
-            inicializarTabla();
-            cargarConteos();
+            cargarTrabajos();
+            limpiarFormulario(true);
         });
     </script>
+    <style>
+        .cursor-pointer { cursor: pointer; }
+        #tablaTrabajos tbody tr:hover { background-color: #e9ecef; }
+    </style>
 }

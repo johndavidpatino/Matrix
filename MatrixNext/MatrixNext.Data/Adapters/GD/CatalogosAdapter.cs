@@ -8,37 +8,25 @@ using MatrixNext.Data.DTOs.GD;
 namespace MatrixNext.Data.Adapters.GD
 {
     /// <summary>
-    /// Interfaz para operaciones de CatÃ¡logos
-    /// Sprint 12.3.8: CatÃ¡logos EdiciÃ³n con Datos
-    /// SPs: GD_TipoSolicitud_*, GD_Estados_*, GD_Procesos_*
+    /// Interfaz para operaciones de Catálogos
+    /// Sprint 12.3.8: Catálogos Edición con Datos
+    /// NOTA: Solo GD_TipoSolicitud existe en BD. GD_Estados y GD_Procesos NO EXISTEN.
     /// </summary>
     public interface ICatalogosAdapter
     {
-        // ========== Tipos de Solicitud ==========
+        // ========== Tipos de Solicitud (FUNCIONAL) ==========
         Task<IEnumerable<TipoSolicitudDto>> ObtenerTiposSolicitudAsync(bool soloActivos = false);
         Task<TipoSolicitudDto> ObtenerTipoSolicitudAsync(long idTipoSolicitud);
         Task<bool> ActualizarTipoSolicitudAsync(TipoSolicitudDto tipoSolicitud, long usuarioModifica);
         Task<bool> DesactivarTipoSolicitudAsync(long idTipoSolicitud, long usuarioModifica);
-
-        // ========== Estados ==========
-        Task<IEnumerable<EstadoDto>> ObtenerEstadosAsync(bool soloActivos = false);
-        Task<IEnumerable<EstadoDto>> ObtenerEstadosPorModuloAsync(string modulo, bool soloActivos = false);
-        Task<EstadoDto> ObtenerEstadoAsync(long idEstado);
-        Task<bool> ActualizarEstadoAsync(EstadoDto estado, long usuarioModifica);
-        Task<bool> DesactivarEstadoAsync(long idEstado, long usuarioModifica);
-
-        // ========== Procesos ==========
-        Task<IEnumerable<ProcesoDto>> ObtenerProcesosAsync(bool soloActivos = false);
-        Task<ProcesoDto> ObtenerProcesoAsync(long idProceso);
-        Task<bool> ActualizarProcesoAsync(ProcesoDto proceso, long usuarioModifica);
-        Task<bool> DesactivarProcesoAsync(long idProceso, long usuarioModifica);
 
         // ========== Resumen ==========
         Task<CatalogosResumenDto> ObtenerResumenAsync();
     }
 
     /// <summary>
-    /// Adaptador para operaciones de CatÃ¡logos
+    /// Adaptador para operaciones de Catálogos GD
+    /// NOTA: Solo GD_TipoSolicitud implementado. Estados y Procesos removidos (tablas no existen).
     /// </summary>
     public class CatalogosAdapter : ICatalogosAdapter
     {
@@ -114,83 +102,11 @@ namespace MatrixNext.Data.Adapters.GD
 
         #endregion
 
-        #region Estados - TABLAS NO EXISTEN
-        
-        /// <summary>
-        /// NOTA: Tabla GD_Estados NO EXISTE en CO_Matrix_Intranet
-        /// Existe GD_EstadoSolicitud pero con estructura diferente
-        /// </summary>
-
-        public Task<IEnumerable<EstadoDto>> ObtenerEstadosAsync(bool soloActivos = false)
-        {
-            throw new NotImplementedException(
-                "Tabla GD_Estados no existe en BD. " +
-                "Existe GD_EstadoSolicitud pero con estructura diferente.");
-        }
-
-        public Task<IEnumerable<EstadoDto>> ObtenerEstadosPorModuloAsync(string modulo, bool soloActivos = false)
-        {
-            throw new NotImplementedException(
-                "Tabla GD_Estados no existe en BD.");
-        }
-
-        public Task<EstadoDto> ObtenerEstadoAsync(long idEstado)
-        {
-            throw new NotImplementedException(
-                "Tabla GD_Estados no existe en BD.");
-        }
-
-        public Task<bool> ActualizarEstadoAsync(EstadoDto estado, long usuarioModifica)
-        {
-            throw new NotImplementedException(
-                "Tabla GD_Estados no existe en BD.");
-        }
-
-        public Task<bool> DesactivarEstadoAsync(long idEstado, long usuarioModifica)
-        {
-            throw new NotImplementedException(
-                "Tabla GD_Estados no existe en BD.");
-        }
-
-        #endregion
-
-        #region Procesos - TABLA NO EXISTE
-
-        /// <summary>
-        /// NOTA: Tabla GD_Procesos NO EXISTE en CO_Matrix_Intranet
-        /// </summary>
-
-        public Task<IEnumerable<ProcesoDto>> ObtenerProcesosAsync(bool soloActivos = false)
-        {
-            throw new NotImplementedException(
-                "Tabla GD_Procesos no existe en BD.");
-        }
-
-        public Task<ProcesoDto> ObtenerProcesoAsync(long idProceso)
-        {
-            throw new NotImplementedException(
-                "Tabla GD_Procesos no existe en BD.");
-        }
-
-        public Task<bool> ActualizarProcesoAsync(ProcesoDto proceso, long usuarioModifica)
-        {
-            throw new NotImplementedException(
-                "Tabla GD_Procesos no existe en BD.");
-        }
-
-        public Task<bool> DesactivarProcesoAsync(long idProceso, long usuarioModifica)
-        {
-            throw new NotImplementedException(
-                "Tabla GD_Procesos no existe en BD.");
-        }
-
-        #endregion
-
         #region Resumen
 
         public async Task<CatalogosResumenDto> ObtenerResumenAsync()
         {
-            // Solo GD_TipoSolicitud existe - los otros catálogos devuelven 0
+            // Solo GD_TipoSolicitud existe
             const string query = @"
                 SELECT
                     (SELECT COUNT(*) FROM GD_TipoSolicitud) AS TotalTiposSolicitud,
@@ -207,4 +123,3 @@ namespace MatrixNext.Data.Adapters.GD
         #endregion
     }
 }
-
