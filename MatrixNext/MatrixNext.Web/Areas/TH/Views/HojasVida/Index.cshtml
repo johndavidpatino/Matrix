@@ -1,0 +1,261 @@
+@{
+    ViewData["Title"] = "Hojas de Vida";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <!-- Encabezado -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-0">
+                <i class="bi bi-file-person text-primary me-2"></i>Hojas de Vida - Reclutamiento
+            </h2>
+            <small class="text-muted">Gestión de candidatos y procesos de selección</small>
+        </div>
+        <button class="btn btn-primary" id="btnNuevo">
+            <i class="bi bi-plus-lg me-1"></i>Nueva Hoja de Vida
+        </button>
+    </div>
+
+    <!-- Filtros de búsqueda -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-light">
+            <h6 class="mb-0"><i class="bi bi-funnel me-2"></i>Filtros de Búsqueda</h6>
+        </div>
+        <div class="card-body">
+            <form id="formFiltros">
+                <div class="row g-3">
+                    <div class="col-md-2">
+                        <label class="form-label">ID</label>
+                        <input type="number" class="form-control" id="filtroId" name="id" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Nombres</label>
+                        <input type="text" class="form-control" id="filtroNombres" name="nombres" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Apellidos</label>
+                        <input type="text" class="form-control" id="filtroApellidos" name="apellidos" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Nivel Inglés</label>
+                        <select class="form-select" id="filtroNivelIngles" name="nivelIngles">
+                            <option value="">-- Todos --</option>
+                            @if (ViewBag.NivelesIngles != null)
+                            {
+                                @foreach (SelectListItem item in ViewBag.NivelesIngles)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Profesión</label>
+                        <select class="form-select" id="filtroProfesion" name="profesion">
+                            <option value="">-- Todas --</option>
+                            @if (ViewBag.Profesiones != null)
+                            {
+                                @foreach (SelectListItem item in ViewBag.Profesiones)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Keywords</label>
+                        <input type="text" class="form-control" id="filtroKeywords" name="keywords" placeholder="Excel, SAP, etc." />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Exp. Desde (años)</label>
+                        <input type="number" class="form-control" id="filtroExpDesde" name="anosExperienciaInicio" min="0" max="50" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Exp. Hasta (años)</label>
+                        <input type="number" class="form-control" id="filtroExpHasta" name="anosExperienciaFin" min="0" max="50" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Nivel Educativo</label>
+                        <select class="form-select" id="filtroNivelEducativo" name="nivelEducativo">
+                            <option value="">-- Todos --</option>
+                            @if (ViewBag.NivelesEducativos != null)
+                            {
+                                @foreach (SelectListItem item in ViewBag.NivelesEducativos)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Ciudad</label>
+                        <select class="form-select" id="filtroCiudad" name="ciudadResidencia">
+                            <option value="">-- Todas --</option>
+                            @if (ViewBag.Ciudades != null)
+                            {
+                                @foreach (SelectListItem item in ViewBag.Ciudades)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">¿Tiene Entrevista?</label>
+                        <select class="form-select" id="filtroTieneEntrevista" name="tieneEntrevista">
+                            <option value="">-- Todos --</option>
+                            <option value="true">Sí</option>
+                            <option value="false">No</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12 text-end">
+                        <button type="button" class="btn btn-outline-secondary me-2" id="btnLimpiar">
+                            <i class="bi bi-x-lg me-1"></i>Limpiar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-search me-1"></i>Buscar
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Lista de resultados -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+            <h6 class="mb-0"><i class="bi bi-list-ul me-2"></i>Resultados</h6>
+            <span id="contadorResultados" class="badge bg-secondary">0 registros</span>
+        </div>
+        <div class="card-body p-0">
+            <div id="contenedorLista">
+                <div class="text-center py-5 text-muted">
+                    <i class="bi bi-search display-4 d-block mb-3"></i>
+                    <p>Utilice los filtros para buscar hojas de vida</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal container -->
+<div class="modal fade" id="modalHojaVida" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content" id="modalContent">
+            <!-- Contenido dinámico -->
+        </div>
+    </div>
+</div>
+
+<!-- Modal de detalles (más grande) -->
+<div class="modal fade" id="modalDetalles" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content" id="modalDetallesContent">
+            <!-- Contenido dinámico -->
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(function() {
+            // Buscar al cargar (si hay filtros)
+            buscarHojasVida();
+            
+            // Nuevo
+            $('#btnNuevo').click(function() {
+                $.get('@Url.Action("Create", "HojasVida", new { area = "TH" })', function(html) {
+                    $('#modalContent').html(html);
+                    $('#modalHojaVida').modal('show');
+                });
+            });
+            
+            // Buscar
+            $('#formFiltros').submit(function(e) {
+                e.preventDefault();
+                buscarHojasVida();
+            });
+            
+            // Limpiar filtros
+            $('#btnLimpiar').click(function() {
+                $('#formFiltros')[0].reset();
+                $('#contenedorLista').html(`
+                    <div class="text-center py-5 text-muted">
+                        <i class="bi bi-search display-4 d-block mb-3"></i>
+                        <p>Utilice los filtros para buscar hojas de vida</p>
+                    </div>
+                `);
+                $('#contadorResultados').text('0 registros');
+            });
+            
+            // Ver detalles
+            $(document).on('click', '.btn-ver', function() {
+                var id = $(this).data('id');
+                $.get('@Url.Action("Details", "HojasVida", new { area = "TH" })/' + id, function(html) {
+                    $('#modalDetallesContent').html(html);
+                    $('#modalDetalles').modal('show');
+                });
+            });
+            
+            // Editar
+            $(document).on('click', '.btn-editar', function() {
+                var id = $(this).data('id');
+                $.get('@Url.Action("Edit", "HojasVida", new { area = "TH" })/' + id, function(html) {
+                    $('#modalContent').html(html);
+                    $('#modalHojaVida').modal('show');
+                });
+            });
+            
+            // Submit del form de hoja de vida
+            $(document).on('submit', '#formHojaVida', function(e) {
+                e.preventDefault();
+                var form = $(this);
+                
+                $.ajax({
+                    url: form.attr('action'),
+                    type: 'POST',
+                    data: form.serialize(),
+                    success: function(response) {
+                        if (response.success) {
+                            $('#modalHojaVida').modal('hide');
+                            toastr.success(response.message);
+                            buscarHojasVida();
+                        } else {
+                            toastr.error(response.message);
+                        }
+                    },
+                    error: function() {
+                        toastr.error('Error al procesar la solicitud');
+                    }
+                });
+            });
+        });
+        
+        function buscarHojasVida() {
+            var params = {
+                id: $('#filtroId').val() || null,
+                nombres: $('#filtroNombres').val() || null,
+                apellidos: $('#filtroApellidos').val() || null,
+                nivelIngles: $('#filtroNivelIngles').val() || null,
+                keywords: $('#filtroKeywords').val() || null,
+                anosExperienciaInicio: $('#filtroExpDesde').val() || null,
+                anosExperienciaFin: $('#filtroExpHasta').val() || null,
+                nivelEducativo: $('#filtroNivelEducativo').val() || null,
+                ciudadResidencia: $('#filtroCiudad').val() || null,
+                tieneEntrevista: $('#filtroTieneEntrevista').val() || null,
+                profesion: $('#filtroProfesion').val() || null
+            };
+            
+            $('#contenedorLista').html('<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>');
+            
+            $.get('@Url.Action("Lista", "HojasVida", new { area = "TH" })', params, function(html) {
+                $('#contenedorLista').html(html);
+                var count = $('#contenedorLista table tbody tr').length;
+                $('#contadorResultados').text(count + ' registros');
+            });
+        }
+    </script>
+}

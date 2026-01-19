@@ -1,0 +1,353 @@
+@using MatrixNext.Data.Modules.TH.HojasVida.Models
+@model HojaVidaDto
+
+@{
+    var entrevistas = ViewBag.Entrevistas as IEnumerable<HojaVidaEntrevistaDto> ?? Enumerable.Empty<HojaVidaEntrevistaDto>();
+    var experiencias = ViewBag.ExperienciasLaborales as IEnumerable<HojaVidaExperienciaLaboralDto> ?? Enumerable.Empty<HojaVidaExperienciaLaboralDto>();
+}
+
+<div class="modal-header bg-info text-white">
+    <h5 class="modal-title">
+        <i class="bi bi-file-person me-2"></i>Detalles de Hoja de Vida
+    </h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+</div>
+
+<div class="modal-body">
+    <div class="row">
+        <!-- Columna izquierda: Datos personales -->
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header bg-light">
+                    <h6 class="mb-0"><i class="bi bi-person me-2"></i>Información Personal</h6>
+                </div>
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-5">ID:</dt>
+                        <dd class="col-7"><span class="badge bg-secondary">@Model.Id</span></dd>
+                        
+                        <dt class="col-5">Nombre:</dt>
+                        <dd class="col-7"><strong>@Model.NombreCompleto</strong></dd>
+                        
+                        <dt class="col-5">Identificación:</dt>
+                        <dd class="col-7">@Model.TipoIdentificacionNombre: @Model.Identificacion</dd>
+                        
+                        <dt class="col-5">Edad:</dt>
+                        <dd class="col-7">@(Model.Edad.HasValue ? $"{Model.Edad} años" : "N/A")</dd>
+                        
+                        <dt class="col-5">Ciudad:</dt>
+                        <dd class="col-7">@(Model.CiudadResidenciaNombre ?? "N/A")</dd>
+                        
+                        <dt class="col-5">Celular:</dt>
+                        <dd class="col-7">@(Model.NumeroCelular.HasValue ? Model.NumeroCelular.ToString() : "N/A")</dd>
+                        
+                        <dt class="col-5">Correo:</dt>
+                        <dd class="col-7">@(Model.Correo ?? "N/A")</dd>
+                        
+                        <dt class="col-5">Fecha Registro:</dt>
+                        <dd class="col-7">@(Model.FechaCreacion?.ToString("dd/MM/yyyy") ?? "N/A")</dd>
+                    </dl>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h6 class="mb-0"><i class="bi bi-mortarboard me-2"></i>Información Profesional</h6>
+                </div>
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-5">Profesión:</dt>
+                        <dd class="col-7">@(Model.ProfesionNombre ?? "N/A")</dd>
+                        
+                        <dt class="col-5">Nivel Educativo:</dt>
+                        <dd class="col-7">@(Model.NivelEducativoNombre ?? "N/A")</dd>
+                        
+                        <dt class="col-5">Experiencia:</dt>
+                        <dd class="col-7">@(Model.AnosExperiencia.HasValue ? $"{Model.AnosExperiencia} años" : "N/A")</dd>
+                        
+                        <dt class="col-5">Nivel Inglés:</dt>
+                        <dd class="col-7">
+                            @{
+                                var badgeClass = Model.NivelIngles switch
+                                {
+                                    1 => "bg-secondary",
+                                    2 => "bg-info",
+                                    3 => "bg-primary",
+                                    4 => "bg-success",
+                                    _ => "bg-light text-dark"
+                                };
+                            }
+                            <span class="badge @badgeClass">@Model.NivelInglesDescripcion</span>
+                        </dd>
+                        
+                        @if (!string.IsNullOrEmpty(Model.Keywords))
+                        {
+                            <dt class="col-5">Keywords:</dt>
+                            <dd class="col-7">
+                                @foreach (var kw in Model.Keywords.Split(','))
+                                {
+                                    <span class="badge bg-info me-1">@kw.Trim()</span>
+                                }
+                            </dd>
+                        }
+                    </dl>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Columna derecha: Entrevistas y Experiencias -->
+        <div class="col-md-6">
+            <!-- Entrevistas -->
+            <div class="card mb-3">
+                <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0"><i class="bi bi-calendar-event me-2"></i>Entrevistas</h6>
+                    <button type="button" class="btn btn-sm btn-outline-primary" id="btnAgregarEntrevista">
+                        <i class="bi bi-plus"></i>
+                    </button>
+                </div>
+                <div class="card-body p-0">
+                    @if (!entrevistas.Any())
+                    {
+                        <div class="text-center py-3 text-muted">
+                            <small>No hay entrevistas registradas</small>
+                        </div>
+                    }
+                    else
+                    {
+                        <ul class="list-group list-group-flush">
+                            @foreach (var entrevista in entrevistas)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <strong>@entrevista.FechaEntrevista.ToString("dd/MM/yyyy")</strong>
+                                        @if (!string.IsNullOrEmpty(entrevista.Observaciones))
+                                        {
+                                            <br /><small class="text-muted">@entrevista.Observaciones</small>
+                                        }
+                                    </div>
+                                    <button type="button" class="btn btn-sm btn-outline-danger btn-eliminar-entrevista" 
+                                            data-id="@entrevista.Id" title="Eliminar">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </li>
+                            }
+                        </ul>
+                    }
+                </div>
+            </div>
+            
+            <!-- Experiencias Laborales -->
+            <div class="card">
+                <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0"><i class="bi bi-briefcase me-2"></i>Experiencia Laboral</h6>
+                    <button type="button" class="btn btn-sm btn-outline-primary" id="btnAgregarExperiencia">
+                        <i class="bi bi-plus"></i>
+                    </button>
+                </div>
+                <div class="card-body p-0">
+                    @if (!experiencias.Any())
+                    {
+                        <div class="text-center py-3 text-muted">
+                            <small>No hay experiencias registradas</small>
+                        </div>
+                    }
+                    else
+                    {
+                        <ul class="list-group list-group-flush">
+                            @foreach (var exp in experiencias)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>@exp.Empresa</strong>
+                                        <br /><small class="text-muted">@exp.DuracionAnos años</small>
+                                    </div>
+                                    <button type="button" class="btn btn-sm btn-outline-danger btn-eliminar-experiencia" 
+                                            data-id="@exp.Id" title="Eliminar">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </li>
+                            }
+                        </ul>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Form ocultos para agregar -->
+    <div id="formEntrevistaContainer" class="mt-3" style="display: none;">
+        <div class="card border-primary">
+            <div class="card-header bg-primary text-white">
+                <h6 class="mb-0">Agregar Entrevista</h6>
+            </div>
+            <div class="card-body">
+                <form id="formAgregarEntrevista">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="HojaVidaId" value="@Model.Id" />
+                    <div class="row g-2">
+                        <div class="col-md-4">
+                            <label class="form-label">Fecha</label>
+                            <input type="date" name="FechaEntrevista" class="form-control" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Observaciones</label>
+                            <input type="text" name="Observaciones" class="form-control" />
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="bi bi-check"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div id="formExperienciaContainer" class="mt-3" style="display: none;">
+        <div class="card border-primary">
+            <div class="card-header bg-primary text-white">
+                <h6 class="mb-0">Agregar Experiencia Laboral</h6>
+            </div>
+            <div class="card-body">
+                <form id="formAgregarExperiencia">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="HojaVidaId" value="@Model.Id" />
+                    <div class="row g-2">
+                        <div class="col-md-6">
+                            <label class="form-label">Empresa</label>
+                            <input type="text" name="Empresa" class="form-control" required />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Duración (años)</label>
+                            <input type="number" name="DuracionAnos" step="0.5" min="0.1" max="50" class="form-control" required />
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="bi bi-check"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        <i class="bi bi-x-lg me-1"></i>Cerrar
+    </button>
+    <button type="button" class="btn btn-warning btn-editar-desde-detalles" data-id="@Model.Id">
+        <i class="bi bi-pencil me-1"></i>Editar
+    </button>
+</div>
+
+<script>
+    $(function() {
+        var hojaVidaId = @Model.Id;
+        
+        // Toggle forms
+        $('#btnAgregarEntrevista').click(function() {
+            $('#formEntrevistaContainer').toggle();
+            $('#formExperienciaContainer').hide();
+        });
+        
+        $('#btnAgregarExperiencia').click(function() {
+            $('#formExperienciaContainer').toggle();
+            $('#formEntrevistaContainer').hide();
+        });
+        
+        // Agregar entrevista
+        $('#formAgregarEntrevista').submit(function(e) {
+            e.preventDefault();
+            $.ajax({
+                url: '@Url.Action("AgregarEntrevista", "HojasVida", new { area = "TH" })',
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function(response) {
+                    if (response.success) {
+                        toastr.success(response.message);
+                        recargarDetalles(hojaVidaId);
+                    } else {
+                        toastr.error(response.message);
+                    }
+                }
+            });
+        });
+        
+        // Agregar experiencia
+        $('#formAgregarExperiencia').submit(function(e) {
+            e.preventDefault();
+            $.ajax({
+                url: '@Url.Action("AgregarExperienciaLaboral", "HojasVida", new { area = "TH" })',
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function(response) {
+                    if (response.success) {
+                        toastr.success(response.message);
+                        recargarDetalles(hojaVidaId);
+                    } else {
+                        toastr.error(response.message);
+                    }
+                }
+            });
+        });
+        
+        // Eliminar entrevista
+        $('.btn-eliminar-entrevista').click(function() {
+            var id = $(this).data('id');
+            if (confirm('¿Está seguro de eliminar esta entrevista?')) {
+                $.ajax({
+                    url: '@Url.Action("EliminarEntrevista", "HojasVida", new { area = "TH" })',
+                    type: 'POST',
+                    data: { id: id, __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val() },
+                    success: function(response) {
+                        if (response.success) {
+                            toastr.success(response.message);
+                            recargarDetalles(hojaVidaId);
+                        } else {
+                            toastr.error(response.message);
+                        }
+                    }
+                });
+            }
+        });
+        
+        // Eliminar experiencia
+        $('.btn-eliminar-experiencia').click(function() {
+            var id = $(this).data('id');
+            if (confirm('¿Está seguro de eliminar esta experiencia laboral?')) {
+                $.ajax({
+                    url: '@Url.Action("EliminarExperienciaLaboral", "HojasVida", new { area = "TH" })',
+                    type: 'POST',
+                    data: { id: id, __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val() },
+                    success: function(response) {
+                        if (response.success) {
+                            toastr.success(response.message);
+                            recargarDetalles(hojaVidaId);
+                        } else {
+                            toastr.error(response.message);
+                        }
+                    }
+                });
+            }
+        });
+        
+        // Editar desde detalles
+        $('.btn-editar-desde-detalles').click(function() {
+            $('#modalDetalles').modal('hide');
+            var id = $(this).data('id');
+            $.get('@Url.Action("Edit", "HojasVida", new { area = "TH" })/' + id, function(html) {
+                $('#modalContent').html(html);
+                $('#modalHojaVida').modal('show');
+            });
+        });
+    });
+    
+    function recargarDetalles(id) {
+        $.get('@Url.Action("Details", "HojasVida", new { area = "TH" })/' + id, function(html) {
+            $('#modalDetallesContent').html(html);
+        });
+    }
+</script>

@@ -1,0 +1,125 @@
+@using MatrixNext.Data.Modules.TH.HojasVida.Models
+@model HojaVidaCreateEditDto
+
+<div class="modal-header bg-primary text-white">
+    <h5 class="modal-title">
+        <i class="bi bi-file-person me-2"></i>@(Model.EsActualizacion ? "Editar" : "Nueva") Hoja de Vida
+    </h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+</div>
+
+<form id="formHojaVida" asp-action="Save" asp-controller="HojasVida" asp-area="TH" method="post">
+    <div class="modal-body">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="EsActualizacion" />
+        @if (Model.Id.HasValue)
+        {
+            <input type="hidden" asp-for="Id" />
+        }
+
+        <div class="row g-3">
+            <!-- Tipo Identificación -->
+            <div class="col-md-4">
+                <label asp-for="TipoIdentificacion" class="form-label">Tipo Identificación <span class="text-danger">*</span></label>
+                <select asp-for="TipoIdentificacion" asp-items="@ViewBag.TiposIdentificacion" class="form-select">
+                    <option value="">-- Seleccione --</option>
+                </select>
+                <span asp-validation-for="TipoIdentificacion" class="text-danger"></span>
+            </div>
+
+            <!-- Identificación -->
+            <div class="col-md-4">
+                <label asp-for="Identificacion" class="form-label">Identificación <span class="text-danger">*</span></label>
+                <input asp-for="Identificacion" class="form-control" />
+                <span asp-validation-for="Identificacion" class="text-danger"></span>
+            </div>
+
+            <!-- Edad -->
+            <div class="col-md-4">
+                <label asp-for="Edad" class="form-label">Edad</label>
+                <input asp-for="Edad" type="number" min="18" max="100" class="form-control" />
+                <span asp-validation-for="Edad" class="text-danger"></span>
+            </div>
+
+            <!-- Nombres -->
+            <div class="col-md-6">
+                <label asp-for="Nombres" class="form-label">Nombres <span class="text-danger">*</span></label>
+                <input asp-for="Nombres" class="form-control" />
+                <span asp-validation-for="Nombres" class="text-danger"></span>
+            </div>
+
+            <!-- Apellidos -->
+            <div class="col-md-6">
+                <label asp-for="Apellidos" class="form-label">Apellidos <span class="text-danger">*</span></label>
+                <input asp-for="Apellidos" class="form-control" />
+                <span asp-validation-for="Apellidos" class="text-danger"></span>
+            </div>
+
+            <!-- Profesión -->
+            <div class="col-md-6">
+                <label asp-for="Profesion" class="form-label">Profesión</label>
+                <select asp-for="Profesion" asp-items="@ViewBag.Profesiones" class="form-select">
+                    <option value="">-- Seleccione --</option>
+                </select>
+                <span asp-validation-for="Profesion" class="text-danger"></span>
+            </div>
+
+            <!-- Nivel Educativo -->
+            <div class="col-md-6">
+                <label asp-for="NivelEducativo" class="form-label">Nivel Educativo</label>
+                <select asp-for="NivelEducativo" asp-items="@ViewBag.NivelesEducativos" class="form-select">
+                    <option value="">-- Seleccione --</option>
+                </select>
+                <span asp-validation-for="NivelEducativo" class="text-danger"></span>
+            </div>
+
+            <!-- Años Experiencia -->
+            <div class="col-md-4">
+                <label asp-for="AnosExperiencia" class="form-label">Años de Experiencia</label>
+                <input asp-for="AnosExperiencia" type="number" min="0" max="50" class="form-control" />
+                <span asp-validation-for="AnosExperiencia" class="text-danger"></span>
+            </div>
+
+            <!-- Nivel Inglés -->
+            <div class="col-md-4">
+                <label asp-for="NivelIngles" class="form-label">Nivel de Inglés</label>
+                <select asp-for="NivelIngles" asp-items="@ViewBag.NivelesIngles" class="form-select">
+                    <option value="">-- Seleccione --</option>
+                </select>
+                <span asp-validation-for="NivelIngles" class="text-danger"></span>
+            </div>
+
+            <!-- Ciudad Residencia -->
+            <div class="col-md-4">
+                <label asp-for="CiudadResidencia" class="form-label">Ciudad de Residencia</label>
+                <select asp-for="CiudadResidencia" asp-items="@ViewBag.Ciudades" class="form-select">
+                    <option value="">-- Seleccione --</option>
+                </select>
+                <span asp-validation-for="CiudadResidencia" class="text-danger"></span>
+            </div>
+
+            <!-- Celular -->
+            <div class="col-md-6">
+                <label asp-for="NumeroCelular" class="form-label">Número Celular</label>
+                <input asp-for="NumeroCelular" type="tel" class="form-control" />
+                <span asp-validation-for="NumeroCelular" class="text-danger"></span>
+            </div>
+
+            <!-- Correo -->
+            <div class="col-md-6">
+                <label asp-for="Correo" class="form-label">Correo Electrónico</label>
+                <input asp-for="Correo" type="email" class="form-control" />
+                <span asp-validation-for="Correo" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="bi bi-x-lg me-1"></i>Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-check-lg me-1"></i>Guardar
+        </button>
+    </div>
+</form>

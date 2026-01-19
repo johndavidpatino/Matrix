@@ -7,6 +7,8 @@ using MatrixNext.Data.Modules.TH.Contratistas.Adapters;
 using MatrixNext.Data.Modules.TH.Contratistas.Services;
 using MatrixNext.Data.Modules.TH.Empleados.Adapters;
 using MatrixNext.Data.Modules.TH.Empleados.Services;
+using MatrixNext.Data.Modules.TH.HojasVida.Adapters;
+using MatrixNext.Data.Modules.TH.HojasVida.Services;
 using MatrixNext.Data.Adapters.TH;
 using MatrixNext.Data.Services.TH;
 using MatrixNext.Data.Services.TH.Interfaces;
@@ -61,6 +63,10 @@ namespace MatrixNext.Data.Modules.TH
             // Contratistas services (Sprint Fase 1 TH)
             services.AddScoped<IContratistaAdapter, ContratistaAdapter>();
             services.AddScoped<IContratistaService, ContratistaService>();
+            
+            // HojasVida services (Sprint Fase 1 TH - Reclutamiento)
+            services.AddScoped<IHojaVidaAdapter, HojaVidaAdapter>();
+            services.AddScoped<IHojaVidaService, HojaVidaService>();
             
             return services;
         }

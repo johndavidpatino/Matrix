@@ -1,0 +1,88 @@
+@using MatrixNext.Data.Modules.TH.HojasVida.Models
+@model IEnumerable<HojaVidaDto>
+
+@if (!Model.Any())
+{
+    <div class="text-center py-5 text-muted">
+        <i class="bi bi-inbox display-4 d-block mb-3"></i>
+        <p>No se encontraron hojas de vida con los filtros seleccionados</p>
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover table-striped mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 70px;">ID</th>
+                    <th>Nombre Completo</th>
+                    <th>Identificación</th>
+                    <th>Profesión</th>
+                    <th>Inglés</th>
+                    <th>Experiencia</th>
+                    <th>Ciudad</th>
+                    <th style="width: 100px;" class="text-center">Entrevista</th>
+                    <th style="width: 150px;" class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td><span class="badge bg-secondary">@item.Id</span></td>
+                        <td>
+                            <strong>@item.NombreCompleto</strong>
+                            @if (!string.IsNullOrEmpty(item.Correo))
+                            {
+                                <br /><small class="text-muted">@item.Correo</small>
+                            }
+                        </td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(item.TipoIdentificacionNombre))
+                            {
+                                <small class="text-muted">@item.TipoIdentificacionNombre:</small>
+                            }
+                            @item.Identificacion
+                        </td>
+                        <td>@(item.ProfesionNombre ?? "N/A")</td>
+                        <td>
+                            @{
+                                var badgeClass = item.NivelIngles switch
+                                {
+                                    1 => "bg-secondary",
+                                    2 => "bg-info",
+                                    3 => "bg-primary",
+                                    4 => "bg-success",
+                                    _ => "bg-light text-dark"
+                                };
+                            }
+                            <span class="badge @badgeClass">@item.NivelInglesDescripcion</span>
+                        </td>
+                        <td>@(item.AnosExperiencia.HasValue ? $"{item.AnosExperiencia} años" : "N/A")</td>
+                        <td>@(item.CiudadResidenciaNombre ?? "N/A")</td>
+                        <td class="text-center">
+                            @if (item.TieneEntrevista)
+                            {
+                                <span class="badge bg-success"><i class="bi bi-check-lg"></i> Sí</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark"><i class="bi bi-x-lg"></i> No</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            <div class="btn-group btn-group-sm">
+                                <button type="button" class="btn btn-outline-info btn-ver" data-id="@item.Id" title="Ver detalles">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline-warning btn-editar" data-id="@item.Id" title="Editar">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
