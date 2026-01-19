@@ -1,0 +1,108 @@
+@model MatrixNext.Data.Modules.US.Feedback.Models.FeedbackDto
+
+<div class="modal-header bg-info text-white">
+    <h5 class="modal-title">
+        <i class="fas fa-comment me-2"></i>Detalle de Feedback #@Model.Id
+    </h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+</div>
+
+<div class="modal-body">
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <strong><i class="fas fa-tag me-1"></i>Asunto:</strong>
+            <p class="mb-0">@Model.TipoMensajeNombre</p>
+        </div>
+        <div class="col-md-6">
+            <strong><i class="fas fa-user me-1"></i>Usuario:</strong>
+            <p class="mb-0">@Model.NombreUsuarioEnvia</p>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <strong><i class="fas fa-calendar me-1"></i>Fecha de Registro:</strong>
+            <p class="mb-0">@(Model.FechaEnvio?.ToString("dd/MM/yyyy HH:mm") ?? "-")</p>
+        </div>
+        <div class="col-md-6">
+            <strong><i class="fas fa-info-circle me-1"></i>Estado:</strong>
+            <p class="mb-0">
+                @if (Model.Solucionado == true)
+                {
+                    <span class="badge bg-success"><i class="fas fa-check me-1"></i>Resuelto</span>
+                }
+                else
+                {
+                    <span class="badge bg-warning text-dark"><i class="fas fa-clock me-1"></i>Pendiente</span>
+                }
+            </p>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <strong><i class="fas fa-envelope me-1"></i>Mensaje:</strong>
+        <div class="p-3 bg-light rounded mt-2">
+            @Model.Mensaje
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.Respuesta))
+    {
+        <div class="mb-3">
+            <strong><i class="fas fa-reply me-1"></i>Respuesta:</strong>
+            <div class="p-3 bg-success bg-opacity-10 rounded mt-2">
+                @Model.Respuesta
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <strong><i class="fas fa-user-check me-1"></i>Respondido por:</strong>
+                <p class="mb-0">@(Model.NombreUsuarioResponde ?? "-")</p>
+            </div>
+            <div class="col-md-6">
+                <strong><i class="fas fa-calendar-check me-1"></i>Fecha Respuesta:</strong>
+                <p class="mb-0">@(Model.FechaSolucion?.ToString("dd/MM/yyyy HH:mm") ?? "-")</p>
+            </div>
+        </div>
+    }
+
+    @if (Model.Solucionado != true)
+    {
+        <hr />
+        <h6><i class="fas fa-reply me-1"></i>Responder al Feedback</h6>
+        <form id="formResponder" asp-action="Responder" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="Id" value="@Model.Id" />
+
+            <div class="mb-3">
+                <label for="Respuesta" class="form-label">Respuesta <span class="text-danger">*</span></label>
+                <textarea name="Respuesta" id="Respuesta" class="form-control" rows="4" 
+                          placeholder="Escriba su respuesta..." required></textarea>
+            </div>
+
+            <div class="form-check mb-3">
+                <input type="checkbox" name="Solucionado" value="true" class="form-check-input" id="chkSolucionado" checked>
+                <label class="form-check-label" for="chkSolucionado">Marcar como resuelto</label>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-1"></i>Cancelar
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-paper-plane me-1"></i>Enviar Respuesta
+                </button>
+            </div>
+        </form>
+    }
+</div>
+
+@if (Model.Solucionado == true)
+{
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="fas fa-times me-1"></i>Cerrar
+        </button>
+    </div>
+}

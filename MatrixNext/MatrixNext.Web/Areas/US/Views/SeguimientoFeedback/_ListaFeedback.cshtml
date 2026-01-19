@@ -1,0 +1,63 @@
+@model IEnumerable<MatrixNext.Data.Modules.US.Feedback.Models.FeedbackDto>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        <i class="fas fa-info-circle me-2"></i>No hay registros de feedback para mostrar.
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover table-striped">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 80px">ID</th>
+                    <th>Asunto</th>
+                    <th>Usuario</th>
+                    <th>Mensaje</th>
+                    <th style="width: 120px">Fecha</th>
+                    <th style="width: 100px">Estado</th>
+                    <th style="width: 80px">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.TipoMensajeNombre</td>
+                        <td>@item.NombreUsuarioEnvia</td>
+                        <td>
+                            <span class="d-inline-block text-truncate" style="max-width: 300px;" 
+                                  title="@item.Mensaje">
+                                @item.Mensaje
+                            </span>
+                        </td>
+                        <td>@(item.FechaEnvio?.ToString("dd/MM/yyyy HH:mm") ?? "-")</td>
+                        <td>
+                            @if (item.Solucionado == true)
+                            {
+                                <span class="badge bg-success">
+                                    <i class="fas fa-check me-1"></i>Resuelto
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fas fa-clock me-1"></i>Pendiente
+                                </span>
+                            }
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-info" 
+                                    onclick="verDetalle(@item.Id)" title="Ver detalle">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

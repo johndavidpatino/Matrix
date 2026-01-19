@@ -1,0 +1,77 @@
+@model MatrixNext.Data.Modules.US.Feedback.Models.FeedbackCreateDto
+@{
+    ViewData["Title"] = "Enviar Feedback";
+}
+
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-comment-dots me-2"></i>Enviar Feedback
+                    </h5>
+                </div>
+                <div class="card-body">
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-circle me-2"></i>@TempData["ErrorMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <form asp-action="Enviar" method="post" id="feedbackForm">
+                        <div class="mb-3">
+                            <label asp-for="IdAsunto" class="form-label">
+                                <i class="fas fa-tag me-1"></i>Asunto <span class="text-danger">*</span>
+                            </label>
+                            <select asp-for="IdAsunto" asp-items="@ViewBag.Asuntos" class="form-select">
+                                <option value="">-- Seleccione un asunto --</option>
+                            </select>
+                            <span asp-validation-for="IdAsunto" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Mensaje" class="form-label">
+                                <i class="fas fa-envelope me-1"></i>Mensaje <span class="text-danger">*</span>
+                            </label>
+                            <textarea asp-for="Mensaje" class="form-control" rows="6" 
+                                      placeholder="Escriba su mensaje aquí..."></textarea>
+                            <span asp-validation-for="Mensaje" class="text-danger"></span>
+                            <small class="text-muted">Máximo 2000 caracteres</small>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="@Url.Action("Index", "Home", new { area = "" })" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-1"></i>Volver
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane me-1"></i>Enviar Feedback
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            // Contador de caracteres para el mensaje
+            $('#Mensaje').on('input', function () {
+                var maxLength = 2000;
+                var currentLength = $(this).val().length;
+                var remaining = maxLength - currentLength;
+                
+                if (remaining < 0) {
+                    $(this).val($(this).val().substring(0, maxLength));
+                    remaining = 0;
+                }
+            });
+        });
+    </script>
+}

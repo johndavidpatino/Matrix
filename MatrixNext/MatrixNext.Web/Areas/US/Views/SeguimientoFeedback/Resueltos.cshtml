@@ -1,0 +1,46 @@
+@model IEnumerable<MatrixNext.Data.Modules.US.Feedback.Models.FeedbackDto>
+@{
+    ViewData["Title"] = "Feedback Resuelto";
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-check-circle me-2"></i>Feedback Resuelto
+                    </h5>
+                    <a href="@Url.Action("Index")" class="btn btn-outline-light btn-sm">
+                        <i class="fas fa-clock me-1"></i>Ver Pendientes
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div id="listaFeedback">
+                        <partial name="_ListaFeedback" model="Model" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para detalle -->
+<div class="modal fade" id="detalleModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" id="detalleModalContent">
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function verDetalle(id) {
+            $.get('@Url.Action("Detalle")/' + id, function (html) {
+                $('#detalleModalContent').html(html);
+                var modal = new bootstrap.Modal(document.getElementById('detalleModal'));
+                modal.show();
+            });
+        }
+    </script>
+}
