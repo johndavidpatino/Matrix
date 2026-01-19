@@ -2,6 +2,8 @@ using MatrixNext.Data.Modules.US.Feedback.Adapters;
 using MatrixNext.Data.Modules.US.Feedback.Services;
 using MatrixNext.Data.Modules.US.GruposPermisos.Adapters;
 using MatrixNext.Data.Modules.US.GruposPermisos.Services;
+using MatrixNext.Data.Modules.US.RolesPermisos.Adapters;
+using MatrixNext.Data.Modules.US.RolesPermisos.Services;
 using MatrixNext.Data.Modules.US.TipoGrupoUnidad.Adapters;
 using MatrixNext.Data.Modules.US.TipoGrupoUnidad.Services;
 using MatrixNext.Data.Modules.US.Unidades.Adapters;
@@ -52,6 +54,11 @@ namespace MatrixNext.Data.Modules.US
             services.AddScoped<IFeedbackAdapter>(sp =>
                 new FeedbackAdapter(connection, sp.GetRequiredService<ILogger<FeedbackAdapter>>()));
             services.AddScoped<IFeedbackService, FeedbackService>();
+
+            // RolesPermisos
+            services.AddScoped<IRolPermisoAdapter>(sp =>
+                new RolPermisoAdapter(connection, sp.GetRequiredService<ILogger<RolPermisoAdapter>>()));
+            services.AddScoped<IRolPermisoService, RolPermisoService>();
 
             return services;
         }

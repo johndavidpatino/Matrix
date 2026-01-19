@@ -1,0 +1,30 @@
+@model MatrixNext.Data.Modules.US.RolesPermisos.Models.RolPermisoDto
+
+<div class="modal-header bg-danger text-white">
+    <h5 class="modal-title">
+        <i class="fas fa-exclamation-triangle me-2"></i>Confirmar Eliminación
+    </h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+</div>
+
+<form id="formEliminar" asp-action="EliminarConfirmado" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="permisoId" value="@Model.PermisoId" />
+    <input type="hidden" name="rolId" value="@Model.RolId" />
+
+    <div class="modal-body">
+        <p>¿Está seguro que desea eliminar la asignación del rol <strong>@Model.NombreRol</strong> de este permiso?</p>
+        <p class="text-muted mb-0">
+            <small>Esta acción no se puede deshacer.</small>
+        </p>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="fas fa-times me-1"></i>Cancelar
+        </button>
+        <button type="submit" class="btn btn-danger">
+            <i class="fas fa-trash me-1"></i>Eliminar
+        </button>
+    </div>
+</form>
