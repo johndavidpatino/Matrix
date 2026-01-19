@@ -152,6 +152,16 @@ builder.Services.AddScoped<MatrixNext.Data.Services.INV.IStockConsumiblesService
 builder.Services.AddScoped<MatrixNext.Data.Services.INV.ILegalizacionesService, MatrixNext.Data.Services.INV.LegalizacionesService>();
 builder.Services.AddScoped<MatrixNext.Data.Services.INV.IMantenimientoEquiposService, MatrixNext.Data.Services.INV.MantenimientoEquiposService>();
 
+// ===== SPRINT 21: INV Reportes + RP Indicadores/AvanceCampo =====
+// INV Reportes (Legalizaciones, Remanente)
+builder.Services.AddScoped<MatrixNext.Data.Services.INV.IReportesInvService, MatrixNext.Data.Services.INV.ReportesInvService>();
+
+// RP Indicadores de Calidad (Esquema Análisis, Diligenciamiento Brief, Propuestas 48h)
+builder.Services.AddScoped<MatrixNext.Data.Services.RP.IIndicadoresCalidadService, MatrixNext.Data.Services.RP.IndicadoresCalidadService>();
+
+// RP Avance de Campo (General, Ciudad, Áreas, Remanentes, Matriz Cumplimiento)
+builder.Services.AddScoped<MatrixNext.Data.Services.RP.IAvanceCampoService, MatrixNext.Data.Services.RP.AvanceCampoService>();
+
 // Authorization Service (Sprint 10-11)
 builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
 

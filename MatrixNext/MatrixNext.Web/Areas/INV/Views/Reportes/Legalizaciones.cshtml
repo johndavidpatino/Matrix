@@ -1,0 +1,245 @@
+@{
+    ViewData["Title"] = "Reporte de Legalizaciones";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var bus = ViewBag.BUs as IEnumerable<(int Id, string Nombre)> ?? Enumerable.Empty<(int, string)>();
+    var tiposArticulo = ViewBag.TiposArticulo as IEnumerable<(long Id, string Nombre)> ?? Enumerable.Empty<(long, string)>();
+}
+
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col-12">
+            <h3><i class="fas fa-file-invoice"></i> Reporte de Legalizaciones</h3>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-area="INV" asp-controller="RegistroArticulos" asp-action="Index">Inventario</a></li>
+                    <li class="breadcrumb-item active">Reporte Legalizaciones</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="card mb-3">
+        <div class="card-header bg-primary text-white">
+            <i class="fas fa-filter"></i> Filtros de Búsqueda
+        </div>
+        <div class="card-body">
+            <form id="formFiltros">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="fechaInicio">Fecha Inicio</label>
+                            <input type="date" class="form-control" id="fechaInicio" name="fechaInicio">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="fechaFin">Fecha Fin</label>
+                            <input type="date" class="form-control" id="fechaFin" name="fechaFin">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="articulo">Tipo Artículo</label>
+                            <select class="form-control" id="articulo" name="articulo">
+                                <option value="">-- Todos --</option>
+                                @foreach (var tipo in tiposArticulo)
+                                {
+                                    <option value="@tipo.Id">@tipo.Nombre</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="bu">Business Unit</label>
+                            <select class="form-control" id="bu" name="bu">
+                                <option value="">-- Todos --</option>
+                                @foreach (var b in bus)
+                                {
+                                    <option value="@b.Id">@b.Nombre</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="jobBook">JobBook Código</label>
+                            <input type="text" class="form-control" id="jobBook" name="jobBook" placeholder="Ej: JBI001">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="todosCampos">Búsqueda General</label>
+                            <input type="text" class="form-control" id="todosCampos" name="todosCampos" placeholder="Buscar en todos los campos">
+                        </div>
+                    </div>
+                    <div class="col-md-6 d-flex align-items-end">
+                        <div class="form-group mb-0">
+                            <button type="button" class="btn btn-primary" id="btnBuscar">
+                                <i class="fas fa-search"></i> Buscar
+                            </button>
+                            <button type="button" class="btn btn-success" id="btnExportar" disabled>
+                                <i class="fas fa-file-excel"></i> Exportar Excel
+                            </button>
+                            <button type="button" class="btn btn-secondary" id="btnLimpiar">
+                                <i class="fas fa-eraser"></i> Limpiar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Resultados -->
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-table"></i> Resultados
+            <span id="totalRegistros" class="badge bg-info float-end"></span>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="tblLegalizaciones" class="table table-striped table-bordered table-sm">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Artículo</th>
+                            <th>Producto</th>
+                            <th>Fecha Entrega</th>
+                            <th>Usuario</th>
+                            <th>Cédula</th>
+                            <th>JobBook</th>
+                            <th>BU</th>
+                            <th>Valor</th>
+                            <th>Legalizado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyLegalizaciones">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let datosActuales = [];
+
+        $(document).ready(function() {
+            // Buscar
+            $('#btnBuscar').click(function() {
+                buscarLegalizaciones();
+            });
+
+            // Exportar
+            $('#btnExportar').click(function() {
+                exportarExcel();
+            });
+
+            // Limpiar
+            $('#btnLimpiar').click(function() {
+                $('#formFiltros')[0].reset();
+                $('#tbodyLegalizaciones').html('');
+                $('#totalRegistros').text('');
+                $('#btnExportar').prop('disabled', true);
+                datosActuales = [];
+            });
+        });
+
+        function buscarLegalizaciones() {
+            const filtros = {
+                fechaInicio: $('#fechaInicio').val() || null,
+                fechaFin: $('#fechaFin').val() || null,
+                articulo: $('#articulo').val() || null,
+                bu: $('#bu').val() || null,
+                jobBookCodigo: $('#jobBook').val() || null,
+                todosCampos: $('#todosCampos').val() || null
+            };
+
+            $('#btnBuscar').prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Buscando...');
+
+            $.ajax({
+                url: '@Url.Action("BuscarLegalizaciones", "Reportes", new { area = "INV" })',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(filtros),
+                success: function(response) {
+                    if (response.success) {
+                        datosActuales = response.data;
+                        renderizarTabla(response.data);
+                        $('#totalRegistros').text(`${response.data.length} registros`);
+                        $('#btnExportar').prop('disabled', response.data.length === 0);
+                    } else {
+                        toastr.error(response.message || 'Error al buscar');
+                    }
+                },
+                error: function() {
+                    toastr.error('Error de conexión');
+                },
+                complete: function() {
+                    $('#btnBuscar').prop('disabled', false).html('<i class="fas fa-search"></i> Buscar');
+                }
+            });
+        }
+
+        function renderizarTabla(datos) {
+            let html = '';
+            datos.forEach(item => {
+                html += `<tr>
+                    <td>${item.id}</td>
+                    <td>${item.articulo || ''}</td>
+                    <td>${item.producto || ''}</td>
+                    <td>${item.fechaEntrega ? new Date(item.fechaEntrega).toLocaleDateString('es-CO') : ''}</td>
+                    <td>${item.usuarioAsignado || ''}</td>
+                    <td>${item.cedula || ''}</td>
+                    <td>${item.jobBookCodigo || ''}</td>
+                    <td>${item.bu || ''}</td>
+                    <td>${item.valorTotal ? item.valorTotal.toLocaleString('es-CO') : ''}</td>
+                    <td><span class="badge ${item.legalizado ? 'bg-success' : 'bg-warning'}">${item.legalizado ? 'Sí' : 'No'}</span></td>
+                </tr>`;
+            });
+            $('#tbodyLegalizaciones').html(html || '<tr><td colspan="10" class="text-center">No se encontraron registros</td></tr>');
+        }
+
+        function exportarExcel() {
+            const filtros = {
+                fechaInicio: $('#fechaInicio').val() || null,
+                fechaFin: $('#fechaFin').val() || null,
+                articulo: $('#articulo').val() || null,
+                bu: $('#bu').val() || null,
+                jobBookCodigo: $('#jobBook').val() || null,
+                todosCampos: $('#todosCampos').val() || null
+            };
+
+            $('#btnExportar').prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Exportando...');
+
+            $.ajax({
+                url: '@Url.Action("ExportarLegalizaciones", "Reportes", new { area = "INV" })',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(filtros),
+                xhrFields: { responseType: 'blob' },
+                success: function(blob) {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `ReporteLegalizaciones_${new Date().toISOString().slice(0,10)}.xlsx`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    toastr.success('Archivo exportado correctamente');
+                },
+                error: function() {
+                    toastr.error('Error al exportar');
+                },
+                complete: function() {
+                    $('#btnExportar').prop('disabled', false).html('<i class="fas fa-file-excel"></i> Exportar Excel');
+                }
+            });
+        }
+    </script>
+}

@@ -1,0 +1,394 @@
+@model MatrixNext.Data.DTOs.RP.IndicadoresCalidadViewModel
+@{
+    ViewData["Title"] = "Indicadores de Calidad";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col-12">
+            <h3><i class="fas fa-chart-line"></i> Indicadores de Calidad</h3>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-area="RP" asp-controller="Reportes" asp-action="Index">Reportes</a></li>
+                    <li class="breadcrumb-item active">Indicadores de Calidad</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="card mb-3">
+        <div class="card-header bg-primary text-white">
+            <i class="fas fa-filter"></i> Filtros
+        </div>
+        <div class="card-body">
+            <form id="formFiltros">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="tipoReporte">Tipo de Reporte</label>
+                            <select class="form-control" id="tipoReporte" name="tipoReporte">
+                                <option value="1" selected="@(Model.TipoReporteSeleccionado == 1)">Esquema de Análisis</option>
+                                <option value="2" selected="@(Model.TipoReporteSeleccionado == 2)">Diligenciamiento Brief</option>
+                                <option value="3" selected="@(Model.TipoReporteSeleccionado == 3)">Envío Propuestas 48 Horas</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="año">Año</label>
+                            <select class="form-control" id="año" name="año">
+                                @foreach (var a in Model.AñosDisponibles)
+                                {
+                                    <option value="@a" selected="@(a == Model.AñoSeleccionado)">@a</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="mes">Mes</label>
+                            <select class="form-control" id="mes" name="mes">
+                                <option value="">-- Todos --</option>
+                                @for (int i = 1; i <= 12; i++)
+                                {
+                                    <option value="@i" selected="@(i == Model.MesSeleccionado)">@System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i)</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2" id="divEstado">
+                        <div class="form-group">
+                            <label for="estado">Estado</label>
+                            <select class="form-control" id="estado" name="estado">
+                                <option value="">-- Todos --</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end">
+                        <div class="form-group mb-0">
+                            <button type="button" class="btn btn-primary" id="btnActualizar">
+                                <i class="fas fa-sync"></i> Actualizar
+                            </button>
+                            <button type="button" class="btn btn-success" id="btnExportar">
+                                <i class="fas fa-file-excel"></i> Exportar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="usuario">Filtrar por Usuario</label>
+                            <select class="form-control" id="usuario" name="usuario">
+                                <option value="">-- Todos --</option>
+                                @foreach (var u in Model.UsuariosDisponibles)
+                                {
+                                    <option value="@u">@u</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Resumen -->
+    <div class="card mb-3">
+        <div class="card-header bg-info text-white">
+            <i class="fas fa-table"></i> Resumen por Gerente
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="tblResumen" class="table table-striped table-bordered table-sm">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Gerente</th>
+                            <th>Año</th>
+                            <th>Mes</th>
+                            <th>Base</th>
+                            <th>Cumplimiento</th>
+                            <th>Porcentaje</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyResumen">
+                        @if (Model.TipoReporteSeleccionado == 1 && Model.ResumenEsquema.Any())
+                        {
+                            foreach (var item in Model.ResumenEsquema)
+                            {
+                                <tr>
+                                    <td>@item.Gerente</td>
+                                    <td>@item.Año</td>
+                                    <td>@item.Mes</td>
+                                    <td>@item.Base</td>
+                                    <td>@item.Cumplimiento</td>
+                                    <td><span class="badge @(GetBadgeClass(item.Porcentaje))">@item.Porcentaje</span></td>
+                                </tr>
+                            }
+                        }
+                        else if (Model.TipoReporteSeleccionado == 2 && Model.ResumenBrief.Any())
+                        {
+                            foreach (var item in Model.ResumenBrief)
+                            {
+                                <tr>
+                                    <td>@item.Gerente</td>
+                                    <td>@item.Año</td>
+                                    <td>@item.Mes</td>
+                                    <td>@item.Base</td>
+                                    <td>-</td>
+                                    <td><span class="badge @(GetBadgeClass(item.Porcentaje))">@item.Porcentaje</span></td>
+                                </tr>
+                            }
+                        }
+                        else if (Model.TipoReporteSeleccionado == 3 && Model.ResumenPropuestas.Any())
+                        {
+                            foreach (var item in Model.ResumenPropuestas)
+                            {
+                                <tr>
+                                    <td>@item.Gerente</td>
+                                    <td>@item.Año</td>
+                                    <td>@item.Mes</td>
+                                    <td>@item.Base</td>
+                                    <td>@item.Cumplen</td>
+                                    <td><span class="badge @(GetBadgeClass(item.Porcentaje))">@item.Porcentaje</span></td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detalle -->
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-list"></i> Detalle
+            <span id="totalRegistros" class="badge bg-secondary float-end"></span>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="tblDetalle" class="table table-striped table-bordered table-sm">
+                    <thead class="table-dark">
+                        <tr id="headerDetalle">
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyDetalle">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+    string GetBadgeClass(string? porcentaje)
+    {
+        if (string.IsNullOrEmpty(porcentaje)) return "bg-secondary";
+        var valor = double.TryParse(porcentaje.Replace("%", "").Replace(",", "."), out var v) ? v : 0;
+        if (valor >= 80) return "bg-success";
+        if (valor >= 50) return "bg-warning text-dark";
+        return "bg-danger";
+    }
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            actualizarHeaderDetalle();
+
+            $('#tipoReporte').change(function() {
+                actualizarHeaderDetalle();
+                if ($(this).val() == '2') {
+                    $('#divEstado').hide();
+                } else {
+                    $('#divEstado').show();
+                }
+            });
+
+            $('#btnActualizar').click(function() {
+                actualizarDatos();
+            });
+
+            $('#btnExportar').click(function() {
+                exportarExcel();
+            });
+
+            $('#usuario').change(function() {
+                actualizarDatos();
+            });
+        });
+
+        function actualizarHeaderDetalle() {
+            const tipo = $('#tipoReporte').val();
+            let headers = '';
+            switch(tipo) {
+                case '1':
+                    headers = '<th>IdPDC</th><th>Gerente</th><th>Mes</th><th>Año</th><th>Cliente</th><th>Tiene Esquema</th><th>Fecha Creación</th><th>Fecha Esquema</th>';
+                    break;
+                case '2':
+                    headers = '<th>IdBrief</th><th>Usuario</th><th>Año</th><th>Mes</th><th>% Diligenciamiento</th><th>Fecha Creación</th>';
+                    break;
+                case '3':
+                    headers = '<th>IdPropuesta</th><th>Gerente</th><th>Mes</th><th>Año</th><th>Cliente</th><th>Fecha Brief</th><th>Fecha Propuesta</th><th>Horas</th><th>Cumple 48h</th>';
+                    break;
+            }
+            $('#headerDetalle').html(headers);
+        }
+
+        function actualizarDatos() {
+            const filtros = {
+                tipoReporte: parseInt($('#tipoReporte').val()),
+                año: parseInt($('#año').val()),
+                mes: $('#mes').val() ? parseInt($('#mes').val()) : null,
+                estado: $('#estado').val() ? parseInt($('#estado').val()) : null,
+                usuario: $('#usuario').val() || null
+            };
+
+            $('#btnActualizar').prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Actualizando...');
+
+            $.ajax({
+                url: '@Url.Action("Actualizar", "Indicadores", new { area = "RP" })',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(filtros),
+                success: function(response) {
+                    if (response.success) {
+                        renderizarResumen(response.resumen, filtros.tipoReporte);
+                        renderizarDetalle(response.detalle, filtros.tipoReporte);
+                        actualizarDropdownUsuarios(response.usuarios);
+                    } else {
+                        toastr.error(response.message || 'Error al actualizar');
+                    }
+                },
+                error: function() {
+                    toastr.error('Error de conexión');
+                },
+                complete: function() {
+                    $('#btnActualizar').prop('disabled', false).html('<i class="fas fa-sync"></i> Actualizar');
+                }
+            });
+        }
+
+        function renderizarResumen(datos, tipo) {
+            let html = '';
+            datos.forEach(item => {
+                const porcentaje = item.porcentaje || '0%';
+                const badgeClass = getBadgeClass(porcentaje);
+                html += `<tr>
+                    <td>${item.gerente || ''}</td>
+                    <td>${item.año || ''}</td>
+                    <td>${item.mes || ''}</td>
+                    <td>${item.base || 0}</td>
+                    <td>${tipo == 2 ? '-' : (item.cumplimiento || item.cumplen || 0)}</td>
+                    <td><span class="badge ${badgeClass}">${porcentaje}</span></td>
+                </tr>`;
+            });
+            $('#tbodyResumen').html(html || '<tr><td colspan="6" class="text-center">Sin datos</td></tr>');
+        }
+
+        function renderizarDetalle(datos, tipo) {
+            let html = '';
+            datos.forEach(item => {
+                switch(tipo) {
+                    case 1:
+                        html += `<tr>
+                            <td>${item.idPDC || ''}</td>
+                            <td>${item.gerenteCuentas || ''}</td>
+                            <td>${item.mesPDC || ''}</td>
+                            <td>${item.añoPDC || ''}</td>
+                            <td>${item.cliente || ''}</td>
+                            <td><span class="badge ${item.tieneEsquemaAnalisis == 'Sí' ? 'bg-success' : 'bg-danger'}">${item.tieneEsquemaAnalisis || ''}</span></td>
+                            <td>${formatDate(item.fechaCreacionPDC)}</td>
+                            <td>${formatDate(item.fechaEsquemaAnalisis)}</td>
+                        </tr>`;
+                        break;
+                    case 2:
+                        html += `<tr>
+                            <td>${item.idBrief || ''}</td>
+                            <td>${item.usuario || ''}</td>
+                            <td>${item.año || ''}</td>
+                            <td>${item.mes || ''}</td>
+                            <td>${item.porcentajeDiligenciamiento || ''}</td>
+                            <td>${formatDate(item.fechaCreacionBrief)}</td>
+                        </tr>`;
+                        break;
+                    case 3:
+                        html += `<tr>
+                            <td>${item.idPropuesta || ''}</td>
+                            <td>${item.gerenteCuentas || ''}</td>
+                            <td>${item.mesCreacionBrief || ''}</td>
+                            <td>${item.anoCreacionBrief || ''}</td>
+                            <td>${item.cliente || ''}</td>
+                            <td>${formatDate(item.fechaCreacionBrief)}</td>
+                            <td>${formatDate(item.fechaEnvioPropuesta)}</td>
+                            <td>${item.horasTranscurridas || ''}</td>
+                            <td><span class="badge ${item.cumpleEnvio48Horas == 'Sí' ? 'bg-success' : 'bg-danger'}">${item.cumpleEnvio48Horas || ''}</span></td>
+                        </tr>`;
+                        break;
+                }
+            });
+            $('#tbodyDetalle').html(html || '<tr><td colspan="9" class="text-center">Sin datos</td></tr>');
+            $('#totalRegistros').text(`${datos.length} registros`);
+        }
+
+        function actualizarDropdownUsuarios(usuarios) {
+            const valorActual = $('#usuario').val();
+            let html = '<option value="">-- Todos --</option>';
+            usuarios.forEach(u => {
+                html += `<option value="${u}" ${u == valorActual ? 'selected' : ''}>${u}</option>`;
+            });
+            $('#usuario').html(html);
+        }
+
+        function getBadgeClass(porcentaje) {
+            const valor = parseFloat(porcentaje.replace('%', '').replace(',', '.')) || 0;
+            if (valor >= 80) return 'bg-success';
+            if (valor >= 50) return 'bg-warning text-dark';
+            return 'bg-danger';
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return '';
+            return new Date(dateStr).toLocaleDateString('es-CO');
+        }
+
+        function exportarExcel() {
+            const filtros = {
+                tipoReporte: parseInt($('#tipoReporte').val()),
+                año: parseInt($('#año').val()),
+                mes: $('#mes').val() ? parseInt($('#mes').val()) : null,
+                estado: $('#estado').val() ? parseInt($('#estado').val()) : null,
+                usuario: $('#usuario').val() || null
+            };
+
+            $('#btnExportar').prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Exportando...');
+
+            $.ajax({
+                url: '@Url.Action("Exportar", "Indicadores", new { area = "RP" })',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(filtros),
+                xhrFields: { responseType: 'blob' },
+                success: function(blob) {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `Indicadores_${new Date().toISOString().slice(0,10)}.xlsx`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    toastr.success('Archivo exportado correctamente');
+                },
+                error: function() {
+                    toastr.error('Error al exportar');
+                },
+                complete: function() {
+                    $('#btnExportar').prop('disabled', false).html('<i class="fas fa-file-excel"></i> Exportar');
+                }
+            });
+        }
+    </script>
+}

@@ -1,0 +1,475 @@
+@model MatrixNext.Data.DTOs.RP.AvanceCampoViewModel
+@{
+    ViewData["Title"] = "Avance de Campo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col-12">
+            <h3><i class="fas fa-chart-bar"></i> Avance de Campo</h3>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-area="RP" asp-controller="Reportes" asp-action="Index">Reportes</a></li>
+                    <li class="breadcrumb-item active">Avance de Campo</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="card mb-3">
+        <div class="card-header bg-primary text-white">
+            <i class="fas fa-filter"></i> Filtros
+        </div>
+        <div class="card-body">
+            <form id="formFiltros">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="idTrabajo">Trabajo</label>
+                            <select class="form-control" id="idTrabajo" name="idTrabajo">
+                                <option value="">-- Seleccione un trabajo --</option>
+                                @foreach (var t in Model.TrabajosDisponibles)
+                                {
+                                    <option value="@t.Key" selected="@(t.Key == Model.IdTrabajoSeleccionado)">@t.Value</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end">
+                        <div class="form-group mb-0">
+                            <button type="button" class="btn btn-primary" id="btnActualizar">
+                                <i class="fas fa-sync"></i> Actualizar
+                            </button>
+                            <button type="button" class="btn btn-success" id="btnExportar">
+                                <i class="fas fa-file-excel"></i> Exportar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Resumen General -->
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body text-center">
+                    <h5>Muestra Total</h5>
+                    <h2 id="muestraTotal">@Model.AvanceGeneral.FirstOrDefault()?.MuestraTotal.ToString("N0")</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body text-center">
+                    <h5>Encuestas Realizadas</h5>
+                    <h2 id="encuestasRealizadas">@Model.AvanceGeneral.FirstOrDefault()?.EncuestasRealizadas.ToString("N0")</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning">
+                <div class="card-body text-center">
+                    <h5>Porcentaje Avance</h5>
+                    <h2 id="porcentajeAvance">@Model.AvanceGeneral.FirstOrDefault()?.PorcentajeAvance.ToString("P1")</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body text-center">
+                    <h5>Remanente</h5>
+                    <h2 id="remanente">@Model.AvanceGeneral.FirstOrDefault()?.Remanente.ToString("N0")</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs de contenido -->
+    <ul class="nav nav-tabs" id="tabsAvance" role="tablist">
+        <li class="nav-item">
+            <button class="nav-link active" id="tab-ciudad" data-bs-toggle="tab" data-bs-target="#pane-ciudad" type="button">
+                <i class="fas fa-map-marker-alt"></i> Por Ciudad
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" id="tab-areas" data-bs-toggle="tab" data-bs-target="#pane-areas" type="button">
+                <i class="fas fa-layer-group"></i> Por Áreas
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" id="tab-remanentes" data-bs-toggle="tab" data-bs-target="#pane-remanentes" type="button">
+                <i class="fas fa-exclamation-triangle"></i> Remanentes
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" id="tab-matriz" data-bs-toggle="tab" data-bs-target="#pane-matriz" type="button">
+                <i class="fas fa-table"></i> Matriz Cumplimiento
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content border border-top-0 p-3">
+        <!-- Tab Ciudad -->
+        <div class="tab-pane fade show active" id="pane-ciudad" role="tabpanel">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-sm">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Ciudad</th>
+                            <th>Muestra</th>
+                            <th>Realizadas</th>
+                            <th>% Avance</th>
+                            <th>Remanente</th>
+                            <th>Fecha Estimada</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyCiudad">
+                        @foreach (var item in Model.AvancePorCiudad)
+                        {
+                            <tr>
+                                <td>@item.Ciudad</td>
+                                <td>@item.Muestra.ToString("N0")</td>
+                                <td>@item.Realizadas.ToString("N0")</td>
+                                <td>
+                                    <div class="progress">
+                                        <div class="progress-bar @GetProgressClass(item.PorcentajeAvance)" style="width: @(item.PorcentajeAvance * 100)%">
+                                            @item.PorcentajeAvance.ToString("P1")
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>@item.Remanente.ToString("N0")</td>
+                                <td>@item.FechaEstimadaCierre?.ToString("dd/MM/yyyy")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tab Áreas -->
+        <div class="tab-pane fade" id="pane-areas" role="tabpanel">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-sm">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Área</th>
+                            <th>Muestra</th>
+                            <th>Realizadas</th>
+                            <th>% Avance</th>
+                            <th>Promedio Diario</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyAreas">
+                        @foreach (var item in Model.AvancePorAreas)
+                        {
+                            <tr>
+                                <td>@item.Area</td>
+                                <td>@item.Muestra.ToString("N0")</td>
+                                <td>@item.Realizadas.ToString("N0")</td>
+                                <td>
+                                    <div class="progress">
+                                        <div class="progress-bar @GetProgressClass(item.PorcentajeAvance)" style="width: @(item.PorcentajeAvance * 100)%">
+                                            @item.PorcentajeAvance.ToString("P1")
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>@(item.PromedioDiario?.ToString("N1") ?? "-")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tab Remanentes -->
+        <div class="tab-pane fade" id="pane-remanentes" role="tabpanel">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-sm">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Área</th>
+                            <th>Ciudad</th>
+                            <th>Remanente</th>
+                            <th>Días Estimados</th>
+                            <th>Encuestadores Requeridos</th>
+                            <th>Observación</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyRemanentes">
+                        @foreach (var item in Model.Remanentes)
+                        {
+                            <tr class="@(item.Remanente > 0 ? "table-warning" : "")">
+                                <td>@item.Area</td>
+                                <td>@item.Ciudad</td>
+                                <td>@item.Remanente.ToString("N0")</td>
+                                <td>@item.DiasEstimados?.ToString("N1")</td>
+                                <td>@item.EncuestadoresRequeridos</td>
+                                <td>@item.Observacion</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tab Matriz Cumplimiento -->
+        <div class="tab-pane fade" id="pane-matriz" role="tabpanel">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-sm">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Semana</th>
+                            <th>Fecha Inicio</th>
+                            <th>Fecha Fin</th>
+                            <th>Meta</th>
+                            <th>Real</th>
+                            <th>% Cumplimiento</th>
+                            <th>Diferencia</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyMatriz">
+                        @foreach (var item in Model.MatrizCumplimiento)
+                        {
+                            <tr>
+                                <td>@item.Semana</td>
+                                <td>@item.FechaInicio?.ToString("dd/MM/yyyy")</td>
+                                <td>@item.FechaFin?.ToString("dd/MM/yyyy")</td>
+                                <td>@item.Meta.ToString("N0")</td>
+                                <td>@item.Real.ToString("N0")</td>
+                                <td>
+                                    <div class="progress">
+                                        <div class="progress-bar @GetProgressClass(item.PorcentajeCumplimiento)" style="width: @(item.PorcentajeCumplimiento * 100)%">
+                                            @item.PorcentajeCumplimiento.ToString("P1")
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="@(item.Diferencia >= 0 ? "text-success" : "text-danger")">
+                                    @(item.Diferencia > 0 ? "+" : "")@item.Diferencia.ToString("N0")
+                                </td>
+                                <td>
+                                    <span class="badge @(item.Estado == "Cumplido" ? "bg-success" : "bg-danger")">
+                                        @item.Estado
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+    string GetProgressClass(decimal porcentaje)
+    {
+        if (porcentaje >= 0.8m) return "bg-success";
+        if (porcentaje >= 0.5m) return "bg-warning";
+        return "bg-danger";
+    }
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#btnActualizar').click(function() {
+                actualizarDatos();
+            });
+
+            $('#btnExportar').click(function() {
+                exportarExcel();
+            });
+
+            $('#idTrabajo').change(function() {
+                if ($(this).val()) {
+                    actualizarDatos();
+                }
+            });
+        });
+
+        function actualizarDatos() {
+            const idTrabajo = $('#idTrabajo').val();
+            if (!idTrabajo) {
+                toastr.warning('Seleccione un trabajo');
+                return;
+            }
+
+            $('#btnActualizar').prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Actualizando...');
+
+            // Cargar todos los datos en paralelo
+            Promise.all([
+                cargarAvanceGeneral(idTrabajo),
+                cargarAvanceCiudad(idTrabajo),
+                cargarAvanceAreas(idTrabajo),
+                cargarRemanentes(idTrabajo),
+                cargarMatrizCumplimiento(idTrabajo)
+            ]).then(() => {
+                toastr.success('Datos actualizados');
+            }).catch(() => {
+                toastr.error('Error al cargar algunos datos');
+            }).finally(() => {
+                $('#btnActualizar').prop('disabled', false).html('<i class="fas fa-sync"></i> Actualizar');
+            });
+        }
+
+        function cargarAvanceGeneral(idTrabajo) {
+            return $.get('@Url.Action("AvanceGeneral", "AvanceCampo", new { area = "RP" })', { idTrabajo })
+                .done(function(data) {
+                    if (data && data.length > 0) {
+                        const item = data[0];
+                        $('#muestraTotal').text(formatNumber(item.muestraTotal));
+                        $('#encuestasRealizadas').text(formatNumber(item.encuestasRealizadas));
+                        $('#porcentajeAvance').text(formatPercent(item.porcentajeAvance));
+                        $('#remanente').text(formatNumber(item.remanente));
+                    }
+                });
+        }
+
+        function cargarAvanceCiudad(idTrabajo) {
+            return $.get('@Url.Action("AvanceCiudad", "AvanceCampo", new { area = "RP" })', { idTrabajo })
+                .done(function(data) {
+                    let html = '';
+                    data.forEach(item => {
+                        html += `<tr>
+                            <td>${item.ciudad || ''}</td>
+                            <td>${formatNumber(item.muestra)}</td>
+                            <td>${formatNumber(item.realizadas)}</td>
+                            <td>
+                                <div class="progress">
+                                    <div class="progress-bar ${getProgressClass(item.porcentajeAvance)}" style="width: ${item.porcentajeAvance * 100}%">
+                                        ${formatPercent(item.porcentajeAvance)}
+                                    </div>
+                                </div>
+                            </td>
+                            <td>${formatNumber(item.remanente)}</td>
+                            <td>${item.fechaEstimadaCierre ? new Date(item.fechaEstimadaCierre).toLocaleDateString('es-CO') : ''}</td>
+                        </tr>`;
+                    });
+                    $('#tbodyCiudad').html(html || '<tr><td colspan="6" class="text-center">Sin datos</td></tr>');
+                });
+        }
+
+        function cargarAvanceAreas(idTrabajo) {
+            return $.get('@Url.Action("AvanceAreas", "AvanceCampo", new { area = "RP" })', { idTrabajo })
+                .done(function(data) {
+                    let html = '';
+                    data.forEach(item => {
+                        html += `<tr>
+                            <td>${item.area || ''}</td>
+                            <td>${formatNumber(item.muestra)}</td>
+                            <td>${formatNumber(item.realizadas)}</td>
+                            <td>
+                                <div class="progress">
+                                    <div class="progress-bar ${getProgressClass(item.porcentajeAvance)}" style="width: ${item.porcentajeAvance * 100}%">
+                                        ${formatPercent(item.porcentajeAvance)}
+                                    </div>
+                                </div>
+                            </td>
+                            <td>${item.promedioDiario?.toFixed(1) || '0'}</td>
+                        </tr>`;
+                    });
+                    $('#tbodyAreas').html(html || '<tr><td colspan="5" class="text-center">Sin datos</td></tr>');
+                });
+        }
+
+        function cargarRemanentes(idTrabajo) {
+            return $.get('@Url.Action("Remanentes", "AvanceCampo", new { area = "RP" })', { idTrabajo })
+                .done(function(data) {
+                    let html = '';
+                    data.forEach(item => {
+                        html += `<tr class="${item.remanente > 0 ? 'table-warning' : ''}">
+                            <td>${item.area || ''}</td>
+                            <td>${item.ciudad || ''}</td>
+                            <td>${formatNumber(item.remanente)}</td>
+                            <td>${item.diasEstimados?.toFixed(1) || ''}</td>
+                            <td>${item.encuestadoresRequeridos || ''}</td>
+                            <td>${item.observacion || ''}</td>
+                        </tr>`;
+                    });
+                    $('#tbodyRemanentes').html(html || '<tr><td colspan="6" class="text-center">Sin datos</td></tr>');
+                });
+        }
+
+        function cargarMatrizCumplimiento(idTrabajo) {
+            return $.get('@Url.Action("MatrizCumplimiento", "AvanceCampo", new { area = "RP" })', { idTrabajo })
+                .done(function(data) {
+                    let html = '';
+                    data.forEach(item => {
+                        html += `<tr>
+                            <td>${item.semana || ''}</td>
+                            <td>${item.fechaInicio ? new Date(item.fechaInicio).toLocaleDateString('es-CO') : ''}</td>
+                            <td>${item.fechaFin ? new Date(item.fechaFin).toLocaleDateString('es-CO') : ''}</td>
+                            <td>${formatNumber(item.meta)}</td>
+                            <td>${formatNumber(item.real)}</td>
+                            <td>
+                                <div class="progress">
+                                    <div class="progress-bar ${getProgressClass(item.porcentajeCumplimiento)}" style="width: ${item.porcentajeCumplimiento * 100}%">
+                                        ${formatPercent(item.porcentajeCumplimiento)}
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="${item.diferencia >= 0 ? 'text-success' : 'text-danger'}">
+                                ${item.diferencia > 0 ? '+' : ''}${formatNumber(item.diferencia)}
+                            </td>
+                            <td>
+                                <span class="badge ${item.estado === 'Cumplido' ? 'bg-success' : 'bg-danger'}">${item.estado || ''}</span>
+                            </td>
+                        </tr>`;
+                    });
+                    $('#tbodyMatriz').html(html || '<tr><td colspan="8" class="text-center">Sin datos</td></tr>');
+                });
+        }
+
+        function getProgressClass(porcentaje) {
+            if (porcentaje >= 0.8) return 'bg-success';
+            if (porcentaje >= 0.5) return 'bg-warning';
+            return 'bg-danger';
+        }
+
+        function formatNumber(num) {
+            return (num || 0).toLocaleString('es-CO');
+        }
+
+        function formatPercent(num) {
+            return ((num || 0) * 100).toFixed(1) + '%';
+        }
+
+        function exportarExcel() {
+            const idTrabajo = $('#idTrabajo').val();
+            if (!idTrabajo) {
+                toastr.warning('Seleccione un trabajo');
+                return;
+            }
+
+            $('#btnExportar').prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Exportando...');
+
+            $.ajax({
+                url: '@Url.Action("Exportar", "AvanceCampo", new { area = "RP" })',
+                type: 'GET',
+                data: { idTrabajo },
+                xhrFields: { responseType: 'blob' },
+                success: function(blob) {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `AvanceCampo_${idTrabajo}_${new Date().toISOString().slice(0,10)}.xlsx`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    toastr.success('Archivo exportado correctamente');
+                },
+                error: function() {
+                    toastr.error('Error al exportar');
+                },
+                complete: function() {
+                    $('#btnExportar').prop('disabled', false).html('<i class="fas fa-file-excel"></i> Exportar');
+                }
+            });
+        }
+    </script>
+}
