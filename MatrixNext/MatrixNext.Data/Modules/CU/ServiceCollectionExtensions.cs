@@ -5,6 +5,8 @@ using MatrixNext.Data.Modules.CU.Clientes.Adapters;
 using MatrixNext.Data.Modules.CU.Clientes.Services;
 using MatrixNext.Data.Modules.CU.Proyectos.Adapters;
 using MatrixNext.Data.Modules.CU.Proyectos.Services;
+using MatrixNext.Data.Modules.CU.TrabajosCuentas.Adapters;
+using MatrixNext.Data.Modules.CU.TrabajosCuentas.Services;
 using MatrixNext.Data.Services.CU;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -53,6 +55,10 @@ namespace MatrixNext.Data.Modules.CU
             // Fase 2 - Proyectos
             services.AddScoped<IProyectoAdapter, ProyectoAdapter>();
             services.AddScoped<IProyectoService, ProyectoService>();
+
+            // Fase 2 - Trabajos de Cuenta
+            services.AddScoped<ITrabajoCuentaAdapter, TrabajoCuentaAdapter>();
+            services.AddScoped<ITrabajoCuentaService, TrabajoCuentaService>();
 
             return services;
         }

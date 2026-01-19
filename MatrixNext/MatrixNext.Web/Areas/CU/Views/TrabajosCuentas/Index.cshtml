@@ -1,0 +1,130 @@
+@model MatrixNext.Data.Modules.CU.TrabajosCuentas.Models.TrabajosCuentasIndexViewModel
+@{
+    ViewData["Title"] = "Trabajos de Cuenta";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <!-- Breadcrumb y título -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h4 class="mb-0">
+                <i class="ri-briefcase-line me-2"></i>Trabajos de Cuenta
+                @if (Model.EstudioId.HasValue)
+                {
+                    <small class="text-muted">- Estudio #@Model.EstudioId</small>
+                }
+            </h4>
+        </div>
+        <div>
+            <a asp-area="CU" asp-controller="Estudios" asp-action="Index" class="btn btn-outline-secondary">
+                <i class="ri-arrow-left-line"></i> Volver a Estudios
+            </a>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="card mb-3">
+        <div class="card-body">
+            <form id="formFiltros" class="row g-3">
+                <input type="hidden" name="estudioId" value="@Model.EstudioId" />
+                <div class="col-md-3">
+                    <label class="form-label">JobBook</label>
+                    <input type="text" class="form-control" name="jobBook" placeholder="Buscar por JobBook..." />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Nombre Trabajo</label>
+                    <input type="text" class="form-control" name="nombreTrabajo" placeholder="Buscar por nombre..." />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Estado</label>
+                    <select class="form-select" name="estado">
+                        <option value="">Todos</option>
+                        @foreach (var estado in Model.Estados)
+                        {
+                            <option value="@estado.Id">@estado.EstadoDesc</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary me-2">
+                        <i class="ri-search-line"></i> Buscar
+                    </button>
+                    <button type="reset" class="btn btn-outline-secondary" onclick="limpiarFiltros()">
+                        <i class="ri-refresh-line"></i> Limpiar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Lista de trabajos -->
+    <div class="card">
+        <div class="card-body">
+            <div id="tablaTrabajos">
+                <partial name="_ListaTrabajos" model="Model.Trabajos" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Detalle -->
+<div class="modal fade" id="modalDetalle" tabindex="-1" aria-labelledby="modalDetalleLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalDetalleLabel">Detalle del Trabajo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body" id="modalDetalleBody">
+                <!-- Contenido cargado vía AJAX -->
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    // Cargar modal de detalle
+    function cargarDetalle(id) {
+        const url = `@Url.Action("Detalle", "TrabajosCuentas", new { area = "CU" })?id=${id}`;
+        
+        $('#modalDetalleBody').html('<div class="text-center p-4"><div class="spinner-border"></div></div>');
+        
+        $.get(url, function(html) {
+            $('#modalDetalleBody').html(html);
+            $('#modalDetalle').modal('show');
+        }).fail(function(xhr) {
+            $('#modalDetalleBody').html('<div class="alert alert-danger">Error al cargar el detalle</div>');
+        });
+    }
+
+    // Buscar trabajos
+    $('#formFiltros').on('submit', function(e) {
+        e.preventDefault();
+        buscarTrabajos();
+    });
+
+    function buscarTrabajos() {
+        const formData = $('#formFiltros').serialize();
+        $.get('@Url.Action("Buscar", "TrabajosCuentas", new { area = "CU" })?' + formData, function(html) {
+            $('#tablaTrabajos').html(html);
+        });
+    }
+
+    function limpiarFiltros() {
+        $('#formFiltros')[0].reset();
+        buscarTrabajos();
+    }
+
+    // Navegar a cronograma
+    function verCronograma(trabajoId) {
+        window.location.href = `/CORE/ListaTareasXHilo?IdTrabajo=${trabajoId}`;
+    }
+
+    // Navegar a avance
+    function verAvance(trabajoId) {
+        window.location.href = `/RP/Reportes/AvanceDeCampo?TrabajoId=${trabajoId}`;
+    }
+</script>
+}

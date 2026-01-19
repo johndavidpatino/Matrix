@@ -1,0 +1,80 @@
+@model IEnumerable<MatrixNext.Data.Modules.CU.TrabajosCuentas.Models.TrabajoCuentaDto>
+
+@if (Model.Any())
+{
+    <div class="table-responsive">
+        <table class="table table-hover table-striped">
+            <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>JobBook</th>
+                    <th>Nombre</th>
+                    <th>Estado</th>
+                    <th>Metodología</th>
+                    <th>Unidad</th>
+                    <th>COE Asignado</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>
+                            <span class="badge bg-primary-transparent">@item.JobBook</span>
+                        </td>
+                        <td>@item.NombreTrabajo</td>
+                        <td>
+                            @{
+                                var badgeClass = item.Estado switch
+                                {
+                                    1 => "bg-warning-transparent",   // Pendiente
+                                    2 => "bg-info-transparent",      // En proceso
+                                    3 => "bg-success-transparent",   // Finalizado
+                                    _ => "bg-secondary-transparent"
+                                };
+                            }
+                            <span class="badge @badgeClass">@item.EstadoTrabajo</span>
+                        </td>
+                        <td>@item.Metodologia</td>
+                        <td>@item.NombreUnidad</td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(item.CoeAsignado))
+                            {
+                                <span class="badge bg-info-transparent">@item.CoeAsignado</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning-transparent">Sin asignar</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            <div class="btn-group btn-group-sm">
+                                <button type="button" class="btn btn-outline-info" 
+                                        onclick="cargarDetalle(@item.Id)" title="Ver Detalle">
+                                    <i class="ri-eye-line"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline-primary" 
+                                        onclick="verCronograma(@item.Id)" title="Cronograma">
+                                    <i class="ri-calendar-line"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline-success" 
+                                        onclick="verAvance(@item.Id)" title="Avance de Campo">
+                                    <i class="ri-bar-chart-line"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="alert alert-info">
+        <i class="ri-information-line me-2"></i>
+        No se encontraron trabajos para este estudio.
+    </div>
+}
