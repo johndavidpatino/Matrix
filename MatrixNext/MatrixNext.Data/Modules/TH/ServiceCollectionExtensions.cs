@@ -9,6 +9,8 @@ using MatrixNext.Data.Modules.TH.Empleados.Adapters;
 using MatrixNext.Data.Modules.TH.Empleados.Services;
 using MatrixNext.Data.Modules.TH.HojasVida.Adapters;
 using MatrixNext.Data.Modules.TH.HojasVida.Services;
+using MatrixNext.Data.Modules.TH.HWH.Adapters;
+using MatrixNext.Data.Modules.TH.HWH.Services;
 using MatrixNext.Data.Adapters.TH;
 using MatrixNext.Data.Services.TH;
 using MatrixNext.Data.Services.TH.Interfaces;
@@ -67,6 +69,10 @@ namespace MatrixNext.Data.Modules.TH
             // HojasVida services (Sprint Fase 1 TH - Reclutamiento)
             services.AddScoped<IHojaVidaAdapter, HojaVidaAdapter>();
             services.AddScoped<IHojaVidaService, HojaVidaService>();
+            
+            // HWH services (Sprint Fase 1 TH - Easy Work / Teletrabajo)
+            services.AddScoped<IHWHAdapter, HWHAdapter>();
+            services.AddScoped<IHWHService, HWHService>();
             
             return services;
         }

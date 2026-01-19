@@ -1,0 +1,399 @@
+@{
+    ViewData["Title"] = "Easy Work - Administración";
+    ViewData["PageHeader"] = "Easy Work - Administración";
+    ViewData["PageSubHeader"] = "Gestione las solicitudes de su equipo";
+}
+
+<div class="container-fluid">
+    <!-- Filtros de búsqueda -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-filter me-2"></i>
+                        Filtros de Búsqueda
+                    </h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="ddlEstado">Estado</label>
+                                <select class="form-control" id="ddlEstado">
+                                    <option value="0">Todos</option>
+                                    <option value="1">Pendiente</option>
+                                    <option value="2">Aprobado</option>
+                                    <option value="3">Rechazado</option>
+                                    <option value="4">Anulado</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="txtFechaIni">Fecha Inicio</label>
+                                <input type="date" class="form-control" id="txtFechaIni">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="txtFechaFin">Fecha Fin</label>
+                                <input type="date" class="form-control" id="txtFechaFin">
+                            </div>
+                        </div>
+                        <div class="col-md-3 d-flex align-items-end">
+                            <button type="button" class="btn btn-primary me-2" id="btnBuscar">
+                                <i class="fas fa-search me-1"></i> Buscar
+                            </button>
+                            <button type="button" class="btn btn-secondary" id="btnLimpiar">
+                                <i class="fas fa-eraser me-1"></i> Limpiar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Listado de solicitudes del equipo -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card card-outline card-info">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-users me-2"></i>
+                        Solicitudes del Equipo
+                    </h3>
+                    <div class="card-tools">
+                        <span class="badge badge-info" id="badgeTotal">0 solicitudes</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover" id="tblSolicitudes">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Usuario</th>
+                                    <th>Nombre</th>
+                                    <th>Fecha Programada</th>
+                                    <th>Estado</th>
+                                    <th>Observaciones</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodySolicitudes">
+                                <tr>
+                                    <td colspan="7" class="text-center text-muted">
+                                        <i class="fas fa-spinner fa-spin me-2"></i>
+                                        Cargando solicitudes...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Calendario Gantt del equipo -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-success">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-calendar-alt me-2"></i>
+                        Calendario del Equipo
+                    </h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="ganttContainer" style="min-height: 400px;">
+                        <div class="text-center text-muted py-5">
+                            <i class="fas fa-spinner fa-spin fa-3x mb-3"></i>
+                            <p>Cargando calendario...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para gestionar solicitud -->
+<div class="modal fade" id="modalGestion" tabindex="-1" aria-labelledby="modalGestionLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="modalGestionLabel">
+                    <i class="fas fa-cog me-2"></i>Gestionar Solicitud
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="hfIdGestion">
+                <input type="hidden" id="hfEstadoGestion">
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label>Usuario</label>
+                            <input type="text" class="form-control" id="txtUsuarioGestion" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label>Nombre</label>
+                            <input type="text" class="form-control" id="txtNombreGestion" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label>Fecha Programada</label>
+                            <input type="text" class="form-control" id="txtFechaGestion" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label>Estado Actual</label>
+                            <input type="text" class="form-control" id="txtEstadoGestion" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="txtObservacionesGestion">Observaciones de Gestión</label>
+                    <textarea class="form-control" id="txtObservacionesGestion" rows="3" 
+                              placeholder="Ingrese observaciones (requerido para rechazar o anular)"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-1"></i> Cerrar
+                </button>
+                <button type="button" class="btn btn-success" id="btnAprobar">
+                    <i class="fas fa-check me-1"></i> Aprobar
+                </button>
+                <button type="button" class="btn btn-warning" id="btnRechazar">
+                    <i class="fas fa-times-circle me-1"></i> Rechazar
+                </button>
+                <button type="button" class="btn btn-danger" id="btnAnular">
+                    <i class="fas fa-ban me-1"></i> Anular
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    $(document).ready(function() {
+        // Inicializar fechas por defecto
+        const hoy = new Date();
+        const primerDia = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
+        const ultimoDia = new Date(hoy.getFullYear(), hoy.getMonth() + 2, 0);
+        
+        $('#txtFechaIni').val(formatDate(primerDia));
+        $('#txtFechaFin').val(formatDate(ultimoDia));
+        
+        // Eventos
+        $('#btnBuscar').on('click', buscarSolicitudes);
+        $('#btnLimpiar').on('click', limpiar);
+        $('#btnAprobar').on('click', aprobarSolicitud);
+        $('#btnRechazar').on('click', rechazarSolicitud);
+        $('#btnAnular').on('click', anularSolicitud);
+        
+        // Cargar solicitudes iniciales
+        buscarSolicitudes();
+    });
+    
+    function formatDate(date) {
+        return date.toISOString().split('T')[0];
+    }
+    
+    function buscarSolicitudes() {
+        const estado = $('#ddlEstado').val();
+        const fechaIni = $('#txtFechaIni').val();
+        const fechaFin = $('#txtFechaFin').val();
+        
+        const params = {
+            estado: estado != '0' ? estado : null,
+            fechaInicio: fechaIni || null,
+            fechaFin: fechaFin || null
+        };
+        
+        $.get('@Url.Action("SolicitudesEquipo", "HWH", new { area = "TH" })', params, function(response) {
+            if (response.success) {
+                renderizarSolicitudes(response.data);
+                $('#badgeTotal').text(response.data.length + ' solicitudes');
+            }
+        });
+    }
+    
+    function renderizarSolicitudes(solicitudes) {
+        const tbody = $('#tbodySolicitudes');
+        tbody.empty();
+        
+        if (!solicitudes || solicitudes.length === 0) {
+            tbody.html('<tr><td colspan="7" class="text-center text-muted">No se encontraron solicitudes</td></tr>');
+            return;
+        }
+        
+        solicitudes.forEach(function(s) {
+            const row = `
+                <tr>
+                    <td>${s.id}</td>
+                    <td>${s.usuario}</td>
+                    <td>${s.nombreUsuario || '-'}</td>
+                    <td>${s.fechaProgramadaStr}</td>
+                    <td><span class="badge ${s.estadoBadgeClass}">${s.nombreEstado}</span></td>
+                    <td>${s.observaciones || '-'}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" onclick="abrirModalGestion(${s.id})" title="Gestionar">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                    </td>
+                </tr>
+            `;
+            tbody.append(row);
+        });
+    }
+    
+    function abrirModalGestion(id) {
+        $.get('@Url.Action("Obtener", "HWH", new { area = "TH" })', { id: id }, function(response) {
+            if (response.success) {
+                const s = response.data;
+                $('#hfIdGestion').val(s.id);
+                $('#hfEstadoGestion').val(s.estado);
+                $('#txtUsuarioGestion').val(s.usuario);
+                $('#txtNombreGestion').val(s.nombreUsuario);
+                $('#txtFechaGestion').val(s.fechaProgramadaStr);
+                $('#txtEstadoGestion').val(s.nombreEstado);
+                $('#txtObservacionesGestion').val('');
+                
+                // Mostrar/ocultar botones según estado
+                $('#btnAprobar').prop('disabled', !s.puedeGestionar);
+                $('#btnRechazar').prop('disabled', !s.puedeGestionar);
+                $('#btnAnular').prop('disabled', !s.puedeAnular);
+                
+                $('#modalGestion').modal('show');
+            }
+        });
+    }
+    
+    function aprobarSolicitud() {
+        const id = $('#hfIdGestion').val();
+        const observaciones = $('#txtObservacionesGestion').val().trim();
+        
+        $.ajax({
+            url: '@Url.Action("Aprobar", "HWH", new { area = "TH" })',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                id: parseInt(id),
+                estado: 2,
+                observaciones: observaciones
+            }),
+            success: function(response) {
+                if (response.success) {
+                    toastr.success(response.message);
+                    $('#modalGestion').modal('hide');
+                    buscarSolicitudes();
+                } else {
+                    toastr.error(response.message);
+                }
+            },
+            error: function() {
+                toastr.error('Error al aprobar la solicitud');
+            }
+        });
+    }
+    
+    function rechazarSolicitud() {
+        const id = $('#hfIdGestion').val();
+        const observaciones = $('#txtObservacionesGestion').val().trim();
+        
+        if (!observaciones) {
+            toastr.error('Debe indicar el motivo del rechazo');
+            return;
+        }
+        
+        $.ajax({
+            url: '@Url.Action("Rechazar", "HWH", new { area = "TH" })',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                id: parseInt(id),
+                estado: 3,
+                observaciones: observaciones
+            }),
+            success: function(response) {
+                if (response.success) {
+                    toastr.success(response.message);
+                    $('#modalGestion').modal('hide');
+                    buscarSolicitudes();
+                } else {
+                    toastr.error(response.message);
+                }
+            },
+            error: function() {
+                toastr.error('Error al rechazar la solicitud');
+            }
+        });
+    }
+    
+    function anularSolicitud() {
+        const id = $('#hfIdGestion').val();
+        const observaciones = $('#txtObservacionesGestion').val().trim();
+        
+        if (!observaciones) {
+            toastr.error('Debe indicar el motivo de la anulación');
+            return;
+        }
+        
+        $.ajax({
+            url: '@Url.Action("Anular", "HWH", new { area = "TH" })',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                id: parseInt(id),
+                estado: 4,
+                observaciones: observaciones
+            }),
+            success: function(response) {
+                if (response.success) {
+                    toastr.success(response.message);
+                    $('#modalGestion').modal('hide');
+                    buscarSolicitudes();
+                } else {
+                    toastr.error(response.message);
+                }
+            },
+            error: function() {
+                toastr.error('Error al anular la solicitud');
+            }
+        });
+    }
+    
+    function limpiar() {
+        $('#ddlEstado').val('0');
+        const hoy = new Date();
+        const primerDia = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
+        const ultimoDia = new Date(hoy.getFullYear(), hoy.getMonth() + 2, 0);
+        $('#txtFechaIni').val(formatDate(primerDia));
+        $('#txtFechaFin').val(formatDate(ultimoDia));
+        buscarSolicitudes();
+    }
+</script>
+}
