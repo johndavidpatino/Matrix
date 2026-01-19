@@ -1,0 +1,201 @@
+@using MatrixNext.Data.Modules.TH.Capacitaciones.Models
+@model IEnumerable<CapacitacionParticipanteDto>
+@{
+    var capacitacionId = ViewBag.CapacitacionId as int? ?? 0;
+    var capacitacionActividad = ViewBag.CapacitacionActividad as string ?? "";
+}
+
+<div class="modal-header bg-info text-white">
+    <h5 class="modal-title">
+        <i class="bi bi-people me-2"></i>Participantes de Capacitación
+    </h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+</div>
+
+<div class="modal-body">
+    <!-- Información de la Capacitación -->
+    <div class="alert alert-light border mb-3">
+        <strong>Capacitación:</strong> @capacitacionActividad
+        <span class="badge bg-secondary ms-2">ID: @capacitacionId</span>
+    </div>
+
+    <!-- Botón Agregar -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <span class="text-muted">Total: @Model.Count() participante(s)</span>
+        <button type="button" class="btn btn-success btn-sm" 
+                onclick="mostrarAgregarParticipante(@capacitacionId)">
+            <i class="bi bi-plus-lg me-1"></i>Agregar Participante
+        </button>
+    </div>
+
+    <!-- Contenedor para formulario de agregar -->
+    <div id="containerAgregarParticipante" style="display: none;"></div>
+
+    <!-- Lista de Participantes -->
+    @if (Model.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-sm table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Cédula</th>
+                        <th>Nombre</th>
+                        <th class="text-center">Asistió</th>
+                        <th class="text-center">Aprobó</th>
+                        <th>Observaciones</th>
+                        <th class="text-center" style="width: 100px;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var participante in Model)
+                    {
+                        <tr data-participante-id="@participante.Id">
+                            <td>@participante.Cedula</td>
+                            <td>@participante.NombreCompleto</td>
+                            <td class="text-center">
+                                <input type="checkbox" class="form-check-input chk-asistio" 
+                                       data-id="@participante.Id"
+                                       @(participante.Asistio ? "checked" : "") />
+                            </td>
+                            <td class="text-center">
+                                <input type="checkbox" class="form-check-input chk-aprobo" 
+                                       data-id="@participante.Id"
+                                       @(participante.Aprobo ? "checked" : "") />
+                            </td>
+                            <td>
+                                <input type="text" class="form-control form-control-sm txt-observaciones" 
+                                       data-id="@participante.Id"
+                                       value="@participante.Observaciones" 
+                                       placeholder="Observaciones..." />
+                            </td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-outline-primary btn-sm btn-guardar-participante" 
+                                        data-id="@participante.Id" title="Guardar cambios">
+                                    <i class="bi bi-check-lg"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline-danger btn-sm btn-eliminar-participante" 
+                                        data-id="@participante.Id" 
+                                        data-nombre="@participante.NombreCompleto"
+                                        title="Eliminar participante">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Resumen -->
+        <div class="row mt-3">
+            <div class="col-md-4">
+                <div class="card border-info">
+                    <div class="card-body text-center py-2">
+                        <h5 class="mb-0 text-info">@Model.Count()</h5>
+                        <small class="text-muted">Total</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-success">
+                    <div class="card-body text-center py-2">
+                        <h5 class="mb-0 text-success">@Model.Count(p => p.Asistio)</h5>
+                        <small class="text-muted">Asistieron</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-primary">
+                    <div class="card-body text-center py-2">
+                        <h5 class="mb-0 text-primary">@Model.Count(p => p.Aprobo)</h5>
+                        <small class="text-muted">Aprobaron</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center">
+            <i class="bi bi-info-circle me-2"></i>
+            No hay participantes registrados para esta capacitación.
+        </div>
+    }
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        <i class="bi bi-x-lg me-1"></i>Cerrar
+    </button>
+</div>
+
+<script>
+    // Guardar cambios de participante
+    $(document).on('click', '.btn-guardar-participante', function () {
+        var id = $(this).data('id');
+        var row = $(this).closest('tr');
+        var data = {
+            Id: id,
+            IdCapacitacion: @capacitacionId,
+            Asistio: row.find('.chk-asistio').is(':checked'),
+            Aprobo: row.find('.chk-aprobo').is(':checked'),
+            Observaciones: row.find('.txt-observaciones').val()
+        };
+
+        $.ajax({
+            url: '@Url.Action("ActualizarParticipante", "Capacitaciones", new { area = "TH" })',
+            type: 'POST',
+            data: data,
+            headers: { 'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val() },
+            success: function (response) {
+                if (response.success) {
+                    showToast(response.message, 'success');
+                } else {
+                    showToast(response.message, 'error');
+                }
+            },
+            error: function () {
+                showToast('Error al actualizar el participante', 'error');
+            }
+        });
+    });
+
+    // Eliminar participante
+    $(document).on('click', '.btn-eliminar-participante', function () {
+        var id = $(this).data('id');
+        var nombre = $(this).data('nombre');
+
+        if (confirm('¿Está seguro que desea eliminar a ' + nombre + ' de la capacitación?')) {
+            $.ajax({
+                url: '@Url.Action("EliminarParticipante", "Capacitaciones", new { area = "TH" })',
+                type: 'POST',
+                data: { id: id },
+                headers: { 'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val() },
+                success: function (response) {
+                    if (response.success) {
+                        showToast(response.message, 'success');
+                        $('tr[data-participante-id="' + id + '"]').fadeOut(function () {
+                            $(this).remove();
+                        });
+                        // Refrescar lista principal
+                        cargarLista();
+                    } else {
+                        showToast(response.message, 'error');
+                    }
+                },
+                error: function () {
+                    showToast('Error al eliminar el participante', 'error');
+                }
+            });
+        }
+    });
+
+    // Mostrar formulario agregar participante
+    function mostrarAgregarParticipante(idCapacitacion) {
+        $.get('@Url.Action("AgregarParticipante", "Capacitaciones", new { area = "TH" })', { id: idCapacitacion }, function (html) {
+            $('#containerAgregarParticipante').html(html).slideDown();
+        });
+    }
+</script>
+
+@Html.AntiForgeryToken()

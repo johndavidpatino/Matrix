@@ -1,0 +1,189 @@
+@using MatrixNext.Data.Modules.TH.Capacitaciones.Models
+@{
+    var capacitacionId = ViewBag.CapacitacionId as int? ?? 0;
+}
+
+<div class="card border-success mb-3">
+    <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-person-plus me-2"></i>Agregar Participante</span>
+        <button type="button" class="btn btn-sm btn-light" onclick="$('#containerAgregarParticipante').slideUp();">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </div>
+    <div class="card-body">
+        <input type="hidden" id="nuevoParticipante_IdCapacitacion" value="@capacitacionId" />
+        
+        <div class="row g-3">
+            <!-- Búsqueda de persona -->
+            <div class="col-md-8">
+                <label class="form-label">Buscar Persona</label>
+                <div class="input-group">
+                    <input type="text" id="txtBuscarPersona" class="form-control" 
+                           placeholder="Ingrese cédula o nombre..." />
+                    <button type="button" class="btn btn-outline-primary" id="btnBuscarPersona">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resultados de búsqueda -->
+        <div id="resultadosBusqueda" class="mt-3" style="display: none;">
+            <label class="form-label">Seleccionar Persona:</label>
+            <select id="selectPersona" class="form-select" size="5">
+                <!-- Se llena dinámicamente -->
+            </select>
+        </div>
+
+        <!-- Datos del participante seleccionado -->
+        <div id="datosParticipante" class="mt-3" style="display: none;">
+            <input type="hidden" id="nuevoParticipante_IdPersona" />
+            
+            <div class="alert alert-info">
+                <strong>Persona seleccionada:</strong> <span id="nombrePersonaSeleccionada"></span>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="nuevoParticipante_Asistio" />
+                        <label class="form-check-label" for="nuevoParticipante_Asistio">Asistió</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="nuevoParticipante_Aprobo" />
+                        <label class="form-check-label" for="nuevoParticipante_Aprobo">Aprobó</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" id="nuevoParticipante_Observaciones" class="form-control" 
+                           placeholder="Observaciones (opcional)" />
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <button type="button" class="btn btn-success" id="btnGuardarNuevoParticipante">
+                    <i class="bi bi-check-lg me-1"></i>Agregar
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="limpiarFormularioParticipante();">
+                    <i class="bi bi-x-lg me-1"></i>Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Buscar personas
+    $('#btnBuscarPersona').on('click', function () {
+        buscarPersonas();
+    });
+
+    $('#txtBuscarPersona').on('keypress', function (e) {
+        if (e.which === 13) {
+            e.preventDefault();
+            buscarPersonas();
+        }
+    });
+
+    function buscarPersonas() {
+        var termino = $('#txtBuscarPersona').val().trim();
+        if (termino.length < 3) {
+            showToast('Ingrese al menos 3 caracteres para buscar', 'warning');
+            return;
+        }
+
+        $.get('@Url.Action("BuscarPersonas", "Capacitaciones", new { area = "TH" })', { termino: termino }, function (response) {
+            if (response.success && response.data.length > 0) {
+                var select = $('#selectPersona');
+                select.empty();
+                $.each(response.data, function (i, persona) {
+                    select.append($('<option>', {
+                        value: persona.id,
+                        text: persona.cedula + ' - ' + persona.nombreCompleto,
+                        'data-nombre': persona.nombreCompleto
+                    }));
+                });
+                $('#resultadosBusqueda').slideDown();
+                $('#datosParticipante').hide();
+            } else {
+                showToast('No se encontraron personas con ese criterio', 'info');
+                $('#resultadosBusqueda').hide();
+            }
+        });
+    }
+
+    // Seleccionar persona de la lista
+    $('#selectPersona').on('dblclick', function () {
+        var selected = $(this).find('option:selected');
+        if (selected.length) {
+            $('#nuevoParticipante_IdPersona').val(selected.val());
+            $('#nombrePersonaSeleccionada').text(selected.data('nombre'));
+            $('#datosParticipante').slideDown();
+            $('#resultadosBusqueda').hide();
+        }
+    });
+
+    // También con un solo click + botón
+    $('#selectPersona').on('change', function () {
+        var selected = $(this).find('option:selected');
+        if (selected.length) {
+            $('#nuevoParticipante_IdPersona').val(selected.val());
+            $('#nombrePersonaSeleccionada').text(selected.data('nombre'));
+            $('#datosParticipante').slideDown();
+        }
+    });
+
+    // Guardar nuevo participante
+    $('#btnGuardarNuevoParticipante').on('click', function () {
+        var idPersona = $('#nuevoParticipante_IdPersona').val();
+        if (!idPersona) {
+            showToast('Debe seleccionar una persona', 'warning');
+            return;
+        }
+
+        var data = {
+            IdCapacitacion: $('#nuevoParticipante_IdCapacitacion').val(),
+            IdPersona: idPersona,
+            Asistio: $('#nuevoParticipante_Asistio').is(':checked'),
+            Aprobo: $('#nuevoParticipante_Aprobo').is(':checked'),
+            Observaciones: $('#nuevoParticipante_Observaciones').val()
+        };
+
+        $.ajax({
+            url: '@Url.Action("GuardarParticipante", "Capacitaciones", new { area = "TH" })',
+            type: 'POST',
+            data: data,
+            headers: { 'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val() },
+            success: function (response) {
+                if (response.success) {
+                    showToast(response.message, 'success');
+                    // Refrescar la lista de participantes
+                    var idCapacitacion = $('#nuevoParticipante_IdCapacitacion').val();
+                    $.get('@Url.Action("Participantes", "Capacitaciones", new { area = "TH" })', { id: idCapacitacion }, function (html) {
+                        $('#modalCapacitaciones .modal-content').html(html);
+                    });
+                    // También refrescar lista principal
+                    cargarLista();
+                } else {
+                    showToast(response.message, 'error');
+                }
+            },
+            error: function () {
+                showToast('Error al agregar el participante', 'error');
+            }
+        });
+    });
+
+    function limpiarFormularioParticipante() {
+        $('#txtBuscarPersona').val('');
+        $('#selectPersona').empty();
+        $('#resultadosBusqueda').hide();
+        $('#datosParticipante').hide();
+        $('#nuevoParticipante_IdPersona').val('');
+        $('#nuevoParticipante_Asistio').prop('checked', false);
+        $('#nuevoParticipante_Aprobo').prop('checked', false);
+        $('#nuevoParticipante_Observaciones').val('');
+    }
+</script>

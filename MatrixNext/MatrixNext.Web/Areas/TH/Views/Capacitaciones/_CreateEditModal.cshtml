@@ -1,0 +1,89 @@
+@using MatrixNext.Data.Modules.TH.Capacitaciones.Models
+@model CapacitacionCreateEditDto
+
+@{
+    var esEdicion = Model.Id > 0;
+    var titulo = esEdicion ? "Editar Capacitación" : "Nueva Capacitación";
+    var responsables = ViewBag.Responsables as IEnumerable<ResponsableComboDto> ?? Enumerable.Empty<ResponsableComboDto>();
+}
+
+<div class="modal-header bg-primary text-white">
+    <h5 class="modal-title">
+        <i class="bi bi-@(esEdicion ? "pencil" : "plus-lg") me-2"></i>@titulo
+    </h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+</div>
+
+<form id="formCapacitacion" asp-action="Save" method="post">
+    <div class="modal-body">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="TrabajoId" />
+
+        <div class="row g-3">
+            <div class="col-md-8">
+                <label asp-for="Actividad" class="form-label">Actividad <span class="text-danger">*</span></label>
+                <textarea asp-for="Actividad" class="form-control" rows="2" 
+                          placeholder="Descripción de la actividad de capacitación"></textarea>
+                <span asp-validation-for="Actividad" class="text-danger"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="Fecha" class="form-label">Fecha <span class="text-danger">*</span></label>
+                <input asp-for="Fecha" type="date" class="form-control" />
+                <span asp-validation-for="Fecha" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row g-3 mt-1">
+            <div class="col-md-6">
+                <label asp-for="Ubicacion" class="form-label">Ubicación <span class="text-danger">*</span></label>
+                <input asp-for="Ubicacion" class="form-control" placeholder="Lugar de la capacitación" />
+                <span asp-validation-for="Ubicacion" class="text-danger"></span>
+            </div>
+            <div class="col-md-3">
+                <label asp-for="Duracion" class="form-label">Duración (horas) <span class="text-danger">*</span></label>
+                <input asp-for="Duracion" type="number" class="form-control" min="1" max="255" />
+                <span asp-validation-for="Duracion" class="text-danger"></span>
+            </div>
+            <div class="col-md-3">
+                <label asp-for="ResponsableId" class="form-label">Responsable <span class="text-danger">*</span></label>
+                <select asp-for="ResponsableId" class="form-select">
+                    <option value="">-- Seleccione --</option>
+                    @foreach (var resp in responsables)
+                    {
+                        <option value="@resp.Id" selected="@(Model.ResponsableId == resp.Id)">@resp.Nombre</option>
+                    }
+                </select>
+                <span asp-validation-for="ResponsableId" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row g-3 mt-1">
+            <div class="col-md-6">
+                <label asp-for="Capacitador" class="form-label">Capacitador</label>
+                <input asp-for="Capacitador" class="form-control" placeholder="Nombre del capacitador" />
+            </div>
+            <div class="col-md-6">
+                <label asp-for="ModoEvaluacion" class="form-label">Modo de Evaluación</label>
+                <input asp-for="ModoEvaluacion" class="form-control" placeholder="Ej: Examen, Práctica, Observación" />
+            </div>
+        </div>
+
+        <div class="row g-3 mt-1">
+            <div class="col-12">
+                <label asp-for="ObjetivoActividad" class="form-label">Objetivo de la Actividad</label>
+                <textarea asp-for="ObjetivoActividad" class="form-control" rows="3" 
+                          placeholder="Describa el objetivo de esta capacitación"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="bi bi-x-lg me-1"></i>Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-check-lg me-1"></i>Guardar
+        </button>
+    </div>
+</form>

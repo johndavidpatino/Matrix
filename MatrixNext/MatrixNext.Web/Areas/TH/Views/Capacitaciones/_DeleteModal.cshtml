@@ -1,0 +1,60 @@
+@using MatrixNext.Data.Modules.TH.Capacitaciones.Models
+@model CapacitacionDto
+
+<div class="modal-header bg-danger text-white">
+    <h5 class="modal-title">
+        <i class="bi bi-exclamation-triangle me-2"></i>Eliminar Capacitación
+    </h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+</div>
+
+<div class="modal-body">
+    <div class="alert alert-warning">
+        <i class="bi bi-exclamation-circle me-2"></i>
+        ¿Está seguro que desea eliminar esta capacitación? Esta acción no se puede deshacer.
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <dl class="row mb-0">
+                <dt class="col-sm-4">ID:</dt>
+                <dd class="col-sm-8">@Model.Id</dd>
+
+                <dt class="col-sm-4">Actividad:</dt>
+                <dd class="col-sm-8">@Model.Actividad</dd>
+
+                <dt class="col-sm-4">Fecha:</dt>
+                <dd class="col-sm-8">@Model.Fecha?.ToString("dd/MM/yyyy")</dd>
+
+                <dt class="col-sm-4">Ubicación:</dt>
+                <dd class="col-sm-8">@Model.Ubicacion</dd>
+
+                <dt class="col-sm-4">Responsable:</dt>
+                <dd class="col-sm-8">@Model.ResponsableNombre</dd>
+
+                <dt class="col-sm-4">Participantes:</dt>
+                <dd class="col-sm-8">@Model.TotalParticipantes</dd>
+            </dl>
+        </div>
+    </div>
+
+    @if (Model.TotalParticipantes > 0)
+    {
+        <div class="alert alert-danger mt-3">
+            <i class="bi bi-people-fill me-2"></i>
+            Esta capacitación tiene <strong>@Model.TotalParticipantes participante(s)</strong> registrado(s).
+            Al eliminarla, se perderá toda la información asociada.
+        </div>
+    }
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        <i class="bi bi-x-lg me-1"></i>Cancelar
+    </button>
+    <button type="button" class="btn btn-danger" id="btnConfirmarEliminar" data-id="@Model.Id">
+        <i class="bi bi-trash me-1"></i>Eliminar
+    </button>
+</div>
+
+@Html.AntiForgeryToken()
