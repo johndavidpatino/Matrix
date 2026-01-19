@@ -1,0 +1,141 @@
+@model MatrixNext.Data.DTOs.PY.VariableControlDto
+
+<div class="modal-header">
+    <h5 class="modal-title">Detalle Evaluación - Variables de Control</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+</div>
+<div class="modal-body">
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <strong>Evaluado:</strong> @Model.NombreEvaluado
+        </div>
+        <div class="col-md-6">
+            <strong>Tipo:</strong> @Model.TipoEvaluado
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <strong>Fecha Evaluación:</strong> @Model.FechaCreacion.ToString("dd/MM/yyyy HH:mm")
+        </div>
+        <div class="col-md-6">
+            <strong>Registrado por:</strong> @Model.NombreUsuario
+        </div>
+    </div>
+
+    <hr />
+
+    <h6>Resultados Evaluación</h6>
+    <table class="table table-sm table-bordered">
+        <thead>
+            <tr>
+                <th style="width: 50%">Variable</th>
+                <th style="width: 15%" class="text-center">Cumple</th>
+                <th style="width: 35%">Observaciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Seguridad y confidencialidad de la información</td>
+                <td class="text-center">
+                    @if (Model.CumpleSeguridad == 1)
+                    {
+                        <span class="badge bg-success">Sí</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">No</span>
+                    }
+                </td>
+                <td>@Model.ObsSeguridad</td>
+            </tr>
+            <tr>
+                <td>Forma de obtención de los entrevistados</td>
+                <td class="text-center">
+                    @if (Model.CumpleObtencion == 1)
+                    {
+                        <span class="badge bg-success">Sí</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">No</span>
+                    }
+                </td>
+                <td>@Model.ObsObtencion</td>
+            </tr>
+            <tr>
+                <td>Grupo objetivo</td>
+                <td class="text-center">
+                    @if (Model.CumpleObjetivo == 1)
+                    {
+                        <span class="badge bg-success">Sí</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">No</span>
+                    }
+                </td>
+                <td>@Model.ObsObjetivo</td>
+            </tr>
+            <tr>
+                <td>Aplicación de instrumentos</td>
+                <td class="text-center">
+                    @if (Model.CumpleAplicacion == 1)
+                    {
+                        <span class="badge bg-success">Sí</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">No</span>
+                    }
+                </td>
+                <td>@Model.ObsAplicacion</td>
+            </tr>
+            <tr>
+                <td>Distribución de cuotas</td>
+                <td class="text-center">
+                    @if (Model.CumpleDistribucion == 1)
+                    {
+                        <span class="badge bg-success">Sí</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">No</span>
+                    }
+                </td>
+                <td>@Model.ObsDistribucion</td>
+            </tr>
+            <tr>
+                <td>Cumplimiento de metodología y otras instrucciones</td>
+                <td class="text-center">
+                    @if (Model.CumpleCumplimiento == 1)
+                    {
+                        <span class="badge bg-success">Sí</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">No</span>
+                    }
+                </td>
+                <td>@Model.ObsCumplimiento</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr class="table-active">
+                <td><strong>Porcentaje de Cumplimiento</strong></td>
+                <td colspan="2" class="text-center">
+                    @{
+                        var totalCumple = (Model.CumpleSeguridad ?? 0) + (Model.CumpleObtencion ?? 0) + 
+                                          (Model.CumpleObjetivo ?? 0) + (Model.CumpleAplicacion ?? 0) + 
+                                          (Model.CumpleDistribucion ?? 0) + (Model.CumpleCumplimiento ?? 0);
+                        var porcentaje = Math.Round((decimal)totalCumple / 6 * 100, 0);
+                        var badgeClass = porcentaje >= 80 ? "bg-success" : porcentaje >= 50 ? "bg-warning" : "bg-danger";
+                    }
+                    <span class="badge @badgeClass fs-6">@porcentaje%</span>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+</div>

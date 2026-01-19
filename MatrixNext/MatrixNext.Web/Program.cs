@@ -162,6 +162,14 @@ builder.Services.AddScoped<MatrixNext.Data.Services.RP.IIndicadoresCalidadServic
 // RP Avance de Campo (General, Ciudad, Áreas, Remanentes, Matriz Cumplimiento)
 builder.Services.AddScoped<MatrixNext.Data.Services.RP.IAvanceCampoService, MatrixNext.Data.Services.RP.AvanceCampoService>();
 
+// ===== SPRINT 22 (Fase 4): PY_VariablesControl + DuplicarTrabajos =====
+// PY Variables de Control (CRUD + Reportes detallado y por mes)
+builder.Services.AddScoped<MatrixNext.Data.Services.PY.IVariablesControlService>(sp =>
+{
+    var logger = sp.GetRequiredService<ILogger<MatrixNext.Data.Services.PY.VariablesControlService>>();
+    return new MatrixNext.Data.Services.PY.VariablesControlService(connectionString!, logger);
+});
+
 // Authorization Service (Sprint 10-11)
 builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
 

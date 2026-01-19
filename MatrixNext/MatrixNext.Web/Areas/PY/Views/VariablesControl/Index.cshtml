@@ -1,0 +1,344 @@
+@model MatrixNext.Data.DTOs.PY.VariablesControlViewModel
+
+@{
+    ViewData["Title"] = "Variables de Control";
+}
+
+<div class="container-fluid">
+    <!-- Información del Trabajo -->
+    <div class="card mb-3">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">
+                <i class="fas fa-clipboard-check"></i> Variables de Control
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="form-label">Id Trabajo</label>
+                    <input type="text" class="form-control" value="@Model.IdTrabajo" readonly />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">JobBook</label>
+                    <input type="text" class="form-control" value="@Model.JobBook" readonly />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Nombre Trabajo/Estudio</label>
+                    <input type="text" class="form-control" value="@Model.NombreTrabajo" readonly />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">OMP</label>
+                    <input type="text" class="form-control" value="@Model.NombreCOE" readonly />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulario de Variables de Control -->
+    <div class="card">
+        <div class="card-body">
+            <form id="formVariableControl">
+                <input type="hidden" id="idTrabajo" value="@Model.IdTrabajo" />
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Evaluado *</label>
+                        <select id="idEvaluado" class="form-select" required>
+                            <option value="">Seleccione un empleado...</option>
+                            @foreach (var emp in Model.EmpleadosDisponibles)
+                            {
+                                <option value="@emp.Key">@emp.Value</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Tipo Evaluado *</label>
+                        <select id="tipoEvaluado" class="form-select" required>
+                            <option value="">Seleccione...</option>
+                            <option value="COE">COE</option>
+                            <option value="Gerente">Gerente</option>
+                            <option value="Coordinador">Coordinador</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Variable: Seguridad y confidencialidad -->
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h6 class="mb-0">Seguridad y confidencialidad de la información</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="cumpleSeguridad" id="seguridadSi" value="1" />
+                                    <label class="form-check-label" for="seguridadSi">Sí</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="cumpleSeguridad" id="seguridadNo" value="0" />
+                                    <label class="form-check-label" for="seguridadNo">No</label>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <textarea id="obsSeguridad" class="form-control" rows="2" placeholder="Observaciones"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Variable: Forma de obtención -->
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h6 class="mb-0">Forma de Obtención de los entrevistados</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="cumpleObtencion" id="obtencionSi" value="1" />
+                                    <label class="form-check-label" for="obtencionSi">Sí</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="cumpleObtencion" id="obtencionNo" value="0" />
+                                    <label class="form-check-label" for="obtencionNo">No</label>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <textarea id="obsObtencion" class="form-control" rows="2" placeholder="Observaciones"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Variable: Grupo objetivo -->
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h6 class="mb-0">Grupo objetivo</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="cumpleObjetivo" id="objetivoSi" value="1" />
+                                    <label class="form-check-label" for="objetivoSi">Sí</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="cumpleObjetivo" id="objetivoNo" value="0" />
+                                    <label class="form-check-label" for="objetivoNo">No</label>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <textarea id="obsObjetivo" class="form-control" rows="2" placeholder="Observaciones"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Variable: Aplicación de instrumentos -->
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h6 class="mb-0">Aplicación de instrumentos</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="cumpleAplicacion" id="aplicacionSi" value="1" />
+                                    <label class="form-check-label" for="aplicacionSi">Sí</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="cumpleAplicacion" id="aplicacionNo" value="0" />
+                                    <label class="form-check-label" for="aplicacionNo">No</label>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <textarea id="obsAplicacion" class="form-control" rows="2" placeholder="Observaciones"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Variable: Distribución de cuotas -->
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h6 class="mb-0">Distribución de Cuotas</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="cumpleDistribucion" id="distribucionSi" value="1" />
+                                    <label class="form-check-label" for="distribucionSi">Sí</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="cumpleDistribucion" id="distribucionNo" value="0" />
+                                    <label class="form-check-label" for="distribucionNo">No</label>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <textarea id="obsDistribucion" class="form-control" rows="2" placeholder="Observaciones"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Variable: Cumplimiento de metodología -->
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h6 class="mb-0">Cumplimiento de Metodología y otras instrucciones</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="cumpleCumplimiento" id="cumplimientoSi" value="1" />
+                                    <label class="form-check-label" for="cumplimientoSi">Sí</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="cumpleCumplimiento" id="cumplimientoNo" value="0" />
+                                    <label class="form-check-label" for="cumplimientoNo">No</label>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <textarea id="obsCumplimiento" class="form-control" rows="2" placeholder="Observaciones"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-end">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Guardar
+                    </button>
+                    <a href="@Url.Action("Index", "Trabajos", new { area = "PY" })" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Historial de Evaluaciones -->
+    @if (Model.VariablesRegistradas.Any())
+    {
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6 class="mb-0">Historial de Evaluaciones</h6>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Evaluado</th>
+                            <th>Tipo</th>
+                            <th>% Cumplimiento</th>
+                            <th>Usuario</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.VariablesRegistradas)
+                        {
+                            var totalCumple = (item.CumpleSeguridad ?? 0) + (item.CumpleObtencion ?? 0) + 
+                                              (item.CumpleObjetivo ?? 0) + (item.CumpleAplicacion ?? 0) + 
+                                              (item.CumpleDistribucion ?? 0) + (item.CumpleCumplimiento ?? 0);
+                            var porcentaje = Math.Round((decimal)totalCumple / 6 * 100, 0);
+                            var badgeClass = porcentaje >= 80 ? "bg-success" : porcentaje >= 50 ? "bg-warning" : "bg-danger";
+                            
+                            <tr>
+                                <td>@item.FechaCreacion.ToString("dd/MM/yyyy")</td>
+                                <td>@item.NombreEvaluado</td>
+                                <td>@item.TipoEvaluado</td>
+                                <td><span class="badge @badgeClass">@porcentaje%</span></td>
+                                <td>@item.NombreUsuario</td>
+                                <td>
+                                    <button class="btn btn-sm btn-info" 
+                                            onclick="verDetalle(@item.Id)">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Modal Detalle -->
+<div class="modal fade" id="modalDetalle" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" id="modalDetalleContent">
+            <!-- Content loaded via AJAX -->
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Submit form
+            $('#formVariableControl').on('submit', function(e) {
+                e.preventDefault();
+                
+                // Validar
+                if (!$('#idEvaluado').val() || !$('#tipoEvaluado').val()) {
+                    alert('Debe seleccionar evaluado y tipo de evaluado');
+                    return;
+                }
+                
+                // Validar que al menos un radio button esté seleccionado por grupo
+                if (!$('input[name="cumpleSeguridad"]:checked').val()) {
+                    alert('Debe responder todas las variables de control');
+                    return;
+                }
+                
+                const data = {
+                    idTrabajo: parseInt($('#idTrabajo').val()),
+                    idEvaluado: parseInt($('#idEvaluado').val()),
+                    tipoEvaluado: $('#tipoEvaluado').val(),
+                    cumpleSeguridad: parseInt($('input[name="cumpleSeguridad"]:checked').val()),
+                    obsSeguridad: $('#obsSeguridad').val(),
+                    cumpleObtencion: parseInt($('input[name="cumpleObtencion"]:checked').val()),
+                    obsObtencion: $('#obsObtencion').val(),
+                    cumpleObjetivo: parseInt($('input[name="cumpleObjetivo"]:checked').val()),
+                    obsObjetivo: $('#obsObjetivo').val(),
+                    cumpleAplicacion: parseInt($('input[name="cumpleAplicacion"]:checked').val()),
+                    obsAplicacion: $('#obsAplicacion').val(),
+                    cumpleDistribucion: parseInt($('input[name="cumpleDistribucion"]:checked').val()),
+                    obsDistribucion: $('#obsDistribucion').val(),
+                    cumpleCumplimiento: parseInt($('input[name="cumpleCumplimiento"]:checked').val()),
+                    obsCumplimiento: $('#obsCumplimiento').val()
+                };
+                
+                $.ajax({
+                    url: '@Url.Action("Guardar", "VariablesControl", new { area = "PY" })',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    success: function(response) {
+                        if (response.success) {
+                            alert(response.message);
+                            location.reload();
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function() {
+                        alert('Error al guardar la variable de control');
+                    }
+                });
+            });
+        });
+        
+        function verDetalle(id) {
+            $.get('@Url.Action("Detalle", "VariablesControl", new { area = "PY" })?id=' + id, function(html) {
+                $('#modalDetalleContent').html(html);
+                $('#modalDetalle').modal('show');
+            });
+        }
+    </script>
+}
