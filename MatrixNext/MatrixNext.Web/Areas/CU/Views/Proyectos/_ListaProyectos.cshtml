@@ -1,0 +1,64 @@
+@model IEnumerable<MatrixNext.Data.Modules.CU.Proyectos.Models.ProyectoDto>
+
+@if (Model.Any())
+{
+    <div class="table-responsive">
+        <table class="table table-hover table-striped">
+            <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>JobBook</th>
+                    <th>Nombre</th>
+                    <th>Tipo</th>
+                    <th>Unidad</th>
+                    <th>Gerente Proyecto</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>
+                            <span class="badge bg-primary-transparent">@item.JobBook</span>
+                        </td>
+                        <td>@item.Nombre</td>
+                        <td>@item.TipoProyecto</td>
+                        <td>@item.Unidad</td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(item.GP_Nombres))
+                            {
+                                <span class="badge bg-info-transparent">@item.GP_Nombres</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning-transparent">Sin asignar</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            <div class="btn-group btn-group-sm">
+                                <button type="button" class="btn btn-outline-primary" 
+                                        data-bs-toggle="modal" data-bs-target="#modalProyecto"
+                                        onclick="cargarModalProyecto(@item.Id)" title="Editar">
+                                    <i class="ri-edit-line"></i>
+                                </button>
+                                <a asp-area="CU" asp-controller="TrabajosCuentas" asp-action="Index" asp-route-estudioId="@item.EstudioId"
+                                   class="btn btn-outline-info" title="Ver Trabajos">
+                                    <i class="ri-list-check"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="alert alert-info">
+        <i class="ri-information-line me-2"></i>
+        No se encontraron proyectos. Haga clic en "Nuevo Proyecto" para crear uno.
+    </div>
+}

@@ -1,0 +1,119 @@
+@model MatrixNext.Data.Modules.CU.Proyectos.Models.ProyectoCreateEditDto
+@{
+    var tiposProyecto = ViewBag.TiposProyecto as IEnumerable<MatrixNext.Data.Modules.CU.Proyectos.Models.TipoProyectoDto>;
+    var unidades = ViewBag.Unidades as IEnumerable<MatrixNext.Data.Modules.CU.Proyectos.Models.UnidadComboDto>;
+}
+
+<form id="formProyecto" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="EstudioId" />
+    
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label asp-for="JobBook" class="form-label">JobBook <span class="text-danger">*</span></label>
+            <input asp-for="JobBook" class="form-control" placeholder="Ej: 12345-01-01" />
+            <span asp-validation-for="JobBook" class="text-danger"></span>
+            <small class="text-muted">El JobBook no puede terminar en 00</small>
+        </div>
+        
+        <div class="col-md-6">
+            <label asp-for="TipoProyectoId" class="form-label">Tipo Proyecto <span class="text-danger">*</span></label>
+            <select asp-for="TipoProyectoId" class="form-select">
+                <option value="">Seleccione...</option>
+                @if (tiposProyecto != null)
+                {
+                    @foreach (var tipo in tiposProyecto)
+                    {
+                        <option value="@tipo.Id">@tipo.TipoProyecto</option>
+                    }
+                }
+            </select>
+            <span asp-validation-for="TipoProyectoId" class="text-danger"></span>
+        </div>
+        
+        <div class="col-12">
+            <label asp-for="Nombre" class="form-label">Nombre <span class="text-danger">*</span></label>
+            <input asp-for="Nombre" class="form-control" placeholder="Nombre del proyecto" />
+            <span asp-validation-for="Nombre" class="text-danger"></span>
+        </div>
+        
+        <div class="col-md-6">
+            <label asp-for="UnidadId" class="form-label">Unidad <span class="text-danger">*</span></label>
+            <select asp-for="UnidadId" class="form-select">
+                <option value="">Seleccione...</option>
+                @if (unidades != null)
+                {
+                    @foreach (var unidad in unidades)
+                    {
+                        <option value="@unidad.Id">@unidad.Unidad</option>
+                    }
+                }
+            </select>
+            <span asp-validation-for="UnidadId" class="text-danger"></span>
+        </div>
+        
+        <div class="col-md-6">
+            <label asp-for="GerenteProyectos" class="form-label">Gerente de Proyectos</label>
+            <input asp-for="GerenteProyectos" type="number" class="form-control" placeholder="ID del gerente (opcional)" />
+            <span asp-validation-for="GerenteProyectos" class="text-danger"></span>
+        </div>
+        
+        <!-- Campos adicionales A1-A7 en acordeón -->
+        <div class="col-12">
+            <div class="accordion" id="accordionCamposAdicionales">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                                data-bs-target="#collapseCampos" aria-expanded="false">
+                            <i class="ri-settings-3-line me-2"></i>Campos Adicionales
+                        </button>
+                    </h2>
+                    <div id="collapseCampos" class="accordion-collapse collapse" data-bs-parent="#accordionCamposAdicionales">
+                        <div class="accordion-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label asp-for="A1" class="form-label">A1</label>
+                                    <textarea asp-for="A1" class="form-control" rows="2"></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="A2" class="form-label">A2</label>
+                                    <textarea asp-for="A2" class="form-control" rows="2"></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="A3" class="form-label">A3</label>
+                                    <textarea asp-for="A3" class="form-control" rows="2"></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="A4" class="form-label">A4</label>
+                                    <textarea asp-for="A4" class="form-control" rows="2"></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="A5" class="form-label">A5</label>
+                                    <textarea asp-for="A5" class="form-control" rows="2"></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="A6" class="form-label">A6</label>
+                                    <textarea asp-for="A6" class="form-control" rows="2"></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <label asp-for="A7" class="form-label">A7</label>
+                                    <textarea asp-for="A7" class="form-control" rows="2"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-footer mt-3">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="ri-close-line"></i> Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary">
+            <i class="ri-save-line"></i> Guardar
+        </button>
+    </div>
+</form>
