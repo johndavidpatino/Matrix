@@ -177,6 +177,13 @@ builder.Services.AddScoped<MatrixNext.Data.Services.PY.IDuplicarTrabajoService>(
     return new MatrixNext.Data.Services.PY.DuplicarTrabajoService(connectionString!, logger);
 });
 
+// OP Solicitud Presupuestos Internos (Cuantitativo - COE Permiso 100)
+builder.Services.AddScoped<MatrixNext.Data.Services.ISolicitudPresupuestoInternoService>(sp =>
+{
+    var logger = sp.GetRequiredService<ILogger<MatrixNext.Data.Services.SolicitudPresupuestoInternoService>>();
+    return new MatrixNext.Data.Services.SolicitudPresupuestoInternoService(connectionString!, logger);
+});
+
 // Authorization Service (Sprint 10-11)
 builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
 

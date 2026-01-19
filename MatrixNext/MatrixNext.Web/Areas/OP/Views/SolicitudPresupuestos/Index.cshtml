@@ -1,0 +1,169 @@
+@model MatrixNext.Data.Dtos.SolicitudPresupuestoViewModel
+
+@{
+    ViewData["Title"] = "Solicitud de Presupuesto Interno";
+}
+
+<div class="container-fluid py-4">
+    <!-- Encabezado -->
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="h3">
+                <i class="bi bi-file-earmark-text"></i> Solicitud de Presupuesto Interno
+            </h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-area="OP" asp-controller="Home" asp-action="Index">OP Cuantitativo</a></li>
+                    <li class="breadcrumb-item"><a asp-area="OP" asp-controller="Trabajos" asp-action="Index">Trabajos</a></li>
+                    <li class="breadcrumb-item active">Solicitud Presupuesto</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Card con información del trabajo -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-briefcase"></i> Información del Trabajo
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <strong>JobBook:</strong> @Model.JobBook
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Nombre:</strong> @Model.NombreTrabajo
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Metodología:</strong> @(Model.Metodologia ?? "N/A")
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.YaSolicitado)
+    {
+        <!-- Alerta de solicitud existente -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="alert alert-info" role="alert">
+                    <h5 class="alert-heading">
+                        <i class="bi bi-info-circle"></i> Solicitud Existente
+                    </h5>
+                    <p class="mb-0">
+                        Ya fue realizada una solicitud de presupuesto para este trabajo el 
+                        <strong>@Model.SolicitudExistente?.Fecha.ToString("dd/MM/yyyy HH:mm")</strong>.
+                    </p>
+                    @if (!string.IsNullOrEmpty(Model.SolicitudExistente?.Observacion))
+                    {
+                        <hr />
+                        <p class="mb-0">
+                            <strong>Especificaciones solicitadas:</strong><br />
+                            @Model.SolicitudExistente.Observacion
+                        </p>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <!-- Formulario de solicitud -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-pencil-square"></i> Nueva Solicitud de Presupuesto
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <form asp-action="Solicitar" method="post" id="formSolicitud">
+                            <input type="hidden" asp-for="TrabajoId" />
+                            
+                            <div class="alert alert-warning" role="alert">
+                                <i class="bi bi-exclamation-triangle"></i>
+                                <strong>Importante:</strong> Escriba todas las especificaciones necesarias para la generación del presupuesto.
+                                Sea lo más detallado posible para facilitar el proceso.
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="Observacion" class="form-label">
+                                    <i class="bi bi-card-text"></i> Especificaciones para el Presupuesto
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <textarea asp-for="Observacion" 
+                                          class="form-control" 
+                                          rows="8" 
+                                          placeholder="Detalle todas las especificaciones técnicas, requerimientos de muestra, ciudades, características del estudio, etc."
+                                          required></textarea>
+                                <div class="form-text">
+                                    Incluya: ciudades, tamaño de muestra, tipo de encuestadores, metodología específica, cronograma esperado, etc.
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-end gap-2">
+                                <a asp-area="OP" asp-controller="Trabajos" asp-action="Index" class="btn btn-secondary">
+                                    <i class="bi bi-x-circle"></i> Cancelar
+                                </a>
+                                <button type="submit" class="btn btn-primary" id="btnSolicitar">
+                                    <i class="bi bi-send"></i> Solicitar Presupuesto
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#formSolicitud').on('submit', function (e) {
+                e.preventDefault();
+
+                var form = $(this);
+                var observacion = $('#Observacion').val().trim();
+
+                if (observacion === '') {
+                    alert('Debe escribir las especificaciones para la generación del presupuesto');
+                    return;
+                }
+
+                // Deshabilitar botón y mostrar spinner
+                var btnSolicitar = $('#btnSolicitar');
+                btnSolicitar.prop('disabled', true);
+                btnSolicitar.html('<span class="spinner-border spinner-border-sm me-2"></span>Enviando...');
+
+                $.ajax({
+                    url: form.attr('action'),
+                    type: 'POST',
+                    data: form.serialize(),
+                    success: function (response) {
+                        if (response.success) {
+                            alert(response.message);
+                            window.location.reload();
+                        } else {
+                            alert(response.message);
+                            btnSolicitar.prop('disabled', false);
+                            btnSolicitar.html('<i class="bi bi-send"></i> Solicitar Presupuesto');
+                        }
+                    },
+                    error: function () {
+                        alert('Error al procesar la solicitud. Por favor intente nuevamente.');
+                        btnSolicitar.prop('disabled', false);
+                        btnSolicitar.html('<i class="bi bi-send"></i> Solicitar Presupuesto');
+                    }
+                });
+            });
+        });
+    </script>
+}
