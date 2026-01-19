@@ -1,0 +1,40 @@
+@using MatrixNext.Data.Modules.TH.Contratistas.Models
+@model IEnumerable<ContratistaLogDto>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info text-center">
+        <i class="bi bi-info-circle me-2"></i>
+        No se encontraron registros en el historial.
+    </div>
+}
+else
+{
+    <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+        <table class="table table-sm table-striped">
+            <thead class="table-light sticky-top">
+                <tr>
+                    <th style="width: 150px;">Fecha</th>
+                    <th style="width: 120px;">Contratista</th>
+                    <th>Observación</th>
+                    <th style="width: 150px;">Usuario</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var log in Model.OrderByDescending(l => l.Fecha))
+                {
+                    <tr>
+                        <td>@log.Fecha?.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@log.ContratistaId</td>
+                        <td>@log.Observacion</td>
+                        <td>@log.UsuarioNombre</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="text-muted small mt-2">
+        Total: @Model.Count() registro(s)
+    </div>
+}

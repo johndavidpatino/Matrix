@@ -1,0 +1,97 @@
+@using MatrixNext.Data.Modules.TH.Contratistas.Models
+@model IEnumerable<ContratistaDto>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info text-center">
+        <i class="bi bi-info-circle me-2"></i>
+        No se encontraron contratistas con los criterios especificados.
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered">
+            <thead class="table-light">
+                <tr>
+                    <th>Identificación</th>
+                    <th>Nombre</th>
+                    <th>Ciudad</th>
+                    <th>Teléfono</th>
+                    <th>Email</th>
+                    <th>Clasificación</th>
+                    <th class="text-center">Estado</th>
+                    <th class="text-center" style="width: 180px;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    var badgeClass = item.Activo ? "bg-success" : (item.Estado == 3 ? "bg-danger" : "bg-warning");
+                    var estadoTexto = item.Activo ? "Activo" : (item.Estado == 3 ? "Retirado" : "Inactivo");
+                    
+                    <tr>
+                        <td>@item.Identificacion</td>
+                        <td>@item.Nombre</td>
+                        <td>@item.CiudadNombre</td>
+                        <td>@item.Telefono</td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(item.Email))
+                            {
+                                <a href="mailto:@item.Email">@item.Email</a>
+                            }
+                        </td>
+                        <td>@item.ClasificacionNombre</td>
+                        <td class="text-center">
+                            <span class="badge @badgeClass">@estadoTexto</span>
+                        </td>
+                        <td class="text-center">
+                            <div class="btn-group btn-group-sm" role="group">
+                                <button type="button" class="btn btn-outline-info" 
+                                        onclick="verDetalles(@item.Identificacion)" 
+                                        title="Ver detalles">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline-primary" 
+                                        onclick="editarContratista(@item.Identificacion)" 
+                                        title="Editar">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary" 
+                                        onclick="verServicios(@item.Identificacion)" 
+                                        title="Servicios">
+                                    <i class="bi bi-list-check"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline-dark" 
+                                        onclick="verLog(@item.Identificacion)" 
+                                        title="Historial">
+                                    <i class="bi bi-clock-history"></i>
+                                </button>
+                                @if (item.Activo)
+                                {
+                                    <button type="button" class="btn btn-outline-warning" 
+                                            onclick="cambiarEstado(@item.Identificacion, 2)" 
+                                            title="Inactivar">
+                                        <i class="bi bi-pause-circle"></i>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-outline-success" 
+                                            onclick="cambiarEstado(@item.Identificacion, 1)" 
+                                            title="Activar">
+                                        <i class="bi bi-play-circle"></i>
+                                    </button>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="text-muted small mt-2">
+        Total: @Model.Count() contratista(s)
+    </div>
+}

@@ -1,0 +1,78 @@
+@using MatrixNext.Data.Modules.TH.Contratistas.Models
+@model IEnumerable<ContratistaLogDto>
+@{
+    var contratistaId = ViewBag.ContratistaId as long?;
+    var contratistaNombre = ViewBag.ContratistaNombre as string ?? "";
+}
+
+<div class="modal-header bg-dark text-white">
+    <h5 class="modal-title">
+        <i class="bi bi-clock-history me-2"></i>Historial de Cambios
+    </h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+</div>
+
+<div class="modal-body">
+    @if (contratistaId.HasValue)
+    {
+        <div class="alert alert-light border mb-3">
+            <strong>Contratista:</strong> @contratistaNombre
+            <span class="badge bg-secondary ms-2">ID: @contratistaId</span>
+        </div>
+    }
+    else
+    {
+        <!-- Búsqueda general -->
+        <div class="card border mb-3">
+            <div class="card-body">
+                <div class="row g-2">
+                    <div class="col-md-5">
+                        <input type="number" id="filtroLogId" class="form-control" placeholder="Identificación...">
+                    </div>
+                    <div class="col-md-5">
+                        <input type="text" id="filtroLogNombre" class="form-control" placeholder="Nombre...">
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-primary w-100" id="btnBuscarLog">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div id="logListaContainer">
+        @await Html.PartialAsync("_LogLista", Model)
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        <i class="bi bi-x-lg me-1"></i>Cerrar
+    </button>
+</div>
+
+<script>
+    @if (!contratistaId.HasValue)
+    {
+        <text>
+        $('#btnBuscarLog').on('click', function () {
+            var identificacion = $('#filtroLogId').val() || null;
+            var nombre = $('#filtroLogNombre').val() || null;
+
+            $.get('@Url.Action("BuscarLog", "Contratistas", new { area = "TH" })', 
+                  { identificacion: identificacion, nombre: nombre }, 
+                  function (html) {
+                      $('#logListaContainer').html(html);
+                  });
+        });
+
+        $('#filtroLogId, #filtroLogNombre').on('keypress', function (e) {
+            if (e.which === 13) {
+                $('#btnBuscarLog').click();
+            }
+        });
+        </text>
+    }
+</script>

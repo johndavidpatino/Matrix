@@ -3,6 +3,8 @@ using MatrixNext.Data.Modules.TH.Ausencias.Adapters;
 using MatrixNext.Data.Modules.TH.Ausencias.Services;
 using MatrixNext.Data.Modules.TH.Capacitaciones.Adapters;
 using MatrixNext.Data.Modules.TH.Capacitaciones.Services;
+using MatrixNext.Data.Modules.TH.Contratistas.Adapters;
+using MatrixNext.Data.Modules.TH.Contratistas.Services;
 using MatrixNext.Data.Modules.TH.Empleados.Adapters;
 using MatrixNext.Data.Modules.TH.Empleados.Services;
 using MatrixNext.Data.Adapters.TH;
@@ -55,6 +57,10 @@ namespace MatrixNext.Data.Modules.TH
             // Capacitaciones services (Sprint Fase 1 TH)
             services.AddScoped<ICapacitacionAdapter, CapacitacionAdapter>();
             services.AddScoped<ICapacitacionService, CapacitacionService>();
+            
+            // Contratistas services (Sprint Fase 1 TH)
+            services.AddScoped<IContratistaAdapter, ContratistaAdapter>();
+            services.AddScoped<IContratistaService, ContratistaService>();
             
             return services;
         }

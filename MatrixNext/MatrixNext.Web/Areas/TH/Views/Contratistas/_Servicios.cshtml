@@ -1,0 +1,161 @@
+@using MatrixNext.Data.Modules.TH.Contratistas.Models
+@model IEnumerable<ContratistaServicioDto>
+@{
+    var contratistaId = ViewBag.ContratistaId as long? ?? 0;
+    var contratistaNombre = ViewBag.ContratistaNombre as string ?? "";
+}
+
+<div class="modal-header bg-secondary text-white">
+    <h5 class="modal-title">
+        <i class="bi bi-list-check me-2"></i>Servicios del Contratista
+    </h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+</div>
+
+<div class="modal-body">
+    <!-- Info del contratista -->
+    <div class="alert alert-light border mb-3">
+        <strong>Contratista:</strong> @contratistaNombre
+        <span class="badge bg-secondary ms-2">ID: @contratistaId</span>
+    </div>
+
+    <!-- Formulario agregar servicio -->
+    <div class="card border-success mb-3">
+        <div class="card-header bg-success text-white">
+            <i class="bi bi-plus-lg me-2"></i>Agregar Servicio
+        </div>
+        <div class="card-body">
+            <div class="row g-2">
+                <div class="col-md-8">
+                    <select id="ddlServicioNuevo" class="form-select" asp-items="@ViewBag.ServiciosDisponibles">
+                        <option value="">-- Seleccione un servicio --</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <button type="button" class="btn btn-success w-100" id="btnAgregarServicio">
+                        <i class="bi bi-plus-lg me-1"></i>Agregar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lista de servicios -->
+    @if (Model.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-sm table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Servicio</th>
+                        <th class="text-center">Estado</th>
+                        <th class="text-center" style="width: 100px;">Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var servicio in Model)
+                    {
+                        <tr data-servicio-id="@servicio.Id">
+                            <td>@servicio.ServicioId</td>
+                            <td>@servicio.NombreServicio</td>
+                            <td class="text-center">
+                                <div class="form-check form-switch d-flex justify-content-center">
+                                    <input type="checkbox" class="form-check-input chk-estado" 
+                                           data-id="@servicio.Id"
+                                           @(servicio.Estado ? "checked" : "") />
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-outline-primary btn-sm btn-guardar-servicio" 
+                                        data-id="@servicio.Id" title="Guardar cambios">
+                                    <i class="bi bi-check-lg"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="text-muted small">
+            Total: @Model.Count() servicio(s)
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center">
+            <i class="bi bi-info-circle me-2"></i>
+            Este contratista no tiene servicios asignados.
+        </div>
+    }
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        <i class="bi bi-x-lg me-1"></i>Cerrar
+    </button>
+</div>
+
+@Html.AntiForgeryToken()
+
+<script>
+    // Agregar servicio
+    $('#btnAgregarServicio').on('click', function () {
+        var servicioId = $('#ddlServicioNuevo').val();
+        var servicioNombre = $('#ddlServicioNuevo option:selected').text();
+
+        if (!servicioId) {
+            showToast('Seleccione un servicio', 'warning');
+            return;
+        }
+
+        $.ajax({
+            url: '@Url.Action("AgregarServicio", "Contratistas", new { area = "TH" })',
+            type: 'POST',
+            data: {
+                ContratistaId: @contratistaId,
+                ServicioId: servicioId,
+                NombreServicio: servicioNombre,
+                Estado: true
+            },
+            headers: { 'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val() },
+            success: function (response) {
+                if (response.success) {
+                    showToast(response.message, 'success');
+                    // Refrescar la lista de servicios
+                    verServicios(@contratistaId);
+                } else {
+                    showToast(response.message, 'error');
+                }
+            },
+            error: function () {
+                showToast('Error al agregar el servicio', 'error');
+            }
+        });
+    });
+
+    // Actualizar estado de servicio
+    $(document).on('click', '.btn-guardar-servicio', function () {
+        var id = $(this).data('id');
+        var row = $(this).closest('tr');
+        var estado = row.find('.chk-estado').is(':checked');
+
+        $.ajax({
+            url: '@Url.Action("ActualizarServicio", "Contratistas", new { area = "TH" })',
+            type: 'POST',
+            data: { id: id, estado: estado, contratistaId: @contratistaId },
+            headers: { 'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val() },
+            success: function (response) {
+                if (response.success) {
+                    showToast(response.message, 'success');
+                } else {
+                    showToast(response.message, 'error');
+                }
+            },
+            error: function () {
+                showToast('Error al actualizar el servicio', 'error');
+            }
+        });
+    });
+</script>

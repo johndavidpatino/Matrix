@@ -1,0 +1,138 @@
+@using MatrixNext.Data.Modules.TH.Contratistas.Models
+@model ContratistaCreateEditDto
+
+<div class="modal-header bg-primary text-white">
+    <h5 class="modal-title">
+        <i class="bi bi-building me-2"></i>@(Model.EsActualizacion ? "Editar" : "Nuevo") Contratista
+    </h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+</div>
+
+<form id="formContratista" asp-action="Save" asp-controller="Contratistas" asp-area="TH" method="post">
+    <div class="modal-body">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="EsActualizacion" />
+
+        <div class="row g-3">
+            <!-- Identificación -->
+            <div class="col-md-4">
+                <label asp-for="Identificacion" class="form-label">Identificación (NIT/CC) <span class="text-danger">*</span></label>
+                @if (Model.EsActualizacion)
+                {
+                    <input asp-for="Identificacion" class="form-control" readonly />
+                }
+                else
+                {
+                    <input asp-for="Identificacion" class="form-control" />
+                }
+                <span asp-validation-for="Identificacion" class="text-danger"></span>
+            </div>
+
+            <!-- Symphony -->
+            <div class="col-md-4">
+                <label asp-for="NumeroSymphony" class="form-label">Número Symphony <span class="text-danger">*</span></label>
+                <input asp-for="NumeroSymphony" class="form-control" />
+                <span asp-validation-for="NumeroSymphony" class="text-danger"></span>
+            </div>
+
+            <!-- Estado -->
+            <div class="col-md-4">
+                <label asp-for="Estado" class="form-label">Estado <span class="text-danger">*</span></label>
+                <select asp-for="Estado" asp-items="@ViewBag.Estados" class="form-select">
+                    <option value="">-- Seleccione --</option>
+                </select>
+                <span asp-validation-for="Estado" class="text-danger"></span>
+            </div>
+
+            <!-- Nombre -->
+            <div class="col-md-8">
+                <label asp-for="Nombre" class="form-label">Nombre / Razón Social <span class="text-danger">*</span></label>
+                <input asp-for="Nombre" class="form-control" />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+
+            <!-- Clasificación -->
+            <div class="col-md-4">
+                <label asp-for="Clasificacion" class="form-label">Clasificación <span class="text-danger">*</span></label>
+                <select asp-for="Clasificacion" asp-items="@ViewBag.Clasificaciones" class="form-select">
+                    <option value="">-- Seleccione --</option>
+                </select>
+                <span asp-validation-for="Clasificacion" class="text-danger"></span>
+            </div>
+
+            <!-- Dirección -->
+            <div class="col-md-8">
+                <label asp-for="Direccion" class="form-label">Dirección</label>
+                <input asp-for="Direccion" class="form-control" />
+                <span asp-validation-for="Direccion" class="text-danger"></span>
+            </div>
+
+            <!-- Ciudad -->
+            <div class="col-md-4">
+                <label asp-for="CiudadId" class="form-label">Ciudad <span class="text-danger">*</span></label>
+                <select asp-for="CiudadId" asp-items="@ViewBag.Ciudades" class="form-select">
+                    <option value="">-- Seleccione --</option>
+                </select>
+                <span asp-validation-for="CiudadId" class="text-danger"></span>
+            </div>
+
+            <!-- Teléfono -->
+            <div class="col-md-4">
+                <label asp-for="Telefono" class="form-label">Teléfono</label>
+                <input asp-for="Telefono" class="form-control" />
+                <span asp-validation-for="Telefono" class="text-danger"></span>
+            </div>
+
+            <!-- Email -->
+            <div class="col-md-4">
+                <label asp-for="Email" class="form-label">Email</label>
+                <input asp-for="Email" type="email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <!-- Fecha Registro -->
+            <div class="col-md-4">
+                <label asp-for="FechaRegistro" class="form-label">Fecha Ingreso <span class="text-danger">*</span></label>
+                <input asp-for="FechaRegistro" type="date" class="form-control" />
+                <span asp-validation-for="FechaRegistro" class="text-danger"></span>
+            </div>
+
+            <!-- Descripción Cuenta -->
+            <div class="col-md-12">
+                <label asp-for="DescripcionCuenta" class="form-label">Descripción Cuenta Bancaria</label>
+                <input asp-for="DescripcionCuenta" class="form-control" />
+                <span asp-validation-for="DescripcionCuenta" class="text-danger"></span>
+            </div>
+
+            <!-- Solicitado por -->
+            <div class="col-md-6">
+                <label asp-for="Solicitud" class="form-label">Solicitado por</label>
+                <input asp-for="Solicitud" class="form-control" />
+                <span asp-validation-for="Solicitud" class="text-danger"></span>
+            </div>
+
+            <!-- Aprobado por -->
+            <div class="col-md-6">
+                <label asp-for="Aprobado" class="form-label">Aprobado por</label>
+                <input asp-for="Aprobado" class="form-control" />
+                <span asp-validation-for="Aprobado" class="text-danger"></span>
+            </div>
+
+            <!-- Observaciones -->
+            <div class="col-md-12">
+                <label asp-for="Observaciones" class="form-label">Observaciones</label>
+                <textarea asp-for="Observaciones" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Observaciones" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="bi bi-x-lg me-1"></i>Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-check-lg me-1"></i>Guardar
+        </button>
+    </div>
+</form>

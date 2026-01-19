@@ -1,0 +1,108 @@
+@using MatrixNext.Data.Modules.TH.Contratistas.Models
+@model ContratistaDto
+
+<div class="modal-header bg-info text-white">
+    <h5 class="modal-title">
+        <i class="bi bi-info-circle me-2"></i>Detalles del Contratista
+    </h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+</div>
+
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-6">
+            <dl class="row">
+                <dt class="col-sm-5">Identificación:</dt>
+                <dd class="col-sm-7">@Model.Identificacion</dd>
+
+                <dt class="col-sm-5">Nombre:</dt>
+                <dd class="col-sm-7">@Model.Nombre</dd>
+
+                <dt class="col-sm-5">Estado:</dt>
+                <dd class="col-sm-7">
+                    @{
+                        var badgeClass = Model.Activo ? "bg-success" : (Model.Estado == 3 ? "bg-danger" : "bg-warning");
+                        var estadoTexto = Model.Activo ? "Activo" : (Model.Estado == 3 ? "Retirado" : "Inactivo");
+                    }
+                    <span class="badge @badgeClass">@estadoTexto</span>
+                </dd>
+
+                <dt class="col-sm-5">Clasificación:</dt>
+                <dd class="col-sm-7">@Model.ClasificacionNombre</dd>
+
+                <dt class="col-sm-5">Symphony:</dt>
+                <dd class="col-sm-7">@Model.NumeroSymphony</dd>
+
+                <dt class="col-sm-5">Fecha Ingreso:</dt>
+                <dd class="col-sm-7">@Model.FechaRegistro?.ToString("dd/MM/yyyy")</dd>
+            </dl>
+        </div>
+        <div class="col-md-6">
+            <dl class="row">
+                <dt class="col-sm-5">Ciudad:</dt>
+                <dd class="col-sm-7">@Model.CiudadNombre</dd>
+
+                <dt class="col-sm-5">Dirección:</dt>
+                <dd class="col-sm-7">@(Model.Direccion ?? "-")</dd>
+
+                <dt class="col-sm-5">Teléfono:</dt>
+                <dd class="col-sm-7">@(Model.Telefono ?? "-")</dd>
+
+                <dt class="col-sm-5">Email:</dt>
+                <dd class="col-sm-7">
+                    @if (!string.IsNullOrEmpty(Model.Email))
+                    {
+                        <a href="mailto:@Model.Email">@Model.Email</a>
+                    }
+                    else
+                    {
+                        <span>-</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-5">Cuenta Bancaria:</dt>
+                <dd class="col-sm-7">@(Model.DescripcionCuenta ?? "-")</dd>
+            </dl>
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <div class="col-md-6">
+            <dl class="row">
+                <dt class="col-sm-5">Solicitado por:</dt>
+                <dd class="col-sm-7">@(Model.Solicitud ?? "-")</dd>
+
+                <dt class="col-sm-5">Aprobado por:</dt>
+                <dd class="col-sm-7">@(Model.Aprobado ?? "-")</dd>
+            </dl>
+        </div>
+        <div class="col-md-6">
+            <dl class="row">
+                <dt class="col-sm-5">Servicios:</dt>
+                <dd class="col-sm-7">@Model.TotalServicios</dd>
+            </dl>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.Observaciones))
+    {
+        <hr />
+        <div class="row">
+            <div class="col-12">
+                <strong>Observaciones:</strong>
+                <p class="mt-2">@Model.Observaciones</p>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary" onclick="editarContratista(@Model.Identificacion)">
+        <i class="bi bi-pencil me-1"></i>Editar
+    </button>
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        <i class="bi bi-x-lg me-1"></i>Cerrar
+    </button>
+</div>

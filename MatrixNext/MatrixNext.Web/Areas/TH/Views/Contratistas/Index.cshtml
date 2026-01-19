@@ -1,0 +1,195 @@
+@using MatrixNext.Data.Modules.TH.Contratistas.Models
+@{
+    ViewData["Title"] = "Contratistas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Breadcrumb -->
+<div class="d-flex align-items-center justify-content-between page-header-breadcrumb flex-wrap gap-2">
+    <div>
+        <nav>
+            <ol class="breadcrumb mb-1">
+                <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="#">Talento Humano</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Contratistas</li>
+            </ol>
+        </nav>
+        <h1 class="page-title fw-medium fs-18 mb-0">Gestión de Contratistas</h1>
+    </div>
+    <div class="btn-list">
+        <button type="button" class="btn btn-primary btn-wave" id="btnNuevo">
+            <i class="bi bi-plus-lg me-1"></i>Nuevo Contratista
+        </button>
+    </div>
+</div>
+
+<!-- Filtros -->
+<div class="card custom-card mb-3">
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label">Identificación</label>
+                <input type="number" id="filtroIdentificacion" class="form-control" placeholder="Buscar por NIT/CC...">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Nombre</label>
+                <input type="text" id="filtroNombre" class="form-control" placeholder="Buscar por nombre...">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Estado</label>
+                <select id="filtroActivo" class="form-select">
+                    <option value="">Todos</option>
+                    <option value="true">Activos</option>
+                    <option value="false">Inactivos</option>
+                </select>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="button" class="btn btn-outline-primary w-100" id="btnBuscar">
+                    <i class="bi bi-search me-1"></i>Buscar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Lista de contratistas -->
+<div class="card custom-card">
+    <div class="card-body">
+        <div id="listaContratistas">
+            <!-- Se carga via AJAX -->
+            <div class="text-center py-4">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal principal para crear/editar -->
+<div class="modal fade" id="modalContratistas" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <!-- Contenido cargado dinámicamente -->
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Cargar lista inicial
+            cargarLista();
+
+            // Búsqueda con Enter
+            $('#filtroIdentificacion, #filtroNombre').on('keypress', function (e) {
+                if (e.which === 13) {
+                    cargarLista();
+                }
+            });
+
+            // Botón buscar
+            $('#btnBuscar').on('click', function () {
+                cargarLista();
+            });
+
+            // Botón nuevo
+            $('#btnNuevo').on('click', function () {
+                abrirModal('@Url.Action("Create", "Contratistas", new { area = "TH" })');
+            });
+        });
+
+        function cargarLista() {
+            var params = {
+                identificacion: $('#filtroIdentificacion').val() || null,
+                nombre: $('#filtroNombre').val() || null,
+                activo: $('#filtroActivo').val() || null
+            };
+
+            $.get('@Url.Action("Lista", "Contratistas", new { area = "TH" })', params, function (html) {
+                $('#listaContratistas').html(html);
+            });
+        }
+
+        function abrirModal(url) {
+            $.get(url, function (html) {
+                $('#modalContratistas .modal-content').html(html);
+                $('#modalContratistas').modal('show');
+            });
+        }
+
+        function editarContratista(identificacion) {
+            abrirModal('@Url.Action("Edit", "Contratistas", new { area = "TH" })/' + identificacion);
+        }
+
+        function verDetalles(identificacion) {
+            abrirModal('@Url.Action("Details", "Contratistas", new { area = "TH" })/' + identificacion);
+        }
+
+        function verServicios(identificacion) {
+            abrirModal('@Url.Action("Servicios", "Contratistas", new { area = "TH" })/' + identificacion);
+        }
+
+        function verLog(identificacion) {
+            abrirModal('@Url.Action("Log", "Contratistas", new { area = "TH" })/' + identificacion);
+        }
+
+        function cambiarEstado(identificacion, estado) {
+            var estadoTexto = estado == 1 ? 'Activar' : (estado == 2 ? 'Inactivar' : 'Retirar');
+            if (confirm('¿Está seguro que desea ' + estadoTexto + ' este contratista?')) {
+                $.ajax({
+                    url: '@Url.Action("CambiarEstado", "Contratistas", new { area = "TH" })',
+                    type: 'POST',
+                    data: { identificacion: identificacion, estado: estado },
+                    headers: { 'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val() },
+                    success: function (response) {
+                        if (response.success) {
+                            showToast(response.message, 'success');
+                            cargarLista();
+                        } else {
+                            showToast(response.message, 'error');
+                        }
+                    },
+                    error: function () {
+                        showToast('Error al cambiar el estado', 'error');
+                    }
+                });
+            }
+        }
+
+        // Manejar submit del modal
+        $(document).on('submit', '#formContratista', function (e) {
+            e.preventDefault();
+            var form = $(this);
+
+            $.ajax({
+                url: form.attr('action'),
+                type: 'POST',
+                data: form.serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        showToast(response.message, 'success');
+                        $('#modalContratistas').modal('hide');
+                        cargarLista();
+                    } else {
+                        showToast(response.message, 'error');
+                    }
+                },
+                error: function () {
+                    showToast('Error al guardar', 'error');
+                }
+            });
+        });
+
+        function showToast(message, type) {
+            // Utilizar la función global de toast si existe
+            if (typeof toastr !== 'undefined') {
+                toastr[type](message);
+            } else {
+                alert(message);
+            }
+        }
+    </script>
+}
+
+@Html.AntiForgeryToken()
