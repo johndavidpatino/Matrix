@@ -1,0 +1,144 @@
+@model IEnumerable<MatrixNext.Data.Models.GD.PncDto>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info m-3">
+        <i class="fas fa-info-circle me-2"></i>
+        No se encontraron Productos No Conformes registrados.
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped table-hover mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th style="width:60px;">#</th>
+                    <th>Asociado A</th>
+                    <th>Proyecto/Trabajo</th>
+                    <th>Proceso</th>
+                    <th>Fuente</th>
+                    <th>Categoría</th>
+                    <th>Fecha Reclamo</th>
+                    <th>Responsable</th>
+                    <th>Estado</th>
+                    <th style="width:120px;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <span class="badge bg-secondary">@item.Id</span>
+                        </td>
+                        <td>@item.AsociadoADescripcion</td>
+                        <td>
+                            <span title="@item.ProyectoTrabajo">
+                                @(item.ProyectoTrabajo?.Length > 30 
+                                    ? item.ProyectoTrabajo.Substring(0, 30) + "..." 
+                                    : item.ProyectoTrabajo)
+                            </span>
+                        </td>
+                        <td>@item.ProcesoDescripcion</td>
+                        <td>@item.FuenteDescripcion</td>
+                        <td>@item.CategoriaDescripcion</td>
+                        <td>@item.FechaReclamo.ToString("dd/MM/yyyy")</td>
+                        <td>@item.ResponsableNombre</td>
+                        <td>
+                            @{
+                                var estadoClass = item.Estado switch
+                                {
+                                    1 => "bg-danger",      // Abierto
+                                    2 => "bg-success",     // Cerrado
+                                    _ => "bg-warning"      // En proceso
+                                };
+                                var estadoText = item.Estado switch
+                                {
+                                    1 => "Abierto",
+                                    2 => "Cerrado",
+                                    _ => "En proceso"
+                                };
+                            }
+                            <span class="badge @estadoClass">@estadoText</span>
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <button type="button" class="btn btn-outline-primary" 
+                                        title="Ver Detalle"
+                                        data-ajax-url="@Url.Action("Detalle", new { id = item.Id })"
+                                        data-ajax-target="#modalContainer">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline-info" 
+                                        title="Seguimiento"
+                                        data-ajax-url="@Url.Action("SeguimientoPnc", new { id = item.Id })"
+                                        data-ajax-target="#modalContainer">
+                                    <i class="fas fa-tasks"></i>
+                                </button>
+                                @if (item.Estado == 1) // Solo si está abierto
+                                {
+                                    <button type="button" class="btn btn-outline-success btn-cerrar-pnc" 
+                                            title="Cerrar PNC"
+                                            data-pnc-id="@item.Id">
+                                        <i class="fas fa-check-circle"></i>
+                                    </button>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<script>
+    $(document).ready(function() {
+        // Botones de acción con AJAX
+        $('[data-ajax-url]').on('click', function(e) {
+            e.preventDefault();
+            var url = $(this).data('ajax-url');
+            var target = $(this).data('ajax-target');
+            
+            $.get(url, function(html) {
+                $(target).html(html);
+                var modal = $(target).find('.modal');
+                if (modal.length) {
+                    new bootstrap.Modal(modal[0]).show();
+                }
+            });
+        });
+
+        // Cerrar PNC
+        $('.btn-cerrar-pnc').on('click', function() {
+            var pncId = $(this).data('pnc-id');
+            
+            if (confirm('¿Está seguro de cerrar este PNC?')) {
+                var observacion = prompt('Ingrese una observación para el cierre:');
+                if (observacion !== null) {
+                    $.ajax({
+                        url: '@Url.Action("ActualizarEstado")',
+                        type: 'POST',
+                        data: {
+                            id: pncId,
+                            estado: 2, // Cerrado
+                            observacion: observacion,
+                            __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                location.reload();
+                            } else {
+                                alert(response.message || 'Error al cerrar el PNC');
+                            }
+                        },
+                        error: function() {
+                            alert('Error al procesar la solicitud');
+                        }
+                    });
+                }
+            }
+        });
+    });
+</script>

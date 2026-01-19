@@ -1,8 +1,135 @@
+@model MatrixNext.Data.Models.GD.PncIndexViewModel
 @{
     ViewData["Title"] = "Productos No Conformes";
 }
 
-<div class="container py-4">
-    <h2>@ViewData["Title"]</h2>
-    <p class="text-muted">Gestión de PNC relacionados con documentos.</p>
+<div class="container-fluid py-3">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2><i class="fas fa-exclamation-triangle text-warning me-2"></i>@ViewData["Title"]</h2>
+            <p class="text-muted mb-0">Gestión de Productos No Conformes</p>
+        </div>
+        <button type="button" class="btn btn-primary" 
+                data-bs-toggle="modal" 
+                data-ajax-url="@Url.Action("Create")"
+                data-ajax-target="#modalContainer">
+            <i class="fas fa-plus me-1"></i> Nuevo PNC
+        </button>
+    </div>
+
+    <!-- Filtros -->
+    <div class="card mb-4">
+        <div class="card-header bg-light">
+            <i class="fas fa-filter me-1"></i> Filtros de Búsqueda
+        </div>
+        <div class="card-body">
+            <form id="formFiltros" asp-action="Buscar" method="get">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label">Estado</label>
+                        <select name="Estado" class="form-select" id="filtroEstado">
+                            <option value="">-- Todos --</option>
+                            @foreach (var estado in Model.Estados)
+                            {
+                                <option value="@estado.Id" 
+                                        selected="@(Model.Filtros.Estado == estado.Id)">
+                                    @estado.Nombre
+                                </option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Responsable</label>
+                        <input type="text" name="Responsable" class="form-control" 
+                               value="@Model.Filtros.Responsable" placeholder="ID Responsable">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">ID PNC</label>
+                        <input type="text" name="Id" class="form-control" 
+                               value="@Model.Filtros.Id" placeholder="Número de PNC">
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary me-2">
+                            <i class="fas fa-search me-1"></i> Buscar
+                        </button>
+                        <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
+                            <i class="fas fa-eraser me-1"></i> Limpiar
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Tabs: Mis PNC / Seguimiento General -->
+    <ul class="nav nav-tabs" id="pncTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="mis-pnc-tab" data-bs-toggle="tab" 
+                    data-bs-target="#mis-pnc" type="button" role="tab">
+                <i class="fas fa-list me-1"></i> Mis PNC
+                <span class="badge bg-primary ms-1">@Model.Productos.Count()</span>
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="seguimiento-tab" data-bs-toggle="tab" 
+                    data-bs-target="#seguimiento" type="button" role="tab">
+                <i class="fas fa-chart-line me-1"></i> Seguimiento
+                <span class="badge bg-secondary ms-1">@Model.Seguimiento.Count()</span>
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="pncTabsContent">
+        <!-- Tab: Mis PNC -->
+        <div class="tab-pane fade show active" id="mis-pnc" role="tabpanel">
+            <div class="card border-top-0 rounded-top-0">
+                <div class="card-body p-0">
+                    <partial name="_ListaPnc" model="Model.Productos" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Seguimiento -->
+        <div class="tab-pane fade" id="seguimiento" role="tabpanel">
+            <div class="card border-top-0 rounded-top-0">
+                <div class="card-body p-0">
+                    <partial name="_Seguimiento" model="Model.Seguimiento" />
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<!-- Container para modales -->
+<div id="modalContainer"></div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Cargar modal dinámicamente
+            $('[data-ajax-url]').on('click', function(e) {
+                e.preventDefault();
+                var url = $(this).data('ajax-url');
+                var target = $(this).data('ajax-target');
+                
+                $.get(url, function(html) {
+                    $(target).html(html);
+                    var modal = $(target).find('.modal');
+                    if (modal.length) {
+                        new bootstrap.Modal(modal[0]).show();
+                    }
+                });
+            });
+
+            // Submit de filtros via AJAX
+            $('#formFiltros').on('submit', function(e) {
+                e.preventDefault();
+                var url = $(this).attr('action') + '?' + $(this).serialize();
+                
+                $.get(url, function(html) {
+                    $('#mis-pnc .card-body').html(html);
+                });
+            });
+        });
+    </script>
+}

@@ -1,0 +1,149 @@
+@model IEnumerable<MatrixNext.Data.Models.GD.PncSeguimientoDto>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info m-3">
+        <i class="fas fa-info-circle me-2"></i>
+        No hay registros de seguimiento para mostrar.
+    </div>
+}
+else
+{
+    <!-- Resumen por estado -->
+    <div class="row g-3 p-3">
+        @{
+            var cerrados = Model.Count(x => x.Estado == "Cerrado");
+            var sinCausas = Model.Count(x => x.Estado == "No tiene causas");
+            var sinAcciones = Model.Count(x => x.Estado == "No tiene acciones");
+            var gestionados = Model.Count(x => x.Estado == "Gestionado");
+        }
+        <div class="col-md-3">
+            <div class="card bg-success bg-opacity-10 border-success">
+                <div class="card-body text-center">
+                    <h3 class="text-success mb-0">@cerrados</h3>
+                    <small class="text-muted">Cerrados</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-danger bg-opacity-10 border-danger">
+                <div class="card-body text-center">
+                    <h3 class="text-danger mb-0">@sinCausas</h3>
+                    <small class="text-muted">Sin Causas</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning bg-opacity-10 border-warning">
+                <div class="card-body text-center">
+                    <h3 class="text-warning mb-0">@sinAcciones</h3>
+                    <small class="text-muted">Sin Acciones</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info bg-opacity-10 border-info">
+                <div class="card-body text-center">
+                    <h3 class="text-info mb-0">@gestionados</h3>
+                    <small class="text-muted">Gestionados</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>JobBook</th>
+                    <th>Estudio/Trabajo</th>
+                    <th>Fecha Reclamo</th>
+                    <th>Reporta</th>
+                    <th>Unidad</th>
+                    <th>Fuente</th>
+                    <th>Categoría</th>
+                    <th>Causas</th>
+                    <th>Acciones</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <span class="badge bg-secondary">@item.Id</span>
+                        </td>
+                        <td><code>@item.JobBook</code></td>
+                        <td>
+                            @if (item.IdTrabajo.HasValue)
+                            {
+                                <span title="@item.NombreTrabajo">
+                                    @(item.NombreTrabajo?.Length > 25 
+                                        ? item.NombreTrabajo?.Substring(0, 25) + "..." 
+                                        : item.NombreTrabajo)
+                                </span>
+                            }
+                            else
+                            {
+                                <span title="@item.NombreEstudio">
+                                    @(item.NombreEstudio?.Length > 25 
+                                        ? item.NombreEstudio?.Substring(0, 25) + "..." 
+                                        : item.NombreEstudio)
+                                </span>
+                            }
+                        </td>
+                        <td>@item.FechaReclamo.ToString("dd/MM/yyyy")</td>
+                        <td>@item.Reporta</td>
+                        <td>@item.Unidad</td>
+                        <td>@item.FuenteReclamo</td>
+                        <td>@item.Categoria</td>
+                        <td class="text-center">
+                            @if (item.CantidadCausas.GetValueOrDefault() == 0)
+                            {
+                                <span class="badge bg-danger">0</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success">@item.CantidadCausas</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            @if (item.CantidadAcciones.GetValueOrDefault() == 0)
+                            {
+                                <span class="badge bg-danger">0</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success">@item.CantidadAcciones</span>
+                            }
+                        </td>
+                        <td>
+                            @{
+                                var estadoClass = item.Estado switch
+                                {
+                                    "Cerrado" => "bg-success",
+                                    "No tiene causas" => "bg-danger",
+                                    "No tiene acciones" => "bg-warning",
+                                    "Gestionado" => "bg-info",
+                                    _ => "bg-secondary"
+                                };
+                            }
+                            <span class="badge @estadoClass">@item.Estado</span>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-outline-primary" 
+                                    title="Ver Seguimiento"
+                                    data-ajax-url="@Url.Action("SeguimientoPnc", new { id = item.Id })"
+                                    data-ajax-target="#modalContainer">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

@@ -1,79 +1,195 @@
-﻿@model MatrixNext.Data.DTOs.GD.PncDto
+﻿@model MatrixNext.Data.Models.GD.PncCrearDto
+@{
+    var procesos = ViewBag.Procesos as IEnumerable<MatrixNext.Data.Models.GD.CatalogoItem> ?? Enumerable.Empty<MatrixNext.Data.Models.GD.CatalogoItem>();
+    var categorias = ViewBag.Categorias as IEnumerable<MatrixNext.Data.Models.GD.CatalogoItem> ?? Enumerable.Empty<MatrixNext.Data.Models.GD.CatalogoItem>();
+    var fuentes = ViewBag.Fuentes as IEnumerable<MatrixNext.Data.Models.GD.CatalogoItem> ?? Enumerable.Empty<MatrixNext.Data.Models.GD.CatalogoItem>();
+}
 
 <div class="modal fade" id="modalForm" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Registrar PNC</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-plus-circle me-2"></i>Registrar Producto No Conforme
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
 
             <form asp-action="Create" method="post" data-ajax-form>
+                @Html.AntiForgeryToken()
                 <div class="modal-body">
                     <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label asp-for="AsociadoA" class="form-label">Tipo de AsociaciÃ³n *</label>
-                                <select asp-for="AsociadoA" class="form-select">
-                                    <option value="">Seleccione...</option>
-                                    <option value="1">Trabajo (JBE)</option>
-                                    <option value="2">JBI</option>
-                                    <option value="3">Actividad</option>
-                                </select>
-                                <span asp-validation-for="AsociadoA" class="text-danger"></span>
-                            </div>
+                    <!-- Tipo de Asociación -->
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label asp-for="AsociadoA" class="form-label">Tipo de Asociación <span class="text-danger">*</span></label>
+                            <select asp-for="AsociadoA" class="form-select" id="ddlAsociadoA" required>
+                                <option value="">Seleccione...</option>
+                                <option value="1">Proyecto (JBE)</option>
+                                <option value="2">Trabajo (JBI)</option>
+                                <option value="3">Actividad</option>
+                            </select>
+                            <span asp-validation-for="AsociadoA" class="text-danger"></span>
                         </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label asp-for="IdReferencia" class="form-label">ID Referencia *</label>
-                                <input asp-for="IdReferencia" type="number" class="form-control" />
-                                <span asp-validation-for="IdReferencia" class="text-danger"></span>
-                            </div>
+                        <div class="col-md-4" id="divProyecto" style="display:none;">
+                            <label asp-for="ProyectoId" class="form-label">ID Proyecto</label>
+                            <input asp-for="ProyectoId" type="number" class="form-control" />
+                            <span asp-validation-for="ProyectoId" class="text-danger"></span>
                         </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label asp-for="IdProceso" class="form-label">Proceso *</label>
-                                <input asp-for="IdProceso" type="number" class="form-control" />
-                                <span asp-validation-for="IdProceso" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label asp-for="FechaReclamo" class="form-label">Fecha del Reclamo</label>
-                                <input asp-for="FechaReclamo" type="date" class="form-control" />
-                                <span asp-validation-for="FechaReclamo" class="text-danger"></span>
-                            </div>
+                        <div class="col-md-4" id="divTrabajo" style="display:none;">
+                            <label asp-for="TrabajoId" class="form-label">ID Trabajo</label>
+                            <input asp-for="TrabajoId" type="number" class="form-control" />
+                            <span asp-validation-for="TrabajoId" class="text-danger"></span>
                         </div>
                     </div>
 
+                    <!-- Proceso y Procedimiento -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Proceso" class="form-label">Proceso <span class="text-danger">*</span></label>
+                            <select asp-for="Proceso" class="form-select" id="ddlProceso" required>
+                                <option value="">Seleccione...</option>
+                                @foreach (var item in procesos)
+                                {
+                                    <option value="@item.Id">@item.Nombre</option>
+                                }
+                            </select>
+                            <span asp-validation-for="Proceso" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Procedimiento" class="form-label">Procedimiento <span class="text-danger">*</span></label>
+                            <select asp-for="Procedimiento" class="form-select" id="ddlProcedimiento" required>
+                                <option value="">Seleccione proceso primero...</option>
+                            </select>
+                            <span asp-validation-for="Procedimiento" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-- Fuente y Categoría -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Fuente" class="form-label">Fuente del Reclamo <span class="text-danger">*</span></label>
+                            <select asp-for="Fuente" class="form-select" required>
+                                <option value="">Seleccione...</option>
+                                @foreach (var item in fuentes)
+                                {
+                                    <option value="@item.Id">@item.Nombre</option>
+                                }
+                            </select>
+                            <span asp-validation-for="Fuente" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Categoria" class="form-label">Categoría <span class="text-danger">*</span></label>
+                            <select asp-for="Categoria" class="form-select" required>
+                                <option value="">Seleccione...</option>
+                                @foreach (var item in categorias)
+                                {
+                                    <option value="@item.Id">@item.Nombre</option>
+                                }
+                            </select>
+                            <span asp-validation-for="Categoria" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-- Fecha y Unidad -->
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label asp-for="FechaReclamo" class="form-label">Fecha del Reclamo <span class="text-danger">*</span></label>
+                            <input asp-for="FechaReclamo" type="date" class="form-control" required />
+                            <span asp-validation-for="FechaReclamo" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="Unidad" class="form-label">Unidad <span class="text-danger">*</span></label>
+                            <input asp-for="Unidad" type="number" class="form-control" required />
+                            <span asp-validation-for="Unidad" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="Tarea" class="form-label">Tarea (opcional)</label>
+                            <input asp-for="Tarea" type="number" class="form-control" />
+                        </div>
+                    </div>
+
+                    <!-- Personas -->
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label asp-for="PersonaIdentifica" class="form-label">Persona que Identifica <span class="text-danger">*</span></label>
+                            <input asp-for="PersonaIdentifica" type="number" class="form-control" required placeholder="ID Usuario" />
+                            <span asp-validation-for="PersonaIdentifica" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="Responsable" class="form-label">Responsable <span class="text-danger">*</span></label>
+                            <input asp-for="Responsable" type="number" class="form-control" required placeholder="ID Usuario" />
+                            <span asp-validation-for="Responsable" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="InformarA" class="form-label">Informar A <span class="text-danger">*</span></label>
+                            <input asp-for="InformarA" type="number" class="form-control" required placeholder="ID Usuario" />
+                            <span asp-validation-for="InformarA" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-- Descripción -->
                     <div class="mb-3">
-                        <label asp-for="Descripcion" class="form-label">DescripciÃ³n del Problema *</label>
-                        <textarea asp-for="Descripcion" class="form-control" rows="4"></textarea>
+                        <label asp-for="Descripcion" class="form-label">Descripción del Problema <span class="text-danger">*</span></label>
+                        <textarea asp-for="Descripcion" class="form-control" rows="4" required 
+                                  placeholder="Describa detalladamente el producto no conforme..."></textarea>
                         <span asp-validation-for="Descripcion" class="text-danger"></span>
-                    </div>
-
-                    <div class="mb-3">
-                        <label asp-for="Observaciones" class="form-label">Observaciones</label>
-                        <textarea asp-for="Observaciones" class="form-control" rows="2"></textarea>
                     </div>
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Registrar PNC</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-1"></i>Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-1"></i>Registrar PNC
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-@section Scripts {
-    <script>
+<script>
+    $(document).ready(function() {
+        // Mostrar/ocultar campos según tipo de asociación
+        $('#ddlAsociadoA').on('change', function() {
+            var valor = $(this).val();
+            $('#divProyecto, #divTrabajo').hide();
+            
+            if (valor === '1') { // Proyecto
+                $('#divProyecto').show();
+            } else if (valor === '2') { // Trabajo
+                $('#divTrabajo').show();
+            }
+        });
+
+        // Cargar procedimientos al cambiar proceso
+        $('#ddlProceso').on('change', function() {
+            var procesoId = $(this).val();
+            var ddlProcedimiento = $('#ddlProcedimiento');
+            
+            ddlProcedimiento.html('<option value="">Cargando...</option>');
+            
+            if (procesoId) {
+                $.get('@Url.Action("ObtenerProcedimientos")', { procesoId: procesoId }, function(response) {
+                    ddlProcedimiento.html('<option value="">Seleccione...</option>');
+                    if (response.success && response.data) {
+                        $.each(response.data, function(i, item) {
+                            ddlProcedimiento.append($('<option>', {
+                                value: item.id,
+                                text: item.nombre
+                            }));
+                        });
+                    }
+                });
+            } else {
+                ddlProcedimiento.html('<option value="">Seleccione proceso primero...</option>');
+            }
+        });
+
+        // Submit AJAX
         $(document).on('submit', '[data-ajax-form]', function (e) {
             e.preventDefault();
             const form = $(this);
@@ -85,9 +201,11 @@
                 success: function (response) {
                     if (response.success) {
                         $('#modalForm').modal('hide');
+                        // Mostrar toast de éxito
+                        alert(response.message || 'PNC registrado exitosamente');
                         location.reload();
                     } else {
-                        alert(response.message);
+                        alert(response.message || 'Error al registrar el PNC');
                     }
                 },
                 error: function () {
@@ -95,6 +213,5 @@
                 }
             });
         });
-    </script>
-}
-
+    });
+</script>

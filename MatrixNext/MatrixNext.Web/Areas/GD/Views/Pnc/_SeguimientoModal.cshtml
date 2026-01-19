@@ -1,142 +1,187 @@
-﻿@model MatrixNext.Data.DTOs.GD.PncDto
-
-@{
-    var seguimiento = ViewBag.Seguimiento as IEnumerable<MatrixNext.Data.DTOs.GD.PncSeguimientoDto> ?? new List<MatrixNext.Data.DTOs.GD.PncSeguimientoDto>();
-    var log = ViewBag.Log as IEnumerable<MatrixNext.Data.DTOs.GD.PncLogDto> ?? new List<MatrixNext.Data.DTOs.GD.PncLogDto>();
-}
+﻿@model MatrixNext.Data.Models.GD.PncDetalleViewModel
 
 <div class="modal fade" id="modalForm" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Seguimiento PNC #@Model.IdPnc</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-chart-line me-2"></i>Seguimiento PNC #@Model.Producto.Id
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
 
             <div class="modal-body">
                 <!-- Resumen -->
                 <div class="alert alert-info">
-                    <strong>@Model.ProyectoTrabajo</strong> - @Model.NombreProceso
-                    <br>
-                    <small>@Model.Descripcion</small>
-                </div>
-
-                <!-- Seguimiento de Causas -->
-                <div class="card mb-3">
-                    <div class="card-header">
-                        <h6 class="mb-0">Seguimiento de Causas</h6>
-                    </div>
-                    <div class="card-body">
-                        @if (seguimiento.Any())
-                        {
-                            <div class="table-responsive">
-                                <table class="table table-sm table-hover">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>Causa</th>
-                                            <th>Responsable</th>
-                                            <th>Vencimiento</th>
-                                            <th>DÃ­as Restantes</th>
-                                            <th>Estado</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var seg in seguimiento)
-                                        {
-                                            <tr>
-                                                <td>
-                                                    <small>@(seg.DescripcionCausa?.Length > 40 ? seg.DescripcionCausa.Substring(0, 40) + "..." : seg.DescripcionCausa)</small>
-                                                </td>
-                                                <td><small>@seg.Responsable</small></td>
-                                                <td><small>@seg.FechaVencimiento?.ToString("dd/MM/yyyy")</small></td>
-                                                <td>
-                                                    <span class="badge bg-@seg.DiasClass">
-                                                        @seg.DiasRestantes dÃ­as
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <span class="badge bg-@seg.EstadoCausa">@seg.EstadoCausa</span>
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        }
-                        else
-                        {
-                            <p class="text-muted text-center py-3">No hay causas en seguimiento</p>
-                        }
-                    </div>
-                </div>
-
-                <!-- Timeline de Cambios -->
-                <div class="card">
-                    <div class="card-header">
-                        <h6 class="mb-0">Historial de Cambios</h6>
-                    </div>
-                    <div class="card-body">
-                        @if (log.Any())
-                        {
-                            <div class="timeline">
-                                @foreach (var item in log.OrderByDescending(x => x.FechaCambio))
+                    <div class="row">
+                        <div class="col-md-8">
+                            <strong>@Model.Producto.ProyectoTrabajo</strong> - @Model.Producto.ProcesoDescripcion
+                            <br>
+                            <small class="text-muted">@Model.Producto.Descripcion</small>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            @{
+                                var estadoClass = Model.Producto.Estado switch
                                 {
-                                    <div class="timeline-item mb-3">
-                                        <div class="timeline-marker badge bg-secondary">
-                                            <i class="fas fa-arrow-right"></i>
+                                    1 => "bg-danger",
+                                    2 => "bg-success",
+                                    _ => "bg-warning"
+                                };
+                                var estadoText = Model.Producto.Estado switch
+                                {
+                                    1 => "Abierto",
+                                    2 => "Cerrado",
+                                    _ => "En proceso"
+                                };
+                            }
+                            <span class="badge @estadoClass fs-6">@estadoText</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Indicadores -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-4">
+                        <div class="card text-center">
+                            <div class="card-body py-3">
+                                <h3 class="text-primary mb-0">@Model.Causas.Count()</h3>
+                                <small class="text-muted">Causas Registradas</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-center">
+                            <div class="card-body py-3">
+                                <h3 class="text-info mb-0">@Model.Acciones.Count()</h3>
+                                <small class="text-muted">Acciones Correctivas</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-center">
+                            <div class="card-body py-3">
+                                @{
+                                    var accionesPendientes = Model.Acciones.Count(a => a.Estado == 1);
+                                    var badgeClass = accionesPendientes > 0 ? "text-warning" : "text-success";
+                                }
+                                <h3 class="@badgeClass mb-0">@accionesPendientes</h3>
+                                <small class="text-muted">Acciones Pendientes</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Causas y sus Acciones -->
+                <div class="card mb-3">
+                    <div class="card-header bg-light">
+                        <h6 class="mb-0"><i class="fas fa-list-check me-2"></i>Causas y Acciones</h6>
+                    </div>
+                    <div class="card-body">
+                        @if (Model.Causas.Any())
+                        {
+                            <div class="accordion" id="accordionCausas">
+                                @{
+                                    int index = 0;
+                                    foreach (var causa in Model.Causas)
+                                    {
+                                        var accionesCausa = Model.Acciones.Where(a => a.CausaId == causa.Id).ToList();
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header">
+                                                <button class="accordion-button @(index > 0 ? "collapsed" : "")" type="button" 
+                                                        data-bs-toggle="collapse" data-bs-target="#causa@index">
+                                                    <span class="badge bg-secondary me-2">C@(index + 1)</span>
+                                                    @(causa.Causa.Length > 50 ? causa.Causa.Substring(0, 50) + "..." : causa.Causa)
+                                                    @if (accionesCausa.Any())
+                                                    {
+                                                        <span class="badge bg-info ms-2">@accionesCausa.Count acciones</span>
+                                                    }
+                                                </button>
+                                            </h2>
+                                            <div id="causa@index" class="accordion-collapse collapse @(index == 0 ? "show" : "")" 
+                                                 data-bs-parent="#accordionCausas">
+                                                <div class="accordion-body">
+                                                    <p><strong>Causa:</strong> @causa.Causa</p>
+                                                    <p><strong>Corrección:</strong> @(causa.Correccion ?? "No especificada")</p>
+                                                    <p><strong>Fecha Est. Cierre:</strong> @(causa.FechaEstimadaCierre?.ToString("dd/MM/yyyy") ?? "No definida")</p>
+                                                    
+                                                    @if (accionesCausa.Any())
+                                                    {
+                                                        <hr>
+                                                        <h6>Acciones Correctivas:</h6>
+                                                        <ul class="list-group list-group-flush">
+                                                            @foreach (var accion in accionesCausa)
+                                                            {
+                                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                                    <div>
+                                                                        <small>@accion.Accion</small>
+                                                                        <br>
+                                                                        <span class="text-muted"><small>Responsable: @accion.Responsable</small></span>
+                                                                    </div>
+                                                                    @{
+                                                                        var accionBadgeClass = accion.Estado == 1 ? "bg-warning" : "bg-success";
+                                                                        var accionBadgeText = accion.Estado == 1 ? "Pendiente" : "Completada";
+                                                                    }
+                                                                    <span class="badge @accionBadgeClass">@accionBadgeText</span>
+                                                                </li>
+                                                            }
+                                                        </ul>
+                                                    }
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="timeline-content">
-                                            <p class="mb-0">
-                                                <strong>@item.Accion</strong>
-                                                <br>
-                                                <small class="text-muted">@item.MotivoCambio</small>
-                                                <br>
-                                                <small class="text-muted">Por: @item.NombreUsuario - @item.FechaCambio?.ToString("dd/MM/yyyy HH:mm")</small>
-                                            </p>
-                                        </div>
-                                    </div>
+                                        index++;
+                                    }
                                 }
                             </div>
                         }
                         else
                         {
-                            <p class="text-muted text-center py-3">No hay historial</p>
+                            <div class="text-center py-4 text-muted">
+                                <i class="fas fa-exclamation-circle fa-2x mb-2 d-block text-warning"></i>
+                                <strong>No hay causas registradas</strong>
+                                <p class="mb-0"><small>Este PNC requiere registrar causas para su seguimiento</small></p>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Historial de Estados -->
+                <div class="card">
+                    <div class="card-header bg-light">
+                        <h6 class="mb-0"><i class="fas fa-history me-2"></i>Historial de Cambios</h6>
+                    </div>
+                    <div class="card-body p-0">
+                        @if (Model.HistorialEstados.Any())
+                        {
+                            <ul class="list-group list-group-flush">
+                                @foreach (var log in Model.HistorialEstados.OrderByDescending(x => x.Fecha))
+                                {
+                                    <li class="list-group-item">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h6 class="mb-1">@log.EstadoDescripcion</h6>
+                                            <small class="text-muted">@log.Fecha.ToString("dd/MM/yyyy HH:mm")</small>
+                                        </div>
+                                        <p class="mb-1 text-muted"><small>@log.Observacion</small></p>
+                                        <small>Por: @log.UsuarioNombre</small>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <div class="text-center py-3 text-muted">
+                                Sin historial de cambios
+                            </div>
                         }
                     </div>
                 </div>
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-1"></i>Cerrar
+                </button>
             </div>
         </div>
     </div>
 </div>
-
-<style>
-    .timeline {
-        position: relative;
-        padding-left: 30px;
-    }
-
-    .timeline-item {
-        position: relative;
-    }
-
-    .timeline-marker {
-        position: absolute;
-        left: -30px;
-        width: 20px;
-        height: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .timeline-content {
-        padding-left: 10px;
-        border-left: 2px solid #dee2e6;
-        padding-bottom: 10px;
-    }
-</style>
-
